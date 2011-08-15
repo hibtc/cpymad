@@ -7,6 +7,7 @@ from tools_optics import get_values
 import tools_twiss as tw
 
 class PyMadModel():
+    
     '''
     a wrapper for jmad models
     '''
