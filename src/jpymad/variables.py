@@ -10,11 +10,11 @@ class Enums:
     collects shortcuts for variables that can be used in
     pymad
     """
-    def __init__(self, java_gateway):
+    def __init__(self, jgw):
         """
         connects to the jmad service and initializes some convenient variables
         """
-        self.JMadPlane = java_gateway.jvm.cern.accsoft.steering.jmad.domain.types.enums.JMadPlane
-        self.MadxTwissVariable = java_gateway.jvm.cern.accsoft.steering.jmad.domain.var.enums.MadxTwissVariable
-        self.MadxVarType = java_gateway.jvm.cern.accsoft.steering.jmad.util.MadxVarType
-        self.KnobType = java_gateway.jvm.cern.accsoft.steering.jmad.domain.knob.KnobType
+        self.JMadPlane = jgw.jvm.cern.accsoft.steering.jmad.domain.types.enums.JMadPlane
+        self.MadxTwissVariable = jgw.jvm.cern.accsoft.steering.jmad.domain.var.enums.MadxTwissVariable
+        self.MadxVarType = jgw.jvm.cern.accsoft.steering.jmad.util.MadxVarType
+        self.KnobType = jgw.jvm.cern.accsoft.steering.jmad.domain.knob.KnobType

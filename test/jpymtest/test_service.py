@@ -5,16 +5,16 @@ Created on Nov 17, 2010
 '''
 import unittest
 
-from pymad.service import pms 
-from pymad.service import connect
 from numpy.testing.utils import assert_
+from utils import PyMadTestCase
+from jpymad.globals import GCont
 
 class Test(unittest.TestCase):
 
 
     def testConnect(self):
-        connect()
-        assert_(not pms.java_gateway == None, 'Must be connected to a java_gateway')
+        pms = PyMadTestCase.pms
+        assert_(not GCont.java_gateway == None, 'Must be connected to a java_gateway')
         assert_(not pms.jmad_service == None, 'JMad service must be available')
         pass
 

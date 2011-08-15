@@ -6,27 +6,24 @@ calculates the mean dispersion at the MBIs
 @author: kfuchsbe
 '''
 
-from pymad import am, connect, set_am
 import numpy as np
-from pymad.tools_models import create_model
+from jpymad.service import JPyMadService
 
-def ensure_model():
+pms = None
+
+def ensure_model(pms):
     '''
     ensures, that the desired model is created and active
     '''
-    connect()
-    active_model = am()
+    active_model = pms.am()
     if active_model is None:
-        new_model = create_model("TI8")
-        set_am(new_model)
+        new_model = pms.create_model("TI8")
+        pms.set_am(new_model)
     
-def calc_mean_dispersion(elementpatterns=['MBI[T\.].*']):
+def calc_mean_dispersion(model,elementpatterns=['MBI[T\.].*']):
     """
-    caluculates the mean dispersion at the elements, which match the given regex
+    calculates the mean dispersion at the elements, which match the given regex
     """
-    connect()
-    
-    model = am()
     tw = model.twiss(['name','dx'], elementpatterns)
     print 'elements:'
     print '------'
@@ -35,5 +32,7 @@ def calc_mean_dispersion(elementpatterns=['MBI[T\.].*']):
 
 
 if __name__ == "__main__":
-    ensure_model()
-    calc_mean_dispersion()
+    pms = JPyMadService()
+    ensure_model(pms)
+    model = pms.am()
+    calc_mean_dispersion(model)

@@ -3,10 +3,10 @@ Created on Nov 26, 2010
 
 @author: kaifox
 '''
-from service import pms
+from globals import GCont
 
 def _iscorrector(element):
-    return pms.java_gateway.jvm.cern.accsoft.steering.jmad.domain.elem.JMadElementType.CORRECTOR.isTypeOf(element)
+    return GCont.java_gateway.jvm.cern.accsoft.steering.jmad.domain.elem.JMadElementType.CORRECTOR.isTypeOf(element) #@UndefinedVariable
 
 def get_kicks(model, hnames, vnames):
     elements = model.get_elements()
@@ -15,13 +15,13 @@ def get_kicks(model, hnames, vnames):
     for name in hnames:
         corrector = elements[name]
         if _iscorrector(corrector):
-            hkicks[name] = corrector.getKick(pms.enums.JMadPlane.H) #@UndefinedVariable
+            hkicks[name] = corrector.getKick(GCont.enums.JMadPlane.H) #@UndefinedVariable
 
     vkicks = dict()
     for name in vnames:
         corrector = elements[name]
         if _iscorrector(corrector):
-            vkicks[name] = corrector.getKick(pms.enums.JMadPlane.V) #@UndefinedVariable
+            vkicks[name] = corrector.getKick(GCont.enums.JMadPlane.V) #@UndefinedVariable
     
     return hkicks, vkicks
 
@@ -40,12 +40,12 @@ def set_kicks(model, hkicks, vkicks):
     for name, value in hkicks.items():
         corrector = elements[name]
         if _iscorrector(corrector):
-            corrector.setKick(pms.enums.JMadPlane.H, value) #@UndefinedVariable
+            corrector.setKick(GCont.enums.JMadPlane.H, value) #@UndefinedVariable
 
     for name, value in vkicks.items():
         corrector = elements[name]
         if _iscorrector(corrector):
-            corrector.setKick(pms.enums.JMadPlane.V, value) #@UndefinedVariable
+            corrector.setKick(GCont.enums.JMadPlane.V, value) #@UndefinedVariable
 
 def add_kicks(model, hkicks, vkicks):
     old_hkicks, old_vkicks = get_kicks(model, hkicks.keys(), vkicks.keys())

@@ -4,7 +4,6 @@ Created on Tue Nov 16 20:20:15 2010
 
 @author: kaifox
 """
-from service import pms
 from conversions import tofl
 from conversions import tostr
 

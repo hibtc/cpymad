@@ -5,8 +5,6 @@ Created on Tue Nov 16 16:26:03 2010
 @author: kaifox
 """
 
-# The service
-from service import pms
 
 # os: needed for system calls
 import os
@@ -22,10 +20,7 @@ def _start_jmad_gui():
     os.system(cmd)
 
 def start_jmad():
-        """
-        starts jmad to later be able to connect to it.
-        """
-        if pms.is_connected():
-            return
-            
-        _start_jmad_gui()
+    """
+    starts jmad to later be able to connect to it.
+    """
+    _start_jmad_gui()

@@ -5,17 +5,18 @@ Created on Nov 26, 2010
 '''
 from tools_optics import get_values
 import tools_twiss as tw
+from pymad.abc import PyMadModel
+from jpymad.modeldef import JPyMadModelDefinition
 
-class PyMadModel():
-    
+class JPyMadModel(PyMadModel):
     '''
     a wrapper for jmad models
     '''
     def __init__(self, jmad_model):
         self.jmm = jmad_model
-        
-    def init(self):
-        self.jmm.init()
+    
+    def get_mdef(self):
+        return JPyMadModelDefinition(self.jmm.getModelDefinition())
         
     def get_elements(self):
         elements = dict()
@@ -30,5 +31,5 @@ class PyMadModel():
             dict[name] = get_values(optic, name)
         return values
     
-    def twiss(self, madxvarnames, elementpatterns=['.*']):
+    def twiss(self, madxvarnames=[], elementpatterns=['.*']):
         return tw.twiss(self.jmm, madxvarnames, elementpatterns)

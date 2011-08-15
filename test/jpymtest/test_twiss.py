@@ -3,18 +3,15 @@ Created on Nov 17, 2010
 
 @author: kaifox
 '''
-import pmtest.utils as tu 
 import unittest
 
-from pymad import am
-from pymad import connect
+from utils import PyMadTestCase
 
-class Test(tu.PyMadTestCase):
+class Test(unittest.TestCase):
 
     def testTwiss(self):
-        connect()
         madxvarnames = ["s", "name", "betx", "bety"]
-        result = am().twiss(madxvarnames)
+        result = PyMadTestCase.pms.am().twiss(madxvarnames)
         
         print result
 
