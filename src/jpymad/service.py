@@ -64,8 +64,9 @@ class JPyMadService(PyMadService):
         
         # now, that everything is connected, we can init the variables
         GCont.enums = Enums(GCont.java_gateway)
-        
-    def get_mdefs(self):
+    
+    @property
+    def mdefs(self):
         model_definition_manager = self.jmad_service.getModelDefinitionManager()
         mdefs = []
         for model_definition in model_definition_manager.getAllModelDefinitions():
@@ -73,7 +74,8 @@ class JPyMadService(PyMadService):
         
         return mdefs
     
-    def get_models(self):
+    @property
+    def models(self):
         model_manager = self.jmad_service.getModelManager()
         return [JPyMadModel(model) for model in model_manager.getModels()]
     
@@ -95,6 +97,7 @@ class JPyMadService(PyMadService):
         jmm.init()
         return JPyMadModel(jmm)
 
+    @property
     def am(self):
         """
         retrieves the active model from the model manager
@@ -106,7 +109,8 @@ class JPyMadService(PyMadService):
         else:
             return JPyMadModel(active_model) 
 
-    def set_am(self, pymadmodel):
+    @am.setter
+    def am(self, pymadmodel):
         model_manager = self.jmad_service.getModelManager()
         model_manager.setActiveModel(pymadmodel.jmm)
 

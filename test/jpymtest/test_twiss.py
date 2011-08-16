@@ -11,7 +11,7 @@ class Test(unittest.TestCase):
 
     def testTwiss(self):
         madxvarnames = ["s", "name", "betx", "bety"]
-        result = PyMadTestCase.pms.am().twiss(madxvarnames)
+        result = PyMadTestCase.pms.am.twiss(madxvarnames)
         
         print result
 

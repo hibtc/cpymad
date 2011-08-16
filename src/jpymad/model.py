@@ -15,7 +15,8 @@ class JPyMadModel(PyMadModel):
     def __init__(self, jmad_model):
         self.jmm = jmad_model
     
-    def get_mdef(self):
+    @property
+    def mdef(self):
         return JPyMadModelDefinition(self.jmm.getModelDefinition())
         
     def get_elements(self):

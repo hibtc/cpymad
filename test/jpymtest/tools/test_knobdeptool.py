@@ -11,7 +11,7 @@ from jpymad.globals import GCont
 class Test(unittest.TestCase):
 
     def testKnobDepTool(self):
-        model =  PyMadTestCase.pms.am()
+        model =  PyMadTestCase.pms.am
         deltaprange = [-0.001, 0, 0.001]
         
         knobmanager = model.jmm.getKnobManager()

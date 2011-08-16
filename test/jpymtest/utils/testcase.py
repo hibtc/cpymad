@@ -9,6 +9,6 @@ class PyMadTestCase():
     
     pms = JPyMadService()
     model = pms.create_model("TI2")
-    pms.set_am(model) 
+    pms.am = model 
     
     

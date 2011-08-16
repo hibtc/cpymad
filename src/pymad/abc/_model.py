@@ -4,13 +4,13 @@ Created on 15 Aug 2011
 @author: kfuchsbe
 '''
 from io import __metaclass__
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta, abstractmethod, abstractproperty
 class PyMadModel():
     ''' The abstract class for models '''
     __metaclass__ = ABCMeta
     
-    @abstractmethod
-    def get_mdef(self):
+    @abstractproperty
+    def mdef(self):
         ''' returns the model definition from which the model was created '''
         pass
 

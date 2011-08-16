@@ -4,19 +4,19 @@ Created on 15 Aug 2011
 @author: kfuchsbe
 '''
 from io import __metaclass__
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta, abstractmethod, abstractproperty
 
 class PyMadService():
     ''' The abstract class for a model-service. '''
     __metaclass__ = ABCMeta
     
-    @abstractmethod
-    def get_mdefs(self):
+    @abstractproperty
+    def mdefs(self):
         ''' Returns all the available model definitions as a list '''
         pass
     
-    @abstractmethod
-    def get_models(self):
+    @abstractproperty
+    def models(self):
         ''' Returns all the instantiated models as a list '''
         pass
     

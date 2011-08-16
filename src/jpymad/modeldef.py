@@ -10,6 +10,7 @@ class JPyMadModelDefinition(PyMadModelDefinition):
     
     def __init__(self, jmmd):
         self.jmmd = jmmd
-        
+    
+    @property
     def name(self):
         return self.jmmd.getName()
