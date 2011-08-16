@@ -14,3 +14,17 @@ class JPyMadModelDefinition(PyMadModelDefinition):
     @property
     def name(self):
         return self.jmmd.getName()
+    
+    @property
+    def seqnames(self):
+        names = []
+        for sequence in self.jmmd.getSequenceDefinitions():
+            names.append(sequence.getName());
+        return names
+    
+    @property
+    def opticnames(self):
+        names = []
+        for optic in self.jmmd.getOpticsDefinitions():
+            names.append(optic.getName());
+        return names

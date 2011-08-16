@@ -27,7 +27,7 @@ class KnobDepTool():
         
         for paramvalue in paramrange:
             self._knob.setOffset(float(paramvalue))
-            twresult = self._model.twiss(columns, elementpatterns)
+            twresult, params = self._model.twiss(columns, elementpatterns)
             
             if data == None:
                 data = Data()

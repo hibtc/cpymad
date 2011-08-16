@@ -18,7 +18,18 @@ class JPyMadModel(PyMadModel):
     @property
     def mdef(self):
         return JPyMadModelDefinition(self.jmm.getModelDefinition())
+    
+    @property
+    def name(self):
+        return self.jmm.getName()
+    
+    def set_optic(self, opticname):
+        opticdef = self.jmm.getModelDefinition().getOpticsDefinition(opticname)
+        if opticdef is None:
+            raise(ValueError("Optics definition with name '" + opticname + "' can not be found!"));
         
+        self.jmm.setActiveOpticsDefinition(opticdef)
+    
     def get_elements(self):
         elements = dict()
         for element in self.jmm.getActiveRange().getElements():
@@ -32,5 +43,11 @@ class JPyMadModel(PyMadModel):
             dict[name] = get_values(optic, name)
         return values
     
-    def twiss(self, madxvarnames=[], elementpatterns=['.*']):
-        return tw.twiss(self.jmm, madxvarnames, elementpatterns)
+    def twiss(self, seqname=None, columns=[], elementpatterns=['.*'], file=None):
+        if not seqname is None:
+            print("WARN: seqname='" + seqname + "'. This will be ignored by the jpymad implementation. Instead the active sequence will be used.")
+        
+        if not file is None:
+            print("WARN: file='" + seqname + "'. This is currently ignored by the jpymad implementation.")
+        
+        return tw.twiss(self.jmm, columns, elementpatterns)

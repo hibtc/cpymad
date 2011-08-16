@@ -10,12 +10,27 @@ class PyMadModel():
     __metaclass__ = ABCMeta
     
     @abstractproperty
+    def name(self):
+        ''' Returns the name of this model '''
+        pass
+    
+    @abstractproperty
     def mdef(self):
         ''' returns the model definition from which the model was created '''
         pass
 
     @abstractmethod
-    def twiss(self, madxvarnames=[], elementpatterns=['.*']):
+    def set_optic(self, opticname):
+        ''' Sets the actual optic with that of the given name. If the optic is not 
+        contained in the definitions, then a ValueError is raised.  
+        '''
+        pass
+    
+    @abstractmethod
+    def twiss(self, seqname=None, columns=[], elementpatterns=['.*'], file=None):
         ''' Runs a twiss on the model and returns a result containing the variables and the elements given.
         '''
         pass
+    
+    def __str__(self):
+        return self.name

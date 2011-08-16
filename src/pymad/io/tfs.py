@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy
 import os
+from pymad.domain import TfsTable, TfsSummary
+    
     
 ##
 # @brief Read a tfs table and returns table/parameters
@@ -31,7 +33,7 @@ def tfs(inputfile):
             names=l.split()[1:]
             table=_readTable(f,names)
         l=f.readline()
-    return table,params
+    return TfsTable(table), TfsSummary(params)
 
 ##
 # Add parameter to object

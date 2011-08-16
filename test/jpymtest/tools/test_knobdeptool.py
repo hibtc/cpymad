@@ -6,7 +6,7 @@ Created on Nov 17, 2010
 import unittest
 from jpymad.tools import KnobDepTool
 from jpymtest.utils import PyMadTestCase
-from jpymad.globals import GCont
+from jpymad.globals import JPyMadGlobals
 
 class Test(unittest.TestCase):
 
@@ -15,7 +15,7 @@ class Test(unittest.TestCase):
         deltaprange = [-0.001, 0, 0.001]
         
         knobmanager = model.jmm.getKnobManager()
-        knob = knobmanager.getKnob(GCont.enums.KnobType.CUSTOM, 'deltap') #@UndefinedVariable
+        knob = knobmanager.getKnob(JPyMadGlobals.enums.KnobType.CUSTOM, 'deltap') #@UndefinedVariable
         modeltool = KnobDepTool(model, knob)
         madxvars = ['x', 'mux', 'y', 'muy']
    

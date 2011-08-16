@@ -13,7 +13,7 @@ from pymad.abc import PyMadService
 from variables import Enums
 from jpymad.modeldef import JPyMadModelDefinition
 from jpymad.model import JPyMadModel
-from globals import GCont
+from globals import JPyMadGlobals
 
 
 class JPyMadService(PyMadService):
@@ -48,22 +48,22 @@ class JPyMadService(PyMadService):
         if self.is_connected():
             return
         
-        if GCont.java_gateway == None:
-            GCont.java_gateway = JavaGateway()
+        if JPyMadGlobals.java_gateway == None:
+            JPyMadGlobals.java_gateway = JavaGateway()
         
         if self.jmad_service == None:
             # the entry-point is directly the jmad service
             # test the connection
             try:
-                str = GCont.java_gateway.jvm.java.lang.String #@UndefinedVariable
+                str = JPyMadGlobals.java_gateway.jvm.java.lang.String #@UndefinedVariable
             except:
                 raise
             else:
                 # only assign the jmad_service, if no error occured
-                self.jmad_service = GCont.java_gateway.entry_point #@UndefinedVariable
+                self.jmad_service = JPyMadGlobals.java_gateway.entry_point #@UndefinedVariable
         
         # now, that everything is connected, we can init the variables
-        GCont.enums = Enums(GCont.java_gateway)
+        JPyMadGlobals.enums = Enums(JPyMadGlobals.java_gateway)
     
     @property
     def mdefs(self):
@@ -73,6 +73,10 @@ class JPyMadService(PyMadService):
             mdefs.append(JPyMadModelDefinition(model_definition))
         
         return mdefs
+    
+    @property
+    def mdefnames(self):
+        return [mdef.name for mdef in self.mdefs]
     
     @property
     def models(self):
@@ -96,6 +100,9 @@ class JPyMadService(PyMadService):
         jmm = self.jmad_service.createModel(model_definition.jmmd)
         jmm.init()
         return JPyMadModel(jmm)
+
+    def delete_model(self, model):
+        self.jmad_service.deleteModel(model.jmm)
 
     @property
     def am(self):

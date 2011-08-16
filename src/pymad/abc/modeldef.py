@@ -16,6 +16,16 @@ class PyMadModelDefinition():
     def name(self):
         pass
 
+    @abstractproperty
+    def seqnames(self):
+        ''' Returns a list of the names of the defines sequences in this model definition '''
+        pass
+    
+    @abstractproperty
+    def opticnames(self):
+        ''' Returns a list of the names of the available optics in this model definition '''
+        pass
+    
     def __str__(self):
         return self.name
     

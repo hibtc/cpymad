@@ -1,3 +1,3 @@
-from _service import PyMadService
-from _modeldef import PyMadModelDefinition
-from _model import PyMadModel
+from service import PyMadService
+from modeldef import PyMadModelDefinition
+from model import PyMadModel
