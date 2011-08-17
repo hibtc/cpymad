@@ -4,7 +4,7 @@ Created on 16 Aug 2011
 @author: kfuchsbe
 '''
 import unittest
-from pymad.domain._tfs import TfsTable
+from pymad.domain.tfs import TfsTable
 
 
 class Test(unittest.TestCase):
