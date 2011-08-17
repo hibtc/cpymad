@@ -18,14 +18,16 @@ cdata=['_models/*.json','_models/*.madx'] # list of data files to include..
 libs=['madx', "X11", "z", "pthread", "c", "stdc++"]
 includedirs=['/usr/local/include/madX',
              '/usr/include/madX',
-             '/afs/cern.ch/user/y/ylevinse/.local/include']
+             '/afs/cern.ch/user/y/ylevinse/.local/include/madX']
+libdirs=['/afs/cern.ch/user/y/ylevinse/.local/lib']
 
 madmodule=Extension('madx',
                     define_macros = [('MAJOR_VERSION', '0'),
                                      ('MINOR_VERSION', '1')],
                     include_dirs = includedirs,
                     libraries = libs,
-                    sources = sourcefiles
+                    sources = sourcefiles,
+                    library_dirs = libdirs
                     )
 
 setup(

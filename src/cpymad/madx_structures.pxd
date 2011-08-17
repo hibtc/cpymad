@@ -3,8 +3,10 @@
 # In the current state, this doesn't work very well,
 # segfaults more often than not, and isn't helpful..
 # 
-cdef int NAME_L
-NAME_L=48 # defined by preprocessor in madx..
+
+#cdef int NAME_L
+#NAME_L=48 # defined by preprocessor in madx..
+
 cdef extern from "madxl.h":
     #cdef NAME_L
     pass
@@ -24,14 +26,6 @@ cdef extern from "madx.h":
         pass
     struct node:
         pass
-    cdef struct table:
-        char* name
-        int num_cols, org_cols,dynamic,origin,curr
-        char_p_array *header #,*node_nm
-        int_array *col_out,*row_out
-        name_list* columns    #names + types (in inform)
-        char ***s_cols
-        pass
     
     struct name_list:
           char[48]  name           
@@ -42,6 +36,15 @@ cdef extern from "madx.h":
           #int stamp
           #char** names;                 # element names for sort
           pass
+    
+    cdef struct table:
+        char* name
+        int num_cols, org_cols,dynamic,origin,curr
+        char_p_array *header #,*node_nm
+        int_array *col_out,*row_out
+        name_list* columns    #names + types (in inform)
+        char ***s_cols
+        pass
       
     # to be able to read sequence information..
     struct sequence:

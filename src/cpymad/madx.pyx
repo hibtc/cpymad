@@ -1,4 +1,4 @@
-include "madx_structures.pyx"
+from cpymad.madx_structures cimport sequence_list, name_list
 cdef extern from "madextern.h":
     void madextern_start()
     void madextern_end()
@@ -98,7 +98,11 @@ class madx:
     def select(self,flag,pattern,columns):
         self.command('SELECT, FLAG='+flag+', CLEAR;')
         if type(columns)==list:
-            clms=','.join(str(c) for c in columns)
+            #clms=','.join(str(c) for c in columns)
+            clms=''
+            for c in columns:
+                clms+=c+','
+            clms=clms[:-1]
         else:
             clms=columns
         self.command('SELECT, FLAG='+flag+', PATTERN='+pattern[0]+', COLUMN='+clms+';')
