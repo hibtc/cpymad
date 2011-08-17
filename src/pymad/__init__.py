@@ -9,5 +9,3 @@ from domain import *
 #    from cpymad import *
 #elif library=='jpymad':
 #    from jpymad import *
-
-from _tfs import tfs
