@@ -5,7 +5,15 @@ from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
 sourcefiles=["cpymad/madx.pyx"] # this can be a list of both c and pyx source files..
-pythonsrc=["cpymad","cpymad._models","jpymad","jpymad.tools", "pymad"] # list of python modules to include
+pythonsrc=["cpymad",            # list of python modules to include
+           "cpymad._models",
+           "jpymad",
+           "jpymad.tools", 
+           "pymad",
+           "pymad.io",
+           "pymad.abc",
+           "pymad.tools",
+           "pymad.domain"] 
 cdata=['_models/*.json','_models/*.madx'] # list of data files to include..
 libs=['madx', "X11", "z", "pthread", "c", "stdc++"]
 includedirs=['/usr/local/include/madX',
