@@ -1,4 +1,5 @@
-from pymad import tfs
+from pymad._tfs import tfs
 
-from _models import _model
-model=_model.model
+from _models._model import model
+
+from _listModels import modelList

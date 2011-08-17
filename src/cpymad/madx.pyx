@@ -1,14 +1,17 @@
-include "pymadx/table.pyx"
+include "madx_structures.pyx"
 cdef extern from "madextern.h":
     void madextern_start()
     void madextern_end()
     void madextern_input(char*)
+    sequence_list *madextern_get_sequence_list()
     #table *getTable()
 
 import os,sys
-from pymadx import tfs
+from pymad import tfs
 
+_madstarted=False
 
+_loaded_models=[]
 ##
 # @brief Python class which interfaces to Mad-X
 # Linking to the C Library.
@@ -17,7 +20,10 @@ class madx:
     ##
     # Initialize object
     def __init__(self,histfile='',recursive_history=False):
-        madextern_start()
+        global _madstarted
+        if not _madstarted:
+            madextern_start()
+            _madstarted=True
         if histfile:
             self._hist=True
             self._hfile=file(histfile,'w')
@@ -30,19 +36,14 @@ class madx:
     
     ##
     # Closes history file
-    # and calls the madextern_end()
-    # function.
+    # madextern_end should
+    # not be called since
+    # other objects might still be
+    # running..
     def __del__(self):
         if self._rechist:
             self._hfile.close()
-        madextern_end()
-    ##
-    # @brief debug command to attempt to figure out table struct
-    def debug(self):
-        cdef table tab
-        tab=table(15)
-        print tab.keys()
-        #print tab.num_cols
+        #madextern_end()
     
     # give lowercase version of command here..
     def _checkCommand(self,cmd):
@@ -93,10 +94,14 @@ class madx:
     # @brief run select command for a flag..
     # @param flag [string] the flag to run select on
     # @param pattern [list] the new pattern
-    # @param columns [string] the columns you want for the flag
+    # @param columns [list/string] the columns you want for the flag
     def select(self,flag,pattern,columns):
         self.command('SELECT, FLAG='+flag+', CLEAR;')
-        self.command('SELECT, FLAG='+flag+', PATTERN='+pattern[0]+', COLUMN='+columns+';')
+        if type(columns)==list:
+            clms=','.join(str(c) for c in columns)
+        else:
+            clms=columns
+        self.command('SELECT, FLAG='+flag+', PATTERN='+pattern[0]+', COLUMN='+clms+';')
         for i in range(1,len(pattern)):
             self.command('SELECT, FLAG='+flag+', PATTERN='+pattern[i]+';')
             
@@ -106,15 +111,13 @@ class madx:
     # @param sequence [string] name of sequence
     # @param fname [string,optional] name of file to store tfs table
     # @param pattern [list, optional] pattern to include in table
-    # @param columns [string, optional] columns to include in table
+    # @param columns [list or string, optional] columns to include in table
     def twiss(self,
               sequence,
               pattern=['full'],
               columns='name,s,betx,bety,x,y,dx,dy,px,py,mux,muy',
               fname=''
               ):
-        if type(sequence)!=str:
-            print("ERROR: sequence must be a string")
         if fname:
             tmpfile=fname
         else:
@@ -138,15 +141,13 @@ class madx:
     # @param sequence [string] name of sequence
     # @param fname [string,optional] name of file to store tfs table
     # @param pattern [list, optional] pattern to include in table
-    # @param columns [string, optional] columns to include in table
+    # @param columns [string or list, optional] columns to include in table
     def survey(self,
               sequence,
               pattern=['full'],
               columns='name,l,angle,x,y,z,theta',
               fname=''
               ):
-        if type(sequence)!=str:
-            print("ERROR: sequence must be a string")
         if fname:
             tmpfile=fname
         else:
@@ -163,6 +164,16 @@ class madx:
         if not fname:
             os.remove(tmpfile)
         return tab,param
+    
+    def list_of_models(self):
+        global _loaded_models
+        return _loaded_models
+    
+    def append_model(self,model_name):
+        global _loaded_models
+        if model_name in _loaded_models:
+            raise ValueError("You cannot load the same module twice!")
+        _loaded_models.append(model_name)
     
     # turn on/off verbose outupt..
     def verbose(self,switch):
@@ -191,3 +202,15 @@ class madx:
                 self._writeHist(l+'\n')
         else:
             self._hfile.write(command)
+    
+    def get_sequences(self):
+        cdef sequence_list *seqs
+        seqs= madextern_get_sequence_list()
+        ret={}
+        for i in xrange(seqs.curr):
+            ret[seqs.sequs[i].name]={'name':seqs.sequs[i].name}
+            if seqs.sequs[i].tw_table.name is not NULL:
+                ret[seqs.sequs[i].name]['twissname']=seqs.sequs[i].tw_table.name
+        return ret
+        #print "Currently number of sequenses available:",seqs.curr
+        #print "Name of list:",seqs.name

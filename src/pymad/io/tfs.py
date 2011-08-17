@@ -13,17 +13,13 @@ from pymad.domain import TfsTable, TfsSummary
 # Returns both.
 def tfs(inputfile):
     params={}
-    if type(inputfile)!=str:
-        print("ERROR: inputfile must be a string")
-        return None
     if not os.path.isfile(inputfile):
         if os.path.isfile(inputfile+'.tfs'):
             inputfile+='.tfs'
         elif os.path.isfile(inputfile+'.TFS'):
             inputfile+='.TFS'
         else:
-            print("ERROR: "+inputfile+" is not a valid file path")
-            return None
+            raise ValueError("ERROR: "+inputfile+" is not a valid file path")
     f=file(inputfile,'r')
     l=f.readline()
     while(l):
@@ -31,7 +27,7 @@ def tfs(inputfile):
             _addParameter(params,l)
         if l.strip()[0]=='*': # beginning of vector list...
             names=l.split()[1:]
-            table=_readTable(f,names)
+            table=_read_table(f,names)
         l=f.readline()
     return TfsTable(table), TfsSummary(params)
 
@@ -43,36 +39,37 @@ def tfs(inputfile):
 # 
 # @param line The line from the file that should be added
 def _addParameter(params,line):
+    lname=line.split()[1].lower()
     if line.split()[2]=='%le':
-        params[line.split()[1]]=float(line.split()[3])
+        params[lname]=float(line.split()[3])
     if line.split()[2][-1]=='s':
-        params[line.split()[1]]=line.split('"')[1]
+        params[lname]=line.split('"')[1]
     if line.split()[2]=='%d':
-        params[line.split()[1]]=int(line.split()[3])
+        params[lname]=int(line.split()[3])
 
 ##
 # Reads in a table in tfs format.
 # Input the file stream at the location
 # where the names of the columns have just been read.
-def _readTable(fstream,names):
+def _read_table(fstream,names):
     l=fstream.readline()
     types=[]
     table={}
     for n in names:
-        table[n]=[]
+        table[n.lower()]=[]
     while(l):
         if l.strip()[0]=='$':
             types=l.split()[1:]
         else:
             for n,el in zip(names,l.split()):
-                table[n].append(el)
+                table[n.lower()].append(el)
         l=fstream.readline()
     for n,typ in zip(names,types):
         if typ=='%le':
-            table[n]=numpy.array(table[n],dtype=float)
+            table[n.lower()]=numpy.array(table[n.lower()],dtype=float)
         elif typ=='%d':
-            table[n]=numpy.array(table[n],dtype=int)
+            table[n.lower()]=numpy.array(table[n.lower()],dtype=int)
         elif typ=='%s':
-            for k in xrange(len(table[n])):
-                table[n][k]=table[n][k].split('"')[1]
+            for k in xrange(len(table[n.lower()])):
+                table[n.lower()][k]=table[n.lower()][k].split('"')[1]
     return table
