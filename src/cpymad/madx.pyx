@@ -7,7 +7,7 @@ cdef extern from "madextern.h":
     #table *getTable()
 
 import os,sys
-from cpymad import tfs
+from pymad.io import tfs
 
 _madstarted=False
 
