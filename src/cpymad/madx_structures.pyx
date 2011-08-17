@@ -9,20 +9,13 @@ cdef extern from "madxl.h":
     #cdef NAME_L
     pass
 cdef extern from "madx.h":
-    #char[NAME_L] name
-    #int  max,                     # max. array size
-    #curr,                    # current occupation
-    #flag;                    # ancillary flag
-    #int stamp;
-    #char** p;
     struct char_p_array:
-        #int curr,flag,stamp
+        int flag,stamp
         #char** p
-        int stamp
         char[48] name
-        #int  max,                     # max. array size
-        #     curr;                    # current occupation
-        #int* i;
+        int  max                     # max. array size
+        int  curr                   # current occupation
+        int* i
         pass
     struct int_array:
         pass
@@ -53,9 +46,10 @@ cdef extern from "madx.h":
     #struct sequence* org_sequ;    # pointer to sequence it refers to
     cdef struct table:
         char* name
-        int num_cols #,org_cols,dynamic,origin
-        #char_p_array *header,*node_nm
+        int num_cols, org_cols,dynamic,origin
+        char_p_array *header #,*node_nm
         #int_array *col_out,*row_out
+        name_list* columns    #names + types (in inform)
         pass
     
     struct name_list:

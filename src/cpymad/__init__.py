@@ -1,4 +1,4 @@
-from pymad._tfs import tfs
+from pymad.io._tfs import tfs
 
 from _models._model import model
 

@@ -7,7 +7,7 @@ cdef extern from "madextern.h":
     #table *getTable()
 
 import os,sys
-from pymad import tfs
+from cpymad import tfs
 
 _madstarted=False
 
@@ -211,6 +211,10 @@ class madx:
             ret[seqs.sequs[i].name]={'name':seqs.sequs[i].name}
             if seqs.sequs[i].tw_table.name is not NULL:
                 ret[seqs.sequs[i].name]['twissname']=seqs.sequs[i].tw_table.name
+                print seqs.sequs[i].tw_table.name,"columns:"
+                for j in xrange(seqs.sequs[i].tw_table.num_cols):
+                    print seqs.sequs[i].tw_table.header[j].name
+                print ""
         return ret
         #print "Currently number of sequenses available:",seqs.curr
         #print "Name of list:",seqs.name
