@@ -12,8 +12,8 @@ def ls_mdefs(pms=None):
     lists all the currently available model definitions from the given service
     
     Arguments:
-    pms -- the pymad service from which to retrieve the model definitions, 
-            if this is None then the singleton is used
+    :param pms: the pymad service from which to retrieve the model definitions, 
+    if this is None then the singleton is used
     """
     if pms is None:
         pms = get_pms()
@@ -30,8 +30,7 @@ def ls_models(pms=None):
     """
     lists all the currently created models from the given service
     Arguments:
-    pms -- the pymad service from which to retrieve the model definitions,
-            if this is None then the singleton is used
+    :param pms: the pymad service from which to retrieve the model definitions, if this is None then the singleton is used
     """
     if pms is None:
         pms = get_pms()

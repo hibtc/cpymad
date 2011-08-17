@@ -28,12 +28,10 @@ def init(mode='cpymad', **kwargs):
     prints a warning and does nothing else. 
     
     Arguments:
-    mode -- can be either 'cpymad' or 'pymad'. This option determines which pymad-service will be initialized.
-            the default is 'cpymad'
-    kwargs -- all the rest of the arguments are directly passed to the constructor of the created PyMadService
-    
-    Returns:
-    the newly created pymad service if one was created. 
+    :param mode: Can be either 'cpymad' or 'pymad'. This option determines which pymad-service will be initialized. The default is 'cpymad'.
+    :param kwargs: All the rest of the arguments are directly passed to the constructor of the created PyMadService
+    :returns: the newly created pymad service if one was created.
+     
     '''
     
     if is_initialized():
@@ -41,8 +39,8 @@ def init(mode='cpymad', **kwargs):
         return None
     
     if mode is 'cpymad':
-        from cpymad.service import CPyMadService
-        pms = CPyMadService(**kwargs)
+        from cpymad.service import CpymadService 
+        pms = CpymadService(**kwargs)
     elif mode is 'jpymad':
         from jpymad.service import JPyMadService
         pms = JPyMadService(**kwargs)
