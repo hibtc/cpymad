@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<project name="pymad-doc" default="publish" basedir=".">
+
+	<!-- Load the files where all the dirs have to be given -->
+	<property file="build.properties" />
+
+	<!--
+		Target to publish the website. This runs sphinx beforehand to create the actual html.
+		It synchronizes the webpage, but preserves the dir 'static' in which all manually published files can be placed.
+	-->
+	<target name="publish" description="Publishes the website to the cern dfs" depends="run.sphinx">
+		<sync todir="${publish.dir}">
+			<fileset dir="${sphinx.build.dir}" />
+			<preserveintarget>
+				<include name="**/static/**" />
+			</preserveintarget>
+		</sync>
+	</target>
+
+	<!--
+		Target to run sphinx and produce the html output. This requires sphinx to be
+		properliy installed on the system. See <http://sphinx.pocoo.org>.
+	-->
+	<target name="run.sphinx">
+		<exec dir="${sphinx.root.dir}" executable="make">
+			<arg value="html" />
+		</exec>
+	</target>
+</project>
