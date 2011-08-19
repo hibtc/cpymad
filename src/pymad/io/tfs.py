@@ -16,19 +16,33 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
+'''
+.. module:: tfs
+
+Function to read tfs tables into Python objects
+
+.. moduleauthor:: Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen@cern.ch>
+'''
 import numpy
 import os
 from pymad.domain import TfsTable, TfsSummary
     
-    
-##
-# @brief Read a tfs table and returns table/parameters
-# 
-# The function takes in a tfs file. It will add
-# all parameters into one dictionary, and the table
-# into another dictionary.
-# Returns both.
 def tfs(inputfile):
+    '''
+    .. py:function:: tfs(inputfile)
+
+    Read a tfs table and returns table/parameters
+    
+    The function takes in a tfs file. It will add
+    all parameters into one dictionary, and the table
+    into another dictionary.
+
+    :param string inputfile: tfs file, full path
+    :raises ValueError: In case file path is not found
+    :rtype: tuple containing (tfs table (TfsTable), parameters (TfsSummary))
+
+    See also: :mod:`pymad.domain.tfs`
+    '''
     params={}
     if not os.path.isfile(inputfile):
         if os.path.isfile(inputfile+'.tfs'):

@@ -16,6 +16,14 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 
+'''
+.. module:: madx
+.. moduleauthor:: Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen.at.cern.ch>
+
+Main module to interface with Mad-X library.
+
+'''
+
 from cpymad.madx_structures cimport sequence_list, name_list
 cdef extern from "madextern.h":
     void madextern_start()
@@ -30,14 +38,20 @@ from pymad.io import tfs
 _madstarted=False
 
 _loaded_models=[]
-##
-# @brief Python class which interfaces to Mad-X
-# Linking to the C Library.
+
 class madx:
-    
-    ##
-    # Initialize object
+    '''
+    Python class which interfaces to Mad-X library
+    '''
     def __init__(self,histfile='',recursive_history=False):
+        '''
+        Initializing Mad-X instance
+        
+        :param str histfile: (optional) name of file which will contain all Mad-X commands.
+        :param bool recursive_history: If true, history file will contain no calls to other files. 
+                                       Instead, recursively writing commands from these files when called.
+        
+        '''
         global _madstarted
         if not _madstarted:
             madextern_start()
