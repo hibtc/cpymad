@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 import pymad as pm
 
 # choose the mode
-mode = 'cpymad' # 'cpymad'
+mode = 'cpymad' # 'jpymad'
 
 # currently lacking same model/optic names
 if mode is 'jpymad':
