@@ -35,7 +35,7 @@ def ls_mdefs(pms=None):
     if pms is None:
         pms = get_pms()
         
-    mdefs = pms.get_mdefs()
+    mdefs = pms.mdefs
     
     print "Available model definitions:"
     print "----------------------------"

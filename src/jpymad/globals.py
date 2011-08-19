@@ -22,4 +22,5 @@ Created on 15 Aug 2011
 '''
 class JPyMadGlobals(): 
     java_gateway = None
+    jmad_service = None
     enums = None
