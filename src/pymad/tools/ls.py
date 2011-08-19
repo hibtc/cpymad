@@ -54,6 +54,6 @@ def ls_models(pms=None):
         
     print "Model instances:"
     print "----------------"
-    for model in pms.models:
+    for model in pms.models():
         print model
         

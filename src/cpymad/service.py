@@ -27,14 +27,29 @@ class CpymadService(PyMadService):
     ''' The CPymad implementation of the
         abstract class PyMadService. '''
     
+    def __init__(self):
+        self._am=None
+        self.madx=madx.madx()
+    
+    
     def mdefs(self):
-        return cpymad.modelList
+        return cpymad.modelList()
+    
+    def mdefnames(self):
+        return self.mdefs()
     
     def models(self):
-        return madx.list_of_models
+        return self.madx.list_of_models()
     
     def create_model(self, modeldef):
-        cpymad.model(modeldef)
+        self._am=cpymad.model(modeldef)
+        return self._am
+    
+    def am(self):
+        return self._am
+    def delete_model(self):
+        del self._am
+        self._am=None
     
 
 if __name__=="__main__":
