@@ -132,10 +132,10 @@ class model:
     def list_optics(self):
         return self._dict['optics'].keys()
     
-    def twiss(self,sequence=""):
+    def twiss(self,sequence="",columns=""):
         if sequence=="":
             sequence=self._dict['default']['sequence']
-        return self.madx.twiss(sequence)
+        return self.madx.twiss(sequence=sequence,columns=columns)
 
 
 def _deepcopy(origin,new):
