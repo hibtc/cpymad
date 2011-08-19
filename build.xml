@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="pymad-doc" default="publish" basedir=".">
+<project name="pymad-doc" default="run.sphinx" basedir=".">
 
 	<!-- Load the files where all the dirs have to be given -->
 	<property file="build.properties" />

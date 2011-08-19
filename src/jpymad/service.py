@@ -15,7 +15,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
-from jpymad.jmad import connect, start_gui, start_pymadservice, stop
 '''
 performs all the initialization stuff to access JMad from python.
 
@@ -27,8 +26,9 @@ Created on Nov 11, 2010
 # py4j for communicating with jmad
 from pymad.abc import PyMadService
 
-from jpymad.modeldef import JPyMadModelDefinition
-from jpymad.model import JPyMadModel
+from modeldef import JPyMadModelDefinition
+from model import JPyMadModel
+import jmad as jm
 
 
 class JPyMadService(PyMadService):
@@ -37,6 +37,8 @@ class JPyMadService(PyMadService):
     """
     def __init__(self, **kwargs):
         super(JPyMadService, self)
+        
+        self._started_jmad = False
         
         start = None
         jmadhome = None
@@ -50,13 +52,13 @@ class JPyMadService(PyMadService):
        
         if not start is None: 
             if start is "gui":
-                start_gui(jmadhome)
+                self._started_jmad = jm.start_gui(jmadhome)
             elif start is "service":
-                start_pymadservice(jmadhome)
+                self._started_jmad = jm.start_pymadservice(jmadhome)
             else:
                 print "WARN: unhandled start='" + start + "' for JPymandService (start can be one of 'gui' or 'service'). Ignoring it."
             
-        self.jmad_service = connect()
+        self.jmad_service = jm.connect()
         
     
     
@@ -94,6 +96,7 @@ class JPyMadService(PyMadService):
     
         jmm = self.jmad_service.createModel(model_definition.jmmd)
         jmm.init()
+        print jm.stop
         return JPyMadModel(jmm)
 
     def delete_model(self, model):
@@ -116,16 +119,7 @@ class JPyMadService(PyMadService):
         model_manager = self.jmad_service.getModelManager()
         model_manager.setActiveModel(pymadmodel.jmm)
         
-    def stop(self):
-        stop()
-
-
-
+    def cleanup(self):
+        if (self._started_jmad == True):
+            jm.stop()
     
-    
-        
-
-    
-   
-    
-
