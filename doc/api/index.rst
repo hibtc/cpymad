@@ -6,8 +6,13 @@ Module pymad
 
 The pymad package contains all parts of the general API.
 
-Module tfs
-----------
+Module pymad.io.tfs
+-------------------
+.. automodule:: pymad.io.tfs
+	:members:
+
+Module pymad.domain.tfs
+-----------------------
 .. automodule:: pymad.domain.tfs
 	:members:
 

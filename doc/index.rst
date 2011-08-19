@@ -21,7 +21,8 @@ Contents:
    
    examples/index
    api/index
-
+   cpymad/index
+   jpymad/index
 Indices and tables
 ==================
 
