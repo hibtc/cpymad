@@ -17,14 +17,14 @@
 #-------------------------------------------------------------------------------
 '''
 Created on 16 Aug 2011
-
-@author: kfuchsbe
+.. module:: tfs
+.. moduleauthor:: kfuchsbe
 '''
 from string import lower
 
 
 class LookupDict():
-    ''' A dictionary like structur, which exposes the values of the keys also as attributes with the key names '''
+    ''' A dictionary-like structure, which exposes the values of the keys also as attributes with the key names '''
     
     def __init__(self, values):
         ''' Initializes the class with the values.
@@ -36,7 +36,10 @@ class LookupDict():
         self._values = dict()
         for key, val in values.items():
             self._values[self._unify_key(key)] = val
-
+    
+    def __iter__(self):
+        return iter(self._values)
+        
     def _get_val_or_raise_error(self, key, error):
         ukey = self._unify_key(key)
         
