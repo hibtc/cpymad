@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
-from _model import model
+from cpymad.model import model
 
 class lhc(model):
     ##

@@ -15,19 +15,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
+'''
+.. module: cpymad.model
+
+Cython implementation of the model api.
+:See also: :mod:`pymad.abc.model`
+
+.. moduleauthor:: Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen@cern.ch>
+
+'''
+
 import json, os, sys
 from madx import madx
 
 
 class model:
-    ##
-    # Initialize object
+    '''
+    model class implementation.
+     
+    :param string model: Name of model to load.
+    :param string optics: Name of optics to load
+    :param string history: Name of file which will contain all Mad-X commands called.
+    '''
     def __init__(self,model,optics='',history=''):
-        # initialize madx instance
-        # history is an optional string,
-        # which if defined will contain all madx
-        # commands..
-        self.madx=madx(history)
+        self.madx=madx(histfile=history)
         
         already_loaded=False
         for m in self.madx.list_of_models():
@@ -41,7 +52,7 @@ class model:
             # name of model:
             self.model=model
             # loading the dictionary...
-            self._dict=json.loads(_get_data(model+'.json'))
+            self._dict=_get_data(model)
             
             self._db=None
             for db in self._dict['dbdir']:
@@ -52,7 +63,7 @@ class model:
             
             
             self.madx.verbose(False)
-            self.madx.command(_get_data(self._dict['header']))
+            self.madx.command(_get_file_content(os.path.join('_models',self._dict['header'])))
             
             self._call(self._dict['sequence'])
             
@@ -61,7 +72,6 @@ class model:
         
         self.set_optics(optics)
     
-    # unsure why it doesn't recognize that madx is out of scope by itself..
     def __del__(self):
         del self.madx
     
@@ -69,15 +79,31 @@ class model:
         self.madx.call(self._db+f)
     
     def has_sequence(self,sequence):
-        return sequence in self.madx.get_sequence_list()
+        '''
+         Check if model has the sequence.
+         
+         :param string sequence: Sequence name to be checked.
+        '''
+        return sequence in self.madx.get_sequences()
     
     def has_optics(self,optics):
+        '''
+         Check if model has the optics.
+         
+         :param string optics: Optics name to be checked.
+        '''
         return optics in self._dict['optics']
         
     def set_optics(self,optics):
+        '''
+         Set new optics.
+         
+         :param string optics: Optics name.
+         
+         :raises KeyError: In case you try to set an optics not available in model.
+        '''
         if optics=='':
             optics=self._dict['default']['optics']
-            
         if self._optics==optics:
             print("INFO: Optics already initialized")
             return 0
@@ -101,7 +127,7 @@ class model:
         self._optics=optics
     
     def list_sequences(self):
-        return self.madx.get_sequence_list()
+        return self.madx.get_sequences()
     
     def list_optics(self):
         return self._dict['optics'].keys()
@@ -119,18 +145,25 @@ def _deepcopy(origin,new):
     new._db=origin._db
     new._optics=origin._optics
   
-def _get_data(filename):
+def _get_data(modelname):
+    fname=os.path.join('_models',modelname+'.json')
+    _dict = _get_file_content(fname)
+    return json.loads(_dict)
+
+def _get_file_content(filename):
     try:
          import pkgutil
-         _dict = pkgutil.get_data(__name__, filename)
+         stream = pkgutil.get_data(__name__, filename)
     except ImportError:
         import pkg_resources
-        _dict = pkg_resources.resource_string(__name__,  filename)
-    return _dict  
+        stream = pkg_resources.resource_string(__name__, filename)
+    return stream
+    
+
 
 def _check_compatible(model):
     m=madx()
-    d=json.loads(_get_data(model+'.json'))
+    d=_get_data(model)
     if len(m.list_of_models())>0:
         # we always throw error until we know this actually can work..
         raise ValueError("Two models cannot be loaded at once at this moment")
