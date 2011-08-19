@@ -20,7 +20,6 @@ Created on 15 Aug 2011
 
 @author: kfuchsbe
 '''
-from io import __metaclass__
 from abc import ABCMeta, abstractmethod, abstractproperty
 
 class PyMadService():
