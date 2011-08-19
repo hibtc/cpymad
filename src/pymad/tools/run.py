@@ -44,8 +44,7 @@ def init(mode='cpymad', **kwargs):
     the mode (allowed values are 'cpymad' and 'jpymad'. If already a pymad service is running, then this function
     prints a warning and does nothing else. 
     
-    Arguments:
-    :param mode: Can be either 'cpymad' or 'pymad'. This option determines which pymad-service will be initialized. The default is 'cpymad'.
+    :param string mode: Can be either 'cpymad' or 'pymad'. This option determines which pymad-service will be initialized. The default is 'cpymad'.
     :param kwargs: All the rest of the arguments are directly passed to the constructor of the created PyMadService
     :returns: the newly created pymad service if one was created.
      
