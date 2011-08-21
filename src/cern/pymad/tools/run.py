@@ -23,7 +23,7 @@ Created on 16 Aug 2011
 @author: kfuchsbe
 '''
 
-from pymad.globals import PyMadGlobals
+from cern.pymad.globals import PyMadGlobals
 
 class PyMadNotInititalizedError(Exception):
     pass

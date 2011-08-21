@@ -24,7 +24,6 @@ from Cython.Distutils import build_ext
 sourcefiles=["cern/cpymad/madx.pyx"] # this can be a list of both c and pyx source files..
 pythonsrc=["cern",
            "cern.cpymad",
-           "cern.cpymad._models",
            "cern.jpymad",
            "cern.jpymad.tools", 
            "cern.pymad",
