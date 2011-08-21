@@ -13,6 +13,10 @@ MadX is a software package to simulate particle accelerators and is used at CERN
 MadX has its own proprietary scripting language and is usually launched from the command line. 
 Further information about MadX can be found at http://cern.ch/mad.
 
+The source is available at https://github.com/pymad/pymad
+
+Bugs can be reported at https://github.com/pymad/pymad/issues
+
 Contents:
 =========
   
