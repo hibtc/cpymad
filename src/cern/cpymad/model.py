@@ -75,6 +75,9 @@ class model:
     def __del__(self):
         del self.madx
     
+    def __str__(self):
+        return self.model
+    
     def _call(self,f):
         self.madx.call(self._db+f)
     
