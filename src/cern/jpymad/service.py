@@ -35,20 +35,13 @@ class JPyMadService(PyMadService):
     """
     the service which is the main facade for the JPyMad - implementation
     """
-    def __init__(self, **kwargs):
+    def __init__(self, start=None,jmadhome=None, **kwargs):
         super(JPyMadService, self)
         
         self._started_jmad = False
         
-        start = None
-        jmadhome = None
         for key, value in kwargs.items():
-            if key is 'start':
-                start = value
-            elif key is 'jmadhome':
-                jmadhome = value
-            else:
-                print "WARN: unhandled option '" + key + "' for JPyMandService. Ignoring it." 
+            print "WARN: unhandled option '" + key + "' for JPyMandService. Ignoring it." 
        
         if not start is None: 
             if start is "gui":
