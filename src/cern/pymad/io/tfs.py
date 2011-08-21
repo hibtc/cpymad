@@ -25,7 +25,7 @@ Function to read tfs tables into Python objects
 '''
 import numpy
 import os
-from pymad.domain import TfsTable, TfsSummary
+from cern.pymad.domain import TfsTable, TfsSummary
     
 def tfs(inputfile):
     '''

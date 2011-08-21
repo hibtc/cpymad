@@ -26,7 +26,7 @@ Cython implementation of the model api.
 '''
 
 import json, os, sys
-from madx import madx
+from cern.madx import madx
 
 
 class model:
@@ -135,7 +135,11 @@ class model:
     def twiss(self,sequence="",columns=""):
         if sequence=="":
             sequence=self._dict['default']['sequence']
-        return self.madx.twiss(sequence=sequence,columns=columns)
+        if columns:
+            return self.madx.twiss(sequence=sequence,columns=columns)
+        else:
+            return self.madx.twiss(sequence=sequence)
+            
 
 
 def _deepcopy(origin,new):

@@ -24,7 +24,7 @@ Main module to interface with Mad-X library.
 
 '''
 
-from cpymad.madx_structures cimport sequence_list, name_list
+from cern.cpymad.madx_structures cimport sequence_list, name_list
 cdef extern from "madextern.h":
     void madextern_start()
     void madextern_end()
@@ -95,13 +95,13 @@ class madx:
         cmd=self._fixcmd(cmd)
         if type(cmd)==int: # means we should not execute command
             return cmd
-        if self._checkCommand(cmd.lower()):
-            madextern_input(cmd)
         if self._hist:
             if cmd[-1]=='\n':
                 self._writeHist(cmd)
             else:
                 self._writeHist(cmd+'\n')
+        if self._checkCommand(cmd.lower()):
+            madextern_input(cmd)
         return 0
     def help(self,cmd=''):
         if cmd:

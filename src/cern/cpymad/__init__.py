@@ -15,8 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
-from pymad.io.tfs import tfs
 
-from cpymad.model import model
+from cern.cpymad.model import model
 
 from listModels import modelList

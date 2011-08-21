@@ -18,10 +18,10 @@
 '''
 Created on 16 Aug 2011
 
-@author: kfuchsbe
+.. moduleauthor:: Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen[at]cern.ch>
 '''
-from pymad.abc.service import PyMadService
-import cpymad,madx
+from cern.pymad.abc.service import PyMadService
+from cern import cpymad,madx
 
 class CpymadService(PyMadService):
     ''' The CPymad implementation of the
