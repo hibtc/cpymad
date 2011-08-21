@@ -15,10 +15,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
-from run import init
-from run import cleanup
-from run import is_initialized
-from run import get_pms
+from run import init,cleanup,is_initialized,get_pms
 
-from ls import ls_mdefs
-from ls import ls_models
+from ls import ls_mdefs,ls_models

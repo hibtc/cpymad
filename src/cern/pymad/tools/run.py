@@ -55,10 +55,10 @@ def init(mode='cpymad', **kwargs):
         return None
     
     if mode is 'cpymad':
-        from cpymad.service import CpymadService 
+        from cern.cpymad.service import CpymadService 
         pms = CpymadService(**kwargs)
     elif mode is 'jpymad':
-        from jpymad.service import JPyMadService
+        from cern.jpymad.service import JPyMadService
         pms = JPyMadService(**kwargs)
     else:
         raise ValueError("Unknown mode '" + mode + "'! Use one of 'cpymad' or 'jpymad'!")
