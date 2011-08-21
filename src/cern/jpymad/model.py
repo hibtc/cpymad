@@ -22,8 +22,8 @@ Created on Nov 26, 2010
 '''
 from tools_optics import get_values
 import tools_twiss as tw
-from pymad.abc import PyMadModel
-from jpymad.modeldef import JPyMadModelDefinition
+from cern.pymad.abc import PyMadModel
+from modeldef import JPyMadModelDefinition
 
 class JPyMadModel(PyMadModel):
     '''

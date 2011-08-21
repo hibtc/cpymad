@@ -24,7 +24,7 @@ Created on Nov 17, 2010
 from conversions import tofl
 from conversions import tostr 
 from globals import JPyMadGlobals
-from pymad.domain.tfs import TfsTable, TfsSummary
+from cern.pymad.domain.tfs import TfsTable, TfsSummary
 
 def twiss(model, madxvarnames, elementpatterns=['.*']):
     

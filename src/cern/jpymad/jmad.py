@@ -16,7 +16,7 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
-from jpymad.variables import Enums
+from variables import Enums
 """
 Created on Tue Nov 16 16:26:03 2010
 

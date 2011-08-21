@@ -24,7 +24,7 @@ Created on Nov 11, 2010
 '''
 
 # py4j for communicating with jmad
-from pymad.abc import PyMadService
+from cern.pymad.abc import PyMadService
 
 from modeldef import JPyMadModelDefinition
 from model import JPyMadModel

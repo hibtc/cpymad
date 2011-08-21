@@ -20,7 +20,7 @@ Created on 15 Aug 2011
 
 @author: kfuchsbe
 '''
-from pymad.abc import PyMadModelDefinition
+from cern.pymad.abc import PyMadModelDefinition
 
 class JPyMadModelDefinition(PyMadModelDefinition):
     ''' A wrapper for jmad model-definitions '''
