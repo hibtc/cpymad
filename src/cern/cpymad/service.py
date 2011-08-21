@@ -27,9 +27,11 @@ class CpymadService(PyMadService):
     ''' The CPymad implementation of the
         abstract class PyMadService. '''
     
-    def __init__(self):
+    def __init__(self, **kwargs):
         self._am=None
         self.madx=madx.madx()
+        for key, value in kwargs.items():
+            print "WARN: unhandled option '" + key + "' for CPyMandService. Ignoring it." 
     
     
     def mdefs(self):
