@@ -1,12 +1,12 @@
 # This is the example we published in our IPAC'11 paper.
 
 from matplotlib import pyplot as plt
-import pymad as pm
+from cern import pymad as pm
 
 
 # create the service
-#pms = pm.init('cpymad')
-pms = pm.init('jpymad', start='gui')
+pms = pm.init('cpymad')
+#pms = pm.init('jpymad', start='gui')
 
 # print the name of all model definitions
 print pms.mdefnames()
