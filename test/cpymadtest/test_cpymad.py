@@ -15,14 +15,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
-import cpymad
+from cern import cpymad
 import unittest
 
 
 class TestCpymad(unittest.TestCase):
     
     def setUp(self):
-        self.lhc=cpymad.model('lhc')
+        self.lhc=cpymad.model('lhc',history='hist_cpymad.madx')
         
     def test_twiss(self):
         t,p=self.lhc.twiss()
