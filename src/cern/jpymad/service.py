@@ -29,6 +29,7 @@ from cern.pymad.abc import PyMadService
 from modeldef import JPyMadModelDefinition
 from model import JPyMadModel
 import jmad as jm
+import atexit
 
 
 class JPyMadService(PyMadService):
@@ -40,6 +41,8 @@ class JPyMadService(PyMadService):
         
         self._started_jmad = False
         
+        # YIL edit: What about this?
+        atexit.register(self.cleanup)
         for key, value in kwargs.items():
             print "WARN: unhandled option '" + key + "' for JPyMandService. Ignoring it." 
        
