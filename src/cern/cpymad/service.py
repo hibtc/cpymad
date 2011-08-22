@@ -34,12 +34,15 @@ class CpymadService(PyMadService):
         for key, value in kwargs.items():
             print "WARN: unhandled option '" + key + "' for CPyMandService. Ignoring it." 
     
+    @property
     def mdefs(self):
         return cpymad.modelList()
     
+    @property
     def mdefnames(self):
-        return self.mdefs()
+        return self.mdefs
     
+    @property
     def models(self):
         mnames=[]
         for m in self._models:
@@ -55,6 +58,11 @@ class CpymadService(PyMadService):
         return self._am
     
     def delete_model(self,model):
+        '''
+         The cpymad implementation of this is to simply
+         remove all references to the model. If the reference count is
+         still different from zero, it will be kept in memory.
+        '''
         if str(self._am)==model:
             self._am=None
         for i in range(len(self._models)):
