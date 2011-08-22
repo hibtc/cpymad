@@ -29,6 +29,8 @@ import json, os, sys
 from cern.madx import madx
 #from cern.pymad import abc.model
 import multiprocessing
+import signal,atexit
+
 
 
 #class model(model.PyMadModel):
@@ -54,30 +56,29 @@ class model():
                 self._db=db
         if not self._db:
             raise ValueError,"Could not find an available database path"
-        
         # Defining two pipes which are used for communicating...
         _child_pipe_recv,_parent_send=multiprocessing.Pipe(False)
         _parent_recv,_child_pipe_send=multiprocessing.Pipe(False)
         self._send=_parent_send.send
         self._recv=_parent_recv.recv
         
-        self._mprocess=multiprocessing.Process(target=_modelProcess, 
-                                               args=(_child_pipe_send,_child_pipe_recv,model,history))
+        self._mprocess=_modelProcess(_child_pipe_send,_child_pipe_recv,model,history)
         self._mprocess.start()
+        atexit.register(self._mprocess.terminate)
         
         self._call(self._dict['sequence'])
         
         self._optics=''
         
         self.set_optics(optics)
+        
     
     def __del__(self):
-        print "Trying to delete model..."
         try:
             self._send('delete_model')
             self._mprocess.join(5)
-        except TypeError:
-            pass
+        except TypeError: pass
+    
     def __str__(self):
         return self.model
     
@@ -173,34 +174,48 @@ def _get_file_content(filename):
         stream = pkg_resources.resource_string(__name__, filename)
     return stream
     
+class _modelProcess(multiprocessing.Process):
+    
+    def __init__(self,sender,receiver,model,history=''):
+        self.sender=sender
+        self.receiver=receiver
+        self.model=model
+        self.history=history
+        multiprocessing.Process.__init__(self) 
+    
+    def run(self):
+        _madx=madx(histfile=self.history)
+        _dict=_get_data(self.model)
+        _madx.verbose(False)
+        _madx.append_model(self.model)
+        _madx.command(_get_file_content(os.path.join('_models',_dict['header'])))
+        signal.signal(signal.SIGTERM, sys.exit)
 
+        def terminator(num, frame):
+             sys.exit()
+        signal.signal(signal.SIGTERM, terminator)
 
-def _modelProcess(sender,receiver,model,history=''):
-    _madx=madx(histfile=history)
-    _dict=_get_data(model)
-    _madx.verbose(False)
-    _madx.append_model(model)
-    _madx.command(_get_file_content(os.path.join('_models',_dict['header'])))
-    while True:
-        cmd=receiver.recv()
-        if cmd=='delete_model':
-            sender.close()
-            receiver.close()
-            break
-        elif cmd[0]=='call':
-            _madx.call(cmd[1])
-            sender.send('done')
-        elif cmd[0]=='has_sequence':
-            sender.send(cmd[1] in _madx.get_sequences())
-        elif cmd[0]=='command':
-            _madx.command(cmd[1])
-            sender.send('done')
-        elif cmd[0]=='twiss':
-            if cmd[2]:
-                t,p=_madx.twiss(sequence=cmd[1],columns=cmd[2],retdict=True)
-            else:
-                t,p=_madx.twiss(sequence=cmd[1],retdict=True)
-            sender.send((t,p))
-        else:
-            raise ValueError("You sent a wrong command to subprocess")
-            
+        while True:
+            if self.receiver.poll(2):
+                cmd=self.receiver.recv()
+                if cmd=='delete_model':
+                    self.sender.close()
+                    self.receiver.close()
+                    break
+                elif cmd[0]=='call':
+                    _madx.call(cmd[1])
+                    self.sender.send('done')
+                elif cmd[0]=='has_sequence':
+                    self.sender.send(cmd[1] in _madx.get_sequences())
+                elif cmd[0]=='command':
+                    _madx.command(cmd[1])
+                    self.sender.send('done')
+                elif cmd[0]=='twiss':
+                    if cmd[2]:
+                        t,p=_madx.twiss(sequence=cmd[1],columns=cmd[2],retdict=True)
+                    else:
+                        t,p=_madx.twiss(sequence=cmd[1],retdict=True)
+                    self.sender.send((t,p))
+                else:
+                    raise ValueError("You sent a wrong command to subprocess: "+str(cmd))
+
