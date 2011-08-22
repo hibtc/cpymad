@@ -37,23 +37,24 @@ def get_pms():
 
 def is_initialized():
     ''' returns true, if a pymad service is initialized, false otherwise '''
-    return (not PyMadGlobals.PYMAD_SERVICE() is None)
+    return (not (PyMadGlobals.PYMAD_SERVICE is None or PyMadGlobals.PYMAD_SERVICE() is None) )
+
+
 
 def init(mode='cpymad', **kwargs):
     ''' Initializes the environment for using pymad in one of the possible modes. The first argument determines
     the mode (allowed values are 'cpymad' and 'jpymad'. If already a pymad service is running, then this function
     prints a warning and does nothing else. 
     
-    :param string mode: Can be either 'cpymad' or 'pymad'. This option determines which pymad-service will be initialized. The default is 'cpymad'.
+    :param string mode: Can be either 'cpymad' or 'pymad'. This option determines which pymad-service will be initialized.
     :param kwargs: All the rest of the arguments are directly passed to the constructor of the created PyMadService
     :returns: the newly created pymad service if one was created.
      
     '''
     
-    #if is_initialized():
-        #print("Already a pymad service running. Doing nothing.")
-        #return None
-    
+    if is_initialized():
+        print("Already a pymad service running. Doing nothing.")
+        return None
     if mode is 'cpymad':
         from cern.cpymad.service import CpymadService 
         pms = CpymadService(**kwargs)
@@ -75,8 +76,6 @@ def cleanup():
     
     pms = PyMadGlobals.PYMAD_SERVICE()
     pms.cleanup()
-    # not necessary, automatically None when pms is deleted..
-    #PyMadGlobals.PYMAD_SERVICE = None
     
     
     
