@@ -33,11 +33,11 @@ def get_pms():
     if not is_initialized():
         raise(PyMadNotInititalizedError())
     
-    return PyMadGlobals.PYMAD_SERVICE
+    return PyMadGlobals.PYMAD_SERVICE()
 
 def is_initialized():
     ''' returns true, if a pymad service is initialized, false otherwise '''
-    return (not PyMadGlobals.PYMAD_SERVICE is None)
+    return (not PyMadGlobals.PYMAD_SERVICE() is None)
 
 def init(mode='cpymad', **kwargs):
     ''' Initializes the environment for using pymad in one of the possible modes. The first argument determines
@@ -62,8 +62,8 @@ def init(mode='cpymad', **kwargs):
         pms = JPyMadService(**kwargs)
     else:
         raise ValueError("Unknown mode '" + mode + "'! Use one of 'cpymad' or 'jpymad'!")
-    
-    PyMadGlobals.PYMAD_SERVICE = True
+    import weakref
+    PyMadGlobals.PYMAD_SERVICE = weakref.ref(pms)
     return pms
 
 def cleanup():
@@ -73,9 +73,10 @@ def cleanup():
         print "pymad is not initialized. Doing nothing."
         return
     
-    pms = PyMadGlobals.PYMAD_SERVICE
+    pms = PyMadGlobals.PYMAD_SERVICE()
     pms.cleanup()
-    PyMadGlobals.PYMAD_SERVICE = None
+    # not necessary, automatically None when pms is deleted..
+    #PyMadGlobals.PYMAD_SERVICE = None
     
     
     

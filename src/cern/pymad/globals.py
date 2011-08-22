@@ -27,5 +27,6 @@ class PyMadGlobals():
     '''
     
     # the pymad-service singleton
-    PYMAD_SERVICE = None
+    def PYMAD_SERVICE():
+        return None
     
