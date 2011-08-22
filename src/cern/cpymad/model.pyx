@@ -30,6 +30,7 @@ from cern.madx import madx
 #from cern.pymad import abc.model
 import multiprocessing
 
+
 #class model(model.PyMadModel):
 class model():
     '''
@@ -41,7 +42,6 @@ class model():
     :param string history: Name of file which will contain all Mad-X commands called.
     '''
     def __init__(self,model,optics='',history=''):
-
         
         # name of model:
         self.model=model
@@ -78,7 +78,6 @@ class model():
             self._mprocess.join(5)
         except TypeError:
             pass
-    
     def __str__(self):
         return self.model
     
