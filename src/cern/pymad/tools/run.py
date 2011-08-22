@@ -63,7 +63,7 @@ def init(mode='cpymad', **kwargs):
     else:
         raise ValueError("Unknown mode '" + mode + "'! Use one of 'cpymad' or 'jpymad'!")
     
-    PyMadGlobals.PYMAD_SERVICE = pms
+    PyMadGlobals.PYMAD_SERVICE = True
     return pms
 
 def cleanup():
