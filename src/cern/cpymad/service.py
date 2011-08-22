@@ -21,7 +21,8 @@ Created on 16 Aug 2011
 .. moduleauthor:: Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen[at]cern.ch>
 '''
 from cern.pymad.abc.service import PyMadService
-from cern import cpymad,madx
+from cern import cpymad
+
 
 class CpymadService(PyMadService):
     ''' The CPymad implementation of the
@@ -29,10 +30,15 @@ class CpymadService(PyMadService):
     
     def __init__(self, **kwargs):
         self._am=None
-        self.madx=madx.madx()
+        self._models=[]
         for key, value in kwargs.items():
             print "WARN: unhandled option '" + key + "' for CPyMandService. Ignoring it." 
     
+    def __del__(self):
+        if hasattr(self,'_models'):
+            for m in self._models:
+                print "Deleting model "+str(m)
+                m.__del__()
     
     def mdefs(self):
         return cpymad.modelList()
@@ -41,19 +47,27 @@ class CpymadService(PyMadService):
         return self.mdefs()
     
     def models(self):
-        return self.madx.list_of_models()
+        mnames=[]
+        for m in self._models:
+            mnames.append(str(m))
+        return mnames
     
     def create_model(self, modeldef):
-        self._am=cpymad.model(modeldef)
+        self._models.append(cpymad.model(modeldef))
+        self._am=self._models[-1]
         return self._am
     
     def am(self):
         return self._am
-    def delete_model(self):
-        del self._am
-        self._am=None
     
+    def delete_model(self,model):
+        if str(self._am)==model:
+            self._am=None
+        for i in range(len(self._models)):
+            if model==str(self._models[i]):
+                del self._models[i]
+    
+    def cleanup(self):
+        print "Cleaning up service.."
+        self.__del__()
 
-if __name__=="__main__":
-    pmdl=CpymadService.create_model('lhc')
-    print pmdl.models()

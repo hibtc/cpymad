@@ -33,7 +33,7 @@ cdef extern from "madextern.h":
     #table *getTable()
 
 import os,sys
-from pymad.io import tfs
+from pymad.io import tfs,tfsDict
 
 _madstarted=False
 
@@ -148,11 +148,13 @@ class madx:
     # @param fname [string,optional] name of file to store tfs table
     # @param pattern [list, optional] pattern to include in table
     # @param columns [list or string, optional] columns to include in table
+    # @param retdict [bool] if true, returns tables as dictionary types
     def twiss(self,
               sequence,
               pattern=['full'],
               columns='name,s,betx,bety,x,y,dx,dy,px,py,mux,muy',
-              fname=''
+              fname='',
+              retdict=False
               ):
         if fname:
             tmpfile=fname
@@ -164,9 +166,9 @@ class madx:
                 i+=1
         self.select('twiss',pattern,columns)
         self.command('set, format="12.6F";')
-        self.command('use, sequence='+sequence+';')
+        self.use(sequence)
         self.command('twiss, sequence='+sequence+', file="'+tmpfile+'";')
-        tab,param=tfs(tmpfile)
+        tab,param=self._get_dict(tmpfile,retdict)
         if not fname:
             os.remove(tmpfile)
         return tab,param
@@ -182,7 +184,8 @@ class madx:
               sequence,
               pattern=['full'],
               columns='name,l,angle,x,y,z,theta',
-              fname=''
+              fname='',
+              retdict=False
               ):
         if fname:
             tmpfile=fname
@@ -194,12 +197,15 @@ class madx:
                 i+=1
         self.select('survey',pattern,columns)
         self.command('set, format="12.6F";')
-        self.command('use, period='+sequence+';')
+        self.use(sequence)
         self.command('survey, file="'+tmpfile+'";')
-        tab,param=tfs(tmpfile)
+        tab,param=self._get_dict(tmpfile,retdict)
         if not fname:
             os.remove(tmpfile)
         return tab,param
+    
+    def use(self,sequence):
+        self.command('use, sequence='+sequence+';')
     
     def list_of_models(self):
         global _loaded_models
@@ -254,3 +260,8 @@ class madx:
         return ret
         #print "Currently number of sequenses available:",seqs.curr
         #print "Name of list:",seqs.name
+
+    def _get_dict(self,tmpfile,retdict):
+        if retdict:
+            return tfsDict(tmpfile)
+        return tfs(tmpfile)

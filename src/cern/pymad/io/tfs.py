@@ -28,10 +28,14 @@ import os
 from cern.pymad.domain import TfsTable, TfsSummary
     
 def tfs(inputfile):
-    '''
-    .. py:function:: tfs(inputfile)
+    table,params=tfsDict(inputfile)
+    return TfsTable(table), TfsSummary(params)
 
-    Read a tfs table and returns table/parameters
+def tfsDict(inputfile):
+    '''
+    .. py:function:: tfsDict(inputfile)
+
+    Read a tfs table and returns table/summary info
     
     The function takes in a tfs file. It will add
     all parameters into one dictionary, and the table
@@ -39,7 +43,7 @@ def tfs(inputfile):
 
     :param string inputfile: tfs file, full path
     :raises ValueError: In case file path is not found
-    :rtype: tuple containing (tfs table (TfsTable), parameters (TfsSummary))
+    :rtype: tuple containing dictionaries (tfs table , summary)
 
     See also: :mod:`pymad.domain.tfs`
     '''
@@ -60,7 +64,7 @@ def tfs(inputfile):
             names=l.split()[1:]
             table=_read_table(f,names)
         l=f.readline()
-    return TfsTable(table), TfsSummary(params)
+    return table, params
 
 ##
 # Add parameter to object

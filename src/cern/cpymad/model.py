@@ -27,9 +27,11 @@ Cython implementation of the model api.
 
 import json, os, sys
 from cern.madx import madx
+#from cern.pymad import abc.model
+import multiprocessing
 
-
-class model:
+#class model(model.PyMadModel):
+class model():
     '''
     model class implementation.
      
@@ -38,48 +40,46 @@ class model:
     :param string history: Name of file which will contain all Mad-X commands called.
     '''
     def __init__(self,model,optics='',history=''):
-        self.madx=madx(histfile=history)
+
         
-        already_loaded=False
-        for m in self.madx.list_of_models():
-            if model==m.model:
-                _deepcopy(m,self)
-                already_loaded=True
+        # name of model:
+        self.model=model
+        # loading the dictionary...
+        self._dict=_get_data(model)
         
-        if not already_loaded:
-            # check that the model does not conflict with existing models..
-            _check_compatible(model)
-            # name of model:
-            self.model=model
-            # loading the dictionary...
-            self._dict=_get_data(model)
-            
-            self._db=None
-            for db in self._dict['dbdir']:
-                if os.path.isdir(db):
-                    self._db=db
-            if not self._db:
-                raise ValueError,"Could not find an available database path"
-            
-            
-            self.madx.verbose(False)
-            self.madx.command(_get_file_content(os.path.join('_models',self._dict['header'])))
-            
-            self._call(self._dict['sequence'])
-            
-            self._optics=''
-            self.madx.append_model(self)
+        self._db=None
+        for db in self._dict['dbdir']:
+            if os.path.isdir(db):
+                self._db=db
+        if not self._db:
+            raise ValueError,"Could not find an available database path"
+        
+        
+        self._parent_pipe,self._child_pipe=multiprocessing.Pipe()
+        self._mprocess=multiprocessing.Process(target=_modelProcess, 
+                                               args=(self._child_pipe,model,history))
+        self._mprocess.start()
+        
+        self._call(self._dict['sequence'])
+        
+        self._optics=''
         
         self.set_optics(optics)
     
     def __del__(self):
-        del self.madx
+        try:
+            self._parent_pipe.send('delete_model')
+            self._mprocess.join()
+        except TypeError:
+            pass
     
     def __str__(self):
         return self.model
     
     def _call(self,f):
-        self.madx.call(self._db+f)
+        self._parent_pipe.send(('call',self._db+f))
+        return self._parent_pipe.recv()
+        #self.madx.call(self._db+f)
     
     def has_sequence(self,sequence):
         '''
@@ -87,7 +87,8 @@ class model:
          
          :param string sequence: Sequence name to be checked.
         '''
-        return sequence in self.madx.get_sequences()
+        return self._sendrecv(('has_sequence',sequence))
+        #return sequence in self.madx.get_sequences()
     
     def has_optics(self,optics):
         '''
@@ -96,7 +97,7 @@ class model:
          :param string optics: Optics name to be checked.
         '''
         return optics in self._dict['optics']
-        
+    
     def set_optics(self,optics):
         '''
          Set new optics.
@@ -123,35 +124,36 @@ class model:
         for f in odict['flags']:
             val=odict['flags'][f]
             for e in fdict[f]:
-                self.madx.command(e+":="+val)
+                self._cmd(e+":="+val)
+                #self.madx.command(e+":="+val)
         
         for b in odict['beams']:
-            self.madx.command(bdict[b])
+            self._cmd(bdict[b])
+            #self.madx.command(bdict[b])
         self._optics=optics
     
     def list_sequences(self):
-        return self.madx.get_sequences()
+        return self._sendrecv('get_sequences')
     
     def list_optics(self):
         return self._dict['optics'].keys()
     
     def twiss(self,sequence="",columns=""):
+        from cern.pymad.domain import TfsTable, TfsSummary
         if sequence=="":
             sequence=self._dict['default']['sequence']
-        if columns:
-            return self.madx.twiss(sequence=sequence,columns=columns)
-        else:
-            return self.madx.twiss(sequence=sequence)
-            
-
-
-def _deepcopy(origin,new):
-    new.madx=origin.madx
-    new.model=origin.model
-    new._dict=origin._dict
-    new._db=origin._db
-    new._optics=origin._optics
-  
+        t,s=self._sendrecv(('twiss',sequence,columns))
+        return TfsTable(t),TfsSummary(s)
+        #return self.madx.twiss(sequence=sequence,columns=columns)
+    
+    def _cmd(self,command):
+        self._parent_pipe.send(('command',command))
+        return self._parent_pipe.recv()
+    def _sendrecv(self,func):
+        self._parent_pipe.send(func)
+        return self._parent_pipe.recv()
+        
+           
 def _get_data(modelname):
     fname=os.path.join('_models',modelname+'.json')
     _dict = _get_file_content(fname)
@@ -168,9 +170,32 @@ def _get_file_content(filename):
     
 
 
-def _check_compatible(model):
-    m=madx()
-    d=_get_data(model)
-    if len(m.list_of_models())>0:
-        # we always throw error until we know this actually can work..
-        raise ValueError("Two models cannot be loaded at once at this moment")
+def _modelProcess(conn,model,history=''):
+    _madx=madx(histfile=history)
+    _dict=_get_data(model)
+    _madx.verbose(False)
+    _madx.append_model(model)
+    _madx.command(_get_file_content(os.path.join('_models',_dict['header'])))
+    while True:
+        cmd=conn.recv()
+        print "Received command:",cmd
+        if cmd=='delete_model':
+            conn.close()
+            break
+        elif cmd[0]=='call':
+            _madx.call(cmd[1])
+            conn.send('done')
+        elif cmd[0]=='has_sequence':
+            conn.send(cmd[1] in _madx.get_sequences())
+        elif cmd[0]=='command':
+            _madx.command(cmd[1])
+            conn.send('done')
+        elif cmd[0]=='twiss':
+            if cmd[2]:
+                t,p=_madx.twiss(sequence=cmd[1],columns=cmd[2],retdict=True)
+            else:
+                t,p=_madx.twiss(sequence=cmd[1],retdict=True)
+            conn.send((t,p))
+        else:
+            raise ValueError("You sent a wrong command to subprocess")
+            
