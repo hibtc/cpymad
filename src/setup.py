@@ -21,7 +21,8 @@ from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
-sourcefiles=["cern/cpymad/madx.pyx"] # this can be a list of both c and pyx source files..
+sourcefiles=[["cern/cpymad/madx.pyx"],
+             ["cern/cpymad/model.pyx"]]
 pythonsrc=["cern",
            "cern.cpymad",
            "cern.jpymad",
@@ -38,21 +39,30 @@ includedirs=['/usr/local/include/madX',
              '/afs/cern.ch/user/y/ylevinse/.local/include/madX']
 libdirs=['/afs/cern.ch/user/y/ylevinse/.local/lib']
 
-madmodule=Extension('cern.madx',
+mods=[Extension('cern.madx',
                     define_macros = [('MAJOR_VERSION', '0'),
                                      ('MINOR_VERSION', '1')],
                     include_dirs = includedirs,
                     libraries = libs,
-                    sources = sourcefiles,
+                    sources = sourcefiles[0],
+                    library_dirs = libdirs
+                    ),
+       Extension('cern.cpymad.model',
+                    define_macros = [('MAJOR_VERSION', '0'),
+                                     ('MINOR_VERSION', '1')],
+                    include_dirs = includedirs,
+                    libraries = libs,
+                    sources = sourcefiles[1],
                     library_dirs = libdirs
                     )
+      ]
 
 setup(
     name='PyMAD',
     version='0.1',
     description='Interface to Mad-X, using Cython or Py4J through JMAD',
     cmdclass = {'build_ext': build_ext},
-    ext_modules = [madmodule],
+    ext_modules = mods,
     author='PyMAD developers',
     author_email='pymad@cern.ch',
     license = 'CERN Standard Copyright License',
