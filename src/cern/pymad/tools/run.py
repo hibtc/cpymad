@@ -50,9 +50,9 @@ def init(mode='cpymad', **kwargs):
      
     '''
     
-    if is_initialized():
-        print("Already a pymad service running. Doing nothing.")
-        return None
+    #if is_initialized():
+        #print("Already a pymad service running. Doing nothing.")
+        #return None
     
     if mode is 'cpymad':
         from cern.cpymad.service import CpymadService 

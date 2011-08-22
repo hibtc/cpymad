@@ -33,7 +33,8 @@ import multiprocessing
 #class model(model.PyMadModel):
 class model():
     '''
-    model class implementation.
+    model class implementation. the model spawns a madx instance in a separate process.
+    this has the advantage that you can run separate models which do not affect each other.
      
     :param string model: Name of model to load.
     :param string optics: Name of optics to load
@@ -67,9 +68,10 @@ class model():
         self.set_optics(optics)
     
     def __del__(self):
+        print "Trying to delete model..."
         try:
             self._parent_pipe.send('delete_model')
-            self._mprocess.join()
+            self._mprocess.join(5)
         except TypeError:
             pass
     
@@ -178,7 +180,6 @@ def _modelProcess(conn,model,history=''):
     _madx.command(_get_file_content(os.path.join('_models',_dict['header'])))
     while True:
         cmd=conn.recv()
-        print "Received command:",cmd
         if cmd=='delete_model':
             conn.close()
             break

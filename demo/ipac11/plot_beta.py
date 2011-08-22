@@ -18,10 +18,10 @@ model = pms.create_model('lhc')
 pm.ls_models()
 
 # obtain get twiss table in a python object
-table,parameters=model.twiss(columns=['name', 's', 'betx', 'bety'])
+table,summary=model.twiss(columns=['name', 's', 'betx', 'bety'])
 
 # plot the result
 plt.plot(table.s,table.betx)
 plt.show()
 
-del pms
+del pms,model

@@ -34,12 +34,6 @@ class CpymadService(PyMadService):
         for key, value in kwargs.items():
             print "WARN: unhandled option '" + key + "' for CPyMandService. Ignoring it." 
     
-    def __del__(self):
-        if hasattr(self,'_models'):
-            for m in self._models:
-                print "Deleting model "+str(m)
-                m.__del__()
-    
     def mdefs(self):
         return cpymad.modelList()
     
@@ -66,8 +60,4 @@ class CpymadService(PyMadService):
         for i in range(len(self._models)):
             if model==str(self._models[i]):
                 del self._models[i]
-    
-    def cleanup(self):
-        print "Cleaning up service.."
-        self.__del__()
 
