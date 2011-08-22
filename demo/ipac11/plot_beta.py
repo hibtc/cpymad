@@ -24,4 +24,4 @@ table,summary=model.twiss(columns=['name', 's', 'betx', 'bety'])
 plt.plot(table.s,table.betx)
 plt.show()
 
-del pms,model
+pms.cleanup()

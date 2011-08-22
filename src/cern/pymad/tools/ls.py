@@ -32,15 +32,15 @@ def ls_mdefs(pms=None):
     :param pms: the pymad service from which to retrieve the model definitions, 
     if this is None then the singleton is used
     """
-    #if pms is None:
-        #pms = get_pms()
+    if pms is None:
+        pms = get_pms()
         
-    #mdefs = pms.mdefs
+    mdefs = pms.mdefs
     
     print "Available model definitions:"
     print "----------------------------"
-    #for mdef in mdefs:
-        #print mdef
+    for mdef in mdefs:
+        print mdef
 
 
 def ls_models(pms=None):
@@ -49,11 +49,11 @@ def ls_models(pms=None):
     Arguments:
     :param pms: the pymad service from which to retrieve the model definitions, if this is None then the singleton is used
     """
-    #if pms is None:
-        #pms = get_pms()
+    if pms is None:
+        pms = get_pms()
         
     print "Model instances:"
     print "----------------"
-    #for model in pms.models():
-        #print model
+    for model in pms.models():
+        print model
         
