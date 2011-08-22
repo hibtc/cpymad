@@ -34,7 +34,7 @@ class PyMadModelDefinition():
 
     @abstractproperty
     def seqnames(self):
-        ''' Returns a list of the names of the defines sequences in this model definition '''
+        ''' Returns a list of the names of the defined sequences in this model definition '''
         pass
     
     @abstractproperty
