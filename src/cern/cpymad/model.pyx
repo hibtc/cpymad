@@ -55,10 +55,14 @@ class model():
         if not self._db:
             raise ValueError,"Could not find an available database path"
         
+        # Defining two pipes which are used for communicating...
+        _child_pipe_recv,_parent_send=multiprocessing.Pipe(False)
+        _parent_recv,_child_pipe_send=multiprocessing.Pipe(False)
+        self._send=_parent_send.send
+        self._recv=_parent_recv.recv
         
-        self._parent_pipe,self._child_pipe=multiprocessing.Pipe()
         self._mprocess=multiprocessing.Process(target=_modelProcess, 
-                                               args=(self._child_pipe,model,history))
+                                               args=(_child_pipe_send,_child_pipe_recv,model,history))
         self._mprocess.start()
         
         self._call(self._dict['sequence'])
@@ -70,7 +74,7 @@ class model():
     def __del__(self):
         print "Trying to delete model..."
         try:
-            self._parent_pipe.send('delete_model')
+            self._send('delete_model')
             self._mprocess.join(5)
         except TypeError:
             pass
@@ -79,8 +83,8 @@ class model():
         return self.model
     
     def _call(self,f):
-        self._parent_pipe.send(('call',self._db+f))
-        return self._parent_pipe.recv()
+        self._send(('call',self._db+f))
+        return self._recv()
         #self.madx.call(self._db+f)
     
     def has_sequence(self,sequence):
@@ -149,11 +153,11 @@ class model():
         #return self.madx.twiss(sequence=sequence,columns=columns)
     
     def _cmd(self,command):
-        self._parent_pipe.send(('command',command))
-        return self._parent_pipe.recv()
+        self._send(('command',command))
+        return self._recv()
     def _sendrecv(self,func):
-        self._parent_pipe.send(func)
-        return self._parent_pipe.recv()
+        self._send(func)
+        return self._recv()
         
            
 def _get_data(modelname):
@@ -172,31 +176,32 @@ def _get_file_content(filename):
     
 
 
-def _modelProcess(conn,model,history=''):
+def _modelProcess(sender,receiver,model,history=''):
     _madx=madx(histfile=history)
     _dict=_get_data(model)
     _madx.verbose(False)
     _madx.append_model(model)
     _madx.command(_get_file_content(os.path.join('_models',_dict['header'])))
     while True:
-        cmd=conn.recv()
+        cmd=receiver.recv()
         if cmd=='delete_model':
-            conn.close()
+            sender.close()
+            receiver.close()
             break
         elif cmd[0]=='call':
             _madx.call(cmd[1])
-            conn.send('done')
+            sender.send('done')
         elif cmd[0]=='has_sequence':
-            conn.send(cmd[1] in _madx.get_sequences())
+            sender.send(cmd[1] in _madx.get_sequences())
         elif cmd[0]=='command':
             _madx.command(cmd[1])
-            conn.send('done')
+            sender.send('done')
         elif cmd[0]=='twiss':
             if cmd[2]:
                 t,p=_madx.twiss(sequence=cmd[1],columns=cmd[2],retdict=True)
             else:
                 t,p=_madx.twiss(sequence=cmd[1],retdict=True)
-            conn.send((t,p))
+            sender.send((t,p))
         else:
             raise ValueError("You sent a wrong command to subprocess")
             
