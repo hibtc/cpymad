@@ -218,4 +218,4 @@ class _modelProcess(multiprocessing.Process):
                     self.sender.send((t,p))
                 else:
                     raise ValueError("You sent a wrong command to subprocess: "+str(cmd))
-                    break
+
