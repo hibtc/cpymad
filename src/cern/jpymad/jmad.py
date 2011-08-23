@@ -139,7 +139,7 @@ def start_pymadservice(jmadhome=None):
     """
     starts the nogui-version of the service
     """
-    return _start('start-pymad-service', jmadhome)
+    return _start('start-pymadservice', jmadhome)
 
 def stop():
     """
