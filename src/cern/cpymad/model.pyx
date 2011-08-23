@@ -27,11 +27,11 @@ Cython implementation of the model api.
 
 import json, os, sys
 from cern.madx import madx
+import cern.cpymad
 #from cern.pymad import abc.model
 import multiprocessing
 import signal,atexit
-
-
+from cern.pymad.globals import USE_COUCH
 
 #class model(model.PyMadModel):
 class model():
@@ -50,20 +50,21 @@ class model():
         # loading the dictionary...
         self._dict=_get_data(model)
         
-        self._db=None
-        for db in self._dict['dbdir']:
-            if os.path.isdir(db):
-                self._db=db
-        if not self._db:
-            raise ValueError,"Could not find an available database path"
         # Defining two pipes which are used for communicating...
         _child_pipe_recv,_parent_send=multiprocessing.Pipe(False)
         _parent_recv,_child_pipe_send=multiprocessing.Pipe(False)
         self._send=_parent_send.send
         self._recv=_parent_recv.recv
+        if not USE_COUCH:
+            for d in self._dict['dbdirs']:
+                if os.path.isdir(d):
+                    self._db=d
+                    break
         
-        self._mprocess=_modelProcess(_child_pipe_send,_child_pipe_recv,model,history)
+        self._mprocess=_modelProcess(_child_pipe_send,_child_pipe_recv,model,self._dict['initscript'],history)
+        
         self._mprocess.start()
+        
         atexit.register(self._mprocess.terminate)
         
         self._call(self._dict['sequence'])
@@ -83,9 +84,12 @@ class model():
         return self.model
     
     def _call(self,f):
-        self._send(('call',self._db+f))
-        return self._recv()
-        #self.madx.call(self._db+f)
+        if USE_COUCH:
+            cmd=cern.cpymad._couch_server.get_file(self.model,f)
+            for c in cmd.split('\n'): # I wonder if this might be needed for now?
+                ret=self._sendrecv(('command',cmd))
+            return ret
+        return self._sendrecv(('call',self._db+f))
     
     def has_sequence(self,sequence):
         '''
@@ -94,7 +98,6 @@ class model():
          :param string sequence: Sequence name to be checked.
         '''
         return self._sendrecv(('has_sequence',sequence))
-        #return sequence in self.madx.get_sequences()
     
     def has_optics(self,optics):
         '''
@@ -120,22 +123,21 @@ class model():
         
         # optics dictionary..
         odict=self._dict['optics'][optics]
-        # flags dictionary..
-        fdict=self._dict['flags']
+        # knobs dictionary..
+        kdict=self._dict['knobs']
         bdict=self._dict['beams']
         
         for strfile in odict['strengths']:
             self._call(strfile)
         
-        for f in odict['flags']:
-            val=odict['flags'][f]
-            for e in fdict[f]:
-                self._cmd(e+":="+val)
-                #self.madx.command(e+":="+val)
+        for f in odict['knobs']:
+            if odict['knobs'][f]:
+                for e in kdict[f]:
+                    val=str(kdict[f][e])
+                    self._cmd(e+":="+val)
         
         for b in odict['beams']:
             self._cmd(bdict[b])
-            #self.madx.command(bdict[b])
         self._optics=optics
     
     def list_sequences(self):
@@ -161,11 +163,16 @@ class model():
         
            
 def _get_data(modelname):
-    fname=os.path.join('_models',modelname+'.json')
-    _dict = _get_file_content(fname)
+    if USE_COUCH:
+        return cern.cpymad._couch_server.get_model(modelname)
+    fname=modelname+'.json'
+    _dict = _get_file_content(modelname,fname)
     return json.loads(_dict)
 
-def _get_file_content(filename):
+def _get_file_content(modelname,filename):
+    if USE_COUCH:
+        return cern.cpymad._couch_server.get_file(modelname,filename)
+    filename=os.path.join('_models',filename)
     try:
          import pkgutil
          stream = pkgutil.get_data(__name__, filename)
@@ -176,19 +183,21 @@ def _get_file_content(filename):
     
 class _modelProcess(multiprocessing.Process):
     
-    def __init__(self,sender,receiver,model,history=''):
+    def __init__(self,sender,receiver,model,modelhead,history=''):
         self.sender=sender
         self.receiver=receiver
         self.model=model
+        self._modelhead=modelhead
         self.history=history
         multiprocessing.Process.__init__(self) 
     
     def run(self):
         _madx=madx(histfile=self.history)
-        _dict=_get_data(self.model)
         _madx.verbose(False)
         _madx.append_model(self.model)
-        _madx.command(_get_file_content(os.path.join('_models',_dict['header'])))
+        if USE_COUCH:
+            _madx.command(_get_file_content(self._modelhead))
+        del self._modelhead
         signal.signal(signal.SIGTERM, sys.exit)
 
         def terminator(num, frame):

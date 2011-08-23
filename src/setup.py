@@ -25,6 +25,7 @@ sourcefiles=[["cern/cpymad/madx.pyx"],
              ["cern/cpymad/model.pyx"]]
 pythonsrc=["cern",
            "cern.cpymad",
+           "cern.cpymad._couch",
            "cern.jpymad",
            "cern.jpymad.tools", 
            "cern.pymad",

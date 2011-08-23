@@ -1,42 +1,42 @@
 {
-    "header": "init_lhc.madx", 
+    "initscript": "init_lhc.madx", 
     "beams": {
         "lhcb1coll": "BEAM, SEQUENCE=LHCB1, PARTICLE=PROTON, PC=7000;", 
         "lhcb1inj": "BEAM, SEQUENCE=LHCB1, PARTICLE=PROTON, PC=450;", 
         "lhcb2coll": "BEAM, SEQUENCE=LHCB2, PARTICLE=PROTON, PC=7000, BV=-1;", 
         "lhcb2inj": "BEAM, SEQUENCE=LHCB2, PARTICLE=PROTON, PC=450, BV=-1;"
     }, 
-    "dbdir": ["/afs/cern.ch/eng/lhc/optics/V6.503/"], 
-    "flags": {
-        "expmagnets": [
-            "on_atlas", 
-            "on_alice", 
-            "on_cms", 
-            "on_lhcb"
-        ], 
-        "separation": [
-            "on_sep1", 
-            "on_sep2", 
-            "on_sep5", 
-            "on_sep8"
-        ], 
-        "xangle": [
-            "on_x1", 
-            "on_x2", 
-            "on_x5", 
-            "on_x8"
-        ]
-    }, 
+    "dbdirs": ["/afs/cern.ch/eng/lhc/optics/V6.503/"], 
+   "knobs": {
+       "expmagnets": {
+           "on_atlas": 1,
+           "on_alice": 1,
+           "on_cms": 1,
+           "on_lhcb": 1
+       },
+       "separation": {
+           "on_sep1": 1,
+           "on_sep2": 1,
+           "on_sep5": 1,
+           "on_sep8": 1
+       },
+       "xangle": {
+           "on_x1": 1,
+           "on_x2": 4.7,
+           "on_x5": 1,
+           "on_x8": 1
+       }
+   },
     "optics": {
         "collision": {
             "beams": [
                 "lhcb1coll", 
                 "lhcb2coll"
             ], 
-            "flags": {
-                "expmagnets": "1", 
-                "separation": "0", 
-                "xangle": "1"
+            "knobs": {
+                "expmagnets": true, 
+                "separation": false, 
+                "xangle": true
             }, 
             "strengths": [
                 "V6.5.coll.str"
@@ -47,10 +47,10 @@
                 "lhcb1inj", 
                 "lhcb2inj"
             ], 
-            "flags": {
-                "expmagnets": "0", 
-                "separation": "1", 
-                "xangle": "1"
+            "knobs": {
+                "expmagnets": false, 
+                "separation": true, 
+                "xangle": true
             }, 
             "strengths": [
                 "V6.5.inj.str"

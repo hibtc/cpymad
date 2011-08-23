@@ -16,9 +16,12 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 import os
-
+from cern.pymad.globals import USE_COUCH
+import cern.cpymad
 
 def modelList():
+    if USE_COUCH:
+        return cern.cpymad._couch_server.ls_models()
     pymadloc=os.path.dirname(__file__)
     modelloc=os.path.join(pymadloc,'_models')
     ret=[]
@@ -26,3 +29,7 @@ def modelList():
         if len(f)>5 and f[-5:].lower()=='.json':
             ret.append(f[:-5])
     return ret
+
+
+if __name__=="__main__":
+    print modelList()

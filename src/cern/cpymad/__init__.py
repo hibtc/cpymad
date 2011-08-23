@@ -19,3 +19,8 @@
 from cern.cpymad.model import model
 
 from listModels import modelList
+from cern.pymad.globals import USE_COUCH
+
+if USE_COUCH:
+    import _couch
+    _couch_server=_couch.couch.Server()

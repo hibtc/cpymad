@@ -226,8 +226,7 @@ class madx:
 
     def _fixcmd(self,cmd):
         if type(cmd)!=str and type(cmd)!=unicode:
-            print("ERROR: input must be a string")
-            return 1
+            raise TypeError("ERROR: input must be a string, not "+str(type(cmd)))
         if len(cmd.strip())==0:
             return 0
         if cmd.strip()[-1]!=';':
