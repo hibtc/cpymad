@@ -45,12 +45,7 @@ def _get_jmad_home():
     """
     returns the home directory of jmad
     """
-    varname = 'JMAD_HOME'
-    if os.environ.has_key(varname):
-        return os.environ[varname]
-    else:
-        print "WARN: environment variable '" + varname + "' not set! Either set it to the root of jmad (pymadservice or gui), or start the gui manually."
-        return None 
+    return _get_env_var('JMAD_HOME')
 
 def _wait_for_file(filename, timeout=10.0):
     '''
@@ -88,6 +83,16 @@ def _delete_waitfile(filename, ignorefail=True):
                 print "WARN: failed to delete file'" + filename + "' try again in " + str(_SLEEP_INTERVAL) + " sec."
                 sleep(_SLEEP_INTERVAL)
 
+def _get_env_var(varname):
+    if not os.environ.has_key(varname):
+        return None
+    return os.environ[varname]
+
+
+def _search_path_for_bin(binname):
+    for d in _get_env_var("PATH").split(':'):
+        if os.path.isfile(os.path.join(d,binname)):
+            return d
 
 def _start(scriptname, jmadhome=None):
     """
@@ -96,10 +101,15 @@ def _start(scriptname, jmadhome=None):
     if jmadhome is None:
         jmadhome = _get_jmad_home()
         
+    if jmadhome is None: # YIL suggestion: also check system path..
+        jmadhome = _search_path_for_bin(scriptname+ _get_extension())
+        
     if jmadhome is None:
+        print("WARNING: Could not locate jmad script "+scriptname)
         return False
     
-    waitfile = os.path.join(jmadhome, 'pymad-service-ready.out')
+    #waitfile = os.path.join(jmadhome, 'pymad-service-ready.out')
+    waitfile = os.path.join(os.getcwd(),'pymad-service-ready.out')
     _delete_waitfile(waitfile, False)
     
     cmd = os.path.join(jmadhome, scriptname + _get_extension())
@@ -108,7 +118,9 @@ def _start(scriptname, jmadhome=None):
         print "WARN: start script '" + cmd + "' does not exist. Cannot start."
         return False
     
-    Popen(cmd, cwd=jmadhome)
+    
+    
+    Popen([cmd,waitfile], cwd=jmadhome)
     
     if _wait_for_file(waitfile):
         print "... started."
@@ -121,13 +133,13 @@ def start_gui(jmadhome=None):
     """
     starts jmad to later be able to connect to it.
     """
-    return _start('start-gui', jmadhome)
+    return _start('start-jmad-gui', jmadhome)
 
 def start_pymadservice(jmadhome=None):
     """
     starts the nogui-version of the service
     """
-    return _start('start-pymadservice', jmadhome)
+    return _start('start-pymad-service', jmadhome)
 
 def stop():
     """
