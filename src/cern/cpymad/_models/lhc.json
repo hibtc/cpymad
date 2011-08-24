@@ -56,7 +56,87 @@
                 "V6.5.inj.str"
             ]
         }
-    }, 
+    },
+    "sequences": { 
+        "lhcb1": {
+           "aperfiles": [
+               "aperture/aperture.b1.madx",
+               "aperture/aper_tol.b1.madx"
+           ],
+           "ranges":
+               {
+                   "ir1r":{
+                       "range": ["IP1","E.DS.R1.B1"],
+                       "offsets": 0
+                       },
+                   "ir1l":{
+                       "range":["S.DS.L1.B1","IP1"],
+                       "offsets": 0
+                       },
+                   "ir2":{
+                       "range":["S.DS.L2.B1","E.DS.R2.B1"],
+                       "offsets": 1
+                       },
+                   "ir5":{
+                       "range":["S.DS.L5.B1","E.DS.R5.B1"],
+                       "offsets": 4
+                       },
+                   "ir8":{
+                       "range":["S.DS.L8.B1","E.DS.R8.B1"],
+                       "offsets": 7
+                       }
+               },
+               
+           "offsets": [
+               "aperture/offset.ip1.b1.tfs",
+               "aperture/offset.ip2.b1.tfs",
+               "aperture/offset.ip3.b1.tfs",
+               "aperture/offset.ip4.b1.tfs",
+               "aperture/offset.ip5.b1.tfs",
+               "aperture/offset.ip6.b1.tfs",
+               "aperture/offset.ip7.b1.tfs",
+               "aperture/offset.ip8.b1.tfs"
+               ]},
+        "lhcb2": {
+           "aperfiles": [
+               "aperture/aperture.b2.madx",
+               "aperture/aper_tol.b2.madx"
+           ],
+           "ranges": 
+               {
+               "ir1l":{
+                   "range": ["IP1","E.DS.L1.B2"],
+                   "offsets": 0
+                   },
+               "ir1r":{
+                   "range":["S.DS.L1.B1","IP1"],
+                   "offsets": 0
+                   },
+               "ir2":{
+                   "range":["S.DS.L2.B1","E.DS.R2.B1"],
+                   "offsets": 1
+                   },
+               "ir5":{
+                   "range":["S.DS.L5.B1","E.DS.R5.B1"],
+                   "offsets": 4
+                   },
+               "ir8":{
+                   "range":["S.DS.L8.B1","E.DS.R8.B1"],
+                   "offsets": 7
+                   }
+               },
+           "offsets": [
+               "aperture/offset.ip1.b2.tfs",
+               "aperture/offset.ip2.b2.tfs",
+               "aperture/offset.ip3.b2.tfs",
+               "aperture/offset.ip4.b2.tfs",
+               "aperture/offset.ip5.b2.tfs",
+               "aperture/offset.ip6.b2.tfs",
+               "aperture/offset.ip7.b2.tfs",
+               "aperture/offset.ip8.b2.tfs"
+               ]
+             }
+         },
     "default": { 
         "optics": "collision",
         "sequence": "lhcb1"
