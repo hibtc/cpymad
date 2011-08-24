@@ -21,8 +21,7 @@ from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
-sourcefiles=[["cern/cpymad/madx.pyx"],
-             ["cern/cpymad/model.pyx"]]
+sourcefiles=[["cern/cpymad/madx.pyx"]]
 pythonsrc=["cern",
            "cern.cpymad",
            "cern.cpymad._couch",
@@ -48,14 +47,14 @@ mods=[Extension('cern.madx',
                     sources = sourcefiles[0],
                     library_dirs = libdirs
                     ),
-       Extension('cern.cpymad.model',
-                    define_macros = [('MAJOR_VERSION', '0'),
-                                     ('MINOR_VERSION', '1')],
-                    include_dirs = includedirs,
-                    libraries = libs,
-                    sources = sourcefiles[1],
-                    library_dirs = libdirs
-                    )
+       #Extension('cern.cpymad.model',
+                    #define_macros = [('MAJOR_VERSION', '0'),
+                                     #('MINOR_VERSION', '1')],
+                    #include_dirs = includedirs,
+                    #libraries = libs,
+                    #sources = sourcefiles[1],
+                    #library_dirs = libdirs
+                    #)
       ]
 
 setup(
