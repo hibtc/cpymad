@@ -148,19 +148,15 @@ class madx:
     # @param flag [string] the flag to run select on
     # @param pattern [list] the new pattern
     # @param columns [list/string] the columns you want for the flag
-    def select(self,flag,pattern,columns):
+    def select(self,flag,columns,pattern=[]):
         self.command('SELECT, FLAG='+flag+', CLEAR;')
         if type(columns)==list:
-            #clms=','.join(str(c) for c in columns)
-            clms=''
-            for c in columns:
-                clms+=c+','
-            clms=clms[:-1]
+            clms=', '.join(columns)
         else:
             clms=columns
-        self.command('SELECT, FLAG='+flag+', PATTERN='+pattern[0]+', COLUMN='+clms+';')
-        for i in range(1,len(pattern)):
-            self.command('SELECT, FLAG='+flag+', PATTERN='+pattern[i]+';')
+        self.command('SELECT, FLAG='+flag+', COLUMN='+clms+';')
+        for p in pattern:
+            self.command('SELECT, FLAG='+flag+', PATTERN='+p+';')
             
     ##
     # @brief Runs select+use+twiss on the sequence selected
@@ -185,7 +181,7 @@ class madx:
             while os.path.isfile(tmpfile):
                 tmpfile='twiss.'+str(i)+'.temp.tfs'
                 i+=1
-        self.select('twiss',pattern,columns)
+        self.select('twiss',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
         self.use(sequence)
         self.command('twiss, sequence='+sequence+', file="'+tmpfile+'";')
@@ -217,7 +213,7 @@ class madx:
             while os.path.isfile(tmpfile):
                 tmpfile='survey.'+str(i)+'.temp.tfs'
                 i+=1
-        self.select('survey',pattern,columns)
+        self.select('survey',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
         self.use(sequence)
         self.command('survey, file="'+tmpfile+'";')
@@ -251,10 +247,10 @@ class madx:
             while os.path.isfile(tmpfile):
                 tmpfile='survey.'+str(i)+'.temp.tfs'
                 i+=1
-        self.select('aperture',pattern,columns)
+        self.select('aperture',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
-        self.use(sequence)
-        self.command('aperture,'+_add_range(madrange)+'file="'+tmpfile+'";')
+        #self.use(sequence) # this seems to cause a bug?
+        self.command('aperture,'+_add_range(madrange)+_add_offsets(offsets)+'file="'+tmpfile+'";')
         tab,param=_get_dict(tmpfile,retdict)
         if not fname:
             os.remove(tmpfile)
@@ -333,5 +329,9 @@ def _add_range(madrange):
             return 'range='+madrange[0]+'/'+madrange[1]+','
         else:
             raise TypeError("Wrong range type/format")
-    else:
-        return ''
+    return ''
+
+def _add_offsets(offsets):
+    if offsets:
+        return 'offsetelem="'+offsets+'",'
+    return ''

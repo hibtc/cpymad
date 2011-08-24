@@ -131,7 +131,6 @@ class model():
         # optics dictionary..
         odict=self._dict['optics'][optics]
         # knobs dictionary..
-        kdict=self._dict['knobs']
         bdict=self._dict['beams']
         
         for strfile in odict['strengths']:
@@ -139,13 +138,19 @@ class model():
         
         for f in odict['knobs']:
             if odict['knobs'][f]:
-                for e in kdict[f]:
-                    val=str(kdict[f][e])
-                    self._cmd(e+":="+val)
+                self.set_knob(f,1.0)
+            else:
+                self.set_knob(f,0.0)
         
         for b in odict['beams']:
             self._cmd(bdict[b])
         self._optics=optics
+    
+    def set_knob(self,knob,value):
+        kdict=self._dict['knobs']
+        for e in kdict[knob]:
+            val=str(kdict[knob][e]*value)
+            self._cmd(e+"="+val)
     
     def get_sequences(self):
         return self._sendrecv('get_sequences')
@@ -236,7 +241,13 @@ class model():
         ran=seq['ranges'][arange]['range']
         ofile=''
         if onum or onum!=0:
-            ofile=seq['offsets'][onum]
+            if USE_COUCH:
+                ofile='tmp_madx_offsets.tfs'
+                ftmp=file(ofile,'w')
+                ftmp.write(cern.cpymad._couch_server.get_file(self.model,seq['offsets'][onum]))
+                ftmp.close()
+            else:
+                ofile=self._db+seq['offsets'][onum]
         
         t,s=self._sendrecv(('aperture',sequence,ran,columns,ofile,fname))
         if retdict:
