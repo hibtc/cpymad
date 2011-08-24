@@ -65,6 +65,12 @@ class LookupDict():
         
     def _unify_key(self, key):
         return lower(key)
+    
+    def keys(self):
+        '''
+         Similar to dictionary.keys()...
+        '''
+        return self._values.keys()
 
 
 class TfsTable(LookupDict):
@@ -73,7 +79,7 @@ class TfsTable(LookupDict):
         LookupDict.__init__(self, values)
         if self._values.has_key('name'):
             self._names = self._values['name']
-            
+    
     @property
     def names(self):
         ''' Returns the names of the elements in the twiss table '''
