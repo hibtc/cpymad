@@ -34,9 +34,11 @@ cdef extern from "madextern.h":
 
 import os,sys
 from pymad.io import tfs,tfsDict
+import cern.pymad.globals
 
 _madstarted=False
 
+# I think this is deprecated..
 _loaded_models=[]
 
 class madx:
@@ -59,6 +61,14 @@ class madx:
         if histfile:
             self._hist=True
             self._hfile=file(histfile,'w')
+            self._rechist=recursive_history
+        elif cern.pymad.globals.MAD_HISTORY_BASE:
+            base=cern.pymad.globals.MAD_HISTORY_BASE
+            self._hist=True
+            i=0
+            while os.path.isfile(base+str(i)+'.madx'):
+                i+=1
+            self._hfile=file(base+str(i)+'.madx')
             self._rechist=recursive_history
         else:
             self._hist=False
@@ -170,6 +180,7 @@ class madx:
               sequence,
               pattern=['full'],
               columns='name,s,betx,bety,x,y,dx,dy,px,py,mux,muy',
+              madrange='',
               fname='',
               retdict=False
               ):
@@ -184,7 +195,7 @@ class madx:
         self.select('twiss',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
         self.use(sequence)
-        self.command('twiss, sequence='+sequence+', file="'+tmpfile+'";')
+        self.command('twiss, sequence='+sequence+','+_add_range(madrange)+' file="'+tmpfile+'";')
         tab,param=_get_dict(tmpfile,retdict)
         if not fname:
             os.remove(tmpfile)
@@ -194,6 +205,7 @@ class madx:
               sequence,
               pattern=['full'],
               columns='name,l,angle,x,y,z,theta',
+              madrange='',
               fname='',
               retdict=False
               ):
@@ -216,7 +228,7 @@ class madx:
         self.select('survey',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
         self.use(sequence)
-        self.command('survey, file="'+tmpfile+'";')
+        self.command('survey,'+_add_range(madrange)+' file="'+tmpfile+'";')
         tab,param=_get_dict(tmpfile,retdict)
         if not fname:
             os.remove(tmpfile)
@@ -242,10 +254,10 @@ class madx:
         if fname:
             tmpfile=fname
         else:
-            tmpfile='survey.temp.tfs'
+            tmpfile='aperture.temp.tfs'
             i=0
             while os.path.isfile(tmpfile):
-                tmpfile='survey.'+str(i)+'.temp.tfs'
+                tmpfile='aperture.'+str(i)+'.temp.tfs'
                 i+=1
         self.select('aperture',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
@@ -259,10 +271,12 @@ class madx:
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')
     
+    # I think this is deprecated..
     def list_of_models(self):
         global _loaded_models
         return _loaded_models
     
+    # I think this is deprecated..
     def append_model(self,model_name):
         global _loaded_models
         if model_name in _loaded_models:

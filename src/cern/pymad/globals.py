@@ -29,7 +29,18 @@ class PyMadGlobals():
     # the pymad-service singleton
     PYMAD_SERVICE=None
     
-# Use couchdb (only inside CERN at the moment..)
-# Does not work yet, problems with
-# multiprocessing and accesses to the server.
+'''
+ Use couchdb (only inside CERN at the moment..)
+ Does not work yet, problems with
+ multiprocessing and accesses to the server.
+'''
 USE_COUCH=False
+
+'''
+ If this is a string (i.e. "if MAD_HISTORY_BASE" is True),
+ then every madx instance will write a history
+ file with this as base name.
+ an integer will be appended, pluss file ending '.madx'
+ If you in your script specify histfile, that takes precedence
+'''
+MAD_HISTORY_BASE='history'
