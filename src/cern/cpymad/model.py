@@ -161,11 +161,14 @@ class model():
     def twiss(self,
               sequence='',
               columns='name,s,betx,bety,x,y,dx,dy,px,py,mux,muy',
-              twrange='',
+              madrange='',
               fname='',
               retdict=False):
         '''
          Run a TWISS on the model.
+         
+         Warning for ranges: Currently TWISS with initial conditions is NOT
+         implemented!
          
          :param string sequence: Sequence, if empty, using default sequence.
          :param string columns: Columns in the twiss table, can also be list of strings
@@ -176,7 +179,8 @@ class model():
         from cern.pymad.domain import TfsTable, TfsSummary
         if sequence=='':
             sequence=self._dict['default']['sequence']
-        t,s=self._sendrecv(('twiss',sequence,columns,fname))
+        args={'sequence':sequence,'columns':columns,'madrange':madrange,'fname':fname}
+        t,s=self._sendrecv(('twiss',args))
         # we say that when the "full" range has been selected, 
         # we can set this to true. Needed for e.g. aperture calls
         if not twrange:
@@ -188,6 +192,7 @@ class model():
     def survey(self,
                sequence='',
                columns='name,l,angle,x,y,z,theta',
+               madrange='',
                fname='',
                retdict=False):
         '''
@@ -201,14 +206,15 @@ class model():
         from cern.pymad.domain import TfsTable, TfsSummary
         if sequence=='':
             sequence=self._dict['default']['sequence']
-        t,s=self._sendrecv(('survey',sequence,columns,fname))
+        args={'sequence':sequence,'columns':columns,'madrange':madrange,'fname':fname}
+        t,s=self._sendrecv(('survey',args))
         if retdict:
             return t,s
         return TfsTable(t),TfsSummary(s)
     
     def aperture(self,
                sequence='',
-               arange='',
+               madrange='',
                columns='name,l,s,n1,aper_1,aper_2,aper_3,aper_4',
                fname='',
                retdict=False):
@@ -216,7 +222,7 @@ class model():
          Get the aperture from the model.
          
          :param string sequence: Sequence, if empty, using default sequence.
-         :param string arange: Range, if empty, the full sequence is chosen.
+         :param string madrange: Range, if empty, the full sequence is chosen.
          :param string columns: Columns in the twiss table, can also be list of strings
          :param string fname: Optionally, give name of file for tfs table.
          :param bool retdict: Return dictionaries (default is an extended LookUpDict)
@@ -235,26 +241,46 @@ class model():
                 self._call(afile)
             self._apercalled[sequence]=True
         # getting offset file if any:
-        if arange not in seq['ranges']:
-            raise ValueError("%s is not a valid range name, available ranges: '%s'" % (arange,"' '".join(seq['ranges'].keys())))
-        onum=seq['ranges'][arange]['offsets']
-        ran=seq['ranges'][arange]['range']
-        ofile=''
-        if onum or onum!=0:
-            if USE_COUCH:
-                ofile='tmp_madx_offsets.tfs'
-                ftmp=file(ofile,'w')
-                ftmp.write(cern.cpymad._couch_server.get_file(self.model,seq['offsets'][onum]))
-                ftmp.close()
-            else:
-                ofile=self._db+seq['offsets'][onum]
+        # if no range was selected, we ignore offsets...
+        offsets=''
+        if madrange:
+            rangedict=self._get_range_dict(sequence,madrange)
+            onum=seq['ranges'][madrange]['offsets']
+            ran=seq['ranges'][madrange]['range']
+            if onum or onum!=0:
+                if USE_COUCH:
+                    offsets='tmp_madx_offsets'
+                    ocount=0
+                    while os.path.isfile(offsets+str(ocount)+'.tfs'):
+                        ocount+=1
+                    offsets+=str(ocount)+'.tfs'
+                    ftmp=file(offsets,'w')
+                    ftmp.write(cern.cpymad._couch_server.get_file(self.model,seq['offsets'][onum]))
+                    ftmp.close()
+                else:
+                    offsets=self._db+seq['offsets'][onum]
         
-        t,s=self._sendrecv(('aperture',sequence,ran,columns,ofile,fname))
+        args={'sequence':sequence,
+              'madrange':ran,
+              'columns':columns,
+              'offsets':offsets,
+              'fname':fname}
+        t,s=self._sendrecv(('aperture',args))
+        if USE_COUCH:
+            os.remove(offsets)
         if retdict:
             return t,s
         return TfsTable(t),TfsSummary(s)
         
-    
+    def _get_ranges(self,sequence):
+        return self._dict['sequences'][sequence]['ranges'].keys()
+        
+    def _get_range_dict(self,sequence,madrange):
+        seq=self._dict['sequences'][sequence]
+        if madrange not in seq['ranges']:
+            raise ValueError("%s is not a valid range name, available ranges: '%s'" % (madrange,"' '".join(seq['ranges'].keys())))
+        return seq['ranges'][madrange]
+        
     def _cmd(self,command):
         self._send(('command',command))
         return self._recv()
@@ -320,13 +346,24 @@ class _modelProcess(multiprocessing.Process):
                     _madx.command(cmd[1])
                     self.sender.send('done')
                 elif cmd[0]=='twiss':
-                    t,s=_madx.twiss(sequence=cmd[1],columns=cmd[2],fname=cmd[3],retdict=True)
+                    t,s=_madx.twiss(sequence=cmd[1]['sequence'],
+                                     columns=cmd[1]['columns'],
+                                     fname=cmd[1]['fname']
+                                     ,retdict=True)
                     self.sender.send((t,s))
                 elif cmd[0]=='survey':
-                    t,s=_madx.survey(sequence=cmd[1],columns=cmd[2],fname=cmd[3],retdict=True)
+                    t,s=_madx.survey(sequence=cmd[1]['sequence'],
+                                     columns=cmd[1]['columns'],
+                                     fname=cmd[1]['fname']
+                                     ,retdict=True)
                     self.sender.send((t,s))
                 elif cmd[0]=='aperture':
-                    t,s=_madx.aperture(sequence=cmd[1],madrange=cmd[2],columns=cmd[3],offsets=cmd[4],fname=cmd[5],retdict=True)
+                    t,s=_madx.aperture(sequence=cmd[1]['sequence'],
+                                       madrange=cmd[1]['madrange'],
+                                       columns=cmd[1]['columns'],
+                                       offsets=cmd[1]['offsets'],
+                                       fname=cmd[1]['fname'],
+                                       retdict=True)
                     self.sender.send((t,s))
                 else:
                     raise ValueError("You sent a wrong command to subprocess: "+str(cmd))

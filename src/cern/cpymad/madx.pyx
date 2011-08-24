@@ -195,6 +195,8 @@ class madx:
         self.select('twiss',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
         self.use(sequence)
+        if madrange:
+            print("WARNING: Twiss with range selection does not currently make ANY sense")
         self.command('twiss, sequence='+sequence+','+_add_range(madrange)+' file="'+tmpfile+'";')
         tab,param=_get_dict(tmpfile,retdict)
         if not fname:
