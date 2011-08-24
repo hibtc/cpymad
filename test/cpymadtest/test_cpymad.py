@@ -22,10 +22,14 @@ import unittest
 class TestCpymad(unittest.TestCase):
     
     def setUp(self):
-        self.lhc=cpymad.model('lhc',history='hist_cpymad.madx')
+        self.model=cpymad.model('lhc',history='hist_cpymad.madx')
+    
+    # It's a bit surprising that this doesn't happen by itself.. Hmmm...
+    def tearDown(self):
+        del self.model
         
     def test_twiss(self):
-        t,p=self.lhc.twiss()
+        t,p=self.model.twiss()
         for attr in ['betx','bety','s']:
             self.assertTrue(hasattr(t,attr))
         # check that keys are all lowercase..
@@ -35,17 +39,17 @@ class TestCpymad(unittest.TestCase):
             self.assertTrue(k==k.lower())
         
     def test_sequences(self):
-        self.assertFalse(self.lhc.has_sequence('non_existing_sequence'))
+        self.assertFalse(self.model.has_sequence('non_existing_sequence'))
         for seq in ['lhcb1','lhcb2']:
-            self.assertTrue(self.lhc.has_sequence(seq))
+            self.assertTrue(self.model.has_sequence(seq))
     
     def test_wrong_optics(self):
         with self.assertRaises(KeyError):
-            self.lhc.set_optics('non_existing_optics')
+            self.model.set_optics('non_existing_optics')
     
     def test_has_optics(self):
-        self.assertFalse(self.lhc.has_optics('non_existing_optics'))
-        self.assertTrue(self.lhc.has_optics('collision'))
+        self.assertFalse(self.model.has_optics('non_existing_optics'))
+        self.assertTrue(self.model.has_optics('collision'))
     
     def test_listModels(self):
         l=cpymad.modelList()
