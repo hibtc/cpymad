@@ -66,13 +66,14 @@ class madx:
                 print("WARNING: you cannot get recursive history without history file...")
             self._rechist=False
     
-    ##
-    # Closes history file
-    # madextern_end should
-    # not be called since
-    # other objects might still be
-    # running..
     def __del__(self):
+        '''
+         Closes history file
+         madextern_end should
+         not be called since
+         other objects might still be
+         running..
+        '''
         if self._rechist:
             self._hfile.close()
         #madextern_end()
@@ -92,9 +93,22 @@ class madx:
         return True
 
     def command(self,cmd):
+        '''
+         Send a general Mad-X command. 
+         Some sanity checks are performed.
+         
+         :param string cmd: command
+        '''
         cmd=self._fixcmd(cmd)
         if type(cmd)==int: # means we should not execute command
             return cmd
+        if type(cmd)==list:
+            for c in cmd:
+                self._single_cmd(c)
+        else:
+            self._single_cmd(cmd)
+    
+    def _single_cmd(self,cmd):    
         if self._hist:
             if cmd[-1]=='\n':
                 self._writeHist(cmd)
@@ -103,6 +117,7 @@ class madx:
         if self._checkCommand(cmd.lower()):
             madextern_input(cmd)
         return 0
+    
     def help(self,cmd=''):
         if cmd:
             print("Information about command: "+cmd.strip())
@@ -111,7 +126,13 @@ class madx:
             cmd='help'
             print("Available commands in Mad-X: ")
         self.command(cmd)
+    
     def call(self,filename):
+        '''
+         Call a file
+         
+         :param string filename: Name of input file to call
+        '''
         fname=filename
         if not os.path.isfile(fname):
             fname=filename+'.madx'
@@ -231,6 +252,10 @@ class madx:
             return 0
         if cmd.strip()[-1]!=';':
             cmd+=';'
+        # for very long commands (probably parsed in from a file)
+        # we split and only run one line at the time.
+        if len(cmd)>10000:
+            cmd=cmd.split('\n')
         return cmd
     def _writeHist(self,command):
         # this still brakes for "multiline commands"...
