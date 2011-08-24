@@ -189,18 +189,11 @@ class madx:
         self.command('set, format="12.6F";')
         self.use(sequence)
         self.command('twiss, sequence='+sequence+', file="'+tmpfile+'";')
-        tab,param=self._get_dict(tmpfile,retdict)
+        tab,param=_get_dict(tmpfile,retdict)
         if not fname:
             os.remove(tmpfile)
         return tab,param
-            
-    ##
-    # @brief Runs select+use+survey on the sequence selected
-    # 
-    # @param sequence [string] name of sequence
-    # @param fname [string,optional] name of file to store tfs table
-    # @param pattern [list, optional] pattern to include in table
-    # @param columns [string or list, optional] columns to include in table
+    
     def survey(self,
               sequence,
               pattern=['full'],
@@ -208,6 +201,14 @@ class madx:
               fname='',
               retdict=False
               ):
+        '''
+         Runs select+use+survey on the sequence selected
+         
+         @param sequence [string] name of sequence
+         @param fname [string,optional] name of file to store tfs table
+         @param pattern [list, optional] pattern to include in table
+         @param columns [string or list, optional] columns to include in table
+        '''
         if fname:
             tmpfile=fname
         else:
@@ -220,11 +221,45 @@ class madx:
         self.command('set, format="12.6F";')
         self.use(sequence)
         self.command('survey, file="'+tmpfile+'";')
-        tab,param=self._get_dict(tmpfile,retdict)
+        tab,param=_get_dict(tmpfile,retdict)
         if not fname:
             os.remove(tmpfile)
         return tab,param
-    
+            
+    def aperture(self,
+              sequence,
+              pattern=['full'],
+              madrange='',
+              columns='name,l,angle,x,y,z,theta',
+              offsets='',
+              fname='',
+              retdict=False
+              ):
+        '''
+         Runs select+use+aperture on the sequence selected
+         
+         @param sequence [string] name of sequence
+         @param fname [string,optional] name of file to store tfs table
+         @param pattern [list, optional] pattern to include in table
+         @param columns [string or list, optional] columns to include in table
+        '''
+        if fname:
+            tmpfile=fname
+        else:
+            tmpfile='survey.temp.tfs'
+            i=0
+            while os.path.isfile(tmpfile):
+                tmpfile='survey.'+str(i)+'.temp.tfs'
+                i+=1
+        self.select('aperture',pattern,columns)
+        self.command('set, format="12.6F";')
+        self.use(sequence)
+        self.command('aperture,'+_add_range(madrange)+'file="'+tmpfile+'";')
+        tab,param=_get_dict(tmpfile,retdict)
+        if not fname:
+            os.remove(tmpfile)
+        return tab,param
+        
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')
     
@@ -285,7 +320,18 @@ class madx:
         #print "Currently number of sequenses available:",seqs.curr
         #print "Name of list:",seqs.name
 
-    def _get_dict(self,tmpfile,retdict):
-        if retdict:
-            return tfsDict(tmpfile)
-        return tfs(tmpfile)
+def _get_dict(tmpfile,retdict):
+    if retdict:
+        return tfsDict(tmpfile)
+    return tfs(tmpfile)
+
+def _add_range(madrange):
+    if madrange:
+        if type(madrange)==str:
+            return 'range='+madrange+','
+        elif type(madrange)==list:
+            return 'range='+madrange[0]+'/'+madrange[1]+','
+        else:
+            raise TypeError("Wrong range type/format")
+    else:
+        return ''

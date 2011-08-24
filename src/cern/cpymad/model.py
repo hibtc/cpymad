@@ -41,9 +41,9 @@ class model():
      
     :param string model: Name of model to load.
     :param string optics: Name of optics to load
-    :param string history: Name of file which will contain all Mad-X commands called.
+    :param string histfile: Name of file which will contain all Mad-X commands called.
     '''
-    def __init__(self,model,optics='',history=''):
+    def __init__(self,model,optics='',histfile=''):
         
         # name of model:
         self.model=model
@@ -61,7 +61,7 @@ class model():
                     self._db=d
                     break
         
-        self._mprocess=_modelProcess(_child_pipe_send,_child_pipe_recv,model,history)
+        self._mprocess=_modelProcess(_child_pipe_send,_child_pipe_recv,model,histfile)
         
         self._mprocess.start()
         
@@ -72,6 +72,13 @@ class model():
         self._optics=''
         
         self.set_optics(optics)
+        
+        # To keep track of whether or not certain things are already called..
+        self._apercalled={}
+        self._twisscalled={}
+        for seq in self.get_sequences():
+            self._apercalled[seq]=False
+            self._twisscalled[seq]=False
         
     
     def __del__(self):
@@ -97,7 +104,7 @@ class model():
          
          :param string sequence: Sequence name to be checked.
         '''
-        return self._sendrecv(('has_sequence',sequence))
+        return sequence in self.get_sequences()
     
     def has_optics(self,optics):
         '''
@@ -140,23 +147,109 @@ class model():
             self._cmd(bdict[b])
         self._optics=optics
     
-    def list_sequences(self):
+    def get_sequences(self):
         return self._sendrecv('get_sequences')
     
     def list_optics(self):
         return self._dict['optics'].keys()
     
-    def twiss(self,sequence="",columns=""):
+    def twiss(self,
+              sequence='',
+              columns='name,s,betx,bety,x,y,dx,dy,px,py,mux,muy',
+              twrange='',
+              fname='',
+              retdict=False):
+        '''
+         Run a TWISS on the model.
+         
+         :param string sequence: Sequence, if empty, using default sequence.
+         :param string columns: Columns in the twiss table, can also be list of strings
+         :param string twrange: Optional, give name of a range defined for the model.
+         :param string fname: Optionally, give name of file for tfs table.
+         :param bool retdict: Return dictionaries (default is an extended LookUpDict)
+        '''
         from cern.pymad.domain import TfsTable, TfsSummary
-        if sequence=="":
+        if sequence=='':
             sequence=self._dict['default']['sequence']
-        t,s=self._sendrecv(('twiss',sequence,columns))
+        t,s=self._sendrecv(('twiss',sequence,columns,fname))
+        # we say that when the "full" range has been selected, 
+        # we can set this to true. Needed for e.g. aperture calls
+        if not twrange:
+            self._twisscalled[sequence]=True
+        if retdict:
+            return t,s
         return TfsTable(t),TfsSummary(s)
+    
+    def survey(self,
+               sequence='',
+               columns='name,l,angle,x,y,z,theta',
+               fname='',
+               retdict=False):
+        '''
+         Run a survey on the model.
+         
+         :param string sequence: Sequence, if empty, using default sequence.
+         :param string columns: Columns in the twiss table, can also be list of strings
+         :param string fname: Optionally, give name of file for tfs table.
+         :param bool retdict: Return dictionaries (default is an extended LookUpDict)
+        '''
+        from cern.pymad.domain import TfsTable, TfsSummary
+        if sequence=='':
+            sequence=self._dict['default']['sequence']
+        t,s=self._sendrecv(('survey',sequence,columns,fname))
+        if retdict:
+            return t,s
+        return TfsTable(t),TfsSummary(s)
+    
+    def aperture(self,
+               sequence='',
+               arange='',
+               columns='name,l,s,n1,aper_1,aper_2,aper_3,aper_4',
+               fname='',
+               retdict=False):
+        '''
+         Get the aperture from the model.
+         
+         :param string sequence: Sequence, if empty, using default sequence.
+         :param string arange: Range, if empty, the full sequence is chosen.
+         :param string columns: Columns in the twiss table, can also be list of strings
+         :param string fname: Optionally, give name of file for tfs table.
+         :param bool retdict: Return dictionaries (default is an extended LookUpDict)
+        '''
+        from cern.pymad.domain import TfsTable, TfsSummary
+        if sequence=='':
+            sequence=self._dict['default']['sequence']
+        seq=self._dict['sequences'][sequence]
+        
+        if not self._twisscalled[sequence]:
+            self.twiss(sequence)
+        # Calling "basic aperture files"
+        if not self._apercalled[sequence]:
+            print seq.keys()
+            for afile in seq['aperfiles']:
+                self._call(afile)
+            self._apercalled[sequence]=True
+        # getting offset file if any:
+        if arange not in seq['ranges']:
+            raise ValueError("%s is not a valid range name, available ranges: '%s'" % (arange,"' '".join(seq['ranges'].keys())))
+        onum=seq['ranges'][arange]['offsets']
+        ran=seq['ranges'][arange]['range']
+        ofile=''
+        if onum or onum!=0:
+            ofile=seq['offsets'][onum]
+        
+        t,s=self._sendrecv(('aperture',sequence,ran,columns,ofile,fname))
+        if retdict:
+            return t,s
+        return TfsTable(t),TfsSummary(s)
+        
     
     def _cmd(self,command):
         self._send(('command',command))
         return self._recv()
     def _sendrecv(self,func):
+        if sys.flags.debug:
+            print("Sending function call "+str(func))
         self._send(func)
         return self._recv()
         
@@ -181,7 +274,6 @@ def _get_file_content(modelname,filename):
     return stream
     
 class _modelProcess(multiprocessing.Process):
-    
     def __init__(self,sender,receiver,model,history=''):
         self.sender=sender
         self.receiver=receiver
@@ -196,13 +288,10 @@ class _modelProcess(multiprocessing.Process):
         if USE_COUCH:
             _couch_server=cern.cpymad._couch.couch.Server()
             _madx.command(_couch_server.get_file(self.model,'initscript'))
-        
-        # this should be sufficient..
-        signal.signal(signal.SIGTERM, sys.exit)
 
-        #def terminator(num, frame):
-             #sys.exit()
-        #signal.signal(signal.SIGTERM, terminator)
+        def terminator(num, frame):
+             sys.exit()
+        signal.signal(signal.SIGTERM, terminator)
 
         while True:
             if self.receiver.poll(2):
@@ -214,16 +303,19 @@ class _modelProcess(multiprocessing.Process):
                 elif cmd[0]=='call':
                     _madx.call(cmd[1])
                     self.sender.send('done')
-                elif cmd[0]=='has_sequence':
-                    self.sender.send(cmd[1] in _madx.get_sequences())
+                elif cmd=='get_sequences':
+                    self.sender.send( _madx.get_sequences())
                 elif cmd[0]=='command':
                     _madx.command(cmd[1])
                     self.sender.send('done')
                 elif cmd[0]=='twiss':
-                    if cmd[2]:
-                        t,s=_madx.twiss(sequence=cmd[1],columns=cmd[2],retdict=True)
-                    else:
-                        t,s=_madx.twiss(sequence=cmd[1],retdict=True)
+                    t,s=_madx.twiss(sequence=cmd[1],columns=cmd[2],fname=cmd[3],retdict=True)
+                    self.sender.send((t,s))
+                elif cmd[0]=='survey':
+                    t,s=_madx.survey(sequence=cmd[1],columns=cmd[2],fname=cmd[3],retdict=True)
+                    self.sender.send((t,s))
+                elif cmd[0]=='aperture':
+                    t,s=_madx.aperture(sequence=cmd[1],madrange=cmd[2],columns=cmd[3],offsets=cmd[4],fname=cmd[5],retdict=True)
                     self.sender.send((t,s))
                 else:
                     raise ValueError("You sent a wrong command to subprocess: "+str(cmd))
