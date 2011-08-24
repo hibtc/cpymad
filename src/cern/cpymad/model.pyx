@@ -61,7 +61,7 @@ class model():
                     self._db=d
                     break
         
-        self._mprocess=_modelProcess(_child_pipe_send,_child_pipe_recv,model,self._dict['initscript'],history)
+        self._mprocess=_modelProcess(_child_pipe_send,_child_pipe_recv,model,history)
         
         self._mprocess.start()
         
@@ -152,7 +152,6 @@ class model():
             sequence=self._dict['default']['sequence']
         t,s=self._sendrecv(('twiss',sequence,columns))
         return TfsTable(t),TfsSummary(s)
-        #return self.madx.twiss(sequence=sequence,columns=columns)
     
     def _cmd(self,command):
         self._send(('command',command))
@@ -183,11 +182,10 @@ def _get_file_content(modelname,filename):
     
 class _modelProcess(multiprocessing.Process):
     
-    def __init__(self,sender,receiver,model,modelhead,history=''):
+    def __init__(self,sender,receiver,model,history=''):
         self.sender=sender
         self.receiver=receiver
         self.model=model
-        self._modelhead=modelhead
         self.history=history
         multiprocessing.Process.__init__(self) 
     
@@ -196,13 +194,15 @@ class _modelProcess(multiprocessing.Process):
         _madx.verbose(False)
         _madx.append_model(self.model)
         if USE_COUCH:
-            _madx.command(_get_file_content(self._modelhead))
-        del self._modelhead
+            _couch_server=cern.cpymad._couch.couch.Server()
+            _madx.command(_couch_server.get_file(self.model,'initscript'))
+        
+        # this should be sufficient..
         signal.signal(signal.SIGTERM, sys.exit)
 
-        def terminator(num, frame):
-             sys.exit()
-        signal.signal(signal.SIGTERM, terminator)
+        #def terminator(num, frame):
+             #sys.exit()
+        #signal.signal(signal.SIGTERM, terminator)
 
         while True:
             if self.receiver.poll(2):
@@ -221,10 +221,10 @@ class _modelProcess(multiprocessing.Process):
                     self.sender.send('done')
                 elif cmd[0]=='twiss':
                     if cmd[2]:
-                        t,p=_madx.twiss(sequence=cmd[1],columns=cmd[2],retdict=True)
+                        t,s=_madx.twiss(sequence=cmd[1],columns=cmd[2],retdict=True)
                     else:
-                        t,p=_madx.twiss(sequence=cmd[1],retdict=True)
-                    self.sender.send((t,p))
+                        t,s=_madx.twiss(sequence=cmd[1],retdict=True)
+                    self.sender.send((t,s))
                 else:
                     raise ValueError("You sent a wrong command to subprocess: "+str(cmd))
 
