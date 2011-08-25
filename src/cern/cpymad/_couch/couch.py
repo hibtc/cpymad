@@ -17,8 +17,6 @@
 #-------------------------------------------------------------------------------
 import couchdb
 
-#couch = couchdb.Server() # Assuming localhost:5984
-# If your CouchDB server is running elsewhere, set it up like this:
 class Server():
     def __init__(self,url='http://137.138.26.237',port=5984,dbname='cpymad_models'):
         self._couch = couchdb.Server(str(url)+':'+str(port))
@@ -66,6 +64,8 @@ class Server():
         for (a,f) in zip(attachments,fnames):
             self._db.put_attachment(modname, a, filename=f, content_type='ASCII')
     
+    def del_model(self,modname):
+        self._db.delete(self._db[modname])
 
 def check_model_valid(dictionary,fnames,attachments):
     '''
