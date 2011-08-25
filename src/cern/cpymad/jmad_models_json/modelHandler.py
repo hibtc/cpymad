@@ -74,12 +74,12 @@ def jmad2cpymad(mod,usecouch=True):
     
     # folder paths
     jpo=jd['path-offsets']
-    dnew["path-offsets"]={"resource-offset":jpo['resource-offset']['@value']}
+    dnew["path-offsets"]={"resource":jpo['resource-offset']['@value']}
     if "repository-offset" in jpo:
         repoff=jpo['repository-offset']['@value']
     else:
         repoff=''
-    dnew['path-offsets']['repository-offset']=repoff
+    dnew['path-offsets']['repository']=repoff
     
     # sequences
     dnew['sequences']={}
@@ -156,7 +156,47 @@ def convertModels(usecouch=True):
         except TypeError:
             print "\n\t%s failed\n" % mod
 
+def _append_file(f,fnames,fpaths,offsets,locations):
+    fnames.append(offsets[f['location']]+'/'+f['path'])
+    fpaths.append(locations[f['location']]+'/'+fnames[-1])
+    #if not os.path.isfile(fpaths[-1]):
+        #raise ValueError("Missing file %s" % fpaths[-1])
+
+def _get_file_list(mdict):
+    from cern import cpymad
+    
+    dbdir=''
+    fpaths=[]
+    fnames=[]
+    for d in mdict['dbdirs']:
+        if os.path.isdir(d):
+            dbdir=d
+            break
+    if not dbdir:
+        raise ValueError("Could not find a valid db directory")
+    locations={"repository":dbdir,"resource": os.path.dirname(cpymad.__file__)+'/_models'}
+    print mdict['path-offsets']
+    for f in mdict['init-files']:
+        _append_file(f,fnames,fpaths,mdict['path-offsets'],locations)
+    
+    for seq in mdict['sequences']:
+        for f in mdict['sequences'][seq]['aperfiles']:
+            _append_file(f,fnames,fpaths,mdict['path-offsets'],locations)
+        for f in mdict['sequences'][seq]['offsets']:
+            _append_file(f,fnames,fpaths,mdict['path-offsets'],locations)
+            
+    for op in mdict['optics']:
+        for f in mdict['optics'][op]['strengths']:
+            _append_file(f,fnames,fpaths,mdict['path-offsets'],locations)
+    
+            
+        
+    for n,p in zip( fnames, fpaths):
+        print n,p
+    return fnames,fpaths
+        
 if __name__=="__main__":
     #uploadJmadModels()
     #jmad2cpymad('lhc',usecouch=False)
-    convertModels(True)
+    #convertModels(False)
+    _get_file_list(json.loads(file('lhc.cpymad.json','r').read()))

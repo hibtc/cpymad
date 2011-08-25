@@ -18,8 +18,8 @@
 import couchdb
 
 class Server():
-    def __init__(self,url='http://137.138.26.237',port=5984,dbname='cpymad_models'):
-        self._couch = couchdb.Server(str(url)+':'+str(port))
+    def __init__(self,url='137.138.26.237',port=5984,user='jmad_user',password='iAmJmad99',dbname='cpymad_models'):
+        self._couch = couchdb.Server('http://'+user+':'+password+'@'+url+':'+str(port))
         self._db = self._couch[dbname]
     
     def ls_models(self):
@@ -53,26 +53,26 @@ class Server():
         '''
         return self._db[model]
         
-    def put_model(self,modname,dictionary,fnames=[],attachments=[]):
+    def put_model(self,modname,dictionary,fpaths=[],fnames=[]):
         '''
          Create a new model..
         '''
-        check_model_valid(dictionary,fnames,attachments)
+        check_model_valid(dictionary,fpaths,fnames)
         if modname in self.ls_models():
             doc=self._db[modname]
             for k in dictionary:
                 doc[k]=dictionary[k]
             dictionary=doc
         self._db[modname]=dictionary
-        if len(fnames)!=len(attachments):
+        if len(fpaths)!=len(fnames):
             raise ValueError("You need to give one filename for each attachment")
-        for (a,f) in zip(attachments,fnames):
+        for (a,f) in zip(fnames,fpaths):
             self._db.put_attachment(modname, a, filename=f, content_type='ASCII')
     
     def del_model(self,modname):
         self._db.delete(self._db[modname])
 
-def check_model_valid(dictionary,fnames,attachments):
+def check_model_valid(dictionary,fpaths,fnames):
     '''
      We don't currently check..
     '''
