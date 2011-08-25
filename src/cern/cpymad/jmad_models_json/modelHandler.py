@@ -136,7 +136,7 @@ def jmad2cpymad(mod,usecouch=True):
     
     file(mod+'.cpymad.json','w').write(json.dumps(dnew,indent=2))
     if usecouch:
-        uploadModel(c,mod+'.cpymad.json',mod,)
+        uploadModel(c,mod+'.cpymad.json',mod)
 
 def convertModels(usecouch=True):
     if usecouch:
