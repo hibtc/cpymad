@@ -22,8 +22,8 @@
     }
   ], 
   "path-offsets": {
-    "repository-offset": "lhc/optics/V6.503", 
-    "resource-offset": "lhc"
+    "resource": "lhc", 
+    "repository": "lhc/optics/V6.503"
   }, 
   "sequences": {
     "lhcb1": {
@@ -37,14 +37,14 @@
             "deltap": 0.0, 
             "name": "lhcb1-twiss", 
             "centre": false, 
-            "alfy": -1.679855, 
+            "chrom": true, 
             "bety": 71.515031, 
             "betx": 55.679041, 
             "dpy": 0.0, 
             "dpx": 0.03792, 
             "dx": -0.1103, 
             "dy": 0.0, 
-            "chrom": true, 
+            "alfy": -1.679855, 
             "alfx": 2.128241, 
             "closed-orbit": false
           }
@@ -55,10 +55,10 @@
             "#e"
           ], 
           "twiss-init": {
-            "centre": false, 
+            "closed-orbit": false, 
             "chrom": true, 
             "name": "default-twiss", 
-            "closed-orbit": false
+            "centre": false
           }
         }, 
         "ALL first turn": {
@@ -70,14 +70,14 @@
             "deltap": 0.0, 
             "name": "lhcb1-twiss", 
             "centre": false, 
-            "alfy": -1.679855, 
+            "chrom": true, 
             "bety": 71.515031, 
             "betx": 55.679041, 
             "dpy": 0.0, 
             "dpx": 0.03792, 
             "dx": -0.1103, 
             "dy": 0.0, 
-            "chrom": true, 
+            "alfy": -1.679855, 
             "alfx": 2.128241, 
             "closed-orbit": false
           }
@@ -91,14 +91,14 @@
             "deltap": 0.0, 
             "name": "lhcb1-twiss", 
             "centre": false, 
-            "alfy": -1.679855, 
+            "chrom": true, 
             "bety": 71.515031, 
             "betx": 55.679041, 
             "dpy": 0.0, 
             "dpx": 0.03792, 
             "dx": -0.1103, 
             "dy": 0.0, 
-            "chrom": true, 
+            "alfy": -1.679855, 
             "alfx": 2.128241, 
             "closed-orbit": false
           }
@@ -126,10 +126,10 @@
             "#e"
           ], 
           "twiss-init": {
-            "centre": false, 
+            "closed-orbit": false, 
             "chrom": true, 
             "name": "default-twiss", 
-            "closed-orbit": false
+            "centre": false
           }
         }, 
         "ALL first turn": {
@@ -141,14 +141,14 @@
             "deltap": 0.0, 
             "name": "lhcb2-twiss", 
             "centre": false, 
-            "alfy": -2.127759, 
+            "chrom": true, 
             "bety": 140.995239, 
             "betx": 66.829881, 
             "dpy": 3e-06, 
             "dpx": 0.003062, 
             "dx": 0.107789, 
             "dy": 0.000136, 
-            "chrom": true, 
+            "alfy": -2.127759, 
             "alfx": -9e-06, 
             "closed-orbit": false
           }
@@ -162,14 +162,14 @@
             "deltap": 0.0, 
             "name": "lhcb2-twiss", 
             "centre": false, 
-            "alfy": -2.127759, 
+            "chrom": true, 
             "bety": 140.995239, 
             "betx": 66.829881, 
             "dpy": 3e-06, 
             "dpx": 0.003062, 
             "dx": 0.107789, 
             "dy": 0.000136, 
-            "chrom": true, 
+            "alfy": -2.127759, 
             "alfx": -9e-06, 
             "closed-orbit": false
           }
@@ -183,14 +183,14 @@
             "deltap": 0.0, 
             "name": "lhcb2-twiss", 
             "centre": false, 
-            "alfy": -2.127759, 
+            "chrom": true, 
             "bety": 140.995239, 
             "betx": 66.829881, 
             "dpy": 3e-06, 
             "dpx": 0.003062, 
             "dx": 0.107789, 
             "dy": 0.000136, 
-            "chrom": true, 
+            "alfy": -2.127759, 
             "alfx": -9e-06, 
             "closed-orbit": false
           }
@@ -204,14 +204,14 @@
             "deltap": 0.0, 
             "name": "lhcb2-twiss", 
             "centre": false, 
-            "alfy": -2.127759, 
+            "chrom": true, 
             "bety": 140.995239, 
             "betx": 66.829881, 
             "dpy": 3e-06, 
             "dpx": 0.003062, 
             "dx": 0.107789, 
             "dy": 0.000136, 
-            "chrom": true, 
+            "alfy": -2.127759, 
             "alfx": -9e-06, 
             "closed-orbit": false
           }
@@ -225,14 +225,14 @@
             "deltap": 0.0, 
             "name": "lhcb2-twiss", 
             "centre": false, 
-            "alfy": -2.127759, 
+            "chrom": true, 
             "bety": 140.995239, 
             "betx": 66.829881, 
             "dpy": 3e-06, 
             "dpx": 0.003062, 
             "dx": 0.107789, 
             "dy": 0.000136, 
-            "chrom": true, 
+            "alfy": -2.127759, 
             "alfx": -9e-06, 
             "closed-orbit": false
           }
@@ -246,14 +246,14 @@
             "deltap": 0.0, 
             "name": "lhcb2-twiss", 
             "centre": false, 
-            "alfy": -2.127759, 
+            "chrom": true, 
             "bety": 140.995239, 
             "betx": 66.829881, 
             "dpy": 3e-06, 
             "dpx": 0.003062, 
             "dx": 0.107789, 
             "dy": 0.000136, 
-            "chrom": true, 
+            "alfy": -2.127759, 
             "alfx": -9e-06, 
             "closed-orbit": false
           }
@@ -275,28 +275,19 @@
     }
   }, 
   "optics": {
-    "IR8/ip8_0.00860_beta_6.0m.str": {
-      "strengths": [
-        {
-          "path": "IR8/ip8_0.00860_beta_6.0m.str", 
-          "location": "repository"
-        }
-      ], 
-      "overlay": true
-    }, 
     "IR8/ip8_0.00885_beta10.0m.str": {
       "strengths": [
         {
-          "path": "IR8/ip8_0.00885_beta10.0m.str", 
+          "path": "IR8/ip8_0.00885_beta10.00m.str", 
           "location": "repository"
         }
       ], 
       "overlay": true
     }, 
-    "IR2/ip2_0.00889_beta_9.0m.str": {
+    "IR2/IP2_0.00912_beta10.0m.str": {
       "strengths": [
         {
-          "path": "IR2/ip2_0.00889_beta_9.0m.str", 
+          "path": "IR2/IP2_0.00912_beta10.0m.str", 
           "location": "repository"
         }
       ], 
@@ -305,7 +296,7 @@
     "IR8/ip8_0.00860_beta_2.0m.str": {
       "strengths": [
         {
-          "path": "IR8/ip8_0.00860_beta_2.0m.str", 
+          "path": "IR8/ip8_0.00860_beta_2.00m.str", 
           "location": "repository"
         }
       ], 
@@ -314,16 +305,16 @@
     "IR8/ip8_0.00860_beta_7.0m.str": {
       "strengths": [
         {
-          "path": "IR8/ip8_0.00860_beta_7.0m.str", 
+          "path": "IR8/ip8_0.00860_beta_7.00m.str", 
           "location": "repository"
         }
       ], 
       "overlay": true
     }, 
-    "IR2/ip2_0.00889_beta_8.0m.str": {
+    "IR2/IP2_0.00889_beta_9.5m.str": {
       "strengths": [
         {
-          "path": "IR2/ip2_0.00889_beta_8.0m.str", 
+          "path": "IR2/IP2_0.00889_beta_9.50m.str", 
           "location": "repository"
         }
       ], 
@@ -347,10 +338,19 @@
       ], 
       "overlay": true
     }, 
-    "IR5/IP5_beta_7.00.str": {
+    "IR2/IP2_0.00889_beta_7.5m.str": {
       "strengths": [
         {
-          "path": "IR5/IP5_beta_7.00.str", 
+          "path": "IR2/IP2_0.00889_beta_7.50m.str", 
+          "location": "repository"
+        }
+      ], 
+      "overlay": true
+    }, 
+    "IR2/IP2_0.00904_beta10.0m.str": {
+      "strengths": [
+        {
+          "path": "IR2/IP2_0.00904_beta10.00m.str", 
           "location": "repository"
         }
       ], 
@@ -365,19 +365,19 @@
       ], 
       "overlay": true
     }, 
-    "IR2/ip2_0.00935_beta10.0m.str": {
+    "IR8/ip8_0.00940_beta10.0m.str": {
       "strengths": [
         {
-          "path": "IR2/ip2_0.00935_beta10.0m.str", 
+          "path": "IR8/ip8_0.00940_beta10.0m.str", 
           "location": "repository"
         }
       ], 
       "overlay": true
     }, 
-    "IR8/ip8_0.00940_beta10.0m.str": {
+    "IR2/IP2_0.00889_beta_6.5m.str": {
       "strengths": [
         {
-          "path": "IR8/ip8_0.00940_beta10.0m.str", 
+          "path": "IR2/IP2_0.00889_beta_6.50m.str", 
           "location": "repository"
         }
       ], 
@@ -401,19 +401,28 @@
       ], 
       "overlay": true
     }, 
-    "IR2/ip2_0.00889_beta_5.0m.str": {
+    "IR1/IP1_beta_0.65.str": {
       "strengths": [
         {
-          "path": "IR2/ip2_0.00889_beta_5.0m.str", 
+          "path": "IR1/IP1_beta_0.65.str", 
           "location": "repository"
         }
       ], 
       "overlay": true
     }, 
-    "IR1/IP1_beta_0.65.str": {
+    "IR2/IP2_0.00889_beta_6.0m.str": {
       "strengths": [
         {
-          "path": "IR1/IP1_beta_0.65.str", 
+          "path": "IR2/IP2_0.00889_beta_6.00m.str", 
+          "location": "repository"
+        }
+      ], 
+      "overlay": true
+    }, 
+    "IR2/IP2_0.00889_beta_2.0m.str": {
+      "strengths": [
+        {
+          "path": "IR2/IP2_0.00889_beta_2.00m.str", 
           "location": "repository"
         }
       ], 
@@ -428,10 +437,19 @@
       ], 
       "overlay": true
     }, 
+    "IR2/IP2_0.00889_beta_2.5m.str": {
+      "strengths": [
+        {
+          "path": "IR2/IP2_0.00889_beta_2.50m.str", 
+          "location": "repository"
+        }
+      ], 
+      "overlay": true
+    }, 
     "IR8x/ip8_0.00860_beta_5.5m.str": {
       "strengths": [
         {
-          "path": "IR8x/ip8_0.00860_beta_5.5m.str", 
+          "path": "IR8x/ip8_0.00860_beta_5.50m.str", 
           "location": "repository"
         }
       ], 
@@ -440,25 +458,7 @@
     "IR8/ip8_0.00900_beta10.0m.str": {
       "strengths": [
         {
-          "path": "IR8/ip8_0.00900_beta10.0m.str", 
-          "location": "repository"
-        }
-      ], 
-      "overlay": true
-    }, 
-    "IR2/ip2_0.00951_beta10.0m.str": {
-      "strengths": [
-        {
-          "path": "IR2/ip2_0.00951_beta10.0m.str", 
-          "location": "repository"
-        }
-      ], 
-      "overlay": true
-    }, 
-    "IR8x/ip8_0.00860_beta_3.5m.str": {
-      "strengths": [
-        {
-          "path": "IR8x/ip8_0.00860_beta_3.5m.str", 
+          "path": "IR8/ip8_0.00900_beta10.00m.str", 
           "location": "repository"
         }
       ], 
@@ -467,7 +467,7 @@
     "IR8/ip8_0.00860_beta_3.0m.str": {
       "strengths": [
         {
-          "path": "IR8/ip8_0.00860_beta_3.0m.str", 
+          "path": "IR8/ip8_0.00860_beta_3.00m.str", 
           "location": "repository"
         }
       ], 
@@ -477,6 +477,15 @@
       "strengths": [
         {
           "path": "IR2_ions/ip2_0.70.str", 
+          "location": "repository"
+        }
+      ], 
+      "overlay": true
+    }, 
+    "IR2/IP2_0.00889_beta10.0m.str": {
+      "strengths": [
+        {
+          "path": "IR2/IP2_0.00889_beta10.00m.str", 
           "location": "repository"
         }
       ], 
@@ -494,7 +503,7 @@
     "IR8x/ip8_0.00860_beta_8.0m.str": {
       "strengths": [
         {
-          "path": "IR8x/ip8_0.00860_beta_8.0m.str", 
+          "path": "IR8x/ip8_0.00860_beta_8.00m.str", 
           "location": "repository"
         }
       ], 
@@ -509,19 +518,10 @@
       ], 
       "overlay": true
     }, 
-    "IR2/ip2_0.00912_beta10.0m.str": {
-      "strengths": [
-        {
-          "path": "IR2/ip2_0.00912_beta10.0m.str", 
-          "location": "repository"
-        }
-      ], 
-      "overlay": true
-    }, 
     "IR8/ip8_0.00860_beta_6.5m.str": {
       "strengths": [
         {
-          "path": "IR8/ip8_0.00860_beta_6.5m.str", 
+          "path": "IR8/ip8_0.00860_beta_6.50m.str", 
           "location": "repository"
         }
       ], 
@@ -540,24 +540,6 @@
       "strengths": [
         {
           "path": "IR5/IP5_beta17.0p.str", 
-          "location": "repository"
-        }
-      ], 
-      "overlay": true
-    }, 
-    "IR2/ip2_0.00889_beta_7.5m.str": {
-      "strengths": [
-        {
-          "path": "IR2/ip2_0.00889_beta_7.5m.str", 
-          "location": "repository"
-        }
-      ], 
-      "overlay": true
-    }, 
-    "IR2/ip2_0.00904_beta10.0m.str": {
-      "strengths": [
-        {
-          "path": "IR2/ip2_0.00904_beta10.0m.str", 
           "location": "repository"
         }
       ], 
@@ -590,15 +572,6 @@
       ], 
       "overlay": true
     }, 
-    "IR2/ip2_0.00889_beta_6.5m.str": {
-      "strengths": [
-        {
-          "path": "IR2/ip2_0.00889_beta_6.5m.str", 
-          "location": "repository"
-        }
-      ], 
-      "overlay": true
-    }, 
     "IR8/ip8_0.0095098_beta_10m.str": {
       "strengths": [
         {
@@ -611,7 +584,16 @@
     "IR8/ip8_0.00860_beta_2.5m.str": {
       "strengths": [
         {
-          "path": "IR8/ip8_0.00860_beta_2.5m.str", 
+          "path": "IR8/ip8_0.00860_beta_2.50m.str", 
+          "location": "repository"
+        }
+      ], 
+      "overlay": true
+    }, 
+    "IR2/IP2_0.00889_beta_7.0m.str": {
+      "strengths": [
+        {
+          "path": "IR2/IP2_0.00889_beta_7.00m.str", 
           "location": "repository"
         }
       ], 
@@ -644,10 +626,19 @@
       ], 
       "overlay": true
     }, 
+    "IR8/ip8_0.00860_beta_6.00m.str": {
+      "strengths": [
+        {
+          "path": "IR8/ip8_0.00860_beta_6.00m.str", 
+          "location": "repository"
+        }
+      ], 
+      "overlay": true
+    }, 
     "IR8x/ip8_0.00860_beta_7.5m.str": {
       "strengths": [
         {
-          "path": "IR8x/ip8_0.00860_beta_7.5m.str", 
+          "path": "IR8x/ip8_0.00860_beta_7.50m.str", 
           "location": "repository"
         }
       ], 
@@ -671,15 +662,6 @@
       ], 
       "overlay": true
     }, 
-    "IR2/ip2_0.00889_beta_6.0m.str": {
-      "strengths": [
-        {
-          "path": "IR2/ip2_0.00889_beta_6.0m.str", 
-          "location": "repository"
-        }
-      ], 
-      "overlay": true
-    }, 
     "IR8x/ip8_0.00860_beta_2.5m.str": {
       "strengths": [
         {
@@ -692,7 +674,7 @@
     "IR8x/ip8_0.00860_beta_8.5m.str": {
       "strengths": [
         {
-          "path": "IR8x/ip8_0.00860_beta_8.5m.str", 
+          "path": "IR8x/ip8_0.00860_beta_8.50m.str", 
           "location": "repository"
         }
       ], 
@@ -707,10 +689,10 @@
       ], 
       "overlay": true
     }, 
-    "IR2/ip2_0.00889_beta_2.5m.str": {
+    "IR2/IP2_0.00889_beta_3.0m.str": {
       "strengths": [
         {
-          "path": "IR2/ip2_0.00889_beta_2.5m.str", 
+          "path": "IR2/IP2_0.00889_beta_3.00m.str", 
           "location": "repository"
         }
       ], 
@@ -719,7 +701,7 @@
     "IR8x/ip8_0.00860_beta_4.0m.str": {
       "strengths": [
         {
-          "path": "IR8x/ip8_0.00860_beta_4.0m.str", 
+          "path": "IR8x/ip8_0.00860_beta_4.00m.str", 
           "location": "repository"
         }
       ], 
@@ -728,7 +710,7 @@
     "IR8/ip8_0.00860_beta_9.0m.str": {
       "strengths": [
         {
-          "path": "IR8/ip8_0.00860_beta_9.0m.str", 
+          "path": "IR8/ip8_0.00860_beta_9.00m.str", 
           "location": "repository"
         }
       ], 
@@ -737,7 +719,16 @@
     "IR8/ip8_0.00875_beta10.0m.str": {
       "strengths": [
         {
-          "path": "IR8/ip8_0.00875_beta10.0m.str", 
+          "path": "IR8/ip8_0.00875_beta10.00m.str", 
+          "location": "repository"
+        }
+      ], 
+      "overlay": true
+    }, 
+    "IR2/IP2_0.00889_beta_4.0m.str": {
+      "strengths": [
+        {
+          "path": "IR2/IP2_0.00889_beta_4.00m.str", 
           "location": "repository"
         }
       ], 
@@ -761,19 +752,28 @@
       ], 
       "overlay": true
     }, 
-    "IR8x/ip8_0.00860_beta_9.0m.str": {
+    "IR5/IP5_beta_7.00.str": {
       "strengths": [
         {
-          "path": "IR8x/ip8_0.00860_beta_9.0m.str", 
+          "path": "IR5/IP5_beta_7.00.str", 
           "location": "repository"
         }
       ], 
       "overlay": true
     }, 
-    "IR2/ip2_0.00889_beta10.0m.str": {
+    "IR2/IP2_0.00889_beta_8.5m.str": {
       "strengths": [
         {
-          "path": "IR2/ip2_0.00889_beta10.0m.str", 
+          "path": "IR2/IP2_0.00889_beta_8.50m.str", 
+          "location": "repository"
+        }
+      ], 
+      "overlay": true
+    }, 
+    "IR8x/ip8_0.00860_beta_9.0m.str": {
+      "strengths": [
+        {
+          "path": "IR8x/ip8_0.00860_beta_9.00m.str", 
           "location": "repository"
         }
       ], 
@@ -827,7 +827,7 @@
     "IR8x/ip8_0.00860_beta_9.5m.str": {
       "strengths": [
         {
-          "path": "IR8x/ip8_0.00860_beta_9.5m.str", 
+          "path": "IR8x/ip8_0.00860_beta_9.50m.str", 
           "location": "repository"
         }
       ], 
@@ -837,6 +837,15 @@
       "strengths": [
         {
           "path": "IR2_ions/ip210.00.str", 
+          "location": "repository"
+        }
+      ], 
+      "overlay": true
+    }, 
+    "IR2/IP2_0.00920_beta10.0m.str": {
+      "strengths": [
+        {
+          "path": "IR2/IP2_0.00920_beta10.0m.str", 
           "location": "repository"
         }
       ], 
@@ -878,6 +887,15 @@
       ], 
       "overlay": true
     }, 
+    "IR2/IP2_0.00928_beta10.0m.str": {
+      "strengths": [
+        {
+          "path": "IR2/IP2_0.00928_beta10.0m.str", 
+          "location": "repository"
+        }
+      ], 
+      "overlay": true
+    }, 
     "IR8/ip8_0.00925_beta10.0m.str": {
       "strengths": [
         {
@@ -899,16 +917,16 @@
     "IR8/ip8_0.00860_beta_9.5m.str": {
       "strengths": [
         {
-          "path": "IR8/ip8_0.00860_beta_9.5m.str", 
+          "path": "IR8/ip8_0.00860_beta_9.50m.str", 
           "location": "repository"
         }
       ], 
       "overlay": true
     }, 
-    "IR2/ip2_0.00889_beta_7.0m.str": {
+    "IR2/IP2_0.00943_beta10.0m.str": {
       "strengths": [
         {
-          "path": "IR2/ip2_0.00889_beta_7.0m.str", 
+          "path": "IR2/IP2_0.00943_beta10.0m.str", 
           "location": "repository"
         }
       ], 
@@ -935,7 +953,7 @@
     "IR8/ip8_0.00860_beta_8.5m.str": {
       "strengths": [
         {
-          "path": "IR8/ip8_0.00860_beta_8.5m.str", 
+          "path": "IR8/ip8_0.00860_beta_8.50m.str", 
           "location": "repository"
         }
       ], 
@@ -975,7 +993,7 @@
     "IR8x/ip8_0.00860_beta_6.0m.str": {
       "strengths": [
         {
-          "path": "IR8x/ip8_0.00860_beta_6.0m.str", 
+          "path": "IR8x/ip8_0.00860_beta_6.00m.str", 
           "location": "repository"
         }
       ], 
@@ -993,7 +1011,7 @@
     "IR8x/ip8_0.00860_beta_7.0m.str": {
       "strengths": [
         {
-          "path": "IR8x/ip8_0.00860_beta_7.0m.str", 
+          "path": "IR8x/ip8_0.00860_beta_7.00m.str", 
           "location": "repository"
         }
       ], 
@@ -1002,7 +1020,7 @@
     "IR8x/ip8_0.00860_beta_5.0m.str": {
       "strengths": [
         {
-          "path": "IR8x/ip8_0.00860_beta_5.0m.str", 
+          "path": "IR8x/ip8_0.00860_beta_5.00m.str", 
           "location": "repository"
         }
       ], 
@@ -1017,10 +1035,10 @@
       ], 
       "overlay": true
     }, 
-    "IR2/ip2_0.00889_beta_3.0m.str": {
+    "IR2/IP2_0.00897_beta10.0m.str": {
       "strengths": [
         {
-          "path": "IR2/ip2_0.00889_beta_3.0m.str", 
+          "path": "IR2/IP2_0.00897_beta10.00m.str", 
           "location": "repository"
         }
       ], 
@@ -1038,16 +1056,7 @@
     "IR8/ip8_0.00860_beta_5.5m.str": {
       "strengths": [
         {
-          "path": "IR8/ip8_0.00860_beta_5.5m.str", 
-          "location": "repository"
-        }
-      ], 
-      "overlay": true
-    }, 
-    "IR2/ip2_0.00889_beta_4.0m.str": {
-      "strengths": [
-        {
-          "path": "IR2/ip2_0.00889_beta_4.0m.str", 
+          "path": "IR8/ip8_0.00860_beta_5.50m.str", 
           "location": "repository"
         }
       ], 
@@ -1065,16 +1074,16 @@
     "IR8/ip8_0.00860_beta_7.5m.str": {
       "strengths": [
         {
-          "path": "IR8/ip8_0.00860_beta_7.5m.str", 
+          "path": "IR8/ip8_0.00860_beta_7.50m.str", 
           "location": "repository"
         }
       ], 
       "overlay": true
     }, 
-    "IR2/ip2_0.00889_beta_8.5m.str": {
+    "IR2/IP2_0.00889_beta_9.0m.str": {
       "strengths": [
         {
-          "path": "IR2/ip2_0.00889_beta_8.5m.str", 
+          "path": "IR2/IP2_0.00889_beta_9.00m.str", 
           "location": "repository"
         }
       ], 
@@ -1092,7 +1101,7 @@
     "IR8/ip8_0.00860_beta_8.0m.str": {
       "strengths": [
         {
-          "path": "IR8/ip8_0.00860_beta_8.0m.str", 
+          "path": "IR8/ip8_0.00860_beta_8.00m.str", 
           "location": "repository"
         }
       ], 
@@ -1106,6 +1115,15 @@
         }
       ], 
       "overlay": false
+    }, 
+    "IR2/IP2_0.00889_beta_8.0m.str": {
+      "strengths": [
+        {
+          "path": "IR2/IP2_0.00889_beta_8.00m.str", 
+          "location": "repository"
+        }
+      ], 
+      "overlay": true
     }, 
     "IR2_ions/ip2_0.50.str": {
       "strengths": [
@@ -1125,10 +1143,10 @@
       ], 
       "overlay": true
     }, 
-    "IR2/ip2_0.00920_beta10.0m.str": {
+    "IR8x/ip8_0.00860_beta_3.5m.str": {
       "strengths": [
         {
-          "path": "IR2/ip2_0.00920_beta10.0m.str", 
+          "path": "IR8x/ip8_0.00860_beta_3.50m.str", 
           "location": "repository"
         }
       ], 
@@ -1146,16 +1164,16 @@
     "IR8/ip8_0.00895_beta10.0m.str": {
       "strengths": [
         {
-          "path": "IR8/ip8_0.00895_beta10.0m.str", 
+          "path": "IR8/ip8_0.00895_beta10.00m.str", 
           "location": "repository"
         }
       ], 
       "overlay": true
     }, 
-    "IR2/ip2_0.00928_beta10.0m.str": {
+    "IR2/IP2_0.00935_beta10.0m.str": {
       "strengths": [
         {
-          "path": "IR2/ip2_0.00928_beta10.0m.str", 
+          "path": "IR2/IP2_0.00935_beta10.0m.str", 
           "location": "repository"
         }
       ], 
@@ -1174,15 +1192,6 @@
       "strengths": [
         {
           "path": "IR1/IP1_beta_7.00.str", 
-          "location": "repository"
-        }
-      ], 
-      "overlay": true
-    }, 
-    "IR2/ip2_0.00943_beta10.0m.str": {
-      "strengths": [
-        {
-          "path": "IR2/ip2_0.00943_beta10.0m.str", 
           "location": "repository"
         }
       ], 
@@ -1209,7 +1218,7 @@
     "IR8/ip8_0.00860_beta10.0m.str": {
       "strengths": [
         {
-          "path": "IR8/ip8_0.00860_beta10.0m.str", 
+          "path": "IR8/ip8_0.00860_beta10.00m.str", 
           "location": "repository"
         }
       ], 
@@ -1233,10 +1242,10 @@
       ], 
       "overlay": true
     }, 
-    "IR2/ip2_0.00889_beta_9.5m.str": {
+    "IR2/IP2_0.00889_beta_5.0m.str": {
       "strengths": [
         {
-          "path": "IR2/ip2_0.00889_beta_9.5m.str", 
+          "path": "IR2/IP2_0.00889_beta_5.00m.str", 
           "location": "repository"
         }
       ], 
@@ -1254,7 +1263,7 @@
     "IR8x/ip8_0.00860_beta_6.5m.str": {
       "strengths": [
         {
-          "path": "IR8x/ip8_0.00860_beta_6.5m.str", 
+          "path": "IR8x/ip8_0.00860_beta_6.50m.str", 
           "location": "repository"
         }
       ], 
@@ -1263,16 +1272,7 @@
     "IR8x/ip8_0.00860_beta_4.5m.str": {
       "strengths": [
         {
-          "path": "IR8x/ip8_0.00860_beta_4.5m.str", 
-          "location": "repository"
-        }
-      ], 
-      "overlay": true
-    }, 
-    "IR2/ip2_0.00889_beta_2.0m.str": {
-      "strengths": [
-        {
-          "path": "IR2/ip2_0.00889_beta_2.0m.str", 
+          "path": "IR8x/ip8_0.00860_beta_4.50m.str", 
           "location": "repository"
         }
       ], 
@@ -1296,15 +1296,6 @@
       ], 
       "overlay": true
     }, 
-    "IR2/ip2_0.00897_beta10.0m.str": {
-      "strengths": [
-        {
-          "path": "IR2/ip2_0.00897_beta10.0m.str", 
-          "location": "repository"
-        }
-      ], 
-      "overlay": true
-    }, 
     "IR2_ions/ip2_6.00.str": {
       "strengths": [
         {
@@ -1318,6 +1309,15 @@
       "strengths": [
         {
           "path": "IR2_ions/ip2_2.00.str", 
+          "location": "repository"
+        }
+      ], 
+      "overlay": true
+    }, 
+    "IR2/IP2_0.00951_beta10.0m.str": {
+      "strengths": [
+        {
+          "path": "IR2/IP2_0.00951_beta10.0m.str", 
           "location": "repository"
         }
       ], 

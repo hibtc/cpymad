@@ -32,7 +32,31 @@ pythonsrc=["cern",
            "cern.pymad.abc",
            "cern.pymad.tools",
            "cern.pymad.domain"] 
-cdata=['_models/*.json','_models/*.madx'] # list of data files to include..
+cdata=['_models/*.json',
+       '_models/*.madx',
+       'jmad_models_json/*.cpymad.json'] # list of data files to include..
+# add this to include data array
+redata=[
+         '_models/re*data/**/*.madx',
+         '_models/re*data/**/*.str',
+         #'_models/re*data/*/*/*.madx',
+         #'_models/re*data/*/*/*.str',
+         #'_models/re*data/*/*/*/*.madx',
+         #'_models/re*data/*/*/*/*.str',
+         #'_models/re*data/*/*/*/*/*.madx',
+         #'_models/re*data/*/*/*/*/*.str',
+         ]
+#repdata=['_models/repdata/*/*/*/*.madx',
+         #'_models/repdata/*/*/*/*.str',
+         #'_models/repdata/*.madx',
+         #'_models/repdata/*.str',
+         #'_models/repdata/*/*.madx',
+         #'_models/repdata/*/*.str',
+         #'_models/repdata/*/*/*.madx',
+         #'_models/repdata/*/*/*.str',
+         #]
+#cdata.extend(repdata)
+cdata.extend(redata)
 libs=['madx', "X11", "z", "pthread", "c", "stdc++"]
 includedirs=['/usr/local/include/madX',
              '/usr/include/madX',

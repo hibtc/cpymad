@@ -53,26 +53,35 @@ class Server():
         '''
         return self._db[model]
         
-    def put_model(self,modname,dictionary,fpaths=[],fnames=[]):
+    def put_model(self,modname,dictionary,**kwargs):
         '''
          Create a new model..
+         
+         kwargs:
+         fnames: name of files as they should be on the server
+         fpaths: corresponding full paths for each file on your machine
         '''
-        check_model_valid(dictionary,fpaths,fnames)
+        check_model_valid(dictionary)
+        
         if modname in self.ls_models():
             doc=self._db[modname]
             for k in dictionary:
                 doc[k]=dictionary[k]
             dictionary=doc
         self._db[modname]=dictionary
-        if len(fpaths)!=len(fnames):
-            raise ValueError("You need to give one filename for each attachment")
-        for (a,f) in zip(fnames,fpaths):
-            self._db.put_attachment(modname, a, filename=f, content_type='ASCII')
+        
+        if 'fnames' in kwargs:
+            if len(kwargs['fnames'])!=len(kwargs['fpaths']):
+                raise ValueError("You need to give one filename for each attachment")
+            for (a,f) in zip(kwargs['fnames'],kwargs['fpaths']):
+                print "Uploading attachment %s" % a
+                content=file(f,'r')
+                self._db.put_attachment(self._db[modname], content, filename=a)
     
     def del_model(self,modname):
         self._db.delete(self._db[modname])
 
-def check_model_valid(dictionary,fpaths,fnames):
+def check_model_valid(dictionary):
     '''
      We don't currently check..
     '''

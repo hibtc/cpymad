@@ -2,23 +2,23 @@
 from cern.cpymad._couch import couch
 import os,json
 
-overwrite=False
+overwrite=True
 
-def uploadModel(c,mod,modname):
+def uploadModel(c,mod,modname,**kwargs):
     d=json.loads(file(mod,'r').read())
     print("Uploading "+modname)
-    c.put_model(modname,d)
+    c.put_model(modname,d,**kwargs)
 
 
 
-def uploadJmadModels(dbname):
+def uploadJmadModels():
     c=couch.Server(dbname='jmad_models')
 
     avail_models=c.ls_models()
     #for mod in avail_models:
         #c.del_model(mod)
     for mod in os.listdir('.'):
-        if mod[-5:]=='.json':
+        if mod[-9:]=='.jmd.json':
             if overwrite or mod not in avail_models :
                 uploadModel(c,mod,mod[:-9])
 
@@ -137,8 +137,9 @@ def jmad2cpymad(mod,usecouch=True):
     
     file(mod+'.cpymad.json','w').write(json.dumps(dnew,indent=2))
     if usecouch:
+        fnames,fpaths=_get_file_list(dnew)
         c2=couch.Server(dbname='cpymad_newstyle')
-        uploadModel(c2,mod+'.cpymad.json',mod)
+        uploadModel(c2,mod+'.cpymad.json',mod,fnames=fnames,fpaths=fpaths)
 
 def convertModels(usecouch=True):
     if usecouch:
@@ -150,11 +151,11 @@ def convertModels(usecouch=True):
             if f[-9:]=='.jmd.json':
                 avail_models.append(f[:-9])
     for mod in avail_models:
-        print "Converting "+mod
-        try:
-            jmad2cpymad(mod, usecouch)
-        except TypeError:
-            print "\n\t%s failed\n" % mod
+        print "Converting "+mod+'..'
+        #try:
+        jmad2cpymad(mod, usecouch)
+        #except TypeError:
+            #print " FAILED"
 
 def _append_file(f,fnames,fpaths,offsets,locations):
     fnames.append(offsets[f['location']]+'/'+f['path'])
@@ -174,7 +175,7 @@ def _get_file_list(mdict):
             break
     if not dbdir:
         raise ValueError("Could not find a valid db directory")
-    locations={"repository":dbdir,"resource": os.path.dirname(cpymad.__file__)+'/_models'}
+    locations={"repository":dbdir,"resource": os.path.dirname(cpymad.__file__)+'/_models/resdata/'}
     print mdict['path-offsets']
     for f in mdict['init-files']:
         _append_file(f,fnames,fpaths,mdict['path-offsets'],locations)
@@ -188,15 +189,11 @@ def _get_file_list(mdict):
     for op in mdict['optics']:
         for f in mdict['optics'][op]['strengths']:
             _append_file(f,fnames,fpaths,mdict['path-offsets'],locations)
-    
-            
-        
-    for n,p in zip( fnames, fpaths):
-        print n,p
     return fnames,fpaths
         
 if __name__=="__main__":
-    #uploadJmadModels()
-    #jmad2cpymad('lhc',usecouch=False)
-    #convertModels(False)
-    _get_file_list(json.loads(file('lhc.cpymad.json','r').read()))
+    uploadJmadModels()
+    print "Converting lhc"
+    jmad2cpymad('lhc',usecouch=True)
+    #convertModels(usecouch=True)
+    #_get_file_list(json.loads(file('lhc.cpymad.json','r').read()))

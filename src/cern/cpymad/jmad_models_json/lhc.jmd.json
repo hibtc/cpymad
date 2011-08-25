@@ -1,1 +1,1830 @@
-{"jmad-model-definition":{"@name":"lhc","optics":{"optic":[{"@name":"injection","@overlay":"false","init-files":{"call-file":[{"@path":"V6.5.inj.str","@parse":"STRENGTHS"},{"@location":"RESOURCE","@path":"b2b3.str","@parse":"STRENGTHS"}]}},{"@name":"collision","@overlay":"false","init-files":{"call-file":{"@path":"V6.5.coll.str","@parse":"STRENGTHS"}}},{"@name":"IR1\/IP1_beta11.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR1\/IP1_beta11.00.str","@parse":"STRENGTHS"}}},{"@name":"IR1\/IP1_beta11.0p.str","@overlay":"true","init-files":{"call-file":{"@path":"IR1\/IP1_beta11.0p.str","@parse":"STRENGTHS"}}},{"@name":"IR1\/IP1_beta17.0p.str","@overlay":"true","init-files":{"call-file":{"@path":"IR1\/IP1_beta17.0p.str","@parse":"STRENGTHS"}}},{"@name":"IR1\/IP1_beta_0.55.str","@overlay":"true","init-files":{"call-file":{"@path":"IR1\/IP1_beta_0.55.str","@parse":"STRENGTHS"}}},{"@name":"IR1\/IP1_beta_0.65.str","@overlay":"true","init-files":{"call-file":{"@path":"IR1\/IP1_beta_0.65.str","@parse":"STRENGTHS"}}},{"@name":"IR1\/IP1_beta_0.80.str","@overlay":"true","init-files":{"call-file":{"@path":"IR1\/IP1_beta_0.80.str","@parse":"STRENGTHS"}}},{"@name":"IR1\/IP1_beta_1.10.str","@overlay":"true","init-files":{"call-file":{"@path":"IR1\/IP1_beta_1.10.str","@parse":"STRENGTHS"}}},{"@name":"IR1\/IP1_beta_1.50.str","@overlay":"true","init-files":{"call-file":{"@path":"IR1\/IP1_beta_1.50.str","@parse":"STRENGTHS"}}},{"@name":"IR1\/IP1_beta_2.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR1\/IP1_beta_2.00.str","@parse":"STRENGTHS"}}},{"@name":"IR1\/IP1_beta_2.50.str","@overlay":"true","init-files":{"call-file":{"@path":"IR1\/IP1_beta_2.50.str","@parse":"STRENGTHS"}}},{"@name":"IR1\/IP1_beta_3.50.str","@overlay":"true","init-files":{"call-file":{"@path":"IR1\/IP1_beta_3.50.str","@parse":"STRENGTHS"}}},{"@name":"IR1\/IP1_beta_4.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR1\/IP1_beta_4.00.str","@parse":"STRENGTHS"}}},{"@name":"IR1\/IP1_beta_5.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR1\/IP1_beta_5.00.str","@parse":"STRENGTHS"}}},{"@name":"IR1\/IP1_beta_7.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR1\/IP1_beta_7.00.str","@parse":"STRENGTHS"}}},{"@name":"IR1\/IP1_beta_9.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR1\/IP1_beta_9.00.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/V6.5.inj.new-nominal.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/V6.5.inj.new-nominal.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00889_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00889_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00889_beta_2.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00889_beta_2.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00889_beta_2.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00889_beta_2.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00889_beta_3.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00889_beta_3.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00889_beta_4.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00889_beta_4.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00889_beta_5.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00889_beta_5.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00889_beta_6.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00889_beta_6.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00889_beta_6.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00889_beta_6.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00889_beta_7.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00889_beta_7.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00889_beta_7.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00889_beta_7.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00889_beta_8.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00889_beta_8.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00889_beta_8.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00889_beta_8.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00889_beta_9.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00889_beta_9.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00889_beta_9.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00889_beta_9.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00897_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00897_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00904_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00904_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00912_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00912_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00920_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00920_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00928_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00928_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00935_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00935_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00943_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00943_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR2\/ip2_0.00951_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2\/ip2_0.00951_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR2_ions\/ip210.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2_ions\/ip210.00.str","@parse":"STRENGTHS"}}},{"@name":"IR2_ions\/ip2_0.50.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2_ions\/ip2_0.50.str","@parse":"STRENGTHS"}}},{"@name":"IR2_ions\/ip2_0.70.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2_ions\/ip2_0.70.str","@parse":"STRENGTHS"}}},{"@name":"IR2_ions\/ip2_0.90.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2_ions\/ip2_0.90.str","@parse":"STRENGTHS"}}},{"@name":"IR2_ions\/ip2_1.10.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2_ions\/ip2_1.10.str","@parse":"STRENGTHS"}}},{"@name":"IR2_ions\/ip2_1.50.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2_ions\/ip2_1.50.str","@parse":"STRENGTHS"}}},{"@name":"IR2_ions\/ip2_2.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2_ions\/ip2_2.00.str","@parse":"STRENGTHS"}}},{"@name":"IR2_ions\/ip2_2.50.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2_ions\/ip2_2.50.str","@parse":"STRENGTHS"}}},{"@name":"IR2_ions\/ip2_3.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2_ions\/ip2_3.00.str","@parse":"STRENGTHS"}}},{"@name":"IR2_ions\/ip2_4.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2_ions\/ip2_4.00.str","@parse":"STRENGTHS"}}},{"@name":"IR2_ions\/ip2_5.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2_ions\/ip2_5.00.str","@parse":"STRENGTHS"}}},{"@name":"IR2_ions\/ip2_6.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2_ions\/ip2_6.00.str","@parse":"STRENGTHS"}}},{"@name":"IR2_ions\/ip2_8.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR2_ions\/ip2_8.00.str","@parse":"STRENGTHS"}}},{"@name":"IR5\/IP5_beta11.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR5\/IP5_beta11.00.str","@parse":"STRENGTHS"}}},{"@name":"IR5\/IP5_beta11.0p.str","@overlay":"true","init-files":{"call-file":{"@path":"IR5\/IP5_beta11.0p.str","@parse":"STRENGTHS"}}},{"@name":"IR5\/IP5_beta17.0p.str","@overlay":"true","init-files":{"call-file":{"@path":"IR5\/IP5_beta17.0p.str","@parse":"STRENGTHS"}}},{"@name":"IR5\/IP5_beta_0.55.str","@overlay":"true","init-files":{"call-file":{"@path":"IR5\/IP5_beta_0.55.str","@parse":"STRENGTHS"}}},{"@name":"IR5\/IP5_beta_0.65.str","@overlay":"true","init-files":{"call-file":{"@path":"IR5\/IP5_beta_0.65.str","@parse":"STRENGTHS"}}},{"@name":"IR5\/IP5_beta_0.80.str","@overlay":"true","init-files":{"call-file":{"@path":"IR5\/IP5_beta_0.80.str","@parse":"STRENGTHS"}}},{"@name":"IR5\/IP5_beta_1.10.str","@overlay":"true","init-files":{"call-file":{"@path":"IR5\/IP5_beta_1.10.str","@parse":"STRENGTHS"}}},{"@name":"IR5\/IP5_beta_1.50.str","@overlay":"true","init-files":{"call-file":{"@path":"IR5\/IP5_beta_1.50.str","@parse":"STRENGTHS"}}},{"@name":"IR5\/IP5_beta_2.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR5\/IP5_beta_2.00.str","@parse":"STRENGTHS"}}},{"@name":"IR5\/IP5_beta_2.50.str","@overlay":"true","init-files":{"call-file":{"@path":"IR5\/IP5_beta_2.50.str","@parse":"STRENGTHS"}}},{"@name":"IR5\/IP5_beta_3.50.str","@overlay":"true","init-files":{"call-file":{"@path":"IR5\/IP5_beta_3.50.str","@parse":"STRENGTHS"}}},{"@name":"IR5\/IP5_beta_4.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR5\/IP5_beta_4.00.str","@parse":"STRENGTHS"}}},{"@name":"IR5\/IP5_beta_5.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR5\/IP5_beta_5.00.str","@parse":"STRENGTHS"}}},{"@name":"IR5\/IP5_beta_7.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR5\/IP5_beta_7.00.str","@parse":"STRENGTHS"}}},{"@name":"IR5\/IP5_beta_9.00.str","@overlay":"true","init-files":{"call-file":{"@path":"IR5\/IP5_beta_9.00.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00860_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00860_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00860_beta_2.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00860_beta_2.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00860_beta_2.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00860_beta_2.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00860_beta_3.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00860_beta_3.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00860_beta_3.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00860_beta_3.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00860_beta_4.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00860_beta_4.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00860_beta_4.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00860_beta_4.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00860_beta_5.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00860_beta_5.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00860_beta_5.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00860_beta_5.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00860_beta_6.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00860_beta_6.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00860_beta_6.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00860_beta_6.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00860_beta_7.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00860_beta_7.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00860_beta_7.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00860_beta_7.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00860_beta_8.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00860_beta_8.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00860_beta_8.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00860_beta_8.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00860_beta_9.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00860_beta_9.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00860_beta_9.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00860_beta_9.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00865_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00865_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00875_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00875_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00885_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00885_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00895_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00895_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00900_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00900_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00905_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00905_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00910_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00910_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00915_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00915_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00920_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00920_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00925_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00925_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00930_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00930_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00935_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00935_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00940_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00940_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.00945_beta10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.00945_beta10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8\/ip8_0.0095098_beta_10m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8\/ip8_0.0095098_beta_10m.str","@parse":"STRENGTHS"}}},{"@name":"IR8x\/ip8_0.00860_beta_10.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8x\/ip8_0.00860_beta_10.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8x\/ip8_0.00860_beta_2.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8x\/ip8_0.00860_beta_2.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8x\/ip8_0.00860_beta_2.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8x\/ip8_0.00860_beta_2.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR8x\/ip8_0.00860_beta_3.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8x\/ip8_0.00860_beta_3.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8x\/ip8_0.00860_beta_3.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8x\/ip8_0.00860_beta_3.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR8x\/ip8_0.00860_beta_4.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8x\/ip8_0.00860_beta_4.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8x\/ip8_0.00860_beta_4.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8x\/ip8_0.00860_beta_4.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR8x\/ip8_0.00860_beta_5.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8x\/ip8_0.00860_beta_5.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8x\/ip8_0.00860_beta_5.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8x\/ip8_0.00860_beta_5.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR8x\/ip8_0.00860_beta_6.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8x\/ip8_0.00860_beta_6.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8x\/ip8_0.00860_beta_6.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8x\/ip8_0.00860_beta_6.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR8x\/ip8_0.00860_beta_7.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8x\/ip8_0.00860_beta_7.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8x\/ip8_0.00860_beta_7.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8x\/ip8_0.00860_beta_7.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR8x\/ip8_0.00860_beta_8.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8x\/ip8_0.00860_beta_8.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8x\/ip8_0.00860_beta_8.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8x\/ip8_0.00860_beta_8.5m.str","@parse":"STRENGTHS"}}},{"@name":"IR8x\/ip8_0.00860_beta_9.0m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8x\/ip8_0.00860_beta_9.0m.str","@parse":"STRENGTHS"}}},{"@name":"IR8x\/ip8_0.00860_beta_9.5m.str","@overlay":"true","init-files":{"call-file":{"@path":"IR8x\/ip8_0.00860_beta_9.5m.str","@parse":"STRENGTHS"}}}]},"default-optic":{"@ref-name":"injection"},"sequences":{"sequence":[{"@name":"lhcb1","beam":{"particle":{"@value":"PROTON"},"energy":{"@value":"450.0"},"ex":{"@value":"7.297671095555556E-9"},"ey":{"@value":"7.297671095555556E-9"},"sigt":{"@value":"0.077"},"sige":{"@value":"5.0E-4"},"npart":{"@value":"1.1E11"},"bv":{"@value":"PLUS"}},"ranges":{"range":[{"@name":"ALL","madx-range":{"@first":"#s","@last":"#e"},"twiss-initial-conditions":{"@name":"default-twiss","chrom":{"@value":"true"},"closed-orbit":{"@value":"false"},"centre":{"@value":"false"}}},{"@name":"ALL first turn","madx-range":{"@first":"#s","@last":"#e"},"twiss-initial-conditions":{"@name":"lhcb1-twiss","chrom":{"@value":"true"},"closed-orbit":{"@value":"false"},"centre":{"@value":"false"},"betx":{"@value":"55.679041"},"bety":{"@value":"71.515031"},"alfx":{"@value":"2.128241"},"alfy":{"@value":"-1.679855"},"dx":{"@value":"-0.1103"},"dy":{"@value":"0.0"},"dpx":{"@value":"0.03792"},"dpy":{"@value":"0.0"},"deltap":{"@value":"0.0"}}},{"@name":"Inj. Sector 2-3","madx-range":{"@first":"LHCINJ.B1","@last":"TCLA.7R3.B1"},"twiss-initial-conditions":{"@name":"lhcb1-twiss","chrom":{"@value":"true"},"closed-orbit":{"@value":"false"},"centre":{"@value":"false"},"betx":{"@value":"55.679041"},"bety":{"@value":"71.515031"},"alfx":{"@value":"2.128241"},"alfy":{"@value":"-1.679855"},"dx":{"@value":"-0.1103"},"dy":{"@value":"0.0"},"dpx":{"@value":"0.03792"},"dpy":{"@value":"0.0"},"deltap":{"@value":"0.0"}}},{"@name":"Inj. Sector 2-5","madx-range":{"@first":"LHCINJ.B1","@last":"IP5"},"twiss-initial-conditions":{"@name":"lhcb1-twiss","chrom":{"@value":"true"},"closed-orbit":{"@value":"false"},"centre":{"@value":"false"},"betx":{"@value":"55.679041"},"bety":{"@value":"71.515031"},"alfx":{"@value":"2.128241"},"alfy":{"@value":"-1.679855"},"dx":{"@value":"-0.1103"},"dy":{"@value":"0.0"},"dpx":{"@value":"0.03792"},"dpy":{"@value":"0.0"},"deltap":{"@value":"0.0"}}}]},"default-range":{"@ref-name":"ALL"}},{"@name":"lhcb2","beam":{"particle":{"@value":"PROTON"},"energy":{"@value":"450.0"},"ex":{"@value":"7.297671095555556E-9"},"ey":{"@value":"7.297671095555556E-9"},"sigt":{"@value":"0.077"},"sige":{"@value":"5.0E-4"},"npart":{"@value":"1.1E11"},"bv":{"@value":"MINUS"}},"ranges":{"range":[{"@name":"ALL","madx-range":{"@first":"#s","@last":"#e"},"twiss-initial-conditions":{"@name":"default-twiss","chrom":{"@value":"true"},"closed-orbit":{"@value":"false"},"centre":{"@value":"false"}},"corrector-invert-filters":{"regex-filter":[{"@regex":"(?i)^MCBX.*","@plane":"H"},{"@regex":"(?i)^MCBX.*","@plane":"V"}]}},{"@name":"ALL first turn","madx-range":{"@first":"#s","@last":"#e"},"twiss-initial-conditions":{"@name":"lhcb2-twiss","chrom":{"@value":"true"},"closed-orbit":{"@value":"false"},"centre":{"@value":"false"},"betx":{"@value":"66.829881"},"bety":{"@value":"140.995239"},"alfx":{"@value":"-9.0E-6"},"alfy":{"@value":"-2.127759"},"dx":{"@value":"0.107789"},"dy":{"@value":"1.36E-4"},"dpx":{"@value":"0.003062"},"dpy":{"@value":"3.0E-6"},"deltap":{"@value":"0.0"}},"corrector-invert-filters":{"regex-filter":[{"@regex":"(?i)^MCBX.*","@plane":"H"},{"@regex":"(?i)^MCBX.*","@plane":"V"}]}},{"@name":"Inj. Sectors 8-7","madx-range":{"@first":"TCLA.A7L7.B2","@last":"LHCINJ.B2"},"twiss-initial-conditions":{"@name":"lhcb2-twiss","chrom":{"@value":"true"},"closed-orbit":{"@value":"false"},"centre":{"@value":"false"},"betx":{"@value":"66.829881"},"bety":{"@value":"140.995239"},"alfx":{"@value":"-9.0E-6"},"alfy":{"@value":"-2.127759"},"dx":{"@value":"0.107789"},"dy":{"@value":"1.36E-4"},"dpx":{"@value":"0.003062"},"dpy":{"@value":"3.0E-6"},"deltap":{"@value":"0.0"}},"corrector-invert-filters":{"regex-filter":[{"@regex":"(?i)^MCBX.*","@plane":"H"},{"@regex":"(?i)^MCBX.*","@plane":"V"}]}},{"@name":"Inj. Sectors 8-6","madx-range":{"@first":"TCDQA.A4L6.B2","@last":"LHCINJ.B2"},"twiss-initial-conditions":{"@name":"lhcb2-twiss","chrom":{"@value":"true"},"closed-orbit":{"@value":"false"},"centre":{"@value":"false"},"betx":{"@value":"66.829881"},"bety":{"@value":"140.995239"},"alfx":{"@value":"-9.0E-6"},"alfy":{"@value":"-2.127759"},"dx":{"@value":"0.107789"},"dy":{"@value":"1.36E-4"},"dpx":{"@value":"0.003062"},"dpy":{"@value":"3.0E-6"},"deltap":{"@value":"0.0"}},"corrector-invert-filters":{"regex-filter":[{"@regex":"(?i)^MCBX.*","@plane":"H"},{"@regex":"(?i)^MCBX.*","@plane":"V"}]}},{"@name":"Inj. Sectors 8-5","madx-range":{"@first":"IP5","@last":"LHCINJ.B2"},"twiss-initial-conditions":{"@name":"lhcb2-twiss","chrom":{"@value":"true"},"closed-orbit":{"@value":"false"},"centre":{"@value":"false"},"betx":{"@value":"66.829881"},"bety":{"@value":"140.995239"},"alfx":{"@value":"-9.0E-6"},"alfy":{"@value":"-2.127759"},"dx":{"@value":"0.107789"},"dy":{"@value":"1.36E-4"},"dpx":{"@value":"0.003062"},"dpy":{"@value":"3.0E-6"},"deltap":{"@value":"0.0"}},"corrector-invert-filters":{"regex-filter":[{"@regex":"(?i)^MCBX.*","@plane":"H"},{"@regex":"(?i)^MCBX.*","@plane":"V"}]}},{"@name":"Inj. Sectors 8-4","madx-range":{"@first":"IP4","@last":"LHCINJ.B2"},"twiss-initial-conditions":{"@name":"lhcb2-twiss","chrom":{"@value":"true"},"closed-orbit":{"@value":"false"},"centre":{"@value":"false"},"betx":{"@value":"66.829881"},"bety":{"@value":"140.995239"},"alfx":{"@value":"-9.0E-6"},"alfy":{"@value":"-2.127759"},"dx":{"@value":"0.107789"},"dy":{"@value":"1.36E-4"},"dpx":{"@value":"0.003062"},"dpy":{"@value":"3.0E-6"},"deltap":{"@value":"0.0"}},"corrector-invert-filters":{"regex-filter":[{"@regex":"(?i)^MCBX.*","@plane":"H"},{"@regex":"(?i)^MCBX.*","@plane":"V"}]}},{"@name":"Inj. Sectors 8-1","madx-range":{"@first":"IP1","@last":"LHCINJ.B2"},"twiss-initial-conditions":{"@name":"lhcb2-twiss","chrom":{"@value":"true"},"closed-orbit":{"@value":"false"},"centre":{"@value":"false"},"betx":{"@value":"66.829881"},"bety":{"@value":"140.995239"},"alfx":{"@value":"-9.0E-6"},"alfy":{"@value":"-2.127759"},"dx":{"@value":"0.107789"},"dy":{"@value":"1.36E-4"},"dpx":{"@value":"0.003062"},"dpy":{"@value":"3.0E-6"},"deltap":{"@value":"0.0"}},"corrector-invert-filters":{"regex-filter":[{"@regex":"(?i)^MCBX.*","@plane":"H"},{"@regex":"(?i)^MCBX.*","@plane":"V"}]}}]},"default-range":{"@ref-name":"ALL"}}]},"default-sequence":{"@ref-name":"lhcb1"},"init-files":{"call-file":[{"@path":"V6.5.seq"},{"@location":"RESOURCE","@path":"setb2b3-lhc-b1.madx"},{"@location":"RESOURCE","@path":"setb2b3-lhc-b2.madx"}]},"path-offsets":{"repository-offset":{"@value":"lhc\/optics\/V6.503"},"resource-offset":{"@value":"lhc"}},"svn-revision":"$Revision$"}}
+{
+   "_id": "lhc",
+   "_rev": "1-9bbd5e9ee819d8b136cdf96126b9103d",
+   "jmad-model-definition": {
+       "@name": "lhc",
+       "svn-revision": "$Revision$",
+       "default-optic": {
+           "@ref-name": "injection"
+       },
+       "init-files": {
+           "call-file": [
+               {
+                   "@path": "V6.5.seq"
+               },
+               {
+                   "@path": "setb2b3-lhc-b1.madx",
+                   "@location": "RESOURCE"
+               },
+               {
+                   "@path": "setb2b3-lhc-b2.madx",
+                   "@location": "RESOURCE"
+               }
+           ]
+       },
+       "path-offsets": {
+           "repository-offset": {
+               "@value": "lhc/optics/V6.503"
+           },
+           "resource-offset": {
+               "@value": "lhc"
+           }
+       },
+       "sequences": {
+           "sequence": [
+               {
+                   "ranges": {
+                       "range": [
+                           {
+                               "madx-range": {
+                                   "@first": "#s",
+                                   "@last": "#e"
+                               },
+                               "twiss-initial-conditions": {
+                                   "chrom": {
+                                       "@value": "true"
+                                   },
+                                   "centre": {
+                                       "@value": "false"
+                                   },
+                                   "@name": "default-twiss",
+                                   "closed-orbit": {
+                                       "@value": "false"
+                                   }
+                               },
+                               "@name": "ALL"
+                           },
+                           {
+                               "madx-range": {
+                                   "@first": "#s",
+                                   "@last": "#e"
+                               },
+                               "twiss-initial-conditions": {
+                                   "deltap": {
+                                       "@value": "0.0"
+                                   },
+                                   "@name": "lhcb1-twiss",
+                                   "centre": {
+                                       "@value": "false"
+                                   },
+                                   "alfy": {
+                                       "@value": "-1.679855"
+                                   },
+                                   "bety": {
+                                       "@value": "71.515031"
+                                   },
+                                   "betx": {
+                                       "@value": "55.679041"
+                                   },
+                                   "dpy": {
+                                       "@value": "0.0"
+                                   },
+                                   "dpx": {
+                                       "@value": "0.03792"
+                                   },
+                                   "dx": {
+                                       "@value": "-0.1103"
+                                   },
+                                   "dy": {
+                                       "@value": "0.0"
+                                   },
+                                   "chrom": {
+                                       "@value": "true"
+                                   },
+                                   "alfx": {
+                                       "@value": "2.128241"
+                                   },
+                                   "closed-orbit": {
+                                       "@value": "false"
+                                   }
+                               },
+                               "@name": "ALL first turn"
+                           },
+                           {
+                               "madx-range": {
+                                   "@first": "LHCINJ.B1",
+                                   "@last": "TCLA.7R3.B1"
+                               },
+                               "twiss-initial-conditions": {
+                                   "deltap": {
+                                       "@value": "0.0"
+                                   },
+                                   "@name": "lhcb1-twiss",
+                                   "centre": {
+                                       "@value": "false"
+                                   },
+                                   "alfy": {
+                                       "@value": "-1.679855"
+                                   },
+                                   "bety": {
+                                       "@value": "71.515031"
+                                   },
+                                   "betx": {
+                                       "@value": "55.679041"
+                                   },
+                                   "dpy": {
+                                       "@value": "0.0"
+                                   },
+                                   "dpx": {
+                                       "@value": "0.03792"
+                                   },
+                                   "dx": {
+                                       "@value": "-0.1103"
+                                   },
+                                   "dy": {
+                                       "@value": "0.0"
+                                   },
+                                   "chrom": {
+                                       "@value": "true"
+                                   },
+                                   "alfx": {
+                                       "@value": "2.128241"
+                                   },
+                                   "closed-orbit": {
+                                       "@value": "false"
+                                   }
+                               },
+                               "@name": "Inj. Sector 2-3"
+                           },
+                           {
+                               "madx-range": {
+                                   "@first": "LHCINJ.B1",
+                                   "@last": "IP5"
+                               },
+                               "twiss-initial-conditions": {
+                                   "deltap": {
+                                       "@value": "0.0"
+                                   },
+                                   "@name": "lhcb1-twiss",
+                                   "centre": {
+                                       "@value": "false"
+                                   },
+                                   "alfy": {
+                                       "@value": "-1.679855"
+                                   },
+                                   "bety": {
+                                       "@value": "71.515031"
+                                   },
+                                   "betx": {
+                                       "@value": "55.679041"
+                                   },
+                                   "dpy": {
+                                       "@value": "0.0"
+                                   },
+                                   "dpx": {
+                                       "@value": "0.03792"
+                                   },
+                                   "dx": {
+                                       "@value": "-0.1103"
+                                   },
+                                   "dy": {
+                                       "@value": "0.0"
+                                   },
+                                   "chrom": {
+                                       "@value": "true"
+                                   },
+                                   "alfx": {
+                                       "@value": "2.128241"
+                                   },
+                                   "closed-orbit": {
+                                       "@value": "false"
+                                   }
+                               },
+                               "@name": "Inj. Sector 2-5"
+                           }
+                       ]
+                   },
+                   "beam": {
+                       "sige": {
+                           "@value": "5.0E-4"
+                       },
+                       "particle": {
+                           "@value": "PROTON"
+                       },
+                       "energy": {
+                           "@value": "450.0"
+                       },
+                       "npart": {
+                           "@value": "1.1E11"
+                       },
+                       "bv": {
+                           "@value": "PLUS"
+                       },
+                       "ey": {
+                           "@value": "7.297671095555556E-9"
+                       },
+                       "ex": {
+                           "@value": "7.297671095555556E-9"
+                       },
+                       "sigt": {
+                           "@value": "0.077"
+                       }
+                   },
+                   "default-range": {
+                       "@ref-name": "ALL"
+                   },
+                   "@name": "lhcb1"
+               },
+               {
+                   "ranges": {
+                       "range": [
+                           {
+                               "madx-range": {
+                                   "@first": "#s",
+                                   "@last": "#e"
+                               },
+                               "twiss-initial-conditions": {
+                                   "chrom": {
+                                       "@value": "true"
+                                   },
+                                   "centre": {
+                                       "@value": "false"
+                                   },
+                                   "@name": "default-twiss",
+                                   "closed-orbit": {
+                                       "@value": "false"
+                                   }
+                               },
+                               "corrector-invert-filters": {
+                                   "regex-filter": [
+                                       {
+                                           "@plane": "H",
+                                           "@regex": "(?i)^MCBX.*"
+                                       },
+                                       {
+                                           "@plane": "V",
+                                           "@regex": "(?i)^MCBX.*"
+                                       }
+                                   ]
+                               },
+                               "@name": "ALL"
+                           },
+                           {
+                               "madx-range": {
+                                   "@first": "#s",
+                                   "@last": "#e"
+                               },
+                               "twiss-initial-conditions": {
+                                   "deltap": {
+                                       "@value": "0.0"
+                                   },
+                                   "@name": "lhcb2-twiss",
+                                   "centre": {
+                                       "@value": "false"
+                                   },
+                                   "alfy": {
+                                       "@value": "-2.127759"
+                                   },
+                                   "bety": {
+                                       "@value": "140.995239"
+                                   },
+                                   "betx": {
+                                       "@value": "66.829881"
+                                   },
+                                   "dpy": {
+                                       "@value": "3.0E-6"
+                                   },
+                                   "dpx": {
+                                       "@value": "0.003062"
+                                   },
+                                   "dx": {
+                                       "@value": "0.107789"
+                                   },
+                                   "dy": {
+                                       "@value": "1.36E-4"
+                                   },
+                                   "chrom": {
+                                       "@value": "true"
+                                   },
+                                   "alfx": {
+                                       "@value": "-9.0E-6"
+                                   },
+                                   "closed-orbit": {
+                                       "@value": "false"
+                                   }
+                               },
+                               "corrector-invert-filters": {
+                                   "regex-filter": [
+                                       {
+                                           "@plane": "H",
+                                           "@regex": "(?i)^MCBX.*"
+                                       },
+                                       {
+                                           "@plane": "V",
+                                           "@regex": "(?i)^MCBX.*"
+                                       }
+                                   ]
+                               },
+                               "@name": "ALL first turn"
+                           },
+                           {
+                               "madx-range": {
+                                   "@first": "TCLA.A7L7.B2",
+                                   "@last": "LHCINJ.B2"
+                               },
+                               "twiss-initial-conditions": {
+                                   "deltap": {
+                                       "@value": "0.0"
+                                   },
+                                   "@name": "lhcb2-twiss",
+                                   "centre": {
+                                       "@value": "false"
+                                   },
+                                   "alfy": {
+                                       "@value": "-2.127759"
+                                   },
+                                   "bety": {
+                                       "@value": "140.995239"
+                                   },
+                                   "betx": {
+                                       "@value": "66.829881"
+                                   },
+                                   "dpy": {
+                                       "@value": "3.0E-6"
+                                   },
+                                   "dpx": {
+                                       "@value": "0.003062"
+                                   },
+                                   "dx": {
+                                       "@value": "0.107789"
+                                   },
+                                   "dy": {
+                                       "@value": "1.36E-4"
+                                   },
+                                   "chrom": {
+                                       "@value": "true"
+                                   },
+                                   "alfx": {
+                                       "@value": "-9.0E-6"
+                                   },
+                                   "closed-orbit": {
+                                       "@value": "false"
+                                   }
+                               },
+                               "corrector-invert-filters": {
+                                   "regex-filter": [
+                                       {
+                                           "@plane": "H",
+                                           "@regex": "(?i)^MCBX.*"
+                                       },
+                                       {
+                                           "@plane": "V",
+                                           "@regex": "(?i)^MCBX.*"
+                                       }
+                                   ]
+                               },
+                               "@name": "Inj. Sectors 8-7"
+                           },
+                           {
+                               "madx-range": {
+                                   "@first": "TCDQA.A4L6.B2",
+                                   "@last": "LHCINJ.B2"
+                               },
+                               "twiss-initial-conditions": {
+                                   "deltap": {
+                                       "@value": "0.0"
+                                   },
+                                   "@name": "lhcb2-twiss",
+                                   "centre": {
+                                       "@value": "false"
+                                   },
+                                   "alfy": {
+                                       "@value": "-2.127759"
+                                   },
+                                   "bety": {
+                                       "@value": "140.995239"
+                                   },
+                                   "betx": {
+                                       "@value": "66.829881"
+                                   },
+                                   "dpy": {
+                                       "@value": "3.0E-6"
+                                   },
+                                   "dpx": {
+                                       "@value": "0.003062"
+                                   },
+                                   "dx": {
+                                       "@value": "0.107789"
+                                   },
+                                   "dy": {
+                                       "@value": "1.36E-4"
+                                   },
+                                   "chrom": {
+                                       "@value": "true"
+                                   },
+                                   "alfx": {
+                                       "@value": "-9.0E-6"
+                                   },
+                                   "closed-orbit": {
+                                       "@value": "false"
+                                   }
+                               },
+                               "corrector-invert-filters": {
+                                   "regex-filter": [
+                                       {
+                                           "@plane": "H",
+                                           "@regex": "(?i)^MCBX.*"
+                                       },
+                                       {
+                                           "@plane": "V",
+                                           "@regex": "(?i)^MCBX.*"
+                                       }
+                                   ]
+                               },
+                               "@name": "Inj. Sectors 8-6"
+                           },
+                           {
+                               "madx-range": {
+                                   "@first": "IP5",
+                                   "@last": "LHCINJ.B2"
+                               },
+                               "twiss-initial-conditions": {
+                                   "deltap": {
+                                       "@value": "0.0"
+                                   },
+                                   "@name": "lhcb2-twiss",
+                                   "centre": {
+                                       "@value": "false"
+                                   },
+                                   "alfy": {
+                                       "@value": "-2.127759"
+                                   },
+                                   "bety": {
+                                       "@value": "140.995239"
+                                   },
+                                   "betx": {
+                                       "@value": "66.829881"
+                                   },
+                                   "dpy": {
+                                       "@value": "3.0E-6"
+                                   },
+                                   "dpx": {
+                                       "@value": "0.003062"
+                                   },
+                                   "dx": {
+                                       "@value": "0.107789"
+                                   },
+                                   "dy": {
+                                       "@value": "1.36E-4"
+                                   },
+                                   "chrom": {
+                                       "@value": "true"
+                                   },
+                                   "alfx": {
+                                       "@value": "-9.0E-6"
+                                   },
+                                   "closed-orbit": {
+                                       "@value": "false"
+                                   }
+                               },
+                               "corrector-invert-filters": {
+                                   "regex-filter": [
+                                       {
+                                           "@plane": "H",
+                                           "@regex": "(?i)^MCBX.*"
+                                       },
+                                       {
+                                           "@plane": "V",
+                                           "@regex": "(?i)^MCBX.*"
+                                       }
+                                   ]
+                               },
+                               "@name": "Inj. Sectors 8-5"
+                           },
+                           {
+                               "madx-range": {
+                                   "@first": "IP4",
+                                   "@last": "LHCINJ.B2"
+                               },
+                               "twiss-initial-conditions": {
+                                   "deltap": {
+                                       "@value": "0.0"
+                                   },
+                                   "@name": "lhcb2-twiss",
+                                   "centre": {
+                                       "@value": "false"
+                                   },
+                                   "alfy": {
+                                       "@value": "-2.127759"
+                                   },
+                                   "bety": {
+                                       "@value": "140.995239"
+                                   },
+                                   "betx": {
+                                       "@value": "66.829881"
+                                   },
+                                   "dpy": {
+                                       "@value": "3.0E-6"
+                                   },
+                                   "dpx": {
+                                       "@value": "0.003062"
+                                   },
+                                   "dx": {
+                                       "@value": "0.107789"
+                                   },
+                                   "dy": {
+                                       "@value": "1.36E-4"
+                                   },
+                                   "chrom": {
+                                       "@value": "true"
+                                   },
+                                   "alfx": {
+                                       "@value": "-9.0E-6"
+                                   },
+                                   "closed-orbit": {
+                                       "@value": "false"
+                                   }
+                               },
+                               "corrector-invert-filters": {
+                                   "regex-filter": [
+                                       {
+                                           "@plane": "H",
+                                           "@regex": "(?i)^MCBX.*"
+                                       },
+                                       {
+                                           "@plane": "V",
+                                           "@regex": "(?i)^MCBX.*"
+                                       }
+                                   ]
+                               },
+                               "@name": "Inj. Sectors 8-4"
+                           },
+                           {
+                               "madx-range": {
+                                   "@first": "IP1",
+                                   "@last": "LHCINJ.B2"
+                               },
+                               "twiss-initial-conditions": {
+                                   "deltap": {
+                                       "@value": "0.0"
+                                   },
+                                   "@name": "lhcb2-twiss",
+                                   "centre": {
+                                       "@value": "false"
+                                   },
+                                   "alfy": {
+                                       "@value": "-2.127759"
+                                   },
+                                   "bety": {
+                                       "@value": "140.995239"
+                                   },
+                                   "betx": {
+                                       "@value": "66.829881"
+                                   },
+                                   "dpy": {
+                                       "@value": "3.0E-6"
+                                   },
+                                   "dpx": {
+                                       "@value": "0.003062"
+                                   },
+                                   "dx": {
+                                       "@value": "0.107789"
+                                   },
+                                   "dy": {
+                                       "@value": "1.36E-4"
+                                   },
+                                   "chrom": {
+                                       "@value": "true"
+                                   },
+                                   "alfx": {
+                                       "@value": "-9.0E-6"
+                                   },
+                                   "closed-orbit": {
+                                       "@value": "false"
+                                   }
+                               },
+                               "corrector-invert-filters": {
+                                   "regex-filter": [
+                                       {
+                                           "@plane": "H",
+                                           "@regex": "(?i)^MCBX.*"
+                                       },
+                                       {
+                                           "@plane": "V",
+                                           "@regex": "(?i)^MCBX.*"
+                                       }
+                                   ]
+                               },
+                               "@name": "Inj. Sectors 8-1"
+                           }
+                       ]
+                   },
+                   "beam": {
+                       "sige": {
+                           "@value": "5.0E-4"
+                       },
+                       "particle": {
+                           "@value": "PROTON"
+                       },
+                       "energy": {
+                           "@value": "450.0"
+                       },
+                       "npart": {
+                           "@value": "1.1E11"
+                       },
+                       "bv": {
+                           "@value": "MINUS"
+                       },
+                       "ey": {
+                           "@value": "7.297671095555556E-9"
+                       },
+                       "ex": {
+                           "@value": "7.297671095555556E-9"
+                       },
+                       "sigt": {
+                           "@value": "0.077"
+                       }
+                   },
+                   "default-range": {
+                       "@ref-name": "ALL"
+                   },
+                   "@name": "lhcb2"
+               }
+           ]
+       },
+       "optics": {
+           "optic": [
+               {
+                   "@overlay": "false",
+                   "init-files": {
+                       "call-file": [
+                           {
+                               "@path": "V6.5.inj.str",
+                               "@parse": "STRENGTHS"
+                           },
+                           {
+                               "@path": "b2b3.str",
+                               "@parse": "STRENGTHS",
+                               "@location": "RESOURCE"
+                           }
+                       ]
+                   },
+                   "@name": "injection"
+               },
+               {
+                   "@overlay": "false",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "V6.5.coll.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "collision"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR1/IP1_beta11.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR1/IP1_beta11.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR1/IP1_beta11.0p.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR1/IP1_beta11.0p.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR1/IP1_beta17.0p.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR1/IP1_beta17.0p.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR1/IP1_beta_0.55.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR1/IP1_beta_0.55.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR1/IP1_beta_0.65.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR1/IP1_beta_0.65.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR1/IP1_beta_0.80.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR1/IP1_beta_0.80.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR1/IP1_beta_1.10.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR1/IP1_beta_1.10.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR1/IP1_beta_1.50.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR1/IP1_beta_1.50.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR1/IP1_beta_2.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR1/IP1_beta_2.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR1/IP1_beta_2.50.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR1/IP1_beta_2.50.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR1/IP1_beta_3.50.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR1/IP1_beta_3.50.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR1/IP1_beta_4.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR1/IP1_beta_4.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR1/IP1_beta_5.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR1/IP1_beta_5.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR1/IP1_beta_7.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR1/IP1_beta_7.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR1/IP1_beta_9.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR1/IP1_beta_9.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/V6.5.inj.new-nominal.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/V6.5.inj.new-nominal.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00889_beta10.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00889_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00889_beta_2.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00889_beta_2.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00889_beta_2.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00889_beta_2.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00889_beta_3.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00889_beta_3.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00889_beta_4.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00889_beta_4.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00889_beta_5.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00889_beta_5.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00889_beta_6.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00889_beta_6.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00889_beta_6.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00889_beta_6.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00889_beta_7.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00889_beta_7.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00889_beta_7.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00889_beta_7.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00889_beta_8.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00889_beta_8.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00889_beta_8.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00889_beta_8.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00889_beta_9.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00889_beta_9.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00889_beta_9.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00889_beta_9.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00897_beta10.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00897_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00904_beta10.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00904_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00912_beta10.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00912_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00920_beta10.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00920_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00928_beta10.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00928_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00935_beta10.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00935_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00943_beta10.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00943_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2/IP2_0.00951_beta10.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2/IP2_0.00951_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2_ions/ip210.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2_ions/ip210.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2_ions/ip2_0.50.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2_ions/ip2_0.50.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2_ions/ip2_0.70.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2_ions/ip2_0.70.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2_ions/ip2_0.90.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2_ions/ip2_0.90.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2_ions/ip2_1.10.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2_ions/ip2_1.10.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2_ions/ip2_1.50.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2_ions/ip2_1.50.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2_ions/ip2_2.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2_ions/ip2_2.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2_ions/ip2_2.50.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2_ions/ip2_2.50.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2_ions/ip2_3.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2_ions/ip2_3.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2_ions/ip2_4.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2_ions/ip2_4.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2_ions/ip2_5.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2_ions/ip2_5.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2_ions/ip2_6.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2_ions/ip2_6.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR2_ions/ip2_8.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR2_ions/ip2_8.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR5/IP5_beta11.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR5/IP5_beta11.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR5/IP5_beta11.0p.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR5/IP5_beta11.0p.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR5/IP5_beta17.0p.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR5/IP5_beta17.0p.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR5/IP5_beta_0.55.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR5/IP5_beta_0.55.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR5/IP5_beta_0.65.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR5/IP5_beta_0.65.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR5/IP5_beta_0.80.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR5/IP5_beta_0.80.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR5/IP5_beta_1.10.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR5/IP5_beta_1.10.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR5/IP5_beta_1.50.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR5/IP5_beta_1.50.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR5/IP5_beta_2.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR5/IP5_beta_2.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR5/IP5_beta_2.50.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR5/IP5_beta_2.50.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR5/IP5_beta_3.50.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR5/IP5_beta_3.50.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR5/IP5_beta_4.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR5/IP5_beta_4.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR5/IP5_beta_5.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR5/IP5_beta_5.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR5/IP5_beta_7.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR5/IP5_beta_7.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR5/IP5_beta_9.00.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR5/IP5_beta_9.00.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00860_beta10.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00860_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00860_beta_2.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00860_beta_2.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00860_beta_2.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00860_beta_2.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00860_beta_3.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00860_beta_3.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00860_beta_3.5m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00860_beta_3.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00860_beta_4.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00860_beta_4.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00860_beta_4.5m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00860_beta_4.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00860_beta_5.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00860_beta_5.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00860_beta_5.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00860_beta_5.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00860_beta_6.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00860_beta_6.00m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00860_beta_6.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00860_beta_6.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00860_beta_7.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00860_beta_7.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00860_beta_7.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00860_beta_7.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00860_beta_8.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00860_beta_8.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00860_beta_8.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00860_beta_8.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00860_beta_9.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00860_beta_9.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00860_beta_9.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00860_beta_9.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00865_beta10.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00865_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00875_beta10.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00875_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00885_beta10.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00885_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00895_beta10.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00895_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00900_beta10.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00900_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00905_beta10.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00905_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00910_beta10.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00910_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00915_beta10.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00915_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00920_beta10.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00920_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00925_beta10.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00925_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00930_beta10.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00930_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00935_beta10.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00935_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00940_beta10.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00940_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.00945_beta10.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.00945_beta10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8/ip8_0.0095098_beta_10m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8/ip8_0.0095098_beta_10m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8x/ip8_0.00860_beta_10.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8x/ip8_0.00860_beta_10.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8x/ip8_0.00860_beta_2.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8x/ip8_0.00860_beta_2.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8x/ip8_0.00860_beta_2.5m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8x/ip8_0.00860_beta_2.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8x/ip8_0.00860_beta_3.0m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8x/ip8_0.00860_beta_3.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8x/ip8_0.00860_beta_3.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8x/ip8_0.00860_beta_3.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8x/ip8_0.00860_beta_4.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8x/ip8_0.00860_beta_4.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8x/ip8_0.00860_beta_4.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8x/ip8_0.00860_beta_4.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8x/ip8_0.00860_beta_5.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8x/ip8_0.00860_beta_5.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8x/ip8_0.00860_beta_5.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8x/ip8_0.00860_beta_5.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8x/ip8_0.00860_beta_6.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8x/ip8_0.00860_beta_6.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8x/ip8_0.00860_beta_6.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8x/ip8_0.00860_beta_6.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8x/ip8_0.00860_beta_7.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8x/ip8_0.00860_beta_7.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8x/ip8_0.00860_beta_7.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8x/ip8_0.00860_beta_7.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8x/ip8_0.00860_beta_8.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8x/ip8_0.00860_beta_8.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8x/ip8_0.00860_beta_8.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8x/ip8_0.00860_beta_8.5m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8x/ip8_0.00860_beta_9.00m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8x/ip8_0.00860_beta_9.0m.str"
+               },
+               {
+                   "@overlay": "true",
+                   "init-files": {
+                       "call-file": {
+                           "@path": "IR8x/ip8_0.00860_beta_9.50m.str",
+                           "@parse": "STRENGTHS"
+                       }
+                   },
+                   "@name": "IR8x/ip8_0.00860_beta_9.5m.str"
+               }
+           ]
+       },
+       "default-sequence": {
+           "@ref-name": "lhcb1"
+       }
+   }
+}
