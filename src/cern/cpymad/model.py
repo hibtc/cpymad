@@ -160,7 +160,7 @@ class model():
     
     def twiss(self,
               sequence='',
-              columns='name,s,betx,bety,x,y,dx,dy,px,py,mux,muy',
+              columns='name,s,betx,bety,x,y,dx,dy,px,py,mux,muy,l,k1l,angle,k2l',
               madrange='',
               fname='',
               retdict=False):
@@ -172,7 +172,7 @@ class model():
          
          :param string sequence: Sequence, if empty, using default sequence.
          :param string columns: Columns in the twiss table, can also be list of strings
-         :param string twrange: Optional, give name of a range defined for the model.
+         :param string madrange: Optional, give name of a range defined for the model.
          :param string fname: Optionally, give name of file for tfs table.
          :param bool retdict: Return dictionaries (default is an extended LookUpDict)
         '''
@@ -183,7 +183,7 @@ class model():
         t,s=self._sendrecv(('twiss',args))
         # we say that when the "full" range has been selected, 
         # we can set this to true. Needed for e.g. aperture calls
-        if not twrange:
+        if not madrange:
             self._twisscalled[sequence]=True
         if retdict:
             return t,s
@@ -191,7 +191,7 @@ class model():
     
     def survey(self,
                sequence='',
-               columns='name,l,angle,x,y,z,theta',
+               columns='name,l,s,angle,x,y,z,theta',
                madrange='',
                fname='',
                retdict=False):
