@@ -68,7 +68,7 @@ class madx:
             i=0
             while os.path.isfile(base+str(i)+'.madx'):
                 i+=1
-            self._hfile=file(base+str(i)+'.madx')
+            self._hfile=file(base+str(i)+'.madx','w')
             self._rechist=recursive_history
         else:
             self._hist=False
@@ -179,7 +179,7 @@ class madx:
     def twiss(self,
               sequence,
               pattern=['full'],
-              columns='name,s,betx,bety,x,y,dx,dy,px,py,mux,muy',
+              columns='name,s,betx,bety,x,y,dx,dy,px,py,mux,muy,l,k1l,angle,k2l',
               madrange='',
               fname='',
               retdict=False
@@ -206,7 +206,7 @@ class madx:
     def survey(self,
               sequence,
               pattern=['full'],
-              columns='name,l,angle,x,y,z,theta',
+              columns='name,l,s,angle,x,y,z,theta',
               madrange='',
               fname='',
               retdict=False
