@@ -7,7 +7,6 @@
     "optic": "injection", 
     "sequence": "lhcb1"
   }, 
-  "repository-offset": "lhc/optics/V6.503", 
   "init-files": [
     {
       "path": "V6.5.seq", 
@@ -23,6 +22,7 @@
     }
   ], 
   "path-offsets": {
+    "repository-offset": "lhc/optics/V6.503", 
     "resource-offset": "lhc"
   }, 
   "sequences": {
@@ -37,14 +37,14 @@
             "deltap": 0.0, 
             "name": "lhcb1-twiss", 
             "centre": false, 
-            "chrom": true, 
+            "alfy": -1.679855, 
             "bety": 71.515031, 
             "betx": 55.679041, 
             "dpy": 0.0, 
             "dpx": 0.03792, 
             "dx": -0.1103, 
             "dy": 0.0, 
-            "alfy": -1.679855, 
+            "chrom": true, 
             "alfx": 2.128241, 
             "closed-orbit": false
           }
@@ -55,10 +55,10 @@
             "#e"
           ], 
           "twiss-init": {
-            "closed-orbit": false, 
+            "centre": false, 
             "chrom": true, 
             "name": "default-twiss", 
-            "centre": false
+            "closed-orbit": false
           }
         }, 
         "ALL first turn": {
@@ -70,14 +70,14 @@
             "deltap": 0.0, 
             "name": "lhcb1-twiss", 
             "centre": false, 
-            "chrom": true, 
+            "alfy": -1.679855, 
             "bety": 71.515031, 
             "betx": 55.679041, 
             "dpy": 0.0, 
             "dpx": 0.03792, 
             "dx": -0.1103, 
             "dy": 0.0, 
-            "alfy": -1.679855, 
+            "chrom": true, 
             "alfx": 2.128241, 
             "closed-orbit": false
           }
@@ -91,14 +91,14 @@
             "deltap": 0.0, 
             "name": "lhcb1-twiss", 
             "centre": false, 
-            "chrom": true, 
+            "alfy": -1.679855, 
             "bety": 71.515031, 
             "betx": 55.679041, 
             "dpy": 0.0, 
             "dpx": 0.03792, 
             "dx": -0.1103, 
             "dy": 0.0, 
-            "alfy": -1.679855, 
+            "chrom": true, 
             "alfx": 2.128241, 
             "closed-orbit": false
           }
@@ -126,10 +126,10 @@
             "#e"
           ], 
           "twiss-init": {
-            "closed-orbit": false, 
+            "centre": false, 
             "chrom": true, 
             "name": "default-twiss", 
-            "centre": false
+            "closed-orbit": false
           }
         }, 
         "ALL first turn": {
@@ -141,14 +141,14 @@
             "deltap": 0.0, 
             "name": "lhcb2-twiss", 
             "centre": false, 
-            "chrom": true, 
+            "alfy": -2.127759, 
             "bety": 140.995239, 
             "betx": 66.829881, 
             "dpy": 3e-06, 
             "dpx": 0.003062, 
             "dx": 0.107789, 
             "dy": 0.000136, 
-            "alfy": -2.127759, 
+            "chrom": true, 
             "alfx": -9e-06, 
             "closed-orbit": false
           }
@@ -162,14 +162,14 @@
             "deltap": 0.0, 
             "name": "lhcb2-twiss", 
             "centre": false, 
-            "chrom": true, 
+            "alfy": -2.127759, 
             "bety": 140.995239, 
             "betx": 66.829881, 
             "dpy": 3e-06, 
             "dpx": 0.003062, 
             "dx": 0.107789, 
             "dy": 0.000136, 
-            "alfy": -2.127759, 
+            "chrom": true, 
             "alfx": -9e-06, 
             "closed-orbit": false
           }
@@ -183,14 +183,14 @@
             "deltap": 0.0, 
             "name": "lhcb2-twiss", 
             "centre": false, 
-            "chrom": true, 
+            "alfy": -2.127759, 
             "bety": 140.995239, 
             "betx": 66.829881, 
             "dpy": 3e-06, 
             "dpx": 0.003062, 
             "dx": 0.107789, 
             "dy": 0.000136, 
-            "alfy": -2.127759, 
+            "chrom": true, 
             "alfx": -9e-06, 
             "closed-orbit": false
           }
@@ -204,14 +204,14 @@
             "deltap": 0.0, 
             "name": "lhcb2-twiss", 
             "centre": false, 
-            "chrom": true, 
+            "alfy": -2.127759, 
             "bety": 140.995239, 
             "betx": 66.829881, 
             "dpy": 3e-06, 
             "dpx": 0.003062, 
             "dx": 0.107789, 
             "dy": 0.000136, 
-            "alfy": -2.127759, 
+            "chrom": true, 
             "alfx": -9e-06, 
             "closed-orbit": false
           }
@@ -225,14 +225,14 @@
             "deltap": 0.0, 
             "name": "lhcb2-twiss", 
             "centre": false, 
-            "chrom": true, 
+            "alfy": -2.127759, 
             "bety": 140.995239, 
             "betx": 66.829881, 
             "dpy": 3e-06, 
             "dpx": 0.003062, 
             "dx": 0.107789, 
             "dy": 0.000136, 
-            "alfy": -2.127759, 
+            "chrom": true, 
             "alfx": -9e-06, 
             "closed-orbit": false
           }
@@ -246,14 +246,14 @@
             "deltap": 0.0, 
             "name": "lhcb2-twiss", 
             "centre": false, 
-            "chrom": true, 
+            "alfy": -2.127759, 
             "bety": 140.995239, 
             "betx": 66.829881, 
             "dpy": 3e-06, 
             "dpx": 0.003062, 
             "dx": 0.107789, 
             "dy": 0.000136, 
-            "alfy": -2.127759, 
+            "chrom": true, 
             "alfx": -9e-06, 
             "closed-orbit": false
           }

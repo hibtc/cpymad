@@ -45,7 +45,7 @@ def jmad2cpymad(mod,usecouch=True):
      couch db to cpymad model def
     '''
     if usecouch:
-        c=couch.Server(dbname='cpymad_newstyle')
+        c=couch.Server(dbname='jmad_models')
         d=c.get_model(mod)
     else:
         d=json.loads(file(mod+'.jmd.json','r').read())
@@ -76,9 +76,10 @@ def jmad2cpymad(mod,usecouch=True):
     jpo=jd['path-offsets']
     dnew["path-offsets"]={"resource-offset":jpo['resource-offset']['@value']}
     if "repository-offset" in jpo:
-        dnew['repository-offset']=jpo['repository-offset']['@value']
+        repoff=jpo['repository-offset']['@value']
     else:
-        dnew['repository-offset']=''
+        repoff=''
+    dnew['path-offsets']['repository-offset']=repoff
     
     # sequences
     dnew['sequences']={}
@@ -136,7 +137,8 @@ def jmad2cpymad(mod,usecouch=True):
     
     file(mod+'.cpymad.json','w').write(json.dumps(dnew,indent=2))
     if usecouch:
-        uploadModel(c,mod+'.cpymad.json',mod)
+        c2=couch.Server(dbname='cpymad_newstyle')
+        uploadModel(c2,mod+'.cpymad.json',mod)
 
 def convertModels(usecouch=True):
     if usecouch:
@@ -157,4 +159,4 @@ def convertModels(usecouch=True):
 if __name__=="__main__":
     #uploadJmadModels()
     #jmad2cpymad('lhc',usecouch=False)
-    convertModels(False)
+    convertModels(True)

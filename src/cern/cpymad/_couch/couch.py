@@ -58,6 +58,11 @@ class Server():
          Create a new model..
         '''
         check_model_valid(dictionary,fnames,attachments)
+        if modname in self.ls_models():
+            doc=self._db[modname]
+            for k in dictionary:
+                doc[k]=dictionary[k]
+            dictionary=doc
         self._db[modname]=dictionary
         if len(fnames)!=len(attachments):
             raise ValueError("You need to give one filename for each attachment")
