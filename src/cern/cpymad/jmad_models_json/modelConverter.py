@@ -50,7 +50,7 @@ def convert_dict(indict):
 def convert_file(infilename, outfilename):
     indict = json.loads(file(infilename, 'r').read())
     outdict = convert_dict(indict);
-    file(outfilename, 'w').write(json.dumps(outdict))
+    file(outfilename, 'w').write(json.dumps(outdict, indent=2))
 
 if __name__ == "__main__":
     print "Converting lhc"
