@@ -28,14 +28,32 @@ def _convert_value(value):
 
 def _convert_recursively(item):
     if  isinstance(item, list):
-        newlist = []
+        convert2dict=True
         for nextItem in item:
-            newlist.append(_convert_recursively(nextItem));
-        return newlist
+            if not '@name' in nextItem:
+                convert2dict=False
+        if convert2dict:
+            newdict = {}
+            for nextItem in item:
+                key=nextItem['@name']
+                del nextItem['@name']
+                print "DBG",nextItem
+                newdict[key]=_convert_recursively(nextItem)
+            return newdict
+        else:
+            newlist = []
+            for nextItem in item:
+                newlist.append(_convert_recursively(nextItem));
+            return newlist
     elif isinstance(item, dict):
         newdict = {}    
         for key, value in item.items():
-            newdict[_convert_key(key)] = _convert_recursively(value)
+            thiskey=_convert_key(key)
+            # we trick out the first key
+            if thiskey=='jmad-model-definition':
+                thiskey=value['@name']
+                del value['@name']
+            newdict[thiskey] = _convert_recursively(value)
         return newdict
     else:
         return _convert_value(item)
