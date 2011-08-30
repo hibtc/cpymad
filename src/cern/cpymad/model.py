@@ -45,6 +45,8 @@ class model():
     '''
     def __init__(self,model,optics='',histfile=''):
         
+        if model not in cern.cpymad.modelList():
+            raise ValueError("The model you asked for does not exist in the database")
         # name of model:
         self.model=model
         # loading the dictionary...
@@ -160,7 +162,8 @@ class model():
     
     def twiss(self,
               sequence='',
-              columns='name,s,betx,bety,x,y,dx,dy,px,py,mux,muy,l,k1l,angle,k2l',
+              columns=['name','s','betx','bety','x','y','dx','dy','px','py','mux','muy','l','k1l','angle','k2l'],
+              pattern=['full'],
               madrange='',
               fname='',
               retdict=False):
@@ -179,7 +182,7 @@ class model():
         from cern.pymad.domain import TfsTable, TfsSummary
         if sequence=='':
             sequence=self._dict['default']['sequence']
-        args={'sequence':sequence,'columns':columns,'madrange':madrange,'fname':fname}
+        args={'sequence':sequence,'columns':columns,'pattern':pattern,'madrange':madrange,'fname':fname}
         t,s=self._sendrecv(('twiss',args))
         # we say that when the "full" range has been selected, 
         # we can set this to true. Needed for e.g. aperture calls
@@ -294,7 +297,7 @@ class model():
 def _get_data(modelname):
     if USE_COUCH:
         return cern.cpymad._couch_server.get_model(modelname)
-    fname=modelname+'.json'
+    fname=modelname+'.cpymad.json'
     _dict = _get_file_content(modelname,fname)
     return json.loads(_dict)
 
@@ -348,6 +351,7 @@ class _modelProcess(multiprocessing.Process):
                 elif cmd[0]=='twiss':
                     t,s=_madx.twiss(sequence=cmd[1]['sequence'],
                                      columns=cmd[1]['columns'],
+                                     pattern=cmd[1]['pattern'],
                                      fname=cmd[1]['fname']
                                      ,retdict=True)
                     self.sender.send((t,s))
