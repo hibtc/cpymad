@@ -288,9 +288,9 @@ class madx:
     # turn on/off verbose outupt..
     def verbose(self,switch):
         if switch:
-            self.command("OPTION, ECHO, WARN, INFO;")
+            self.command("option, echo, warn, info")
         else:
-            self.command("OPTION, -ECHO, -WARN, -INFO;")
+            self.command("option, -echo, -warn, -info")
 
     def _fixcmd(self,cmd):
         if type(cmd)!=str and type(cmd)!=unicode:

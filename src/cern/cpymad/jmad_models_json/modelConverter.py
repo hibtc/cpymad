@@ -59,13 +59,24 @@ def _convert_recursively(item):
         return newdict
     else:
         return _convert_value(item)
-        
+
+def _add_default_cpymads(new_dict):
+    '''
+     Add some default stuff needed in the cpymad
+     definition.
+    '''
+    for mname,model in new_dict.items():
+        model['dbdirs']=['/afs/cern.ch/eng/']
+        for seqname,sequence in model['sequences'].items():
+            sequence['aperfiles']=[]
         
 def convert_dict(indict):
     '''
     converts a jmad-model definition to one which is more nicely readble from cpymad
     '''
-    return _convert_recursively(indict)
+    new_dict=_convert_recursively(indict)
+    _add_default_cpymads(new_dict)
+    return new_dict
 
 def convert_file(infilename, outfilename):
     indict = json.loads(file(infilename, 'r').read())
