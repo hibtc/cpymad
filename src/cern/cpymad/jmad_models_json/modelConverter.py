@@ -37,7 +37,6 @@ def _convert_recursively(item):
             for nextItem in item:
                 key=nextItem['@name']
                 del nextItem['@name']
-                print "DBG",nextItem
                 newdict[key]=_convert_recursively(nextItem)
             return newdict
         else:
@@ -53,6 +52,9 @@ def _convert_recursively(item):
             if thiskey=='jmad-model-definition':
                 thiskey=value['@name']
                 del value['@name']
+            elif thiskey.split('-')[0]=='default':
+                if '@ref-name' in value:
+                    value=value['@ref-name']
             newdict[thiskey] = _convert_recursively(value)
         return newdict
     else:
