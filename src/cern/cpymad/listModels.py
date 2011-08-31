@@ -29,8 +29,6 @@ def modelList():
         if len(f)>5 and f[-12:].lower()=='.cpymad.json':
             for mname in json.load(file(os.path.join(modelloc,f))).keys():
                 ret.append(mname)
-            
-    print "Models:",ret
     return ret
 
 
