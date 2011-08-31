@@ -2,7 +2,7 @@
 import json
 
 # some fixed conversions:
-_VALUE_MAP = {'true' : True, 'false' : False}
+_VALUE_MAP = {'true' : True, 'false' : False, 'PLUS': 1, 'MINUS': -1}
 
 def _convert_key(key):
     if key.startswith('@'):

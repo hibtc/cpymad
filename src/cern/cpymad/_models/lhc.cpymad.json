@@ -1,4 +1,4 @@
-{
+{ "lhc": {
     "initscript": "init_lhc.madx", 
     "beams": {
         "lhcb1coll": "BEAM, SEQUENCE=LHCB1, PARTICLE=PROTON, PC=7000;", 
@@ -142,4 +142,5 @@
         "sequence": "lhcb1"
         },
     "sequence": "V6.5.seq"
+    }
 }
