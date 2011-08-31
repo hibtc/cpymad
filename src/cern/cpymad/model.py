@@ -50,7 +50,7 @@ class model():
         # name of model:
         self.model=model
         # loading the dictionary...
-        self._dict=_get_data(model)
+        self._mdef=_get_mdef(model)
         
         # Defining two pipes which are used for communicating...
         _child_pipe_recv,_parent_send=multiprocessing.Pipe(False)
@@ -58,7 +58,7 @@ class model():
         self._send=_parent_send.send
         self._recv=_parent_recv.recv
         if not USE_COUCH:
-            for d in self._dict['dbdirs']:
+            for d in self._mdef['dbdirs']:
                 if os.path.isdir(d):
                     self._db=d
                     break
@@ -75,20 +75,20 @@ class model():
     
     def set_sequence(self,sequence):
         if sequence:
-            if sequence in self._dict['sequences']:
+            if sequence in self._mdef['sequences']:
                 self._active['sequence']=sequence
             else:
                 print("WARNING: You tried to activate a non-existing sequence")
         elif not self._active['sequence']:
-            self._active['sequence']=self._dict['default-sequence']
+            self._active['sequence']=self._mdef['default-sequence']
         
     def _setup_initial(self,sequence,optics):
         
-        for ifile in self._dict['init-files']:
+        for ifile in self._mdef['init-files']:
             self._call(ifile)
         
         # essentially just calls the beam command for all sequences..
-        for seq in self._dict['sequences']:
+        for seq in self._mdef['sequences']:
             self._set_sequence(seq)
         # then we set the default one..
         self.set_sequence(sequence)
@@ -102,7 +102,7 @@ class model():
             self._twisscalled[seq]=False
         
     def _set_sequence(self,sequence):
-        sdict=self._dict['sequences'][sequence]
+        sdict=self._mdef['sequences'][sequence]
         bdict=sdict['beam']
         bcmd='beam,'
         for k,v in bdict.items():
@@ -128,9 +128,9 @@ class model():
         else:
             loc='REPOSITORY' # this is default..
         if loc=='RESOURCE':
-            fname=self._dict["path-offsets"]['resource-offset']+'/'+fdict['path']
+            fname=self._mdef["path-offsets"]['resource-offset']+'/'+fdict['path']
         elif loc=='REPOSITORY':
-            fname=self._dict["path-offsets"]['repository-offset']+'/'+fdict['path']
+            fname=self._mdef["path-offsets"]['repository-offset']+'/'+fdict['path']
         if USE_COUCH:
             cmd=cern.cpymad._couch_server.get_file(self.model,fname)
             for c in cmd.split('\n'): # I wonder if this might be needed for now?
@@ -172,7 +172,7 @@ class model():
          
          :param string optics: Optics name to be checked.
         '''
-        return optics in self._dict['optics']
+        return optics in self._mdef['optics']
     
     def set_optics(self,optics):
         '''
@@ -184,13 +184,13 @@ class model():
         '''
         
         if optics=='':
-            optics=self._dict['default-optic']
+            optics=self._mdef['default-optic']
         if self._active['optic']==optics:
             print("INFO: Optics already initialized")
             return 0
         
         # optics dictionary..
-        odict=self._dict['optics'][optics]
+        odict=self._mdef['optics'][optics]
         
         for strfile in odict['init-files']:
             self._call(strfile)
@@ -205,7 +205,7 @@ class model():
         self._active['optic']=optics
     
     def set_knob(self,knob,value):
-        kdict=self._dict['knobs']
+        kdict=self._mdef['knobs']
         for e in kdict[knob]:
             val=str(kdict[knob][e]*value)
             self._cmd(e+"="+val)
@@ -214,7 +214,7 @@ class model():
         return self._sendrecv('get_sequences')
     
     def list_optics(self):
-        return self._dict['optics'].keys()
+        return self._mdef['optics'].keys()
     
     def twiss(self,
               sequence='',
@@ -237,7 +237,7 @@ class model():
         '''
         from cern.pymad.domain import TfsTable, TfsSummary
         if sequence=='':
-            sequence=self._dict['default']['sequence']
+            sequence=self._mdef['default-sequence']
         args={'sequence':sequence,'columns':columns,'pattern':pattern,'madrange':madrange,'fname':fname}
         t,s=self._sendrecv(('twiss',args))
         # we say that when the "full" range has been selected, 
@@ -264,7 +264,7 @@ class model():
         '''
         from cern.pymad.domain import TfsTable, TfsSummary
         if sequence=='':
-            sequence=self._dict['default']['sequence']
+            sequence=self._mdef['default-sequence']
         args={'sequence':sequence,'columns':columns,'madrange':madrange,'fname':fname}
         t,s=self._sendrecv(('survey',args))
         if retdict:
@@ -288,8 +288,8 @@ class model():
         '''
         from cern.pymad.domain import TfsTable, TfsSummary
         if sequence=='':
-            sequence=self._dict['default']['sequence']
-        seq=self._dict['sequences'][sequence]
+            sequence=self._mdef['default-sequence']
+        seq=self._mdef['sequences'][sequence]
         
         if not self._twisscalled[sequence]:
             self.twiss(sequence)
@@ -331,10 +331,10 @@ class model():
         return TfsTable(t),TfsSummary(s)
         
     def _get_ranges(self,sequence):
-        return self._dict['sequences'][sequence]['ranges'].keys()
+        return self._mdef['sequences'][sequence]['ranges'].keys()
         
     def _get_range_dict(self,sequence,madrange):
-        seq=self._dict['sequences'][sequence]
+        seq=self._mdef['sequences'][sequence]
         if madrange not in seq['ranges']:
             raise ValueError("%s is not a valid range name, available ranges: '%s'" % (madrange,"' '".join(seq['ranges'].keys())))
         return seq['ranges'][madrange]
@@ -349,7 +349,7 @@ class model():
         return self._recv()
         
            
-def _get_data(modelname):
+def _get_mdef(modelname):
     if USE_COUCH:
         return cern.cpymad._couch_server.get_model(modelname)
     fname=modelname+'.cpymad.json'
