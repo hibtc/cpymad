@@ -4,9 +4,11 @@ Cpymad implementation
 
 Documentation of the cpymad implementation
 
-Module cern.cpymad.madx
+Module cern.madx
 -----------------------
-Documentation not yet available
+
+.. automodule:: cern.madx
+    :members:
 
 
 Module cern.cpymad.model

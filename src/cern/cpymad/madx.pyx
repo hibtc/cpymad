@@ -16,6 +16,8 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 
+#cython: embedsignature=True
+
 '''
 .. module:: madx
 .. moduleauthor:: Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen.at.cern.ch>
