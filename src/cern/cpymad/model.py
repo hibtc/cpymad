@@ -28,13 +28,13 @@ Cython implementation of the model api.
 import json, os, sys
 from cern.madx import madx
 import cern.cpymad
-#from cern.pymad import abc.model
+from cern.pymad import abc
 import multiprocessing
 import signal,atexit
 from cern.pymad.globals import USE_COUCH
 
-#class model(model.PyMadModel):
-class model():
+class model(abc.model.PyMadModel):
+#class model():
     '''
     model class implementation. the model spawns a madx instance in a separate process.
     this has the advantage that you can run separate models which do not affect each other.
@@ -51,6 +51,7 @@ class model():
         self.model=model
         # loading the dictionary...
         self._mdef=_get_mdef(model)
+        
         
         # Defining two pipes which are used for communicating...
         _child_pipe_recv,_parent_send=multiprocessing.Pipe(False)
@@ -73,6 +74,15 @@ class model():
         
         self._setup_initial(sequence,optics)
     
+    # API stuff:
+    @property
+    def name(self):
+        return self.model
+    
+    @property
+    def mdef(self):
+        return self._mdef.copy()
+    
     def set_sequence(self,sequence):
         if sequence:
             if sequence in self._mdef['sequences']:
@@ -93,7 +103,7 @@ class model():
         # then we set the default one..
         self.set_sequence(sequence)
             
-        self.set_optics(optics)
+        self.set_optic(optics)
         # To keep track of whether or not certain things are already called..
         self._apercalled={}
         self._twisscalled={}
@@ -174,7 +184,7 @@ class model():
         '''
         return optics in self._mdef['optics']
     
-    def set_optics(self,optics):
+    def set_optic(self,optic):
         '''
          Set new optics.
          
@@ -183,14 +193,14 @@ class model():
          :raises KeyError: In case you try to set an optics not available in model.
         '''
         
-        if optics=='':
-            optics=self._mdef['default-optic']
-        if self._active['optic']==optics:
+        if optic=='':
+            optic=self._mdef['default-optic']
+        if self._active['optic']==optic:
             print("INFO: Optics already initialized")
             return 0
         
         # optics dictionary..
-        odict=self._mdef['optics'][optics]
+        odict=self._mdef['optics'][optic]
         
         for strfile in odict['init-files']:
             self._call(strfile)
@@ -202,7 +212,7 @@ class model():
             #else:
                 #self.set_knob(f,0.0)
         
-        self._active['optic']=optics
+        self._active['optic']=optic
     
     def set_knob(self,knob,value):
         kdict=self._mdef['knobs']
