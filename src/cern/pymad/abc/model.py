@@ -16,9 +16,12 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 '''
+.. module: cern.abc.pymad.model
+
 Created on 15 Aug 2011
 
-@author: kfuchsbe
+.. moduleauthor:: Kajetan Fuchsberger <Kajetan.Fuchsberger@cern.ch>
+
 '''
 from abc import ABCMeta, abstractmethod, abstractproperty
 class PyMadModel():

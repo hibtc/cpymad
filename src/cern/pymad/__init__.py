@@ -16,6 +16,15 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 
+'''
+.. module: cern.pymad
+
+PyMad is the API which CPyMad and JPyMad should follow.
+
+.. moduleauthor:: Kajetan Fuchsberger <Kajetan.Fuchsberger@cern.ch>
+
+'''
+
 from io.tfs import tfs
 from tools.run import init
 
