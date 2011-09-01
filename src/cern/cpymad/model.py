@@ -19,7 +19,7 @@
 .. module: cpymad.model
 
 Cython implementation of the model api.
-:See also: :mod:`pymad.abc.model`
+See also :py:class:`cern.pymad.model`
 
 .. moduleauthor:: Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen@cern.ch>
 
@@ -58,11 +58,14 @@ class model(abc.model.PyMadModel):
         _parent_recv,_child_pipe_send=multiprocessing.Pipe(False)
         self._send=_parent_send.send
         self._recv=_parent_recv.recv
+        self._db=None
         if not USE_COUCH:
             for d in self._mdef['dbdirs']:
                 if os.path.isdir(d):
                     self._db=d
                     break
+        if self._db==None:
+            raise ValueError("It is not possible to find database directory for this model")
         
         self._mprocess=_modelProcess(_child_pipe_send,_child_pipe_recv,model,histfile)
         
