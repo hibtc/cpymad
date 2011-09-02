@@ -22,16 +22,24 @@ The argument *--install-platlib* means we exclude external modules. The reason i
 CPyMad
 ------
 
-First method, source script:
+First method, use installation script:
+    We provide an `installation script <install.sh>`_ which should do the full job for you. Download the script
+    and run it. It will take a few minutes to finish. Upon successful completion, it will create an uninstall.sh
+    script which you should keep somewhere. This script knows all the files you have installed, 
+    and will remove all files if you execute it (folders are not removed).
+    
+    Dependencies: cmake, compilers for c/fortran, python 2.6 or 2.7
+
+Second method, source script:
 
   For CPymad on a 64 bit Linux machine with afs available, it is enough to source the script that we 
   currently provide in 
   
    /afs/cern.ch/user/y/ylevinse/public/setupCPYMAD.sh
   
-  We hope to in the near future provide a tarball for Linux and OSX containing all needed files. 
+  We hope to in the near future provide a tarball for Linux and OSX containing all needed files.
 
-Second method, manual installation:
+Third method, manual installation:
 
     * Download the Mad-X source from 
       `svn <http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&rev=0&isdir=1>`_ 
@@ -40,7 +48,9 @@ Second method, manual installation:
       
       .. code-block:: sh
       
-          mkdir build; cd build; cmake -DMADX_STATIC=OFF ../;make install
+          mkdir build; cd build
+          cmake -DMADX_STATIC=OFF -DBUILD_SHARED_LIBS=ON -D ../
+          make install
     
     * Download the PyMad source from `github <https://github.com/pymad/pymad/zipball/master>`_
       and unpack it
