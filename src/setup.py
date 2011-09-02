@@ -76,7 +76,6 @@ while not includedirs:
     add_dir('/afs/cern.ch/user/y/ylevinse/.local/include/madX',includedirs)
 add_dir(os.path.join(home,'.local','lib'),libdirs)
 add_dir(os.path.join(home,'.local','lib64'),libdirs)
-add_dir('/afs/cern.ch/user/y/ylevinse/.local/lib',libdirs)
 
 mods=[Extension('cern.madx',
                     define_macros = [('MAJOR_VERSION', '0'),
@@ -89,14 +88,6 @@ mods=[Extension('cern.madx',
                     # library folders are known to the extension
                     extra_link_args = ['-Wl,-R'+d for d in libdirs]
                     ),
-       #Extension('cern.cpymad.model',
-                    #define_macros = [('MAJOR_VERSION', '0'),
-                                     #('MINOR_VERSION', '1')],
-                    #include_dirs = includedirs,
-                    #libraries = libs,
-                    #sources = sourcefiles[1],
-                    #library_dirs = libdirs
-                    #)
       ]
 
 setup(
