@@ -64,8 +64,8 @@ class model(abc.model.PyMadModel):
                 if os.path.isdir(d):
                     self._db=d
                     break
-        if self._db==None:
-            raise ValueError("It is not possible to find database directory for this model")
+        #if self._db==None:
+            #raise ValueError("It is not possible to find database directory for this model")
         
         self._mprocess=_modelProcess(_child_pipe_send,_child_pipe_recv,model,histfile)
         
@@ -153,7 +153,10 @@ class model(abc.model.PyMadModel):
             if loc=='RESOURCE':
                 fpath=os.path.dirname(__file__)+'/_models/resdata/'+fname
             elif loc=='REPOSITORY':
-                fpath=self._db+fname
+                if self._db:
+                    fpath=self._db+fname
+                else:
+                    fpath=os.path.dirname(__file__)+'/_models/repdata/'+fname
         self.call(fpath)
     
     
