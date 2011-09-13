@@ -55,7 +55,8 @@ of numpy.array() objects, while strings are simple lists.
 
 Finally we choose another library to plot the result, in this case :py:meth:`matplotlib.pyplot.plot`.
 
-Test :py:meth:`os.system`
+Automatic documentation
+=======================
 
 
 .. automodule:: cern.madx
@@ -64,5 +65,19 @@ Test :py:meth:`os.system`
 
 Module cern.cpymad.model
 ------------------------
+
+This module is an implementation of the abstract class
+:py:class:`cern.pymad.abc.model`, using :py:class:`cern.madx` as the backend.
+
+A simple use-case::
+
+    from cern import cpymad
+    m=cpymad.model('lhc')
+    tw=m.twiss()[0]
+    print "max/min beta x:",max(tw.betx),min(tw.betx)
+
+Automatic documentation
+=======================
+
 .. automodule:: cern.cpymad.model
     :members:
