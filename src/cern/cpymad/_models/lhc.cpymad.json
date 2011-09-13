@@ -34,6 +34,9 @@
         "path": "V6.5.seq"
       }, 
       {
+        "path": "init_lhc.madx"
+      }, 
+      {
         "path": "setb2b3-lhc-b1.madx", 
         "location": "RESOURCE"
       }, 

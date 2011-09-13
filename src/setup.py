@@ -32,9 +32,10 @@ pythonsrc=["cern",
            "cern.pymad.abc",
            "cern.pymad.tools",
            "cern.pymad.domain"] 
-cdata=['_models/*.json',
-       '_models/*.madx',
-       'jmad_models_json/*.cpymad.json'] # list of data files to include..
+
+# list of data files to include..
+cdata=['_models/*.json'] 
+
 # add this to include data array
 for j in range(2,10):
     for end in ['.madx','.str','.seq','.tfs']:
