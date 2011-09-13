@@ -12,6 +12,7 @@
         "particle": {
           "value": "PROTON"
         }, 
+        "sequence": "lhcb2", 
         "energy": {
           "value": 450.0
         }, 

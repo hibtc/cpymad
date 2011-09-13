@@ -12,6 +12,7 @@
         "particle": {
           "value": "PROTON"
         }, 
+        "sequence": "ti2lhcb1", 
         "energy": {
           "value": 450.0
         }, 

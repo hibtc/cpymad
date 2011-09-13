@@ -12,6 +12,7 @@
         "particle": {
           "value": "PROTON"
         }, 
+        "sequence": "ti2", 
         "energy": {
           "value": 450.0
         }, 

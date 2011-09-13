@@ -12,6 +12,7 @@
         "particle": {
           "value": "PROTON"
         }, 
+        "sequence": "spsextra", 
         "energy": {
           "value": 450.0
         }, 
