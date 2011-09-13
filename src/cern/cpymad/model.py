@@ -115,15 +115,22 @@ class model(abc.model.PyMadModel):
             self._twisscalled[seq]=False
         
     def _set_sequence(self,sequence):
-        sdict=self._mdef['sequences'][sequence]
-        bdict=sdict['beam']
-        bcmd='beam,'
+        bname=self._mdef['sequences'][sequence]['beam']
+        bdict=self._mdef['beams'][bname]
+        set_beam(bdict)
+    
+    def set_beam(beam_dict):
+        '''
+         Set the beam from a beam definition
+         (dictionary)
+        '''
+        bcmd='beam'
         for k,v in bdict.items():
-            bcmd+=k+'='+str(v)+','
-        bcmd+='sequence='+sequence # remove last comma..
+            bcmd+=','+k+'='+str(v)
         if sys.flags.debug:
             print("Beam command: "+bcmd)
         self._cmd(bcmd)
+        
         
     def __del__(self):
         try:
@@ -163,8 +170,7 @@ class model(abc.model.PyMadModel):
     def call(self,filepath):
         '''
          Call a file in Mad-X. Give either
-         full file path or relative to where script is ran
-         from.
+         full file path or relative.
         '''
         if not os.path.isfile(filepath):
             raise ValueError("You tried to call a file that doesn't exist: "+filepath)
