@@ -53,6 +53,10 @@ def _convert_recursively(item):
             if '@name' in value and thiskey in name_convert_list:
                 thiskey=value['@name']
                 del value['@name']
+            elif thiskey=='init-files' and 'call-file' in value:
+                value=value['call-file']
+            elif '@value' in value and len(value)==1:
+                value=value['@value']
             elif thiskey.split('-')[0]=='default':
                 if '@ref-name' in value:
                     value=value['@ref-name']
@@ -102,8 +106,9 @@ def convert_file(infilename, outfilename):
     file(outfilename, 'w').write(json.dumps(outdict, indent=2))
 
 if __name__ == "__main__":
+    skip=['lhc']
     for f in os.listdir('.'):
-        if f[-9:]=='.jmd.json':
+        if f[-9:]=='.jmd.json' and f[:-9] not in skip:
             print("Converting "+f[:-9])
             convert_file(f, '../_models/'+f[:-9]+'.cpymad.json')
             
