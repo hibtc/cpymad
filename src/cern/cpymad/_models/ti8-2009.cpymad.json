@@ -6,58 +6,38 @@
     "svn-revision": "$Revision$", 
     "beams": {
       "TI8 (2009)_ti8": {
-        "sige": {
-          "value": 0.0005
-        }, 
-        "particle": {
-          "value": "PROTON"
-        }, 
+        "sige": 0.0005, 
+        "particle": "PROTON", 
         "sequence": "ti8", 
-        "energy": {
-          "value": 450.0
-        }, 
-        "npart": {
-          "value": 110000000000.0
-        }, 
-        "bv": {
-          "value": 1
-        }, 
-        "ey": {
-          "value": 7.297671095555556e-09
-        }, 
-        "ex": {
-          "value": 7.297671095555556e-09
-        }, 
-        "sigt": {
-          "value": 0.077
-        }
+        "energy": 450.0, 
+        "npart": 110000000000.0, 
+        "bv": 1, 
+        "ey": 7.297671095555556e-09, 
+        "ex": 7.297671095555556e-09, 
+        "sigt": 0.077
       }
     }, 
     "default-optic": "default optics", 
-    "init-files": {
-      "call-file": [
-        {
-          "path": "TI8.str", 
-          "location": "RESOURCE"
-        }, 
-        {
-          "path": "b2b3.str", 
-          "location": "RESOURCE"
-        }, 
-        {
-          "path": "TI8.seq", 
-          "location": "RESOURCE"
-        }, 
-        {
-          "path": "setb2b3.madx", 
-          "location": "RESOURCE"
-        }
-      ]
-    }, 
-    "path-offsets": {
-      "resource-offset": {
-        "value": "ti8/ti8-2009"
+    "init-files": [
+      {
+        "path": "TI8.str", 
+        "location": "RESOURCE"
+      }, 
+      {
+        "path": "b2b3.str", 
+        "location": "RESOURCE"
+      }, 
+      {
+        "path": "TI8.seq", 
+        "location": "RESOURCE"
+      }, 
+      {
+        "path": "setb2b3.madx", 
+        "location": "RESOURCE"
       }
+    ], 
+    "path-offsets": {
+      "resource-offset": "ti8/ti8-2009"
     }, 
     "sequences": {
       "ti8": {
@@ -68,43 +48,19 @@
               "first": "#s"
             }, 
             "twiss-initial-conditions": {
-              "deltap": {
-                "value": 0.0
-              }, 
+              "deltap": 0.0, 
               "name": "ti8-twiss", 
-              "centre": {
-                "value": false
-              }, 
-              "alfy": {
-                "value": -3.444554843
-              }, 
-              "bety": {
-                "value": 124.8219205
-              }, 
-              "betx": {
-                "value": 17.06248574
-              }, 
-              "dpy": {
-                "value": 0.0
-              }, 
-              "dpx": {
-                "value": 0.00334144588
-              }, 
-              "dx": {
-                "value": -0.2527900995
-              }, 
-              "dy": {
-                "value": 0.0
-              }, 
-              "chrom": {
-                "value": true
-              }, 
-              "alfx": {
-                "value": 0.4588913839
-              }, 
-              "closed-orbit": {
-                "value": false
-              }
+              "centre": false, 
+              "alfy": -3.444554843, 
+              "bety": 124.8219205, 
+              "betx": 17.06248574, 
+              "dpy": 0.0, 
+              "dpx": 0.00334144588, 
+              "dx": -0.2527900995, 
+              "dy": 0.0, 
+              "chrom": true, 
+              "alfx": 0.4588913839, 
+              "closed-orbit": false
             }, 
             "name": "ALL"
           }
@@ -116,20 +72,18 @@
     }, 
     "optics": {
       "optic": {
-        "init-files": {
-          "call-file": [
-            {
-              "parse": "STRENGTHS", 
-              "path": "TI8.str", 
-              "location": "RESOURCE"
-            }, 
-            {
-              "parse": "STRENGTHS", 
-              "path": "b2b3.str", 
-              "location": "RESOURCE"
-            }
-          ]
-        }, 
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "TI8.str", 
+            "location": "RESOURCE"
+          }, 
+          {
+            "parse": "STRENGTHS", 
+            "path": "b2b3.str", 
+            "location": "RESOURCE"
+          }
+        ], 
         "name": "default optics", 
         "overlay": false
       }

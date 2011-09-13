@@ -6,58 +6,38 @@
     "svn-revision": "$Revision$", 
     "beams": {
       "longti8 (2008 after 08 23)_ti8lhcb2": {
-        "sige": {
-          "value": 0.0005
-        }, 
-        "particle": {
-          "value": "PROTON"
-        }, 
+        "sige": 0.0005, 
+        "particle": "PROTON", 
         "sequence": "ti8lhcb2", 
-        "energy": {
-          "value": 450.0
-        }, 
-        "npart": {
-          "value": 110000000000.0
-        }, 
-        "bv": {
-          "value": 1
-        }, 
-        "ey": {
-          "value": 7.297671095555556e-09
-        }, 
-        "ex": {
-          "value": 7.297671095555556e-09
-        }, 
-        "sigt": {
-          "value": 0.077
-        }
+        "energy": 450.0, 
+        "npart": 110000000000.0, 
+        "bv": 1, 
+        "ey": 7.297671095555556e-09, 
+        "ex": 7.297671095555556e-09, 
+        "sigt": 0.077
       }
     }, 
     "default-optic": "2008-09-18 10:34", 
-    "init-files": {
-      "call-file": [
-        {
-          "path": "TI8_140808_k1_k2.seq", 
-          "location": "RESOURCE"
-        }, 
-        {
-          "path": "job1.madx", 
-          "location": "RESOURCE"
-        }, 
-        {
-          "path": "beam_four.seq", 
-          "location": "RESOURCE"
-        }, 
-        {
-          "path": "job.ti8lhcV6.503.optics.madx", 
-          "location": "RESOURCE"
-        }
-      ]
-    }, 
-    "path-offsets": {
-      "resource-offset": {
-        "value": "longti8/longti8-2008"
+    "init-files": [
+      {
+        "path": "TI8_140808_k1_k2.seq", 
+        "location": "RESOURCE"
+      }, 
+      {
+        "path": "job1.madx", 
+        "location": "RESOURCE"
+      }, 
+      {
+        "path": "beam_four.seq", 
+        "location": "RESOURCE"
+      }, 
+      {
+        "path": "job.ti8lhcV6.503.optics.madx", 
+        "location": "RESOURCE"
       }
+    ], 
+    "path-offsets": {
+      "resource-offset": "longti8/longti8-2008"
     }, 
     "sequences": {
       "ti8lhcb2": {
@@ -68,43 +48,19 @@
               "first": "#s"
             }, 
             "twiss-initial-conditions": {
-              "deltap": {
-                "value": 0.0
-              }, 
+              "deltap": 0.0, 
               "name": "ti8-twiss", 
-              "centre": {
-                "value": false
-              }, 
-              "alfy": {
-                "value": -3.444554843
-              }, 
-              "bety": {
-                "value": 124.8219205
-              }, 
-              "betx": {
-                "value": 17.06248574
-              }, 
-              "dpy": {
-                "value": 0.0
-              }, 
-              "dpx": {
-                "value": 0.00334144588
-              }, 
-              "dx": {
-                "value": -0.2527900995
-              }, 
-              "dy": {
-                "value": 0.0
-              }, 
-              "chrom": {
-                "value": true
-              }, 
-              "alfx": {
-                "value": 0.4588913839
-              }, 
-              "closed-orbit": {
-                "value": false
-              }
+              "centre": false, 
+              "alfy": -3.444554843, 
+              "bety": 124.8219205, 
+              "betx": 17.06248574, 
+              "dpy": 0.0, 
+              "dpx": 0.00334144588, 
+              "dx": -0.2527900995, 
+              "dy": 0.0, 
+              "chrom": true, 
+              "alfx": 0.4588913839, 
+              "closed-orbit": false
             }, 
             "name": "ALL"
           }
@@ -117,69 +73,63 @@
     "optics": {
       "optic": {
         "2007-08-23 19:57": {
-          "init-files": {
-            "call-file": [
-              {
-                "parse": "STRENGTHS", 
-                "path": "ti8-2008-08-23-1957.str", 
-                "location": "RESOURCE"
-              }, 
-              {
-                "parse": "STRENGTHS", 
-                "path": "ti8-commons.str", 
-                "location": "RESOURCE"
-              }, 
-              {
-                "parse": "STRENGTHS", 
-                "path": "V6.5.inj.str", 
-                "location": "RESOURCE"
-              }
-            ]
-          }, 
+          "init-files": [
+            {
+              "parse": "STRENGTHS", 
+              "path": "ti8-2008-08-23-1957.str", 
+              "location": "RESOURCE"
+            }, 
+            {
+              "parse": "STRENGTHS", 
+              "path": "ti8-commons.str", 
+              "location": "RESOURCE"
+            }, 
+            {
+              "parse": "STRENGTHS", 
+              "path": "V6.5.inj.str", 
+              "location": "RESOURCE"
+            }
+          ], 
           "overlay": false
         }, 
         "2007-08-24 03:27": {
-          "init-files": {
-            "call-file": [
-              {
-                "parse": "STRENGTHS", 
-                "path": "ti8-2008-08-24-0327.str", 
-                "location": "RESOURCE"
-              }, 
-              {
-                "parse": "STRENGTHS", 
-                "path": "ti8-commons.str", 
-                "location": "RESOURCE"
-              }, 
-              {
-                "parse": "STRENGTHS", 
-                "path": "V6.5.inj.str", 
-                "location": "RESOURCE"
-              }
-            ]
-          }, 
+          "init-files": [
+            {
+              "parse": "STRENGTHS", 
+              "path": "ti8-2008-08-24-0327.str", 
+              "location": "RESOURCE"
+            }, 
+            {
+              "parse": "STRENGTHS", 
+              "path": "ti8-commons.str", 
+              "location": "RESOURCE"
+            }, 
+            {
+              "parse": "STRENGTHS", 
+              "path": "V6.5.inj.str", 
+              "location": "RESOURCE"
+            }
+          ], 
           "overlay": false
         }, 
         "2008-09-18 10:34": {
-          "init-files": {
-            "call-file": [
-              {
-                "parse": "STRENGTHS", 
-                "path": "ti8-2008-09-18-1034.str", 
-                "location": "RESOURCE"
-              }, 
-              {
-                "parse": "STRENGTHS", 
-                "path": "ti8-commons.str", 
-                "location": "RESOURCE"
-              }, 
-              {
-                "parse": "STRENGTHS", 
-                "path": "V6.5.inj.str", 
-                "location": "RESOURCE"
-              }
-            ]
-          }, 
+          "init-files": [
+            {
+              "parse": "STRENGTHS", 
+              "path": "ti8-2008-09-18-1034.str", 
+              "location": "RESOURCE"
+            }, 
+            {
+              "parse": "STRENGTHS", 
+              "path": "ti8-commons.str", 
+              "location": "RESOURCE"
+            }, 
+            {
+              "parse": "STRENGTHS", 
+              "path": "V6.5.inj.str", 
+              "location": "RESOURCE"
+            }
+          ], 
           "overlay": false
         }
       }

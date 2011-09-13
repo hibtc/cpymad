@@ -6,58 +6,38 @@
     "svn-revision": "$Revision$", 
     "beams": {
       "longti2_ti2lhcb1": {
-        "sige": {
-          "value": 0.0005
-        }, 
-        "particle": {
-          "value": "PROTON"
-        }, 
+        "sige": 0.0005, 
+        "particle": "PROTON", 
         "sequence": "ti2lhcb1", 
-        "energy": {
-          "value": 450.0
-        }, 
-        "npart": {
-          "value": 110000000000.0
-        }, 
-        "bv": {
-          "value": 1
-        }, 
-        "ey": {
-          "value": 7.297671095555556e-09
-        }, 
-        "ex": {
-          "value": 7.297671095555556e-09
-        }, 
-        "sigt": {
-          "value": 0.077
-        }
+        "energy": 450.0, 
+        "npart": 110000000000.0, 
+        "bv": 1, 
+        "ey": 7.297671095555556e-09, 
+        "ex": 7.297671095555556e-09, 
+        "sigt": 0.077
       }
     }, 
     "default-optic": "default optics", 
-    "init-files": {
-      "call-file": [
-        {
-          "path": "ti2.seq", 
-          "location": "RESOURCE"
-        }, 
-        {
-          "path": "ti2.aperture.seq", 
-          "location": "RESOURCE"
-        }, 
-        {
-          "path": "V6.5.seq", 
-          "location": "RESOURCE"
-        }, 
-        {
-          "path": "join-ti2-lhc.madx", 
-          "location": "RESOURCE"
-        }
-      ]
-    }, 
-    "path-offsets": {
-      "resource-offset": {
-        "value": "longti2/longti2"
+    "init-files": [
+      {
+        "path": "ti2.seq", 
+        "location": "RESOURCE"
+      }, 
+      {
+        "path": "ti2.aperture.seq", 
+        "location": "RESOURCE"
+      }, 
+      {
+        "path": "V6.5.seq", 
+        "location": "RESOURCE"
+      }, 
+      {
+        "path": "join-ti2-lhc.madx", 
+        "location": "RESOURCE"
       }
+    ], 
+    "path-offsets": {
+      "resource-offset": "longti2/longti2"
     }, 
     "sequences": {
       "ti2lhcb1": {
@@ -68,43 +48,19 @@
               "first": "#s"
             }, 
             "twiss-initial-conditions": {
-              "deltap": {
-                "value": 0.0
-              }, 
+              "deltap": 0.0, 
               "name": "ti2-twiss", 
-              "centre": {
-                "value": false
-              }, 
-              "alfy": {
-                "value": -3.422196857
-              }, 
-              "bety": {
-                "value": 123.9323528
-              }, 
-              "betx": {
-                "value": 17.02748544
-              }, 
-              "dpy": {
-                "value": 0.0
-              }, 
-              "dpx": {
-                "value": 0.01307653962
-              }, 
-              "dx": {
-                "value": -0.3408152943
-              }, 
-              "dy": {
-                "value": 0.0
-              }, 
-              "chrom": {
-                "value": true
-              }, 
-              "alfx": {
-                "value": 0.4583574683
-              }, 
-              "closed-orbit": {
-                "value": false
-              }
+              "centre": false, 
+              "alfy": -3.422196857, 
+              "bety": 123.9323528, 
+              "betx": 17.02748544, 
+              "dpy": 0.0, 
+              "dpx": 0.01307653962, 
+              "dx": -0.3408152943, 
+              "dy": 0.0, 
+              "chrom": true, 
+              "alfx": 0.4583574683, 
+              "closed-orbit": false
             }, 
             "corrector-invert-filters": {
               "regex-filter": [
@@ -134,20 +90,18 @@
     }, 
     "optics": {
       "optic": {
-        "init-files": {
-          "call-file": [
-            {
-              "parse": "STRENGTHS", 
-              "path": "ti2.str", 
-              "location": "RESOURCE"
-            }, 
-            {
-              "parse": "STRENGTHS", 
-              "path": "V6.5.inj.str", 
-              "location": "RESOURCE"
-            }
-          ]
-        }, 
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "ti2.str", 
+            "location": "RESOURCE"
+          }, 
+          {
+            "parse": "STRENGTHS", 
+            "path": "V6.5.inj.str", 
+            "location": "RESOURCE"
+          }
+        ], 
         "name": "default optics", 
         "overlay": false
       }

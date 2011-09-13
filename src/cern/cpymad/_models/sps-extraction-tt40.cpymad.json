@@ -6,44 +6,24 @@
     "svn-revision": "$Revision$", 
     "beams": {
       "SPS-extraction (TT40)_spsextra": {
-        "sige": {
-          "value": 0.0005
-        }, 
-        "particle": {
-          "value": "PROTON"
-        }, 
+        "sige": 0.0005, 
+        "particle": "PROTON", 
         "sequence": "spsextra", 
-        "energy": {
-          "value": 450.0
-        }, 
-        "npart": {
-          "value": 110000000000.0
-        }, 
-        "bv": {
-          "value": 1
-        }, 
-        "ey": {
-          "value": 7.297671095555556e-09
-        }, 
-        "ex": {
-          "value": 7.297671095555556e-09
-        }, 
-        "sigt": {
-          "value": 0.077
-        }
+        "energy": 450.0, 
+        "npart": 110000000000.0, 
+        "bv": 1, 
+        "ey": 7.297671095555556e-09, 
+        "ex": 7.297671095555556e-09, 
+        "sigt": 0.077
       }
     }, 
     "default-optic": "default optics", 
     "init-files": {
-      "call-file": {
-        "path": "SPS_extraction_TT40.seq", 
-        "location": "RESOURCE"
-      }
+      "path": "SPS_extraction_TT40.seq", 
+      "location": "RESOURCE"
     }, 
     "path-offsets": {
-      "resource-offset": {
-        "value": "spsextract"
-      }
+      "resource-offset": "spsextract"
     }, 
     "sequences": {
       "spsextra": {
@@ -54,61 +34,25 @@
               "first": "#s"
             }, 
             "twiss-initial-conditions": {
-              "deltap": {
-                "value": 0.0
-              }, 
-              "ddy": {
-                "value": 0.0
-              }, 
-              "ddx": {
-                "value": -5.866518207
-              }, 
-              "ddpx": {
-                "value": -0.1013887
-              }, 
+              "deltap": 0.0, 
+              "ddy": 0.0, 
+              "ddx": -5.866518207, 
+              "ddpx": -0.1013887, 
               "name": "ti2-twiss", 
-              "centre": {
-                "value": false
-              }, 
-              "alfy": {
-                "value": 0.663770153
-              }, 
-              "bety": {
-                "value": 23.37564376
-              }, 
-              "betx": {
-                "value": 94.19052473
-              }, 
-              "muy": {
-                "value": 14.77184545
-              }, 
-              "mux": {
-                "value": 14.75568751
-              }, 
-              "dpy": {
-                "value": 0.0
-              }, 
-              "dpx": {
-                "value": 0.062160128
-              }, 
-              "dx": {
-                "value": 3.406882672
-              }, 
-              "dy": {
-                "value": 0.0
-              }, 
-              "closed-orbit": {
-                "value": false
-              }, 
-              "chrom": {
-                "value": true
-              }, 
-              "alfx": {
-                "value": -2.188943304
-              }, 
-              "ddpy": {
-                "value": 0.0
-              }
+              "centre": false, 
+              "alfy": 0.663770153, 
+              "bety": 23.37564376, 
+              "betx": 94.19052473, 
+              "muy": 14.77184545, 
+              "mux": 14.75568751, 
+              "dpy": 0.0, 
+              "dpx": 0.062160128, 
+              "dx": 3.406882672, 
+              "dy": 0.0, 
+              "closed-orbit": false, 
+              "chrom": true, 
+              "alfx": -2.188943304, 
+              "ddpy": 0.0
             }, 
             "name": "ALL"
           }
@@ -121,11 +65,9 @@
     "optics": {
       "optic": {
         "init-files": {
-          "call-file": {
-            "parse": "STRENGTHS", 
-            "path": "SPS_extraction_TT40.str", 
-            "location": "RESOURCE"
-          }
+          "parse": "STRENGTHS", 
+          "path": "SPS_extraction_TT40.str", 
+          "location": "RESOURCE"
         }, 
         "name": "default optics", 
         "overlay": false
