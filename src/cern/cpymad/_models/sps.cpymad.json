@@ -4,6 +4,7 @@
       "/afs/cern.ch/eng/"
     ], 
     "svn-revision": "$Revision$", 
+    "beams": {}, 
     "default-optic": "default optics", 
     "init-files": {
       "call-file": [
@@ -46,7 +47,7 @@
       }
     }, 
     "sequences": {
-      "sequence": {
+      "sps": {
         "ranges": {
           "range": {
             "madx-range": {
@@ -54,14 +55,14 @@
               "first": "#s"
             }, 
             "twiss-initial-conditions": {
-              "closed-orbit": {
+              "centre": {
                 "value": false
               }, 
               "chrom": {
                 "value": true
               }, 
               "name": "default-twiss", 
-              "centre": {
+              "closed-orbit": {
                 "value": false
               }
             }, 
@@ -69,7 +70,6 @@
           }
         }, 
         "default-range": "ALL", 
-        "name": "sps", 
         "aperfiles": []
       }
     }, 

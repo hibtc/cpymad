@@ -48,8 +48,9 @@ def _convert_recursively(item):
         newdict = {}    
         for key, value in item.items():
             thiskey=_convert_key(key)
-            # we trick out the first key
-            if thiskey=='jmad-model-definition':
+            # in this case we want to "push down" the name
+            name_convert_list=['jmad-model-definition','sequence']
+            if '@name' in value and thiskey in name_convert_list:
                 thiskey=value['@name']
                 del value['@name']
             elif thiskey.split('-')[0]=='default':
@@ -69,13 +70,29 @@ def _add_default_cpymads(new_dict):
         model['dbdirs']=['/afs/cern.ch/eng/']
         for seqname,sequence in model['sequences'].items():
             sequence['aperfiles']=[]
-        
+
+def _move_beams(new_dict):
+    '''
+     Moving beams in the dictionary..
+    '''
+    for mname,model in new_dict.items():
+        model['beams']={}
+        for seqname,sequence in model['sequences'].items():
+            if 'beam' not in sequence:
+                print("WARNING: No beam defined for "+seqname)
+                continue
+            if mname+'_'+seqname in model['beams']:
+                raise ValueError("Two beams with same name, please resolve")
+            model['beams'][mname+'_'+seqname]=sequence['beam']
+            sequence['beam']=mname+'_'+seqname
+
 def convert_dict(indict):
     '''
     converts a jmad-model definition to one which is more nicely readble from cpymad
     '''
     new_dict=_convert_recursively(indict)
     _add_default_cpymads(new_dict)
+    _move_beams(new_dict)
     return new_dict
 
 def convert_file(infilename, outfilename):
@@ -88,4 +105,8 @@ if __name__ == "__main__":
         if f[-9:]=='.jmd.json':
             print("Converting "+f[:-9])
             convert_file(f, '../_models/'+f[:-9]+'.cpymad.json')
+            
+            # saving jmad file in pretty print format:
+            #jd=json.load(file(f,'r'))
+            #json.dump(jd,file(f,'w'),indent=2)
     

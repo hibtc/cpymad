@@ -4,6 +4,34 @@
       "/afs/cern.ch/eng/"
     ], 
     "svn-revision": "$Revision$", 
+    "beams": {
+      "lhc-beam4_lhcb2": {
+        "sige": {
+          "value": 0.0005
+        }, 
+        "particle": {
+          "value": "PROTON"
+        }, 
+        "energy": {
+          "value": 450.0
+        }, 
+        "npart": {
+          "value": 110000000000.0
+        }, 
+        "bv": {
+          "value": 1
+        }, 
+        "ey": {
+          "value": 7.297671095555556e-09
+        }, 
+        "ex": {
+          "value": 7.297671095555556e-09
+        }, 
+        "sigt": {
+          "value": 0.077
+        }
+      }
+    }, 
     "default-optic": "injection", 
     "init-files": {
       "call-file": [
@@ -25,7 +53,7 @@
       }
     }, 
     "sequences": {
-      "sequence": {
+      "lhcb2": {
         "ranges": {
           "range": {
             "ALL": {
@@ -34,14 +62,14 @@
                 "first": "#s"
               }, 
               "twiss-initial-conditions": {
-                "closed-orbit": {
+                "centre": {
                   "value": false
                 }, 
                 "chrom": {
                   "value": true
                 }, 
                 "name": "default twiss", 
-                "centre": {
+                "closed-orbit": {
                   "value": false
                 }
               }, 
@@ -71,8 +99,8 @@
                 "centre": {
                   "value": false
                 }, 
-                "chrom": {
-                  "value": true
+                "alfy": {
+                  "value": -1.216716
                 }, 
                 "bety": {
                   "value": 75.204871
@@ -92,8 +120,8 @@
                 "dy": {
                   "value": 4.6e-05
                 }, 
-                "alfy": {
-                  "value": -1.216716
+                "chrom": {
+                  "value": true
                 }, 
                 "alfx": {
                   "value": 1.728909
@@ -128,8 +156,8 @@
                 "centre": {
                   "value": false
                 }, 
-                "chrom": {
-                  "value": true
+                "alfy": {
+                  "value": -1.216716
                 }, 
                 "bety": {
                   "value": 75.204871
@@ -149,8 +177,8 @@
                 "dy": {
                   "value": 4.6e-05
                 }, 
-                "alfy": {
-                  "value": -1.216716
+                "chrom": {
+                  "value": true
                 }, 
                 "alfx": {
                   "value": 1.728909
@@ -185,8 +213,8 @@
                 "centre": {
                   "value": false
                 }, 
-                "chrom": {
-                  "value": true
+                "alfy": {
+                  "value": -1.216716
                 }, 
                 "bety": {
                   "value": 75.204871
@@ -206,8 +234,8 @@
                 "dy": {
                   "value": 4.6e-05
                 }, 
-                "alfy": {
-                  "value": -1.216716
+                "chrom": {
+                  "value": true
                 }, 
                 "alfx": {
                   "value": 1.728909
@@ -242,8 +270,8 @@
                 "centre": {
                   "value": false
                 }, 
-                "chrom": {
-                  "value": true
+                "alfy": {
+                  "value": -1.216716
                 }, 
                 "bety": {
                   "value": 75.204871
@@ -263,8 +291,8 @@
                 "dy": {
                   "value": 4.6e-05
                 }, 
-                "alfy": {
-                  "value": -1.216716
+                "chrom": {
+                  "value": true
                 }, 
                 "alfx": {
                   "value": 1.728909
@@ -299,8 +327,8 @@
                 "centre": {
                   "value": false
                 }, 
-                "chrom": {
-                  "value": true
+                "alfy": {
+                  "value": -1.216716
                 }, 
                 "bety": {
                   "value": 75.204871
@@ -320,8 +348,8 @@
                 "dy": {
                   "value": 4.6e-05
                 }, 
-                "alfy": {
-                  "value": -1.216716
+                "chrom": {
+                  "value": true
                 }, 
                 "alfx": {
                   "value": 1.728909
@@ -356,8 +384,8 @@
                 "centre": {
                   "value": false
                 }, 
-                "chrom": {
-                  "value": true
+                "alfy": {
+                  "value": -1.216716
                 }, 
                 "bety": {
                   "value": 75.204871
@@ -377,8 +405,8 @@
                 "dy": {
                   "value": 4.6e-05
                 }, 
-                "alfy": {
-                  "value": -1.216716
+                "chrom": {
+                  "value": true
                 }, 
                 "alfx": {
                   "value": 1.728909
@@ -402,34 +430,8 @@
             }
           }
         }, 
-        "beam": {
-          "sige": {
-            "value": 0.0005
-          }, 
-          "particle": {
-            "value": "PROTON"
-          }, 
-          "energy": {
-            "value": 450.0
-          }, 
-          "npart": {
-            "value": 110000000000.0
-          }, 
-          "bv": {
-            "value": 1
-          }, 
-          "ey": {
-            "value": 7.297671095555556e-09
-          }, 
-          "ex": {
-            "value": 7.297671095555556e-09
-          }, 
-          "sigt": {
-            "value": 0.077
-          }
-        }, 
+        "beam": "lhc-beam4_lhcb2", 
         "default-range": "ALL", 
-        "name": "lhcb2", 
         "aperfiles": []
       }
     }, 

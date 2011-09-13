@@ -4,6 +4,34 @@
       "/afs/cern.ch/eng/"
     ], 
     "svn-revision": "$Revision$", 
+    "beams": {
+      "SPS-extraction (TT40)_spsextra": {
+        "sige": {
+          "value": 0.0005
+        }, 
+        "particle": {
+          "value": "PROTON"
+        }, 
+        "energy": {
+          "value": 450.0
+        }, 
+        "npart": {
+          "value": 110000000000.0
+        }, 
+        "bv": {
+          "value": 1
+        }, 
+        "ey": {
+          "value": 7.297671095555556e-09
+        }, 
+        "ex": {
+          "value": 7.297671095555556e-09
+        }, 
+        "sigt": {
+          "value": 0.077
+        }
+      }
+    }, 
     "default-optic": "default optics", 
     "init-files": {
       "call-file": {
@@ -17,7 +45,7 @@
       }
     }, 
     "sequences": {
-      "sequence": {
+      "spsextra": {
         "ranges": {
           "range": {
             "madx-range": {
@@ -41,8 +69,8 @@
               "centre": {
                 "value": false
               }, 
-              "chrom": {
-                "value": true
+              "alfy": {
+                "value": 0.663770153
               }, 
               "bety": {
                 "value": 23.37564376
@@ -71,8 +99,8 @@
               "closed-orbit": {
                 "value": false
               }, 
-              "alfy": {
-                "value": 0.663770153
+              "chrom": {
+                "value": true
               }, 
               "alfx": {
                 "value": -2.188943304
@@ -84,34 +112,8 @@
             "name": "ALL"
           }
         }, 
-        "beam": {
-          "sige": {
-            "value": 0.0005
-          }, 
-          "particle": {
-            "value": "PROTON"
-          }, 
-          "energy": {
-            "value": 450.0
-          }, 
-          "npart": {
-            "value": 110000000000.0
-          }, 
-          "bv": {
-            "value": 1
-          }, 
-          "ey": {
-            "value": 7.297671095555556e-09
-          }, 
-          "ex": {
-            "value": 7.297671095555556e-09
-          }, 
-          "sigt": {
-            "value": 0.077
-          }
-        }, 
+        "beam": "SPS-extraction (TT40)_spsextra", 
         "default-range": "ALL", 
-        "name": "spsextra", 
         "aperfiles": []
       }
     }, 

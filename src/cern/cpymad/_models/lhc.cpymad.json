@@ -4,6 +4,28 @@
       "/afs/cern.ch/eng/"
     ], 
     "svn-revision": "$Revision$", 
+    "beams": {
+      "lhc_lhcb2": {
+        "sige": 0.0005, 
+        "particle": "PROTON", 
+        "energy": 450.0, 
+        "npart": 110000000000.0, 
+        "bv": -1, 
+        "ey": 7.297671095555556e-09, 
+        "sigt": 0.077, 
+        "ex": 7.297671095555556e-09
+      }, 
+      "lhc_lhcb1": {
+        "sige": 0.0005, 
+        "particle": "PROTON", 
+        "energy": 450.0, 
+        "npart": 110000000000.0, 
+        "bv": 1, 
+        "ey": 7.297671095555556e-09, 
+        "sigt": 0.077, 
+        "ex": 7.297671095555556e-09
+      }
+    }, 
     "default-optic": "injection", 
     "init-files": [
       {
@@ -52,10 +74,10 @@
               "first": "#s"
             }, 
             "twiss-initial-conditions": {
-              "closed-orbit": false, 
+              "centre": false, 
               "chrom": true, 
               "name": "default-twiss", 
-              "centre": false
+              "closed-orbit": false
             }
           }, 
           "ALL first turn": {
@@ -101,16 +123,7 @@
             }
           }
         }, 
-        "beam": {
-          "sige": 0.0005, 
-          "particle": "PROTON", 
-          "energy": 450.0, 
-          "npart": 110000000000.0, 
-          "bv": 1, 
-          "ey": 7.297671095555556e-09, 
-          "sigt": 0.077, 
-          "ex": 7.297671095555556e-09
-        }, 
+        "beam": "lhc_lhcb1", 
         "default-range": "ALL", 
         "aperfiles": []
       }, 
@@ -122,10 +135,10 @@
               "first": "#s"
             }, 
             "twiss-initial-conditions": {
-              "closed-orbit": false, 
+              "centre": false, 
               "chrom": true, 
               "name": "default-twiss", 
-              "centre": false
+              "closed-orbit": false
             }, 
             "corrector-invert-filters": [
               {
@@ -325,16 +338,7 @@
             ]
           }
         }, 
-        "beam": {
-          "sige": 0.0005, 
-          "particle": "PROTON", 
-          "energy": 450.0, 
-          "npart": 110000000000.0, 
-          "bv": -1, 
-          "ey": 7.297671095555556e-09, 
-          "sigt": 0.077, 
-          "ex": 7.297671095555556e-09
-        }, 
+        "beam": "lhc_lhcb2", 
         "default-range": "ALL", 
         "aperfiles": []
       }

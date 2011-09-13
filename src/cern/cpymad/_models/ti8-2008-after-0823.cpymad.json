@@ -4,6 +4,34 @@
       "/afs/cern.ch/eng/"
     ], 
     "svn-revision": "$Revision$", 
+    "beams": {
+      "TI8 (2008 after 0823)_ti8": {
+        "sige": {
+          "value": 0.0005
+        }, 
+        "particle": {
+          "value": "PROTON"
+        }, 
+        "energy": {
+          "value": 450.0
+        }, 
+        "npart": {
+          "value": 110000000000.0
+        }, 
+        "bv": {
+          "value": 1
+        }, 
+        "ey": {
+          "value": 7.297671095555556e-09
+        }, 
+        "ex": {
+          "value": 7.297671095555556e-09
+        }, 
+        "sigt": {
+          "value": 0.077
+        }
+      }
+    }, 
     "default-optic": "2008-09-18 10:34", 
     "init-files": {
       "call-file": {
@@ -17,7 +45,7 @@
       }
     }, 
     "sequences": {
-      "sequence": {
+      "ti8": {
         "ranges": {
           "range": {
             "madx-range": {
@@ -32,8 +60,8 @@
               "centre": {
                 "value": false
               }, 
-              "chrom": {
-                "value": true
+              "alfy": {
+                "value": -3.444554843
               }, 
               "bety": {
                 "value": 124.8219205
@@ -53,8 +81,8 @@
               "dy": {
                 "value": 0.0
               }, 
-              "alfy": {
-                "value": -3.444554843
+              "chrom": {
+                "value": true
               }, 
               "alfx": {
                 "value": 0.4588913839
@@ -66,34 +94,8 @@
             "name": "ALL"
           }
         }, 
-        "beam": {
-          "sige": {
-            "value": 0.0005
-          }, 
-          "particle": {
-            "value": "PROTON"
-          }, 
-          "energy": {
-            "value": 450.0
-          }, 
-          "npart": {
-            "value": 110000000000.0
-          }, 
-          "bv": {
-            "value": 1
-          }, 
-          "ey": {
-            "value": 7.297671095555556e-09
-          }, 
-          "ex": {
-            "value": 7.297671095555556e-09
-          }, 
-          "sigt": {
-            "value": 0.077
-          }
-        }, 
+        "beam": "TI8 (2008 after 0823)_ti8", 
         "default-range": "ALL", 
-        "name": "ti8", 
         "aperfiles": []
       }
     }, 
