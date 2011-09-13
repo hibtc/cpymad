@@ -98,6 +98,8 @@ class model(abc.model.PyMadModel):
     def _setup_initial(self,sequence,optics):
         
         for ifile in self._mdef['init-files']:
+            if sys.flags.debug:
+                print("Calling file: "+str(ifile))
             self._call(ifile)
         
         # essentially just calls the beam command for all sequences..
@@ -116,16 +118,27 @@ class model(abc.model.PyMadModel):
         
     def _set_sequence(self,sequence):
         bname=self._mdef['sequences'][sequence]['beam']
-        bdict=self._mdef['beams'][bname]
-        set_beam(bdict)
+        bdict=self.get_beam(bname)
+        self.set_beam(bdict)
     
-    def set_beam(beam_dict):
+    def get_beam(self,bname):
+        '''
+         Returns the beam definition in form
+         of a dictionary.
+         
+         You can then change parameters in this dictionary
+         as you see fit, and use set_beam() to activate that
+         beam.
+        '''
+        return self._mdef['beams'][bname]
+        
+    def set_beam(self,beam_dict):
         '''
          Set the beam from a beam definition
          (dictionary)
         '''
         bcmd='beam'
-        for k,v in bdict.items():
+        for k,v in beam_dict.items():
             bcmd+=','+k+'='+str(v)
         if sys.flags.debug:
             print("Beam command: "+bcmd)
