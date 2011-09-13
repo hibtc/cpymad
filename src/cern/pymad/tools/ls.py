@@ -37,11 +37,11 @@ def ls_mdefs(pms=None):
         
     mdefs = pms.mdefs
     
-    print "Available model definitions:"
-    print "----------------------------"
+    return mdefs
+    ret=[]
     for mdef in mdefs:
-        print mdef
-
+        ret.append(str(mdef))
+    return ret
 
 def ls_models(pms=None):
     """
@@ -51,9 +51,9 @@ def ls_models(pms=None):
     """
     if pms is None:
         pms = get_pms()
-        
-    print "Model instances:"
-    print "----------------"
+    
+    ret=[]
     for model in pms.models:
-        print model
+        ret.append(str(model))
+    return ret
         

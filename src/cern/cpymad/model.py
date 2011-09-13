@@ -19,7 +19,7 @@
 .. module: cpymad.model
 
 Cython implementation of the model api.
-:See also: :mod:`pymad.abc.model`
+See also :py:class:`cern.pymad.model`
 
 .. moduleauthor:: Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen@cern.ch>
 
@@ -28,13 +28,13 @@ Cython implementation of the model api.
 import json, os, sys
 from cern.madx import madx
 import cern.cpymad
-#from cern.pymad import abc.model
+from cern.pymad import abc
 import multiprocessing
 import signal,atexit
 from cern.pymad.globals import USE_COUCH
 
-#class model(model.PyMadModel):
-class model():
+class model(abc.model.PyMadModel):
+#class model():
     '''
     model class implementation. the model spawns a madx instance in a separate process.
     this has the advantage that you can run separate models which do not affect each other.
@@ -43,25 +43,29 @@ class model():
     :param string optics: Name of optics to load
     :param string histfile: Name of file which will contain all Mad-X commands called.
     '''
-    def __init__(self,model,optics='',histfile=''):
+    def __init__(self,model,sequence='',optics='',histfile=''):
         
         if model not in cern.cpymad.modelList():
             raise ValueError("The model you asked for does not exist in the database")
         # name of model:
         self.model=model
         # loading the dictionary...
-        self._dict=_get_data(model)
+        self._mdef=_get_mdef(model)
+        
         
         # Defining two pipes which are used for communicating...
         _child_pipe_recv,_parent_send=multiprocessing.Pipe(False)
         _parent_recv,_child_pipe_send=multiprocessing.Pipe(False)
         self._send=_parent_send.send
         self._recv=_parent_recv.recv
+        self._db=None
         if not USE_COUCH:
-            for d in self._dict['dbdirs']:
+            for d in self._mdef['dbdirs']:
                 if os.path.isdir(d):
                     self._db=d
                     break
+        #if self._db==None:
+            #raise ValueError("It is not possible to find database directory for this model")
         
         self._mprocess=_modelProcess(_child_pipe_send,_child_pipe_recv,model,histfile)
         
@@ -69,12 +73,42 @@ class model():
         
         atexit.register(self._mprocess.terminate)
         
-        self._call(self._dict['sequence'])
+        self._active={'optic':'','sequence':'','range':''}
         
-        self._optics=''
+        self._setup_initial(sequence,optics)
+    
+    # API stuff:
+    @property
+    def name(self):
+        return self.model
+    
+    @property
+    def mdef(self):
+        return self._mdef.copy()
+    
+    def set_sequence(self,sequence):
+        if sequence:
+            if sequence in self._mdef['sequences']:
+                self._active['sequence']=sequence
+            else:
+                print("WARNING: You tried to activate a non-existing sequence")
+        elif not self._active['sequence']:
+            self._active['sequence']=self._mdef['default-sequence']
         
-        self.set_optics(optics)
+    def _setup_initial(self,sequence,optics):
         
+        for ifile in self._mdef['init-files']:
+            if sys.flags.debug:
+                print("Calling file: "+str(ifile))
+            self._call(ifile)
+        
+        # essentially just calls the beam command for all sequences..
+        for seq in self._mdef['sequences']:
+            self._set_sequence(seq)
+        # then we set the default one..
+        self.set_sequence(sequence)
+            
+        self.set_optic(optics)
         # To keep track of whether or not certain things are already called..
         self._apercalled={}
         self._twisscalled={}
@@ -82,23 +116,82 @@ class model():
             self._apercalled[seq]=False
             self._twisscalled[seq]=False
         
+    def _set_sequence(self,sequence):
+        bname=self._mdef['sequences'][sequence]['beam']
+        bdict=self.get_beam(bname)
+        self.set_beam(bdict)
     
+    def get_beam(self,bname):
+        '''
+         Returns the beam definition in form
+         of a dictionary.
+         
+         You can then change parameters in this dictionary
+         as you see fit, and use set_beam() to activate that
+         beam.
+        '''
+        return self._mdef['beams'][bname]
+        
+    def set_beam(self,beam_dict):
+        '''
+         Set the beam from a beam definition
+         (dictionary)
+        '''
+        bcmd='beam'
+        for k,v in beam_dict.items():
+            bcmd+=','+k+'='+str(v)
+        if sys.flags.debug:
+            print("Beam command: "+bcmd)
+        self._cmd(bcmd)
+        
+        
     def __del__(self):
         try:
             self._send('delete_model')
             self._mprocess.join(5)
         except TypeError: pass
+        except AttributeError: pass
     
     def __str__(self):
         return self.model
     
-    def _call(self,f):
+    def _call(self,fdict):
+        if 'location' in fdict:
+            loc=fdict['location']
+        else:
+            loc='REPOSITORY' # this is default..
+        if loc=='RESOURCE':
+            fname=self._mdef["path-offsets"]['resource-offset']+'/'+fdict['path']
+        elif loc=='REPOSITORY':
+            fname=self._mdef["path-offsets"]['repository-offset']+'/'+fdict['path']
         if USE_COUCH:
-            cmd=cern.cpymad._couch_server.get_file(self.model,f)
+            cmd=cern.cpymad._couch_server.get_file(self.model,fname)
             for c in cmd.split('\n'): # I wonder if this might be needed for now?
                 ret=self._sendrecv(('command',cmd))
             return ret
-        return self._sendrecv(('call',self._db+f))
+        else:
+            if loc=='RESOURCE':
+                fpath=os.path.dirname(__file__)+'/_models/resdata/'+fname
+            elif loc=='REPOSITORY':
+                if self._db:
+                    fpath=self._db+fname
+                else:
+                    fpath=os.path.dirname(__file__)+'/_models/repdata/'+fname
+        self.call(fpath)
+    
+    
+    def call(self,filepath):
+        '''
+         Call a file in Mad-X. Give either
+         full file path or relative.
+        '''
+        if not os.path.isfile(filepath):
+            raise ValueError("You tried to call a file that doesn't exist: "+filepath)
+        
+        if sys.flags.debug:
+            print("Calling file: "+fpath)
+        
+        return self._sendrecv(('call',filepath))
     
     def has_sequence(self,sequence):
         '''
@@ -114,9 +207,9 @@ class model():
          
          :param string optics: Optics name to be checked.
         '''
-        return optics in self._dict['optics']
+        return optics in self._mdef['optics']
     
-    def set_optics(self,optics):
+    def set_optic(self,optic):
         '''
          Set new optics.
          
@@ -124,32 +217,30 @@ class model():
          
          :raises KeyError: In case you try to set an optics not available in model.
         '''
-        if optics=='':
-            optics=self._dict['default']['optics']
-        if self._optics==optics:
+        
+        if optic=='':
+            optic=self._mdef['default-optic']
+        if self._active['optic']==optic:
             print("INFO: Optics already initialized")
             return 0
         
         # optics dictionary..
-        odict=self._dict['optics'][optics]
-        # knobs dictionary..
-        bdict=self._dict['beams']
+        odict=self._mdef['optics'][optic]
         
-        for strfile in odict['strengths']:
+        for strfile in odict['init-files']:
             self._call(strfile)
         
-        for f in odict['knobs']:
-            if odict['knobs'][f]:
-                self.set_knob(f,1.0)
-            else:
-                self.set_knob(f,0.0)
+        # knobs dictionary.. we don't have that yet..
+        #for f in odict['knobs']:
+            #if odict['knobs'][f]:
+                #self.set_knob(f,1.0)
+            #else:
+                #self.set_knob(f,0.0)
         
-        for b in odict['beams']:
-            self._cmd(bdict[b])
-        self._optics=optics
+        self._active['optic']=optic
     
     def set_knob(self,knob,value):
-        kdict=self._dict['knobs']
+        kdict=self._mdef['knobs']
         for e in kdict[knob]:
             val=str(kdict[knob][e]*value)
             self._cmd(e+"="+val)
@@ -158,7 +249,7 @@ class model():
         return self._sendrecv('get_sequences')
     
     def list_optics(self):
-        return self._dict['optics'].keys()
+        return self._mdef['optics'].keys()
     
     def twiss(self,
               sequence='',
@@ -181,7 +272,7 @@ class model():
         '''
         from cern.pymad.domain import TfsTable, TfsSummary
         if sequence=='':
-            sequence=self._dict['default']['sequence']
+            sequence=self._mdef['default-sequence']
         args={'sequence':sequence,'columns':columns,'pattern':pattern,'madrange':madrange,'fname':fname}
         t,s=self._sendrecv(('twiss',args))
         # we say that when the "full" range has been selected, 
@@ -208,7 +299,7 @@ class model():
         '''
         from cern.pymad.domain import TfsTable, TfsSummary
         if sequence=='':
-            sequence=self._dict['default']['sequence']
+            sequence=self._mdef['default-sequence']
         args={'sequence':sequence,'columns':columns,'madrange':madrange,'fname':fname}
         t,s=self._sendrecv(('survey',args))
         if retdict:
@@ -232,14 +323,13 @@ class model():
         '''
         from cern.pymad.domain import TfsTable, TfsSummary
         if sequence=='':
-            sequence=self._dict['default']['sequence']
-        seq=self._dict['sequences'][sequence]
+            sequence=self._mdef['default-sequence']
+        seq=self._mdef['sequences'][sequence]
         
         if not self._twisscalled[sequence]:
             self.twiss(sequence)
         # Calling "basic aperture files"
         if not self._apercalled[sequence]:
-            print seq.keys()
             for afile in seq['aperfiles']:
                 self._call(afile)
             self._apercalled[sequence]=True
@@ -276,10 +366,10 @@ class model():
         return TfsTable(t),TfsSummary(s)
         
     def _get_ranges(self,sequence):
-        return self._dict['sequences'][sequence]['ranges'].keys()
+        return self._mdef['sequences'][sequence]['ranges'].keys()
         
     def _get_range_dict(self,sequence,madrange):
-        seq=self._dict['sequences'][sequence]
+        seq=self._mdef['sequences'][sequence]
         if madrange not in seq['ranges']:
             raise ValueError("%s is not a valid range name, available ranges: '%s'" % (madrange,"' '".join(seq['ranges'].keys())))
         return seq['ranges'][madrange]
@@ -294,12 +384,12 @@ class model():
         return self._recv()
         
            
-def _get_data(modelname):
+def _get_mdef(modelname):
     if USE_COUCH:
         return cern.cpymad._couch_server.get_model(modelname)
     fname=modelname+'.cpymad.json'
     _dict = _get_file_content(modelname,fname)
-    return json.loads(_dict)
+    return json.loads(_dict)[modelname]
 
 def _get_file_content(modelname,filename):
     if USE_COUCH:

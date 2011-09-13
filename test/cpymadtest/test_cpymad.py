@@ -22,7 +22,7 @@ import unittest
 class TestCpymad(unittest.TestCase):
     
     def setUp(self):
-        self.model=cpymad.model('lhc',history='hist_cpymad.madx')
+        self.model=cpymad.model('lhc',histfile='hist_cpymad.madx')
     
     # It's a bit surprising that this doesn't happen by itself.. Hmmm...
     def tearDown(self):
@@ -45,7 +45,7 @@ class TestCpymad(unittest.TestCase):
     
     def test_wrong_optics(self):
         with self.assertRaises(KeyError):
-            self.model.set_optics('non_existing_optics')
+            self.model.set_optic('non_existing_optics')
     
     def test_has_optics(self):
         self.assertFalse(self.model.has_optics('non_existing_optics'))

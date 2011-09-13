@@ -28,6 +28,12 @@ import os
 from cern.pymad.domain import TfsTable, TfsSummary
     
 def tfs(inputfile):
+    '''
+     Returns table and summary information
+     as LookUp dictionaries. These extend on normal
+     dictionary syntax. We recommend using this function
+     for reading tfs files.
+    '''
     table,params=tfsDict(inputfile)
     return TfsTable(table), TfsSummary(params)
 

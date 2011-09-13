@@ -1,145 +1,1460 @@
 {
-    "initscript": "init_lhc.madx", 
+  "lhc": {
+    "dbdirs": [
+      "/afs/cern.ch/eng/"
+    ], 
+    "svn-revision": "$Revision$", 
     "beams": {
-        "lhcb1coll": "BEAM, SEQUENCE=LHCB1, PARTICLE=PROTON, PC=7000;", 
-        "lhcb1inj": "BEAM, SEQUENCE=LHCB1, PARTICLE=PROTON, PC=450;", 
-        "lhcb2coll": "BEAM, SEQUENCE=LHCB2, PARTICLE=PROTON, PC=7000, BV=-1;", 
-        "lhcb2inj": "BEAM, SEQUENCE=LHCB2, PARTICLE=PROTON, PC=450, BV=-1;"
+      "lhc_lhcb2": {
+        "sige": 0.0005, 
+        "particle": "PROTON", 
+        "sequence": "lhcb2",
+        "energy": 450.0, 
+        "npart": 110000000000.0, 
+        "bv": -1, 
+        "ey": 7.297671095555556e-09, 
+        "sigt": 0.077, 
+        "ex": 7.297671095555556e-09
+      }, 
+      "lhc_lhcb1": {
+        "sige": 0.0005, 
+        "particle": "PROTON", 
+        "sequence": "lhcb1",
+        "energy": 450.0, 
+        "npart": 110000000000.0, 
+        "bv": 1, 
+        "ey": 7.297671095555556e-09, 
+        "sigt": 0.077, 
+        "ex": 7.297671095555556e-09
+      }
     }, 
-    "dbdirs": ["/afs/cern.ch/eng/lhc/optics/V6.503/"], 
-   "knobs": {
-       "expmagnets": {
-           "on_atlas": 1,
-           "on_alice": 1,
-           "on_cms": 1,
-           "on_lhcb": 1
-       },
-       "separation": {
-           "on_sep1": 1,
-           "on_sep2": 1,
-           "on_sep5": 1,
-           "on_sep8": 1
-       },
-       "xangle": {
-           "on_x1": 1,
-           "on_x2": 4.7,
-           "on_x5": 1,
-           "on_x8": 1
-       }
-   },
-    "optics": {
-        "collision": {
-            "beams": [
-                "lhcb1coll", 
-                "lhcb2coll"
-            ], 
-            "knobs": {
-                "expmagnets": true, 
-                "separation": false, 
-                "xangle": true
+    "default-optic": "injection", 
+    "init-files": [
+      {
+        "path": "V6.5.seq"
+      }, 
+      {
+        "path": "init_lhc.madx",
+        "location": "RESOURCE"
+      }, 
+      {
+        "path": "setb2b3-lhc-b1.madx", 
+        "location": "RESOURCE"
+      }, 
+      {
+        "path": "setb2b3-lhc-b2.madx", 
+        "location": "RESOURCE"
+      }
+    ], 
+    "path-offsets": {
+      "repository-offset": "lhc/optics/V6.503", 
+      "resource-offset": "lhc"
+    }, 
+    "sequences": {
+      "lhcb1": {
+        "ranges": {
+          "Inj. Sector 2-3": {
+            "madx-range": {
+              "last": "TCLA.7R3.B1", 
+              "first": "LHCINJ.B1"
             }, 
-            "strengths": [
-                "V6.5.coll.str"
-            ]
+            "twiss-initial-conditions": {
+              "deltap": 0.0, 
+              "name": "lhcb1-twiss", 
+              "centre": false, 
+              "chrom": true, 
+              "bety": 71.515031, 
+              "betx": 55.679041, 
+              "dpy": 0.0, 
+              "dpx": 0.03792, 
+              "dx": -0.1103, 
+              "dy": 0.0, 
+              "alfy": -1.679855, 
+              "alfx": 2.128241, 
+              "closed-orbit": false
+            }
+          }, 
+          "ALL": {
+            "madx-range": {
+              "last": "#e", 
+              "first": "#s"
+            }, 
+            "twiss-initial-conditions": {
+              "centre": false, 
+              "chrom": true, 
+              "name": "default-twiss", 
+              "closed-orbit": false
+            }
+          }, 
+          "ALL first turn": {
+            "madx-range": {
+              "last": "#e", 
+              "first": "#s"
+            }, 
+            "twiss-initial-conditions": {
+              "deltap": 0.0, 
+              "name": "lhcb1-twiss", 
+              "centre": false, 
+              "chrom": true, 
+              "bety": 71.515031, 
+              "betx": 55.679041, 
+              "dpy": 0.0, 
+              "dpx": 0.03792, 
+              "dx": -0.1103, 
+              "dy": 0.0, 
+              "alfy": -1.679855, 
+              "alfx": 2.128241, 
+              "closed-orbit": false
+            }
+          }, 
+          "Inj. Sector 2-5": {
+            "madx-range": {
+              "last": "IP5", 
+              "first": "LHCINJ.B1"
+            }, 
+            "twiss-initial-conditions": {
+              "deltap": 0.0, 
+              "name": "lhcb1-twiss", 
+              "centre": false, 
+              "chrom": true, 
+              "bety": 71.515031, 
+              "betx": 55.679041, 
+              "dpy": 0.0, 
+              "dpx": 0.03792, 
+              "dx": -0.1103, 
+              "dy": 0.0, 
+              "alfy": -1.679855, 
+              "alfx": 2.128241, 
+              "closed-orbit": false
+            }
+          },
+          "ir1r":{
+               "madx-range": {"first": "IP1", "last": "E.DS.R1.B1"},
+               "aper-offset": "aperture/offset.ip1.b1.tfs"
+               },
+          "ir1l":{
+               "madx-range": {"first":"S.DS.L1.B1", "last": "IP1"},
+               "aper-offset": "aperture/offset.ip1.b1.tfs"
+               },
+          "ir2":{
+               "madx-range": {"first":"S.DS.L2.B1", "last": "E.DS.R2.B1"},
+               "aper-offset": "aperture/offset.ip2.b1.tfs"
+               },
+          "ir5":{
+               "madx-range": {"first":"S.DS.L5.B1", "last": "E.DS.R5.B1"},
+               "aper-offset": "aperture/offset.ip5.b1.tfs"
+               },
+          "ir8":{
+               "madx-range": {"first":"S.DS.L8.B1", "last": "E.DS.R8.B1"},
+               "aper-offset": "aperture/offset.ip8.b1.tfs"
+               }
         }, 
-        "injection": {
-            "beams": [
-                "lhcb1inj", 
-                "lhcb2inj"
-            ], 
-            "knobs": {
-                "expmagnets": false, 
-                "separation": true, 
-                "xangle": true
-            }, 
-            "strengths": [
-                "V6.5.inj.str"
-            ]
-        }
-    },
-    "sequences": { 
-        "lhcb1": {
-           "aperfiles": [
+        "beam": "lhc_lhcb1", 
+        "default-range": "ALL", 
+        "aperfiles": [
                "aperture/aperture.b1.madx",
                "aperture/aper_tol.b1.madx"
-           ],
-           "ranges":
-               {
-                   "ir1r":{
-                       "range": ["IP1","E.DS.R1.B1"],
-                       "offsets": 0
-                       },
-                   "ir1l":{
-                       "range":["S.DS.L1.B1","IP1"],
-                       "offsets": 0
-                       },
-                   "ir2":{
-                       "range":["S.DS.L2.B1","E.DS.R2.B1"],
-                       "offsets": 1
-                       },
-                   "ir5":{
-                       "range":["S.DS.L5.B1","E.DS.R5.B1"],
-                       "offsets": 4
-                       },
-                   "ir8":{
-                       "range":["S.DS.L8.B1","E.DS.R8.B1"],
-                       "offsets": 7
-                       }
+           ]
+            }, 
+      "lhcb2": {
+        "ranges": {
+          "ALL": {
+            "madx-range": {
+              "last": "#e", 
+              "first": "#s"
+            }, 
+            "twiss-initial-conditions": {
+              "centre": false, 
+              "chrom": true, 
+              "name": "default-twiss", 
+              "closed-orbit": false
+            }, 
+            "corrector-invert-filters": [
+              {
+                "regex": "(?i)^MCBX.*", 
+                "plane": "H"
+              }, 
+              {
+                "regex": "(?i)^MCBX.*", 
+                "plane": "V"
+              }
+            ]
+          }, 
+          "ALL first turn": {
+            "madx-range": {
+              "last": "#e", 
+              "first": "#s"
+            }, 
+            "twiss-initial-conditions": {
+              "deltap": 0.0, 
+              "name": "lhcb2-twiss", 
+              "centre": false, 
+              "chrom": true, 
+              "bety": 140.995239, 
+              "betx": 66.829881, 
+              "dpy": 3e-06, 
+              "dpx": 0.003062, 
+              "dx": 0.107789, 
+              "dy": 0.000136, 
+              "alfy": -2.127759, 
+              "alfx": -9e-06, 
+              "closed-orbit": false
+            }, 
+            "corrector-invert-filters": [
+              {
+                "regex": "(?i)^MCBX.*", 
+                "plane": "H"
+              }, 
+              {
+                "regex": "(?i)^MCBX.*", 
+                "plane": "V"
+              }
+            ]
+          }, 
+          "Inj. Sectors 8-7": {
+            "madx-range": {
+              "last": "LHCINJ.B2", 
+              "first": "TCLA.A7L7.B2"
+            }, 
+            "twiss-initial-conditions": {
+              "deltap": 0.0, 
+              "name": "lhcb2-twiss", 
+              "centre": false, 
+              "chrom": true, 
+              "bety": 140.995239, 
+              "betx": 66.829881, 
+              "dpy": 3e-06, 
+              "dpx": 0.003062, 
+              "dx": 0.107789, 
+              "dy": 0.000136, 
+              "alfy": -2.127759, 
+              "alfx": -9e-06, 
+              "closed-orbit": false
+            }, 
+            "corrector-invert-filters": [
+              {
+                "regex": "(?i)^MCBX.*", 
+                "plane": "H"
+              }, 
+              {
+                "regex": "(?i)^MCBX.*", 
+                "plane": "V"
+              }
+            ]
+          }, 
+          "Inj. Sectors 8-6": {
+            "madx-range": {
+              "last": "LHCINJ.B2", 
+              "first": "TCDQA.A4L6.B2"
+            }, 
+            "twiss-initial-conditions": {
+              "deltap": 0.0, 
+              "name": "lhcb2-twiss", 
+              "centre": false, 
+              "chrom": true, 
+              "bety": 140.995239, 
+              "betx": 66.829881, 
+              "dpy": 3e-06, 
+              "dpx": 0.003062, 
+              "dx": 0.107789, 
+              "dy": 0.000136, 
+              "alfy": -2.127759, 
+              "alfx": -9e-06, 
+              "closed-orbit": false
+            }, 
+            "corrector-invert-filters": [
+              {
+                "regex": "(?i)^MCBX.*", 
+                "plane": "H"
+              }, 
+              {
+                "regex": "(?i)^MCBX.*", 
+                "plane": "V"
+              }
+            ]
+          }, 
+          "Inj. Sectors 8-5": {
+            "madx-range": {
+              "last": "LHCINJ.B2", 
+              "first": "IP5"
+            }, 
+            "twiss-initial-conditions": {
+              "deltap": 0.0, 
+              "name": "lhcb2-twiss", 
+              "centre": false, 
+              "chrom": true, 
+              "bety": 140.995239, 
+              "betx": 66.829881, 
+              "dpy": 3e-06, 
+              "dpx": 0.003062, 
+              "dx": 0.107789, 
+              "dy": 0.000136, 
+              "alfy": -2.127759, 
+              "alfx": -9e-06, 
+              "closed-orbit": false
+            }, 
+            "corrector-invert-filters": [
+              {
+                "regex": "(?i)^MCBX.*", 
+                "plane": "H"
+              }, 
+              {
+                "regex": "(?i)^MCBX.*", 
+                "plane": "V"
+              }
+            ]
+          }, 
+          "Inj. Sectors 8-4": {
+            "madx-range": {
+              "last": "LHCINJ.B2", 
+              "first": "IP4"
+            }, 
+            "twiss-initial-conditions": {
+              "deltap": 0.0, 
+              "name": "lhcb2-twiss", 
+              "centre": false, 
+              "chrom": true, 
+              "bety": 140.995239, 
+              "betx": 66.829881, 
+              "dpy": 3e-06, 
+              "dpx": 0.003062, 
+              "dx": 0.107789, 
+              "dy": 0.000136, 
+              "alfy": -2.127759, 
+              "alfx": -9e-06, 
+              "closed-orbit": false
+            }, 
+            "corrector-invert-filters": [
+              {
+                "regex": "(?i)^MCBX.*", 
+                "plane": "H"
+              }, 
+              {
+                "regex": "(?i)^MCBX.*", 
+                "plane": "V"
+              }
+            ]
+          }, 
+          "Inj. Sectors 8-1": {
+            "madx-range": {
+              "last": "LHCINJ.B2", 
+              "first": "IP1"
+            }, 
+            "twiss-initial-conditions": {
+              "deltap": 0.0, 
+              "name": "lhcb2-twiss", 
+              "centre": false, 
+              "chrom": true, 
+              "bety": 140.995239, 
+              "betx": 66.829881, 
+              "dpy": 3e-06, 
+              "dpx": 0.003062, 
+              "dx": 0.107789, 
+              "dy": 0.000136, 
+              "alfy": -2.127759, 
+              "alfx": -9e-06, 
+              "closed-orbit": false
+            }, 
+            "corrector-invert-filters": [
+              {
+                "regex": "(?i)^MCBX.*", 
+                "plane": "H"
+              }, 
+              {
+                "regex": "(?i)^MCBX.*", 
+                "plane": "V"
+              }
+            ]
+          },
+           "ir1r":{
+               "madx-range": {"last": "IP1", "first": "E.DS.R1.B2"},
+               "aper-offset": "aperture/offset.ip1.b2.tfs"
                },
-               
-           "offsets": [
-               "aperture/offset.ip1.b1.tfs",
-               "aperture/offset.ip2.b1.tfs",
-               "aperture/offset.ip3.b1.tfs",
-               "aperture/offset.ip4.b1.tfs",
-               "aperture/offset.ip5.b1.tfs",
-               "aperture/offset.ip6.b1.tfs",
-               "aperture/offset.ip7.b1.tfs",
-               "aperture/offset.ip8.b1.tfs"
-               ]},
-        "lhcb2": {
-           "aperfiles": [
+           "ir1l":{
+               "madx-range": {"last":"S.DS.L1.B2", "first": "IP1"},
+               "aper-offset": "aperture/offset.ip1.b2.tfs"
+               },
+           "ir2":{
+               "madx-range": {"last":"S.DS.L2.B2", "first": "E.DS.R2.B2"},
+               "aper-offset": "aperture/offset.ip2.b2.tfs"
+               },
+           "ir5":{
+               "madx-range": {"last":"S.DS.L5.B2", "first": "E.DS.R5.B2"},
+               "aper-offset": "aperture/offset.ip5.b2.tfs"
+               },
+           "ir8":{
+               "madx-range": {"last":"S.DS.L8.B2", "first": "E.DS.R8.B2"},
+               "aper-offset": "aperture/offset.ip8.b2.tfs"
+               }
+        }, 
+        "beam": "lhc_lhcb2", 
+        "default-range": "ALL", 
+        "aperfiles": [
                "aperture/aperture.b2.madx",
                "aperture/aper_tol.b2.madx"
-           ],
-           "ranges": 
-               {
-               "ir1l":{
-                   "range": ["IP1","E.DS.L1.B2"],
-                   "offsets": 0
-                   },
-               "ir1r":{
-                   "range":["S.DS.L1.B1","IP1"],
-                   "offsets": 0
-                   },
-               "ir2":{
-                   "range":["S.DS.L2.B1","E.DS.R2.B1"],
-                   "offsets": 1
-                   },
-               "ir5":{
-                   "range":["S.DS.L5.B1","E.DS.R5.B1"],
-                   "offsets": 4
-                   },
-               "ir8":{
-                   "range":["S.DS.L8.B1","E.DS.R8.B1"],
-                   "offsets": 7
-                   }
-               },
-           "offsets": [
-               "aperture/offset.ip1.b2.tfs",
-               "aperture/offset.ip2.b2.tfs",
-               "aperture/offset.ip3.b2.tfs",
-               "aperture/offset.ip4.b2.tfs",
-               "aperture/offset.ip5.b2.tfs",
-               "aperture/offset.ip6.b2.tfs",
-               "aperture/offset.ip7.b2.tfs",
-               "aperture/offset.ip8.b2.tfs"
-               ]
-             }
-         },
-    "default": { 
-        "optics": "collision",
-        "sequence": "lhcb1"
-        },
-    "sequence": "V6.5.seq"
+           ]
+      }
+    }, 
+    "optics": {
+      "IR8/ip8_0.00860_beta_6.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00860_beta_6.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00885_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00885_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00889_beta_9.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00889_beta_9.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00860_beta_2.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00860_beta_2.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00860_beta_7.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00860_beta_7.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00889_beta_8.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00889_beta_8.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR5/IP5_beta_2.50.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR5/IP5_beta_2.50.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR5/IP5_beta_0.65.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR5/IP5_beta_0.65.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR5/IP5_beta_7.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR5/IP5_beta_7.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR1/IP1_beta_2.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR1/IP1_beta_2.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00935_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00935_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00940_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00940_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR5/IP5_beta_1.10.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR5/IP5_beta_1.10.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR1/IP1_beta11.0p.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR1/IP1_beta11.0p.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00889_beta_5.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00889_beta_5.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR1/IP1_beta_0.65.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR1/IP1_beta_0.65.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR1/IP1_beta_1.50.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR1/IP1_beta_1.50.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8x/ip8_0.00860_beta_5.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8x/ip8_0.00860_beta_5.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00900_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00900_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00951_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00951_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8x/ip8_0.00860_beta_3.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8x/ip8_0.00860_beta_3.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00860_beta_3.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00860_beta_3.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2_ions/ip2_0.70.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2_ions/ip2_0.70.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00860_beta_5.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00860_beta_5.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8x/ip8_0.00860_beta_8.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8x/ip8_0.00860_beta_8.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8x/ip8_0.00860_beta_10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8x/ip8_0.00860_beta_10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00912_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00912_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00860_beta_6.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00860_beta_6.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR5/IP5_beta_5.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR5/IP5_beta_5.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR5/IP5_beta17.0p.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR5/IP5_beta17.0p.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00889_beta_7.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00889_beta_7.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00904_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00904_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2_ions/ip2_4.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2_ions/ip2_4.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR1/IP1_beta_3.50.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR1/IP1_beta_3.50.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR1/IP1_beta_5.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR1/IP1_beta_5.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00889_beta_6.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00889_beta_6.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.0095098_beta_10m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.0095098_beta_10m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00860_beta_2.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00860_beta_2.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/V6.5.inj.new-nominal.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/V6.5.inj.new-nominal.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR1/IP1_beta_9.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR1/IP1_beta_9.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR5/IP5_beta_4.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR5/IP5_beta_4.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8x/ip8_0.00860_beta_7.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8x/ip8_0.00860_beta_7.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00905_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00905_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2_ions/ip2_0.90.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2_ions/ip2_0.90.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00889_beta_6.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00889_beta_6.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8x/ip8_0.00860_beta_2.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8x/ip8_0.00860_beta_2.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8x/ip8_0.00860_beta_8.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8x/ip8_0.00860_beta_8.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR5/IP5_beta_9.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR5/IP5_beta_9.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00889_beta_2.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00889_beta_2.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8x/ip8_0.00860_beta_4.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8x/ip8_0.00860_beta_4.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00860_beta_9.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00860_beta_9.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00875_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00875_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00910_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00910_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8x/ip8_0.00860_beta_3.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8x/ip8_0.00860_beta_3.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8x/ip8_0.00860_beta_9.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8x/ip8_0.00860_beta_9.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00889_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00889_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2_ions/ip2_1.50.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2_ions/ip2_1.50.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00860_beta_4.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00860_beta_4.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR1/IP1_beta11.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR1/IP1_beta11.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR1/IP1_beta_2.50.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR1/IP1_beta_2.50.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00930_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00930_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8x/ip8_0.00860_beta_9.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8x/ip8_0.00860_beta_9.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2_ions/ip210.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2_ions/ip210.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR1/IP1_beta_0.80.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR1/IP1_beta_0.80.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR1/IP1_beta17.0p.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR1/IP1_beta17.0p.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR5/IP5_beta11.0p.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR5/IP5_beta11.0p.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00945_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00945_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00925_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00925_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00865_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00865_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00860_beta_9.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00860_beta_9.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00889_beta_7.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00889_beta_7.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00915_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00915_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2_ions/ip2_1.10.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2_ions/ip2_1.10.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00860_beta_8.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00860_beta_8.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00860_beta_3.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00860_beta_3.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2_ions/ip2_3.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2_ions/ip2_3.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "injection": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "V6.5.inj.str"
+          }, 
+          {
+            "parse": "STRENGTHS", 
+            "path": "b2b3.str", 
+            "location": "RESOURCE"
+          }
+        ], 
+        "overlay": false
+      }, 
+      "IR8x/ip8_0.00860_beta_6.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8x/ip8_0.00860_beta_6.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR5/IP5_beta_2.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR5/IP5_beta_2.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8x/ip8_0.00860_beta_7.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8x/ip8_0.00860_beta_7.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8x/ip8_0.00860_beta_5.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8x/ip8_0.00860_beta_5.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2_ions/ip2_8.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2_ions/ip2_8.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00889_beta_3.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00889_beta_3.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR5/IP5_beta11.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR5/IP5_beta11.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00860_beta_5.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00860_beta_5.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00889_beta_4.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00889_beta_4.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2_ions/ip2_5.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2_ions/ip2_5.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00860_beta_7.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00860_beta_7.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00889_beta_8.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00889_beta_8.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00920_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00920_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00860_beta_8.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00860_beta_8.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "collision": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "V6.5.coll.str"
+          }
+        ], 
+        "overlay": false
+      }, 
+      "IR2_ions/ip2_0.50.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2_ions/ip2_0.50.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR1/IP1_beta_4.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR1/IP1_beta_4.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00920_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00920_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR5/IP5_beta_1.50.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR5/IP5_beta_1.50.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00895_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00895_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00928_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00928_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR5/IP5_beta_0.55.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR5/IP5_beta_0.55.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR1/IP1_beta_7.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR1/IP1_beta_7.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00943_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00943_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR1/IP1_beta_1.10.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR1/IP1_beta_1.10.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR1/IP1_beta_0.55.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR1/IP1_beta_0.55.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00860_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00860_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2_ions/ip2_2.50.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2_ions/ip2_2.50.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8x/ip8_0.00860_beta_2.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8x/ip8_0.00860_beta_2.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00889_beta_9.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00889_beta_9.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR5/IP5_beta_3.50.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR5/IP5_beta_3.50.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8x/ip8_0.00860_beta_6.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8x/ip8_0.00860_beta_6.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8x/ip8_0.00860_beta_4.5m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8x/ip8_0.00860_beta_4.5m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00889_beta_2.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00889_beta_2.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR5/IP5_beta_0.80.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR5/IP5_beta_0.80.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00935_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00935_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2/ip2_0.00897_beta10.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2/ip2_0.00897_beta10.0m.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2_ions/ip2_6.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2_ions/ip2_6.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR2_ions/ip2_2.00.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR2_ions/ip2_2.00.str"
+          }
+        ], 
+        "overlay": true
+      }, 
+      "IR8/ip8_0.00860_beta_4.0m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "IR8/ip8_0.00860_beta_4.0m.str"
+          }
+        ], 
+        "overlay": true
+      }
+    }, 
+    "default-sequence": "lhcb1"
+  }
 }

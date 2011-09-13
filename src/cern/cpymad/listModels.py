@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
-import os
+import os,json
 from cern.pymad.globals import USE_COUCH
 import cern.cpymad
 
@@ -26,8 +26,9 @@ def modelList():
     modelloc=os.path.join(pymadloc,'_models')
     ret=[]
     for f in os.listdir(modelloc):
-        if len(f)>5 and f[-5:].lower()=='.json':
-            ret.append(f[:-5])
+        if len(f)>5 and f[-12:].lower()=='.cpymad.json':
+            for mname in json.load(file(os.path.join(modelloc,f))).keys():
+                ret.append(mname)
     return ret
 
 

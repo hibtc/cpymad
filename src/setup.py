@@ -32,31 +32,15 @@ pythonsrc=["cern",
            "cern.pymad.abc",
            "cern.pymad.tools",
            "cern.pymad.domain"] 
-cdata=['_models/*.json',
-       '_models/*.madx',
-       'jmad_models_json/*.cpymad.json'] # list of data files to include..
+
+# list of data files to include..
+cdata=['_models/*.json'] 
+
 # add this to include data array
-redata=[
-         '_models/re*data/**/*.madx',
-         '_models/re*data/**/*.str',
-         #'_models/re*data/*/*/*.madx',
-         #'_models/re*data/*/*/*.str',
-         #'_models/re*data/*/*/*/*.madx',
-         #'_models/re*data/*/*/*/*.str',
-         #'_models/re*data/*/*/*/*/*.madx',
-         #'_models/re*data/*/*/*/*/*.str',
-         ]
-#repdata=['_models/repdata/*/*/*/*.madx',
-         #'_models/repdata/*/*/*/*.str',
-         #'_models/repdata/*.madx',
-         #'_models/repdata/*.str',
-         #'_models/repdata/*/*.madx',
-         #'_models/repdata/*/*.str',
-         #'_models/repdata/*/*/*.madx',
-         #'_models/repdata/*/*/*.str',
-         #]
-#cdata.extend(repdata)
-cdata.extend(redata)
+for j in range(2,10):
+    for end in ['.madx','.str','.seq','.tfs']:
+        cdata.append('_models/re*data'+'/*'*j+end)
+
 libs=['madx', "X11", "z", "pthread", "c", "stdc++"]
 
 def add_dir(directory,dirlist):

@@ -5,9 +5,8 @@ from cern import pymad as pm
 
 # create the service
 #pms = pm.init('cpymad')
-#pms = pm.init('jpymad', start='gui')
-pms = pm.init('jpymad', start='service')
-#pms = pm.init('jpymad')
+pms = pm.init('jpymad', start='gui')
+#pms = pm.init('jpymad', start='service')
 
 # print the name of all model definitions
 print pms.mdefnames

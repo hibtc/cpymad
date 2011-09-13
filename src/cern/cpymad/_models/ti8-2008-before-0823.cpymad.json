@@ -1,0 +1,143 @@
+{
+  "TI8 (2008 before 0823)": {
+    "dbdirs": [
+      "/afs/cern.ch/eng/"
+    ], 
+    "svn-revision": "$Revision$", 
+    "beams": {
+      "TI8 (2008 before 0823)_ti8": {
+        "sige": {
+          "value": 0.0005
+        }, 
+        "particle": {
+          "value": "PROTON"
+        }, 
+        "sequence": "ti8", 
+        "energy": {
+          "value": 450.0
+        }, 
+        "npart": {
+          "value": 110000000000.0
+        }, 
+        "bv": {
+          "value": 1
+        }, 
+        "ey": {
+          "value": 7.297671095555556e-09
+        }, 
+        "ex": {
+          "value": 7.297671095555556e-09
+        }, 
+        "sigt": {
+          "value": 0.077
+        }
+      }
+    }, 
+    "default-optic": "2008-05-24 21:25", 
+    "init-files": {
+      "call-file": {
+        "path": "TI8_140808_k1_k2.seq", 
+        "location": "RESOURCE"
+      }
+    }, 
+    "path-offsets": {
+      "resource-offset": {
+        "value": "ti8/ti8-2008"
+      }
+    }, 
+    "sequences": {
+      "ti8": {
+        "ranges": {
+          "range": {
+            "madx-range": {
+              "last": "#e", 
+              "first": "#s"
+            }, 
+            "twiss-initial-conditions": {
+              "deltap": {
+                "value": 0.0
+              }, 
+              "name": "ti8-twiss", 
+              "centre": {
+                "value": false
+              }, 
+              "alfy": {
+                "value": -3.444554843
+              }, 
+              "bety": {
+                "value": 124.8219205
+              }, 
+              "betx": {
+                "value": 17.06248574
+              }, 
+              "dpy": {
+                "value": 0.0
+              }, 
+              "dpx": {
+                "value": 0.01234144588
+              }, 
+              "dx": {
+                "value": -0.3287900995
+              }, 
+              "dy": {
+                "value": 0.0
+              }, 
+              "chrom": {
+                "value": true
+              }, 
+              "alfx": {
+                "value": 0.4588913839
+              }, 
+              "closed-orbit": {
+                "value": false
+              }
+            }, 
+            "name": "ALL"
+          }
+        }, 
+        "beam": "TI8 (2008 before 0823)_ti8", 
+        "default-range": "ALL", 
+        "aperfiles": []
+      }
+    }, 
+    "optics": {
+      "optic": {
+        "2007-09-13": {
+          "init-files": {
+            "call-file": [
+              {
+                "parse": "STRENGTHS", 
+                "path": "ti8-2007-09-13.str", 
+                "location": "RESOURCE"
+              }, 
+              {
+                "parse": "STRENGTHS", 
+                "path": "ti8-commons.str", 
+                "location": "RESOURCE"
+              }
+            ]
+          }, 
+          "overlay": false
+        }, 
+        "2008-05-24 21:25": {
+          "init-files": {
+            "call-file": [
+              {
+                "parse": "STRENGTHS", 
+                "path": "ti8-2008-05-24-2125.str", 
+                "location": "RESOURCE"
+              }, 
+              {
+                "parse": "STRENGTHS", 
+                "path": "ti8-commons.str", 
+                "location": "RESOURCE"
+              }
+            ]
+          }, 
+          "overlay": false
+        }
+      }
+    }, 
+    "default-sequence": "ti8"
+  }
+}
