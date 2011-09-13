@@ -1,5 +1,5 @@
 
-import json
+import json,os
 
 # some fixed conversions:
 _VALUE_MAP = {'true' : True, 'false' : False, 'PLUS': 1, 'MINUS': -1}
@@ -84,6 +84,8 @@ def convert_file(infilename, outfilename):
     file(outfilename, 'w').write(json.dumps(outdict, indent=2))
 
 if __name__ == "__main__":
-    print "Converting lhc"
-    convert_file('lhc-1.jmd.json', 'lhc-1-out.jmd.json')
+    for f in os.listdir('.'):
+        if f[-9:]=='.jmd.json':
+            print("Converting "+f[:-9])
+            convert_file(f, '../_models/'+f[:-9]+'.cpymad.json')
     
