@@ -317,6 +317,7 @@ class madx:
                 self._writeHist(l+'\n')
         else:
             self._hfile.write(command)
+            self._hfile.flush()
     
     def get_sequences(self):
         cdef sequence_list *seqs
