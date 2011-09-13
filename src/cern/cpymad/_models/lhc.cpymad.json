@@ -8,6 +8,7 @@
       "lhc_lhcb2": {
         "sige": 0.0005, 
         "particle": "PROTON", 
+        "sequence": "lhcb2",
         "energy": 450.0, 
         "npart": 110000000000.0, 
         "bv": -1, 
@@ -18,6 +19,7 @@
       "lhc_lhcb1": {
         "sige": 0.0005, 
         "particle": "PROTON", 
+        "sequence": "lhcb1",
         "energy": 450.0, 
         "npart": 110000000000.0, 
         "bv": 1, 
@@ -121,12 +123,35 @@
               "alfx": 2.128241, 
               "closed-orbit": false
             }
-          }
+          },
+          "ir1r":{
+               "madx-range": {"first": "IP1", "last": "E.DS.R1.B1"},
+               "aper-offset": "aperture/offset.ip1.b1.tfs"
+               },
+          "ir1l":{
+               "madx-range": {"first":"S.DS.L1.B1", "last": "IP1"},
+               "aper-offset": "aperture/offset.ip1.b1.tfs"
+               },
+          "ir2":{
+               "madx-range": {"first":"S.DS.L2.B1", "last": "E.DS.R2.B1"},
+               "aper-offset": "aperture/offset.ip2.b1.tfs"
+               },
+          "ir5":{
+               "madx-range": {"first":"S.DS.L5.B1", "last": "E.DS.R5.B1"},
+               "aper-offset": "aperture/offset.ip5.b1.tfs"
+               },
+          "ir8":{
+               "madx-range": {"first":"S.DS.L8.B1", "last": "E.DS.R8.B1"},
+               "aper-offset": "aperture/offset.ip8.b1.tfs"
+               }
         }, 
         "beam": "lhc_lhcb1", 
         "default-range": "ALL", 
-        "aperfiles": []
-      }, 
+        "aperfiles": [
+               "aperture/aperture.b1.madx",
+               "aperture/aper_tol.b1.madx"
+           ]
+            }, 
       "lhcb2": {
         "ranges": {
           "ALL": {
@@ -336,11 +361,34 @@
                 "plane": "V"
               }
             ]
-          }
+          },
+           "ir1r":{
+               "madx-range": {"last": "IP1", "first": "E.DS.R1.B2"},
+               "aper-offset": "aperture/offset.ip1.b2.tfs"
+               },
+           "ir1l":{
+               "madx-range": {"last":"S.DS.L1.B2", "first": "IP1"},
+               "aper-offset": "aperture/offset.ip1.b2.tfs"
+               },
+           "ir2":{
+               "madx-range": {"last":"S.DS.L2.B2", "first": "E.DS.R2.B2"},
+               "aper-offset": "aperture/offset.ip2.b2.tfs"
+               },
+           "ir5":{
+               "madx-range": {"last":"S.DS.L5.B2", "first": "E.DS.R5.B2"},
+               "aper-offset": "aperture/offset.ip5.b2.tfs"
+               },
+           "ir8":{
+               "madx-range": {"last":"S.DS.L8.B2", "first": "E.DS.R8.B2"},
+               "aper-offset": "aperture/offset.ip8.b2.tfs"
+               }
         }, 
         "beam": "lhc_lhcb2", 
         "default-range": "ALL", 
-        "aperfiles": []
+        "aperfiles": [
+               "aperture/aperture.b2.madx",
+               "aperture/aper_tol.b2.madx"
+           ]
       }
     }, 
     "optics": {
