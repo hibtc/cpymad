@@ -1,0 +1,127 @@
+{
+  "TI8": {
+    "dbdirs": [
+      "/afs/cern.ch/eng/"
+    ], 
+    "svn-revision": "$Revision$", 
+    "default-optic": "default optics", 
+    "init-files": {
+      "call-file": [
+        {
+          "path": "TI8.str", 
+          "location": "RESOURCE"
+        }, 
+        {
+          "path": "TI8.seq", 
+          "location": "RESOURCE"
+        }
+      ]
+    }, 
+    "path-offsets": {
+      "resource-offset": {
+        "value": "ti8/ti8"
+      }
+    }, 
+    "sequences": {
+      "sequence": {
+        "ranges": {
+          "range": {
+            "madx-range": {
+              "last": "#e", 
+              "first": "#s"
+            }, 
+            "twiss-initial-conditions": {
+              "deltap": {
+                "value": 0.0
+              }, 
+              "name": "ti8-twiss", 
+              "centre": {
+                "value": false
+              }, 
+              "chrom": {
+                "value": true
+              }, 
+              "bety": {
+                "value": 124.8219205
+              }, 
+              "betx": {
+                "value": 17.06248574
+              }, 
+              "dpy": {
+                "value": 0.0
+              }, 
+              "dpx": {
+                "value": 0.00334144588
+              }, 
+              "dx": {
+                "value": -0.2527900995
+              }, 
+              "dy": {
+                "value": 0.0
+              }, 
+              "alfy": {
+                "value": -3.444554843
+              }, 
+              "alfx": {
+                "value": 0.4588913839
+              }, 
+              "closed-orbit": {
+                "value": false
+              }
+            }, 
+            "name": "ALL", 
+            "post-use-files": {
+              "call-file": {
+                "path": "setb2b3.madx", 
+                "location": "RESOURCE"
+              }
+            }
+          }
+        }, 
+        "beam": {
+          "sige": {
+            "value": 0.0005
+          }, 
+          "particle": {
+            "value": "PROTON"
+          }, 
+          "energy": {
+            "value": 450.0
+          }, 
+          "npart": {
+            "value": 110000000000.0
+          }, 
+          "bv": {
+            "value": 1
+          }, 
+          "ey": {
+            "value": 7.297671095555556e-09
+          }, 
+          "ex": {
+            "value": 7.297671095555556e-09
+          }, 
+          "sigt": {
+            "value": 0.077
+          }
+        }, 
+        "default-range": "ALL", 
+        "name": "ti8", 
+        "aperfiles": []
+      }
+    }, 
+    "optics": {
+      "optic": {
+        "init-files": {
+          "call-file": {
+            "parse": "STRENGTHS", 
+            "path": "TI8.str", 
+            "location": "RESOURCE"
+          }
+        }, 
+        "name": "default optics", 
+        "overlay": false
+      }
+    }, 
+    "default-sequence": "ti8"
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "longti8 (2008 before 08 23)": {
+    "dbdirs": [
+      "/afs/cern.ch/eng/"
+    ], 
+    "svn-revision": "$Revision$", 
+    "default-optic": "2008-05-24 21:25", 
+    "init-files": {
+      "call-file": [
+        {
+          "path": "TI8_140808_k1_k2.seq", 
+          "location": "RESOURCE"
+        }, 
+        {
+          "path": "job1.madx", 
+          "location": "RESOURCE"
+        }, 
+        {
+          "path": "beam_four.seq", 
+          "location": "RESOURCE"
+        }, 
+        {
+          "path": "job.ti8lhcV6.503.optics.madx", 
+          "location": "RESOURCE"
+        }
+      ]
+    }, 
+    "path-offsets": {
+      "resource-offset": {
+        "value": "longti8/longti8-2008"
+      }
+    }, 
+    "sequences": {
+      "sequence": {
+        "ranges": {
+          "range": {
+            "madx-range": {
+              "last": "#e", 
+              "first": "#s"
+            }, 
+            "twiss-initial-conditions": {
+              "deltap": {
+                "value": 0.0
+              }, 
+              "name": "ti8-twiss", 
+              "centre": {
+                "value": false
+              }, 
+              "chrom": {
+                "value": true
+              }, 
+              "bety": {
+                "value": 124.8219205
+              }, 
+              "betx": {
+                "value": 17.06248574
+              }, 
+              "dpy": {
+                "value": 0.0
+              }, 
+              "dpx": {
+                "value": 0.01234144588
+              }, 
+              "dx": {
+                "value": -0.3287900995
+              }, 
+              "dy": {
+                "value": 0.0
+              }, 
+              "alfy": {
+                "value": -3.444554843
+              }, 
+              "alfx": {
+                "value": 0.4588913839
+              }, 
+              "closed-orbit": {
+                "value": false
+              }
+            }, 
+            "name": "ALL"
+          }
+        }, 
+        "beam": {
+          "sige": {
+            "value": 0.0005
+          }, 
+          "particle": {
+            "value": "PROTON"
+          }, 
+          "energy": {
+            "value": 450.0
+          }, 
+          "npart": {
+            "value": 110000000000.0
+          }, 
+          "bv": {
+            "value": 1
+          }, 
+          "ey": {
+            "value": 7.297671095555556e-09
+          }, 
+          "ex": {
+            "value": 7.297671095555556e-09
+          }, 
+          "sigt": {
+            "value": 0.077
+          }
+        }, 
+        "default-range": "ALL", 
+        "name": "ti8lhcb2", 
+        "aperfiles": []
+      }
+    }, 
+    "optics": {
+      "optic": {
+        "2007-09-13": {
+          "init-files": {
+            "call-file": [
+              {
+                "parse": "STRENGTHS", 
+                "path": "ti8-2007-09-13.str", 
+                "location": "RESOURCE"
+              }, 
+              {
+                "parse": "STRENGTHS", 
+                "path": "ti8-commons.str", 
+                "location": "RESOURCE"
+              }, 
+              {
+                "parse": "STRENGTHS", 
+                "path": "V6.5.inj.str", 
+                "location": "RESOURCE"
+              }
+            ]
+          }, 
+          "overlay": false
+        }, 
+        "2008-05-24 21:25": {
+          "init-files": {
+            "call-file": [
+              {
+                "parse": "STRENGTHS", 
+                "path": "ti8-2008-05-24-2125.str", 
+                "location": "RESOURCE"
+              }, 
+              {
+                "parse": "STRENGTHS", 
+                "path": "ti8-commons.str", 
+                "location": "RESOURCE"
+              }, 
+              {
+                "parse": "STRENGTHS", 
+                "path": "V6.5.inj.str", 
+                "location": "RESOURCE"
+              }
+            ]
+          }, 
+          "overlay": false
+        }
+      }
+    }, 
+    "default-sequence": "ti8lhcb2"
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "longti8 (2009)": {
+    "dbdirs": [
+      "/afs/cern.ch/eng/"
+    ], 
+    "svn-revision": "$Revision$", 
+    "default-optic": "default optics", 
+    "init-files": {
+      "call-file": [
+        {
+          "path": "ti8.seq", 
+          "location": "RESOURCE"
+        }, 
+        {
+          "path": "setb2b3.madx", 
+          "location": "RESOURCE"
+        }, 
+        {
+          "path": "beam_four.seq", 
+          "location": "RESOURCE"
+        }, 
+        {
+          "path": "join-ti8-lhc.madx", 
+          "location": "RESOURCE"
+        }
+      ]
+    }, 
+    "path-offsets": {
+      "resource-offset": {
+        "value": "longti8/longti8-2009"
+      }
+    }, 
+    "sequences": {
+      "sequence": {
+        "ranges": {
+          "range": {
+            "madx-range": {
+              "last": "#e", 
+              "first": "#s"
+            }, 
+            "twiss-initial-conditions": {
+              "deltap": {
+                "value": 0.0
+              }, 
+              "name": "ti8-twiss", 
+              "centre": {
+                "value": false
+              }, 
+              "chrom": {
+                "value": true
+              }, 
+              "bety": {
+                "value": 124.8219205
+              }, 
+              "betx": {
+                "value": 17.06248574
+              }, 
+              "dpy": {
+                "value": 0.0
+              }, 
+              "dpx": {
+                "value": 0.00334144588
+              }, 
+              "dx": {
+                "value": -0.2527900995
+              }, 
+              "dy": {
+                "value": 0.0
+              }, 
+              "alfy": {
+                "value": -3.444554843
+              }, 
+              "alfx": {
+                "value": 0.4588913839
+              }, 
+              "closed-orbit": {
+                "value": false
+              }
+            }, 
+            "name": "ALL"
+          }
+        }, 
+        "beam": {
+          "sige": {
+            "value": 0.0005
+          }, 
+          "particle": {
+            "value": "PROTON"
+          }, 
+          "energy": {
+            "value": 450.0
+          }, 
+          "npart": {
+            "value": 110000000000.0
+          }, 
+          "bv": {
+            "value": 1
+          }, 
+          "ey": {
+            "value": 7.297671095555556e-09
+          }, 
+          "ex": {
+            "value": 7.297671095555556e-09
+          }, 
+          "sigt": {
+            "value": 0.077
+          }
+        }, 
+        "default-range": "ALL", 
+        "name": "ti8lhcb2", 
+        "aperfiles": []
+      }
+    }, 
+    "optics": {
+      "optic": {
+        "init-files": {
+          "call-file": [
+            {
+              "path": "ti8.str", 
+              "location": "RESOURCE"
+            }, 
+            {
+              "parse": "STRENGTHS", 
+              "path": "b2b3.str", 
+              "location": "RESOURCE"
+            }, 
+            {
+              "parse": "STRENGTHS", 
+              "path": "V6.5.inj.str", 
+              "location": "RESOURCE"
+            }
+          ]
+        }, 
+        "name": "default optics", 
+        "overlay": false
+      }
+    }, 
+    "default-sequence": "ti8lhcb2"
+  }
+}
