@@ -163,6 +163,8 @@ class model(abc.model.PyMadModel):
         if loc=='RESOURCE':
             fname=self._mdef["path-offsets"]['resource-offset']+'/'+fdict['path']
         elif loc=='REPOSITORY':
+            if sys.flags.debug:
+                print self._mdef["path-offsets"]['repository-offset'],fdict['path']
             fname=self._mdef["path-offsets"]['repository-offset']+'/'+fdict['path']
         if USE_COUCH:
             cmd=cern.cpymad._couch_server.get_file(self.model,fname)
@@ -189,7 +191,7 @@ class model(abc.model.PyMadModel):
             raise ValueError("You tried to call a file that doesn't exist: "+filepath)
         
         if sys.flags.debug:
-            print("Calling file: "+fpath)
+            print("Calling file: "+filepath)
         
         return self._sendrecv(('call',filepath))
     
@@ -246,10 +248,22 @@ class model(abc.model.PyMadModel):
             self._cmd(e+"="+val)
     
     def get_sequences(self):
+        '''
+         Returns a list of loaded sequences.
+        '''
         return self._sendrecv('get_sequences')
     
     def list_optics(self):
+        '''
+         Returns a list of available optics
+        '''
         return self._mdef['optics'].keys()
+    
+    def list_beams(self):
+        '''
+         Returns a list of available beams
+        '''
+        return self._mdef['beams'].keys()
     
     def twiss(self,
               sequence='',
@@ -387,10 +401,17 @@ class model(abc.model.PyMadModel):
 def _get_mdef(modelname):
     if USE_COUCH:
         return cern.cpymad._couch_server.get_model(modelname)
-    fname=modelname+'.cpymad.json'
+        
+    fname=_get_filename(modelname)
     _dict = _get_file_content(modelname,fname)
     return json.loads(_dict)[modelname]
 
+def _get_filename(modelname):
+    from cern.cpymad import listModels
+    file_list=listModels._get_mnames_files()[1]
+    for f in file_list:
+        if modelname in file_list[f]:
+            return f
 def _get_file_content(modelname,filename):
     if USE_COUCH:
         return cern.cpymad._couch_server.get_file(modelname,filename)

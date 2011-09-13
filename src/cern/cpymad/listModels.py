@@ -20,16 +20,22 @@ from cern.pymad.globals import USE_COUCH
 import cern.cpymad
 
 def modelList():
+    return _get_mnames_files()[0]
+
+def _get_mnames_files():
     if USE_COUCH:
         return cern.cpymad._couch_server.ls_models()
     pymadloc=os.path.dirname(__file__)
     modelloc=os.path.join(pymadloc,'_models')
-    ret=[]
+    mnames=[]
+    fnames={}
     for f in os.listdir(modelloc):
         if len(f)>5 and f[-12:].lower()=='.cpymad.json':
+            fnames[f]=[]
             for mname in json.load(file(os.path.join(modelloc,f))).keys():
-                ret.append(mname)
-    return ret
+                mnames.append(mname)
+                fnames[f].append(mname)
+    return mnames,fnames
 
 
 if __name__=="__main__":
