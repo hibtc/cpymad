@@ -84,6 +84,7 @@ def _move_beams(new_dict):
             if mname+'_'+seqname in model['beams']:
                 raise ValueError("Two beams with same name, please resolve")
             model['beams'][mname+'_'+seqname]=sequence['beam']
+            model['beams'][mname+'_'+seqname]['sequence']=seqname
             sequence['beam']=mname+'_'+seqname
 
 def convert_dict(indict):
