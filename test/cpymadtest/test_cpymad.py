@@ -16,7 +16,7 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 from cern import cpymad
-import unittest
+import unittest,os
 
 
 class TestCpymad(unittest.TestCase):
@@ -54,8 +54,17 @@ class TestCpymad(unittest.TestCase):
     def test_listModels(self):
         l=cpymad.modelList()
         self.assertTrue('lhc' in l)
+    
+    def test_setBeam(self):
+        self.model.list_beams()
+        b=self.model.get_beam('lhc_lhcb1')
+        self.assertTrue('energy' in b)
+        b['energy']=7000
+        self.model.set_beam(b)
+        self.assertTrue(6990 < self.model.twiss(sequence='lhcb1')[1].energy < 7010)
 
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TestCpymad)
     unittest.TextTestRunner(verbosity=1).run(suite)
+    os.remove('hist_cpymad.madx')
