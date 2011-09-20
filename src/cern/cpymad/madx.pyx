@@ -346,6 +346,8 @@ def _add_range(madrange):
             return 'range='+madrange+','
         elif type(madrange)==list:
             return 'range='+madrange[0]+'/'+madrange[1]+','
+        elif type(madrange)==dict:
+            return 'range='+madrange['first']+'/'+madrange['last']+','
         else:
             raise TypeError("Wrong range type/format")
     return ''

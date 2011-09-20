@@ -155,30 +155,30 @@ class model(abc.model.PyMadModel):
     def __str__(self):
         return self.model
     
-    def _call(self,fdict):
+    def _get_file_path(self,fdict):
         if 'location' in fdict:
             loc=fdict['location']
         else:
             loc='REPOSITORY' # this is default..
         if loc=='RESOURCE':
-            fname=self._mdef["path-offsets"]['resource-offset']+'/'+fdict['path']
+            fname = self._mdef["path-offsets"]['resource-offset']+'/'
         elif loc=='REPOSITORY':
-            if sys.flags.debug:
-                print self._mdef["path-offsets"]['repository-offset'],fdict['path']
-            fname=self._mdef["path-offsets"]['repository-offset']+'/'+fdict['path']
+            fname = self._mdef["path-offsets"]['repository-offset']+'/'
+        
         if USE_COUCH:
-            cmd=cern.cpymad._couch_server.get_file(self.model,fname)
-            for c in cmd.split('\n'): # I wonder if this might be needed for now?
-                ret=self._sendrecv(('command',cmd))
-            return ret
+            raise TypeError("Sorry, couch not implemented to use this feature")
         else:
             if loc=='RESOURCE':
-                fpath=os.path.dirname(__file__)+'/_models/resdata/'+fname
+                return os.path.dirname(__file__)+'/_models/resdata/'+fname
             elif loc=='REPOSITORY':
                 if self._db:
-                    fpath=self._db+fname
+                    return self._db+fname
                 else:
-                    fpath=os.path.dirname(__file__)+'/_models/repdata/'+fname
+                    return os.path.dirname(__file__)+'/_models/repdata/'+fname
+    
+    def _call(self,fdict):
+            
+        fpath=self._get_file_path(fdict)+fdict['path']
         self.call(fpath)
     
     
@@ -306,18 +306,30 @@ class model(abc.model.PyMadModel):
         '''
          Run a survey on the model.
          
-         :param string sequence: Sequence, if empty, using default sequence.
+         :param string sequence: Sequence, if empty, using active or default sequence.
          :param string columns: Columns in the twiss table, can also be list of strings
          :param string fname: Optionally, give name of file for tfs table.
          :param bool retdict: Return dictionaries (default is an extended LookUpDict)
         '''
-        from cern.pymad.domain import TfsTable, TfsSummary
         if sequence=='':
-            sequence=self._mdef['default-sequence']
-        args={'sequence':sequence,'columns':columns,'madrange':madrange,'fname':fname}
+            if self._active['sequence']:
+                sequence=self._active['sequence']
+            else:
+                sequence=self._mdef['default-sequence']
+        
+        this_range=''
+        if madrange:
+            rangedict=self._get_range_dict(sequence,madrange)
+            this_range=rangedict['madx-range']
+        
+        args={'sequence':sequence,
+              'columns':columns,
+              'madrange':this_range,
+              'fname':fname}
         t,s=self._sendrecv(('survey',args))
         if retdict:
             return t,s
+        from cern.pymad.domain import TfsTable, TfsSummary
         return TfsTable(t),TfsSummary(s)
     
     def aperture(self,
@@ -337,7 +349,10 @@ class model(abc.model.PyMadModel):
         '''
         from cern.pymad.domain import TfsTable, TfsSummary
         if sequence=='':
-            sequence=self._mdef['default-sequence']
+            if self._active['sequence']:
+                sequence=self._active['sequence']
+            else:
+                sequence=self._mdef['default-sequence']
         seq=self._mdef['sequences'][sequence]
         
         if not self._twisscalled[sequence]:
@@ -345,30 +360,33 @@ class model(abc.model.PyMadModel):
         # Calling "basic aperture files"
         if not self._apercalled[sequence]:
             for afile in seq['aperfiles']:
+                print "Calling file",afile
                 self._call(afile)
             self._apercalled[sequence]=True
         # getting offset file if any:
         # if no range was selected, we ignore offsets...
         offsets=''
+        this_range=''
         if madrange:
             rangedict=self._get_range_dict(sequence,madrange)
-            onum=seq['ranges'][madrange]['offsets']
-            ran=seq['ranges'][madrange]['range']
-            if onum or onum!=0:
+            this_range=rangedict['madx-range']
+            if 'aper-offset' in rangedict:
+                offsets=rangedict['aper-offset']
                 if USE_COUCH:
-                    offsets='tmp_madx_offsets'
+                    offsets_tmp='tmp_madx_offsets'
                     ocount=0
-                    while os.path.isfile(offsets+str(ocount)+'.tfs'):
+                    while os.path.isfile(offsets_tmp+str(ocount)+'.tfs'):
                         ocount+=1
-                    offsets+=str(ocount)+'.tfs'
-                    ftmp=file(offsets,'w')
-                    ftmp.write(cern.cpymad._couch_server.get_file(self.model,seq['offsets'][onum]))
+                    offsets_tmp+=str(ocount)+'.tfs'
+                    ftmp=file(offsets_tmp,'w')
+                    ftmp.write(cern.cpymad._couch_server.get_file(self.model,offsets))
                     ftmp.close()
+                    offsets=offsets_tmp
                 else:
-                    offsets=self._db+seq['offsets'][onum]
+                    offsets=self._get_file_path(offsets)+offsets['path']
         
         args={'sequence':sequence,
-              'madrange':ran,
+              'madrange':this_range,
               'columns':columns,
               'offsets':offsets,
               'fname':fname}
