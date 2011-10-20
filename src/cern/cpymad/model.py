@@ -259,6 +259,22 @@ class model(abc.model.PyMadModel):
         '''
         return self._mdef['optics'].keys()
     
+    def list_ranges(self,sequence=None):
+        '''
+         Returns a list of available ranges for the sequence.
+         If sequence is not given, returns a dictionary structured as
+         {sequence1:[range1,range2,...],sequence2:...}
+         
+         :param string sequence: sequence name.
+        '''
+        if sequence==None:
+            ret={}
+            for s in self.get_sequences():
+                ret[s]=self._mdef['sequences'][s]['ranges'].keys()
+            return ret
+        
+        return self._mdef['sequences'][sequence]['ranges'].keys()
+    
     def list_beams(self):
         '''
          Returns a list of available beams
