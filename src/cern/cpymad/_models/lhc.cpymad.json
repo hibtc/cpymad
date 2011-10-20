@@ -366,24 +366,24 @@
               }
             ]
           },
-           "ir1r":{
-               "madx-range": {"last": "IP1", "first": "E.DS.R1.B2"},
+          "ir1r":{
+               "madx-range": {"first": "IP1", "last": "E.DS.R1.B2"},
+               "aper-offset": {"path": "aperture/offset.ip1.b2.tfs"}
+               },
+          "ir1l":{
+               "madx-range": {"first":"S.DS.L1.B2", "last": "IP1"},
                "aper-offset": {"path":"aperture/offset.ip1.b2.tfs"}
                },
-           "ir1l":{
-               "madx-range": {"last":"S.DS.L1.B2", "first": "IP1"},
-               "aper-offset": {"path":"aperture/offset.ip1.b2.tfs"}
-               },
-           "ir2":{
-               "madx-range": {"last":"S.DS.L2.B2", "first": "E.DS.R2.B2"},
+          "ir2":{
+               "madx-range": {"first":"S.DS.L2.B2", "last": "E.DS.R2.B2"},
                "aper-offset": {"path":"aperture/offset.ip2.b2.tfs"}
                },
-           "ir5":{
-               "madx-range": {"last":"S.DS.L5.B2", "first": "E.DS.R5.B2"},
+          "ir5":{
+               "madx-range": {"first":"S.DS.L5.B2", "last": "E.DS.R5.B2"},
                "aper-offset": {"path":"aperture/offset.ip5.b2.tfs"}
                },
-           "ir8":{
-               "madx-range": {"last":"S.DS.L8.B2", "first": "E.DS.R8.B2"},
+          "ir8":{
+               "madx-range": {"first":"S.DS.L8.B2", "last": "E.DS.R8.B2"},
                "aper-offset": {"path":"aperture/offset.ip8.b2.tfs"}
                }
         }, 

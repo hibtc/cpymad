@@ -320,6 +320,9 @@ class madx:
             self._hfile.flush()
     
     def get_sequences(self):
+        '''
+         Returns the sequences currently in memory
+        '''
         cdef sequence_list *seqs
         seqs= madextern_get_sequence_list()
         ret={}
@@ -336,6 +339,9 @@ class madx:
         #print "Name of list:",seqs.name
 
 def _get_dict(tmpfile,retdict):
+    '''
+     Returns a dictionary from the temporary file.
+    '''
     if retdict:
         return tfsDict(tmpfile)
     return tfs(tmpfile)
