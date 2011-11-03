@@ -27,7 +27,7 @@ Main module to interface with Mad-X library.
 '''
 
 from cern.cpymad.madx_structures cimport sequence_list, name_list
-cdef extern from "madextern.h":
+cdef extern from "mad_api.h":
     void madextern_start()
     void madextern_end()
     void madextern_input(char*)
@@ -362,3 +362,4 @@ def _add_offsets(offsets):
     if offsets:
         return 'offsetelem="'+offsets+'",'
     return ''
+
