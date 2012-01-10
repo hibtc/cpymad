@@ -25,10 +25,10 @@
 #cdef int NAME_L
 #NAME_L=48 # defined by preprocessor in madx..
 
-cdef extern from "madxl.h":
+cdef extern from "madX/madxl.h":
     #cdef NAME_L
     pass
-cdef extern from "madx.h":
+cdef extern from "madX/madx.h":
     struct char_p_array:
         int flag,stamp
         char** p

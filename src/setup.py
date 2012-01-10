@@ -20,7 +20,7 @@
 from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
-import os
+import os,sys
 sourcefiles=[["cern/cpymad/madx.pyx"]]
 pythonsrc=["cern",
            "cern.cpymad",
@@ -53,11 +53,18 @@ home=os.environ['HOME']
 includedirs=[]
 libdirs=[]
 
-while not includedirs:
-    add_dir('/usr/local/include/madX',includedirs)
-    add_dir('/usr/include/madX',includedirs)
-    add_dir(os.path.join(home,'.local','include','madX'),includedirs)
-    add_dir('/afs/cern.ch/user/y/ylevinse/.local/include/madX',includedirs)
+add_dir(os.path.join(sys.prefix,'include'),includedirs)
+add_dir('/usr/local/include',includedirs)
+add_dir('/usr/include',includedirs)
+add_dir(os.path.join(home,'.local','include'),includedirs)
+add_dir('/afs/cern.ch/user/y/ylevinse/.local/include',includedirs)
+mad_include_found=False
+for f in includedirs:
+    if os.path.isdir(os.path.join(f,'madX')):
+        mad_include_found=True
+if not mad_include_found:
+    raise ValueError("Cannot find folder with Mad-X headers")
+
 add_dir(os.path.join(home,'.local','lib'),libdirs)
 add_dir(os.path.join(home,'.local','lib64'),libdirs)
 
