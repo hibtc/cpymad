@@ -52,17 +52,17 @@ def add_dir(directory,dirlist):
 home=os.environ['HOME']
 includedirs=[]
 libdirs=[]
-
-add_dir(os.path.join(sys.prefix,'include'),includedirs)
-add_dir('/usr/local/include',includedirs)
-add_dir('/usr/include',includedirs)
-add_dir(os.path.join(home,'.local','include'),includedirs)
-add_dir('/afs/cern.ch/user/y/ylevinse/.local/include',includedirs)
-mad_include_found=False
-for f in includedirs:
-    if os.path.isdir(os.path.join(f,'madX')):
-        mad_include_found=True
-if not mad_include_found:
+for includedir in [
+    os.path.join(sys.prefix,'include'),
+    '/usr/local/include',
+    '/usr/include',
+    os.path.join(home,'.local','include'),
+    '/afs/cern.ch/user/y/ylevinse/.local/include'
+    ]:
+    if os.path.isdir(os.path.join(includedir,'madX')):
+        add_dir(includedir,includedirs)
+        break
+if not includedirs:
     raise ValueError("Cannot find folder with Mad-X headers")
 
 add_dir(os.path.join(home,'.local','lib'),libdirs)
