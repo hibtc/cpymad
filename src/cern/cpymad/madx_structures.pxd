@@ -25,7 +25,7 @@
 #cdef int NAME_L
 #NAME_L=48 # defined by preprocessor in madx..
 
-cdef extern from "madX/madxl.h":
+cdef extern from "madX/mad_def.h":
     #cdef NAME_L
     pass
 cdef extern from "madX/madx.h":
