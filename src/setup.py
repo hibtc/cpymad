@@ -92,9 +92,7 @@ mods=[Extension('cern.madx',
                     libraries = libs,
                     sources = sourcefiles[0],
                     library_dirs = libdirs,
-                    # The following make sure all
-                    # library folders are known to the extension
-                    extra_link_args = ['-Wl,-R'+d for d in libdirs]
+                    runtime_library_dirs= libdirs
                     ),
       ]
 
