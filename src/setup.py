@@ -21,6 +21,16 @@ from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 import os,sys
+import platform
+
+# ugly hack to add --madxdir=/path/to/madxinstallation
+special_madxdir=''
+for arg in sys.argv:
+    if '--madxdir=' in arg:
+        special_madxdir=arg.split('=')[1]
+        sys.argv.remove(arg)
+
+
 sourcefiles=[["cern/cpymad/madx.pyx"]]
 pythonsrc=["cern",
            "cern.cpymad",
@@ -47,26 +57,33 @@ def add_dir(directory,dirlist):
     if os.path.isdir(directory):
         if directory not in dirlist:
             dirlist.append(directory)
-        
+
 
 home=os.environ['HOME']
 includedirs=[]
 libdirs=[]
-for includedir in [
-    os.path.join(sys.prefix,'include'),
-    '/usr/local/include',
-    '/usr/include',
-    os.path.join(home,'.local','include'),
-    '/afs/cern.ch/user/y/ylevinse/.local/include'
-    ]:
-    if os.path.isdir(os.path.join(includedir,'madX')):
-        add_dir(includedir,includedirs)
+if special_madxdir:
+    _prefixdirs=[special_madxdir]
+else: # making some guesses...
+    _prefixdirs=[
+        sys.prefix,
+        '/usr',
+        '/usr/local',
+        os.path.join(home,'.local'),
+        '/afs/cern.ch/user/y/ylevinse/.local'
+        ]
+
+for prefixdir in _prefixdirs:
+    if os.path.isdir(os.path.join(prefixdir,'include','madX')):
+        add_dir(os.path.join(prefixdir,'include'),includedirs)
         break
 if not includedirs:
     raise ValueError("Cannot find folder with Mad-X headers")
 
-add_dir(os.path.join(home,'.local','lib'),libdirs)
-add_dir(os.path.join(home,'.local','lib64'),libdirs)
+for prefixdir in _prefixdirs:
+    add_dir(os.path.join(prefixdir,'lib'),libdirs)
+    if platform.architecture()[0]=='64bit':
+        add_dir(os.path.join(prefixdir,'lib64'),libdirs)
 
 mods=[Extension('cern.madx',
                     define_macros = [('MAJOR_VERSION', '0'),
