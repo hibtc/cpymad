@@ -49,7 +49,7 @@ Third method, manual installation:
       .. code-block:: sh
       
           mkdir build; cd build
-          cmake -DMADX_STATIC=OFF -DBUILD_SHARED_LIBS=ON -D ../
+          cmake -DMADX_STATIC=OFF -DBUILD_SHARED_LIBS=ON ../
           make install
     
     * Download the PyMad source from `github <https://github.com/pymad/pymad/zipball/master>`_
@@ -63,4 +63,23 @@ Third method, manual installation:
 If you download JMad after following any of the methods described above for CPyMad,
 you will immediately have JPyMad available as well.
 
+
+Potential problems
+------------------
+
+In the following we will try to keep a list of the various issues users have reported during installation.
+
+    * libmadx.so not found::
+        
+          from cern.madx import madx
+          ImportError: libmadx.so: cannot open shared object file: No such file or directory
+      
+      Solution:
+      Though we try to set the runtime path during compilation, it doesn't always work. Please set
+      the LD_LIBRARY_PATH in your environment. Example, if libmadx.so is installed in
+      $HOME/.local/lib, and you use bash, add to $HOME/.bashrc:
+      
+      .. code-block:: sh
+          
+          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/
 
