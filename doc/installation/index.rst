@@ -82,4 +82,15 @@ In the following we will try to keep a list of the various issues users have rep
       .. code-block:: sh
           
           export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/
+    
+    * Cython.Distutils not found:
 
+      .. code-block:: sh
+
+        Traceback (most recent call last):
+         File "setup.py", line 22, in <module>
+          from Cython.Distutils import build_ext
+        ImportError: No module named Cython.Distutils
+     
+     Solution:
+     In order to get cpymad, you need Cython installed on your system. If you cannot obtain that, use jpymad instead.
