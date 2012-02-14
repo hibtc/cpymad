@@ -17,10 +17,14 @@
 #-------------------------------------------------------------------------------
 #!/usr/bin/python
 
-from setuptools import setup
+import os,sys
+
+if "bdist_egg" in sys.argv:
+    from setuptools import setup
+else:
+    from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
-import os,sys
 import platform
 
 # ugly hack to add --madxdir=/path/to/madxinstallation
