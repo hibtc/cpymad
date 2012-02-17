@@ -43,7 +43,7 @@ class model(abc.model.PyMadModel):
     :param string optics: Name of optics to load
     :param string histfile: Name of file which will contain all Mad-X commands called.
     '''
-    def __init__(self,model,sequence='',optics='',histfile=''):
+    def __init__(self,model,sequence='',optics='',histfile='',recursive_history=False):
         
         if model not in cern.cpymad.modelList():
             raise ValueError("The model you asked for does not exist in the database")
@@ -67,7 +67,7 @@ class model(abc.model.PyMadModel):
         #if self._db==None:
             #raise ValueError("It is not possible to find database directory for this model")
         
-        self._mprocess=_modelProcess(_child_pipe_send,_child_pipe_recv,model,histfile)
+        self._mprocess=_modelProcess(_child_pipe_send,_child_pipe_recv,model,histfile,recursive_history)
         
         self._mprocess.start()
         
@@ -471,15 +471,16 @@ def _get_file_content(modelname,filename):
     return stream
     
 class _modelProcess(multiprocessing.Process):
-    def __init__(self,sender,receiver,model,history=''):
+    def __init__(self,sender,receiver,model,history='',recursive_history=False):
         self.sender=sender
         self.receiver=receiver
         self.model=model
         self.history=history
+        self.recursive_history=recursive_history
         multiprocessing.Process.__init__(self) 
     
     def run(self):
-        _madx=madx(histfile=self.history)
+        _madx=madx(histfile=self.history,recursive_history=self.recursive_history)
         _madx.verbose(False)
         _madx.append_model(self.model)
         if USE_COUCH:
