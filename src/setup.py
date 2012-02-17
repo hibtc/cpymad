@@ -102,7 +102,7 @@ mods=[Extension('cern.madx',
 
 setup(
     name='PyMAD',
-    version='0.1',
+    version='0.2',
     description='Interface to Mad-X, using Cython or Py4J through JMAD',
     cmdclass = {'build_ext': build_ext},
     ext_modules = mods,

@@ -303,7 +303,19 @@ class model(abc.model.PyMadModel):
         from cern.pymad.domain import TfsTable, TfsSummary
         if sequence=='':
             sequence=self._mdef['default-sequence']
-        args={'sequence':sequence,'columns':columns,'pattern':pattern,'madrange':madrange,'fname':fname}
+        seqdict=self._mdef['sequences'][sequence]
+        if madrange=='':
+            rangedict=seqdict['ranges'][seqdict['default-range']]
+        else:
+            rangedict=seqdict['ranges'][madrange]
+        args={'sequence':sequence,'columns':columns,'pattern':pattern,'fname':fname}
+        args['madrange']=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]]
+        args['twiss-init']=None
+        if 'twiss-initial-conditions' in rangedict:
+            args['twiss-init']={}
+            for condition,value in rangedict['twiss-initial-conditions'].items():
+                if value:
+                    args['twiss-init'][condition]=value
         t,s=self._sendrecv(('twiss',args))
         # we say that when the "full" range has been selected, 
         # we can set this to true. Needed for e.g. aperture calls
@@ -497,7 +509,8 @@ class _modelProcess(multiprocessing.Process):
                     t,s=_madx.twiss(sequence=cmd[1]['sequence'],
                                      columns=cmd[1]['columns'],
                                      pattern=cmd[1]['pattern'],
-                                     fname=cmd[1]['fname']
+                                     fname=cmd[1]['fname'],
+                                     twiss_init=cmd[1]['twiss-init']
                                      ,retdict=True)
                     self.sender.send((t,s))
                 elif cmd[0]=='survey':

@@ -178,13 +178,19 @@ class madx:
     # @param pattern [list, optional] pattern to include in table
     # @param columns [list or string, optional] columns to include in table
     # @param retdict [bool] if true, returns tables as dictionary types
+    # @param twiss_init [dict, optional] dictionary of twiss initialization variables
     def twiss(self,
               sequence,
               pattern=['full'],
               columns='name,s,betx,bety,x,y,dx,dy,px,py,mux,muy,l,k1l,angle,k2l',
               madrange='',
               fname='',
-              retdict=False
+              retdict=False,
+              betx=None,
+              bety=None,
+              alfx=None,
+              alfy=None,
+              twiss_init=None
               ):
         if fname:
             tmpfile=fname
@@ -197,9 +203,14 @@ class madx:
         self.select('twiss',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
         self.use(sequence)
-        if madrange:
-            print("WARNING: Twiss with range selection does not currently make ANY sense")
-        self.command('twiss, sequence='+sequence+','+_add_range(madrange)+' file="'+tmpfile+'";')
+        _tmpcmd='twiss, sequence='+sequence+','+_add_range(madrange)+' file="'+tmpfile+'"'
+        for i_var,i_val in {'betx':betx,'bety':bety,'alfx':alfx,'alfy':alfy}.items():
+            if i_val!=None:
+                _tmpcmd+=','+i_var+'='+str(i_val)
+        if twiss_init:
+            for i_var,i_val in twiss_init.items():
+                _tmpcmd+=','+i_var+'='+str(i_val)
+        self.command(_tmpcmd+';')
         tab,param=_get_dict(tmpfile,retdict)
         if not fname:
             os.remove(tmpfile)
