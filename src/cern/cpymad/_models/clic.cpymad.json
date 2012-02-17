@@ -1,0 +1,108 @@
+{
+  "clic": {
+    "dbdirs": [
+      "/afs/cern.ch/eng/sl/",
+      "/afs/cern.ch/user/r/rtomas/"
+    ], 
+    "path-offsets": {
+      "repository-offset": "lintrack/CLICr/MainBeam/BDS/v_10_10_11", 
+      "resource-offset": "clic/v_10_10_11/"
+    }, 
+    "beams": {
+      "clic_DIAGCOLL": {
+        "particle": "electron", 
+        "sequence": "DIAGCOLL",
+        "energy": 1500.0, 
+        "radiate": false
+      },
+      "clic_NEWBDS": {
+        "particle": "electron", 
+        "sequence": "NEWBDS",
+        "energy": 1500.0, 
+        "radiate": false
+      }
+    },
+    "init-files": [
+      {
+        "path": "init_1.madx",
+        "location": "RESOURCE"
+      },
+      {
+        "path": "newCLICx"
+      },
+      {
+        "path": "line4CLIC.madx"
+      },
+      {
+        "path": "init_2.madx",
+        "location": "RESOURCE"
+      }
+    ], 
+    
+    "default-sequence": "NEWBDS",
+    "sequences": {
+      "DIAGCOLL": {
+        "ranges": {
+          "ALL": {
+            "madx-range": {
+              "last": "#e", 
+              "first": "#s"
+            },
+            "twiss-initial-conditions": {
+            "bety": "64.450775313773065",
+            "betx": "18.382571324661523", 
+            "alfy": "-1.9393733561889044", 
+            "alfx": "0.59971622633721455", 
+            "closed-orbit": false
+            }
+          }
+        },
+        "beam": "clic_DIAGCOLL",
+        "default-range": "ALL"
+      },
+      "NEWBDS": {
+        "ranges": {
+          "ALL": {
+            "madx-range": {
+              "last": "#e", 
+              "first": "#s"
+            },
+        "twiss-initial-conditions": {
+          "bety": "64.450775313773065",
+          "betx": "18.382571324661523", 
+          "alfy": "-1.9393733561889044", 
+          "alfx": "0.59971622633721455", 
+          "closed-orbit": false
+        }
+          }
+        },
+        "beam": "clic_NEWBDS",
+        "default-range": "ALL"
+      }
+    },
+    "default-optic": "v_10_10_11",
+    "optics": {
+      "v_10_10_11": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS", 
+            "path": "coll_sexts_octs.madx"
+          },
+          {
+            "parse": "STRENGTHS", 
+            "path": "values.disp085.ind92"
+          },
+          {
+            "parse": "STRENGTHS", 
+            "path": "Apertures4MAD.madx"
+          },
+          {
+            "parse": "STRENGTHS", 
+            "path": "values_FFS.madx"
+          }
+        ], 
+        "overlay": true
+      }
+    }
+  }
+}
