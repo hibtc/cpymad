@@ -66,16 +66,18 @@ def add_dir(directory,dirlist):
 home=os.environ['HOME']
 includedirs=[]
 libdirs=[]
+rlibdirs=[]
 if special_madxdir:
     _prefixdirs=[special_madxdir]
 else: # making some guesses...
     _prefixdirs=[
         sys.prefix,
-        '/usr',
+        ]
+for prefixdir in ['/usr',
         '/usr/local',
         os.path.join(home,'.local'),
-        '/afs/cern.ch/user/y/ylevinse/.local'
-        ]
+        '/afs/cern.ch/user/y/ylevinse/.local']:
+    add_dir(prefixdir,_prefixdirs)
 
 for prefixdir in _prefixdirs:
     if os.path.isdir(os.path.join(prefixdir,'include','madX')):
@@ -89,6 +91,14 @@ for prefixdir in _prefixdirs:
     if platform.architecture()[0]=='64bit':
         add_dir(os.path.join(prefixdir,'lib64'),libdirs)
 
+for ldir in libdirs:
+    if rlibdirs:
+        break
+    for suffix in ['so','dll','dylib']:
+        if os.path.isfile(os.path.join(ldir,'libmadx.'+suffix)):
+            rlibdirs=[ldir]
+            libdirs=[ldir]
+            break
 mods=[Extension('cern.madx',
                     define_macros = [('MAJOR_VERSION', '0'),
                                      ('MINOR_VERSION', '1')],
@@ -96,7 +106,7 @@ mods=[Extension('cern.madx',
                     libraries = libs,
                     sources = sourcefiles[0],
                     library_dirs = libdirs,
-                    runtime_library_dirs= libdirs
+                    runtime_library_dirs= rlibdirs
                     ),
       ]
 
