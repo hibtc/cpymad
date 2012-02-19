@@ -55,7 +55,7 @@ for j in range(2,10):
     for end in ['.madx','.str','.seq','.tfs']:
         cdata.append('_models/re*data'+'/*'*j+end)
 
-libs=['madx', "X11", "z", "pthread", "c", "stdc++"]
+libs=['madx', "c", "stdc++"]
 
 def add_dir(directory,dirlist):
     if os.path.isdir(directory):
