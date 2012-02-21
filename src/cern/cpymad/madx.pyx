@@ -209,7 +209,11 @@ class madx:
                 _tmpcmd+=','+i_var+'='+str(i_val)
         if twiss_init:
             for i_var,i_val in twiss_init.items():
-                _tmpcmd+=','+i_var+'='+str(i_val)
+                if i_var not in ['name','closed-orbit']:
+                    if i_val==True:
+                        _tmpcmd+=','+i_var
+                    else:
+                        _tmpcmd+=','+i_var+'='+str(i_val)
         self.command(_tmpcmd+';')
         tab,param=_get_dict(tmpfile,retdict)
         if not fname:
