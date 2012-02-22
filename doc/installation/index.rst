@@ -82,6 +82,10 @@ In the following we will try to keep a list of the various issues users have rep
       .. code-block:: sh
           
           export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/
+
+      Please note, on OSX you might need to use the variable DYLD_LIBRARY_PATH instead of
+      LD_LIBRARY_PATH. The authors are not very familiar with OSX, but know of at least one
+      occurence where that was the problem.
     
     * Cython.Distutils not found:
 
