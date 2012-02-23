@@ -170,15 +170,6 @@ class madx:
         for p in pattern:
             self.command('SELECT, FLAG='+flag+', PATTERN='+p+';')
             
-    ##
-    # @brief Runs select+use+twiss on the sequence selected
-    # 
-    # @param sequence [string] name of sequence
-    # @param fname [string,optional] name of file to store tfs table
-    # @param pattern [list, optional] pattern to include in table
-    # @param columns [list or string, optional] columns to include in table
-    # @param retdict [bool] if true, returns tables as dictionary types
-    # @param twiss_init [dict, optional] dictionary of twiss initialization variables
     def twiss(self,
               sequence,
               pattern=['full'],
@@ -190,8 +181,21 @@ class madx:
               bety=None,
               alfx=None,
               alfy=None,
-              twiss_init=None
+              twiss_init=None,
+              use=True
               ):
+        '''
+            
+            Runs select+use+twiss on the sequence selected
+            
+            :param string sequence: name of sequence
+            :param string fname: name of file to store tfs table
+            :param list pattern: pattern to include in table
+            :param list/string columns: columns to include in table
+            :param bool retdict: if true, returns tables as dictionary types
+            :param dict twiss_init: dictionary of twiss initialization variables
+            :param bool use: Call use before aperture.
+        '''
         if fname:
             tmpfile=fname
         else:
@@ -202,7 +206,8 @@ class madx:
                 i+=1
         self.select('twiss',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
-        self.use(sequence)
+        if use:
+            self.use(sequence)
         _tmpcmd='twiss, sequence='+sequence+','+_add_range(madrange)+' file="'+tmpfile+'"'
         for i_var,i_val in {'betx':betx,'bety':bety,'alfx':alfx,'alfy':alfy}.items():
             if i_val!=None:
@@ -226,15 +231,17 @@ class madx:
               columns='name,l,s,angle,x,y,z,theta',
               madrange='',
               fname='',
-              retdict=False
+              retdict=False,
+              use=True
               ):
         '''
-         Runs select+use+survey on the sequence selected
-         
-         @param sequence [string] name of sequence
-         @param fname [string,optional] name of file to store tfs table
-         @param pattern [list, optional] pattern to include in table
-         @param columns [string or list, optional] columns to include in table
+            Runs select+use+survey on the sequence selected
+            
+            :param string sequence: name of sequence
+            :param string fname: name of file to store tfs table
+            :param list pattern: pattern to include in table
+            :param string/list columns: Columns to include in table
+            :param bool use: Call use before survey.
         '''
         if fname:
             tmpfile=fname
@@ -246,7 +253,8 @@ class madx:
                 i+=1
         self.select('survey',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
-        self.use(sequence)
+        if use:
+            self.use(sequence)
         self.command('survey,'+_add_range(madrange)+' file="'+tmpfile+'";')
         tab,param=_get_dict(tmpfile,retdict)
         if not fname:
@@ -260,7 +268,8 @@ class madx:
               columns='name,l,angle,x,y,z,theta',
               offsets='',
               fname='',
-              retdict=False
+              retdict=False,
+              use=False
               ):
         '''
          Runs select+use+aperture on the sequence selected
@@ -269,6 +278,7 @@ class madx:
          @param fname [string,optional] name of file to store tfs table
          @param pattern [list, optional] pattern to include in table
          @param columns [string or list, optional] columns to include in table
+         :param bool use: Call use before aperture.
         '''
         if fname:
             tmpfile=fname
@@ -280,7 +290,9 @@ class madx:
                 i+=1
         self.select('aperture',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
-        #self.use(sequence) # this seems to cause a bug?
+        if use:
+            print "Warning, use before aperture is known to cause problems"
+            self.use(sequence) # this seems to cause a bug?
         self.command('aperture,'+_add_range(madrange)+_add_offsets(offsets)+'file="'+tmpfile+'";')
         tab,param=_get_dict(tmpfile,retdict)
         if not fname:

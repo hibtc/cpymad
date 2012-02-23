@@ -287,7 +287,9 @@ class model(abc.model.PyMadModel):
               pattern=['full'],
               madrange='',
               fname='',
-              retdict=False):
+              retdict=False,
+              use=True
+              ):
         '''
          Run a TWISS on the model.
          
@@ -298,7 +300,8 @@ class model(abc.model.PyMadModel):
          :param string columns: Columns in the twiss table, can also be list of strings
          :param string madrange: Optional, give name of a range defined for the model.
          :param string fname: Optionally, give name of file for tfs table.
-         :param bool retdict: Return dictionaries (default is an extended LookUpDict)
+         :param bool retdict: Return dictionaries (default is an extended LookUpDict).
+         :param bool use: Call use before twiss.
         '''
         from cern.pymad.domain import TfsTable, TfsSummary
         if sequence=='':
@@ -308,7 +311,7 @@ class model(abc.model.PyMadModel):
             rangedict=seqdict['ranges'][seqdict['default-range']]
         else:
             rangedict=seqdict['ranges'][madrange]
-        args={'sequence':sequence,'columns':columns,'pattern':pattern,'fname':fname}
+        args={'sequence':sequence,'columns':columns,'pattern':pattern,'fname':fname,'use':use}
         args['madrange']=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]]
         args['twiss-init']=None
         if 'twiss-initial-conditions' in rangedict:
@@ -330,14 +333,16 @@ class model(abc.model.PyMadModel):
                columns='name,l,s,angle,x,y,z,theta',
                madrange='',
                fname='',
-               retdict=False):
+               retdict=False,
+               use=True):
         '''
          Run a survey on the model.
          
          :param string sequence: Sequence, if empty, using active or default sequence.
          :param string columns: Columns in the twiss table, can also be list of strings
          :param string fname: Optionally, give name of file for tfs table.
-         :param bool retdict: Return dictionaries (default is an extended LookUpDict)
+         :param bool retdict: Return dictionaries (default is an extended LookUpDict).
+         :param bool use: Call use before survey.
         '''
         if sequence=='':
             if self._active['sequence']:
@@ -353,7 +358,8 @@ class model(abc.model.PyMadModel):
         args={'sequence':sequence,
               'columns':columns,
               'madrange':this_range,
-              'fname':fname}
+              'fname':fname,
+              'use':use}
         t,s=self._sendrecv(('survey',args))
         if retdict:
             return t,s
@@ -365,7 +371,8 @@ class model(abc.model.PyMadModel):
                madrange='',
                columns='name,l,s,n1,aper_1,aper_2,aper_3,aper_4',
                fname='',
-               retdict=False):
+               retdict=False,
+               use=False):
         '''
          Get the aperture from the model.
          
@@ -373,7 +380,8 @@ class model(abc.model.PyMadModel):
          :param string madrange: Range, if empty, the full sequence is chosen.
          :param string columns: Columns in the twiss table, can also be list of strings
          :param string fname: Optionally, give name of file for tfs table.
-         :param bool retdict: Return dictionaries (default is an extended LookUpDict)
+         :param bool retdict: Return dictionaries (default is an extended LookUpDict).
+         :param bool use: Call use before aperture.
         '''
         from cern.pymad.domain import TfsTable, TfsSummary
         if sequence=='':
@@ -417,7 +425,8 @@ class model(abc.model.PyMadModel):
               'madrange':this_range,
               'columns':columns,
               'offsets':offsets,
-              'fname':fname}
+              'fname':fname,
+              'use':use}
         t,s=self._sendrecv(('aperture',args))
         if USE_COUCH:
             os.remove(offsets)
