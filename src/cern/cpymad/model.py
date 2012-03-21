@@ -86,25 +86,27 @@ class model(abc.model.PyMadModel):
     def mdef(self):
         return self._mdef.copy()
     
-    def set_sequence(self,sequence):
+    def set_sequence(self,sequence=''):
         if sequence:
             if sequence in self._mdef['sequences']:
                 self._active['sequence']=sequence
             else:
-                print("WARNING: You tried to activate a non-existing sequence")
+                raise KeyError("You tried to activate a non-existing sequence")
         elif not self._active['sequence']:
             self._active['sequence']=self._mdef['default-sequence']
         
     def _setup_initial(self,sequence,optics):
-        
+        '''
+        Initial setup of the model
+        '''
         for ifile in self._mdef['init-files']:
             if sys.flags.debug:
                 print("Calling file: "+str(ifile))
             self._call(ifile)
         
-        # essentially just calls the beam command for all sequences..
+        # initialize all sequences..
         for seq in self._mdef['sequences']:
-            self._set_sequence(seq)
+            self._init_sequence(seq)
         # then we set the default one..
         self.set_sequence(sequence)
             
@@ -116,7 +118,10 @@ class model(abc.model.PyMadModel):
             self._apercalled[seq]=False
             self._twisscalled[seq]=False
         
-    def _set_sequence(self,sequence):
+    def _init_sequence(self,sequence):
+        '''
+        Initialize sequence
+        '''
         bname=self._mdef['sequences'][sequence]['beam']
         bdict=self.get_beam(bname)
         self.set_beam(bdict)
@@ -280,7 +285,19 @@ class model(abc.model.PyMadModel):
          Returns a list of available beams
         '''
         return self._mdef['beams'].keys()
-    
+        
+    def _get_twiss_initial(self,sequence='',madrange='',name=''):
+        '''
+        Returns the dictionary for the twiss initial conditions.
+        If name is not defined, using default-twiss
+        '''
+        rangedict=_get_range_dict(sequence=sequence,madrange=madrange)
+        if name:
+            return rangedict['twiss-initial-conditions'][name]
+        else:
+            return rangedict['twiss-initial-conditions'][rangedict['default-twiss']]
+
+
     def twiss(self,
               sequence='',
               columns=['name','s','betx','bety','x','y','dx','dy','px','py','mux','muy','l','k1l','angle','k2l'],
@@ -296,7 +313,7 @@ class model(abc.model.PyMadModel):
          Warning for ranges: Currently TWISS with initial conditions is NOT
          implemented!
          
-         :param string sequence: Sequence, if empty, using default sequence.
+         :param string sequence: Sequence, if empty, using active sequence.
          :param string columns: Columns in the twiss table, can also be list of strings
          :param string madrange: Optional, give name of a range defined for the model.
          :param string fname: Optionally, give name of file for tfs table.
@@ -304,19 +321,26 @@ class model(abc.model.PyMadModel):
          :param bool use: Call use before twiss.
         '''
         from cern.pymad.domain import TfsTable, TfsSummary
-        if sequence=='':
-            sequence=self._mdef['default-sequence']
+        self.set_sequence(sequence)
+        sequence=self._active['sequence']
+        
+        if self._apercalled[sequence]:
+            raise ValueError("BUG in Mad-X: Cannot call twiss after aperture..")
+        
         seqdict=self._mdef['sequences'][sequence]
+        
         if madrange=='':
-            rangedict=seqdict['ranges'][seqdict['default-range']]
+            _madrange=seqdict['ranges'][seqdict['default-range']]
         else:
-            rangedict=seqdict['ranges'][madrange]
+            _madrange=madrange
+        rangedict=seqdict['ranges'][_madrange]
+        
         args={'sequence':sequence,'columns':columns,'pattern':pattern,'fname':fname,'use':use}
         args['madrange']=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]]
         args['twiss-init']=None
         if 'twiss-initial-conditions' in rangedict:
             args['twiss-init']={}
-            for condition,value in rangedict['twiss-initial-conditions'].items():
+            for condition,value in self._get_twiss_initial(sequence,_madrange).items():
                 if value:
                     args['twiss-init'][condition]=value
         t,s=self._sendrecv(('twiss',args))
@@ -338,21 +362,18 @@ class model(abc.model.PyMadModel):
         '''
          Run a survey on the model.
          
-         :param string sequence: Sequence, if empty, using active or default sequence.
+         :param string sequence: Sequence, if empty, using active sequence.
          :param string columns: Columns in the twiss table, can also be list of strings
          :param string fname: Optionally, give name of file for tfs table.
          :param bool retdict: Return dictionaries (default is an extended LookUpDict).
          :param bool use: Call use before survey.
         '''
-        if sequence=='':
-            if self._active['sequence']:
-                sequence=self._active['sequence']
-            else:
-                sequence=self._mdef['default-sequence']
+        self.set_sequence(sequence)
+        sequence=self._active['sequence']
         
         this_range=''
         if madrange:
-            rangedict=self._get_range_dict(sequence,madrange)
+            rangedict=self._get_range_dict(sequence=sequence,madrange=madrange)
             this_range=rangedict['madx-range']
         
         args={'sequence':sequence,
@@ -376,7 +397,7 @@ class model(abc.model.PyMadModel):
         '''
          Get the aperture from the model.
          
-         :param string sequence: Sequence, if empty, using default sequence.
+         :param string sequence: Sequence, if empty, using active sequence.
          :param string madrange: Range, if empty, the full sequence is chosen.
          :param string columns: Columns in the twiss table, can also be list of strings
          :param string fname: Optionally, give name of file for tfs table.
@@ -384,12 +405,8 @@ class model(abc.model.PyMadModel):
          :param bool use: Call use before aperture.
         '''
         from cern.pymad.domain import TfsTable, TfsSummary
-        if sequence=='':
-            if self._active['sequence']:
-                sequence=self._active['sequence']
-            else:
-                sequence=self._mdef['default-sequence']
-        seq=self._mdef['sequences'][sequence]
+        self.set_sequence(sequence)
+        sequence=self._active['sequence']
         
         if not self._twisscalled[sequence]:
             self.twiss(sequence)
@@ -404,7 +421,7 @@ class model(abc.model.PyMadModel):
         offsets=''
         this_range=''
         if madrange:
-            rangedict=self._get_range_dict(sequence,madrange)
+            rangedict=self._get_range_dict(sequence=sequence,madrange=madrange)
             this_range=rangedict['madx-range']
             if 'aper-offset' in rangedict:
                 offsets=rangedict['aper-offset']
@@ -436,12 +453,25 @@ class model(abc.model.PyMadModel):
         
     def _get_ranges(self,sequence):
         return self._mdef['sequences'][sequence]['ranges'].keys()
+    
+    def _get_range_dict(self,sequence='',madrange=''):
+        '''
+        Returns the range dictionary. If sequence/range isn't given,
+        returns default for the model
+        '''
+        if sequence=='':
+            sequence=self._active['sequence']
+        elif sequence not in self._mdef['sequences']:
+            raise ValueError("%s is not a valid sequence name, available sequences: '%s'" % (sequence,"' '".join(self._mdef['sequences'].keys())))
         
-    def _get_range_dict(self,sequence,madrange):
-        seq=self._mdef['sequences'][sequence]
-        if madrange not in seq['ranges']:
+        seqdict=self._mdef['sequences'][sequence]
+        
+        if not madrange:
+            madrange=seqdict['ranges'][seqdict['default-range']]
+        elif madrange not in seqdict['ranges']:
             raise ValueError("%s is not a valid range name, available ranges: '%s'" % (madrange,"' '".join(seq['ranges'].keys())))
-        return seq['ranges'][madrange]
+            
+        return seqdict['ranges'][madrange]
         
     def _cmd(self,command):
         self._send(('command',command))
@@ -520,14 +550,16 @@ class _modelProcess(multiprocessing.Process):
                                      columns=cmd[1]['columns'],
                                      pattern=cmd[1]['pattern'],
                                      fname=cmd[1]['fname'],
-                                     twiss_init=cmd[1]['twiss-init']
-                                     ,retdict=True)
+                                     twiss_init=cmd[1]['twiss-init'],
+                                     use=cmd[1]['use'],
+                                     retdict=True)
                     self.sender.send((t,s))
                 elif cmd[0]=='survey':
                     t,s=_madx.survey(sequence=cmd[1]['sequence'],
                                      columns=cmd[1]['columns'],
-                                     fname=cmd[1]['fname']
-                                     ,retdict=True)
+                                     fname=cmd[1]['fname'],
+                                     use=cmd[1]['use'],
+                                     retdict=True)
                     self.sender.send((t,s))
                 elif cmd[0]=='aperture':
                     t,s=_madx.aperture(sequence=cmd[1]['sequence'],
@@ -535,6 +567,7 @@ class _modelProcess(multiprocessing.Process):
                                        columns=cmd[1]['columns'],
                                        offsets=cmd[1]['offsets'],
                                        fname=cmd[1]['fname'],
+                                       use=cmd[1]['use'],
                                        retdict=True)
                     self.sender.send((t,s))
                 else:
