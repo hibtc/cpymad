@@ -40,21 +40,13 @@
               "first": "#s"
             }, 
             "twiss-initial-conditions": {
-              "closed-orbit": false, 
-              "chrom": false, 
-              "name": "default twiss", 
-              "centre": false
-            }, 
-            "corrector-invert-filters": [
-              {
-                "regex": "(?i)^MCBX.*", 
-                "plane": "H"
-              }, 
-              {
-                "regex": "(?i)^MCBX.*", 
-                "plane": "V"
+              "default twiss": {
+                "closed-orbit": false, 
+                "chrom": false, 
+                "centre": false
               }
-            ]
+            }, 
+            "default-twiss": "default twiss"
           }, 
           "ALL first-turn": {
             "madx-range": {
@@ -62,30 +54,22 @@
               "first": "#s"
             }, 
             "twiss-initial-conditions": {
-              "deltap": 0.0, 
-              "name": "lhcb4-twiss", 
-              "centre": false, 
-              "chrom": false, 
-              "bety": 75.204871, 
-              "betx": 53.225011, 
-              "dpy": 3e-06, 
-              "dpx": -0.003062, 
-              "dx": 0.107789, 
-              "dy": 4.6e-05, 
-              "alfy": -1.216716, 
-              "alfx": 1.728909, 
-              "closed-orbit": false
-            }, 
-            "corrector-invert-filters": [
-              {
-                "regex": "(?i)^MCBX.*", 
-                "plane": "H"
-              }, 
-              {
-                "regex": "(?i)^MCBX.*", 
-                "plane": "V"
+              "lhcb4-twiss": {
+                "deltap": 0.0, 
+                "centre": false, 
+                "chrom": false, 
+                "bety": 75.204871, 
+                "betx": 53.225011, 
+                "dpy": 3e-06, 
+                "dpx": -0.003062, 
+                "dx": 0.107789, 
+                "dy": 4.6e-05, 
+                "alfy": -1.216716, 
+                "alfx": 1.728909, 
+                "closed-orbit": false
               }
-            ]
+            }, 
+            "default-twiss": "lhcb4-twiss"
           }, 
           "Inj. Sectors 8-5": {
             "madx-range": {
@@ -93,30 +77,22 @@
               "first": "LHCINJ.B2"
             }, 
             "twiss-initial-conditions": {
-              "deltap": 0.0, 
-              "name": "lhcb4-twiss", 
-              "centre": false, 
-              "chrom": false, 
-              "bety": 75.204871, 
-              "betx": 53.225011, 
-              "dpy": 3e-06, 
-              "dpx": -0.003062, 
-              "dx": 0.107789, 
-              "dy": 4.6e-05, 
-              "alfy": -1.216716, 
-              "alfx": 1.728909, 
-              "closed-orbit": false
-            }, 
-            "corrector-invert-filters": [
-              {
-                "regex": "(?i)^MCBX.*", 
-                "plane": "H"
-              }, 
-              {
-                "regex": "(?i)^MCBX.*", 
-                "plane": "V"
+              "lhcb4-twiss": {
+                "deltap": 0.0, 
+                "centre": false, 
+                "chrom": false, 
+                "bety": 75.204871, 
+                "betx": 53.225011, 
+                "dpy": 3e-06, 
+                "dpx": -0.003062, 
+                "dx": 0.107789, 
+                "dy": 4.6e-05, 
+                "alfy": -1.216716, 
+                "alfx": 1.728909, 
+                "closed-orbit": false
               }
-            ]
+            }, 
+            "default-twiss": "lhcb4-twiss"
           }, 
           "Inj. Sectors 8-4": {
             "madx-range": {
@@ -124,30 +100,22 @@
               "first": "LHCINJ.B2"
             }, 
             "twiss-initial-conditions": {
-              "deltap": 0.0, 
-              "name": "lhcb4-twiss", 
-              "centre": false, 
-              "chrom": false, 
-              "bety": 75.204871, 
-              "betx": 53.225011, 
-              "dpy": 3e-06, 
-              "dpx": -0.003062, 
-              "dx": 0.107789, 
-              "dy": 4.6e-05, 
-              "alfy": -1.216716, 
-              "alfx": 1.728909, 
-              "closed-orbit": false
-            }, 
-            "corrector-invert-filters": [
-              {
-                "regex": "(?i)^MCBX.*", 
-                "plane": "H"
-              }, 
-              {
-                "regex": "(?i)^MCBX.*", 
-                "plane": "V"
+              "lhcb4-twiss": {
+                "deltap": 0.0, 
+                "centre": false, 
+                "chrom": false, 
+                "bety": 75.204871, 
+                "betx": 53.225011, 
+                "dpy": 3e-06, 
+                "dpx": -0.003062, 
+                "dx": 0.107789, 
+                "dy": 4.6e-05, 
+                "alfy": -1.216716, 
+                "alfx": 1.728909, 
+                "closed-orbit": false
               }
-            ]
+            }, 
+            "default-twiss": "lhcb4-twiss"
           }, 
           "Inj. Sectors 8-1": {
             "madx-range": {
@@ -155,30 +123,22 @@
               "first": "LHCINJ.B2"
             }, 
             "twiss-initial-conditions": {
-              "deltap": 0.0, 
-              "name": "lhcb4-twiss", 
-              "centre": false, 
-              "chrom": false, 
-              "bety": 75.204871, 
-              "betx": 53.225011, 
-              "dpy": 3e-06, 
-              "dpx": -0.003062, 
-              "dx": 0.107789, 
-              "dy": 4.6e-05, 
-              "alfy": -1.216716, 
-              "alfx": 1.728909, 
-              "closed-orbit": false
-            }, 
-            "corrector-invert-filters": [
-              {
-                "regex": "(?i)^MCBX.*", 
-                "plane": "H"
-              }, 
-              {
-                "regex": "(?i)^MCBX.*", 
-                "plane": "V"
+              "lhcb4-twiss": {
+                "deltap": 0.0, 
+                "centre": false, 
+                "chrom": false, 
+                "bety": 75.204871, 
+                "betx": 53.225011, 
+                "dpy": 3e-06, 
+                "dpx": -0.003062, 
+                "dx": 0.107789, 
+                "dy": 4.6e-05, 
+                "alfy": -1.216716, 
+                "alfx": 1.728909, 
+                "closed-orbit": false
               }
-            ]
+            }, 
+            "default-twiss": "lhcb4-twiss"
           }, 
           "Inj. Sector 8-7": {
             "madx-range": {
@@ -186,30 +146,22 @@
               "first": "LHCINJ.B2"
             }, 
             "twiss-initial-conditions": {
-              "deltap": 0.0, 
-              "name": "lhcb4-twiss", 
-              "centre": false, 
-              "chrom": false, 
-              "bety": 75.204871, 
-              "betx": 53.225011, 
-              "dpy": 3e-06, 
-              "dpx": -0.003062, 
-              "dx": 0.107789, 
-              "dy": 4.6e-05, 
-              "alfy": -1.216716, 
-              "alfx": 1.728909, 
-              "closed-orbit": false
-            }, 
-            "corrector-invert-filters": [
-              {
-                "regex": "(?i)^MCBX.*", 
-                "plane": "H"
-              }, 
-              {
-                "regex": "(?i)^MCBX.*", 
-                "plane": "V"
+              "lhcb4-twiss": {
+                "deltap": 0.0, 
+                "centre": false, 
+                "chrom": false, 
+                "bety": 75.204871, 
+                "betx": 53.225011, 
+                "dpy": 3e-06, 
+                "dpx": -0.003062, 
+                "dx": 0.107789, 
+                "dy": 4.6e-05, 
+                "alfy": -1.216716, 
+                "alfx": 1.728909, 
+                "closed-orbit": false
               }
-            ]
+            }, 
+            "default-twiss": "lhcb4-twiss"
           }, 
           "Inj. Sector 8-6": {
             "madx-range": {
@@ -217,30 +169,22 @@
               "first": "LHCINJ.B2"
             }, 
             "twiss-initial-conditions": {
-              "deltap": 0.0, 
-              "name": "lhcb4-twiss", 
-              "centre": false, 
-              "chrom": false, 
-              "bety": 75.204871, 
-              "betx": 53.225011, 
-              "dpy": 3e-06, 
-              "dpx": -0.003062, 
-              "dx": 0.107789, 
-              "dy": 4.6e-05, 
-              "alfy": -1.216716, 
-              "alfx": 1.728909, 
-              "closed-orbit": false
-            }, 
-            "corrector-invert-filters": [
-              {
-                "regex": "(?i)^MCBX.*", 
-                "plane": "H"
-              }, 
-              {
-                "regex": "(?i)^MCBX.*", 
-                "plane": "V"
+              "lhcb4-twiss": {
+                "deltap": 0.0, 
+                "centre": false, 
+                "chrom": false, 
+                "bety": 75.204871, 
+                "betx": 53.225011, 
+                "dpy": 3e-06, 
+                "dpx": -0.003062, 
+                "dx": 0.107789, 
+                "dy": 4.6e-05, 
+                "alfy": -1.216716, 
+                "alfx": 1.728909, 
+                "closed-orbit": false
               }
-            ]
+            }, 
+            "default-twiss": "lhcb4-twiss"
           }
         }, 
         "beam": "lhc-beam4_lhcb2", 

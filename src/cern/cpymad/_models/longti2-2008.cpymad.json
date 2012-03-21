@@ -44,21 +44,22 @@
               "first": "#s"
             }, 
             "twiss-initial-conditions": {
-              "deltap": 0.0, 
-              "name": "ti2-twiss", 
-              "centre": false, 
-              "alfy": -3.422196857, 
-              "bety": 123.9323528, 
-              "betx": 17.02748544, 
-              "dpy": 0.0, 
-              "dpx": 0.01307653962, 
-              "dx": -0.3408152943, 
-              "dy": 0.0, 
-              "chrom": true, 
-              "alfx": 0.4583574683, 
-              "closed-orbit": false
+              "ti2-twiss": {
+                "deltap": 0.0, 
+                "centre": false, 
+                "alfy": -3.422196857, 
+                "bety": 123.9323528, 
+                "betx": 17.02748544, 
+                "dpy": 0.0, 
+                "dpx": 0.01307653962, 
+                "dx": -0.3408152943, 
+                "dy": 0.0, 
+                "chrom": true, 
+                "alfx": 0.4583574683, 
+                "closed-orbit": false
+              }
             }, 
-            "name": "ALL"
+            "default-twiss": "ti2-twiss"
           }
         }, 
         "beam": "longti2 (2008)_ti2lhcb1", 
