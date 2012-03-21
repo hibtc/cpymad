@@ -112,5 +112,9 @@ def _read_table(fstream,names):
             table[n.lower()]=numpy.array(table[n.lower()],dtype=int)
         elif typ=='%s':
             for k in xrange(len(table[n.lower()])):
-                table[n.lower()][k]=table[n.lower()][k].split('"')[1]
+                tlst=table[n.lower()][k].split('"')
+                if len(tlst)==1:
+                    table[n.lower()][k]=tlst[0]
+                else:
+                    table[n.lower()][k]=tlst[1]
     return table
