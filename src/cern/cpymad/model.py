@@ -85,15 +85,40 @@ class model(abc.model.PyMadModel):
     @property
     def mdef(self):
         return self._mdef.copy()
+        
     
-    def set_sequence(self,sequence=''):
-        if sequence:
-            if sequence in self._mdef['sequences']:
-                self._active['sequence']=sequence
+    def set_sequence(self,sequence='',madrange=''):
+        '''
+        Set a new active sequence...
+        '''
+        if not sequence:
+            if not self._active['sequence']:
+                self._active['sequence']=self._mdef['default-sequence']
+            sequence=self._active['sequence']
+        if sequence in self._mdef['sequences']:
+            self._active['sequence']=sequence
+            if madrange:
+                self.set_range(madrange)
             else:
-                raise KeyError("You tried to activate a non-existing sequence")
-        elif not self._active['sequence']:
-            self._active['sequence']=self._mdef['default-sequence']
+                self.set_range(self._mdef['sequences'][sequence]['default-range'])
+        else:
+            raise KeyError("You tried to activate a non-existing sequence")
+
+    def set_range(self,madrange=''):
+        '''
+        Sets the active range to madrange. Must be defined in the
+        currently active sequence...
+        If madrange is empty, sets the range to default-range unless
+        another range is already set.
+        '''
+        seqdict=self._mdef['sequences'][self._active['sequence']]
+        if madrange:
+            if madrange not in seqdict['ranges']:
+                raise KeyError("%s is not a valid range name, available ranges: '%s'" % (madrange,"' '".join(seq['ranges'].keys())))
+            self._active['range']=madrange
+        else:
+            if not self._active['range']:
+                self._active['range']=seqdict['default-range']
         
     def _setup_initial(self,sequence,optics):
         '''
@@ -291,8 +316,11 @@ class model(abc.model.PyMadModel):
         Returns the dictionary for the twiss initial conditions.
         If name is not defined, using default-twiss
         '''
-        rangedict=_get_range_dict(sequence=sequence,madrange=madrange)
+        rangedict=self._get_range_dict(sequence=sequence,madrange=madrange)
+        madrange=self._active['range']
         if name:
+            if name not in rangedict['twiss-initial-conditions']:
+                raise ValueError('twiss initial conditions with name '+name+' not found in range '+madrange)
             return rangedict['twiss-initial-conditions'][name]
         else:
             return rangedict['twiss-initial-conditions'][rangedict['default-twiss']]
@@ -321,18 +349,19 @@ class model(abc.model.PyMadModel):
          :param bool use: Call use before twiss.
         '''
         from cern.pymad.domain import TfsTable, TfsSummary
-        self.set_sequence(sequence)
-        sequence=self._active['sequence']
         
+        # set sequence/range...
+        if madrange:
+            self.set_sequence(sequence,madrange)
+        else:
+            self.set_sequence(sequence)
+        sequence=self._active['sequence']
+        _madrange=self._active['range']
+
         if self._apercalled[sequence]:
             raise ValueError("BUG in Mad-X: Cannot call twiss after aperture..")
         
         seqdict=self._mdef['sequences'][sequence]
-        
-        if madrange=='':
-            _madrange=seqdict['ranges'][seqdict['default-range']]
-        else:
-            _madrange=madrange
         rangedict=seqdict['ranges'][_madrange]
         
         args={'sequence':sequence,'columns':columns,'pattern':pattern,'fname':fname,'use':use}
@@ -463,16 +492,12 @@ class model(abc.model.PyMadModel):
             sequence=self._active['sequence']
         elif sequence not in self._mdef['sequences']:
             raise ValueError("%s is not a valid sequence name, available sequences: '%s'" % (sequence,"' '".join(self._mdef['sequences'].keys())))
-        
+
         seqdict=self._mdef['sequences'][sequence]
-        
-        if not madrange:
-            madrange=seqdict['ranges'][seqdict['default-range']]
-        elif madrange not in seqdict['ranges']:
-            raise ValueError("%s is not a valid range name, available ranges: '%s'" % (madrange,"' '".join(seq['ranges'].keys())))
-            
-        return seqdict['ranges'][madrange]
-        
+        if madrange:
+            self.set_range(madrange)
+        return seqdict['ranges'][self._active['range']]
+
     def _cmd(self,command):
         self._send(('command',command))
         return self._recv()
@@ -508,7 +533,22 @@ def _get_file_content(modelname,filename):
         import pkg_resources
         stream = pkg_resources.resource_string(__name__, filename)
     return stream
-    
+
+def save_model(model_def,filename):
+    '''
+    Saves the model definition defined by the dictionary model_def
+    to file filename. The file is in json format. We do not check
+    that the model is valid in any way.
+
+    It is recommended that you rather use the modeldefs.model.save_model,
+    once it is ready.
+    '''
+    if type(model_def)!=dict:
+        raise TypeError('model_def must be a dictionary!')
+    if type(filename)!=type(''):
+        raise TypeError('filename must be a string!')
+    file(filename,'w').write(json.dumps(model_def,indent=2))
+
 class _modelProcess(multiprocessing.Process):
     def __init__(self,sender,receiver,model,history='',recursive_history=False):
         self.sender=sender
