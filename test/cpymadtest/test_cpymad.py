@@ -22,7 +22,7 @@ import unittest,os
 class TestCpymad(unittest.TestCase):
     
     def setUp(self):
-        self.model=cpymad.model('lhc',histfile='hist_cpymad.madx')
+        self.model=cpymad.model('LHC (LSA)',histfile='hist_cpymad.madx')
     
     # It's a bit surprising that this doesn't happen by itself.. Hmmm...
     def tearDown(self):
@@ -57,7 +57,7 @@ class TestCpymad(unittest.TestCase):
     
     def test_setBeam(self):
         self.model.list_beams()
-        b=self.model.get_beam('lhc_lhcb1')
+        b=self.model.get_beam('LHC (LSA)_lhcb1')
         self.assertTrue('energy' in b)
         b['energy']=7000
         self.model.set_beam(b)

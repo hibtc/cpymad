@@ -49,12 +49,12 @@
               "first": "#s"
             }, 
             "twiss-initial-conditions": {
-              "centre": false, 
-              "chrom": true, 
-              "name": "default-twiss", 
-              "closed-orbit": false
-            }, 
-            "name": "ALL"
+              "default-twiss": {
+                "centre": false, 
+                "chrom": true, 
+                "closed-orbit": false
+              }
+            }
           }
         }, 
         "default-range": "ALL", 

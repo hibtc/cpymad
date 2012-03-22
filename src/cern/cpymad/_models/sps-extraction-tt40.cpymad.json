@@ -34,27 +34,28 @@
               "first": "#s"
             }, 
             "twiss-initial-conditions": {
-              "deltap": 0.0, 
-              "ddy": 0.0, 
-              "ddx": -5.866518207, 
-              "ddpx": -0.1013887, 
-              "name": "ti2-twiss", 
-              "centre": false, 
-              "alfy": 0.663770153, 
-              "bety": 23.37564376, 
-              "betx": 94.19052473, 
-              "muy": 14.77184545, 
-              "mux": 14.75568751, 
-              "dpy": 0.0, 
-              "dpx": 0.062160128, 
-              "dx": 3.406882672, 
-              "dy": 0.0, 
-              "closed-orbit": false, 
-              "chrom": true, 
-              "alfx": -2.188943304, 
-              "ddpy": 0.0
+              "ti2-twiss": {
+                "deltap": 0.0, 
+                "ddy": 0.0, 
+                "ddx": -5.866518207, 
+                "ddpx": -0.1013887, 
+                "ddpy": 0.0, 
+                "centre": false, 
+                "alfy": 0.663770153, 
+                "bety": 23.37564376, 
+                "betx": 94.19052473, 
+                "muy": 14.77184545, 
+                "mux": 14.75568751, 
+                "dpy": 0.0, 
+                "dpx": 0.062160128, 
+                "dx": 3.406882672, 
+                "dy": 0.0, 
+                "chrom": true, 
+                "alfx": -2.188943304, 
+                "closed-orbit": false
+              }
             }, 
-            "name": "ALL"
+            "default-twiss": "ti2-twiss"
           }
         }, 
         "beam": "SPS-extraction (TT40)_spsextra", 

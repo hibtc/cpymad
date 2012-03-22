@@ -40,39 +40,22 @@
               "first": "#s"
             }, 
             "twiss-initial-conditions": {
-              "deltap": 0.0, 
-              "name": "ti2-twiss", 
-              "centre": false, 
-              "alfy": -3.422196857, 
-              "bety": 123.9323528, 
-              "betx": 17.02748544, 
-              "dpy": 0.0, 
-              "dpx": 0.01307653962, 
-              "dx": -0.3408152943, 
-              "dy": 0.0, 
-              "chrom": true, 
-              "alfx": 0.4583574683, 
-              "closed-orbit": false
-            }, 
-            "corrector-invert-filters": {
-              "regex-filter": [
-                {
-                  "regex": "(?i)^MDL.*", 
-                  "plane": "H"
-                }, 
-                {
-                  "regex": "(?i)^MDL.*", 
-                  "plane": "V"
-                }
-              ]
-            }, 
-            "name": "ALL", 
-            "post-use-files": {
-              "call-file": {
-                "path": "set-errors-b2-b3.madx", 
-                "location": "RESOURCE"
+              "ti2-twiss": {
+                "deltap": 0.0, 
+                "centre": false, 
+                "alfy": -3.422196857, 
+                "bety": 123.9323528, 
+                "betx": 17.02748544, 
+                "dpy": 0.0, 
+                "dpx": 0.01307653962, 
+                "dx": -0.3408152943, 
+                "dy": 0.0, 
+                "chrom": true, 
+                "alfx": 0.4583574683, 
+                "closed-orbit": false
               }
-            }
+            }, 
+            "default-twiss": "ti2-twiss"
           }
         }, 
         "beam": "TI2_ti2", 
