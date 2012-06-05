@@ -101,6 +101,9 @@ def _read_table(fstream,names):
     while(l):
         if l.strip()[0]=='$':
             types=l.split()[1:]
+        elif l.strip()[0]=='#':
+            l=fstream.readline()
+            continue
         else:
             for n,el in zip(names,l.split()):
                 table[n.lower()].append(el)
