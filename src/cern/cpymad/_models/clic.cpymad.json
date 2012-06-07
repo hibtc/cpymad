@@ -49,12 +49,15 @@
               "first": "#s"
             },
             "twiss-initial-conditions": {
-            "bety": "64.450775313773065",
-            "betx": "18.382571324661523", 
-            "alfy": "-1.9393733561889044", 
-            "alfx": "0.59971622633721455", 
-            "closed-orbit": false
-            }
+              "default": {
+                "bety": "64.450775313773065",
+                "betx": "18.382571324661523", 
+                "alfy": "-1.9393733561889044", 
+                "alfx": "0.59971622633721455", 
+                "closed-orbit": false
+              }
+            },
+            "default-twiss": "default"
           }
         },
         "beam": "clic_DIAGCOLL",
@@ -67,13 +70,16 @@
               "last": "#e", 
               "first": "#s"
             },
-        "twiss-initial-conditions": {
-          "bety": "64.450775313773065",
-          "betx": "18.382571324661523", 
-          "alfy": "-1.9393733561889044", 
-          "alfx": "0.59971622633721455", 
-          "closed-orbit": false
-        }
+            "twiss-initial-conditions": {
+              "default": {
+                "bety": "64.450775313773065",
+                "betx": "18.382571324661523", 
+                "alfy": "-1.9393733561889044", 
+                "alfx": "0.59971622633721455", 
+                "closed-orbit": false
+              }
+            },
+            "default-twiss": "default"
           }
         },
         "beam": "clic_NEWBDS",

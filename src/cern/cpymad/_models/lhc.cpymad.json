@@ -80,11 +80,14 @@
               "first": "#s"
             },
             "twiss-initial-conditions": {
+              "default": {
               "centre": false,
               "chrom": true,
               "name": "default-twiss",
               "closed-orbit": false
-            }
+              }
+            },
+            "default-twiss": "default"
           },
           "ALL first turn": {
             "madx-range": {
@@ -92,6 +95,7 @@
               "first": "#s"
             },
             "twiss-initial-conditions": {
+              "default": {
               "deltap": 0.0,
               "name": "lhcb1-twiss",
               "centre": false,
@@ -106,6 +110,8 @@
               "alfx": 2.128241,
               "closed-orbit": false
             }
+            },
+            "default-twiss": "default"
           },
           "Inj. Sector 2-5": {
             "madx-range": {
@@ -113,6 +119,7 @@
               "first": "LHCINJ.B1"
             },
             "twiss-initial-conditions": {
+              "default": {
               "deltap": 0.0,
               "name": "lhcb1-twiss",
               "centre": false,
@@ -127,6 +134,8 @@
               "alfx": 2.128241,
               "closed-orbit": false
             }
+            },
+            "default-twiss": "default"
           },
           "ir1r":{
                "madx-range": {"first": "IP1", "last": "E.DS.R1.B1"},
