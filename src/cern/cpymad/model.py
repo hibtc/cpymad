@@ -40,7 +40,7 @@ class model(abc.model.PyMadModel):
     this has the advantage that you can run separate models which do not affect each other.
      
     :param string model: Name of model to load.
-    :param string optics: Name of optics to load
+    :param string optics: Name of optics to load, string or list of strings.
     :param string histfile: Name of file which will contain all Mad-X commands called.
     '''
     def __init__(self,model,sequence='',optics='',histfile='',recursive_history=False):
