@@ -134,8 +134,11 @@ class model(abc.model.PyMadModel):
             self._init_sequence(seq)
         # then we set the default one..
         self.set_sequence(sequence)
-            
-        self.set_optic(optics)
+        if type(optics)==type(''):
+            self.set_optic(optics)
+        elif type(optics)==type([]):
+            for o in optics:
+                self.set_optic(o)
         # To keep track of whether or not certain things are already called..
         self._apercalled={}
         self._twisscalled={}
