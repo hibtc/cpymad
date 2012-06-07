@@ -1,0 +1,3692 @@
+{"jmad-model-definition": {
+  "@name": "LHC (LSA)",
+  "optics": [
+    {
+      "@name": "A1100C1100A1000L1000_INJ_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A1100C1100A1000L1000_FLAT_INJ",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A1100C1100A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A1100C1100A1000_0.00951L1000_0.00951_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00951_beta10.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00951_beta10.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A1100C1100A982_0.00941L1000_0.00951_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00951_beta10.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00941_beta9.82m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A1100C1100A950_0.00928L950_0.00949_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00949_beta9.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00928_beta9.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A900C900A900_0.00915L900_0.00949_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00949_beta9.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00915_beta9.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A900C900A850_0.00907L850_0.00945_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00945_beta8.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00907_beta8.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A900C900A800_0.00901L800_0.00942_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00942_beta8.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00901_beta8.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A900C900A750_0.00897L750_0.00932_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00932_beta7.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00897_beta7.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A700C700A700_0.00893L700_0.00923_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00923_beta7.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00893_beta7.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A700C700A650_0.00891L650_0.00915_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00915_beta6.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00891_beta6.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A700C700A600_0.00889L600_0.00909_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00909_beta6.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00889_beta6.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A700C700A550_0.00889L550_0.00904_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00904_beta5.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00889_beta5.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A500C500A500_0.00889L500_0.00900_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_5.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_5.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00900_beta5.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00889_beta5.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A500C500A450_0.00889L450_0.00896_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_5.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_5.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00896_beta4.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00889_beta4.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A400C400A400_0.00889L400_0.00893_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_4.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_4.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00893_beta4.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00889_beta4.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A400C400A400_0.00889L375_0.00888_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_4.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_4.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00888_beta3.75m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00889_beta4.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A350C350A350_0.00889L350_0.00882_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_3.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_3.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00882_beta3.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00889_beta3.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A350C350A350_0.00889L325_0.00878_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_3.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_3.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00878_beta3.25m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00889_beta3.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A350C350A300_0.00889L300_0.00875_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_3.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_3.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00889_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A250C250A250_0.00889L250_0.00872_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_2.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_2.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00872_beta2.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00889_beta2.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A200C200A200_0.00889L200_0.00872_FLAT",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_2.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_2.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00872_beta2.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR2/3.5TeV/special/ip2_0.00889_beta2.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A1100C1100A1000L1000_0.00951_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00951_beta10.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A1100C1100A1000L950_0.00949_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00949_beta9.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A900C900A1000L900_0.00949_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00949_beta9.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A900C900A1000L850_0.00945_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00945_beta8.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A900C900A1000L800_0.00942_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00942_beta8.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A900C900A1000L750_0.00932_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00932_beta7.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A700C700A1000L700_0.00923_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00923_beta7.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A700C700A1000L650_0.00915_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00915_beta6.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A700C700A1000L600_0.00909_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00909_beta6.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A700C700A1000L550_0.00904_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00904_beta5.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A500C500A1000L500_0.00900_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_5.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_5.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00900_beta5.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A400C400A1000L500_0.00900_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_4.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_4.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00900_beta5.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A350C350A1000L500_0.00900_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_3.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_3.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00900_beta5.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A300C300A1000L500_0.00900_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_3.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_3.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00900_beta5.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A250C250A1000L500_0.00900_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_2.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_2.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00900_beta5.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A200C200A1000L500_0.00900_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_2.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_2.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00900_beta5.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A150C150A1000L500_0.00900_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_1.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_1.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00900_beta5.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A110C110A1000L500_0.00900_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_1.10.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_1.10.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00900_beta5.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A80C80A1000L500_0.00900_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_0.80.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_0.80.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00900_beta5.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A65C65A1000L500_0.00900_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_0.65.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_0.65.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00900_beta5.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A55C55A1000L500_0.00900_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_0.55.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_0.55.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00900_beta5.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A500C500A1000L450_0.00896_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_5.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_5.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00896_beta4.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A400C400A1000L400_0.00893_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_4.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_4.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00893_beta4.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A400C400A1000L375_0.00888_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_4.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_4.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00888_beta3.75m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A350C350A1000L350_0.00882_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_3.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_3.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00882_beta3.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A350C350A1000L325_0.00878_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_3.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_3.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00878_beta3.25m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A350C350A1000L300_0.00875_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_3.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_3.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A300C300A1000L300_0.00875_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_3.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_3.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A250C250A1000L300_0.00875_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_2.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_2.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A200C200A1000L300_0.00875_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_2.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_2.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A160C160A1000L300_0.00875_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_1.60.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_1.60.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A150C150A1000L300_0.00875_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_1.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_1.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A400C400A1000L350_0.00882_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_4.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_4.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00882_beta3.50m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A7500C7500A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP1_75.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP5_75.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A6700C6700A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP1_67.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP5_67.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A6000C6000A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP1_60.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP5_60.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A5400C5400A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP1_54.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP5_54.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A5100C5100A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP1_51.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP5_51.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A4600C4600A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP1_46.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP5_46.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A4300C4300A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP1_43.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP5_43.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A4000C4000A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP1_40.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP5_40.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A3600C3600A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP1_36.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP5_36.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A3300C3300A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP1_33.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP5_33.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A3000C3000A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP1_30.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP5_30.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A2500C2500A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP1_25.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP5_25.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A2200C2200A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP1_22.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP5_22.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A1920C1920A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP1_19.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP5_19.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A1670C1670A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP1_16.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP5_16.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A1450C1450A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP1_14.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP5_14.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A1260C1260A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP1_12.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/un-squeeze-11-to-90m/IP5_12.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A9000C9000A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta11.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/IP5_beta90_2010.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "HiBeta/IP1_beta90.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "totem-matching-main-quads.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A55C55A1000L300_0.00875_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_0.55m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_0.55m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A60C60A1000L300_0.00875_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_0.60m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_0.60m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A65C65A1000L300_0.00875_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_0.65m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_0.65m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A70C70A1000L300_0.00875_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_0.70m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_0.70m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A80C80A1000L300_0.00875_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_0.80m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_0.80m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A90C90A1000L300_0.00875_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_0.90m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_0.90m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A100C100A1000L300_0.00875_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_1.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_1.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A110C110A1000L300_0.00875_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_1.10m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_1.10m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A120C120A1000L300_0.00875_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_1.20m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_1.20m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A130C130A1000L300_0.00875_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_1.30m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_1.30m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A140C140A1000L300_0.00875_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_1.40m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_1.40m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR8/3.5TeV/special/ip8_0.00875_beta3.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A150C150A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_1.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_1.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A160C160A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_1.60.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_1.60.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A200C200A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_2.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_2.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A250C250A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_2.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_2.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A300C300A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_3.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_3.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A350C350A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_3.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_3.50.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A400C400A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_4.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_4.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A500C500A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_5.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_5.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A700C700A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_7.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A900C900A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/IP1_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/IP5_beta_9.00.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A55C55A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_0.55m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_0.55m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A60C60A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_0.60m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_0.60m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A65C65A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_0.65m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_0.65m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A70C70A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_0.70m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_0.70m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A80C80A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_0.80m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_0.80m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A90C90A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_0.90m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_0.90m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A100C100A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_1.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_1.00m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A110C110A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_1.10m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_1.10m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A120C120A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_1.20m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_1.20m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A130C130A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_1.30m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_1.30m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    },
+    {
+      "@name": "A140C140A1000L1000_2011",
+      "@overlay": "false",
+      "init-files": [
+        {
+          "@path": "V6.5.inj_special.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR1/new_ip1_b2_squeeze/IP1_beta_1.40m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@path": "IR5/new_ip5_b2_squeeze/IP5_beta_1.40m.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "ac-dipole.str",
+          "@parse": "STRENGTHS"
+        },
+        {
+          "@location": "RESOURCE",
+          "@path": "match-chroma.madx"
+        }
+      ]
+    }
+  ],
+  "default-optic": {
+    "@ref-name": "A1100C1100A1000L1000_INJ_2011"
+  },
+  "sequences": [
+    {
+      "@name": "lhcb1",
+      "beam": {
+        "@particle": "PROTON",
+        "@energy": "450.0",
+        "@ex": "7.297671095555556E-9",
+        "@ey": "7.297671095555556E-9",
+        "@sigt": "0.077",
+        "@sige": "5.0E-4",
+        "@npart": "1.1E11",
+        "@bv": "PLUS",
+        "@sequence": "lhcb1"
+      },
+      "ranges": [
+        {
+          "@name": "ALL",
+          "madx-range": {
+            "@first": "#s",
+            "@last": "#e"
+          },
+          "twiss-initial-conditions": {
+            "@name": "lsa-definition",
+            "@chrom": "false",
+            "@closed-orbit": "false",
+            "@centre": "false"
+          }
+        },
+        {
+          "@name": "ALL first turn",
+          "madx-range": {
+            "@first": "#s",
+            "@last": "#e"
+          },
+          "twiss-initial-conditions": {
+            "@name": "lhcb1-twiss",
+            "@chrom": "false",
+            "@closed-orbit": "false",
+            "@centre": "false",
+            "@betx": "55.679041",
+            "@bety": "71.515031",
+            "@alfx": "2.128241",
+            "@alfy": "-1.679855",
+            "@dx": "-0.1103",
+            "@dy": "0.0",
+            "@dpx": "0.03792",
+            "@dpy": "0.0",
+            "@deltap": "0.0"
+          }
+        },
+        {
+          "@name": "Inj. Sector 2-3",
+          "madx-range": {
+            "@first": "LHCINJ.B1",
+            "@last": "TCLA.7R3.B1"
+          },
+          "twiss-initial-conditions": {
+            "@name": "lhcb1-twiss",
+            "@chrom": "false",
+            "@closed-orbit": "false",
+            "@centre": "false",
+            "@betx": "55.679041",
+            "@bety": "71.515031",
+            "@alfx": "2.128241",
+            "@alfy": "-1.679855",
+            "@dx": "-0.1103",
+            "@dy": "0.0",
+            "@dpx": "0.03792",
+            "@dpy": "0.0",
+            "@deltap": "0.0"
+          }
+        },
+        {
+          "@name": "Inj. Sector 2-5",
+          "madx-range": {
+            "@first": "LHCINJ.B1",
+            "@last": "IP5"
+          },
+          "twiss-initial-conditions": {
+            "@name": "lhcb1-twiss",
+            "@chrom": "false",
+            "@closed-orbit": "false",
+            "@centre": "false",
+            "@betx": "55.679041",
+            "@bety": "71.515031",
+            "@alfx": "2.128241",
+            "@alfy": "-1.679855",
+            "@dx": "-0.1103",
+            "@dy": "0.0",
+            "@dpx": "0.03792",
+            "@dpy": "0.0",
+            "@deltap": "0.0"
+          }
+        }
+      ],
+      "default-range": {
+        "@ref-name": "ALL"
+      }
+    },
+    {
+      "@name": "lhcb2",
+      "beam": {
+        "@particle": "PROTON",
+        "@energy": "450.0",
+        "@ex": "7.297671095555556E-9",
+        "@ey": "7.297671095555556E-9",
+        "@sigt": "0.077",
+        "@sige": "5.0E-4",
+        "@npart": "1.1E11",
+        "@bv": "MINUS",
+        "@sequence": "lhcb2"
+      },
+      "ranges": [
+        {
+          "@name": "ALL",
+          "madx-range": {
+            "@first": "#s",
+            "@last": "#e"
+          },
+          "twiss-initial-conditions": {
+            "@name": "lsa-definition",
+            "@chrom": "false",
+            "@closed-orbit": "false",
+            "@centre": "false"
+          },
+          "corrector-invert-filters": [
+            {
+              "@regex": "(?i)^MCBX.*",
+              "@plane": "H"
+            },
+            {
+              "@regex": "(?i)^MCBX.*",
+              "@plane": "V"
+            }
+          ]
+        },
+        {
+          "@name": "ALL first turn",
+          "madx-range": {
+            "@first": "#s",
+            "@last": "#e"
+          },
+          "twiss-initial-conditions": {
+            "@name": "lhcb2-twiss",
+            "@chrom": "false",
+            "@closed-orbit": "false",
+            "@centre": "false",
+            "@betx": "66.829881",
+            "@bety": "140.995239",
+            "@alfx": "-9.0E-6",
+            "@alfy": "-2.127759",
+            "@dx": "0.107789",
+            "@dy": "1.36E-4",
+            "@dpx": "0.003062",
+            "@dpy": "3.0E-6",
+            "@deltap": "0.0"
+          },
+          "corrector-invert-filters": [
+            {
+              "@regex": "(?i)^MCBX.*",
+              "@plane": "H"
+            },
+            {
+              "@regex": "(?i)^MCBX.*",
+              "@plane": "V"
+            }
+          ]
+        },
+        {
+          "@name": "Inj. Sectors 8-7",
+          "madx-range": {
+            "@first": "TCLA.A7L7.B2",
+            "@last": "LHCINJ.B2"
+          },
+          "twiss-initial-conditions": {
+            "@name": "lhcb2-twiss",
+            "@chrom": "false",
+            "@closed-orbit": "false",
+            "@centre": "false",
+            "@betx": "66.829881",
+            "@bety": "140.995239",
+            "@alfx": "-9.0E-6",
+            "@alfy": "-2.127759",
+            "@dx": "0.107789",
+            "@dy": "1.36E-4",
+            "@dpx": "0.003062",
+            "@dpy": "3.0E-6",
+            "@deltap": "0.0"
+          },
+          "corrector-invert-filters": [
+            {
+              "@regex": "(?i)^MCBX.*",
+              "@plane": "H"
+            },
+            {
+              "@regex": "(?i)^MCBX.*",
+              "@plane": "V"
+            }
+          ]
+        },
+        {
+          "@name": "Inj. Sectors 8-6",
+          "madx-range": {
+            "@first": "TCDQA.A4L6.B2",
+            "@last": "LHCINJ.B2"
+          },
+          "twiss-initial-conditions": {
+            "@name": "lhcb2-twiss",
+            "@chrom": "false",
+            "@closed-orbit": "false",
+            "@centre": "false",
+            "@betx": "66.829881",
+            "@bety": "140.995239",
+            "@alfx": "-9.0E-6",
+            "@alfy": "-2.127759",
+            "@dx": "0.107789",
+            "@dy": "1.36E-4",
+            "@dpx": "0.003062",
+            "@dpy": "3.0E-6",
+            "@deltap": "0.0"
+          },
+          "corrector-invert-filters": [
+            {
+              "@regex": "(?i)^MCBX.*",
+              "@plane": "H"
+            },
+            {
+              "@regex": "(?i)^MCBX.*",
+              "@plane": "V"
+            }
+          ]
+        },
+        {
+          "@name": "Inj. Sectors 8-5",
+          "madx-range": {
+            "@first": "IP5",
+            "@last": "LHCINJ.B2"
+          },
+          "twiss-initial-conditions": {
+            "@name": "lhcb2-twiss",
+            "@chrom": "false",
+            "@closed-orbit": "false",
+            "@centre": "false",
+            "@betx": "66.829881",
+            "@bety": "140.995239",
+            "@alfx": "-9.0E-6",
+            "@alfy": "-2.127759",
+            "@dx": "0.107789",
+            "@dy": "1.36E-4",
+            "@dpx": "0.003062",
+            "@dpy": "3.0E-6",
+            "@deltap": "0.0"
+          },
+          "corrector-invert-filters": [
+            {
+              "@regex": "(?i)^MCBX.*",
+              "@plane": "H"
+            },
+            {
+              "@regex": "(?i)^MCBX.*",
+              "@plane": "V"
+            }
+          ]
+        },
+        {
+          "@name": "Inj. Sectors 8-4",
+          "madx-range": {
+            "@first": "IP4",
+            "@last": "LHCINJ.B2"
+          },
+          "twiss-initial-conditions": {
+            "@name": "lhcb2-twiss",
+            "@chrom": "false",
+            "@closed-orbit": "false",
+            "@centre": "false",
+            "@betx": "66.829881",
+            "@bety": "140.995239",
+            "@alfx": "-9.0E-6",
+            "@alfy": "-2.127759",
+            "@dx": "0.107789",
+            "@dy": "1.36E-4",
+            "@dpx": "0.003062",
+            "@dpy": "3.0E-6",
+            "@deltap": "0.0"
+          },
+          "corrector-invert-filters": [
+            {
+              "@regex": "(?i)^MCBX.*",
+              "@plane": "H"
+            },
+            {
+              "@regex": "(?i)^MCBX.*",
+              "@plane": "V"
+            }
+          ]
+        },
+        {
+          "@name": "Inj. Sectors 8-1",
+          "madx-range": {
+            "@first": "IP1",
+            "@last": "LHCINJ.B2"
+          },
+          "twiss-initial-conditions": {
+            "@name": "lhcb2-twiss",
+            "@chrom": "false",
+            "@closed-orbit": "false",
+            "@centre": "false",
+            "@betx": "66.829881",
+            "@bety": "140.995239",
+            "@alfx": "-9.0E-6",
+            "@alfy": "-2.127759",
+            "@dx": "0.107789",
+            "@dy": "1.36E-4",
+            "@dpx": "0.003062",
+            "@dpy": "3.0E-6",
+            "@deltap": "0.0"
+          },
+          "corrector-invert-filters": [
+            {
+              "@regex": "(?i)^MCBX.*",
+              "@plane": "H"
+            },
+            {
+              "@regex": "(?i)^MCBX.*",
+              "@plane": "V"
+            }
+          ]
+        }
+      ],
+      "default-range": {
+        "@ref-name": "ALL"
+      }
+    }
+  ],
+  "default-sequence": {
+    "@ref-name": "lhcb1"
+  },
+  "init-files": [
+    {
+      "@location": "RESOURCE",
+      "@path": "init-constants.madx"
+    },
+    {
+      "@path": "V6.5.seq"
+    },
+    {
+      "@path": "install_additional_elements.madx"
+    },
+    {
+      "@location": "RESOURCE",
+      "@path": "install-ac-dipole.madx"
+    }
+  ],
+  "path-offsets": {
+    "repository-offset": "lhc/optics/V6.503",
+    "resource-offset": "lhc"
+  },
+  "svn-revision": "$Revision$"
+}}
