@@ -405,6 +405,24 @@
       }
     },
     "optics": {
+      "V6.5.inj_special.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS",
+            "path": "V6.5.inj_special.str"
+          }
+        ],
+        "overlay": true
+      },
+      "V6.5.coll_special.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS",
+            "path": "V6.5.coll_special.str"
+          }
+        ],
+        "overlay": true
+      },
       "IR1/new_ip1_b2_squeeze/IP1_beta_0.55m.str": {
         "init-files": [
           {
