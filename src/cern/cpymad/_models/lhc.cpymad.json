@@ -621,6 +621,69 @@
         ],
         "overlay": true
       },
+      "IR2/3.5TeV/ip2_0.00889_beta0.50m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS",
+            "path": "IR2/3.5TeV/ip2_0.00889_beta0.50m.str"
+          }
+        ],
+        "overlay": true
+      },
+      "IR2/3.5TeV/ip2_0.00889_beta1.00m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS",
+            "path": "IR2/3.5TeV/ip2_0.00889_beta1.00m.str"
+          }
+        ],
+        "overlay": true
+      },
+      "IR2/3.5TeV/ip2_0.00889_beta3.00m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS",
+            "path": "IR2/3.5TeV/ip2_0.00889_beta3.00m.str"
+          }
+        ],
+        "overlay": true
+      },
+      "IR2/3.5TeV/ip2_0.00889_beta5.00m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS",
+            "path": "IR2/3.5TeV/ip2_0.00889_beta5.00m.str"
+          }
+        ],
+        "overlay": true
+      },
+      "IR2/3.5TeV/ip2_0.00951_beta10.00m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS",
+            "path": "IR2/3.5TeV/ip2_0.00951_beta10.00m.str"
+          }
+        ],
+        "overlay": true
+      },
+      "IR8/3.5TeV/ip8_0.00875_beta3.00m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS",
+            "path": "IR8/3.5TeV/ip8_0.00875_beta3.00m.str"
+          }
+        ],
+        "overlay": true
+      },
+      "IR8/3.5TeV/ip8_0.00951_beta10.00m.str": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS",
+            "path": "IR8/3.5TeV/ip8_0.00951_beta10.00m.str"
+          }
+        ],
+        "overlay": true
+      },
       "IR8/ip8_0.00860_beta_6.0m.str": {
         "init-files": [
           {
