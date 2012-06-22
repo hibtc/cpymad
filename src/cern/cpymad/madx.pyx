@@ -37,6 +37,7 @@ cdef extern from "madX/mad_api.h":
 import os,sys
 from pymad.io import tfs,tfsDict
 import cern.pymad.globals
+import _madx_tools
 
 _madstarted=False
 
@@ -111,7 +112,7 @@ class madx:
          
          :param string cmd: command
         '''
-        cmd=self._fixcmd(cmd)
+        cmd=_madx_tools._fixcmd(cmd)
         if type(cmd)==int: # means we should not execute command
             return cmd
         if type(cmd)==list:
@@ -301,7 +302,7 @@ class madx:
         
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')
-    
+
     # turn on/off verbose outupt..
     def verbose(self,switch):
         if switch:
@@ -309,18 +310,6 @@ class madx:
         else:
             self.command("option, -echo, -warn, -info")
 
-    def _fixcmd(self,cmd):
-        if type(cmd)!=str and type(cmd)!=unicode:
-            raise TypeError("ERROR: input must be a string, not "+str(type(cmd)))
-        if len(cmd.strip())==0:
-            return 0
-        if cmd.strip()[-1]!=';':
-            cmd+=';'
-        # for very long commands (probably parsed in from a file)
-        # we split and only run one line at the time.
-        if len(cmd)>10000:
-            cmd=cmd.split('\n')
-        return cmd
     def _writeHist(self,command):
         # this still brakes for "multiline commands"...
         if self._rechist and command.split(',')[0].strip().lower()=='call':
