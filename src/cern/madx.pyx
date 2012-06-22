@@ -26,17 +26,26 @@ Main module to interface with Mad-X library.
 
 '''
 
-from cern.cpymad.madx_structures cimport sequence_list, name_list
+from cern.libmadx.madx_structures cimport sequence_list, name_list
 cdef extern from "madX/mad_api.h":
-    void madextern_start()
-    void madextern_end()
-    void madextern_input(char*)
     sequence_list *madextern_get_sequence_list()
     #table *getTable()
+cdef extern from "madX/mad_core.h":
+    void madx_start()
+    void madx_finish()
+
+cdef extern from "madX/mad_str.h":
+    void stolower_nq(char*)
+cdef extern from "madX/mad_eval.h":
+    void pro_input(char*)
+
+cdef madx_input(char* cmd):
+    stolower_nq(cmd)
+    pro_input(cmd)
 
 import os,sys
 import cern.pymad.globals
-import _madx_tools
+from cern.libmadx import _madx_tools
 
 _madstarted=False
 
@@ -58,7 +67,7 @@ class madx:
         '''
         global _madstarted
         if not _madstarted:
-            madextern_start()
+            madx_start()
             _madstarted=True
         if histfile:
             self._hist=True
@@ -81,14 +90,14 @@ class madx:
     def __del__(self):
         '''
          Closes history file
-         madextern_end should
+         madx_finish should
          not be called since
          other objects might still be
          running..
         '''
         if self._rechist:
             self._hfile.close()
-        #madextern_end()
+        #madx_finish()
     
     # give lowercase version of command here..
     def _checkCommand(self,cmd):
@@ -127,7 +136,7 @@ class madx:
             else:
                 self._writeHist(cmd+'\n')
         if self._checkCommand(cmd.lower()):
-            madextern_input(cmd)
+            madx_input(cmd)
         return 0
     
     def help(self,cmd=''):

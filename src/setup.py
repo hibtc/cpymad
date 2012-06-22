@@ -35,8 +35,9 @@ for arg in sys.argv:
         sys.argv.remove(arg)
 
 
-sourcefiles=[["cern/cpymad/madx.pyx"]]
+sourcefiles=[["cern/madx.pyx"]]
 pythonsrc=["cern",
+           "cern.libmadx",
            "cern.cpymad",
            "cern.cpymad._couch",
            "cern.jpymad",

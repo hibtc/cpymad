@@ -2,7 +2,7 @@
 # This file contains tool functions for madx.pyx
 #
 
-from pymad.io import tfs,tfsDict
+from cern.pymad.io import tfs,tfsDict
 
 
 def _fixcmd(cmd):
