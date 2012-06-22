@@ -35,7 +35,6 @@ cdef extern from "madX/mad_api.h":
     #table *getTable()
 
 import os,sys
-from pymad.io import tfs,tfsDict
 import cern.pymad.globals
 import _madx_tools
 
@@ -209,7 +208,7 @@ class madx:
         self.command('set, format="12.6F";')
         if use:
             self.use(sequence)
-        _tmpcmd='twiss, sequence='+sequence+','+_add_range(madrange)+' file="'+tmpfile+'"'
+        _tmpcmd='twiss, sequence='+sequence+','+_madx_tools._add_range(madrange)+' file="'+tmpfile+'"'
         for i_var,i_val in {'betx':betx,'bety':bety,'alfx':alfx,'alfy':alfy}.items():
             if i_val!=None:
                 _tmpcmd+=','+i_var+'='+str(i_val)
@@ -221,7 +220,7 @@ class madx:
                     else:
                         _tmpcmd+=','+i_var+'='+str(i_val)
         self.command(_tmpcmd+';')
-        tab,param=_get_dict(tmpfile,retdict)
+        tab,param=_madx_tools._get_dict(tmpfile,retdict)
         if not fname:
             os.remove(tmpfile)
         return tab,param
@@ -256,8 +255,8 @@ class madx:
         self.command('set, format="12.6F";')
         if use:
             self.use(sequence)
-        self.command('survey,'+_add_range(madrange)+' file="'+tmpfile+'";')
-        tab,param=_get_dict(tmpfile,retdict)
+        self.command('survey,'+_madx_tools._add_range(madrange)+' file="'+tmpfile+'";')
+        tab,param=_madx_tools._get_dict(tmpfile,retdict)
         if not fname:
             os.remove(tmpfile)
         return tab,param
@@ -294,8 +293,8 @@ class madx:
         if use:
             print "Warning, use before aperture is known to cause problems"
             self.use(sequence) # this seems to cause a bug?
-        self.command('aperture,'+_add_range(madrange)+_add_offsets(offsets)+'file="'+tmpfile+'";')
-        tab,param=_get_dict(tmpfile,retdict)
+        self.command('aperture,'+_madx_tools._add_range(madrange)+_madx_tools._add_offsets(offsets)+'file="'+tmpfile+'";')
+        tab,param=_madx_tools._get_dict(tmpfile,retdict)
         if not fname:
             os.remove(tmpfile)
         return tab,param
@@ -341,29 +340,3 @@ class madx:
         return ret
         #print "Currently number of sequenses available:",seqs.curr
         #print "Name of list:",seqs.name
-
-def _get_dict(tmpfile,retdict):
-    '''
-     Returns a dictionary from the temporary file.
-    '''
-    if retdict:
-        return tfsDict(tmpfile)
-    return tfs(tmpfile)
-
-def _add_range(madrange):
-    if madrange:
-        if type(madrange)==str:
-            return 'range='+madrange+','
-        elif type(madrange)==list:
-            return 'range='+madrange[0]+'/'+madrange[1]+','
-        elif type(madrange)==dict:
-            return 'range='+madrange['first']+'/'+madrange['last']+','
-        else:
-            raise TypeError("Wrong range type/format")
-    return ''
-
-def _add_offsets(offsets):
-    if offsets:
-        return 'offsetelem="'+offsets+'",'
-    return ''
-
