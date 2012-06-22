@@ -302,18 +302,6 @@ class madx:
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')
     
-    # I think this is deprecated..
-    def list_of_models(self):
-        global _loaded_models
-        return _loaded_models
-    
-    # I think this is deprecated..
-    def append_model(self,model_name):
-        global _loaded_models
-        if model_name in _loaded_models:
-            raise ValueError("You cannot load the same module twice!")
-        _loaded_models.append(model_name)
-    
     # turn on/off verbose outupt..
     def verbose(self,switch):
         if switch:
