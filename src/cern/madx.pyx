@@ -26,7 +26,8 @@ Main module to interface with Mad-X library.
 
 '''
 
-from cern.libmadx.madx_structures cimport sequence_list, name_list
+from cern.libmadx.madx_structures cimport sequence_list, name_list,column_info
+
 cdef extern from "madX/mad_api.h":
     sequence_list *madextern_get_sequence_list()
     #table *getTable()
@@ -205,19 +206,13 @@ class madx:
             :param dict twiss_init: dictionary of twiss initialization variables
             :param bool use: Call use before aperture.
         '''
-        if fname:
-            tmpfile=fname
-        else:
-            tmpfile='twiss.temp.tfs'
-            i=0
-            while os.path.isfile(tmpfile):
-                tmpfile='twiss.'+str(i)+'.temp.tfs'
-                i+=1
         self.select('twiss',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
         if use:
             self.use(sequence)
-        _tmpcmd='twiss, sequence='+sequence+','+_madx_tools._add_range(madrange)+' file="'+tmpfile+'"'
+        _tmpcmd='twiss, sequence='+sequence+','+_madx_tools._add_range(madrange)
+        if fname:
+            _tmpcmd+=', file="'+fname+'"'
         for i_var,i_val in {'betx':betx,'bety':bety,'alfx':alfx,'alfy':alfy}.items():
             if i_val!=None:
                 _tmpcmd+=','+i_var+'='+str(i_val)
@@ -229,10 +224,8 @@ class madx:
                     else:
                         _tmpcmd+=','+i_var+'='+str(i_val)
         self.command(_tmpcmd+';')
-        tab,param=_madx_tools._get_dict(tmpfile,retdict)
-        if not fname:
-            os.remove(tmpfile)
-        return tab,param
+        tab=_get_dict_from_mem('twiss',columns,retdict)
+        return tab
     
     def survey(self,
               sequence,
@@ -349,3 +342,87 @@ class madx:
         return ret
         #print "Currently number of sequenses available:",seqs.curr
         #print "Name of list:",seqs.name
+        
+from cern.libmadx.madx_structures cimport column_info
+cdef extern from "madX/mad_table.h":
+    column_info  table_get_column(char* table_name,char* column_name)
+
+from libc.stdlib cimport free
+from cpython cimport PyObject, Py_INCREF
+
+# Import the Python-level symbols of numpy
+import numpy as np
+
+# Import the C-level symbols of numpy
+cimport numpy as np
+
+# Numpy must be initialized. When using numpy from C or Cython you must
+# _always_ do that, or you will have segfaults
+np.import_array()
+
+# We need to build an array-wrapper class to deallocate our array when
+# the Python object is deleted.
+cdef class ArrayWrapper:
+    cdef void* data_ptr
+    cdef int size
+
+    cdef set_data(self, int size, void* data_ptr):
+        """ Set the data of the array
+
+        This cannot be done in the constructor as it must recieve C-level
+        arguments.
+
+        Parameters:
+        -----------
+        size: int
+        Length of the array.
+        data_ptr: void*
+        Pointer to the data
+
+        """
+        self.data_ptr = data_ptr
+        self.size = size
+        #self.dtype=dtype
+
+    def __array__(self):
+        """ Here we use the __array__ method, that is called when numpy
+        tries to get an array from the object."""
+        cdef np.npy_intp shape[1]
+        shape[0] = <np.npy_intp> self.size
+        # Create a 1D array, of length 'size'
+        ndarray = np.PyArray_SimpleNewFromData(1, shape,
+                                               np.NPY_DOUBLE, self.data_ptr)
+        return ndarray
+
+    #def __dealloc__(self):
+        """
+        Frees the array. This is called by Python when all the
+        references to the object are gone. 
+        Mad-X is completely broken, so let's not
+        """
+
+
+cdef _get_dict_from_mem(table,columns,retdict):
+    ret={}
+    cdef column_info info
+    cdef np.ndarray _tmp
+
+    if type(columns)==str:
+        columns=columns.split(',')
+    
+    for c in columns:
+        info=table_get_column(table,c)
+        dtype=<bytes>info.datatype
+        if dtype=='d':
+            aw=ArrayWrapper()
+            aw.set_data(info.length,info.data)
+            _tmp = np.array(aw, copy=False)
+            # Assign our object to the 'base' of the ndarray object
+            _tmp.base = <PyObject*> aw
+            Py_INCREF(aw)
+            ret[c]=_tmp
+        elif dtype=='S':
+            print "String, skipping for now..",c
+        else:
+            print "Unknown datatype",dtype,c
+    return ret

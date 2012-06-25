@@ -65,7 +65,7 @@ def add_dir(directory,dirlist):
 
 
 home=os.environ['HOME']
-includedirs=[]
+includedirs=['/usr/lib/python2.7/site-packages/numpy/core/include/']
 libdirs=[]
 rlibdirs=[]
 if special_madxdir:

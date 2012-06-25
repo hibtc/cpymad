@@ -564,7 +564,6 @@ class _modelProcess(multiprocessing.Process):
     def run(self):
         _madx=madx(histfile=self.history,recursive_history=self.recursive_history)
         _madx.verbose(False)
-        _madx.append_model(self.model)
         if USE_COUCH:
             _couch_server=cern.cpymad._couch.couch.Server()
             _madx.command(_couch_server.get_file(self.model,'initscript'))

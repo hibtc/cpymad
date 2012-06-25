@@ -76,4 +76,9 @@ cdef extern from "madX/mad_table.h":
         name_list* columns    #names + types (in inform)
         char ***s_cols
         pass
-    
+
+    cdef struct column_info:
+            void * data
+            int length
+            char datatype
+            char datasize
