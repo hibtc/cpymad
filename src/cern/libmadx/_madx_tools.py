@@ -5,6 +5,23 @@
 from cern.pymad.io import tfs,tfsDict
 
 
+
+    
+def _checkCommand(cmd):
+    ''' give the lowercase version of the command
+    this function does some sanity checks...'''
+    if "stop;" in cmd or "exit;" in cmd:
+        print("WARNING: found quit in command: "+cmd+"\n")
+        print("Please use madx.finish() or just exit python (CTRL+D)")
+        print("Command ignored")
+        return False
+    if cmd.split(',')>0 and "plot" in cmd.split(',')[0]:
+        print("WARNING: Plot functionality does not work through pymadx")
+        print("Command ignored")
+        return False
+    # All checks passed..
+    return True
+
 def _fixcmd(cmd):
     '''
     Makes sure command is sane.

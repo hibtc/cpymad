@@ -100,20 +100,6 @@ class madx:
         if self._rechist:
             self._hfile.close()
         #madx_finish()
-    
-    # give lowercase version of command here..
-    def _checkCommand(self,cmd):
-        if "stop;" in cmd or "exit;" in cmd:
-            print("WARNING: found quit in command: "+cmd+"\n")
-            print("Please use madx.finish() or just exit python (CTRL+D)")
-            print("Command ignored")
-            return False
-        if cmd.split(',')>0 and "plot" in cmd.split(',')[0]:
-            print("WARNING: Plot functionality does not work through pymadx")
-            print("Command ignored")
-            return False
-        # All checks passed..
-        return True
 
     def command(self,cmd):
         '''
@@ -137,7 +123,7 @@ class madx:
                 self._writeHist(cmd)
             else:
                 self._writeHist(cmd+'\n')
-        if self._checkCommand(cmd.lower()):
+        if _madx_tools._checkCommand(cmd.lower()):
             madx_input(cmd)
         return 0
     
