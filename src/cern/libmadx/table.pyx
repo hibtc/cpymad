@@ -49,12 +49,15 @@ cdef class ArrayWrapper:
                                                np.NPY_DOUBLE, self.data_ptr)
         return ndarray
 
-    #def __dealloc__(self):
+    def __dealloc__(self):
         """
         Frees the array. This is called by Python when all the
         references to the object are gone. 
-        Mad-X is completely broken, so let's not
+        
+        Since we are using the memory which Mad-X might need
+        later on, let's not.
         """
+        pass
 
 
 def get_dict_from_mem(table,columns,retdict):
