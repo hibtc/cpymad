@@ -1,3 +1,5 @@
+from cern.pymad.domain.tfs import TfsTable,TfsSummary
+
 from cern.libmadx.madx_structures cimport column_info
 cdef extern from "madX/mad_table.h":
     column_info  table_get_column(char* table_name,char* column_name)
@@ -73,9 +75,13 @@ def get_dict_from_mem(table,columns,retdict):
             # Assign our object to the 'base' of the ndarray object
             _tmp.base = <PyObject*> aw
             Py_INCREF(aw)
-            ret[c]=_tmp
+            ret[c.lower()]=_tmp
         elif dtype=='S':
             print "String, skipping for now..",c
+        elif dtype=='V':
+            print "ERROR:",c,"is not available in table",table
         else:
             print "Unknown datatype",dtype,c
-    return ret
+    if retdict:
+        return ret,{}
+    return TfsTable(ret),TfsSummary({})

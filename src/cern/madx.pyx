@@ -211,8 +211,7 @@ class madx:
                     else:
                         _tmpcmd+=','+i_var+'='+str(i_val)
         self.command(_tmpcmd+';')
-        tab=table.get_dict_from_mem('twiss',columns,retdict)
-        return tab
+        return table.get_dict_from_mem('twiss',columns,retdict)
     
     def survey(self,
               sequence,
