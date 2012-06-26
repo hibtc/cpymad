@@ -35,7 +35,7 @@ for arg in sys.argv:
         sys.argv.remove(arg)
 
 
-sourcefiles=[["cern/madx.pyx"]]
+sourcefiles=[["cern/madx.pyx"],["cern/libmadx/table.pyx"]]
 pythonsrc=["cern",
            "cern.libmadx",
            "cern.cpymad",
@@ -100,12 +100,22 @@ for ldir in libdirs:
             rlibdirs=[ldir]
             libdirs=[ldir]
             break
+_modver=['0','2']
 mods=[Extension('cern.madx',
-                    define_macros = [('MAJOR_VERSION', '0'),
-                                     ('MINOR_VERSION', '1')],
+        define_macros = [('MAJOR_VERSION', _modver[0]),
+                            ('MINOR_VERSION', _modver[1])],
+        include_dirs = includedirs,
+        libraries = libs,
+        sources = sourcefiles[0],
+        library_dirs = libdirs,
+        runtime_library_dirs= rlibdirs
+        ),
+      Extension('cern.libmadx.table',
+                    define_macros = [('MAJOR_VERSION', _modver[0]),
+                                     ('MINOR_VERSION', _modver[1])],
                     include_dirs = includedirs,
                     libraries = libs,
-                    sources = sourcefiles[0],
+                    sources = sourcefiles[1],
                     library_dirs = libdirs,
                     runtime_library_dirs= rlibdirs
                     ),
