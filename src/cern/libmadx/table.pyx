@@ -20,6 +20,7 @@ np.import_array()
 # We need to build an array-wrapper class to deallocate our array when
 # the Python object is deleted.
 cdef class ArrayWrapper:
+    dtype=np.NPY_DOUBLE
 
     cdef set_data(self, int size, void* data_ptr):
         """ Set the data of the array
@@ -37,7 +38,6 @@ cdef class ArrayWrapper:
         """
         self.data_ptr = data_ptr
         self.size = size
-        #self.dtype=dtype
 
     def __array__(self):
         """ Here we use the __array__ method, that is called when numpy
@@ -59,12 +59,22 @@ cdef class ArrayWrapper:
         """
         pass
 
-
+cdef class ArrayWrapperInt(ArrayWrapper):
+    def __array__(self):
+        """ Here we use the __array__ method, that is called when numpy
+        tries to get an array from the object."""
+        cdef np.npy_intp shape[1]
+        shape[0] = <np.npy_intp> self.size
+        # Create a 1D array, of length 'size'
+        ndarray = np.PyArray_SimpleNewFromData(1, shape,
+                                               np.NPY_INT, self.data_ptr)
+        return ndarray
+    
 def get_dict_from_mem(table,columns,retdict):
     ret={}
     cdef column_info info
     cdef np.ndarray _tmp
-
+    cdef char** char_tmp
     if type(columns)==str:
         columns=columns.split(',')
     
@@ -80,7 +90,11 @@ def get_dict_from_mem(table,columns,retdict):
             Py_INCREF(aw)
             ret[c.lower()]=_tmp
         elif dtype=='S':
-            print "String, skipping for now..",c
+            print "String, this might not work..",c
+            char_tmp=<char**>info.data
+            ret[c.lower()]=np.zeros(info.length,'S%d'%info.datasize)
+            for i in xrange(info.length):
+                ret[c.lower()][i]=char_tmp[i]
         elif dtype=='V':
             print "ERROR:",c,"is not available in table",table
         else:
