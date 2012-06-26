@@ -90,7 +90,6 @@ def get_dict_from_mem(table,columns,retdict):
             Py_INCREF(aw)
             ret[c.lower()]=_tmp
         elif dtype=='S':
-            print "String, this might not work..",c
             char_tmp=<char**>info.data
             ret[c.lower()]=np.zeros(info.length,'S%d'%info.datasize)
             for i in xrange(info.length):

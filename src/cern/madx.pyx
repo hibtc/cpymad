@@ -198,6 +198,8 @@ class madx:
         if use:
             self.use(sequence)
         _tmpcmd='twiss, sequence='+sequence+','+_madx_tools._add_range(madrange)
+        if _tmpcmd[-1]==',':
+            _tmpcmd=_tmpcmd[:-1]
         if fname:
             _tmpcmd+=', file="'+fname+'"'
         for i_var,i_val in {'betx':betx,'bety':bety,'alfx':alfx,'alfy':alfy}.items():
