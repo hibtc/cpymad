@@ -43,4 +43,4 @@ USE_COUCH=False
  an integer will be appended, pluss file ending '.madx'
  If you in your script specify histfile, that takes precedence
 '''
-MAD_HISTORY_BASE='history'
+MAD_HISTORY_BASE=''
