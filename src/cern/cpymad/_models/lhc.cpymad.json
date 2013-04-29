@@ -684,11 +684,11 @@
         ],
         "overlay": true
       },
-      "IR8/ip8_0.00860_beta_6.0m.str": {
+      "IR8/ip8_0.00860_beta6.00m.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
-            "path": "IR8/ip8_0.00860_beta_6.0m.str"
+            "path": "IR8/ip8_0.00860_beta6.00m.str"
           }
         ],
         "overlay": true
@@ -711,20 +711,20 @@
         ],
         "overlay": true
       },
-      "IR8/ip8_0.00860_beta_2.0m.str": {
+      "IR8/ip8_0.00860_beta2.00m.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
-            "path": "IR8/ip8_0.00860_beta_2.0m.str"
+            "path": "IR8/ip8_0.00860_beta2.00m.str"
           }
         ],
         "overlay": true
       },
-      "IR8/ip8_0.00860_beta_7.0m.str": {
+      "IR8/ip8_0.00860_beta7.00m.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
-            "path": "IR8/ip8_0.00860_beta_7.0m.str"
+            "path": "IR8/ip8_0.00860_beta7.00m.str"
           }
         ],
         "overlay": true
@@ -837,15 +837,6 @@
         ],
         "overlay": true
       },
-      "IR8x/ip8_0.00860_beta_5.5m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8x/ip8_0.00860_beta_5.5m.str"
-          }
-        ],
-        "overlay": true
-      },
       "IR8/ip8_0.00900_beta10.00m.str": {
         "init-files": [
           {
@@ -864,56 +855,20 @@
         ],
         "overlay": true
       },
-      "IR8x/ip8_0.00860_beta_3.5m.str": {
+      "IR8/ip8_0.00860_beta3.00m.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
-            "path": "IR8x/ip8_0.00860_beta_3.5m.str"
+            "path": "IR8/ip8_0.00860_beta3.00m.str"
           }
         ],
         "overlay": true
       },
-      "IR8/ip8_0.00860_beta_3.0m.str": {
+      "IR8/ip8_0.00860_beta5.00m.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
-            "path": "IR8/ip8_0.00860_beta_3.0m.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR2_ions/ip2_0.70.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR2_ions/ip2_0.70.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8/ip8_0.00860_beta_5.0m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8/ip8_0.00860_beta_5.0m.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8x/ip8_0.00860_beta_8.0m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8x/ip8_0.00860_beta_8.0m.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8x/ip8_0.00860_beta_10.0m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8x/ip8_0.00860_beta_10.0m.str"
+            "path": "IR8/ip8_0.00860_beta5.00m.str"
           }
         ],
         "overlay": true
@@ -927,11 +882,11 @@
         ],
         "overlay": true
       },
-      "IR8/ip8_0.00860_beta_6.5m.str": {
+      "IR8/ip8_0.00860_beta6.50m.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
-            "path": "IR8/ip8_0.00860_beta_6.5m.str"
+            "path": "IR8/ip8_0.00860_beta6.50m.str"
           }
         ],
         "overlay": true
@@ -972,15 +927,6 @@
         ],
         "overlay": true
       },
-      "IR2_ions/ip2_4.00.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR2_ions/ip2_4.00.str"
-          }
-        ],
-        "overlay": true
-      },
       "IR1/IP1_beta_3.50.str": {
         "init-files": [
           {
@@ -1008,20 +954,11 @@
         ],
         "overlay": true
       },
-      "IR8/ip8_0.0095098_beta_10m.str": {
+      "IR8/ip8_0.00860_beta2.50m.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
-            "path": "IR8/ip8_0.0095098_beta_10m.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8/ip8_0.00860_beta_2.5m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8/ip8_0.00860_beta_2.5m.str"
+            "path": "IR8/ip8_0.00860_beta2.50m.str"
           }
         ],
         "overlay": true
@@ -1053,15 +990,6 @@
         ],
         "overlay": true
       },
-      "IR8x/ip8_0.00860_beta_7.5m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8x/ip8_0.00860_beta_7.5m.str"
-          }
-        ],
-        "overlay": true
-      },
       "IR8/ip8_0.00905_beta10.00m.str": {
         "init-files": [
           {
@@ -1071,38 +999,11 @@
         ],
         "overlay": true
       },
-      "IR2_ions/ip2_0.90.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR2_ions/ip2_0.90.str"
-          }
-        ],
-        "overlay": true
-      },
       "IR2/IP2_0.00889_6.0m.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
             "path": "IR2/IP2_0.00889_6.0m.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8x/ip8_0.00860_beta_2.5m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8x/ip8_0.00860_beta_2.5m.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8x/ip8_0.00860_beta_8.5m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8x/ip8_0.00860_beta_8.5m.str"
           }
         ],
         "overlay": true
@@ -1125,20 +1026,11 @@
         ],
         "overlay": true
       },
-      "IR8x/ip8_0.00860_beta_4.0m.str": {
+      "IR8/ip8_0.00860_beta9.00m.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
-            "path": "IR8x/ip8_0.00860_beta_4.0m.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8/ip8_0.00860_beta_9.0m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8/ip8_0.00860_beta_9.0m.str"
+            "path": "IR8/ip8_0.00860_beta9.00m.str"
           }
         ],
         "overlay": true
@@ -1161,24 +1053,6 @@
         ],
         "overlay": true
       },
-      "IR8x/ip8_0.00860_beta_3.0m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8x/ip8_0.00860_beta_3.0m.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8x/ip8_0.00860_beta_9.0m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8x/ip8_0.00860_beta_9.0m.str"
-          }
-        ],
-        "overlay": true
-      },
       "IR2/IP2_0.00889_10.0m.str": {
         "init-files": [
           {
@@ -1188,20 +1062,11 @@
         ],
         "overlay": true
       },
-      "IR2_ions/ip2_1.50.str": {
+      "IR8/ip8_0.00860_beta4.50m.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
-            "path": "IR2_ions/ip2_1.50.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8/ip8_0.00860_beta_4.5m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8/ip8_0.00860_beta_4.5m.str"
+            "path": "IR8/ip8_0.00860_beta4.50m.str"
           }
         ],
         "overlay": true
@@ -1229,24 +1094,6 @@
           {
             "parse": "STRENGTHS",
             "path": "IR8/ip8_0.00930_beta10.00m.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8x/ip8_0.00860_beta_9.5m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8x/ip8_0.00860_beta_9.5m.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR2_ions/ip210.00.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR2_ions/ip210.00.str"
           }
         ],
         "overlay": true
@@ -1305,11 +1152,11 @@
         ],
         "overlay": true
       },
-      "IR8/ip8_0.00860_beta_9.5m.str": {
+      "IR8/ip8_0.00860_beta9.50m.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
-            "path": "IR8/ip8_0.00860_beta_9.5m.str"
+            "path": "IR8/ip8_0.00860_beta9.50m.str"
           }
         ],
         "overlay": true
@@ -1332,38 +1179,20 @@
         ],
         "overlay": true
       },
-      "IR2_ions/ip2_1.10.str": {
+      "IR8/ip8_0.00860_beta8.50m.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
-            "path": "IR2_ions/ip2_1.10.str"
+            "path": "IR8/ip8_0.00860_beta8.50m.str"
           }
         ],
         "overlay": true
       },
-      "IR8/ip8_0.00860_beta_8.5m.str": {
+      "IR8/ip8_0.00860_beta3.50m.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
-            "path": "IR8/ip8_0.00860_beta_8.5m.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8/ip8_0.00860_beta_3.5m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8/ip8_0.00860_beta_3.5m.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR2_ions/ip2_3.00.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR2_ions/ip2_3.00.str"
+            "path": "IR8/ip8_0.00860_beta3.50m.str"
           }
         ],
         "overlay": true
@@ -1382,47 +1211,11 @@
         ],
         "overlay": false
       },
-      "IR8x/ip8_0.00860_beta_6.0m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8x/ip8_0.00860_beta_6.0m.str"
-          }
-        ],
-        "overlay": true
-      },
       "IR5/IP5_beta_2.00.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
             "path": "IR5/IP5_beta_2.00.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8x/ip8_0.00860_beta_7.0m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8x/ip8_0.00860_beta_7.0m.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8x/ip8_0.00860_beta_5.0m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8x/ip8_0.00860_beta_5.0m.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR2_ions/ip2_8.00.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR2_ions/ip2_8.00.str"
           }
         ],
         "overlay": true
@@ -1445,11 +1238,11 @@
         ],
         "overlay": true
       },
-      "IR8/ip8_0.00860_beta_5.5m.str": {
+      "IR8/ip8_0.00860_beta5.50m.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
-            "path": "IR8/ip8_0.00860_beta_5.5m.str"
+            "path": "IR8/ip8_0.00860_beta5.50m.str"
           }
         ],
         "overlay": true
@@ -1463,20 +1256,11 @@
         ],
         "overlay": true
       },
-      "IR2_ions/ip2_5.00.str": {
+      "IR8/ip8_0.00860_beta7.50m.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
-            "path": "IR2_ions/ip2_5.00.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8/ip8_0.00860_beta_7.5m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8/ip8_0.00860_beta_7.5m.str"
+            "path": "IR8/ip8_0.00860_beta7.50m.str"
           }
         ],
         "overlay": true
@@ -1499,11 +1283,11 @@
         ],
         "overlay": true
       },
-      "IR8/ip8_0.00860_beta_8.0m.str": {
+      "IR8/ip8_0.00860_beta8.00m.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
-            "path": "IR8/ip8_0.00860_beta_8.0m.str"
+            "path": "IR8/ip8_0.00860_beta8.00m.str"
           }
         ],
         "overlay": true
@@ -1516,15 +1300,6 @@
           }
         ],
         "overlay": false
-      },
-      "IR2_ions/ip2_0.50.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR2_ions/ip2_0.50.str"
-          }
-        ],
-        "overlay": true
       },
       "IR1/IP1_beta_4.00.str": {
         "init-files": [
@@ -1625,24 +1400,6 @@
         ],
         "overlay": true
       },
-      "IR2_ions/ip2_2.50.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR2_ions/ip2_2.50.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8x/ip8_0.00860_beta_2.0m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8x/ip8_0.00860_beta_2.0m.str"
-          }
-        ],
-        "overlay": true
-      },
       "IR2/IP2_0.00889_9.5m.str": {
         "init-files": [
           {
@@ -1657,24 +1414,6 @@
           {
             "parse": "STRENGTHS",
             "path": "IR5/IP5_beta_3.50.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8x/ip8_0.00860_beta_6.5m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8x/ip8_0.00860_beta_6.5m.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8x/ip8_0.00860_beta_4.5m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8x/ip8_0.00860_beta_4.5m.str"
           }
         ],
         "overlay": true
@@ -1715,29 +1454,11 @@
         ],
         "overlay": true
       },
-      "IR2_ions/ip2_6.00.str": {
+      "IR8/ip8_0.00860_beta4.00m.str": {
         "init-files": [
           {
             "parse": "STRENGTHS",
-            "path": "IR2_ions/ip2_6.00.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR2_ions/ip2_2.00.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR2_ions/ip2_2.00.str"
-          }
-        ],
-        "overlay": true
-      },
-      "IR8/ip8_0.00860_beta_4.0m.str": {
-        "init-files": [
-          {
-            "parse": "STRENGTHS",
-            "path": "IR8/ip8_0.00860_beta_4.0m.str"
+            "path": "IR8/ip8_0.00860_beta4.00m.str"
           }
         ],
         "overlay": true
