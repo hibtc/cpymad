@@ -20,14 +20,11 @@ import unittest,os
 
 
 class TestCpymad(unittest.TestCase):
-    
-    def setUp(self):
-        self.model=cpymad.model('LHC (LSA)',histfile='hist_cpymad.madx')
-    
+
     # It's a bit surprising that this doesn't happen by itself.. Hmmm...
     def tearDown(self):
         del self.model
-        
+
     def test_twiss(self):
         t,p=self.model.twiss()
         for attr in ['betx','bety','s']:
@@ -37,34 +34,23 @@ class TestCpymad(unittest.TestCase):
             self.assertTrue(k==k.lower())
         for k in p:
             self.assertTrue(k==k.lower())
-        
+
     def test_sequences(self):
-        self.assertFalse(self.model.has_sequence('non_existing_sequence'))
-        for seq in ['lhcb1','lhcb2']:
+        '''
+         Checks that all sequences defined in the model (json)
+         is also loaded into memory
+        '''
+        for seq in self.model.mdef['sequences'].keys():
+            print "Testing sequence",seq
             self.assertTrue(self.model.has_sequence(seq))
-    
-    def test_wrong_optics(self):
-        with self.assertRaises(KeyError):
-            self.model.set_optic('non_existing_optics')
-    
-    def test_has_optics(self):
-        self.assertFalse(self.model.has_optics('non_existing_optics'))
-        self.assertTrue(self.model.has_optics('collision'))
-    
-    def test_listModels(self):
-        l=cpymad.modelList()
-        self.assertTrue('lhc' in l)
-    
-    def test_setBeam(self):
-        self.model.list_beams()
-        b=self.model.get_beam('LHC (LSA)_lhcb1')
-        self.assertTrue('energy' in b)
-        b['energy']=7000
-        self.model.set_beam(b)
-        self.assertTrue(6990 < self.model.twiss(sequence='lhcb1')[1].energy < 7010)
 
+    def test_set_optic(self):
+        '''
+         Sets all optics found in the model definition
+        '''
+        for optic in self.model.list_optics():
+            print "Testing optics",optic
+            self.model.set_optic(optic)
+            self.assertEqual(optic,self.model._active['optic'])
+            self.model.twiss()
 
-if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestCpymad)
-    unittest.TextTestRunner(verbosity=1).run(suite)
-    os.remove('hist_cpymad.madx')
