@@ -53,7 +53,7 @@ cdata=['_models/*.json']
 
 # add this to include data array
 for j in range(2,10):
-    for end in ['.madx','.str','.seq','.tfs']:
+    for end in ['.madx','.str','.seq','.tfs', '.xsifx']:
         cdata.append('_models/re*data'+'/*'*j+end)
 
 libs=['madx', "c", "stdc++"]
