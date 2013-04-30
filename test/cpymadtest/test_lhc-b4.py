@@ -19,12 +19,12 @@ import unittest
 from cern import cpymad
 from base_test import TestCpymad
 
-class TestLongTI8(TestCpymad):
+class TestLHC(TestCpymad):
     def setUp(self):
-        self.model=cpymad.model('longti8 (2008 after 08 23)')
+        self.model=cpymad.model('lhc-beam4')
         self.model._cmd('option,-twiss_print')
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestLongTI8)
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestLHC)
     unittest.TextTestRunner(verbosity=1).run(suite)
 
