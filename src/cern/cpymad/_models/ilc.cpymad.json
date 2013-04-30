@@ -1,5 +1,7 @@
 {
   "ilc": {
+    "real": true,
+    "extends": [],
     "dbdirs": [
     ],
     "path-offsets": {
@@ -82,6 +84,8 @@
     }
   },
   "ilc-4.50m": {
+    "real": true,
+    "extends": [],
     "dbdirs": [
     ],
     "path-offsets": {

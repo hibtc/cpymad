@@ -32,9 +32,11 @@ def _get_mnames_files():
     for f in os.listdir(modelloc):
         if len(f)>5 and f[-12:].lower()=='.cpymad.json':
             fnames[f]=[]
-            for mname in json.load(file(os.path.join(modelloc,f))).keys():
-                mnames.append(mname)
-                fnames[f].append(mname)
+            jloaded=json.load(file(os.path.join(modelloc,f)))
+            for mname in jloaded.keys():
+                if jloaded[mname]['real']:
+                    mnames.append(mname)
+                    fnames[f].append(mname)
     return mnames,fnames
 
 

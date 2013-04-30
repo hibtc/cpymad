@@ -517,7 +517,22 @@ def _get_mdef(modelname):
         
     fname=_get_filename(modelname)
     _dict = _get_file_content(modelname,fname)
-    return json.loads(_dict)[modelname]
+    _jdict=json.loads(_dict)
+    ret_dict=_jdict[modelname]
+    for extra_dict in ret_dict['extends']:
+        for key in _jdict[extra_dict]:
+            if key in ret_dict and not key=='real':
+                if type(_jdict[extra_dict][key])==dict:
+                    ret_dict[key].update(_jdict[extra_dict][key])
+                elif type(_jdict[extra_dict][key])==list:
+                    ret_dict[key].extend(_jdict[extra_dict][key])
+                else:
+                    raise TypeError('Could not extend %s model with %s' % (modelname,extra_dict))
+            else:
+                ret_dict[key]=_jdict[extra_dict][key]
+        ret_dict.update(_jdict[extra_dict])
+
+    return ret_dict
 
 def _get_filename(modelname):
     from cern.cpymad import listModels

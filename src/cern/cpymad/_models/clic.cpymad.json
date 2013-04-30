@@ -1,5 +1,7 @@
 {
   "clic": {
+    "real": true,
+    "extends": [],
     "dbdirs": [
       "/afs/cern.ch/eng/sl/lintrack/",
       "/afs/cern.ch/user/r/rtomas/lintrack/"
