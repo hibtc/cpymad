@@ -76,8 +76,7 @@ else: # making some guesses...
         ]
 for prefixdir in ['/usr',
         '/usr/local',
-        os.path.join(home,'.local'),
-        '/afs/cern.ch/user/y/ylevinse/.local']:
+        os.path.join(home,'.local')]:
     add_dir(prefixdir,_prefixdirs)
 
 for prefixdir in _prefixdirs:
