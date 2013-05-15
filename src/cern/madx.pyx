@@ -178,7 +178,7 @@ class madx:
         self.command('SELECT, FLAG='+flag+', COLUMN='+clms+';')
         for p in pattern:
             self.command('SELECT, FLAG='+flag+', PATTERN='+p+';')
-            
+
     def twiss(self,
               sequence,
               pattern=['full'],
@@ -191,12 +191,13 @@ class madx:
               alfx=None,
               alfy=None,
               twiss_init=None,
+              chrom=True,
               use=True
               ):
         '''
-            
+
             Runs select+use+twiss on the sequence selected
-            
+
             :param string sequence: name of sequence
             :param string fname: name of file to store tfs table
             :param list pattern: pattern to include in table
@@ -204,6 +205,7 @@ class madx:
             :param bool retdict: if true, returns tables as dictionary types
             :param dict twiss_init: dictionary of twiss initialization variables
             :param bool use: Call use before aperture.
+            :param bool chrom: Also calculate chromatic functions (slower)
         '''
         if fname:
             tmpfile=fname
@@ -218,6 +220,8 @@ class madx:
         if use:
             self.use(sequence)
         _tmpcmd='twiss, sequence='+sequence+','+_madx_tools._add_range(madrange)+' file="'+tmpfile+'"'
+        if chrom:
+            _tmpcmd+=',chrom'
         for i_var,i_val in {'betx':betx,'bety':bety,'alfx':alfx,'alfy':alfy}.items():
             if i_val!=None:
                 _tmpcmd+=','+i_var+'='+str(i_val)
