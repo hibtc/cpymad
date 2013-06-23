@@ -62,6 +62,9 @@ def _mad_command(cmd, *args, **kwargs):
     >>> _mad_command('option', echo=False)
     option, -echo;
 
+    >>> _mad_command('constraint', ('betx', '<', 3.13), 'bety < 3.5')
+    constraint, betx<3.13, bety < 3.5;
+
     Note that alphabetic order is enforced on kwargs, such that results are
     always reproducible.
 
@@ -69,18 +72,23 @@ def _mad_command(cmd, *args, **kwargs):
     mad = cmd
     fullargs = list(args) + sorted(kwargs.items(), key=lambda i: i[0])
     for arg in fullargs:
-        try:
-            key, value = arg
-        except ValueError:
+        if isinstance(arg, tuple):
+            if len(arg) == 3:
+                key, op, value = arg
+            else:
+                key, value = arg
+                op = '='
+        else:
             key = arg
             value = True
+
         key = str(key)
         if key.lower() == 'range':
             mad += ', ' + key + '=' + _add_range(value)[:-1]
         elif isinstance(value, bool):
             mad += ', ' + ('' if value else '-') + key
         else:
-            mad += ', ' + key + '=' + str(value)
+            mad += ', ' + key + op + str(value)
     mad += ';'
     return mad
 
