@@ -64,6 +64,7 @@ def _tmp_filename(operation):
         i += 1
     return tmpfile
 
+# main interface
 class madx:
     '''
     Python class which interfaces to Mad-X library
@@ -305,6 +306,50 @@ class madx:
         
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')
+
+
+    def match(
+            self,
+            sequence,
+            constraints,
+            vary,
+            fname='',
+            betx=None,
+            bety=None,
+            alfx=None,
+            alfy=None,
+            twiss_init=None,
+            ):
+        """
+        Perform match operation.
+
+        @param sequence [string] name of sequence
+        @param constraints [list] constraints to pose during matching
+        @param vary [list] variable commands
+        """
+        tmpfile = fname or self._tmp_filename('match')
+
+        if not twiss_init:
+            twiss_init = {}
+        for k,v in {'betx':betx,'bety':bety,'alfx':alfx,'alfy':alfy}.items():
+            if v is not None:
+                twiss_init[k] = v
+
+        cmd = _madx_tools._mad_command('match', ('sequence', sequence), **twiss_init)
+        for c in constraints:
+            cmd += _madx_tools._mad_command('constraint', **c)
+        for v in vary:
+            cmd += _madx_tools._mad_command('vary', **v)
+        cmd += _madx_tools._mad_command('endmatch')
+
+        self.command(cmd)
+
+        #----------------------------------------
+        # tab,param=_madx_tools._get_dict(tmpfile,retdict)
+        # if not fname:
+        #     os.remove(tmpfile)
+        # return tab,param
+        #----------------------------------------
 
     # turn on/off verbose outupt..
     def verbose(self,switch):
