@@ -485,6 +485,50 @@ class model(abc.model.PyMadModel):
             return t,s
         return TfsTable(t),TfsSummary(s)
 
+    def match(
+            self,
+            sequence,
+            constraints,
+            vary,
+            fname=''):
+        """
+        Perform a matching operation.
+        """
+        #----------------------------------------
+        # from cern.pymad.domain import TfsTable, TfsSummary
+        #----------------------------------------
+
+        # set sequence/range...
+        self.set_sequence(sequence)
+        sequence=self._active['sequence']
+        _madrange=self._active['range']
+
+        seqdict=self._mdef['sequences'][sequence]
+        rangedict=seqdict['ranges'][_madrange]
+
+        args = {'sequence': sequence,
+                'constraints': constraints,
+                'vary': vary,
+                'fname': fname}
+        args['madrange']=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]]
+
+        args['twiss-init']=None
+        if 'twiss-initial-conditions' in rangedict:
+            args['twiss-init']={}
+            for condition,value in self._get_twiss_initial(sequence,_madrange).items():
+                if value:
+                    args['twiss-init'][condition]=value
+        s=self._sendrecv(('twiss',args))
+
+        #----------------------------------------
+        # t,s=self._sendrecv(('twiss',args))
+        # if retdict:
+        #     return t,s
+        # return TfsTable(t),TfsSummary(s)
+        #----------------------------------------
+
+
+
     def _get_ranges(self,sequence):
         return self._mdef['sequences'][sequence]['ranges'].keys()
 
@@ -634,6 +678,15 @@ class _modelProcess(multiprocessing.Process):
                                        use=cmd[1]['use'],
                                        retdict=True)
                     self.sender.send((t,s))
+                elif cmd[0] == 'match':
+                    _madx.match(
+                            sequence=cmd[1]['sequence'],
+                            constraints=cmd[1]['constraints'],
+                            vary=cmd[1]['vary'],
+                            fname=cmd[1]['fname'],
+                            twiss_init=cmd[1]['twiss-init'])
+                    self.sender.send('done')
+                    pass
                 else:
                     raise ValueError("You sent a wrong command to subprocess: "+str(cmd))
 
