@@ -307,25 +307,64 @@ class madx:
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')
 
-
     def match(
             self,
             sequence,
             constraints,
             vary,
+            *,
             fname='',
             betx=None,
             bety=None,
             alfx=None,
             alfy=None,
-            twiss_init=None,
-            ):
+            twiss_init=None):
         """
         Perform match operation.
 
         @param sequence [string] name of sequence
         @param constraints [list] constraints to pose during matching
-        @param vary [list] variable commands
+        @param vary [list or dict] vary commands
+
+        Each item of constraints must be a list or dict directly passable
+        to _mad_command().
+
+        If vary is a list each entry must either be list or a dict which can
+        be passed to _mad_command(). Otherwise the value is taken to be the
+        NAME of the variable.
+        If vary is a dict the key corresponds to the NAME. Its value is a
+        list or dict passable to _mad_command(). If this is not the case the
+        value is taken as the STEP value.
+
+        Examples:
+        >>> m.match(
+        >>>     'lhc',
+        >>>     constraints=[{'betx':3, 'range':'#e'}, [('bety','<',3)]],
+        >>>     vary=['K1', {'name':'K2', 'step':1e-6}])
+
+        Is equivalent to:
+
+        match sequence=lhc;
+        constraint, betx=3, range=#e;
+        constraint, bety<3;
+        vary, name=K1;
+        vary, name=K2, step=1e-6;
+        endmatch;
+
+        >>> m.match(
+        >>>     'lhc',
+        >>>     [{'betx':3, 'range':'#e'}],
+        >>>     {'K1': {'upper':3}, 'K2':1e-6})
+        >>> 
+
+        Is equivalent to:
+
+        match sequence=lhc;
+        constraint, betx=3, range=#e;
+        vary, name=K1, upper=3;
+        vary, name=K2, step=1e-6;
+        endmatch;
+
         """
         tmpfile = fname or self._tmp_filename('match')
 
@@ -335,11 +374,33 @@ class madx:
             if v is not None:
                 twiss_init[k] = v
 
+        # MATCH (=start)
         cmd = _madx_tools._mad_command('match', ('sequence', sequence), **twiss_init)
-        for c in constraints:
-            cmd += _madx_tools._mad_command('constraint', **c)
-        for v in vary:
-            cmd += _madx_tools._mad_command('vary', **v)
+
+        # CONSTRAINT
+        if isinstance(constraints, list):
+            for c in constraints:
+                cmd += _madx_tools._mad_command_auto('constraint', c)
+        else:
+            raise TypeError("constraints must be list.")
+
+        # VARY
+        if isinstance(vary, dict):
+            for k,v in vary:
+                try:
+                    cmd += _madx_tools._mad_command_auto('vary', v, name=k)
+                except TypeError:
+                    cmd += _madx_tools._mad_command('vary', name=k, step=v)
+        elif isinstance(vary, list):
+            for v in vary:
+                try:
+                    cmd += _madx_tools._mad_command_auto('vary', v)
+                except TypeError:
+                    cmd += _madx_tools._mad_command('vary', name=v)
+        else:
+            raise TypeError("vary must be list or dict.")
+
+        # ENDMATCH
         cmd += _madx_tools._mad_command('endmatch')
 
         self.command(cmd)

@@ -65,6 +65,9 @@ def _mad_command(cmd, *args, **kwargs):
     >>> _mad_command('constraint', ('betx', '<', 3.13), 'bety < 3.5')
     constraint, betx<3.13, bety < 3.5;
 
+    >>> _mad_command('constraint', **{'betx<3.13':True})
+    constraint, betx<3.13;
+
     Note that alphabetic order is enforced on kwargs, such that results are
     always reproducible.
 
@@ -91,4 +94,19 @@ def _mad_command(cmd, *args, **kwargs):
             mad += ', ' + key + op + str(value)
     mad += ';'
     return mad
+
+def _call(fn, *params):
+    args = []
+    kwargs = {}
+    for v in params:
+        if isinstance(v, dict):
+            kwargs.update(v)
+        elif isinstance(v, list):
+            args += v
+        else:
+            raise TypeError("_call accepts only lists or dicts")
+    fn(*args, **kwargs)
+
+def _mad_command_auto(cmd, args, *extra, **kwargs):
+    return _call(_mad_command, [cmd], args, list(extra), kwargs)
 
