@@ -487,9 +487,9 @@ class model(abc.model.PyMadModel):
 
     def match(
             self,
-            sequence,
             constraints,
             vary,
+            sequence = '',
             fname=''):
         """
         Perform a matching operation.
@@ -518,10 +518,10 @@ class model(abc.model.PyMadModel):
             for condition,value in self._get_twiss_initial(sequence,_madrange).items():
                 if value:
                     args['twiss-init'][condition]=value
-        s=self._sendrecv(('twiss',args))
+        s=self._sendrecv(('match',args))
 
         #----------------------------------------
-        # t,s=self._sendrecv(('twiss',args))
+        # t,s=self._sendrecv(('match',args))
         # if retdict:
         #     return t,s
         # return TfsTable(t),TfsSummary(s)

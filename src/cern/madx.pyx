@@ -366,7 +366,7 @@ class madx:
         endmatch;
 
         """
-        tmpfile = fname or self._tmp_filename('match')
+        tmpfile = fname or _tmp_filename('match')
 
         if not twiss_init:
             twiss_init = {}
