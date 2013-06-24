@@ -87,12 +87,12 @@ def _mad_command(cmd, *args, **kwargs):
 
         key = str(key)
         if key.lower() == 'range':
-            mad += ', ' + key + '=' + _add_range(value)[:-1]
+            mad += ', ' + _add_range(value)[:-1]
         elif isinstance(value, bool):
             mad += ', ' + ('' if value else '-') + key
         else:
             mad += ', ' + key + op + str(value)
-    mad += ';'
+    mad += ';\n'
     return mad
 
 def _call(fn, *params):
@@ -105,8 +105,8 @@ def _call(fn, *params):
             args += v
         else:
             raise TypeError("_call accepts only lists or dicts")
-    fn(*args, **kwargs)
+    return fn(*args, **kwargs)
 
-def _mad_command_auto(cmd, args, *extra, **kwargs):
-    return _call(_mad_command, [cmd], args, list(extra), kwargs)
+def _mad_command_unpack(*arglists, **kwargs):
+    return _call(_mad_command, kwargs, *arglists)
 

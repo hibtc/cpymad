@@ -312,6 +312,7 @@ class madx:
             sequence,
             constraints,
             vary,
+            method,
             *,
             fname='',
             betx=None,
@@ -340,15 +341,18 @@ class madx:
         >>> m.match(
         >>>     'lhc',
         >>>     constraints=[{'betx':3, 'range':'#e'}, [('bety','<',3)]],
-        >>>     vary=['K1', {'name':'K2', 'step':1e-6}])
+        >>>     vary=['K1', {'name':'K2', 'step':1e-6}],
+        >>>     method=['lmdif', dict(calls=100, tolerance=1e-6)]
+        >>>     )
 
         Is equivalent to:
 
-        match sequence=lhc;
+        match, sequence=lhc;
         constraint, betx=3, range=#e;
         constraint, bety<3;
         vary, name=K1;
         vary, name=K2, step=1e-6;
+        lmdif, calls=100, tolerance=1e-6;
         endmatch;
 
         >>> m.match(
@@ -359,7 +363,7 @@ class madx:
 
         Is equivalent to:
 
-        match sequence=lhc;
+        match, sequence=lhc;
         constraint, betx=3, range=#e;
         vary, name=K1, upper=3;
         vary, name=K2, step=1e-6;
@@ -380,7 +384,7 @@ class madx:
         # CONSTRAINT
         if isinstance(constraints, list):
             for c in constraints:
-                cmd += _madx_tools._mad_command_auto('constraint', c)
+                cmd += _madx_tools._mad_command_unpack(['constraint'], c)
         else:
             raise TypeError("constraints must be list.")
 
@@ -388,17 +392,20 @@ class madx:
         if isinstance(vary, dict):
             for k,v in vary:
                 try:
-                    cmd += _madx_tools._mad_command_auto('vary', v, name=k)
+                    cmd += _madx_tools._mad_command_unpack(['vary'], v, name=k)
                 except TypeError:
                     cmd += _madx_tools._mad_command('vary', name=k, step=v)
         elif isinstance(vary, list):
             for v in vary:
                 try:
-                    cmd += _madx_tools._mad_command_auto('vary', v)
+                    cmd += _madx_tools._mad_command_unpack(['vary'], v)
                 except TypeError:
                     cmd += _madx_tools._mad_command('vary', name=v)
         else:
             raise TypeError("vary must be list or dict.")
+
+        # METHOD
+        cmd += _madx_tools._mad_command_unpack(method)
 
         # ENDMATCH
         cmd += _madx_tools._mad_command('endmatch')

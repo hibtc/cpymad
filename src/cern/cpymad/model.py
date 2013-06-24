@@ -489,6 +489,7 @@ class model(abc.model.PyMadModel):
             self,
             constraints,
             vary,
+            method=['lmdif'],
             sequence = '',
             fname=''):
         """
@@ -509,6 +510,7 @@ class model(abc.model.PyMadModel):
         args = {'sequence': sequence,
                 'constraints': constraints,
                 'vary': vary,
+                'method': method,
                 'fname': fname}
         args['madrange']=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]]
 
@@ -683,6 +685,7 @@ class _modelProcess(multiprocessing.Process):
                             sequence=cmd[1]['sequence'],
                             constraints=cmd[1]['constraints'],
                             vary=cmd[1]['vary'],
+                            method=cmd[1]['method'],
                             fname=cmd[1]['fname'],
                             twiss_init=cmd[1]['twiss-init'])
                     self.sender.send('done')
