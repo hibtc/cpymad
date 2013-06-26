@@ -52,6 +52,18 @@ _madstarted=False
 # I think this is deprecated..
 _loaded_models=[]
 
+# private utility functions
+def _tmp_filename(operation):
+    """
+    Create a name for a temporary file.
+    """
+    tmpfile = operation + '.temp.tfs'
+    i = 0
+    while os.path.isfile(tmpfile):
+        tmpfile = operation + '.' + str(i) + '.temp.tfs'
+        i += 1
+    return tmpfile
+
 class madx:
     '''
     Python class which interfaces to Mad-X library
@@ -207,14 +219,7 @@ class madx:
             :param bool use: Call use before aperture.
             :param bool chrom: Also calculate chromatic functions (slower)
         '''
-        if fname:
-            tmpfile=fname
-        else:
-            tmpfile='twiss.temp.tfs'
-            i=0
-            while os.path.isfile(tmpfile):
-                tmpfile='twiss.'+str(i)+'.temp.tfs'
-                i+=1
+        tmpfile = fname or _tmp_filename('twiss')
         self.select('twiss',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
         if use:
@@ -256,14 +261,7 @@ class madx:
             :param string/list columns: Columns to include in table
             :param bool use: Call use before survey.
         '''
-        if fname:
-            tmpfile=fname
-        else:
-            tmpfile='survey.temp.tfs'
-            i=0
-            while os.path.isfile(tmpfile):
-                tmpfile='survey.'+str(i)+'.temp.tfs'
-                i+=1
+        tmpfile = fname or _tmp_filename('survey')
         self.select('survey',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
         if use:
@@ -293,14 +291,7 @@ class madx:
          @param columns [string or list, optional] columns to include in table
          :param bool use: Call use before aperture.
         '''
-        if fname:
-            tmpfile=fname
-        else:
-            tmpfile='aperture.temp.tfs'
-            i=0
-            while os.path.isfile(tmpfile):
-                tmpfile='aperture.'+str(i)+'.temp.tfs'
-                i+=1
+        tmpfile = fname or _tmp_filename('aperture')
         self.select('aperture',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
         if use:
