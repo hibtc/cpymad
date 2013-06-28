@@ -54,6 +54,18 @@ _madstarted=False
 # I think this is deprecated..
 _loaded_models=[]
 
+# private utility functions
+def _tmp_filename(operation):
+    """
+    Create a name for a temporary file.
+    """
+    tmpfile = operation + '.temp.tfs'
+    i = 0
+    while os.path.isfile(tmpfile):
+        tmpfile = operation + '.' + str(i) + '.temp.tfs'
+        i += 1
+    return tmpfile
+
 class madx:
     '''
     Python class which interfaces to Mad-X library
@@ -166,7 +178,7 @@ class madx:
         self.command('SELECT, FLAG='+flag+', COLUMN='+clms+';')
         for p in pattern:
             self.command('SELECT, FLAG='+flag+', PATTERN='+p+';')
-            
+
     def twiss(self,
               sequence,
               pattern=['full'],
@@ -179,12 +191,13 @@ class madx:
               alfx=None,
               alfy=None,
               twiss_init=None,
+              chrom=True,
               use=True
               ):
         '''
-            
+
             Runs select+use+twiss on the sequence selected
-            
+
             :param string sequence: name of sequence
             :param string fname: name of file to store tfs table
             :param list pattern: pattern to include in table
@@ -192,15 +205,18 @@ class madx:
             :param bool retdict: if true, returns tables as dictionary types
             :param dict twiss_init: dictionary of twiss initialization variables
             :param bool use: Call use before aperture.
+            :param bool chrom: Also calculate chromatic functions (slower)
         '''
         self.select('twiss',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
         if use:
             self.use(sequence)
         _tmpcmd='twiss, sequence='+sequence+','+_madx_tools._add_range(madrange)
+        if chrom:
+            _tmpcmd+=',chrom'
         if _tmpcmd[-1]==',':
             _tmpcmd=_tmpcmd[:-1]
-        if fname:
+        if fname: # we only need this if user wants the file to be written..
             _tmpcmd+=', file="'+fname+'"'
         for i_var,i_val in {'betx':betx,'bety':bety,'alfx':alfx,'alfy':alfy}.items():
             if i_val!=None:
@@ -233,14 +249,7 @@ class madx:
             :param string/list columns: Columns to include in table
             :param bool use: Call use before survey.
         '''
-        if fname:
-            tmpfile=fname
-        else:
-            tmpfile='survey.temp.tfs'
-            i=0
-            while os.path.isfile(tmpfile):
-                tmpfile='survey.'+str(i)+'.temp.tfs'
-                i+=1
+        tmpfile = fname or _tmp_filename('survey')
         self.select('survey',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
         if use:
@@ -270,14 +279,7 @@ class madx:
          @param columns [string or list, optional] columns to include in table
          :param bool use: Call use before aperture.
         '''
-        if fname:
-            tmpfile=fname
-        else:
-            tmpfile='aperture.temp.tfs'
-            i=0
-            while os.path.isfile(tmpfile):
-                tmpfile='aperture.'+str(i)+'.temp.tfs'
-                i+=1
+        tmpfile = fname or _tmp_filename('aperture')
         self.select('aperture',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
         if use:

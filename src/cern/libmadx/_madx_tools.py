@@ -26,7 +26,7 @@ def _fixcmd(cmd):
     '''
     Makes sure command is sane.
     '''
-    if type(cmd)!=str and type(cmd)!=unicode:
+    if not isinstance(cmd, basestring):
         raise TypeError("ERROR: input must be a string, not "+str(type(cmd)))
     if len(cmd.strip())==0:
         return 0
@@ -48,7 +48,7 @@ def _get_dict(tmpfile,retdict):
 
 def _add_range(madrange):
     if madrange:
-        if type(madrange)==str:
+        if isinstance(madrange, basestring):
             return 'range='+madrange+','
         elif type(madrange)==list:
             return 'range='+madrange[0]+'/'+madrange[1]+','

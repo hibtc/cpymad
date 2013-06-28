@@ -1,0 +1,170 @@
+{
+  "ilc": {
+    "real": true,
+    "extends": [],
+    "dbdirs": [
+    ],
+    "path-offsets": {
+      "repository-offset": "ILC/",
+      "resource-offset": "ilc/v01/"
+    },
+    "beams": {
+      "ilc_eff1": {
+        "particle": "electron",
+        "sequence": "eff1",
+        "energy": "E0_BDS",
+        "ex": "EMITX",
+        "ey": "EMITY",
+        "sigt": "BLENG",
+        "sige": "ESPRD",
+        "radiate": false
+      }
+    },
+    "init-files": [
+      {
+        "path": "init_1.madx",
+        "location": "RESOURCE"
+      },
+      {
+        "path": "ilc000_ILC_common.xsifx"
+      },
+      {
+        "path": "ilc008_BDS_common.xsifx"
+      },
+      {
+        "path": "init_2.madx",
+        "location": "RESOURCE"
+      }
+    ],
+
+    "default-sequence": "eff1",
+    "sequences": {
+      "eff1": {
+        "ranges": {
+          "ALL": {
+            "madx-range": {
+              "last": "#e", 
+              "first": "#s"
+            },
+            "twiss-initial-conditions": {
+              "default": {
+                "betx": 19.903055344277,
+                "bety": 23.515062683376,
+                "alfx": -0.132334196527E-14,
+                "alfy": -0.460733846946E-14,
+                "closed-orbit": false
+              }
+            },
+            "default-twiss": "default"
+          }
+        },
+        "beam": "ilc_eff1",
+        "default-range": "ALL"
+      }
+    },
+    "default-optic": "3.50",
+    "optics": {
+      "3.50": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS",
+            "path": "ffs_351LD0_304D1B.madx"
+          },
+          {
+            "parse": "STRENGTHS",
+            "path": "k_ffs_351_bx11_by48_quads.madx"
+          },
+          {
+            "path": "init_eff1.madx",
+            "location": "RESOURCE"
+          }
+        ],
+        "overlay": true
+      }
+    }
+  },
+  "ilc-4.50m": {
+    "real": true,
+    "extends": [],
+    "dbdirs": [
+    ],
+    "path-offsets": {
+      "repository-offset": "ILC/",
+      "resource-offset": "ilc/v01/"
+    },
+    "beams": {
+      "ilc_eff1": {
+        "particle": "electron",
+        "sequence": "eff1",
+        "energy": "E0_BDS",
+        "ex": "EMITX",
+        "ey": "EMITY",
+        "sigt": "BLENG",
+        "sige": "ESPRD",
+        "radiate": false
+      }
+    },
+    "init-files": [
+      {
+        "path": "init_1.madx",
+        "location": "RESOURCE"
+      },
+      {
+        "path": "ilc000_ILC_common.xsifx"
+      },
+      {
+        "path": "ilc008_BDS_common.xsifx"
+      },
+      {
+        "path": "init_2.madx",
+        "location": "RESOURCE"
+      }
+    ],
+
+    "default-sequence": "eff1",
+    "sequences": {
+      "eff1": {
+        "ranges": {
+          "ALL": {
+            "madx-range": {
+              "last": "#e", 
+              "first": "#s"
+            },
+            "twiss-initial-conditions": {
+              "default": {
+                "betx": 19.903055344277,
+                "bety": 23.515062683376,
+                "alfx": -0.132334196527E-14,
+                "alfy": -0.460733846946E-14,
+                "closed-orbit": false
+              }
+            },
+            "default-twiss": "default"
+          }
+        },
+        "beam": "ilc_eff1",
+        "default-range": "ALL"
+      }
+    },
+    "default-optic": "4.50",
+    "optics": {
+      "4.50": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS",
+            "path": "ffs_450LD0_205D1B.madx"
+          },
+          {
+            "parse": "STRENGTHS",
+            "path": "k_ffs_450_bx11_by48_quads.madx"
+          },
+          {
+            "path": "init_eff1.madx",
+            "location": "RESOURCE"
+          }
+        ],
+        "overlay": true
+      }
+    }
+  }
+}

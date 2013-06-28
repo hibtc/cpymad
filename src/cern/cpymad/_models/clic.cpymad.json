@@ -1,23 +1,25 @@
 {
   "clic": {
+    "real": true,
+    "extends": [],
     "dbdirs": [
-      "/afs/cern.ch/eng/sl/",
-      "/afs/cern.ch/user/r/rtomas/"
+      "/afs/cern.ch/eng/sl/lintrack/",
+      "/afs/cern.ch/user/r/rtomas/lintrack/"
     ], 
     "path-offsets": {
-      "repository-offset": "lintrack/CLICr/MainBeam/BDS/v_10_10_11", 
+      "repository-offset": "CLICr/MainBeam/BDS/v_10_10_11",
       "resource-offset": "clic/v_10_10_11/"
     }, 
     "beams": {
-      "clic_DIAGCOLL": {
+      "clic_diagcoll": {
         "particle": "electron", 
-        "sequence": "DIAGCOLL",
+        "sequence": "diagcoll",
         "energy": 1500.0, 
         "radiate": false
       },
-      "clic_NEWBDS": {
+      "clic_newbds": {
         "particle": "electron", 
-        "sequence": "NEWBDS",
+        "sequence": "newbds",
         "energy": 1500.0, 
         "radiate": false
       }
@@ -39,9 +41,9 @@
       }
     ], 
     
-    "default-sequence": "NEWBDS",
+    "default-sequence": "newbds",
     "sequences": {
-      "DIAGCOLL": {
+      "diagcoll": {
         "ranges": {
           "ALL": {
             "madx-range": {
@@ -60,10 +62,10 @@
             "default-twiss": "default"
           }
         },
-        "beam": "clic_DIAGCOLL",
+        "beam": "clic_diagcoll",
         "default-range": "ALL"
       },
-      "NEWBDS": {
+      "newbds": {
         "ranges": {
           "ALL": {
             "madx-range": {
@@ -82,7 +84,7 @@
             "default-twiss": "default"
           }
         },
-        "beam": "clic_NEWBDS",
+        "beam": "clic_newbds",
         "default-range": "ALL"
       }
     },

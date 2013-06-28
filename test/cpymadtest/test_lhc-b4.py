@@ -15,32 +15,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
-'''
-Created on 16 Aug 2011
+import unittest
+from cern import cpymad
+from base_test import TestCpymad
 
-@author: kfuchsbe
-'''
-class PyMadGlobals():
-    ''' A class containing only the singletons used for the pymad convenience functions. 
-    
-    This class shall never be instantiated.
-    '''
-    
-    # the pymad-service singleton
-    PYMAD_SERVICE=None
-    
-'''
- Use couchdb (only inside CERN at the moment..)
- Does not work yet, problems with
- multiprocessing and accesses to the server.
-'''
-USE_COUCH=False
+class TestLHC(TestCpymad):
+    def setUp(self):
+        self.model=cpymad.model('lhc-beam4')
+        self.model._cmd('option,-twiss_print')
 
-'''
- If this is a string (i.e. "if MAD_HISTORY_BASE" is True),
- then every madx instance will write a history
- file with this as base name.
- an integer will be appended, pluss file ending '.madx'
- If you in your script specify histfile, that takes precedence
-'''
-MAD_HISTORY_BASE=''
+if __name__ == '__main__':
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestLHC)
+    unittest.TextTestRunner(verbosity=1).run(suite)
+

@@ -1,5 +1,5 @@
 .*~
+.*.swp
 *.pyc
 _build
 build
-src/cern/cpymad/madx.c

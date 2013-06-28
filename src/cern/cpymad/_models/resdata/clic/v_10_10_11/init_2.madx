@@ -1,3 +1,8 @@
 NEWBDS: LINE:=(fakeline,DIAGNOSTICS,NOENTRBDS);
 
 DIAGCOLL: LINE:=(fakeline,DIAGNOSTICS,NOENTRCOLSYS);
+
+! convert lines to sequences..
+use,sequence='diagcoll';
+use,sequence='newbds';
+

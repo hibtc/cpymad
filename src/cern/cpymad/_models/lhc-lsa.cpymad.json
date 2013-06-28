@@ -1,5 +1,7 @@
 {
   "LHC (LSA)": {
+    "real": true,
+    "extends": [],
     "dbdirs": [
       "/afs/cern.ch/eng/"
     ], 

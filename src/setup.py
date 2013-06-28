@@ -53,7 +53,7 @@ cdata=['_models/*.json']
 
 # add this to include data array
 for j in range(2,10):
-    for end in ['.madx','.str','.seq','.tfs']:
+    for end in ['.madx','.str','.seq','.tfs', '.xsifx', 'CLICx' ,'.ind92']:
         cdata.append('_models/re*data'+'/*'*j+end)
 
 libs=['madx', "c", "stdc++"]
@@ -76,8 +76,7 @@ else: # making some guesses...
         ]
 for prefixdir in ['/usr',
         '/usr/local',
-        os.path.join(home,'.local'),
-        '/afs/cern.ch/user/y/ylevinse/.local']:
+        os.path.join(home,'.local')]:
     add_dir(prefixdir,_prefixdirs)
 
 for prefixdir in _prefixdirs:
