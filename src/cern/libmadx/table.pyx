@@ -1,8 +1,9 @@
 from cern.pymad.domain.tfs import TfsTable,TfsSummary
 
-from cern.libmadx.madx_structures cimport column_info
+from cern.libmadx.madx_structures cimport column_info,char_p_array
 cdef extern from "madX/mad_table.h":
     column_info  table_get_column(char* table_name,char* column_name)
+    char_p_array table_get_header(char* table_name)
 
 from libc.stdlib cimport free
 from cpython cimport PyObject, Py_INCREF
@@ -69,15 +70,38 @@ cdef class ArrayWrapperInt(ArrayWrapper):
         ndarray = np.PyArray_SimpleNewFromData(1, shape,
                                                np.NPY_INT, self.data_ptr)
         return ndarray
-    
+
+
+cdef _split_header_line(header_line):
+    hsplit=header_line.split()
+    if len(hsplit)!=4 or hsplit[0]!='@':
+        raise ValueError("Could not read header line: %s" % header_line)
+    key=hsplit[1]
+    value=hsplit[3]
+    if hsplit[2]=="%le":
+        value=float(value)
+    return key,value
+
 def get_dict_from_mem(table,columns,retdict):
     ret={}
     cdef column_info info
+    cdef char_p_array *header
     cdef np.ndarray _tmp
     cdef char** char_tmp
     if type(columns)==str:
         columns=columns.split(',')
-    
+
+
+    # reading the header information..
+    header = <char_p_array*>table_get_header(table)
+    ret_header={}
+    for i in xrange(header.curr):
+        key,value=_split_header_line(header.p[i])
+        ret_header[key]=value
+
+
+
+    # reading the columns that were requested..
     for c in columns:
         info=table_get_column(table,c)
         dtype=<bytes>info.datatype
@@ -98,6 +122,7 @@ def get_dict_from_mem(table,columns,retdict):
             print "ERROR:",c,"is not available in table",table
         else:
             print "Unknown datatype",dtype,c
+    
     if retdict:
-        return ret,{}
-    return TfsTable(ret),TfsSummary({})
+        return ret,ret_header
+    return TfsTable(ret),TfsSummary(ret_header)
