@@ -2,8 +2,10 @@
 # This file contains tool functions for madx.pyx
 #
 import collections
+import re
 
 from cern.pymad.io import tfs,tfsDict
+from cern.pymad.domain.tfs import LookupDict
 
 
 def _fixcmd(cmd):
@@ -116,4 +118,38 @@ def _mad_command_unpack(*arglists, **kwargs):
         else:
             raise TypeError("_call accepts only lists or dicts")
     return _mad_command(*args, **kwargs)
+
+def _read_knobfile(filename, retdict):
+    """
+    Read the knobfile output of ENDMATCH.
+
+    The input file is in a format like:
+
+        k0sl_h1ms4v  :=+1.00000000e-04+0.00000000e+00*knob;
+        k1_h3qd22    :=+8.57142860e-01+2.82559231e-01*knob;
+
+    The result is in the form of a dictionary:
+
+    """
+    result = {}
+    initial = {}
+    r_name = r'\s*(\w*)\s*'
+    r_number = r'\s*([+-]?(?:\d+(?:\.\d*)?|\d*\.\d+)(?:[eE][+\-]?\d+)?)\s*'
+    regex = re.compile('^' + r_name + ':=' + r_number + '([+-])' + r_number + r'\*\s*knob\s*;\s*$')
+    with open(filename, 'r') as f:
+        for line in f:
+            print(line)
+            match = regex.match(line)
+            if match:
+                print("MATCHED")
+                knob_name = match.group(1)
+                initial_value = float(match.group(2))
+                variation = float(match.group(3) + match.group(4))
+                result[knob_name] = initial_value + variation
+                initial[knob_name] = initial_value
+    if retdict:
+        return result, initial
+    else:
+        return LookupDict(result), LookupDict(initial)
+
 
