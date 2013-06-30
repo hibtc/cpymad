@@ -33,9 +33,9 @@ def _add_range(madrange):
     if madrange:
         if isinstance(madrange, basestring):
             return 'range='+madrange+','
-        elif type(madrange)==list:
+        elif isinstance(madrange, list):
             return 'range='+madrange[0]+'/'+madrange[1]+','
-        elif type(madrange)==dict:
+        elif isinstance(madrange, dict):
             return 'range='+madrange['first']+'/'+madrange['last']+','
         else:
             raise TypeError("Wrong range type/format")
