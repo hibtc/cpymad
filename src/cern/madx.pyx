@@ -319,7 +319,8 @@ class madx:
             bety=None,
             alfx=None,
             alfy=None,
-            twiss_init=None):
+            twiss_init=None,
+            retdict=False):
         """
         Perform match operation.
 
@@ -408,16 +409,13 @@ class madx:
         cmd += _madx_tools._mad_command_unpack(method)
 
         # ENDMATCH
-        cmd += _madx_tools._mad_command('endmatch')
+        cmd += _madx_tools._mad_command('endmatch', knobfile=tmpfile)
 
         self.command(cmd)
-
-        #----------------------------------------
-        # tab,param=_madx_tools._get_dict(tmpfile,retdict)
-        # if not fname:
-        #     os.remove(tmpfile)
-        # return tab,param
-        #----------------------------------------
+        result,initial=_madx_tools._read_knobfile(tmpfile, retdict)
+        if not fname:
+            os.remove(tmpfile)
+        return result,initial
 
     # turn on/off verbose outupt..
     def verbose(self,switch):
