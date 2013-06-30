@@ -78,9 +78,13 @@ def _mad_command(cmd, *args, **kwargs):
         if isinstance(arg, tuple):
             if len(arg) == 3:
                 key, op, value = arg
-            else:
+            elif len(arg) == 2:
                 key, value = arg
                 op = '='
+            elif len(arg) == 1:
+                key, value = arg[0], True
+            else:
+                raise ValueError("Accepts only 1-to-3-tuples.")
         else:
             key = arg
             value = True
