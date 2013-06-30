@@ -384,21 +384,21 @@ class madx:
         # CONSTRAINT
         if isinstance(constraints, list):
             for c in constraints:
-                cmd += _madx_tools._mad_command_unpack(['constraint'], c)
+                cmd += _madx_tools._mad_command_unpack('constraint', c)
         else:
             raise TypeError("constraints must be list.")
 
         # VARY
         if isinstance(vary, dict):
-            for k,v in vary:
+            for k,v in vary.items():
                 try:
-                    cmd += _madx_tools._mad_command_unpack(['vary'], v, name=k)
+                    cmd += _madx_tools._mad_command_unpack('vary', v, name=k)
                 except TypeError:
                     cmd += _madx_tools._mad_command('vary', name=k, step=v)
         elif isinstance(vary, list):
             for v in vary:
                 try:
-                    cmd += _madx_tools._mad_command_unpack(['vary'], v)
+                    cmd += _madx_tools._mad_command_unpack('vary', v)
                 except TypeError:
                     cmd += _madx_tools._mad_command('vary', name=v)
         else:

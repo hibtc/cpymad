@@ -1,6 +1,7 @@
 ##
 # This file contains tool functions for madx.pyx
 #
+import collections
 
 from cern.pymad.io import tfs,tfsDict
 
@@ -91,6 +92,7 @@ def _mad_command(cmd, *args, **kwargs):
 
         key = str(key)
         if key.lower() == 'range':
+            # NOTE: we need to cut the trailing ',' from _add_range:
             mad += ', ' + _add_range(value)[:-1]
         elif isinstance(value, bool):
             mad += ', ' + ('' if value else '-') + key
@@ -99,18 +101,19 @@ def _mad_command(cmd, *args, **kwargs):
     mad += ';\n'
     return mad
 
-def _call(fn, *params):
+def _mad_command_unpack(*arglists, **kwargs):
+    """Create a MAD-X command from lists of its components."""
     args = []
-    kwargs = {}
-    for v in params:
-        if isinstance(v, dict):
-            kwargs.update(v)
+    for v in arglists:
+        if isinstance(v, basestring):
+            args.append(v)
+        elif isinstance(v, collections.OrderedDict):
+            args += list(v.items())
+        elif isinstance(v, dict):
+            args += sorted(v.items(), key=lambda i: i[0])
         elif isinstance(v, list):
             args += v
         else:
             raise TypeError("_call accepts only lists or dicts")
-    return fn(*args, **kwargs)
-
-def _mad_command_unpack(*arglists, **kwargs):
-    return _call(_mad_command, kwargs, *arglists)
+    return _mad_command(*args, **kwargs)
 
