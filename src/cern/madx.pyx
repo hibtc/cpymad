@@ -247,6 +247,7 @@ class madx:
             :param string fname: name of file to store tfs table
             :param list pattern: pattern to include in table
             :param string/list columns: Columns to include in table
+            :param bool retdict: if true, returns tables as dictionary types
             :param bool use: Call use before survey.
         '''
         tmpfile = fname or _tmp_filename('survey')
@@ -259,7 +260,7 @@ class madx:
         if not fname:
             os.remove(tmpfile)
         return tab,param
-            
+
     def aperture(self,
               sequence,
               pattern=['full'],
@@ -277,6 +278,7 @@ class madx:
          @param fname [string,optional] name of file to store tfs table
          @param pattern [list, optional] pattern to include in table
          @param columns [string or list, optional] columns to include in table
+            :param bool retdict: if true, returns tables as dictionary types
          :param bool use: Call use before aperture.
         '''
         tmpfile = fname or _tmp_filename('aperture')
@@ -285,11 +287,11 @@ class madx:
         if use:
             print "Warning, use before aperture is known to cause problems"
             self.use(sequence) # this seems to cause a bug?
-        self.command('aperture,'+_madx_tools._add_range(madrange)+_madx_tools._add_offsets(offsets)+'file="'+tmpfile+'";')
-        tab,param=_madx_tools._get_dict(tmpfile,retdict)
-        if not fname:
-            os.remove(tmpfile)
-        return tab,param
+        _cmd='aperture,'+_madx_tools._add_range(madrange)+_madx_tools._add_offsets(offsets)
+        if fname:
+            _cmd+=',file="'+fname+'"'
+        self.command(_cmd)
+        return table.get_dict_from_mem('aperture',columns,retdict)
         
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')
