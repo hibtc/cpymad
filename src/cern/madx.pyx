@@ -26,7 +26,7 @@ Main module to interface with Mad-X library.
 
 '''
 
-from cern.libmadx.madx_structures cimport sequence_list, name_list,column_info
+from cern.libmadx.madx_structures cimport sequence_list, name_list, column_info
 from cern.libmadx import table
 
 cdef extern from "madX/mad_api.h":

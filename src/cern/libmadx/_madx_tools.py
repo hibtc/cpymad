@@ -5,8 +5,6 @@
 from cern.pymad.io import tfs,tfsDict
 
 
-
-    
 def _checkCommand(cmd):
     ''' give the lowercase version of the command
     this function does some sanity checks...'''
