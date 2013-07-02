@@ -79,3 +79,9 @@ cdef extern from "madX/madx.h":
           sequence **sequs      # sequence pointer list
           int curr
           pass
+
+    cdef struct column_info:
+            void * data
+            int length
+            char datatype
+            char datasize

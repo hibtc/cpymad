@@ -19,6 +19,9 @@
 
 import os,sys
 
+# Version of pymad (major,minor):
+PYMADVERSION=['0','2']
+
 if "bdist_egg" in sys.argv:
     from setuptools import setup
 else:
@@ -35,7 +38,7 @@ for arg in sys.argv:
         sys.argv.remove(arg)
 
 
-sourcefiles=[["cern/madx.pyx"]]
+sourcefiles=[["cern/madx.pyx"],["cern/libmadx/table.pyx"]]
 pythonsrc=["cern",
            "cern.libmadx",
            "cern.cpymad",
@@ -86,6 +89,10 @@ for prefixdir in _prefixdirs:
 if not includedirs:
     raise ValueError("Cannot find folder with Mad-X headers")
 
+# Add numpy include directory (for cern.libmadx.table):
+import numpy
+includedirs.append(numpy.get_include())
+
 for prefixdir in _prefixdirs:
     add_dir(os.path.join(prefixdir,'lib'),libdirs)
     if platform.architecture()[0]=='64bit':
@@ -100,11 +107,20 @@ for ldir in libdirs:
             libdirs=[ldir]
             break
 mods=[Extension('cern.madx',
-                    define_macros = [('MAJOR_VERSION', '0'),
-                                     ('MINOR_VERSION', '1')],
+        define_macros = [('MAJOR_VERSION', PYMADVERSION[0]),
+                            ('MINOR_VERSION', PYMADVERSION[1])],
+        include_dirs = includedirs,
+        libraries = libs,
+        sources = sourcefiles[0],
+        library_dirs = libdirs,
+        runtime_library_dirs= rlibdirs
+        ),
+      Extension('cern.libmadx.table',
+                    define_macros = [('MAJOR_VERSION', PYMADVERSION[0]),
+                                     ('MINOR_VERSION', PYMADVERSION[1])],
                     include_dirs = includedirs,
                     libraries = libs,
-                    sources = sourcefiles[0],
+                    sources = sourcefiles[1],
                     library_dirs = libdirs,
                     runtime_library_dirs= rlibdirs
                     ),
@@ -112,7 +128,7 @@ mods=[Extension('cern.madx',
 
 setup(
     name='PyMAD',
-    version='0.2',
+    version='.'.join([str(i) for i in PYMADVERSION]),
     description='Interface to Mad-X, using Cython or Py4J through JMAD',
     cmdclass = {'build_ext': build_ext},
     ext_modules = mods,

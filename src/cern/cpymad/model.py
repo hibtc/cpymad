@@ -446,7 +446,7 @@ class model(abc.model.PyMadModel):
             self.twiss(sequence)
         # Calling "basic aperture files"
         if not self._apercalled[sequence]:
-            for afile in seq['aperfiles']:
+            for afile in self._mdef['sequences'][sequence]['aperfiles']:
                 print "Calling file",afile
                 self._call(afile)
             self._apercalled[sequence]=True
