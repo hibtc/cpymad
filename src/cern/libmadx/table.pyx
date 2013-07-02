@@ -105,7 +105,7 @@ def get_dict_from_mem(table,columns,retdict):
     for c in columns:
         info=table_get_column(table,c)
         dtype=<bytes>info.datatype
-        if dtype=='d':
+        if dtype==u'd':
             aw=ArrayWrapper()
             aw.set_data(info.length,info.data)
             _tmp = np.array(aw, copy=False)
@@ -113,12 +113,12 @@ def get_dict_from_mem(table,columns,retdict):
             _tmp.base = <PyObject*> aw
             Py_INCREF(aw)
             ret[c.lower()]=_tmp
-        elif dtype=='S':
+        elif dtype==u'S':
             char_tmp=<char**>info.data
             ret[c.lower()]=np.zeros(info.length,'S%d'%info.datasize)
             for i in xrange(info.length):
                 ret[c.lower()][i]=char_tmp[i]
-        elif dtype=='V':
+        elif dtype==u'V':
             print "ERROR:",c,"is not available in table",table
         else:
             print "Unknown datatype",dtype,c
