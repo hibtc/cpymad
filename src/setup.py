@@ -19,6 +19,9 @@
 
 import os,sys
 
+# Version of pymad (major,minor):
+PYMADVERSION=['0','2']
+
 if "bdist_egg" in sys.argv:
     from setuptools import setup
 else:
@@ -65,7 +68,7 @@ def add_dir(directory,dirlist):
 
 
 home=os.environ['HOME']
-includedirs=['/usr/lib/python2.7/site-packages/numpy/core/include/']
+includedirs=[]
 libdirs=[]
 rlibdirs=[]
 if special_madxdir:
@@ -86,6 +89,10 @@ for prefixdir in _prefixdirs:
 if not includedirs:
     raise ValueError("Cannot find folder with Mad-X headers")
 
+# Add numpy include directory (for cern.libmadx.table):
+import numpy
+includedirs.append(numpy.get_include())
+
 for prefixdir in _prefixdirs:
     add_dir(os.path.join(prefixdir,'lib'),libdirs)
     if platform.architecture()[0]=='64bit':
@@ -99,10 +106,9 @@ for ldir in libdirs:
             rlibdirs=[ldir]
             libdirs=[ldir]
             break
-_modver=['0','2']
 mods=[Extension('cern.madx',
-        define_macros = [('MAJOR_VERSION', _modver[0]),
-                            ('MINOR_VERSION', _modver[1])],
+        define_macros = [('MAJOR_VERSION', PYMADVERSION[0]),
+                            ('MINOR_VERSION', PYMADVERSION[1])],
         include_dirs = includedirs,
         libraries = libs,
         sources = sourcefiles[0],
@@ -110,8 +116,8 @@ mods=[Extension('cern.madx',
         runtime_library_dirs= rlibdirs
         ),
       Extension('cern.libmadx.table',
-                    define_macros = [('MAJOR_VERSION', _modver[0]),
-                                     ('MINOR_VERSION', _modver[1])],
+                    define_macros = [('MAJOR_VERSION', PYMADVERSION[0]),
+                                     ('MINOR_VERSION', PYMADVERSION[1])],
                     include_dirs = includedirs,
                     libraries = libs,
                     sources = sourcefiles[1],
@@ -122,7 +128,7 @@ mods=[Extension('cern.madx',
 
 setup(
     name='PyMAD',
-    version='0.2',
+    version='.'.join([str(i) for i in PYMADVERSION]),
     description='Interface to Mad-X, using Cython or Py4J through JMAD',
     cmdclass = {'build_ext': build_ext},
     ext_modules = mods,
