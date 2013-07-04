@@ -446,7 +446,7 @@ class model(abc.model.PyMadModel):
             self.twiss(sequence)
         # Calling "basic aperture files"
         if not self._apercalled[sequence]:
-            for afile in seq['aperfiles']:
+            for afile in self._mdef['sequences'][sequence]['aperfiles']:
                 print "Calling file",afile
                 self._call(afile)
             self._apercalled[sequence]=True
@@ -587,17 +587,23 @@ def _get_file_content(modelname,filename):
         return cern.cpymad._couch_server.get_file(modelname,filename)
 
     try:
+        # first we try a simple read
+        # this is necessary if the model path is outside the pymad installation
         with open(filename) as f:
-            data = f.read()
+            file_content = f.read()
     except FileNotFoundError:
+        # this can happen if the installed pymad is e.g. in an egg file
+        # we then try to read the file from our pymad installation
+        # using pkgutil.get_data
         filename = os.path.join('_models',os.path.basename(filename))
         try:
             import pkgutil
-            data = pkgutil.get_data(__name__, filename)
+            file_content = pkgutil.get_data(__name__, filename)
         except ImportError:
+            # not all python installations we currently support have pkgutil apparently..
             import pkg_resources
-            data = pkg_resources.resource_string(__name__, filename)
-    return data
+            file_content = pkg_resources.resource_string(__name__, filename)
+    return file_content
 
 
 def save_model(model_def,filename):

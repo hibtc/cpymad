@@ -26,7 +26,9 @@ Main module to interface with Mad-X library.
 
 '''
 
-from cern.libmadx.madx_structures cimport sequence_list, name_list
+from cern.libmadx.madx_structures cimport sequence_list, name_list, column_info
+from cern.libmadx import table
+
 cdef extern from "madX/mad_api.h":
     sequence_list *madextern_get_sequence_list()
     #table *getTable()
@@ -111,20 +113,6 @@ class madx:
         if self._rechist:
             self._hfile.close()
         #madx_finish()
-    
-    # give lowercase version of command here..
-    def _checkCommand(self,cmd):
-        if "stop;" in cmd or "exit;" in cmd:
-            print("WARNING: found quit in command: "+cmd+"\n")
-            print("Please use madx.finish() or just exit python (CTRL+D)")
-            print("Command ignored")
-            return False
-        if cmd.split(',')>0 and "plot" in cmd.split(',')[0]:
-            print("WARNING: Plot functionality does not work through pymadx")
-            print("Command ignored")
-            return False
-        # All checks passed..
-        return True
 
     def command(self,cmd):
         '''
@@ -148,7 +136,7 @@ class madx:
                 self._writeHist(cmd)
             else:
                 self._writeHist(cmd+'\n')
-        if self._checkCommand(cmd.lower()):
+        if _madx_tools._checkCommand(cmd.lower()):
             madx_input(cmd)
         return 0
     
@@ -220,14 +208,17 @@ class madx:
             :param bool use: Call use before aperture.
             :param bool chrom: Also calculate chromatic functions (slower)
         '''
-        tmpfile = fname or _tmp_filename('twiss')
         self.select('twiss',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
         if use:
             self.use(sequence)
-        _tmpcmd='twiss, sequence='+sequence+','+_madx_tools._add_range(madrange)+' file="'+tmpfile+'"'
+        _tmpcmd='twiss, sequence='+sequence+','+_madx_tools._add_range(madrange)
         if chrom:
             _tmpcmd+=',chrom'
+        if _tmpcmd[-1]==',':
+            _tmpcmd=_tmpcmd[:-1]
+        if fname: # we only need this if user wants the file to be written..
+            _tmpcmd+=', file="'+fname+'"'
         for i_var,i_val in {'betx':betx,'bety':bety,'alfx':alfx,'alfy':alfy}.items():
             if i_val!=None:
                 _tmpcmd+=','+i_var+'='+str(i_val)
@@ -239,10 +230,7 @@ class madx:
                     else:
                         _tmpcmd+=','+i_var+'='+str(i_val)
         self.command(_tmpcmd+';')
-        tab,param=_madx_tools._get_dict(tmpfile,retdict)
-        if not fname:
-            os.remove(tmpfile)
-        return tab,param
+        return table.get_dict_from_mem('twiss',columns,retdict)
     
     def survey(self,
               sequence,
@@ -260,6 +248,7 @@ class madx:
             :param string fname: name of file to store tfs table
             :param list pattern: pattern to include in table
             :param string/list columns: Columns to include in table
+            :param bool retdict: if true, returns tables as dictionary types
             :param bool use: Call use before survey.
         '''
         tmpfile = fname or _tmp_filename('survey')
@@ -272,7 +261,7 @@ class madx:
         if not fname:
             os.remove(tmpfile)
         return tab,param
-            
+
     def aperture(self,
               sequence,
               pattern=['full'],
@@ -290,6 +279,7 @@ class madx:
          @param fname [string,optional] name of file to store tfs table
          @param pattern [list, optional] pattern to include in table
          @param columns [string or list, optional] columns to include in table
+            :param bool retdict: if true, returns tables as dictionary types
          :param bool use: Call use before aperture.
         '''
         tmpfile = fname or _tmp_filename('aperture')
@@ -298,11 +288,11 @@ class madx:
         if use:
             print "Warning, use before aperture is known to cause problems"
             self.use(sequence) # this seems to cause a bug?
-        self.command('aperture,'+_madx_tools._add_range(madrange)+_madx_tools._add_offsets(offsets)+'file="'+tmpfile+'";')
-        tab,param=_madx_tools._get_dict(tmpfile,retdict)
-        if not fname:
-            os.remove(tmpfile)
-        return tab,param
+        _cmd='aperture,'+_madx_tools._add_range(madrange)+_madx_tools._add_offsets(offsets)
+        if fname:
+            _cmd+=',file="'+fname+'"'
+        self.command(_cmd)
+        return table.get_dict_from_mem('aperture',columns,retdict)
         
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')
@@ -455,3 +445,4 @@ class madx:
         return ret
         #print "Currently number of sequenses available:",seqs.curr
         #print "Name of list:",seqs.name
+        

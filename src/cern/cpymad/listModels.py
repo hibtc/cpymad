@@ -19,7 +19,7 @@ import os,json
 from cern.pymad.globals import USE_COUCH
 import cern.cpymad
 
-modelpathes = [os.path.join(os.path.dirname(__file__),'_models')]
+modelpaths = [os.path.join(os.path.dirname(__file__),'_models')]
 
 def modelList():
     return _get_mnames_files()[0]
@@ -27,7 +27,7 @@ def modelList():
 def _get_mnames_files():
     """List availabel models and corresponding file pathes.
 
-    Searches for all .cpymad.json files within all `modelpathes` folders.
+    Searches for all .cpymad.json files within all `modelpaths` folders.
     Returns a list [model names] and a dictionary {file => [model names]}.
     No care is taken to prevent a model from being listed multiple times.
     """
@@ -35,7 +35,7 @@ def _get_mnames_files():
         return cern.cpymad._couch_server.ls_models()
     mnames=[]
     fnames={}
-    for modelloc in modelpathes:
+    for modelloc in modelpaths:
         for f in os.listdir(modelloc):
             if not f.lower().endswith('.cpymad.json'):
                 continue

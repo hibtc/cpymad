@@ -28,6 +28,7 @@
 cdef extern from "madX/mad_def.h":
     #cdef NAME_L
     pass
+
 cdef extern from "madX/madx.h":
     struct char_p_array:
         int flag,stamp
@@ -54,7 +55,19 @@ cdef extern from "madX/madx.h":
           #int stamp
           #char** names;                 # element names for sort
           pass
+
+cdef extern from "madX/mad_table.h":
+    cdef struct table:
+        char* name
+        int num_cols, org_cols,dynamic,origin,curr
+        char_p_array *header #,*node_nm
+        int_array *col_out,*row_out
+        name_list* columns    #names + types (in inform)
+        char ***s_cols
+        pass
+
       
+cdef extern from "madX/madx.h":
     # to be able to read sequence information..
     struct sequence:
         char[48] name
@@ -67,13 +80,8 @@ cdef extern from "madX/madx.h":
           int curr
           pass
 
-cdef extern from "madX/mad_table.h":
-    cdef struct table:
-        char* name
-        int num_cols, org_cols,dynamic,origin,curr
-        char_p_array *header #,*node_nm
-        int_array *col_out,*row_out
-        name_list* columns    #names + types (in inform)
-        char ***s_cols
-        pass
-    
+    cdef struct column_info:
+            void * data
+            int length
+            char datatype
+            char datasize
