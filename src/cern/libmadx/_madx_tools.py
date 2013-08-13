@@ -153,10 +153,8 @@ def _read_knobfile(filename, retdict):
     regex = re.compile('^' + r_name + ':=' + r_number + '([+-])' + r_number + r'\*\s*knob\s*;\s*$')
     with open(filename, 'r') as f:
         for line in f:
-            print(line)
             match = regex.match(line)
             if match:
-                print("MATCHED")
                 knob_name = match.group(1)
                 initial_value = float(match.group(2))
                 variation = float(match.group(3) + match.group(4))
