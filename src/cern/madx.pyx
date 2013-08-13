@@ -305,7 +305,6 @@ class madx:
             vary,
             weight=None,
             method=['lmdif'],
-            *,
             fname='',
             betx=None,
             bety=None,
