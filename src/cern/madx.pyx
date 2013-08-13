@@ -46,6 +46,7 @@ cdef madx_input(char* cmd):
     pro_input(cmd)
 
 import os,sys
+import collections
 import cern.pymad.globals
 from cern.libmadx import _madx_tools
 
@@ -373,20 +374,18 @@ class madx:
         cmd = _madx_tools._mad_command('match', ('sequence', sequence), **twiss_init)
 
         # CONSTRAINT
-        if isinstance(constraints, list):
-            for c in constraints:
-                cmd += _madx_tools._mad_command_unpack('constraint', c)
-        else:
-            raise TypeError("constraints must be list.")
+        assert isinstance(constraints, collections.Sequence)
+        for c in constraints:
+            cmd += _madx_tools._mad_command_unpack('constraint', c)
 
         # VARY
-        if isinstance(vary, dict):
+        if isinstance(vary, collections.Mapping):
             for k,v in vary.items():
                 try:
                     cmd += _madx_tools._mad_command_unpack('vary', v, name=k)
                 except TypeError:
                     cmd += _madx_tools._mad_command('vary', name=k, step=v)
-        elif isinstance(vary, list):
+        elif isinstance(vary, collections.Sequence):
             for v in vary:
                 try:
                     cmd += _madx_tools._mad_command_unpack('vary', v)

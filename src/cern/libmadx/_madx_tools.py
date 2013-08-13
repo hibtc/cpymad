@@ -51,9 +51,9 @@ def _add_range(madrange):
     if madrange:
         if isinstance(madrange, basestring):
             return 'range='+madrange+','
-        elif isinstance(madrange, list):
+        elif isinstance(madrange, collections.Sequence):
             return 'range='+madrange[0]+'/'+madrange[1]+','
-        elif isinstance(madrange, dict):
+        elif isinstance(madrange, collections.Mapping):
             return 'range='+madrange['first']+'/'+madrange['last']+','
         else:
             raise TypeError("Wrong range type/format")
@@ -126,9 +126,9 @@ def _mad_command_unpack(*arglists, **kwargs):
             args.append(v)
         elif isinstance(v, collections.OrderedDict):
             args += list(v.items())
-        elif isinstance(v, dict):
+        elif isinstance(v, collections.Mapping):
             args += sorted(v.items(), key=lambda i: i[0])
-        elif isinstance(v, list):
+        elif isinstance(v, collections.Sequence):
             args += v
         else:
             raise TypeError("_call accepts only lists or dicts")
