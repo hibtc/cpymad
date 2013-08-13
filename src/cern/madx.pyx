@@ -303,7 +303,8 @@ class madx:
             sequence,
             constraints,
             vary,
-            method,
+            weight=None,
+            method=['lmdif'],
             *,
             fname='',
             betx=None,
@@ -318,6 +319,7 @@ class madx:
         @param sequence [string] name of sequence
         @param constraints [list] constraints to pose during matching
         @param vary [list or dict] vary commands
+        @param weight [dict] weights for matching parameters 
 
         Each item of constraints must be a list or dict directly passable
         to _mad_command().
@@ -334,6 +336,7 @@ class madx:
         >>>     'lhc',
         >>>     constraints=[{'betx':3, 'range':'#e'}, [('bety','<',3)]],
         >>>     vary=['K1', {'name':'K2', 'step':1e-6}],
+        >>>     weight=dict(betx=1, bety=2),
         >>>     method=['lmdif', dict(calls=100, tolerance=1e-6)]
         >>>     )
 
@@ -344,6 +347,7 @@ class madx:
         constraint, bety<3;
         vary, name=K1;
         vary, name=K2, step=1e-6;
+        weight, betx=1, bety=2;
         lmdif, calls=100, tolerance=1e-6;
         endmatch;
 
@@ -393,6 +397,10 @@ class madx:
                     cmd += _madx_tools._mad_command('vary', name=v)
         else:
             raise TypeError("vary must be list or dict.")
+
+        # WEIGHT
+        if weight:
+            cmd += _madx_tools._mad_command_unpack('weight', weight)
 
         # METHOD
         cmd += _madx_tools._mad_command_unpack(method)

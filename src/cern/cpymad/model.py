@@ -489,12 +489,15 @@ class model(abc.model.PyMadModel):
             self,
             constraints,
             vary,
+            weight=None,
             method=['lmdif'],
             sequence = '',
             fname='',
             retdict=False):
         """
         Perform a matching operation.
+
+        See cern.madx.match() for a description of the parameters.
         """
         from cern.pymad.domain.tfs import LookupDict
 
@@ -509,6 +512,7 @@ class model(abc.model.PyMadModel):
         args = {'sequence': sequence,
                 'constraints': constraints,
                 'vary': vary,
+                'weight': weight,
                 'method': method,
                 'fname': fname}
         args['madrange']=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]]
@@ -686,6 +690,7 @@ class _modelProcess(multiprocessing.Process):
                             sequence=cmd[1]['sequence'],
                             constraints=cmd[1]['constraints'],
                             vary=cmd[1]['vary'],
+                            weight=cmd[1]['weight'],
                             method=cmd[1]['method'],
                             fname=cmd[1]['fname'],
                             twiss_init=cmd[1]['twiss-init'],
