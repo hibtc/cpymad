@@ -521,7 +521,7 @@ class model(abc.model.PyMadModel):
         if 'twiss-initial-conditions' in rangedict:
             args['twiss-init']={}
             for condition,value in self._get_twiss_initial(sequence,_madrange).items():
-                if value:
+                if value not in ['name']:
                     args['twiss-init'][condition]=value
 
         result,initial=self._sendrecv(('match',args))
