@@ -530,9 +530,7 @@ class model(abc.model.PyMadModel):
                     args['twiss-init'][condition]=value
 
         result,initial=self._sendrecv(('match',args))
-        if retdict:
-            return result,initial
-        return LookupDict(result),LookupDict(initial)
+        return self.twiss(sequence=sequence)
 
 
     def _get_ranges(self,sequence):
