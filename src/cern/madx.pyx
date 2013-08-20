@@ -390,10 +390,10 @@ class madx:
                     cmd += _madx_tools._mad_command('vary', name=k, step=v)
         elif isinstance(vary, collections.Sequence):
             for v in vary:
-                try:
-                    cmd += _madx_tools._mad_command_unpack('vary', v)
-                except TypeError:
+                if isinstance(v, basestring):
                     cmd += _madx_tools._mad_command('vary', name=v)
+                else:
+                    cmd += _madx_tools._mad_command_unpack('vary', v)
         else:
             raise TypeError("vary must be list or dict.")
 
@@ -402,7 +402,7 @@ class madx:
             cmd += _madx_tools._mad_command_unpack('weight', weight)
 
         # METHOD
-        cmd += _madx_tools._mad_command_unpack(method)
+        cmd += _madx_tools._mad_command_unpack(*method)
 
         # ENDMATCH
         cmd += _madx_tools._mad_command('endmatch', knobfile=tmpfile)
