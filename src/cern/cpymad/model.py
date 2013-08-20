@@ -497,7 +497,7 @@ class model(abc.model.PyMadModel):
         """
         Perform a matching operation.
 
-        See cern.madx.match() for a description of the parameters.
+        See :func:`cern.madx.match` for a description of the parameters.
         """
         from cern.pymad.domain.tfs import LookupDict
 

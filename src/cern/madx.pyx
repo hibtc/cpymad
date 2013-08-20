@@ -203,7 +203,7 @@ class madx:
             :param string sequence: name of sequence
             :param string fname: name of file to store tfs table
             :param list pattern: pattern to include in table
-            :param list/string columns: columns to include in table
+            :param string columns: columns to include in table, can also be a list of strings
             :param bool retdict: if true, returns tables as dictionary types
             :param dict twiss_init: dictionary of twiss initialization variables
             :param bool use: Call use before aperture.
@@ -275,12 +275,12 @@ class madx:
               ):
         '''
          Runs select+use+aperture on the sequence selected
-         
-         @param sequence [string] name of sequence
-         @param fname [string,optional] name of file to store tfs table
-         @param pattern [list, optional] pattern to include in table
-         @param columns [string or list, optional] columns to include in table
-            :param bool retdict: if true, returns tables as dictionary types
+
+         :param string sequence: name of sequence
+         :param string fname: name of file to store tfs table
+         :param list pattern: pattern to include in table
+         :param list columns: columns to include in table (can also be string)
+         :param bool retdict: if true, returns tables as dictionary types
          :param bool use: Call use before aperture.
         '''
         tmpfile = fname or _tmp_filename('aperture')
@@ -314,11 +314,11 @@ class madx:
         """
         Prepare a match command sequence.
 
-        @param sequence [string] name of sequence
-        @param constraints [list] constraints to pose during matching
-        @param vary [list or dict] vary commands
-        @param weight [dict] weights for matching parameters 
-        @param method [list]
+        :param string sequence: name of sequence
+        :param list constraints: constraints to pose during matching
+        :param list vary: vary commands (can also be dict)
+        :param dict weight: weights for matching parameters
+        :param list method: Which method to apply
 
         Each item of constraints must be a list or dict directly passable
         to _mad_command().
