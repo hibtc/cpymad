@@ -517,11 +517,16 @@ class model(abc.model.PyMadModel):
                 'fname': fname}
         args['madrange']=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]]
 
+        def is_match_param(v):
+            return v.lower() in ['rmatrix', 'chrom', 'beta0', 'deltap',
+                    'betx','alfx','mux','x','px','dx','dpx',
+                    'bety','alfy','muy','y','py','dy','dpy' ]
+
         args['twiss-init']=None
         if 'twiss-initial-conditions' in rangedict:
             args['twiss-init']={}
             for condition,value in self._get_twiss_initial(sequence,_madrange).items():
-                if value not in ['name']:
+                if is_match_param(condition):
                     args['twiss-init'][condition]=value
 
         result,initial=self._sendrecv(('match',args))
