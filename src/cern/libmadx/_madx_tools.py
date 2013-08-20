@@ -81,16 +81,16 @@ def _mad_command(cmd, *args, **kwargs):
 
     Examples:
 
-    >>> _mad_command('twiss', ('sequence', lhc), 'centre', dx=2, betx=3, bety=8)
-    twiss, sequence=lhc, centre, betx=3, bety=3, dx=2;
+    >>> print(_mad_command('twiss', ('sequence', 'lhc'), 'centre', dx=2, betx=3, bety=8).rstrip())
+    twiss, sequence=lhc, centre, betx=3, bety=8, dx=2;
 
-    >>> _mad_command('option', echo=False)
+    >>> print(_mad_command('option', echo=False).rstrip())
     option, -echo;
 
-    >>> _mad_command('constraint', ('betx', '<', 3.13), 'bety < 3.5')
+    >>> print(_mad_command('constraint', ('betx', '<', 3.13), 'bety < 3.5').rstrip())
     constraint, betx<3.13, bety < 3.5;
 
-    >>> _mad_command('constraint', **{'betx<3.13':True})
+    >>> print(_mad_command('constraint', **{'betx<3.13':True}).rstrip())
     constraint, betx<3.13;
 
     Note that alphabetic order is enforced on kwargs, such that results are

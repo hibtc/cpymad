@@ -298,27 +298,27 @@ class madx:
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')
 
-    def match(
-            self,
-            sequence,
-            constraints,
-            vary,
-            weight=None,
-            method=['lmdif'],
-            fname='',
-            betx=None,
-            bety=None,
-            alfx=None,
-            alfy=None,
-            twiss_init=None,
-            retdict=False):
+    @staticmethod
+    def matchcommand(
+        sequence,
+        constraints,
+        vary,
+        weight=None,
+        method=['lmdif'],
+        fname='',
+        betx=None,
+        bety=None,
+        alfx=None,
+        alfy=None,
+        twiss_init=None):
         """
-        Perform match operation.
+        Prepare a match command sequence.
 
         @param sequence [string] name of sequence
         @param constraints [list] constraints to pose during matching
         @param vary [list or dict] vary commands
         @param weight [dict] weights for matching parameters 
+        @param method [list]
 
         Each item of constraints must be a list or dict directly passable
         to _mad_command().
@@ -331,42 +331,37 @@ class madx:
         value is taken as the STEP value.
 
         Examples:
-        >>> m.match(
-        >>>     'lhc',
-        >>>     constraints=[{'betx':3, 'range':'#e'}, [('bety','<',3)]],
-        >>>     vary=['K1', {'name':'K2', 'step':1e-6}],
-        >>>     weight=dict(betx=1, bety=2),
-        >>>     method=['lmdif', dict(calls=100, tolerance=1e-6)]
-        >>>     )
 
-        Is equivalent to:
-
+        >>> print(madx.matchcommand(
+        ...     'lhc',
+        ...     constraints=[{'betx':3, 'range':'#e'}, [('bety','<',3)]],
+        ...     vary=['K1', {'name':'K2', 'step':1e-6}],
+        ...     weight=dict(betx=1, bety=2),
+        ...     method=['lmdif', dict(calls=100, tolerance=1e-6)]
+        ... ).rstrip())
         match, sequence=lhc;
         constraint, betx=3, range=#e;
         constraint, bety<3;
         vary, name=K1;
-        vary, name=K2, step=1e-6;
+        vary, name=K2, step=1e-06;
         weight, betx=1, bety=2;
-        lmdif, calls=100, tolerance=1e-6;
+        lmdif, calls=100, tolerance=1e-06;
         endmatch;
 
-        >>> m.match(
-        >>>     'lhc',
-        >>>     [{'betx':3, 'range':'#e'}],
-        >>>     {'K1': {'upper':3}, 'K2':1e-6})
-        >>> 
-
-        Is equivalent to:
-
+        >>> print(madx.matchcommand(
+        ...     'lhc',
+        ...     constraints=[{'betx':3, 'range':'#e'}],
+        ...     vary={'K1': {'upper':3}, 'K2':1e-6},
+        ...     fname='knobs.txt'
+        ... ).rstrip())
         match, sequence=lhc;
         constraint, betx=3, range=#e;
-        vary, name=K1, upper=3;
-        vary, name=K2, step=1e-6;
-        endmatch;
+        vary, upper=3, name=K1;
+        vary, name=K2, step=1e-06;
+        lmdif;
+        endmatch, knobfile=knobs.txt;
 
         """
-        tmpfile = fname or _tmp_filename('match')
-
         if not twiss_init:
             twiss_init = {}
         for k,v in {'betx':betx,'bety':bety,'alfx':alfx,'alfy':alfy}.items():
@@ -405,7 +400,50 @@ class madx:
         cmd += _madx_tools._mad_command_unpack(*method)
 
         # ENDMATCH
-        cmd += _madx_tools._mad_command('endmatch', knobfile=tmpfile)
+        if fname:
+            cmd += _madx_tools._mad_command('endmatch', knobfile=fname)
+        else:
+            cmd += _madx_tools._mad_command('endmatch')
+        return cmd
+
+
+    def match(
+            self,
+            sequence,
+            constraints,
+            vary,
+            weight=None,
+            method=['lmdif'],
+            fname='',
+            betx=None,
+            bety=None,
+            alfx=None,
+            alfy=None,
+            twiss_init=None,
+            retdict=False):
+        """
+        Perform match operation.
+
+        @param sequence [string] name of sequence
+        @param constraints [list] constraints to pose during matching
+        @param vary [list or dict] vary commands
+        @param weight [dict] weights for matching parameters 
+
+        For further reference, see madx.matchcommand().
+
+        """
+        tmpfile = fname or _tmp_filename('match')
+
+        cmd = self.matchcommand(
+                sequence=sequence,
+                constraints=constraints,
+                vary=vary,
+                weight=weight,
+                method=method,
+                fname=tmpfile,
+                betx=betx, bety=bety,
+                alfx=alfx, alfy=alfy,
+                twiss_init=twiss_init)
 
         self.command(cmd)
         result,initial=_madx_tools._read_knobfile(tmpfile, retdict)
