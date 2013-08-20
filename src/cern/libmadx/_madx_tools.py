@@ -64,6 +64,13 @@ def _add_offsets(offsets):
         return 'offsetelem="'+offsets+'",'
     return ''
 
+def _sorted_items(kwargs):
+    """Return dictionary items in canonicalized order."""
+    if isinstance(kwargs, collections.OrderedDict):
+        return kwargs.items()
+    else:
+        return sorted(kwargs.items(), key=lambda i: i[0])
+
 def _mad_command(cmd, *args, **kwargs):
     """
     Create a MAD-X command from its name and parameter list.
@@ -91,7 +98,7 @@ def _mad_command(cmd, *args, **kwargs):
 
     """
     mad = cmd
-    fullargs = list(args) + sorted(kwargs.items(), key=lambda i: i[0])
+    fullargs = list(args) + _sorted_items(kwargs)
     for arg in fullargs:
         if isinstance(arg, tuple):
             if len(arg) == 3:
@@ -124,10 +131,8 @@ def _mad_command_unpack(*arglists, **kwargs):
     for v in arglists:
         if isinstance(v, basestring):
             args.append(v)
-        elif isinstance(v, collections.OrderedDict):
-            args += list(v.items())
         elif isinstance(v, collections.Mapping):
-            args += sorted(v.items(), key=lambda i: i[0])
+            args += _sorted_items(v)
         elif isinstance(v, collections.Sequence):
             args += v
         else:

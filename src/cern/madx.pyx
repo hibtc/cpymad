@@ -383,7 +383,7 @@ class madx:
 
         # VARY
         if isinstance(vary, collections.Mapping):
-            for k,v in vary.items():
+            for k,v in _madx_tools._sorted_items(vary):
                 try:
                     cmd += _madx_tools._mad_command_unpack('vary', v, name=k)
                 except TypeError:
