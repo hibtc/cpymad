@@ -148,7 +148,8 @@ def _read_knobfile(filename, retdict):
         k0sl_h1ms4v  :=+1.00000000e-04+0.00000000e+00*knob;
         k1_h3qd22    :=+8.57142860e-01+2.82559231e-01*knob;
 
-    The result is in the form of a dictionary:
+    The result is a tuple `(final, initial)`. Where both entries are
+    dictionaries or LookupDict depending on the `retdict` parameter.
 
     """
     result = {}
