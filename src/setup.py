@@ -29,6 +29,7 @@ else:
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 import platform
+from distutils.util import get_platform
 
 # ugly hack to add --madxdir=/path/to/madxinstallation
 special_madxdir=''
@@ -66,8 +67,12 @@ def add_dir(directory,dirlist):
         if directory not in dirlist:
             dirlist.append(directory)
 
+try:
+    home = os.environ['HOME']
+except KeyError:
+    # on win32 %HOMEDRIVE%%HOMEPATH% is the way to go:
+    home = os.environ['HOMEDRIVE'] + os.environ['HOMEPATH']
 
-home=os.environ['HOME']
 includedirs=[]
 libdirs=[]
 rlibdirs=[]
