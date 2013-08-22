@@ -129,7 +129,7 @@ def _mad_command_unpack(*arglists, **kwargs):
     """Create a MAD-X command from lists of its components."""
     args = []
     for v in arglists:
-        if isinstance(v, basestring):
+        if isinstance(v, basestring) or isinstance(v, tuple):
             args.append(v)
         elif isinstance(v, collections.Mapping):
             args += _sorted_items(v)
@@ -157,15 +157,18 @@ def _read_knobfile(filename, retdict):
     r_name = r'\s*(\w*)\s*'
     r_number = r'\s*([+-]?(?:\d+(?:\.\d*)?|\d*\.\d+)(?:[eE][+\-]?\d+)?)\s*'
     regex = re.compile('^' + r_name + ':=' + r_number + '([+-])' + r_number + r'\*\s*knob\s*;\s*$')
-    with open(filename, 'r') as f:
-        for line in f:
-            match = regex.match(line)
-            if match:
-                knob_name = match.group(1)
-                initial_value = float(match.group(2))
-                variation = float(match.group(3) + match.group(4))
-                result[knob_name] = initial_value + variation
-                initial[knob_name] = initial_value
+    try:
+        with open(filename, 'r') as f:
+            for line in f:
+                match = regex.match(line)
+                if match:
+                    knob_name = match.group(1)
+                    initial_value = float(match.group(2))
+                    variation = float(match.group(3) + match.group(4))
+                    result[knob_name] = initial_value + variation
+                    initial[knob_name] = initial_value
+    except IOError:
+        pass
     if retdict:
         return result, initial
     else:
