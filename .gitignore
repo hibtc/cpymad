@@ -1,5 +1,6 @@
 .*~
 .*.swp
 *.pyc
+*.c
 _build
 build

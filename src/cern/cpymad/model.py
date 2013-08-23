@@ -485,6 +485,54 @@ class model(abc.model.PyMadModel):
             return t,s
         return TfsTable(t),TfsSummary(s)
 
+    def match(
+            self,
+            constraints,
+            vary,
+            weight=None,
+            method=['lmdif'],
+            sequence = '',
+            fname='',
+            retdict=False):
+        """
+        Perform a matching operation.
+
+        See cern.madx.match() for a description of the parameters.
+        """
+        from cern.pymad.domain.tfs import LookupDict
+
+        # set sequence/range...
+        self.set_sequence(sequence)
+        sequence=self._active['sequence']
+        _madrange=self._active['range']
+
+        seqdict=self._mdef['sequences'][sequence]
+        rangedict=seqdict['ranges'][_madrange]
+
+        args = {'sequence': sequence,
+                'constraints': constraints,
+                'vary': vary,
+                'weight': weight,
+                'method': method,
+                'fname': fname}
+        args['madrange']=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]]
+
+        def is_match_param(v):
+            return v.lower() in ['rmatrix', 'chrom', 'beta0', 'deltap',
+                    'betx','alfx','mux','x','px','dx','dpx',
+                    'bety','alfy','muy','y','py','dy','dpy' ]
+
+        args['twiss-init']=None
+        if 'twiss-initial-conditions' in rangedict:
+            args['twiss-init']={}
+            for condition,value in self._get_twiss_initial(sequence,_madrange).items():
+                if is_match_param(condition):
+                    args['twiss-init'][condition]=value
+
+        result,initial=self._sendrecv(('match',args))
+        return self.twiss(sequence=sequence)
+
+
     def _get_ranges(self,sequence):
         return self._mdef['sequences'][sequence]['ranges'].keys()
 
@@ -640,6 +688,17 @@ class _modelProcess(multiprocessing.Process):
                                        use=cmd[1]['use'],
                                        retdict=True)
                     self.sender.send((t,s))
+                elif cmd[0] == 'match':
+                    r,i=_madx.match(
+                            sequence=cmd[1]['sequence'],
+                            constraints=cmd[1]['constraints'],
+                            vary=cmd[1]['vary'],
+                            weight=cmd[1]['weight'],
+                            method=cmd[1]['method'],
+                            fname=cmd[1]['fname'],
+                            twiss_init=cmd[1]['twiss-init'],
+                            retdict=True)
+                    self.sender.send((r,i))
                 else:
                     raise ValueError("You sent a wrong command to subprocess: "+str(cmd))
 
