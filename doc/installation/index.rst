@@ -187,7 +187,7 @@ In the following we will try to keep a list of the various issues users have rep
         compiler=mingw32
 
 
-      If you do not want to modify your python system configuration you can specify the compiler on the command line:
+      If you do not want to modify your python system configuration you can place this as ``setup.cfg`` in the current directory. You can also specify the compiler on the command line:
 
       .. code-block:: bat
 
@@ -197,3 +197,33 @@ In the following we will try to keep a list of the various issues users have rep
 
       See also `this question on stackoverflow <http://stackoverflow.com/questions/2817869/error-unable-to-find-vcvarsall-bat>`_.
 
+    * distutils.unixcompiler not configured:
+
+      .. code-block:: python
+
+        Traceback (most recent call last):
+          ...
+          File "C:\Python27\lib\distutils\unixccompiler.py", line 227, in runtime_library_dir_option
+            compiler = os.path.basename(sysconfig.get_config_var("CC"))
+          File "C:\Python27\lib\ntpath.py", line 198, in basename
+            return split(p)[1]
+          File "C:\Python27\lib\ntpath.py", line 170, in split
+            d, p = splitdrive(p)
+          File "C:\Python27\lib\ntpath.py", line 125, in splitdrive
+            if p[1:2] == ':':
+        TypeError: 'NoneType' object has no attribute '__getitem__'
+
+      Occurs:
+      While building ``python setup.py install``.
+
+      Reason:
+      Bug in distutils (?).
+
+      Solution:
+      Add the following line to the function ``_init_nt()`` in the file ``Lib\distutils\sysconfig.py`` of the python installation.
+
+      .. code-block::python
+
+        g['CC'] = 'gcc'
+
+      For further reference see `a related issue <http://bugs.python.org/issue2437>`_.
