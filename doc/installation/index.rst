@@ -19,8 +19,8 @@ the command
 
 The argument *--install-platlib* means we exclude external modules. The reason is that the external module cern.madx requires the dynamic library of Mad-X available on your system (which we here assume you do not have)
 
-CPyMad
-------
+CPyMad (unix)
+-------------
 
 First method, use installation script:
     We provide an `installation script <install.sh>`_ which should do the full job for you. Download the script
@@ -64,6 +64,66 @@ If you download JMad after following any of the methods described above for CPyM
 you will immediately have JPyMad available as well.
 
 
+Cython (windows, MinGW)
+-----------------------
+
+At this time you have to build pymad manually.
+
+    * If you want to install all system dependencies at once, I recommend `Python(x,y) <https://code.google.com/p/pythonxy/>`_. This is a python development distribution including MinGW, Cython and Python2.7. Make sure Cython and MinGW are marked for installation.
+
+    * Download the Mad-X source from
+      `svn <http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&rev=0&isdir=1>`_
+      and unpack it.
+
+    * Build the Mad-X library as a **shared library** (``.dll``).
+      Enter the folder madX and run the commands
+
+      .. code-block:: bat
+
+          mkdir build && cd build
+          cmake -G "MinGW Makefiles" -DBUILD_SHARED_LIBS:BOOL=ON -DCMAKE_INSTALL_PREFIX=..\madx-redist ..\
+          make install
+
+      This will install the headers, binaries and library files to the folder ``..\madx-redist``.
+
+      Executing CMake from the GUI, you have to add the ``BUILD_SHARED_LIBS`` option manually. Afterwards reconfigure and regenerate.
+
+
+    * Alternatively, if you have already built a static library you can convert it to a dynamic library using ``pexports`` and ``dlltool`` like so:
+
+      .. code-block:: bat
+
+          mingw-get install mingw32-pexports
+
+          ar -x libptc.a
+          gcc -shared *.obj -o libptc.dll -lgfortran
+          pexports libptc.dll >libptc.def
+          dlltool --dllname libptc.dll --def libptc.def --output-lib libptc.dll.a
+          del *.obj libptc.def
+
+          ar -x libmadx.a
+          gcc -shared *.obj -o libmadx.dll -L. -lptc.dll -lstdc++ -lgfortran
+          pexports libmadx.dll >libmadx.def
+          dlltool --dllname libmadx.dll --def libmadx.def --output-lib libmadx.dll.a
+          del *.obj libmadx.def
+
+
+    * In the folder ``pymad/src``, run the command
+
+      .. code-block:: bat
+
+          python setup.py install --madxdir=<path-to-your>\madx-redist
+
+      It is highly unlikely that your build succeeds at this point. See :ref:`potential-problems` for further information.
+
+
+    * Copy the ``.dll`` library files to either your system or better your applications runtime path.
+
+
+
+
+.. _potential-problems:
+
 Potential problems
 ------------------
 
@@ -98,3 +158,42 @@ In the following we will try to keep a list of the various issues users have rep
 
      Solution:
      In order to get cpymad, you need Cython installed on your system. If you cannot obtain that, use jpymad instead.
+
+    * Cannot find find -lpthread:
+
+      Occurs:
+      When linking libmadx with the ``-DMADX_STATIC:BOOL=ON`` cmake option specified.
+
+      Reason:
+      A static version of pthreads is not installed by default.
+
+      Solution:
+      Download a `prebuilt version of the library <http://www.sourceware.org/pthreads-win32/>`_. You need the file ``libpthreadGC2.a``. Copy it to ``C:\MinGW32-xy\lib\libpthread.a``.
+
+    * Unable to find vcvarsall.bat:
+
+      Occurs:
+      While building ``python setup.py install``.
+
+      Reason:
+      distutils is not configured to use MinGW.
+
+      Solution:
+      Add the following lines to ``C:\Python27\Lib\distutils\distutils.cfg``
+
+      .. code-block:: python
+
+        [build]
+        compiler=mingw32
+
+
+      If you do not want to modify your python system configuration you can specify the compiler on the command line:
+
+      .. code-block:: bat
+
+        python setup.py build --madxdir=<path-to-your>\madx-redist --compiler=mingw32
+        python setup.py install --madxdir=<path-to-your>\madx-redist
+
+
+      See also `this question on stackoverflow <http://stackoverflow.com/questions/2817869/error-unable-to-find-vcvarsall-bat>`_.
+
