@@ -9,7 +9,7 @@ k1fac := bnfac * 1 /(r.ref * l.MB);
 k2fac := bnfac * 2 /(r.ref^2 * l.MB);
 
 //
-// Arc 12 
+// Arc 12
 //
 
 k1.a12.b2 := ab.a12 * b2.mb.a12.b2 * k1fac;

@@ -1,14 +1,14 @@
 #-------------------------------------------------------------------------------
 # This file is part of PyMad.
-# 
+#
 # Copyright (c) 2011, CERN. All rights reserved.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 # 	http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -59,10 +59,10 @@ def _wait_for_file(filename, timeout=10.0):
         time = time + _SLEEP_INTERVAL
         if time > timeout:
             return False
-        
+
     _delete_waitfile(filename, True)
     return True
-        
+
 def _delete_waitfile(filename, ignorefail=True):
     '''
     deletes the file, which is used to determine, if madx is ready
@@ -100,28 +100,28 @@ def _start(scriptname, jmadhome=None):
     """
     if jmadhome is None:
         jmadhome = _get_jmad_home()
-        
+
     if jmadhome is None: # YIL suggestion: also check system path..
         jmadhome = _search_path_for_bin(scriptname+ _get_extension())
-        
+
     if jmadhome is None:
         print("WARNING: Could not locate jmad script "+scriptname)
         return False
-    
+
     #waitfile = os.path.join(jmadhome, 'pymad-service-ready.out')
     waitfile = os.path.join(os.getcwd(),'pymad-service-ready.out')
     _delete_waitfile(waitfile, False)
-    
+
     cmd = os.path.join(jmadhome, scriptname + _get_extension())
-    
+
     if not os.path.isfile(cmd):
         print "WARN: start script '" + cmd + "' does not exist. Cannot start."
         return False
-    
-    
-    
+
+
+
     Popen([cmd,waitfile], cwd=jmadhome)
-    
+
     if _wait_for_file(waitfile):
         print "... started."
         return True
@@ -148,7 +148,7 @@ def stop():
     if not is_connected():
         print "Not connected to java, cannot stop the process! Try using 'connect()' first and then 'stop()'."
         return
-    
+
     java_pymadservice = JPyMadGlobals.java_gateway.entry_point #@UndefinedVariable
     try:
         java_pymadservice.end()
@@ -158,26 +158,26 @@ def stop():
         JPyMadGlobals.jmad_service = None
         JPyMadGlobals.enums = None
         print "Stopping java process seemed to work."
-    
-    
+
+
 def is_connected():
     """
     returns true, if a connection is established, false if not.
     """
     return not (JPyMadGlobals.jmad_service == None)
-    
+
 def connect():
     """
     Creates the gateway and the jmad service
     """
-    
+
     # if the java-gateway was already initialized, then we have nothing to do!
     if is_connected():
         return
-    
+
     if JPyMadGlobals.java_gateway == None:
         JPyMadGlobals.java_gateway = JavaGateway()
-    
+
     if JPyMadGlobals.jmad_service == None:
         # the entry-point is directly the jmad service
         # test the connection
@@ -188,8 +188,8 @@ def connect():
         else:
             # only assign the jmad_service, if no error occured
             JPyMadGlobals.jmad_service = JPyMadGlobals.java_gateway.entry_point.getJmadService() #@UndefinedVariable
-    
+
             # now, that everything is connected, we can init the variables
             JPyMadGlobals.enums = Enums(JPyMadGlobals.java_gateway)
-    
+
     return JPyMadGlobals.jmad_service

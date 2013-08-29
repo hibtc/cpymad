@@ -7,7 +7,7 @@ class TestCpymadSurvey(unittest.TestCase):
     # It's a bit surprising that this doesn't happen by itself.. Hmmm...
     def tearDown(self):
         del self.model
-    
+
     def test_aperture(self):
 
         self.model=cpymad.model('lhc')

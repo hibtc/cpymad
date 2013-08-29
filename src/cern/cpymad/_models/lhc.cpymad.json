@@ -440,195 +440,195 @@
     ],
     "beams": {
       "lhc-beam4_lhcb2": {
-        "sige": 0.0005, 
-        "particle": "PROTON", 
-        "sequence": "lhcb2", 
-        "energy": 450.0, 
-        "npart": 110000000000.0, 
-        "bv": 1, 
-        "ey": 7.297671095555556e-09, 
-        "sigt": 0.077, 
+        "sige": 0.0005,
+        "particle": "PROTON",
+        "sequence": "lhcb2",
+        "energy": 450.0,
+        "npart": 110000000000.0,
+        "bv": 1,
+        "ey": 7.297671095555556e-09,
+        "sigt": 0.077,
         "ex": 7.297671095555556e-09
       }
-    }, 
-    "default-optic": "injection", 
+    },
+    "default-optic": "injection",
     "init-files": [
       {
         "path": "beam_four.seq"
-      }, 
+      },
       {
-        "path": "setb2b3-lhc-b2.madx", 
+        "path": "setb2b3-lhc-b2.madx",
         "location": "RESOURCE"
       }
-    ], 
+    ],
     "path-offsets": {
-      "repository-offset": "lhc/optics/V6.503", 
+      "repository-offset": "lhc/optics/V6.503",
       "resource-offset": "lhc"
-    }, 
+    },
     "sequences": {
       "lhcb2": {
         "ranges": {
           "ALL": {
             "madx-range": {
-              "last": "#e", 
+              "last": "#e",
               "first": "#s"
-            }, 
+            },
             "twiss-initial-conditions": {
               "default twiss": {
-                "closed-orbit": false, 
-                "chrom": false, 
+                "closed-orbit": false,
+                "chrom": false,
                 "centre": false
               }
-            }, 
+            },
             "default-twiss": "default twiss"
-          }, 
+          },
           "ALL first-turn": {
             "madx-range": {
-              "last": "#e", 
+              "last": "#e",
               "first": "#s"
-            }, 
+            },
             "twiss-initial-conditions": {
               "lhcb4-twiss": {
-                "deltap": 0.0, 
-                "centre": false, 
-                "chrom": false, 
-                "bety": 75.204871, 
-                "betx": 53.225011, 
-                "dpy": 3e-06, 
-                "dpx": -0.003062, 
-                "dx": 0.107789, 
-                "dy": 4.6e-05, 
-                "alfy": -1.216716, 
-                "alfx": 1.728909, 
+                "deltap": 0.0,
+                "centre": false,
+                "chrom": false,
+                "bety": 75.204871,
+                "betx": 53.225011,
+                "dpy": 3e-06,
+                "dpx": -0.003062,
+                "dx": 0.107789,
+                "dy": 4.6e-05,
+                "alfy": -1.216716,
+                "alfx": 1.728909,
                 "closed-orbit": false
               }
-            }, 
+            },
             "default-twiss": "lhcb4-twiss"
-          }, 
+          },
           "Inj. Sectors 8-5": {
             "madx-range": {
-              "last": "IP5", 
+              "last": "IP5",
               "first": "LHCINJ.B2"
-            }, 
+            },
             "twiss-initial-conditions": {
               "lhcb4-twiss": {
-                "deltap": 0.0, 
-                "centre": false, 
-                "chrom": false, 
-                "bety": 75.204871, 
-                "betx": 53.225011, 
-                "dpy": 3e-06, 
-                "dpx": -0.003062, 
-                "dx": 0.107789, 
-                "dy": 4.6e-05, 
-                "alfy": -1.216716, 
-                "alfx": 1.728909, 
+                "deltap": 0.0,
+                "centre": false,
+                "chrom": false,
+                "bety": 75.204871,
+                "betx": 53.225011,
+                "dpy": 3e-06,
+                "dpx": -0.003062,
+                "dx": 0.107789,
+                "dy": 4.6e-05,
+                "alfy": -1.216716,
+                "alfx": 1.728909,
                 "closed-orbit": false
               }
-            }, 
+            },
             "default-twiss": "lhcb4-twiss"
-          }, 
+          },
           "Inj. Sectors 8-4": {
             "madx-range": {
-              "last": "IP4", 
+              "last": "IP4",
               "first": "LHCINJ.B2"
-            }, 
+            },
             "twiss-initial-conditions": {
               "lhcb4-twiss": {
-                "deltap": 0.0, 
-                "centre": false, 
-                "chrom": false, 
-                "bety": 75.204871, 
-                "betx": 53.225011, 
-                "dpy": 3e-06, 
-                "dpx": -0.003062, 
-                "dx": 0.107789, 
-                "dy": 4.6e-05, 
-                "alfy": -1.216716, 
-                "alfx": 1.728909, 
+                "deltap": 0.0,
+                "centre": false,
+                "chrom": false,
+                "bety": 75.204871,
+                "betx": 53.225011,
+                "dpy": 3e-06,
+                "dpx": -0.003062,
+                "dx": 0.107789,
+                "dy": 4.6e-05,
+                "alfy": -1.216716,
+                "alfx": 1.728909,
                 "closed-orbit": false
               }
-            }, 
+            },
             "default-twiss": "lhcb4-twiss"
-          }, 
+          },
           "Inj. Sectors 8-1": {
             "madx-range": {
-              "last": "IP1", 
+              "last": "IP1",
               "first": "LHCINJ.B2"
-            }, 
+            },
             "twiss-initial-conditions": {
               "lhcb4-twiss": {
-                "deltap": 0.0, 
-                "centre": false, 
-                "chrom": false, 
-                "bety": 75.204871, 
-                "betx": 53.225011, 
-                "dpy": 3e-06, 
-                "dpx": -0.003062, 
-                "dx": 0.107789, 
-                "dy": 4.6e-05, 
-                "alfy": -1.216716, 
-                "alfx": 1.728909, 
+                "deltap": 0.0,
+                "centre": false,
+                "chrom": false,
+                "bety": 75.204871,
+                "betx": 53.225011,
+                "dpy": 3e-06,
+                "dpx": -0.003062,
+                "dx": 0.107789,
+                "dy": 4.6e-05,
+                "alfy": -1.216716,
+                "alfx": 1.728909,
                 "closed-orbit": false
               }
-            }, 
+            },
             "default-twiss": "lhcb4-twiss"
-          }, 
+          },
           "Inj. Sector 8-7": {
             "madx-range": {
-              "last": "TCLA.A7L7.B2", 
+              "last": "TCLA.A7L7.B2",
               "first": "LHCINJ.B2"
-            }, 
+            },
             "twiss-initial-conditions": {
               "lhcb4-twiss": {
-                "deltap": 0.0, 
-                "centre": false, 
-                "chrom": false, 
-                "bety": 75.204871, 
-                "betx": 53.225011, 
-                "dpy": 3e-06, 
-                "dpx": -0.003062, 
-                "dx": 0.107789, 
-                "dy": 4.6e-05, 
-                "alfy": -1.216716, 
-                "alfx": 1.728909, 
+                "deltap": 0.0,
+                "centre": false,
+                "chrom": false,
+                "bety": 75.204871,
+                "betx": 53.225011,
+                "dpy": 3e-06,
+                "dpx": -0.003062,
+                "dx": 0.107789,
+                "dy": 4.6e-05,
+                "alfy": -1.216716,
+                "alfx": 1.728909,
                 "closed-orbit": false
               }
-            }, 
+            },
             "default-twiss": "lhcb4-twiss"
-          }, 
+          },
           "Inj. Sector 8-6": {
             "madx-range": {
-              "last": "TCDQA.A4L6.B2", 
+              "last": "TCDQA.A4L6.B2",
               "first": "LHCINJ.B2"
-            }, 
+            },
             "twiss-initial-conditions": {
               "lhcb4-twiss": {
-                "deltap": 0.0, 
-                "centre": false, 
-                "chrom": false, 
-                "bety": 75.204871, 
-                "betx": 53.225011, 
-                "dpy": 3e-06, 
-                "dpx": -0.003062, 
-                "dx": 0.107789, 
-                "dy": 4.6e-05, 
-                "alfy": -1.216716, 
-                "alfx": 1.728909, 
+                "deltap": 0.0,
+                "centre": false,
+                "chrom": false,
+                "bety": 75.204871,
+                "betx": 53.225011,
+                "dpy": 3e-06,
+                "dpx": -0.003062,
+                "dx": 0.107789,
+                "dy": 4.6e-05,
+                "alfy": -1.216716,
+                "alfx": 1.728909,
                 "closed-orbit": false
               }
-            }, 
+            },
             "default-twiss": "lhcb4-twiss"
           }
-        }, 
-        "beam": "lhc-beam4_lhcb2", 
-        "default-range": "ALL", 
+        },
+        "beam": "lhc-beam4_lhcb2",
+        "default-range": "ALL",
         "aperfiles": []
       }
-    }, 
+    },
     "default-sequence": "lhcb2"
   },
-  
+
   "lhc-optics": {
     "real": false,
     "optics": {

@@ -20,13 +20,13 @@ Installation:
 Usage:
     # Once installed this is a nice example showing current
     # usability (run from examples folder):
-    
+
     from cern import pymad
-    
-    # select backend, 
+
+    # select backend,
     # 'cpymad' is currently default if nothing is provided
     # Returns a pymad.service object
-    pms=pymad.init('jpymad') 
+    pms=pymad.init('jpymad')
     # Create a model:
     pm=pms.create_model('lhc')
     # Run twiss:

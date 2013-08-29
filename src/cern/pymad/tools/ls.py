@@ -1,14 +1,14 @@
 #-------------------------------------------------------------------------------
 # This file is part of PyMad.
-# 
+#
 # Copyright (c) 2011, CERN. All rights reserved.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 # 	http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,22 +21,22 @@ Created on Tue Nov 16 19:21:25 2010
 
 @author: kaifox
 """
-from run import get_pms 
+from run import get_pms
 
 
 def ls_mdefs(pms=None):
     """
     lists all the currently available model definitions from the given service
-    
+
     Arguments:
-    :param pms: the pymad service from which to retrieve the model definitions, 
+    :param pms: the pymad service from which to retrieve the model definitions,
     if this is None then the singleton is used
     """
     if pms is None:
         pms = get_pms()
-        
+
     mdefs = pms.mdefs
-    
+
     return mdefs
     ret=[]
     for mdef in mdefs:
@@ -51,9 +51,9 @@ def ls_models(pms=None):
     """
     if pms is None:
         pms = get_pms()
-    
+
     ret=[]
     for model in pms.models:
         ret.append(str(model))
     return ret
-        
+

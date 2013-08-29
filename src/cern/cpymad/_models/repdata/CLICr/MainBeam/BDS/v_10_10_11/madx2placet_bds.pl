@@ -9,8 +9,8 @@ open(FILE, $ARGV[0]) or die "Could not open file $ARGV[0]\n";
 @elemnames = ();
 @elemleng = ();
 @key = ();
-@a_x = (); 
-@a_y = (); 
+@a_x = ();
+@a_y = ();
 @til = ();
 @k0 = ();
 @k1 = ();
@@ -29,7 +29,7 @@ sub search_index  # $i = search_index("ENERGY"); $energy = $line[$i];
 {
     my $name = $_[0];
     my $i;
-    
+
     for ($i = 0; $i < @names; $i++)
     {
 	if ($names[$i] eq $name)
@@ -45,7 +45,7 @@ sub search_value  # $energy = search_value("ENERGY");
     return $line[search_index($_[0])];
 }
 
-sub check_name  
+sub check_name
 {
     my $name = $_[0];
     my $jj = $_[1];
@@ -54,15 +54,15 @@ sub check_name
     for ($j =$jj-2; $j<$jj; $j++)
     {
 	if(@elemnames[$j] eq $name)
-	{   
-	   $chk_nm = 0; 
+	{
+	   $chk_nm = 0;
 	   last;
 	}
     }
     return $chk_nm;
 }
 
-sub check_leng  
+sub check_leng
 {
     my $name = $_[0];
     my $j = $_[1];
@@ -70,7 +70,7 @@ sub check_leng
     $elemleng = @elemleng;
     if($j > 1) {
 	if((@elemleng[$j-1] eq 0 && @elemnames[$j-2] eq $name) || (@elemleng[$j-1] eq 0 && @elemleng[$j-2] eq 0 && @elemnames[$j-3] eq $name))
-	{   
+	{
 	    $chk_lg = 0;
 	}
     }
@@ -90,7 +90,7 @@ sub check_same_line
 	  $nl++;
 	  @skip_lines[$k] = 1;
 	}
-	elsif (@elemleng[$k] != 0) 
+	elsif (@elemleng[$k] != 0)
 	{
 	    last;
 	}
@@ -109,7 +109,7 @@ sub check_merror
 	{
 	    @skip_lines[$k] = 1;
 	    $ki = $k;
-	} 
+	}
     }
     return $ki;
 }
@@ -126,24 +126,24 @@ while ($lines = <FILE>)
 {
 
     if ($lines =~ /^\*/) {
-	
+
 	@line = split(" ", $lines);
-	
+
 	for ($i=1;$i<@line;$i++)
 	{
 	    push(@names, $line[$i]);
 	}
-	
+
     } elsif ($lines !~ /^[@\*\$]/) {
-	
+
 	@line = split(" ", $lines);
-	
+
 	my $keyword = search_value("KEYWORD");
 	my $length = search_value("L");
 	my $name = search_value("NAME");
 
 	my $apx = 1.0; # beware, this is in meters
-	my $apy = 1.0; # beware, this is in meters	    
+	my $apy = 1.0; # beware, this is in meters
 	if($aper == 1) {
 	     $apx = search_value("APER_1"); # beware, this is in meters
 	     $apy = search_value("APER_2"); # beware, this is in meters
@@ -186,8 +186,8 @@ close(FILE);
 for ($i=0;$i<$count; $i++)
 {
 
-    if (@skip_lines[$i] == 1) { next; } 
-    
+    if (@skip_lines[$i] == 1) { next; }
+
     my $name = $elemnames[$i];
     my $keyword= $key[$i];
     my $apx = $a_x[$i];
@@ -211,7 +211,7 @@ for ($i=0;$i<$count; $i++)
 # This part is commented because in some lattice after a drift a series of multipoles may come 09/03/2010
 #	if( $key[$i+1] =~ /MULTIPOLE/ && $elemleng[$i+1] == 0 && ( $k0[$i+1] != 0 || $k1[$i+1] != 0 || $k2[$i+1] != 0 || $k3[$i+1] != 0 || $k4[$i+1] != 0 || $k5[$i+1] != 0 || $k6[$i+1] != 0) ){
 #	if( $key[$i+1] =~ /MULTIPOLE/ && $elemleng[$i+1] == 0 ){
-#	  
+#
 #	    $elemleng[$i+1] = $length;
 #	}
 #	else {
@@ -225,7 +225,7 @@ for ($i=0;$i<$count; $i++)
 		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 	    }
 	    elsif($apx !=0 && $apy ==0){
-		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";	  
+		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 	    }
 	    else {
 		print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
@@ -237,7 +237,7 @@ for ($i=0;$i<$count; $i++)
 	if($split) {
 	    if($chl) {
 		if ($length != 0) {
-		    print "Girder\n"; 
+		    print "Girder\n";
 		}
 	    }
 	    my $chk_nl = check_same_line($name,$i,$k1l);
@@ -262,17 +262,17 @@ for ($i=0;$i<$count; $i++)
 #		print " -type 3 -Kn \[expr $str*\$e0\]";
 #	    } elsif ($k3[$chk_me] ne 0 && $k3[$chk_me] != 0){
 #		my $str = $k3[$chk_me];
-#		print " -type 4 -Kn \[expr -1.0*$str*\$e0\]";		
+#		print " -type 4 -Kn \[expr -1.0*$str*\$e0\]";
 #	    } elsif ($k4[$chk_me] ne 0 && $k4[$chk_me] != 0){
 #		my $str = $k4[$chk_me];
-#		print " -type 5 -Kn \[expr $str*\$e0\]";	
+#		print " -type 5 -Kn \[expr $str*\$e0\]";
 #	    } elsif ($k5[$chk_me] ne 0 && $k5[$chk_me] != 0 ){
 #		my $str = $k5[$chk_me];
-#		print " -type 6 -Kn \[expr -1.0*$str*\$e0\]";	
+#		print " -type 6 -Kn \[expr -1.0*$str*\$e0\]";
 #	    } elsif ($k6[$chk_me] ne 0 && $k6[$chk_me] != 0 ){
 #		my $str = $k6[$chk_me];
-#		print " -type 7 -Kn \[expr $str*\$e0\]";	
-#	    } 
+#		print " -type 7 -Kn \[expr $str*\$e0\]";
+#	    }
 #	}
 
 	if ($tilt != 0)
@@ -283,7 +283,7 @@ for ($i=0;$i<$count; $i++)
 	    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 	}
 	elsif($apx !=0 && $apy ==0){
-	    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";	  
+	    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 	}
 	else {
 	    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
@@ -313,16 +313,16 @@ for ($i=0;$i<$count; $i++)
 	if ($tilt != 0)
 	{
 	    print " -tilt $tilt";
-	}      
+	}
 	if($apx !=0 && $apy !=0){
 	    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 	}
 	elsif($apx !=0 && $apy ==0){
-	    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";	  	  
+	    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 	}
 	else {
-	    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";	  		
-	}	    
+	    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
+	}
     }
     elsif ($keyword =~ /OCTUPOLE/)
     {
@@ -341,8 +341,8 @@ for ($i=0;$i<$count; $i++)
 	}
 	else {
 	    if ($length != 0) {
-		print "Girder\n";	
-	    }	    
+		print "Girder\n";
+	    }
 	    print "Multipole -name $name -synrad \$mult_synrad -type 4 -length $length -strength \[expr -1.0*$k3l*\$e0\]";
 	}
 	if ($tilt != 0)
@@ -353,10 +353,10 @@ for ($i=0;$i<$count; $i++)
 	    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 	}
 	elsif($apx !=0 && $apy ==0){
-		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n"; 	  
+		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 	    }
 	    else {
-		print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";	  		
+		print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
 	    }
 	}
 	elsif ($keyword =~ /MULTIPOLE/)
@@ -389,11 +389,11 @@ for ($i=0;$i<$count; $i++)
 		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 		}
 		elsif($apx !=0 && $apy ==0){
-		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n"; 	    
+		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 		}
 		else {
-		    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";	  		
-		}		
+		    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
+		}
 	    } elsif ($k1l != 0) {
 		if($split) {
 		    if($chk && $chl) {
@@ -421,10 +421,10 @@ for ($i=0;$i<$count; $i++)
 		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 		}
 		elsif($apx !=0 && $apy ==0){
-		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n"; 	    
+		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 		}
 		else {
-		    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";	  		
+		    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
 		}
 	    } elsif ($k2l != 0) {
 		if($split) {
@@ -449,14 +449,14 @@ for ($i=0;$i<$count; $i++)
 		{
 		    print " -tilt $tilt";
 		}
-		if($apx !=0 && $apy !=0){	  
+		if($apx !=0 && $apy !=0){
 		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 		}
 		elsif($apx !=0 && $apy ==0){
-		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";	      
+		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 		}
 		else {
-		    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";	  		
+		    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
 		}
 	    } elsif ($k3l != 0) {
 		if($split) {
@@ -475,7 +475,7 @@ for ($i=0;$i<$count; $i++)
 		    if ($length != 0) {
 			print "Girder\n";
 		    }
-		    print "Multipole -name $name -synrad \$mult_synrad -type 4 -length $length -strength \[expr -1.0*$k3l*\$e0\]";    
+		    print "Multipole -name $name -synrad \$mult_synrad -type 4 -length $length -strength \[expr -1.0*$k3l*\$e0\]";
 		}
 		if ($tilt != 0)
 		{
@@ -485,10 +485,10 @@ for ($i=0;$i<$count; $i++)
 		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 		}
 		elsif($apx !=0 && $apy ==0){
-		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";	      
+		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 		}
 		else {
-		    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";	  		
+		    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
 		}
 	    } elsif ($k4l != 0) {
 		if($split) {
@@ -517,10 +517,10 @@ for ($i=0;$i<$count; $i++)
 		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 		}
 		elsif($apx !=0 && $apy ==0){
-		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";	     
+		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 		}
 		else {
-		    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";	  		
+		    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
 		}
 	    } elsif ($k5l != 0) {
 		if($split) {
@@ -549,10 +549,10 @@ for ($i=0;$i<$count; $i++)
 		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 		}
 		elsif($apx !=0 && $apy ==0){
-		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";	     
+		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 		}
 		else {
-		    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";	  		
+		    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
 		}
 	    } else {
 		print "# WARNING: Multipole options not defined. Multipole type 0 with 0.";
@@ -571,12 +571,12 @@ for ($i=0;$i<$count; $i++)
 		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 		}
 		elsif($apx !=0 && $apy ==0){
-		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";	     
+		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 		}
 		else {
-		    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";	  		
+		    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
 		}
-	    } 
+	    }
 	}
 	elsif ($keyword =~ /RBEND/)
 	{
@@ -598,10 +598,10 @@ for ($i=0;$i<$count; $i++)
 		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 	    }
 	    elsif($apx !=0 && $apy ==0){
-		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";	     
+		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 	    }
 	    else {
-		print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";	  		
+		print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
 	    }
 	}
 	elsif ($keyword =~ /SBEND/)
@@ -620,10 +620,10 @@ for ($i=0;$i<$count; $i++)
 		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 	    }
 	    elsif($apx !=0 && $apy ==0){
-		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";	     
+		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 	    }
 	    else {
-		print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";	  		
+		print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
 	    }
 	    print "set e0 \[expr \$e0-14.1e-6*$angle*$angle/$length*\$e0*\$e0*\$e0*\$e0*\$sbend_synrad\]\n";
 	}
@@ -666,10 +666,10 @@ for ($i=0;$i<$count; $i++)
 		    print " -aperture_shape rectangular -aperture_x $apx -aperture_y $apy\n";
 		}
 		elsif($apx !=0 && $apy ==0){
-		    print " -aperture_shape rectangular -aperture_x $apx -aperture_y $apx\n";	     
+		    print " -aperture_shape rectangular -aperture_x $apx -aperture_y $apx\n";
 		}
 		else {
-		    print " -aperture_shape rectangular -aperture_x 0.008 -aperture_y 0.008\n";	  		
+		    print " -aperture_shape rectangular -aperture_x 0.008 -aperture_y 0.008\n";
 		}
 	    }
 	}
@@ -690,10 +690,10 @@ for ($i=0;$i<$count; $i++)
 		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 		}
 		elsif($apx !=0 && $apy ==0){
-		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";	     
+		    print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 		}
 		else {
-		    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";	  		
+		    print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
 		}
 	    }
 	}
@@ -703,16 +703,16 @@ for ($i=0;$i<$count; $i++)
 	    print "# HCORRECTOR -name $name -length $length\n";
 	    if($chk && $chl) {
 		if ($length != 0) {
-		    print "Girder\n";    
+		    print "Girder\n";
 		    print "Drift -name $name -length $length";
 		    if($apx !=0 && $apy !=0){
 			print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 		    }
 		    elsif($apx !=0 && $apy ==0){
-			print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";	     
+			print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 		    }
 		    else {
-			print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";	  		
+			print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
 		    }
 		}
 	    }
@@ -729,10 +729,10 @@ for ($i=0;$i<$count; $i++)
 			print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 		    }
 		    elsif($apx !=0 && $apy ==0){
-			print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";	     
+			print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 		    }
 		    else {
-			print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";	  		
+			print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
 		    }
 		}
 	    }
@@ -749,11 +749,11 @@ for ($i=0;$i<$count; $i++)
 		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 	    }
 	    elsif($apx !=0 && $apy ==0){
-		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";	     
+		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 	    }
 	    else {
-		print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";	  		
-	    }	
+		print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
+	    }
 	}
 	elsif ($keyword =~ /MONITOR/)
 	{
@@ -767,13 +767,13 @@ for ($i=0;$i<$count; $i++)
 		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 	    }
 	    elsif($apx !=0 && $apy ==0){
-		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";	     
+		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 	    }
 	    else {
-		print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";	  		
+		print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
 	    }
 	}
-	else 
+	else
 	{
 	    print "# UNKNOWN: @line\n";
 	    if($chk && $chl) {
@@ -781,15 +781,15 @@ for ($i=0;$i<$count; $i++)
 		    print "Girder\n";
 		}
 	    }
-	    print "Drift -name $name -length $length"; 
+	    print "Drift -name $name -length $length";
 	    if($apx !=0 && $apy !=0){
 		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apy\n";
 	    }
 	    elsif($apx !=0 && $apy ==0){
-		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";	     
+		print " -aperture_shape elliptic -aperture_x $apx -aperture_y $apx\n";
 	    }
 	    else {
-		print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";	  		
+		print " -aperture_shape elliptic -aperture_x 0.008 -aperture_y 0.008\n";
 	    }
 	}
 }

@@ -1,14 +1,14 @@
 #-------------------------------------------------------------------------------
 # This file is part of PyMad.
-# 
+#
 # Copyright (c) 2011, CERN. All rights reserved.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 # 	http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -75,11 +75,11 @@ class madx:
     def __init__(self,histfile='',recursive_history=False):
         '''
         Initializing Mad-X instance
-        
+
         :param str histfile: (optional) name of file which will contain all Mad-X commands.
-        :param bool recursive_history: If true, history file will contain no calls to other files. 
+        :param bool recursive_history: If true, history file will contain no calls to other files.
                                        Instead, recursively writing commands from these files when called.
-        
+
         '''
         global _madstarted
         if not _madstarted:
@@ -102,7 +102,7 @@ class madx:
             if recursive_history:
                 print("WARNING: you cannot get recursive history without history file...")
             self._rechist=False
-    
+
     def __del__(self):
         '''
          Closes history file
@@ -117,9 +117,9 @@ class madx:
 
     def command(self,cmd):
         '''
-         Send a general Mad-X command. 
+         Send a general Mad-X command.
          Some sanity checks are performed.
-         
+
          :param string cmd: command
         '''
         cmd=_madx_tools._fixcmd(cmd)
@@ -130,8 +130,8 @@ class madx:
                 self._single_cmd(c)
         else:
             self._single_cmd(cmd)
-    
-    def _single_cmd(self,cmd):    
+
+    def _single_cmd(self,cmd):
         if self._hist:
             if cmd[-1]=='\n':
                 self._writeHist(cmd)
@@ -140,7 +140,7 @@ class madx:
         if _madx_tools._checkCommand(cmd.lower()):
             madx_input(cmd)
         return 0
-    
+
     def help(self,cmd=''):
         if cmd:
             print("Information about command: "+cmd.strip())
@@ -149,11 +149,11 @@ class madx:
             cmd='help'
             print("Available commands in Mad-X: ")
         self.command(cmd)
-    
+
     def call(self,filename):
         '''
          Call a file
-         
+
          :param string filename: Name of input file to call
         '''
         fname=filename
@@ -232,7 +232,7 @@ class madx:
                         _tmpcmd+=','+i_var+'='+str(i_val)
         self.command(_tmpcmd+';')
         return table.get_dict_from_mem('twiss',columns,retdict)
-    
+
     def survey(self,
               sequence,
               pattern=['full'],
@@ -244,7 +244,7 @@ class madx:
               ):
         '''
             Runs select+use+survey on the sequence selected
-            
+
             :param string sequence: name of sequence
             :param string fname: name of file to store tfs table
             :param list pattern: pattern to include in table
@@ -294,7 +294,7 @@ class madx:
             _cmd+=',file="'+fname+'"'
         self.command(_cmd)
         return table.get_dict_from_mem('aperture',columns,retdict)
-        
+
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')
 
@@ -427,7 +427,7 @@ class madx:
         @param sequence [string] name of sequence
         @param constraints [list] constraints to pose during matching
         @param vary [list or dict] vary commands
-        @param weight [dict] weights for matching parameters 
+        @param weight [dict] weights for matching parameters
 
         For further reference, see madx.matchcommand().
 
@@ -470,7 +470,7 @@ class madx:
         else:
             self._hfile.write(command)
             self._hfile.flush()
-    
+
     def get_sequences(self):
         '''
          Returns the sequences currently in memory
@@ -489,4 +489,4 @@ class madx:
         return ret
         #print "Currently number of sequenses available:",seqs.curr
         #print "Name of list:",seqs.name
-        
+

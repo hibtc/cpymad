@@ -53,8 +53,8 @@ cdef class ArrayWrapper:
     def __dealloc__(self):
         """
         Frees the array. This is called by Python when all the
-        references to the object are gone. 
-        
+        references to the object are gone.
+
         Since we are using the memory which Mad-X might need
         later on, let's not.
         """
@@ -122,7 +122,7 @@ def get_dict_from_mem(table,columns,retdict):
             print "ERROR:",c,"is not available in table",table
         else:
             print "Unknown datatype",dtype,c
-    
+
     if retdict:
         return ret,ret_header
     return TfsTable(ret),TfsSummary(ret_header)

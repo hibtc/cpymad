@@ -1,14 +1,14 @@
 #-------------------------------------------------------------------------------
 # This file is part of PyMad.
-# 
+#
 # Copyright (c) 2011, CERN. All rights reserved.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 # 	http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,10 +17,10 @@
 #-------------------------------------------------------------------------------
 
 # This file holds the table struct as defined in madx.h
-# 
+#
 # In the current state, this doesn't work very well,
 # segfaults more often than not, and isn't helpful..
-# 
+#
 
 #cdef int NAME_L
 #NAME_L=48 # defined by preprocessor in madx..
@@ -45,9 +45,9 @@ cdef extern from "madX/madx.h":
         pass
     struct node:
         pass
-    
+
     struct name_list:
-          char[48]  name           
+          char[48]  name
           int  max                      # max. pointer array size
           int  curr                     # current occupation
           #int* index                    # index for alphabetic access
@@ -66,7 +66,7 @@ cdef extern from "madX/mad_table.h":
         char ***s_cols
         pass
 
-      
+
 cdef extern from "madX/madx.h":
     # to be able to read sequence information..
     struct sequence:

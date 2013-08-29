@@ -19,7 +19,7 @@
   const IN2M    = 0.0254;        !in to m
   const GEV2MEV = 1000.0;        !GeV to MeV
   const CB      = 1.0E10/clight; !energy to rigidity (kG-m/GeV)
-  
+
 ! emittance budget parameters (500 GeV cm, "Nominal" parameter set)
 
   EXN_DR  := 8.0E-6;        !damping ring extraction

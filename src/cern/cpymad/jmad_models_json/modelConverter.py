@@ -25,11 +25,11 @@ def _try_float_convert(value):
 def _convert_value(value):
     if _VALUE_MAP.has_key(value):
         return _VALUE_MAP[value]
-    
+
     newval = _try_float_convert(value)
     if not newval == None:
         return newval
-    
+
     return value
 
 def _convert_dict_keep_parent(newdict,value,thiskey):
@@ -61,7 +61,7 @@ def _convert_recursively(item):
                 newlist.append(_convert_recursively(nextItem));
             return newlist
     elif isinstance(item, dict):
-        newdict = {}    
+        newdict = {}
         for key, value in item.items():
             thiskey=_convert_key(key)
             if '@name' in value and thiskey in _NAME_CONVERT_LIST:
@@ -130,8 +130,8 @@ if __name__ == "__main__":
         if f[-9:]=='.jmd.json' and f[:-9] not in skip:
             print("Converting "+f[:-9])
             convert_file(f, '../_models/'+f[:-9]+'.cpymad.json')
-            
+
             # saving jmad file in pretty print format:
             #jd=json.load(file(f,'r'))
             #json.dump(jd,file(f,'w'),indent=2)
-    
+

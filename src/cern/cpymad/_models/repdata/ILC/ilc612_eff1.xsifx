@@ -33,7 +33,7 @@
 //    move QF5 through QD2A quad strengths to the configuration files.
 // 24-jul-2003, PT:
 //    new preamble.  Move bend angles, sext strengths, octupole strengths,
-//    decapole strengths, and some definitions around the IR to the 
+//    decapole strengths, and some definitions around the IR to the
 //    configuration ("patch") files.
 // 23-JUL-2003, PT:
 //    add BPMVIRT to octupoles, decapoles, any sextupoles w/o a BPM.
@@ -61,7 +61,7 @@
 //    SF5/QD4/SF4 from 1 cm to 1.25 cm
 // 03-DEC-2001, A. Seryi
 //    Switch to "short" final doublet ... create nlc130.effh.xsifxx for TRC
-//    studies 
+//    studies
 // 14-NOV-2001, A. Seryi
 //    Bend strengths optimized for 250 GeV beam
 // 20-SEP-2001, P. Tenenbaum
@@ -102,13 +102,13 @@
   TB2  := -Bsign*(-0.991473613E-4 );
   TB1  := -Bsign*(-0.357678789E-4 );
 
-  BS1 : SBEND, L:=LBff/2, HGAP:=GBff1, ANGLE:=TBS1/2, 
+  BS1 : SBEND, L:=LBff/2, HGAP:=GBff1, ANGLE:=TBS1/2,
               FINT:=0, FINTX:=0; //TYPE:="H20";
-  B5  : SBEND, L:=LBff/2, HGAP:=GBff1p25, ANGLE:=TB5/2, 
+  B5  : SBEND, L:=LBff/2, HGAP:=GBff1p25, ANGLE:=TB5/2,
               FINT:=0, FINTX:=0;//TYPE:="H25";
-  B2  : SBEND, L:=LBff/2, HGAP:=GBff3, ANGLE:=TB2/2, 
+  B2  : SBEND, L:=LBff/2, HGAP:=GBff3, ANGLE:=TB2/2,
               FINT:=0, FINTX:=0;//TYPE:="H60";
-  B1  : SBEND, L:=LBff/2, HGAP:=GBff3, ANGLE:=TB1/2, 
+  B1  : SBEND, L:=LBff/2, HGAP:=GBff3, ANGLE:=TB1/2,
               FINT:=0, FINTX:=0;//TYPE:="H60"
 
   BS1space : DRIFT, L:=LBff;//TYPE:="reserved";
@@ -128,13 +128,13 @@
   ABEC1b := ECANG-ABEC1a          ;//bend angle ("long" half)
   LBEC1b := LBEC1-LBEC1a          ;//effective length ("long" half)
 
-  BEC1a : SBEND, L:=LBEC1a, HGAP:=GBff1, ANGLE:=+ABEC1a, 
+  BEC1a : SBEND, L:=LBEC1a, HGAP:=GBff1, ANGLE:=+ABEC1a,
                 E1:=0, FINT:=0.5, FINTX:=0;//TYPE:="H20"
-  BEC1b : SBEND, L:=LBEC1b, HGAP:=GBff1, ANGLE:=+ABEC1b, 
+  BEC1b : SBEND, L:=LBEC1b, HGAP:=GBff1, ANGLE:=+ABEC1b,
                 E2:=+ECANG, FINT:=0, FINTX:=0.5;//TYPE:="H20"
-  BEC4a : SBEND, L:=LBEC1b, HGAP:=GBff1, ANGLE:=+ABEC1b, 
+  BEC4a : SBEND, L:=LBEC1b, HGAP:=GBff1, ANGLE:=+ABEC1b,
                 E1:=+ECANG, FINT:=0.5, FINTX:=0;//TYPE:="H20"
-  BEC4b : SBEND, L:=LBEC1a, HGAP:=GBff1, ANGLE:=+ABEC1a, 
+  BEC4b : SBEND, L:=LBEC1a, HGAP:=GBff1, ANGLE:=+ABEC1a,
                 E2:=0, FINT:=0, FINTX:=0.5;//TYPE:="H20"
   ZBEC2  := 6.0                   ;//pole "Z" length (m)
   RBEC2  := ZBEC2/SIN(ECANG)      ;//bend radius (m)
@@ -143,13 +143,13 @@
   LBEC2a := RBEC2*ABEC2a          ;//effective length ("short" half)
   ABEC2b := ECANG-ABEC2a          ;//bend angle ("long" half)
   LBEC2b := LBEC2-LBEC2a          ;//effective length ("long" half)
-  BEC2a : SBEND, L:=LBEC2b, ANGLE:=-ABEC2b, HGAP:=GBff1, 
+  BEC2a : SBEND, L:=LBEC2b, ANGLE:=-ABEC2b, HGAP:=GBff1,
                 E1:=-ECANG, FINT:=0.5, FINTX:=0;//TYPE:="H20"
-  BEC2b : SBEND, L:=LBEC2a, ANGLE:=-ABEC2a, HGAP:=GBff1, 
+  BEC2b : SBEND, L:=LBEC2a, ANGLE:=-ABEC2a, HGAP:=GBff1,
                 E2:=0, FINT:=0, FINTX:=0.5;//TYPE:="H20"
-  BEC3a : SBEND, L:=LBEC2a, ANGLE:=-ABEC2a, HGAP:=GBff1, 
+  BEC3a : SBEND, L:=LBEC2a, ANGLE:=-ABEC2a, HGAP:=GBff1,
                 E1:=0, FINT:=0.5, FINTX:=0;//TYPE:="H20"
-  BEC3b : SBEND, L:=LBEC2b, ANGLE:=-ABEC2b, HGAP:=GBff1, 
+  BEC3b : SBEND, L:=LBEC2b, ANGLE:=-ABEC2b, HGAP:=GBff1,
                 E2:=-ECANG, FINT:=0, FINTX:=0.5;//TYPE:="H20"
 // bend-to-bend path lengths
   ZECBBo := 16.1              ;//outer bend-to-bend "Z" spacing (m)
@@ -615,7 +615,7 @@ XGAPSP5, 0.750e-3  ;
     QM16,BPMQ079,QM16,D12a,FBANGKIK,D12b,
     QM15,BPMQ079,QM15,D11,
     QM14,BPMQ079,QM14,D10,
-    QM13a,BPMQ079,QM13a,LX0h,EFFs, 
+    QM13a,BPMQ079,QM13a,LX0h,EFFs,
     LX0h,
     QM13b,BPMQ079,QM13b,D9,
     QM12,BPMQ079,QM12,D8,
@@ -699,5 +699,5 @@ XGAPSP5, 0.750e-3  ;
 ;
 
 ;
-  
+
 ;

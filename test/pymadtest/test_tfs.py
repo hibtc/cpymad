@@ -1,5 +1,5 @@
 
-from pymad import tfs 
+from pymad import tfs
 import unittest
 
 

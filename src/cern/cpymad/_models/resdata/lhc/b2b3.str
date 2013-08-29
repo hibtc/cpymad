@@ -1,4 +1,4 @@
-! redefinition of the strengthes for b2,b3 
+! redefinition of the strengthes for b2,b3
 ! main dipole errors in LHC
 
 
@@ -56,7 +56,7 @@ kmqd                  := -0.008600955656 ;
 
 deltakk = 0.0;
 
-kqf := kmqf * (1 + deltakk);    
+kqf := kmqf * (1 + deltakk);
 kqd := kmqd * (1 + deltakk);
 
 

@@ -1,14 +1,14 @@
 #-------------------------------------------------------------------------------
 # This file is part of PyMad.
-# 
+#
 # Copyright (c) 2011, CERN. All rights reserved.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 # 	http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,15 +45,15 @@ pythonsrc=["cern",
            "cern.cpymad",
            "cern.cpymad._couch",
            "cern.jpymad",
-           "cern.jpymad.tools", 
+           "cern.jpymad.tools",
            "cern.pymad",
            "cern.pymad.io",
            "cern.pymad.abc",
            "cern.pymad.tools",
-           "cern.pymad.domain"] 
+           "cern.pymad.domain"]
 
 # list of data files to include..
-cdata=['_models/*.json'] 
+cdata=['_models/*.json']
 
 # add this to include data array
 for j in range(2,10):

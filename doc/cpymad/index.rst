@@ -1,7 +1,7 @@
 CPyMad implementation
 *********************
 
-CPyMad is designed for two use-cases. 
+CPyMad is designed for two use-cases.
 
 * The first is as a replacement for
   the Mad-X interpreter, where function calls are pretty much the same, but
@@ -18,24 +18,24 @@ Module cern.madx
 This module aims to provide the full functionality of the Mad-X library in a more
 convenient Python environment. As an example, when you call twiss/aperture/survey etc,
 you immediately retrieve a functional Python object containing the information from the
-table generated. Further, we try to reduce the amount of commands needed by combining 
+table generated. Further, we try to reduce the amount of commands needed by combining
 e.g. use, select, and twiss into the twiss function itself, and define reasonable default
-patterns/columns etc. 
+patterns/columns etc.
 
 A simple use case::
-    
+
     from cern import madx
     from matplotlib import pyplot
-    
+
     m=madx.madx()
-    
+
     m.call('my-sequences.seq')
     m.call('my-strengths.str')
-    
+
     m.command('beam,sequence=myseq1,particle=PROTON')
-    
+
     tw,summary=m.twiss('myseq1',columns=['s','betx'])
-    
+
     pyplot.plot(tw.s,tw.betx)
     pyplot.show()
 
@@ -44,8 +44,8 @@ and the strengths for your optics. You can then use :py:meth:`~cern.madx.madx.ca
 the syntax should be understandable for a Mad-X user.
 
 For anything not yet implemented in :py:class:`cern.madx.madx`,
-the :py:meth:`~cern.madx.madx.command` function is there. You can give any normal 
-Mad-X like command to this function. If you forget the **;** at the end, it will be 
+the :py:meth:`~cern.madx.madx.command` function is there. You can give any normal
+Mad-X like command to this function. If you forget the **;** at the end, it will be
 automatically added. In the example it is used to set the beam.
 
 Finally we call twiss. If we do not give a pattern, 'full' is chosen by default. Columns are also optional,

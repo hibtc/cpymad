@@ -7,12 +7,12 @@ The following example shows how to use pymad to plot the beta functions for the 
     from cern import pymad
 
     def plot_beta(model, postfix=''):
-        # Run twiss on the model, optionally give name of file 
+        # Run twiss on the model, optionally give name of file
         # where tfs table is stored
-        result, summary = model.twiss(seqname='lhcb1', 
+        result, summary = model.twiss(seqname='lhcb1',
                                       columns=['name', 's', 'betx', 'bety'],
                                       file='lhcb1' + postfix + '.tfs')
-        
+
         pyplot.figure()
         # do something with the result (note, madx is still waiting!):
         pyplot.xlabel('dist. from IP1')
@@ -52,7 +52,7 @@ The following example shows how to use pymad to plot the beta functions for the 
     pymad.ls_models()
 
     # print a list of available sequences:
-    print mdef.seqnames 
+    print mdef.seqnames
 
     plot_beta(model, '_inj')
 
@@ -60,7 +60,7 @@ The following example shows how to use pymad to plot the beta functions for the 
     print mdef.opticnames
     model.set_optic(opticname)
 
-    plot_beta(model, '_coll') 
+    plot_beta(model, '_coll')
 
     # remove the model from the service:
     pms.delete_model(model)

@@ -43,7 +43,7 @@
         "ranges": {
           "ALL": {
             "madx-range": {
-              "last": "#e", 
+              "last": "#e",
               "first": "#s"
             },
             "twiss-initial-conditions": {
@@ -127,7 +127,7 @@
         "ranges": {
           "ALL": {
             "madx-range": {
-              "last": "#e", 
+              "last": "#e",
               "first": "#s"
             },
             "twiss-initial-conditions": {
