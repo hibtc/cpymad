@@ -64,6 +64,13 @@ def _add_offsets(offsets):
         return 'offsetelem="'+offsets+'",'
     return ''
 
+def _sorted_items(kwargs):
+    """Return dictionary items in canonicalized order."""
+    if isinstance(kwargs, collections.OrderedDict):
+        return kwargs.items()
+    else:
+        return sorted(kwargs.items(), key=lambda i: i[0])
+
 def _mad_command(cmd, *args, **kwargs):
     """
     Create a MAD-X command from its name and parameter list.
@@ -74,16 +81,16 @@ def _mad_command(cmd, *args, **kwargs):
 
     Examples:
 
-    >>> _mad_command('twiss', ('sequence', lhc), 'centre', dx=2, betx=3, bety=8)
-    twiss, sequence=lhc, centre, betx=3, bety=3, dx=2;
+    >>> print(_mad_command('twiss', ('sequence', 'lhc'), 'centre', dx=2, betx=3, bety=8).rstrip())
+    twiss, sequence=lhc, centre, betx=3, bety=8, dx=2;
 
-    >>> _mad_command('option', echo=False)
+    >>> print(_mad_command('option', echo=False).rstrip())
     option, -echo;
 
-    >>> _mad_command('constraint', ('betx', '<', 3.13), 'bety < 3.5')
+    >>> print(_mad_command('constraint', ('betx', '<', 3.13), 'bety < 3.5').rstrip())
     constraint, betx<3.13, bety < 3.5;
 
-    >>> _mad_command('constraint', **{'betx<3.13':True})
+    >>> print(_mad_command('constraint', **{'betx<3.13':True}).rstrip())
     constraint, betx<3.13;
 
     Note that alphabetic order is enforced on kwargs, such that results are
@@ -91,7 +98,7 @@ def _mad_command(cmd, *args, **kwargs):
 
     """
     mad = cmd
-    fullargs = list(args) + sorted(kwargs.items(), key=lambda i: i[0])
+    fullargs = list(args) + _sorted_items(kwargs)
     for arg in fullargs:
         if isinstance(arg, tuple):
             if len(arg) == 3:
@@ -124,10 +131,8 @@ def _mad_command_unpack(*arglists, **kwargs):
     for v in arglists:
         if isinstance(v, basestring):
             args.append(v)
-        elif isinstance(v, collections.OrderedDict):
-            args += list(v.items())
         elif isinstance(v, collections.Mapping):
-            args += sorted(v.items(), key=lambda i: i[0])
+            args += _sorted_items(v)
         elif isinstance(v, collections.Sequence):
             args += v
         else:
@@ -143,7 +148,8 @@ def _read_knobfile(filename, retdict):
         k0sl_h1ms4v  :=+1.00000000e-04+0.00000000e+00*knob;
         k1_h3qd22    :=+8.57142860e-01+2.82559231e-01*knob;
 
-    The result is in the form of a dictionary:
+    The result is a tuple `(final, initial)`. Where both entries are
+    dictionaries or LookupDict depending on the `retdict` parameter.
 
     """
     result = {}
