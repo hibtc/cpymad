@@ -3,7 +3,7 @@ TITLE, "TITLE: FFS 450LD0 205D1B";
 !
 ! DATE AND TIME:    25/02/07  13.03.42
 !
-! FILE:             ffs_sv.mad                                                                      
+! FILE:             ffs_sv.mad
 !
 
 ! Translated from MAD8 to MADX by J. Barranco (CERN)
@@ -280,7 +280,7 @@ B1: SBEND, L:=LB12/4.0, ANGLE:=CH1*TB1/2.0, HGAP:=GB3, FINT:=0.0, FINTX:=0.0;//;
 BS1space : DRIFT, L=LB12/4.0;// TYPE="reserved"
 B5space  : DRIFT, L=LB12/4.0; // TYPE="reserved"
 B2space  : DRIFT, L=LB12/4.0; // TYPE="reserved"
-B1space  : DRIFT, L=LB12/4.0; // TYPE="reserved" 
+B1space  : DRIFT, L=LB12/4.0; // TYPE="reserved"
 
 BS1L : LINE=(BS1space,BS1,BS1,BS1space);
 B5L  : LINE=(B5space,B5,B5,B5space);
@@ -301,7 +301,7 @@ BS1space : DRIFT, L=2*LB12/5.0;// TYPE="reserved"
 B5space  : DRIFT, L=2*LB12/5.0; // TYPE="reserved"
 B52space  : DRIFT, L=2*LB12/5.0; // TYPE="reserved"
 B2space  : DRIFT, L=2*LB12/5.0; // TYPE="reserved"
-B1space  : DRIFT, L=2*LB12/5.0; // TYPE="reserved" 
+B1space  : DRIFT, L=2*LB12/5.0; // TYPE="reserved"
 
 BS1L : LINE=(BS1space,BS1,BS1space);
 B5L  : LINE=(B5space,B5,B5space);

@@ -1,14 +1,14 @@
 #-------------------------------------------------------------------------------
 # This file is part of PyMad.
-# 
+#
 # Copyright (c) 2011, CERN. All rights reserved.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 # 	http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,6 +29,7 @@ else:
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 import platform
+from distutils.util import get_platform
 
 # ugly hack to add --madxdir=/path/to/madxinstallation
 special_madxdir=''
@@ -44,30 +45,38 @@ pythonsrc=["cern",
            "cern.cpymad",
            "cern.cpymad._couch",
            "cern.jpymad",
-           "cern.jpymad.tools", 
+           "cern.jpymad.tools",
            "cern.pymad",
            "cern.pymad.io",
            "cern.pymad.abc",
            "cern.pymad.tools",
-           "cern.pymad.domain"] 
+           "cern.pymad.domain"]
 
 # list of data files to include..
-cdata=['_models/*.json'] 
+cdata=['_models/*.json']
 
 # add this to include data array
 for j in range(2,10):
     for end in ['.madx','.str','.seq','.tfs', '.xsifx', 'CLICx' ,'.ind92']:
         cdata.append('_models/re*data'+'/*'*j+end)
 
-libs=['madx', "c", "stdc++"]
+libs=['madx', 'stdc++']
+if get_platform() == "win32":
+    libs += ['ptc', 'gfortran', 'msvcrt']
+else:
+    libs += ['c']
 
 def add_dir(directory,dirlist):
     if os.path.isdir(directory):
         if directory not in dirlist:
             dirlist.append(directory)
 
+try:
+    home = os.environ['HOME']
+except KeyError:
+    # on win32 %HOMEDRIVE%%HOMEPATH% is the way to go:
+    home = os.environ['HOMEDRIVE'] + os.environ['HOMEPATH']
 
-home=os.environ['HOME']
 includedirs=[]
 libdirs=[]
 rlibdirs=[]

@@ -74,7 +74,7 @@ def _sorted_items(kwargs):
 def _mad_command(cmd, *args, **kwargs):
     """
     Create a MAD-X command from its name and parameter list.
-    
+
     @param cmd [string] name of the MAD command
     @params *args [list] ordered arguments to the MAD command
     @params **kwargs [dict] unordered arguments to the MAD command

@@ -1,6 +1,6 @@
 #!/afs/cern.ch/user/r/rtomas/lintrack/Python-2.5_32bit/Python-2.5_32bit/bin/python
 
-# Just to make sure that the path to the libraires is defined 
+# Just to make sure that the path to the libraires is defined
 import sys
 sys.path.append('/afs/cern.ch/eng/sl/lintrack/Python_Classes4MAD/')
 

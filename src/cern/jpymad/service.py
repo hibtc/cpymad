@@ -1,14 +1,14 @@
 #-------------------------------------------------------------------------------
 # This file is part of PyMad.
-# 
+#
 # Copyright (c) 2011, CERN. All rights reserved.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 # 	http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,50 +38,50 @@ class JPyMadService(PyMadService):
     """
     def __init__(self, start=None,jmadhome=None, **kwargs):
         super(JPyMadService, self)
-        
+
         self._started_jmad = False
-        
+
         # YIL edit: What about this?
         atexit.register(self.cleanup)
         for key, value in kwargs.items():
-            print "WARN: unhandled option '" + key + "' for JPyMandService. Ignoring it." 
-       
-        if not start is None: 
+            print "WARN: unhandled option '" + key + "' for JPyMandService. Ignoring it."
+
+        if not start is None:
             if start is "gui":
                 self._started_jmad = jm.start_gui(jmadhome)
             elif start is "service":
                 self._started_jmad = jm.start_pymadservice(jmadhome)
             else:
                 print "WARN: unhandled start='" + start + "' for JPymandService (start can be one of 'gui' or 'service'). Ignoring it."
-            
+
         self.jmad_service = jm.connect()
-        
-    
-    
+
+
+
     @property
     def mdefs(self):
-        model_definition_manager = self.jmad_service.getModelDefinitionManager() 
+        model_definition_manager = self.jmad_service.getModelDefinitionManager()
         mdefs = []
         for model_definition in model_definition_manager.getAllModelDefinitions():
             mdefs.append(JPyMadModelDefinition(model_definition))
-        
+
         return mdefs
-    
+
     @property
     def mdefnames(self):
         return [mdef.name for mdef in self.mdefs]
-    
+
     @property
     def models(self):
         model_manager = self.jmad_service.getModelManager()
         return [JPyMadModel(model) for model in model_manager.getModels()]
-    
+
     def get_mdef(self, name):
         ''' returns the model definition of the given name '''
         model_definition_manager = self.jmad_service.getModelDefinitionManager()
         model_definition = model_definition_manager.getModelDefinition(name)
         return JPyMadModelDefinition(model_definition)
-    
+
     def create_model(self, mdef):
         if  isinstance(mdef, str):
             model_definition = self.get_mdef(mdef)
@@ -89,7 +89,7 @@ class JPyMadService(PyMadService):
                 raise Exception("Model definition '" + mdef + "' not found.")
         else:
             model_definition = mdef
-    
+
         jmm = self.jmad_service.createModel(model_definition.jmmd)
         jmm.init()
         print jm.stop
@@ -108,14 +108,14 @@ class JPyMadService(PyMadService):
         if active_model == None:
             return None
         else:
-            return JPyMadModel(active_model) 
+            return JPyMadModel(active_model)
 
     @am.setter
     def am(self, pymadmodel):
         model_manager = self.jmad_service.getModelManager()
         model_manager.setActiveModel(pymadmodel.jmm)
-        
+
     def cleanup(self):
         if (self._started_jmad == True):
             jm.stop()
-    
+

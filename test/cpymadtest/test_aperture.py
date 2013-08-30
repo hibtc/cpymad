@@ -6,7 +6,7 @@ class TestCpymadAperture(unittest.TestCase):
     # It's a bit surprising that this doesn't happen by itself.. Hmmm...
     def tearDown(self):
         del self.model
-    
+
     def test_aperture(self):
         '''
          Tests a specific aperture from LHC model

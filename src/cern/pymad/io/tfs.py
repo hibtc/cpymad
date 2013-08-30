@@ -1,14 +1,14 @@
 #-------------------------------------------------------------------------------
 # This file is part of PyMad.
-# 
+#
 # Copyright (c) 2011, CERN. All rights reserved.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 # 	http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@ Function to read tfs tables into Python objects
 import numpy
 import os
 from cern.pymad.domain import TfsTable, TfsSummary
-    
+
 def tfs(inputfile):
     '''
      Returns table and summary information
@@ -42,7 +42,7 @@ def tfsDict(inputfile):
     .. py:function:: tfsDict(inputfile)
 
     Read a tfs table and returns table/summary info
-    
+
     The function takes in a tfs file. It will add
     all parameters into one dictionary, and the table
     into another dictionary.
@@ -74,10 +74,10 @@ def tfsDict(inputfile):
 
 ##
 # Add parameter to object
-# 
+#
 # Any line starting with an @ is a parameter.
 # If that is found, this function should be called and given the line
-# 
+#
 # @param line The line from the file that should be added
 def _addParameter(params,line):
     lname=line.split()[1].lower()

@@ -43,8 +43,8 @@
 @ ORIGIN           %19s "MAD-X 5.00.00 Linux"
 @ DATE             %08s "30/01/12"
 @ TIME             %08s "09.00.47"
-* NAME                                S               BETX               BETY               ALFX               ALFY                 DX                MUX                MUY                  L                K1L                K2L 
-$ %s                                %le                %le                %le                %le                %le                %le                %le                %le                %le                %le                %le 
+* NAME                                S               BETX               BETY               ALFX               ALFY                 DX                MUX                MUY                  L                K1L                K2L
+$ %s                                %le                %le                %le                %le                %le                %le                %le                %le                %le                %le                %le
  "NEWBDS$START"                       0        18.38257132        64.45077531       0.5997162263       -1.939373356                  0                  0                  0                  0                  0                  0
  "FQF"                                1        16.61809067         70.8975888        1.143097854        -4.58621552                  0     0.009055191357     0.002368988692                  1       0.0367475361                  0
  "FDD"                               11        7.636625335        193.6996455      -0.2449513207       -7.693990152                  0       0.1828988694      0.01596678322                 10                  0                  0

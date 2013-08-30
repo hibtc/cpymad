@@ -7,7 +7,7 @@
 {% endblock %}
 
 
-{% block relbar1 %} 
+{% block relbar1 %}
 
 <div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
 <a href="{{ pathto('index') }}"><img src="{{
@@ -15,7 +15,7 @@ pathto("_static/pymad-logo-text.png", 1) }}" border="0" alt="py4sci"/></a>
 </div>
 {{ super() }}
 {% endblock %}
- 
+
 {# put the sidebar before the body #}
 {% block sidebar1 %}{{ sidebar() }}{% endblock %}
 {% block sidebar2 %}{% endblock %}
