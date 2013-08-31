@@ -8,6 +8,13 @@ from cern.pymad.io import tfs,tfsDict
 from cern.pymad.domain.tfs import LookupDict
 
 
+try:
+    unicode
+except NameError:
+    # Python 3
+    basestring = unicode = str
+
+
 def _checkCommand(cmd):
     ''' give the lowercase version of the command
     this function does some sanity checks...'''

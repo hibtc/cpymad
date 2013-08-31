@@ -62,7 +62,7 @@ class LookupDict():
         return self._get_val_or_raise_error(key, KeyError())
 
     def _unify_key(self, key):
-        return str.lower(key)
+        return key.lower()
 
     def keys(self):
         '''
