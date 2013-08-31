@@ -42,7 +42,7 @@ class TestCpymad(unittest.TestCase):
          Checks that all sequences defined in the model (json)
          is also loaded into memory
         '''
-        for seq in self.model.mdef['sequences'].keys():
+        for seq in self.model.mdef['sequences']:
             print("Testing sequence",seq)
             self.assertTrue(self.model.has_sequence(seq))
 

@@ -41,7 +41,7 @@ class LookupDict():
     def _get_val_or_raise_error(self, key, error):
         ukey = self._unify_key(key)
 
-        if (self._values.has_key(ukey)):
+        if ukey in self._values:
             return self._values[key]
         else:
             raise(error)
@@ -75,7 +75,7 @@ class TfsTable(LookupDict):
     ''' A class to hold the results of a twiss '''
     def __init__(self, values):
         LookupDict.__init__(self, values)
-        if self._values.has_key('name'):
+        if 'name' in self._values:
             self._names = self._values['name']
 
     @property

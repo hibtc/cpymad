@@ -23,7 +23,7 @@ def _try_float_convert(value):
         return None
 
 def _convert_value(value):
-    if _VALUE_MAP.has_key(value):
+    if value in _VALUE_MAP:
         return _VALUE_MAP[value]
 
     newval = _try_float_convert(value)
@@ -108,7 +108,7 @@ def _move_beams(new_dict):
             sequence['beam']=mname+'_'+seqname
             for r in sequence['ranges']:
                 if 'default-twiss' not in sequence['ranges'][r]:
-                    sequence['ranges'][r]['default-twiss']=sequence['ranges'][r]['twiss-initial-conditions'].keys()[0]
+                    sequence['ranges'][r]['default-twiss']=list(sequence['ranges'][r]['twiss-initial-conditions'].keys())[0]
 
 def convert_dict(indict):
     '''

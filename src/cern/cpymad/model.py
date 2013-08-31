@@ -292,7 +292,7 @@ class model(abc.model.PyMadModel):
 
     def list_optics(self):
         '''
-         Returns a list of available optics
+         Returns an iterable of available optics
         '''
         return self._mdef['optics'].keys()
 
@@ -307,14 +307,14 @@ class model(abc.model.PyMadModel):
         if sequence==None:
             ret={}
             for s in self.get_sequences():
-                ret[s]=self._mdef['sequences'][s]['ranges'].keys()
+                ret[s]=list(self._mdef['sequences'][s]['ranges'].keys())
             return ret
 
-        return self._mdef['sequences'][sequence]['ranges'].keys()
+        return list(self._mdef['sequences'][sequence]['ranges'].keys())
 
     def list_beams(self):
         '''
-         Returns a list of available beams
+         Returns an iterable of available beams
         '''
         return self._mdef['beams'].keys()
 
@@ -365,7 +365,7 @@ class model(abc.model.PyMadModel):
         sequence=self._active['sequence']
         _madrange=self._active['range']
 
-        if self._apercalled[sequence]:
+        if self._apercalled.get(sequence):
             raise ValueError("BUG in Mad-X: Cannot call twiss after aperture..")
 
         seqdict=self._mdef['sequences'][sequence]

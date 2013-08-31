@@ -86,10 +86,7 @@ def _delete_waitfile(filename, ignorefail=True):
                 sleep(_SLEEP_INTERVAL)
 
 def _get_env_var(varname):
-    if not os.environ.has_key(varname):
-        return None
-    return os.environ[varname]
-
+    return os.environ.get(varname)
 
 def _search_path_for_bin(binname):
     for d in _get_env_var("PATH").split(':'):

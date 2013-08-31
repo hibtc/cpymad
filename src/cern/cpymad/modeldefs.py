@@ -19,7 +19,7 @@ class modeldef():
         '''
          Returns the sequence definition as a dictionary..
         '''
-        if not sequence in self.sequences.keys():
+        if sequence not in self.sequences:
             raise ValueError("Sequence %s is not in the model" % sequence)
         return self.sequences[sequence].copy()
 
