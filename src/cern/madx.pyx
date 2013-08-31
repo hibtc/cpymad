@@ -140,6 +140,7 @@ class madx:
             else:
                 self._writeHist(cmd+'\n')
         if _madx_tools._checkCommand(cmd.lower()):
+            cmd = cmd.encode('utf-8')
             madx_input(cmd)
         return 0
 

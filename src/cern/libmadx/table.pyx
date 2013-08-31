@@ -75,6 +75,7 @@ cdef class ArrayWrapperInt(ArrayWrapper):
 
 
 cdef _split_header_line(header_line):
+    header_line = header_line.decode('utf-8')
     hsplit=header_line.split()
     if len(hsplit)!=4 or hsplit[0]!='@':
         raise ValueError("Could not read header line: %s" % header_line)
@@ -95,6 +96,7 @@ def get_dict_from_mem(table,columns,retdict):
 
 
     # reading the header information..
+    table = table.encode('utf-8')
     header = <char_p_array*>table_get_header(table)
     ret_header={}
     for i in xrange(header.curr):
@@ -105,9 +107,10 @@ def get_dict_from_mem(table,columns,retdict):
 
     # reading the columns that were requested..
     for c in columns:
-        info=table_get_column(table,c)
+        col_bytes = c.encode('utf-8')
+        info=table_get_column(table,col_bytes)
         dtype=<bytes>info.datatype
-        if dtype==u'd':
+        if dtype==b'd':
             aw=ArrayWrapper()
             aw.set_data(info.length,info.data)
             _tmp = np.array(aw, copy=False)
@@ -115,12 +118,12 @@ def get_dict_from_mem(table,columns,retdict):
             _tmp.base = <PyObject*> aw
             Py_INCREF(aw)
             ret[c.lower()]=_tmp
-        elif dtype==u'S':
+        elif dtype==b'S':
             char_tmp=<char**>info.data
             ret[c.lower()]=np.zeros(info.length,'S%d'%info.datasize)
             for i in xrange(info.length):
                 ret[c.lower()][i]=char_tmp[i]
-        elif dtype==u'V':
+        elif dtype==b'V':
             print("ERROR:",c,"is not available in table",table)
         else:
             print("Unknown datatype",dtype,c)
