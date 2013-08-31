@@ -15,12 +15,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
+from __future__ import absolute_import
 
 from cern.cpymad.model import model
 
-from listModels import modelList
+from .listModels import modelList
 from cern.pymad.globals import USE_COUCH
 
 if USE_COUCH:
-    import _couch
+    from . import _couch
     _couch_server=_couch.couch.Server()

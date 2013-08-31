@@ -20,9 +20,11 @@ Created on Nov 17, 2010
 
 @author: kaifox
 '''
+from __future__ import absolute_import
+
 import unittest
 
-from utils import PyMadTestCase
+from .utils import PyMadTestCase
 
 class Test(unittest.TestCase):
 

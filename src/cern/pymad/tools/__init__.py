@@ -15,6 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
-from run import init,cleanup,is_initialized,get_pms
+from __future__ import absolute_import
 
-from ls import ls_mdefs,ls_models
+from .run import init,cleanup,is_initialized,get_pms
+
+from .ls import ls_mdefs,ls_models

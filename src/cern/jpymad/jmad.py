@@ -16,7 +16,9 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
-from variables import Enums
+from __future__ import absolute_import
+
+from .variables import Enums
 """
 Created on Tue Nov 16 16:26:03 2010
 
@@ -25,7 +27,7 @@ Created on Tue Nov 16 16:26:03 2010
 
 import os
 import sys
-from globals import JPyMadGlobals
+from .globals import JPyMadGlobals
 from subprocess import Popen
 from py4j.java_gateway import JavaGateway
 from time import sleep

@@ -22,13 +22,15 @@ Created on Nov 11, 2010
 
 @author: kaifox
 '''
+from __future__ import absolute_import
 
 # py4j for communicating with jmad
 from cern.pymad.abc import PyMadService
 
-from modeldef import JPyMadModelDefinition
-from model import JPyMadModel
-import jmad as jm
+from .modeldef import JPyMadModelDefinition
+from .model import JPyMadModel
+from . import jmad as jm
+
 import atexit
 
 

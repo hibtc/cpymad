@@ -21,7 +21,9 @@ Created on Tue Nov 16 19:21:25 2010
 
 @author: kaifox
 """
-from run import get_pms
+from __future__ import absolute_import
+
+from .run import get_pms
 
 
 def ls_mdefs(pms=None):

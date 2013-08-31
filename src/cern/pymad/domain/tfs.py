@@ -20,8 +20,6 @@ Created on 16 Aug 2011
 .. module:: tfs
 .. moduleauthor:: kfuchsbe
 '''
-from string import lower
-
 
 class LookupDict():
     ''' A dictionary-like structure, which exposes the values of the keys also as attributes with the key names '''
@@ -64,7 +62,7 @@ class LookupDict():
         return self._get_val_or_raise_error(key, KeyError())
 
     def _unify_key(self, key):
-        return lower(key)
+        return str.lower(key)
 
     def keys(self):
         '''

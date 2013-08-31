@@ -20,10 +20,12 @@ Created on Nov 26, 2010
 
 @author: kaifox
 '''
-from tools_optics import get_values
-import tools_twiss as tw
+from __future__ import absolute_import
+
+from .tools_optics import get_values
+from . import tools_twiss as tw
 from cern.pymad.abc import PyMadModel
-from modeldef import JPyMadModelDefinition
+from .modeldef import JPyMadModelDefinition
 
 class JPyMadModel(PyMadModel):
     '''
