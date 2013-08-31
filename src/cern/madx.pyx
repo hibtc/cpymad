@@ -26,6 +26,8 @@ Main module to interface with Mad-X library.
 
 '''
 
+from __future__ import print_function
+
 from cern.libmadx.madx_structures cimport sequence_list, name_list, column_info
 from cern.libmadx import table
 
@@ -287,7 +289,7 @@ class madx:
         self.select('aperture',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
         if use:
-            print "Warning, use before aperture is known to cause problems"
+            print("Warning, use before aperture is known to cause problems")
             self.use(sequence) # this seems to cause a bug?
         _cmd='aperture,'+_madx_tools._add_range(madrange)+_madx_tools._add_offsets(offsets)
         if fname:
@@ -482,11 +484,11 @@ class madx:
             ret[seqs.sequs[i].name]={'name':seqs.sequs[i].name}
             if seqs.sequs[i].tw_table.name is not NULL:
                 ret[seqs.sequs[i].name]['twissname']=seqs.sequs[i].tw_table.name
-                print "Table name:",seqs.sequs[i].tw_table.name
-                print "Number of columns:",seqs.sequs[i].tw_table.num_cols
-                print "Number of columns (orig):",seqs.sequs[i].tw_table.org_cols
-                print "Number of rows:",seqs.sequs[i].tw_table.curr
+                print("Table name:",seqs.sequs[i].tw_table.name)
+                print("Number of columns:",seqs.sequs[i].tw_table.num_cols)
+                print("Number of columns (orig):",seqs.sequs[i].tw_table.org_cols)
+                print("Number of rows:",seqs.sequs[i].tw_table.curr)
         return ret
-        #print "Currently number of sequenses available:",seqs.curr
-        #print "Name of list:",seqs.name
+        #print("Currently number of sequenses available:",seqs.curr)
+        #print("Name of list:",seqs.name)
 

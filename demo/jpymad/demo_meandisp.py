@@ -42,10 +42,10 @@ def calc_mean_dispersion(model,elementpatterns=['MBI[T\.].*']):
     calculates the mean dispersion at the elements, which match the given regex
     """
     tw = model.twiss(['name','dx'], elementpatterns)
-    print 'elements:'
-    print '------'
-    print tw['name']
-    print 'mean of dispersion on elements=' + str(np.average(tw['dx']))
+    print('elements:')
+    print('------')
+    print(tw['name'])
+    print('mean of dispersion on elements=' + str(np.average(tw['dx'])))
 
 
 if __name__ == "__main__":

@@ -9,7 +9,7 @@ pms = pm.init('jpymad', start='gui')
 #pms = pm.init('jpymad', start='service')
 
 # print the name of all model definitions
-print pms.mdefnames
+print(pms.mdefnames)
 
 # get one model-definition
 model = pms.create_model('lhc')

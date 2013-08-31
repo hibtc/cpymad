@@ -71,7 +71,7 @@ def cleanup():
     ''' Cleans up the pymad service and sets the global variable back to None again. '''
 
     if not is_initialized():
-        print "pymad is not initialized. Doing nothing."
+        print("pymad is not initialized. Doing nothing.")
         return
 
     pms = PyMadGlobals.PYMAD_SERVICE()

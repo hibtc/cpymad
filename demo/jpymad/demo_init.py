@@ -28,6 +28,6 @@ pms = JPyMadService()
 mdefs = pms.get_mdefs()
 
 for mdef in mdefs:
-    print mdef
+    print(mdef)
 
 

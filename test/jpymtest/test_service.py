@@ -33,7 +33,7 @@ class Test(unittest.TestCase):
         self.assertTrue(not JPyMadGlobals.java_gateway is None, 'Must be connected to a java_gateway')
         self.assertTrue(not pms.jmad_service is None, 'JMad service must be available')
         for mdef in pms.mdefs:
-            print mdef
+            print(mdef)
 
 
 if __name__ == "__main__":

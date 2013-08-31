@@ -32,7 +32,7 @@ class CpymadService(PyMadService):
         self._am=None
         self._models=[]
         for key, value in kwargs.items():
-            print "WARN: unhandled option '" + key + "' for CPyMandService. Ignoring it."
+            print("WARN: unhandled option '" + key + "' for CPyMandService. Ignoring it.")
 
     @property
     def mdefs(self):

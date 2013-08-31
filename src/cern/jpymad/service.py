@@ -44,7 +44,7 @@ class JPyMadService(PyMadService):
         # YIL edit: What about this?
         atexit.register(self.cleanup)
         for key, value in kwargs.items():
-            print "WARN: unhandled option '" + key + "' for JPyMandService. Ignoring it."
+            print("WARN: unhandled option '" + key + "' for JPyMandService. Ignoring it.")
 
         if not start is None:
             if start is "gui":
@@ -52,7 +52,7 @@ class JPyMadService(PyMadService):
             elif start is "service":
                 self._started_jmad = jm.start_pymadservice(jmadhome)
             else:
-                print "WARN: unhandled start='" + start + "' for JPymandService (start can be one of 'gui' or 'service'). Ignoring it."
+                print("WARN: unhandled start='" + start + "' for JPymandService (start can be one of 'gui' or 'service'). Ignoring it.")
 
         self.jmad_service = jm.connect()
 
@@ -92,7 +92,7 @@ class JPyMadService(PyMadService):
 
         jmm = self.jmad_service.createModel(model_definition.jmmd)
         jmm.init()
-        print jm.stop
+        print(jm.stop)
         return JPyMadModel(jmm)
 
     def delete_model(self, model):

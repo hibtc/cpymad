@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from cern.pymad.domain.tfs import TfsTable,TfsSummary
 
 from cern.libmadx.madx_structures cimport column_info,char_p_array
@@ -119,9 +121,9 @@ def get_dict_from_mem(table,columns,retdict):
             for i in xrange(info.length):
                 ret[c.lower()][i]=char_tmp[i]
         elif dtype==u'V':
-            print "ERROR:",c,"is not available in table",table
+            print("ERROR:",c,"is not available in table",table)
         else:
-            print "Unknown datatype",dtype,c
+            print("Unknown datatype",dtype,c)
 
     if retdict:
         return ret,ret_header

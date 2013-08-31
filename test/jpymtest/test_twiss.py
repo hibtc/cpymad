@@ -30,7 +30,7 @@ class Test(unittest.TestCase):
         madxvarnames = ["s", "name", "betx", "bety"]
         result, params = PyMadTestCase.pms.am.twiss(madxvarnames)
 
-        print result
+        print(result)
 
         self.assertTrue(not result["s"] == None, "s-values must be returned")
         try:

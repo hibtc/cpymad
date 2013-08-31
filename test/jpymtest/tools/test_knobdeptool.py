@@ -38,8 +38,8 @@ class Test(unittest.TestCase):
 
         result = modeltool.calc(madxvars=madxvars, \
                         paramrange=deltaprange)
-        print result.name
-        print result.s
+        print(result.name)
+        print(result.s)
 
 
 if __name__ == "__main__":

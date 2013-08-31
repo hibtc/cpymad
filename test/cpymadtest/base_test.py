@@ -15,6 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
+from __future__ import print_function
+
 from cern import cpymad
 import unittest,os
 
@@ -41,7 +43,7 @@ class TestCpymad(unittest.TestCase):
          is also loaded into memory
         '''
         for seq in self.model.mdef['sequences'].keys():
-            print "Testing sequence",seq
+            print("Testing sequence",seq)
             self.assertTrue(self.model.has_sequence(seq))
 
     def test_set_optic(self):
@@ -49,7 +51,7 @@ class TestCpymad(unittest.TestCase):
          Sets all optics found in the model definition
         '''
         for optic in self.model.list_optics():
-            print "Testing optics",optic
+            print("Testing optics",optic)
             self.model.set_optic(optic)
             self.assertEqual(optic,self.model._active['optic'])
             self.model.twiss()

@@ -25,6 +25,8 @@ See also :py:class:`cern.pymad.model`
 
 '''
 
+from __future__ import print_function
+
 import json, os, sys
 from cern.madx import madx
 import cern.cpymad
@@ -447,7 +449,7 @@ class model(abc.model.PyMadModel):
         # Calling "basic aperture files"
         if not self._apercalled[sequence]:
             for afile in self._mdef['sequences'][sequence]['aperfiles']:
-                print "Calling file",afile
+                print("Calling file",afile)
                 self._call(afile)
             self._apercalled[sequence]=True
         # getting offset file if any:
