@@ -120,9 +120,9 @@ def convert_dict(indict):
     return new_dict
 
 def convert_file(infilename, outfilename):
-    indict = json.loads(file(infilename, 'r').read())
+    indict = json.loads(open(infilename, 'r').read())
     outdict = convert_dict(indict);
-    file(outfilename, 'w').write(json.dumps(outdict, indent=2))
+    open(outfilename, 'w').write(json.dumps(outdict, indent=2))
 
 if __name__ == "__main__":
     skip=['lhc','longti8']
@@ -132,6 +132,6 @@ if __name__ == "__main__":
             convert_file(f, '../_models/'+f[:-9]+'.cpymad.json')
 
             # saving jmad file in pretty print format:
-            #jd=json.load(file(f,'r'))
-            #json.dump(jd,file(f,'w'),indent=2)
+            #jd=json.load(open(f,'r'))
+            #json.dump(jd,open(f,'w'),indent=2)
 

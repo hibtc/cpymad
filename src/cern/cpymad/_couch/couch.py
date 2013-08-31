@@ -75,7 +75,7 @@ class Server():
                 raise ValueError("You need to give one filename for each attachment")
             for (a,f) in zip(kwargs['fnames'],kwargs['fpaths']):
                 print "Uploading attachment %s" % a
-                content=file(f,'r')
+                content=open(f,'r')
                 self._db.put_attachment(self._db[modname], content, filename=a)
 
     def del_model(self,modname):

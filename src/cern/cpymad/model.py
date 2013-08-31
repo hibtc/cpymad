@@ -465,7 +465,7 @@ class model(abc.model.PyMadModel):
                     while os.path.isfile(offsets_tmp+str(ocount)+'.tfs'):
                         ocount+=1
                     offsets_tmp+=str(ocount)+'.tfs'
-                    ftmp=file(offsets_tmp,'w')
+                    ftmp=open(offsets_tmp,'w')
                     ftmp.write(cern.cpymad._couch_server.get_file(self.model,offsets))
                     ftmp.close()
                     offsets=offsets_tmp
@@ -626,7 +626,7 @@ def save_model(model_def,filename):
         raise TypeError('model_def must be a dictionary!')
     if type(filename)!=type(''):
         raise TypeError('filename must be a string!')
-    file(filename,'w').write(json.dumps(model_def,indent=2))
+    open(filename,'w').write(json.dumps(model_def,indent=2))
 
 class _modelProcess(multiprocessing.Process):
     def __init__(self,sender,receiver,model,history='',recursive_history=False):

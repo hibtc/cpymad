@@ -61,7 +61,7 @@ def tfsDict(inputfile):
             inputfile+='.TFS'
         else:
             raise ValueError("ERROR: "+inputfile+" is not a valid file path")
-    f=file(inputfile,'r')
+    f=open(inputfile,'r')
     l=f.readline()
     while(l):
         if l.strip()[0]=='@':

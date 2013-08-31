@@ -41,7 +41,7 @@ def _get_mnames_files():
                 continue
             path = os.path.join(modelloc, f)
             fnames[path]=[]
-            jloaded=json.load(file(path))
+            jloaded=json.load(open(path))
             for mname in jloaded.keys():
                 if jloaded[mname]['real']:
                     mnames.append(mname)

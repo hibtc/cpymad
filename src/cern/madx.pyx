@@ -87,7 +87,7 @@ class madx:
             _madstarted=True
         if histfile:
             self._hist=True
-            self._hfile=file(histfile,'w')
+            self._hfile=open(histfile,'w')
             self._rechist=recursive_history
         elif cern.pymad.globals.MAD_HISTORY_BASE:
             base=cern.pymad.globals.MAD_HISTORY_BASE
@@ -95,7 +95,7 @@ class madx:
             i=0
             while os.path.isfile(base+str(i)+'.madx'):
                 i+=1
-            self._hfile=file(base+str(i)+'.madx','w')
+            self._hfile=open(base+str(i)+'.madx','w')
             self._rechist=recursive_history
         else:
             self._hist=False
@@ -464,7 +464,7 @@ class madx:
             cfile=command.split(',')[1].strip().strip('file=').strip('FILE=').strip(';\n').strip('"').strip("'")
             if sys.flags.debug:
                 print("DBG: call file ",cfile)
-            fin=file(cfile,'r')
+            fin=open(cfile,'r')
             for l in fin:
                 self._writeHist(l+'\n')
         else:
