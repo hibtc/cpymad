@@ -45,7 +45,7 @@ class JPyMadModel(PyMadModel):
     def set_optic(self, opticname):
         opticdef = self.jmm.getModelDefinition().getOpticsDefinition(opticname)
         if opticdef is None:
-            raise(ValueError("Optics definition with name '" + opticname + "' can not be found!"));
+            raise ValueError("Optics definition with name '" + opticname + "' can not be found!")
 
         self.jmm.setActiveOpticsDefinition(opticdef)
 
