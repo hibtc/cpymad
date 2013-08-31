@@ -1,5 +1,5 @@
 #!/afs/cern.ch/user/r/rtomas/lintrack/Python-2.5_32bit/Python-2.5_32bit/bin/python
-from __future__ import print_function
+from __future__ import print_function, division
 
 # Just to make sure that the path to the libraires is defined
 import sys
