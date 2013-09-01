@@ -1,7 +1,8 @@
+# encoding: utf-8
 #-------------------------------------------------------------------------------
 # This file is part of PyMad.
 #
-# Copyright (c) 2011, CERN. All rights reserved.
+# Copyright (c) 2013, CERN. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,36 +17,24 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 '''
-Created on 15 Aug 2011
+.. module: cern.abc.pymad.interface
 
-@author: kfuchsbe
+Created on 01 Sep 2013
+
+.. moduleauthor:: Thomas Gläßle <t_glaessle@gmx.de>
+
 '''
-from __future__ import absolute_import
 
-from abc import abstractproperty
+from abc import ABCMeta
 
-from .interface import Interface
+Interface = ABCMeta('Interface', (object,), {})
 
-class PyMadModelDefinition(Interface):
-    '''
-    The base class for a model definition
-    '''
+Interface.__doc__ = '''
+Base class for abstract classes.
 
-    @abstractproperty
-    def name(self):
-        pass
+This class serves as a  compatibility layer between python2 and python3.
+It  enables  code  to   use  `metaclass=ABCMeta`  across  both  language
+versions.
 
-    @abstractproperty
-    def seqnames(self):
-        ''' Returns a list of the names of the defined sequences in this model definition '''
-        pass
-
-    @abstractproperty
-    def opticnames(self):
-        ''' Returns a list of the names of the available optics in this model definition '''
-        pass
-
-    def __str__(self):
-        return self.name
-
+'''
 
