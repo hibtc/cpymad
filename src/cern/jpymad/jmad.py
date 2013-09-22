@@ -53,7 +53,7 @@ def _wait_for_file(filename, timeout=10.0):
     '''
     time = 0.0
     while True:
-        if os.path.isfile(filename) == True:
+        if os.path.isfile(filename):
             break
         sleep(_SLEEP_INTERVAL)
         time = time + _SLEEP_INTERVAL

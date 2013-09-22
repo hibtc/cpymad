@@ -116,6 +116,6 @@ class JPyMadService(PyMadService):
         model_manager.setActiveModel(pymadmodel.jmm)
 
     def cleanup(self):
-        if (self._started_jmad == True):
+        if self._started_jmad:
             jm.stop()
 

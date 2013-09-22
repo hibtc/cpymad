@@ -226,7 +226,7 @@ class madx:
         if twiss_init:
             for i_var,i_val in twiss_init.items():
                 if i_var not in ['name','closed-orbit']:
-                    if i_val==True:
+                    if i_val is True:
                         _tmpcmd+=','+i_var
                     else:
                         _tmpcmd+=','+i_var+'='+str(i_val)
