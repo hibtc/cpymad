@@ -27,7 +27,7 @@ def _convert_value(value):
         return _VALUE_MAP[value]
 
     newval = _try_float_convert(value)
-    if not newval == None:
+    if newval is not None:
         return newval
 
     return value

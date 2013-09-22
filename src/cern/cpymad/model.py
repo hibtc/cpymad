@@ -66,7 +66,7 @@ class model(abc.model.PyMadModel):
                 if os.path.isdir(d):
                     self._db=d
                     break
-        #if self._db==None:
+        #if self._db is None:
             #raise ValueError("It is not possible to find database directory for this model")
 
         self._mprocess=_modelProcess(_child_pipe_send,_child_pipe_recv,model,histfile,recursive_history)
@@ -302,7 +302,7 @@ class model(abc.model.PyMadModel):
 
          :param string sequence: sequence name.
         '''
-        if sequence==None:
+        if sequence is None:
             ret={}
             for s in self.get_sequences():
                 ret[s]=self._mdef['sequences'][s]['ranges'].keys()

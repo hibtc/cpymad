@@ -221,7 +221,7 @@ class madx:
         if fname: # we only need this if user wants the file to be written..
             _tmpcmd+=', file="'+fname+'"'
         for i_var,i_val in {'betx':betx,'bety':bety,'alfx':alfx,'alfy':alfy}.items():
-            if i_val!=None:
+            if i_val is not None:
                 _tmpcmd+=','+i_var+'='+str(i_val)
         if twiss_init:
             for i_var,i_val in twiss_init.items():
