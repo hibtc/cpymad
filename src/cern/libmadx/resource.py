@@ -10,22 +10,20 @@ import pkg_resources
 import json, io
 import os
 
-from abc import ABCMeta, abstractmethod
 from contextlib import contextmanager, closing
 from shutil import copyfileobj
 from tempfile import NamedTemporaryFile
-import cStringIO
+
+from cern.pymad.abc.interface import Interface, abstractmethod
 
 
-class ResourceProvider(object):
+class ResourceProvider(Interface):
     """
     Abstract base class for resource providers.
 
     Resources are read-only data objects such as model-data.
 
     """
-    __metaclass__ = ABCMeta
-
     @abstractmethod
     def open(self, name=''):
         """
@@ -105,8 +103,8 @@ class ResourceProvider(object):
         """
         Yield the path of a file containing the resource.
 
-        Use this as a context manager only to make sure the file is deleted
-        when done using.
+        Use this as a context manager to make sure the file is deleted when
+        done using.
 
         """
         try:
