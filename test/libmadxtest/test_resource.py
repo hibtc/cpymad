@@ -129,6 +129,18 @@ class TestPackageResource(Common, unittest.TestCase):
         sys.path.remove(self.base)
         super(TestPackageResource, self).tearDown()
 
+    def test_filename(self):
+        with self.res.filename('a.json') as filename:
+            with open(filename) as f:
+                self.assertEqual(
+                        json.load(f)['path'],
+                        'a.json')
+        with self.res.get(['subdir', 'b.json']).filename() as filename:
+            with open(filename) as f:
+                self.assertEqual(
+                        json.load(f)['path'],
+                        'subdir/b.json')
+
 class TestEggResource(Common, unittest.TestCase):
     def setUp(self):
         super(TestEggResource, self).setUp()
@@ -155,6 +167,20 @@ class TestEggResource(Common, unittest.TestCase):
         for egg in self.eggs:
             sys.path.remove(os.path.join(self.base, 'dist', egg))
         super(TestEggResource, self).tearDown()
+
+    def test_filename(self):
+        with self.res.filename('a.json') as filename:
+            with open(filename) as f:
+                self.assertEqual(
+                        json.load(f)['path'],
+                        'a.json')
+        self.assertFalse(os.path.exists(filename))
+        with self.res.get(['subdir', 'b.json']).filename() as filename:
+            with open(filename) as f:
+                self.assertEqual(
+                        json.load(f)['path'],
+                        'subdir/b.json')
+        self.assertFalse(os.path.exists(filename))
 
 class TestFileResource(Common, unittest.TestCase):
     def setUp(self):

@@ -6,6 +6,9 @@ __all__ = ['PackageResource']
 
 import pkg_resources
 from contextlib import contextmanager, closing
+from shutil import rmtree
+from os import remove
+from os.path import isdir
 
 from .base import ResourceProvider
 
@@ -47,12 +50,19 @@ class PackageResource(ResourceProvider):
 
     @contextmanager
     def filename(self, name=''):
-        yield pkg_resources.resource_filename(
-                self.package,
-                self._get_path(name))
-        # TODO: cleanup
-        # there is pkg_resources.cleanup_resources but this deletes all
-        # cached resources.
+        try:
+            filename = pkg_resources.resource_filename(
+                    self.package,
+                    self._get_path(name))
+            yield filename
+        finally:
+            # there is also pkg_resources.cleanup_resources but this deletes
+            # all cached resources.
+            if isdir(filename):
+                rmtree(filename)
+            else:
+                remove(filename)
+
 
     def _get_path(self, name):
         if not name:
