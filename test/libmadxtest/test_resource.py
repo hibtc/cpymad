@@ -3,7 +3,9 @@ Unit tests for the resource components
 """
 
 # tested classes
-from cern.libmadx.resource import PackageResource, FileResource, CouchResource
+from cern.libmadx.resource.package import PackageResource
+from cern.libmadx.resource.file import FileResource
+from cern.libmadx.resource.couch import CouchResource
 
 # test utilities
 import unittest
@@ -15,7 +17,6 @@ import gc
 import sys
 import setuptools
 import contextlib
-import io
 import cStringIO
 
 

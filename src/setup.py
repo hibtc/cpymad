@@ -42,6 +42,7 @@ for arg in sys.argv:
 sourcefiles=[["cern/madx.pyx"],["cern/libmadx/table.pyx"]]
 pythonsrc=["cern",
            "cern.libmadx",
+           "cern.libmadx.resource",
            "cern.cpymad",
            "cern.cpymad._couch",
            "cern.jpymad",
