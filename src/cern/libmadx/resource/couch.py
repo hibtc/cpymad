@@ -19,9 +19,24 @@ class CouchResource(ResourceProvider):
 
     """
     def __init__(self, db, doc=None, file=None):
+        """
+        Initialize a couchdb resource provider.
+
+        The parameters are:
+
+        :param object db: a couchdb Database instance
+        :param string doc: name (id) of the selected document (may be empty)
+        :param string file: name of the selected attachment (may be empty)
+
+        If doc and file are empty, a selection (.get) will yield a
+        document. Otherwise a selection will append to the name of the
+        currently selected attachment.
+
+        """
         self.db = db
         self.doc = doc
         self.file = file
+        assert self.doc or not self.file
 
     def open(self, name=''):
         if name:
@@ -48,7 +63,8 @@ class CouchResource(ResourceProvider):
         if name:
             return self.get(name).listdir()
         if self.file:
-            raise NotImplementedError("Cannot recurse into attachment.")
+            return (fname for fname in self.db[self.doc]['_attachments']
+                    if fname.startswith(self.file))
         elif self.doc:
             return (fname for fname in self.db[self.doc]['_attachments'])
         else:

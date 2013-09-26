@@ -18,6 +18,12 @@ class FileResource(ResourceProvider):
 
     """
     def __init__(self, path):
+        """
+        Initialize the filesystem resource provider.
+
+        :param string path: name of a filesystem object (file/folder).
+
+        """
         self.path = path
 
     def open(self, name=''):

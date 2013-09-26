@@ -17,11 +17,21 @@ class PackageResource(ResourceProvider):
     """
     Provider for resources that are inside a python package.
 
+    This can be used to access data that resides within .egg files as well
+    as data that is accessible through the filesystem.
+
     Uses pkg_resources.resource_stream() to open resources and
     pkg_resources.listdir() to list available resources.
 
     """
     def __init__(self, package, path=''):
+        """
+        Initialize package resource provider.
+
+        :param string package: python package/module name or object
+        :param string path: name of a resource relative to the package
+
+        """
         self.package = package
         self.path = path
 
