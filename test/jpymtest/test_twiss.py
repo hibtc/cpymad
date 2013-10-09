@@ -32,9 +32,9 @@ class Test(unittest.TestCase):
 
         print result
 
-        self.assertTrue(not result["s"] == None, "s-values must be returned")
+        self.assertTrue(result["s"] is not None, "s-values must be returned")
         try:
-            self.assertTrue(result["x"] == None, "x-values were not requested")
+            self.assertTrue(result["x"] is None, "x-values were not requested")
         except KeyError:
             pass
 

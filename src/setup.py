@@ -20,7 +20,7 @@
 import os,sys
 
 # Version of pymad (major,minor):
-PYMADVERSION=['0','2']
+PYMADVERSION=['0','3']
 
 if "bdist_egg" in sys.argv:
     from setuptools import setup
@@ -42,6 +42,7 @@ for arg in sys.argv:
 sourcefiles=[["cern/madx.pyx"],["cern/libmadx/table.pyx"]]
 pythonsrc=["cern",
            "cern.libmadx",
+           "cern.resource",
            "cern.cpymad",
            "cern.cpymad._couch",
            "cern.jpymad",

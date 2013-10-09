@@ -46,7 +46,7 @@ class KnobDepTool():
             self._knob.setOffset(float(paramvalue))
             twresult, params = self._model.twiss(columns, elementpatterns)
 
-            if data == None:
+            if data is None:
                 data = Data()
                 data.name = np.array(twresult['name'])
                 data.s = np.array(twresult['s'])

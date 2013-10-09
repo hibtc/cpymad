@@ -15,11 +15,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
-from cern import cpymad
-import unittest,os
 
-
-class TestCpymad(unittest.TestCase):
+# NOTE: Do not inherit from unittest.TestCase, otherwise unittest will try
+# to invoke all the test_xxx methods which makes no sense for this base
+# class.
+class TestCpymad(object):
 
     # It's a bit surprising that this doesn't happen by itself.. Hmmm...
     def tearDown(self):
@@ -31,9 +31,9 @@ class TestCpymad(unittest.TestCase):
             self.assertTrue(hasattr(t,attr))
         # check that keys are all lowercase..
         for k in t:
-            self.assertTrue(k==k.lower())
+            self.assertEqual(k, k.lower())
         for k in p:
-            self.assertTrue(k==k.lower())
+            self.assertEqual(k, k.lower())
 
     def test_sequences(self):
         '''

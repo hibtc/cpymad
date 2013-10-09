@@ -220,9 +220,9 @@ In the following we will try to keep a list of the various issues users have rep
       Bug in distutils (?).
 
       Solution:
-      Add the following line to the function ``_init_nt()`` in the file ``Lib\distutils\sysconfig.py`` of the python installation.
+      Add the following line to the function ``_init_nt()`` in the file ``<Python>\Lib\distutils\sysconfig.py`` of the python installation.
 
-      .. code-block::python
+      .. code-block:: python
 
         g['CC'] = 'gcc'
 
