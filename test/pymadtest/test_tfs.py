@@ -1,5 +1,5 @@
 
-from pymad import tfs
+from cern.pymad import tfs
 import unittest
 
 
