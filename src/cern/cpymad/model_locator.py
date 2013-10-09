@@ -16,7 +16,10 @@
 # limitations under the License.
 #------------------------------------------------------------------------------
 """
-Contains classes used to load models from resource locations.
+Contains classes used locate and load models from resource locations.
+
+This might be fully integratable into cpymad.service.
+
 """
 __all__ = [
     'ModelData',
