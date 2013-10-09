@@ -20,7 +20,7 @@
 import os,sys
 
 # Version of pymad (major,minor):
-PYMADVERSION=['0','2']
+PYMADVERSION=['0','3']
 
 if "bdist_egg" in sys.argv:
     from setuptools import setup
