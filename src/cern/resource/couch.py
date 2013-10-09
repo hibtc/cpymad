@@ -57,7 +57,7 @@ class CouchResource(ResourceProvider):
             # TODO: deal with unicode
             return StringIO(self.load())
         else:
-            raise NotImplementedError("Database is not a loadabe resource.")
+            raise NotImplementedError("Database is not a loadable resource.")
 
     def load(self, name=''):
         if name:
@@ -67,7 +67,7 @@ class CouchResource(ResourceProvider):
         elif self.doc:
             return self.db[self.doc]
         else:
-            raise NotImplementedError("Database is not a loadabe resource.")
+            raise NotImplementedError("Database is not a loadable resource.")
 
     def listdir(self, name=''):
         if name:
