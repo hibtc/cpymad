@@ -4,7 +4,8 @@ foreach(PYTEST clic aperture survey)
 endforeach()
 
 # long test, can be excluded by running
-# 'ctest -E LONG'
+# 'ctest -LE SLOW'
 foreach(PYTEST lhc-b4 lhc)
-   add_test(test_${PYTEST}_LONG ${PYTHON} test_${PYTEST}.py)
+   add_test(test_${PYTEST} ${PYTHON} test_${PYTEST}.py)
+   set_tests_properties(test_${PYTEST} PROPERTIES LABELS SLOW)
 endforeach()

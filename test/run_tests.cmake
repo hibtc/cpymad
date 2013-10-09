@@ -68,9 +68,9 @@ file(GLOB build_libdir src/build/lib.*)
 set(ENV{PYTHONPATH} "${build_libdir}:$ENV{PYTHONPATH}")
 
 # only run quick tests:
-#ctest_test(EXCLUDE LONG)
+ctest_test(EXCLUDE_LABEL SLOW)
 # run all tests:
-ctest_test()
+#ctest_test()
 
 # uncomment this to submit to dashboard:
 #ctest_submit()
