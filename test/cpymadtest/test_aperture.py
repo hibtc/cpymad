@@ -1,5 +1,5 @@
 from cern import cpymad
-import unittest,os
+import unittest
 
 class TestCpymadAperture(unittest.TestCase):
 

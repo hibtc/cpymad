@@ -19,7 +19,7 @@ import unittest
 from cern import cpymad
 from base_test import TestCpymad
 
-class TestLHC(TestCpymad):
+class TestLHC(TestCpymad, unittest.TestCase):
     def setUp(self):
         self.model=cpymad.model('lhc-beam4')
         self.model._cmd('option,-twiss_print')
