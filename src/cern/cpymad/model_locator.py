@@ -12,7 +12,7 @@ __all__ = [
 from cern.pymad.abc.interface import Interface, abstractmethod
 from collections import Mapping, OrderedDict
 from itertools import chain
-from cern.libmadx.resource.file import FileResource
+from cern.resource.file import FileResource
 import os.path
 
 def deep_update(d, u):
