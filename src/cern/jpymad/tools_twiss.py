@@ -33,7 +33,7 @@ def twiss(model, madxvarnames, elementpatterns=['.*']):
     outnames = []
     for name in madxvarnames:
         var = JPyMadGlobals.enums.MadxTwissVariable.fromMadxName(name) #@UndefinedVariable
-        if not var == None:
+        if var is not None:
             madxvars.append(var)
             outnames.append(name)
 

@@ -304,7 +304,7 @@ class Model(abc.model.PyMadModel):
 
          :param string sequence: sequence name.
         '''
-        if sequence==None:
+        if sequence is None:
             ret={}
             for s in self.get_sequences():
                 ret[s]=self._mdef['sequences'][s]['ranges'].keys()
