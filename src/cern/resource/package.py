@@ -69,18 +69,23 @@ class PackageResource(ResourceProvider):
 
     @contextmanager
     def filename(self, name=''):
+        filename = pkg_resources.resource_filename(
+                self.package,
+                self._get_path(name))
+        # This check is not very forward compatible, but its the best I got:
+        extracted = isinstance(pkg_resources.get_provider(self.package),
+                               pkg_resources.ZipProvider)
         try:
-            filename = pkg_resources.resource_filename(
-                    self.package,
-                    self._get_path(name))
             yield filename
         finally:
-            # there is also pkg_resources.cleanup_resources but this deletes
-            # all cached resources.
-            if isdir(filename):
-                rmtree(filename)
-            else:
-                remove(filename)
+            if extracted:
+                # there is also pkg_resources.cleanup_resources but this
+                # deletes all cached resources. Furthermore, that method
+                # seems to be a NOOP, currently.
+                if isdir(filename):
+                    rmtree(filename)
+                else:
+                    remove(filename)
 
 
     def _get_path(self, name):

@@ -135,11 +135,13 @@ class TestPackageResource(Common, unittest.TestCase):
                 self.assertEqual(
                         json.load(f)['path'],
                         'a.json')
+        self.assertTrue(os.path.exists(filename))
         with self.res.get(['subdir', 'b.json']).filename() as filename:
             with open(filename) as f:
                 self.assertEqual(
                         json.load(f)['path'],
                         'subdir/b.json')
+        self.assertTrue(os.path.exists(filename))
 
 class TestEggResource(Common, unittest.TestCase):
     def setUp(self):
@@ -175,6 +177,14 @@ class TestEggResource(Common, unittest.TestCase):
                         json.load(f)['path'],
                         'a.json')
         self.assertFalse(os.path.exists(filename))
+        with self.res.get(['subdir', 'b.json']).filename() as filename:
+            with open(filename) as f:
+                self.assertEqual(
+                        json.load(f)['path'],
+                        'subdir/b.json')
+        self.assertFalse(os.path.exists(filename))
+        # The resource should be accessible again, even though the file was
+        # deleted when exiting the context manager:
         with self.res.get(['subdir', 'b.json']).filename() as filename:
             with open(filename) as f:
                 self.assertEqual(
