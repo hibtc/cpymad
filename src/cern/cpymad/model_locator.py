@@ -110,7 +110,7 @@ class ModelLocator(Interface):
         """
         pass
 
-    def get_model(self, name):
+    def get_model(self, name, encoding='utf-8'):
         """
         Get the first found model with the specified name.
 
@@ -140,9 +140,9 @@ class MergedModelLocator(ModelLocator):
         """
         self.res_provider = resource_provider
 
-    def list_models(self):
+    def list_models(self, encoding='utf-8'):
         for res_name in self.res_provider.listdir_filter(ext='.cpymad.json'):
-            mdefs = self.res_provider.json(res_name)
+            mdefs = self.res_provider.json(res_name, encoding=encoding)
             for n,d in mdefs.items():
                 if d['real']:
                     yield n
@@ -156,9 +156,9 @@ class MergedModelLocator(ModelLocator):
         #     ) if mdef['real'])
         #----------------------------------------
 
-    def get_model(self, name):
+    def get_model(self, name, encoding='utf-8'):
         for res_name in self.res_provider.listdir_filter(ext='.cpymad.json'):
-            mdefs = self.res_provider.json(res_name)
+            mdefs = self.res_provider.json(res_name, encoding=encoding)
             # restrict only to 'real' models (don't do that?):
             if name in (n for n,d in mdefs.items() if d['real']):
                 break
@@ -222,9 +222,9 @@ class DistinctModelLocator(ModelLocator):
     def list_models(self):
         return self.resource_provider.listdir()
 
-    def get_model(self, name):
+    def get_model(self, name, encoding='utf-8'):
         res = self.resource_provider.get(name)
-        mdef = res.json()
+        mdef = res.json(encoding=encoding)
         res_prov = res.get(mdef['path-offsets']['resource-offset'])
         repo_prov = res.get(mdef['path-offsets']['repository-offset'])
         return ModelData(name,
@@ -250,10 +250,10 @@ class ChainModelLocator(ModelLocator):
         return chain.from_iterable(locator.list_models()
                                    for locator in self._locators)
 
-    def get_model(self, name):
+    def get_model(self, name, encoding='utf-8'):
         for locator in self._locators:
             try:
-                return locator.get_model(name)
+                return locator.get_model(name, encoding)
             except ValueError:
                 pass
         else:

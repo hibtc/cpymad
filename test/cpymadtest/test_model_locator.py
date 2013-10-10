@@ -1,3 +1,4 @@
+# encoding: utf-8
 """
 Tests for the classes defined in cern.cpymad.model_locator.
 """
@@ -15,8 +16,29 @@ import gc
 import shutil
 from copy import copy
 from tempfile import mkdtemp
-from test.test_resource import create_test_file
+from io import open
 from cern.resource.file import FileResource
+
+
+def create_test_file(base, path, content=None):
+    """
+    Create a file with defined content under base/path.
+    """
+    try:
+        os.makedirs(os.path.join(base, *path[:-1]))
+    except OSError:
+        # directory already exists. the exist_ok parameter exists not until
+        # python3.2
+        pass
+    with open(os.path.join(base, *path), 'wt', encoding='utf-8') as f:
+        if content is None:
+            # With json.dump is not compatible in python2 and python3
+            f.write(u'{"path": "%s", "unicode": "%s"}' % (
+                os.path.join(*path),    # this content is predictable
+                u"äæo≤»で"))            # some unicode test data
+        else:
+            f.write(content)
+
 
 
 class TestMergedModelLocator(unittest.TestCase):
@@ -38,6 +60,7 @@ class TestMergedModelLocator(unittest.TestCase):
 
         create_test_file(self.base, ['dbdir', 'c', 'c.txt'])
 
+        self.unicode_data = u"€®æة《±∓"
         abc = {
             "a": {
                 # virtual models should not be listed:
@@ -60,6 +83,8 @@ class TestMergedModelLocator(unittest.TestCase):
                 "files": [
                     {"path": "b.txt", "location": "REPOSITORY"},
                 ],
+                # some unicode test data:
+                "unicode": self.unicode_data
             },
             "c": {
                 "real": True,
@@ -81,8 +106,12 @@ class TestMergedModelLocator(unittest.TestCase):
         }
         de['e']['extends'] = ['d']
 
-        create_test_file(self.base, ['abc.cpymad.json'], json.dumps(abc))
-        create_test_file(self.base, ['de.cpymad.json'], json.dumps(de))
+        create_test_file(self.base,
+                         ['abc.cpymad.json'],
+                         json.dumps(abc, ensure_ascii=False))
+        create_test_file(self.base,
+                         ['de.cpymad.json'],
+                         json.dumps(de, ensure_ascii=False))
 
 
     def tearDown(self):
@@ -108,6 +137,12 @@ class TestMergedModelLocator(unittest.TestCase):
         self.locator.get_model('e')
         with self.assertRaises(ValueError):
             self.locator.get_model('f')
+
+    def test_encoding(self):
+        """Test that the model is loaded with the correct encoding."""
+        b = self.locator.get_model('b').model
+        self.assertEqual(b['unicode'],
+                         self.unicode_data)
 
     def test_mro(self):
         """
