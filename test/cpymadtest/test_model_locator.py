@@ -15,8 +15,8 @@ import gc
 import shutil
 from copy import copy
 from tempfile import mkdtemp
-from test.libmadxtest.test_resource import create_test_file
-from cern.libmadx.resource.file import FileResource
+from test.test_resource import create_test_file
+from cern.resource.file import FileResource
 
 
 class TestMergedModelLocator(unittest.TestCase):
