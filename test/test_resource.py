@@ -1,6 +1,14 @@
+# encoding: utf-8
 """
 Unit tests for the resource components
 """
+# from __future__ import unicode_literals
+
+# NOTE: The python2 setuptools.setup call expects pure binary (bytes) input
+# parameters. It is therefore impractical to use module-level unicode
+# support via the prededing __future__ import. The tests work on python2
+# anyway since implicit coercion between unicode and bytes is possible. On
+# python3 this is not possible, but not needed.
 
 # tested classes
 from cern.resource.package import PackageResource
@@ -17,30 +25,43 @@ import gc
 import sys
 import setuptools
 import contextlib
-import cStringIO
-
+from io import open
 
 def create_test_file(base, path, content=None):
+    """
+    Create a file with defined content under base/path.
+    """
     try:
         os.makedirs(os.path.join(base, *path[:-1]))
     except OSError:
         # directory already exists. the exist_ok parameter exists not until
         # python3.2
         pass
-    with open(os.path.join(base, *path), 'w') as f:
+    with open(os.path.join(base, *path), 'wt', encoding='utf-8') as f:
         if content is None:
-            json.dump({'path': os.path.join(*path)}, f)
+            # With json.dump is not compatible in python2 and python3
+            f.write(u'{"path": "%s", "unicode": "%s"}' % (
+                os.path.join(*path),    # this content is predictable
+                u"äæo≤»で"))            # some unicode test data
         else:
             f.write(content)
 
 def set_(iterable):
-    return set((s for s in iterable if not s.endswith('.pyc')))
+    return set((s for s in iterable
+                if not s.endswith('.pyc') and s != '__pycache__'))
 
 
 @contextlib.contextmanager
 def captured_output(stream_name):
+    if str is bytes:
+        # Python2: setuptools gives non-unicode output, so we have to
+        # supply a binary stream:
+        from io import BytesIO as StringIO
+    else:
+        # Python3: str is unicode and everything is alright.
+        from io import StringIO
     orig_stdout = getattr(sys, stream_name)
-    setattr(sys, stream_name, cStringIO.StringIO())
+    setattr(sys, stream_name, StringIO())
     try:
         yield getattr(sys, stream_name)
     finally:
@@ -54,7 +75,7 @@ class Common(object):
         self.mod = 'dummy_mod_124'
         self.base = tempfile.mkdtemp()
         self.path = os.path.join(self.base, self.mod)
-        create_test_file(self.path, ['__init__.py'], '')
+        create_test_file(self.path, ['__init__.py'], u'')
         create_test_file(self.path, ['a.json'])
         create_test_file(self.path, ['subdir', 'b.json'])
 
@@ -63,13 +84,13 @@ class Common(object):
         shutil.rmtree(self.base)
 
     def test_open(self):
-        with self.res.open('a.json') as f:
+        with self.res.open('a.json', 'utf-8') as f:
             self.assertEqual(
-                    json.load(f)['path'],
-                    'a.json')
-        with self.res.get('subdir/b.json').open() as f:
+                json.loads(f.read())['path'],
+                'a.json')
+        with self.res.get('subdir/b.json').open(encoding='utf-8') as f:
             self.assertEqual(
-                    json.load(f)['path'],
+                    json.loads(f.read())['path'],
                     os.path.join('subdir', 'b.json'))
 
     def test_list(self):
@@ -101,10 +122,10 @@ class Common(object):
 
     def test_load(self):
         self.assertEqual(
-                json.loads(self.res.load('a.json'))['path'],
+                json.loads(self.res.load('a.json', 'utf-8'))['path'],
                 'a.json')
         self.assertEqual(
-                json.loads(self.res.get('subdir').load('b.json'))['path'],
+                json.loads(self.res.get('subdir').load('b.json', 'utf-8'))['path'],
                 os.path.join('subdir', 'b.json'))
 
     def test_json(self):
@@ -131,15 +152,15 @@ class TestPackageResource(Common, unittest.TestCase):
 
     def test_filename(self):
         with self.res.filename('a.json') as filename:
-            with open(filename) as f:
+            with open(filename, encoding='utf-8') as f:
                 self.assertEqual(
-                        json.load(f)['path'],
+                        json.loads(f.read())['path'],
                         'a.json')
         self.assertTrue(os.path.exists(filename))
         with self.res.get(['subdir', 'b.json']).filename() as filename:
-            with open(filename) as f:
+            with open(filename, encoding='utf-8') as f:
                 self.assertEqual(
-                        json.load(f)['path'],
+                        json.loads(f.read())['path'],
                         'subdir/b.json')
         self.assertTrue(os.path.exists(filename))
 
@@ -172,23 +193,23 @@ class TestEggResource(Common, unittest.TestCase):
 
     def test_filename(self):
         with self.res.filename('a.json') as filename:
-            with open(filename) as f:
+            with open(filename, encoding='utf-8') as f:
                 self.assertEqual(
-                        json.load(f)['path'],
+                        json.loads(f.read())['path'],
                         'a.json')
         self.assertFalse(os.path.exists(filename))
         with self.res.get(['subdir', 'b.json']).filename() as filename:
-            with open(filename) as f:
+            with open(filename, encoding='utf-8') as f:
                 self.assertEqual(
-                        json.load(f)['path'],
+                        json.loads(f.read())['path'],
                         'subdir/b.json')
         self.assertFalse(os.path.exists(filename))
         # The resource should be accessible again, even though the file was
         # deleted when exiting the context manager:
         with self.res.get(['subdir', 'b.json']).filename() as filename:
-            with open(filename) as f:
+            with open(filename, encoding='utf-8') as f:
                 self.assertEqual(
-                        json.load(f)['path'],
+                        json.loads(f.read())['path'],
                         'subdir/b.json')
         self.assertFalse(os.path.exists(filename))
 

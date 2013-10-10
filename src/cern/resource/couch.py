@@ -1,3 +1,4 @@
+# encoding: utf-8
 #----------------------------------------
 # couch.py by Thomas Gläßle
 # 
@@ -13,7 +14,7 @@ Resource provider for couchdb resources.
 """
 __all__ = ['CouchResource']
 
-from io import StringIO
+from io import BytesIO, TextIOWrapper
 import os.path
 
 from .base import ResourceProvider
@@ -47,18 +48,19 @@ class CouchResource(ResourceProvider):
         self.file = file
         assert self.doc or not self.file
 
-    def open(self, name=''):
+    def _open_binary(self, name):
+        # TODO: is couch data really encoded binary?
         if name:
             return self.get(name).open()
         if self.file:
             return self.db.get_attachment(self.doc, name)
         elif self.doc:
-            # TODO: deal with unicode
-            return StringIO(self.load())
+            return BytesIO(self.load())
         else:
             raise NotImplementedError("Database is not a loadabe resource.")
 
-    def load(self, name=''):
+    def _load_binary(self, name):
+        # TODO: is couch data really encoded binary?
         if name:
             return self.get(name).load()
         if self.file:
@@ -67,6 +69,18 @@ class CouchResource(ResourceProvider):
             return self.db[self.doc]
         else:
             raise NotImplementedError("Database is not a loadabe resource.")
+
+    def open(self, name='', encoding=None):
+        if encoding is None:
+            return self._open_binary(name)
+        else:
+            return TextIOWrapper(self._open_binary(name))
+
+    def load(self, name='', encoding=None):
+        if encoding is None:
+            return self._load_binary(name)
+        else:
+            return self._load_binary(name).decode(encoding)
 
     def listdir(self, name=''):
         if name:

@@ -1,3 +1,4 @@
+# encoding: utf-8
 #----------------------------------------
 # package.py by Thomas Gläßle
 # 
@@ -18,8 +19,11 @@ from contextlib import contextmanager, closing
 from shutil import rmtree
 from os import remove
 from os.path import isdir
+from io import TextIOWrapper, StringIO, BytesIO
 
 from .base import ResourceProvider
+
+_manager = pkg_resources.ResourceManager()
 
 
 class PackageResource(ResourceProvider):
@@ -43,42 +47,54 @@ class PackageResource(ResourceProvider):
         """
         self.package = package
         self.path = path
+        self._manager = _manager
+        self._provider = pkg_resources.get_provider(package)
 
-    def open(self, name=''):
-        stream = pkg_resources.resource_stream(
-                self.package,
-                self._get_path(name))
-        if not (hasattr(stream, '__enter__') and hasattr(stream, '__exit__')):
-            stream = closing(stream)
-        return stream
+    def open(self, name='', encoding=None):
+        # The python2 implementation of ZipProvider.get_resource_stream
+        # uses cStringIO.StringIO which is unacceptable for our purposes.
+        # It is not usable as context manager, it fails to support unicode,
+        # it cannot be wrapped by TextIOWrapper. This is how it should have
+        # been done from the beginning:
+        if self._is_filesystem:
+            stream = self._provider.get_resource_stream(
+                    self._manager,
+                    self._get_path(name))
+            if encoding:
+                return stream
+            else:
+                return TextIOWrapper(stream, encoding=encoding)
+        else:
+            data = self.load(name, encoding)
+            if encoding:
+                return StringIO(data)
+            else:
+                return BytesIO(data)
 
-    def load(self, name=''):
-        return pkg_resources.resource_string(
-                self.package,
+    def load(self, name='', encoding=None):
+        data = self._provider.get_resource_string(
+                self._manager,
                 self._get_path(name))
+        if encoding:
+            return data.decode(encoding)
+        else:
+            return data
 
     def listdir(self, name=''):
-        return pkg_resources.resource_listdir(
-                self.package,
-                self._get_path(name))
+        return self._provider.resource_listdir(self._get_path(name))
 
     def get(self, name=''):
-        return self.__class__(
-                self.package,
-                self._get_path(name))
+        return self.__class__(self.package, self._get_path(name))
 
     @contextmanager
     def filename(self, name=''):
-        filename = pkg_resources.resource_filename(
-                self.package,
-                self._get_path(name))
-        # This check is not very forward compatible, but its the best I got:
-        extracted = isinstance(pkg_resources.get_provider(self.package),
-                               pkg_resources.ZipProvider)
+        filename = self._provider.get_resource_filename(
+            self._manager,
+            self._get_path(name))
         try:
             yield filename
         finally:
-            if extracted:
+            if self._is_extracted:
                 # there is also pkg_resources.cleanup_resources but this
                 # deletes all cached resources. Furthermore, that method
                 # seems to be a NOOP, currently.
@@ -95,6 +111,15 @@ class PackageResource(ResourceProvider):
             return '/'.join([self.path] + name)
         else:
             return '/'.join([self.path] + name.split('/'))
+
+    @property
+    def _is_filesystem(self):
+        return isinstance(self._provider, pkg_resources.DefaultProvider)
+
+    @property
+    def _is_extracted(self):
+        # This check is not very forward compatible, but its the best I got:
+        return isinstance(self._provider, pkg_resources.ZipProvider)
 
     def provider(self):
         parts = self.path.rsplit('/', 1)
