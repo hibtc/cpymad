@@ -94,7 +94,7 @@ class PackageResource(ResourceProvider):
         elif isinstance(name, list):
             return '/'.join([self.path] + name)
         else:
-            return '/'.join([self.path, name])
+            return '/'.join([self.path] + name.split('/'))
 
     def provider(self):
         parts = self.path.rsplit('/', 1)

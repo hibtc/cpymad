@@ -54,7 +54,7 @@ class FileResource(ResourceProvider):
         elif isinstance(name, list):
             return os.path.join(self.path, *name)
         else:
-            return os.path.join(self.path, name)
+            return os.path.join(self.path, *name.split('/'))
 
     def provider(self):
         return self.__class__(os.path.dirname(self.path))
