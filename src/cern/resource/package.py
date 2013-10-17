@@ -19,7 +19,7 @@ from contextlib import contextmanager, closing
 from shutil import rmtree
 from os import remove
 from os.path import isdir
-from io import TextIOWrapper, StringIO, BytesIO
+from io import StringIO, BytesIO, open
 
 from .base import ResourceProvider
 
@@ -57,13 +57,13 @@ class PackageResource(ResourceProvider):
         # it cannot be wrapped by TextIOWrapper. This is how it should have
         # been done from the beginning:
         if self._is_filesystem:
-            stream = self._provider.get_resource_stream(
-                    self._manager,
-                    self._get_path(name))
+            filename = self._provider.get_resource_filename(
+                self._manager,
+                self._get_path(name))
             if encoding:
-                return stream
+                return open(filename, 'rt', encoding=encoding)
             else:
-                return TextIOWrapper(stream, encoding=encoding)
+                return open(filename, 'rb')
         else:
             data = self.load(name, encoding)
             if encoding:
