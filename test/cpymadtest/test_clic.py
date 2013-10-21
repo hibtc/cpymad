@@ -19,7 +19,7 @@ import unittest
 from cern import cpymad
 from base_test import TestCpymad
 
-class TestCLIC(TestCpymad):
+class TestCLIC(TestCpymad, unittest.TestCase):
     def setUp(self):
         self.model=cpymad.model('clic')
         self.model._cmd('option,-twiss_print')

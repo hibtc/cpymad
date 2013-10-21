@@ -87,7 +87,7 @@ class JPyMadService(PyMadService):
     def create_model(self, mdef):
         if  isinstance(mdef, str):
             model_definition = self.get_mdef(mdef)
-            if model_definition == None:
+            if model_definition is None:
                 raise Exception("Model definition '" + mdef + "' not found.")
         else:
             model_definition = mdef
@@ -107,7 +107,7 @@ class JPyMadService(PyMadService):
         """
         model_manager = self.jmad_service.getModelManager()
         active_model = model_manager.getActiveModel()
-        if active_model == None:
+        if active_model is None:
             return None
         else:
             return JPyMadModel(active_model)
@@ -118,6 +118,6 @@ class JPyMadService(PyMadService):
         model_manager.setActiveModel(pymadmodel.jmm)
 
     def cleanup(self):
-        if (self._started_jmad == True):
+        if self._started_jmad:
             jm.stop()
 

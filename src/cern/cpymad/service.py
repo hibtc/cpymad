@@ -21,22 +21,47 @@ Created on 16 Aug 2011
 .. moduleauthor:: Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen[at]cern.ch>
 '''
 from cern.pymad.abc.service import PyMadService
-from cern import cpymad
+from cern.pymad.globals import USE_COUCH
+from cern.cpymad import model
+from cern.cpymad.model_locator import ChainModelLocator
+
+
+# Create a default ModelLocator:
+# NOTE: we could (and probably should) stop using this global object and
+# use only CpymadService objects instead!
+if USE_COUCH:
+    from cern.cpymad import _couch
+    from cern.cpymad.model_locator import DistinctModelLocator
+    from cern.resource.couch import CouchResource
+
+    _couch_server=_couch.couch.Server()
+    _locator = DistinctModelLocator(CouchResource(_couch_server._db))
+else:
+    from cern.cpymad.model_locator import MergedModelLocator
+    from cern.resource.package import PackageResource
+
+    _locator = MergedModelLocator(PackageResource(__package__, '_models'))
+
+default_model_locator = ChainModelLocator()
+default_model_locator.add_locator(_locator)
+
 
 
 class CpymadService(PyMadService):
     ''' The CPymad implementation of the
         abstract class PyMadService. '''
 
-    def __init__(self, **kwargs):
+    def __init__(self, model_locator=default_model_locator, **kwargs):
         self._am=None
         self._models=[]
+        self.model_locator = model_locator
         for key, value in kwargs.items():
             print("WARN: unhandled option '" + key + "' for CPyMandService. Ignoring it.")
 
+
     @property
     def mdefs(self):
-        return cpymad.modelList()
+        return self.model_locator.list_models()
 
     @property
     def mdefnames(self):
@@ -50,7 +75,8 @@ class CpymadService(PyMadService):
         return mnames
 
     def create_model(self, modeldef):
-        self._models.append(cpymad.model(modeldef))
+        self._models.append(
+            model(self.model_locator.get_model(modeldef)))
         self._am=self._models[-1]
         return self._am
 
