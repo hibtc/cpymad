@@ -64,7 +64,7 @@ message(${CTEST_SOURCE_DIRECTORY}/src/build)
 #ctest_update()
 ctest_build(BUILD ${CTEST_SOURCE_DIRECTORY}/src)
 
-file(GLOB build_libdir src/build/lib.*)
+file(GLOB build_libdir ${CTEST_SOURCE_DIRECTORY}/src/build/lib.*)
 set(ENV{PYTHONPATH} "${build_libdir}:$ENV{PYTHONPATH}")
 
 # only run quick tests:
