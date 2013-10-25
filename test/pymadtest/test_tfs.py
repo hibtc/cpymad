@@ -5,8 +5,7 @@ import unittest
 
 class TestTFS(unittest.TestCase):
     def test_wrongpath(self):
-        with self.assertRaises(ValueError):
-            tfs('wrong_file_path')
+        self.assertRaises(ValueError, tfs, 'wrong_file_path')
 
 
 if __name__ == '__main__':
