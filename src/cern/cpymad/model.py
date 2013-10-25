@@ -26,50 +26,75 @@ See also :py:class:`cern.pymad.model`
 '''
 
 import json, os, sys
-from cern.madx import madx
-import cern.cpymad
-from cern.pymad import abc
 import multiprocessing
 import signal,atexit
+
+from cern.cpymad import model_locator
+from cern.madx import madx
+from cern.pymad import abc
 from cern.pymad.globals import USE_COUCH
 
-class model(abc.model.PyMadModel):
-#class model():
+
+class Model(abc.model.PyMadModel):
     '''
-    model class implementation. the model spawns a madx instance in a separate process.
+    Model class implementation. the model spawns a madx instance in a separate process.
     this has the advantage that you can run separate models which do not affect each other.
 
-    :param string model: Name of model to load.
-    :param string optics: Name of optics to load, string or list of strings.
-    :param string histfile: Name of file which will contain all Mad-X commands called.
+    To load a Model object using the default ModelLocator use the static
+    constructor method ``Model.from_name``. The default constructor should
+    be invoked with a ModelData instance.
+
     '''
-    def __init__(self,model,sequence='',optics='',histfile='',recursive_history=False):
+    @classmethod
+    def from_name(cls, model, *args, **kwargs):
+        """
+        Create a Model object from its name.
 
-        if model not in cern.cpymad.modelList():
-            raise ValueError("The model you asked for does not exist in the database")
-        # name of model:
-        self.model=model
-        # path where the model file is located
-        self._path = os.path.dirname(_get_filename(model))
-        # loading the dictionary...
-        self._mdef=_get_mdef(model)
+        :param string model: Name of the model
+        :param tuple args: Positional parameters as needed by ``__init__``
+        :param dict kwargs: Keyword parameters as needed by ``__init__``
 
+        This constructor is provided for backward compatibility. To specify
+        where your model data is loaded from you should create and use your
+        own custom cern.cpymad.model_locator.ModelLocator.
+
+        """
+        from cern.cpymad.service import default_model_locator
+        mdata = default_model_locator.get_model(model)
+        return cls(mdata, *args, **kwargs)
+
+
+    def __init__(self, model, sequence='',optics='',histfile='',recursive_history=False):
+        """
+        Construct a Model object.
+
+        :param ModelData model: model data as acquired through a ModelLocator
+        :param string sequence: Name of the default sequence to use
+        :param string optics: Name of optics to load, string or list of strings.
+        :param string histfile: Name of file which will contain all Mad-X commands called.
+        :param bool recursive_history: Recursively load commands of called files into histfile
+
+        For backward compatibility reasons, the first parameter can also be
+        the name of the model to be loaded. This is equivalent to the
+        preferred Model.from_name() constructor.
+
+        """
+        if isinstance(model, model_locator.ModelData):
+            mdata = model
+        else:
+            from cern.cpymad.service import default_model_locator
+            mdata = default_model_locator.get_model(model)
+
+        self.mdata = mdata
+        self._mdef = mdata.model
 
         # Defining two pipes which are used for communicating...
         _child_pipe_recv,_parent_send=multiprocessing.Pipe(False)
         _parent_recv,_child_pipe_send=multiprocessing.Pipe(False)
         self._send=_parent_send.send
         self._recv=_parent_recv.recv
-        self._db=None
-        if not USE_COUCH:
-            for d in self._mdef['dbdirs']:
-                if os.path.isdir(d):
-                    self._db=d
-                    break
-        #if self._db==None:
-            #raise ValueError("It is not possible to find database directory for this model")
 
-        self._mprocess=_modelProcess(_child_pipe_send,_child_pipe_recv,model,histfile,recursive_history)
+        self._mprocess=_modelProcess(_child_pipe_send,_child_pipe_recv,self.name,histfile,recursive_history)
 
         self._mprocess.start()
 
@@ -82,7 +107,7 @@ class model(abc.model.PyMadModel):
     # API stuff:
     @property
     def name(self):
-        return self.model
+        return self.mdata.name
 
     @property
     def mdef(self):
@@ -188,34 +213,11 @@ class model(abc.model.PyMadModel):
         except AttributeError: pass
 
     def __str__(self):
-        return self.model
-
-    def _get_file_path(self,fdict):
-        if 'location' in fdict:
-            loc=fdict['location']
-        else:
-            loc='REPOSITORY' # this is default..
-        if loc=='RESOURCE':
-            fname = self._mdef["path-offsets"]['resource-offset']+'/'
-        elif loc=='REPOSITORY':
-            fname = self._mdef["path-offsets"]['repository-offset']+'/'
-
-        if USE_COUCH:
-            raise TypeError("Sorry, couch not implemented to use this feature")
-        else:
-            if loc=='RESOURCE':
-                return self._path+'/resdata/'+fname
-            elif loc=='REPOSITORY':
-                if self._db:
-                    return self._db+fname
-                else:
-                    return self._path+'/repdata/'+fname
+        return self.name
 
     def _call(self,fdict):
-
-        fpath=self._get_file_path(fdict)+fdict['path']
-        self.call(fpath)
-
+        with self.mdata.get_by_dict(fdict).filename() as fpath:
+            self.call(fpath)
 
     def call(self,filepath):
         '''
@@ -302,7 +304,7 @@ class model(abc.model.PyMadModel):
 
          :param string sequence: sequence name.
         '''
-        if sequence==None:
+        if sequence is None:
             ret={}
             for s in self.get_sequences():
                 ret[s]=self._mdef['sequences'][s]['ranges'].keys()
@@ -452,35 +454,28 @@ class model(abc.model.PyMadModel):
             self._apercalled[sequence]=True
         # getting offset file if any:
         # if no range was selected, we ignore offsets...
-        offsets=''
+        offsets=None
         this_range=''
         if madrange:
             rangedict=self._get_range_dict(sequence=sequence,madrange=madrange)
             this_range=rangedict['madx-range']
             if 'aper-offset' in rangedict:
-                offsets=rangedict['aper-offset']
-                if USE_COUCH:
-                    offsets_tmp='tmp_madx_offsets'
-                    ocount=0
-                    while os.path.isfile(offsets_tmp+str(ocount)+'.tfs'):
-                        ocount+=1
-                    offsets_tmp+=str(ocount)+'.tfs'
-                    ftmp=file(offsets_tmp,'w')
-                    ftmp.write(cern.cpymad._couch_server.get_file(self.model,offsets))
-                    ftmp.close()
-                    offsets=offsets_tmp
-                else:
-                    offsets=self._get_file_path(offsets)+offsets['path']
+                offsets = self.mdata.get_by_dict(rangedict['aper-offset']).filename()
 
         args={'sequence':sequence,
-              'madrange':this_range,
-              'columns':columns,
-              'offsets':offsets,
-              'fname':fname,
-              'use':use}
-        t,s=self._sendrecv(('aperture',args))
-        if USE_COUCH:
-            os.remove(offsets)
+            'madrange':this_range,
+            'columns':columns,
+            'fname':fname,
+            'use':use}
+
+        if offsets:
+            with offsets as offsets_filename:
+                args['offsets'] = offsets_filename
+                t,s=self._sendrecv(('aperture',args))
+        else:
+            args['offsets'] = ''
+            t,s=self._sendrecv(('aperture',args))
+
         if retdict:
             return t,s
         return TfsTable(t),TfsSummary(s)
@@ -561,57 +556,6 @@ class model(abc.model.PyMadModel):
         return self._recv()
 
 
-def _get_mdef(modelname):
-    if USE_COUCH:
-        return cern.cpymad._couch_server.get_model(modelname)
-
-    fname=_get_filename(modelname)
-    _jdict=json.loads(_get_file_content(modelname,fname))
-    ret_dict=_jdict[modelname]
-    for extra_dict in ret_dict['extends']:
-        for key in _jdict[extra_dict]:
-            if key in ret_dict and not key=='real':
-                if type(_jdict[extra_dict][key])==dict:
-                    ret_dict[key].update(_jdict[extra_dict][key])
-                elif type(_jdict[extra_dict][key])==list:
-                    ret_dict[key].extend(_jdict[extra_dict][key])
-                else:
-                    raise TypeError('Could not extend %s model with %s' % (modelname,extra_dict))
-            else:
-                ret_dict[key]=_jdict[extra_dict][key]
-        ret_dict.update(_jdict[extra_dict])
-
-    return ret_dict
-
-def _get_filename(modelname):
-    from cern.cpymad import listModels
-    file_list=listModels._get_mnames_files()[1]
-    for f in file_list:
-        if modelname in file_list[f]:
-            return f
-def _get_file_content(modelname,filename):
-    if USE_COUCH:
-        return cern.cpymad._couch_server.get_file(modelname,filename)
-
-    try:
-        # first we try a simple read
-        # this is necessary if the model path is outside the pymad installation
-        with open(filename) as f:
-            file_content = f.read()
-    except FileNotFoundError:
-        # this can happen if the installed pymad is e.g. in an egg file
-        # we then try to read the file from our pymad installation
-        # using pkgutil.get_data
-        filename = os.path.join('_models',os.path.basename(filename))
-        try:
-            import pkgutil
-            file_content = pkgutil.get_data(__name__, filename)
-        except ImportError:
-            # not all python installations we currently support have pkgutil apparently..
-            import pkg_resources
-            file_content = pkg_resources.resource_string(__name__, filename)
-    return file_content
-
 
 def save_model(model_def,filename):
     '''
@@ -640,9 +584,6 @@ class _modelProcess(multiprocessing.Process):
     def run(self):
         _madx=madx(histfile=self.history,recursive_history=self.recursive_history)
         _madx.verbose(False)
-        if USE_COUCH:
-            _couch_server=cern.cpymad._couch.couch.Server()
-            _madx.command(_couch_server.get_file(self.model,'initscript'))
 
         def terminator(num, frame):
              sys.exit()
