@@ -53,7 +53,7 @@ def _wait_for_file(filename, timeout=10.0):
     '''
     time = 0.0
     while True:
-        if os.path.isfile(filename) == True:
+        if os.path.isfile(filename):
             break
         sleep(_SLEEP_INTERVAL)
         time = time + _SLEEP_INTERVAL
@@ -164,7 +164,7 @@ def is_connected():
     """
     returns true, if a connection is established, false if not.
     """
-    return not (JPyMadGlobals.jmad_service == None)
+    return JPyMadGlobals.jmad_service is not None
 
 def connect():
     """
@@ -175,10 +175,10 @@ def connect():
     if is_connected():
         return
 
-    if JPyMadGlobals.java_gateway == None:
+    if JPyMadGlobals.java_gateway is None:
         JPyMadGlobals.java_gateway = JavaGateway()
 
-    if JPyMadGlobals.jmad_service == None:
+    if JPyMadGlobals.jmad_service is None:
         # the entry-point is directly the jmad service
         # test the connection
         try:
