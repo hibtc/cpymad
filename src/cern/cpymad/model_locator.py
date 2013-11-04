@@ -31,7 +31,7 @@ __all__ = [
 ]
 
 from cern.pymad.abc.interface import Interface, abstractmethod
-from collections import Mapping, OrderedDict
+from collections import Mapping
 from itertools import chain
 from cern.resource.file import FileResource
 import os.path
@@ -171,7 +171,8 @@ class MergedModelLocator(ModelLocator):
 
         # expand the model using its bases specified in 'extends'. try to
         # provide a useful MRO:
-        mro = OrderedDict()
+        # YIL: OrderedDict not available in python 2.6, dict() is good enough?
+        mro = dict()
         more = [name]
         while more:
             even_more = []
