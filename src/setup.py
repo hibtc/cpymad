@@ -140,4 +140,6 @@ setup(
     license = 'CERN Standard Copyright License',
     packages = pythonsrc,
     package_data={'cern.cpymad': cdata},
+    setup_requires=['numpy', 'Cython'],
+    install_requires=['numpy'],
     )
