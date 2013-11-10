@@ -72,24 +72,17 @@ def add_dir(directory,dirlist):
         if directory not in dirlist:
             dirlist.append(directory)
 
-try:
-    home = os.environ['HOME']
-except KeyError:
-    # on win32 %HOMEDRIVE%%HOMEPATH% is the way to go:
-    home = os.environ['HOMEDRIVE'] + os.environ['HOMEPATH']
-
 includedirs=[]
 libdirs=[]
 rlibdirs=[]
 if special_madxdir:
     _prefixdirs=[special_madxdir]
 else: # making some guesses...
-    _prefixdirs=[
-        sys.prefix,
-        ]
+    _prefixdirs=[ sys.prefix, ]
+
 for prefixdir in ['/usr',
         '/usr/local',
-        os.path.join(home,'.local')]:
+        os.path.join(os.path.expanduser('~'),'.local')]:
     add_dir(prefixdir,_prefixdirs)
 
 for prefixdir in _prefixdirs:
