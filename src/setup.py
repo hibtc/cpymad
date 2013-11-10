@@ -22,14 +22,12 @@ import os,sys
 # Version of pymad (major,minor):
 PYMADVERSION=['0','2']
 
-if "bdist_egg" in sys.argv:
-    from setuptools import setup
-else:
-    from distutils.core import setup
-from distutils.extension import Extension
+from setuptools import setup
+from setuptools.extension import Extension
 from Cython.Distutils import build_ext
 import platform
 from distutils.util import get_platform
+import numpy
 
 # ugly hack to add --madxdir=/path/to/madxinstallation
 special_madxdir=''
@@ -93,7 +91,6 @@ if not includedirs:
     raise ValueError("Cannot find folder with Mad-X headers")
 
 # Add numpy include directory (for cern.libmadx.table):
-import numpy
 includedirs.append(numpy.get_include())
 
 for prefixdir in _prefixdirs:
