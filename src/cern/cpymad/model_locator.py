@@ -50,7 +50,7 @@ class ModelData(object):
     """
     Loader for individual data objects from a model resource collection.
 
-    Has three public fields: model, resource, repository. The former is a
+    Has four public fields: name, model, resource, repository. `model` is a
     dictionary containing the fully expanded model definition. The latter
     two are ResourceProvider instances able to load actual data for
     repository/resource data respectively. 
