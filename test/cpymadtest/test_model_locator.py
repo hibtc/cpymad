@@ -129,15 +129,12 @@ class TestMergedModelLocator(unittest.TestCase):
     def test_get(self):
         """Test that ValueError is raised iff model does not exist."""
         # cannot get virtual model ATM:
-        with self.assertRaises(ValueError):
-            self.locator.get_model('a')
+        self.assertRaises(ValueError, self.locator.get_model, 'a')
         self.locator.get_model('b')
         self.locator.get_model('c')
-        with self.assertRaises(ValueError):
-            self.locator.get_model('d')
+        self.assertRaises(ValueError, self.locator.get_model, 'd')
         self.locator.get_model('e')
-        with self.assertRaises(ValueError):
-            self.locator.get_model('f')
+        self.assertRaises(ValueError, self.locator.get_model, 'f')
 
     def test_encoding(self):
         """Test that the model is loaded with the correct encoding."""
@@ -212,8 +209,7 @@ class TestMROFunc(unittest.TestCase):
         class A(X, Y): pass
         class B(Y, X): pass
         bases = (A, B)
-        with self.assertRaises(TypeError):
-            x = self.mro(A, B)
+        self.assertRaises(TypeError, self.mro, A, B)
 
     def test_TrivialSingleInheritance(self):
         O = object
