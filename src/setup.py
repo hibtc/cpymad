@@ -22,14 +22,12 @@ import os,sys
 # Version of pymad (major,minor):
 PYMADVERSION=['0','2']
 
-if "bdist_egg" in sys.argv:
-    from setuptools import setup
-else:
-    from distutils.core import setup
-from distutils.extension import Extension
+from setuptools import setup
+from setuptools.extension import Extension
 from Cython.Distutils import build_ext
 import platform
 from distutils.util import get_platform
+import numpy
 
 # ugly hack to add --madxdir=/path/to/madxinstallation
 special_madxdir=''
@@ -72,24 +70,17 @@ def add_dir(directory,dirlist):
         if directory not in dirlist:
             dirlist.append(directory)
 
-try:
-    home = os.environ['HOME']
-except KeyError:
-    # on win32 %HOMEDRIVE%%HOMEPATH% is the way to go:
-    home = os.environ['HOMEDRIVE'] + os.environ['HOMEPATH']
-
 includedirs=[]
 libdirs=[]
 rlibdirs=[]
 if special_madxdir:
     _prefixdirs=[special_madxdir]
 else: # making some guesses...
-    _prefixdirs=[
-        sys.prefix,
-        ]
+    _prefixdirs=[ sys.prefix, ]
+
 for prefixdir in ['/usr',
         '/usr/local',
-        os.path.join(home,'.local')]:
+        os.path.join(os.path.expanduser('~'),'.local')]:
     add_dir(prefixdir,_prefixdirs)
 
 for prefixdir in _prefixdirs:
@@ -100,7 +91,6 @@ if not includedirs:
     raise ValueError("Cannot find folder with Mad-X headers")
 
 # Add numpy include directory (for cern.libmadx.table):
-import numpy
 includedirs.append(numpy.get_include())
 
 for prefixdir in _prefixdirs:
@@ -147,4 +137,6 @@ setup(
     license = 'CERN Standard Copyright License',
     packages = pythonsrc,
     package_data={'cern.cpymad': cdata},
+    setup_requires=['numpy', 'Cython'],
+    install_requires=['numpy'],
     )
