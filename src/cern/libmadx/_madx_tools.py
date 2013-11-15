@@ -65,17 +65,9 @@ def _add_offsets(offsets):
         return 'offsetelem="'+offsets+'",'
     return ''
 
-def is_python26():
-    '''
-    Returns True if currently running python 2.6..
-    '''
-    if sys.version_info[0]==2 and sys.version_info[1]==6:
-        return True
-    return False
-
 def _sorted_items(kwargs):
     """Return dictionary items in canonicalized order."""
-    if (not is_python26()) and isinstance(kwargs, collections.OrderedDict):
+    if isinstance(kwargs, getattr(collections, 'OrderedDict', ())):
         return kwargs.items()
     else:
         return sorted(kwargs.items(), key=lambda i: i[0])
