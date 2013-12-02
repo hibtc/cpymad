@@ -22,39 +22,37 @@
 # segfaults more often than not, and isn't helpful..
 #
 
-#cdef int NAME_L
-#NAME_L=48 # defined by preprocessor in madx..
-
 cdef extern from "madX/mad_def.h":
-    #cdef NAME_L
-    pass
+    enum:
+        NAME_L
 
 cdef extern from "madX/madx.h":
     struct char_p_array:
         int flag,stamp
         char** p
-        char[48] name
+        char[NAME_L] name
         int  max                     # max. array size
         int  curr                   # current occupation
         int* i
-        pass
+
+    struct char_array:      # dynamic array of char
+        int stamp
+        int max                      # max. array size
+        int curr                     # current occupation
+        char* c
+
     struct int_array:
         char* name
         int curr
         int *i
-        pass
+
     struct node:
         pass
 
     struct name_list:
-          char[48]  name
-          int  max                      # max. pointer array size
-          int  curr                     # current occupation
-          #int* index                    # index for alphabetic access
-          #int* inform                   # array parallel to names with integer
-          #int stamp
-          #char** names;                 # element names for sort
-          pass
+        char[NAME_L]  name
+        int  max                      # max. pointer array size
+        int  curr                     # current occupation
 
 cdef extern from "madX/mad_table.h":
     cdef struct table:
@@ -64,24 +62,27 @@ cdef extern from "madX/mad_table.h":
         int_array *col_out,*row_out
         name_list* columns    #names + types (in inform)
         char ***s_cols
-        pass
-
 
 cdef extern from "madX/madx.h":
     # to be able to read sequence information..
     struct sequence:
-        char[48] name
+        char[NAME_L] name
         table* tw_table       #pointer to latest twiss table created
-        pass
+
     # list of sequences..
     struct sequence_list:
-          sequence_list *list       # index list of names
-          sequence **sequs      # sequence pointer list
-          int curr
-          pass
+        sequence_list *list       # index list of names
+        sequence **sequs      # sequence pointer list
+        int curr
 
     cdef struct column_info:
-            void * data
-            int length
-            char datatype
-            char datasize
+        void * data
+        int length
+        char datatype
+        char datasize
+
+cdef extern from "madX/mad_expr.h":
+    struct expression:
+        pass
+
+
