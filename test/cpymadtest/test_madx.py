@@ -15,3 +15,6 @@ class TestMadX(unittest.TestCase):
         self.madx.command("FOO = PI*3;")
         val = self.madx.evaluate("1/FOO")
         self.assertAlmostEqual(val, 1/(3*pi))
+
+if __name__ == '__main__':
+    unittest.main()
