@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-15 -*-
+# encoding: utf-8
 #------------------------------------------------------------------------------
 # This file is part of PyMad.
 #
@@ -31,7 +31,7 @@ __all__ = [
 ]
 
 from cern.pymad.abc.interface import Interface, abstractmethod
-from collections import Mapping, OrderedDict
+from collections import Mapping
 from itertools import chain
 from cern.resource.file import FileResource
 import os.path
@@ -46,11 +46,42 @@ def deep_update(d, u):
             d[k] = v
     return d
 
+def C3_mro(get_bases, *bases):
+    """
+    Calculate the C3 MRO of bases.
+
+    Suppose you intended creating a class K with the given base classes. This
+    function returns the MRO which K would have, *excluding* K itself (since
+    it doesn't yet exist), as if you had actually created the class.
+
+    Another way of looking at this, if you pass a single class K, this will
+    return the linearization of K (the MRO of K, *including* itself).
+
+    http://code.activestate.com/recipes/577748-calculate-the-mro-of-a-class/
+
+    """
+    seqs = [[C] + C3_mro(get_bases, *get_bases(C)) for C in bases] + [list(bases)]
+    result = []
+    while True:
+      seqs = list(filter(None, seqs))
+      if not seqs:
+          return result
+      try:
+          head = next(seq[0] for seq in seqs
+                      if not any(seq[0] in s[1:] for s in seqs))
+      except StopIteration:
+          raise TypeError("inconsistent hierarchy, no C3 MRO is possible")
+      result.append(head)
+      for seq in seqs:
+          if seq[0] == head:
+              del seq[0]
+
+
 class ModelData(object):
     """
     Loader for individual data objects from a model resource collection.
 
-    Has three public fields: model, resource, repository. The former is a
+    Has four public fields: name, model, resource, repository. `model` is a
     dictionary containing the fully expanded model definition. The latter
     two are ResourceProvider instances able to load actual data for
     repository/resource data respectively. 
@@ -111,7 +142,7 @@ class ModelLocator(Interface):
         """
         pass
 
-    def get_model(self, name):
+    def get_model(self, name, encoding='utf-8'):
         """
         Get the first found model with the specified name.
 
@@ -141,9 +172,9 @@ class MergedModelLocator(ModelLocator):
         """
         self.res_provider = resource_provider
 
-    def list_models(self):
+    def list_models(self, encoding='utf-8'):
         for res_name in self.res_provider.listdir_filter(ext='.cpymad.json'):
-            mdefs = self.res_provider.json(res_name)
+            mdefs = self.res_provider.json(res_name, encoding=encoding)
             for n,d in mdefs.items():
                 if d['real']:
                     yield n
@@ -157,9 +188,9 @@ class MergedModelLocator(ModelLocator):
         #     ) if mdef['real'])
         #----------------------------------------
 
-    def get_model(self, name):
+    def get_model(self, name, encoding='utf-8'):
         for res_name in self.res_provider.listdir_filter(ext='.cpymad.json'):
-            mdefs = self.res_provider.json(res_name)
+            mdefs = self.res_provider.json(res_name, encoding=encoding)
             # restrict only to 'real' models (don't do that?):
             if name in (n for n,d in mdefs.items() if d['real']):
                 break
@@ -171,22 +202,16 @@ class MergedModelLocator(ModelLocator):
 
         # expand the model using its bases specified in 'extends'. try to
         # provide a useful MRO:
-        mro = OrderedDict()
-        more = [name]
-        while more:
-            even_more = []
-            for base in more:
-                if base not in mro:
-                    mro[base] = mdef = mdefs[base]
-                    even_more.extend(mdef.get('extends', []))
-            more = even_more
+        def get_bases(model_name):
+            return mdefs[model_name].get('extends', [])
+        mro = C3_mro(get_bases, name)
 
         # TODO: this could be done using some sort of ChainMap, i.e.
         # merging at lookup time instead of at creation time. but this is
         # probably not worth the trouble for now.
         real_mdef = {}
-        for virt_mdef in reversed(mro.values()):
-            deep_update(real_mdef, virt_mdef)
+        for base in reversed(mro):
+            deep_update(real_mdef, mdefs[base])
 
         # instantiate the resource providers for model resource data
         res_offs = real_mdef['path-offsets']['resource-offset']
@@ -223,9 +248,9 @@ class DistinctModelLocator(ModelLocator):
     def list_models(self):
         return self.resource_provider.listdir()
 
-    def get_model(self, name):
+    def get_model(self, name, encoding='utf-8'):
         res = self.resource_provider.get(name)
-        mdef = res.json()
+        mdef = res.json(encoding=encoding)
         res_prov = res.get(mdef['path-offsets']['resource-offset'])
         repo_prov = res.get(mdef['path-offsets']['repository-offset'])
         return ModelData(name,
@@ -251,10 +276,10 @@ class ChainModelLocator(ModelLocator):
         return chain.from_iterable(locator.list_models()
                                    for locator in self._locators)
 
-    def get_model(self, name):
+    def get_model(self, name, encoding='utf-8'):
         for locator in self._locators:
             try:
-                return locator.get_model(name)
+                return locator.get_model(name, encoding)
             except ValueError:
                 pass
         else:

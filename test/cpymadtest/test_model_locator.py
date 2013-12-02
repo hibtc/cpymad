@@ -1,11 +1,13 @@
+# encoding: utf-8
 """
 Tests for the classes defined in cern.cpymad.model_locator.
 """
 __all__ = ['TestMergedModelLocator',
-           'TestChainedModelLocator']
+           'TestChainedModelLocator',
+           'TestMROFunc']
 
 # tested classes
-from cern.cpymad.model_locator import ModelData, MergedModelLocator, ChainModelLocator
+from cern.cpymad.model_locator import ModelData, MergedModelLocator, ChainModelLocator, C3_mro
 
 # test utilities
 import unittest
@@ -15,8 +17,29 @@ import gc
 import shutil
 from copy import copy
 from tempfile import mkdtemp
-from test.libmadxtest.test_resource import create_test_file
-from cern.libmadx.resource.file import FileResource
+from io import open
+from cern.resource.file import FileResource
+
+
+def create_test_file(base, path, content=None):
+    """
+    Create a file with defined content under base/path.
+    """
+    try:
+        os.makedirs(os.path.join(base, *path[:-1]))
+    except OSError:
+        # directory already exists. the exist_ok parameter exists not until
+        # python3.2
+        pass
+    with open(os.path.join(base, *path), 'wt', encoding='utf-8') as f:
+        if content is None:
+            # With json.dump is not compatible in python2 and python3
+            f.write(u'{"path": "%s", "unicode": "%s"}' % (
+                os.path.join(*path),    # this content is predictable
+                u"äæo≤»で"))            # some unicode test data
+        else:
+            f.write(content)
+
 
 
 class TestMergedModelLocator(unittest.TestCase):
@@ -38,6 +61,7 @@ class TestMergedModelLocator(unittest.TestCase):
 
         create_test_file(self.base, ['dbdir', 'c', 'c.txt'])
 
+        self.unicode_data = u"€®æة《±∓"
         abc = {
             "a": {
                 # virtual models should not be listed:
@@ -60,6 +84,8 @@ class TestMergedModelLocator(unittest.TestCase):
                 "files": [
                     {"path": "b.txt", "location": "REPOSITORY"},
                 ],
+                # some unicode test data:
+                "unicode": self.unicode_data
             },
             "c": {
                 "real": True,
@@ -81,8 +107,12 @@ class TestMergedModelLocator(unittest.TestCase):
         }
         de['e']['extends'] = ['d']
 
-        create_test_file(self.base, ['abc.cpymad.json'], json.dumps(abc))
-        create_test_file(self.base, ['de.cpymad.json'], json.dumps(de))
+        create_test_file(self.base,
+                         ['abc.cpymad.json'],
+                         json.dumps(abc, ensure_ascii=False))
+        create_test_file(self.base,
+                         ['de.cpymad.json'],
+                         json.dumps(de, ensure_ascii=False))
 
 
     def tearDown(self):
@@ -99,15 +129,18 @@ class TestMergedModelLocator(unittest.TestCase):
     def test_get(self):
         """Test that ValueError is raised iff model does not exist."""
         # cannot get virtual model ATM:
-        with self.assertRaises(ValueError):
-            self.locator.get_model('a')
+        self.assertRaises(ValueError, self.locator.get_model, 'a')
         self.locator.get_model('b')
         self.locator.get_model('c')
-        with self.assertRaises(ValueError):
-            self.locator.get_model('d')
+        self.assertRaises(ValueError, self.locator.get_model, 'd')
         self.locator.get_model('e')
-        with self.assertRaises(ValueError):
-            self.locator.get_model('f')
+        self.assertRaises(ValueError, self.locator.get_model, 'f')
+
+    def test_encoding(self):
+        """Test that the model is loaded with the correct encoding."""
+        b = self.locator.get_model('b').model
+        self.assertEqual(b['unicode'],
+                         self.unicode_data)
 
     def test_mro(self):
         """
@@ -156,6 +189,76 @@ class TestMergedModelLocator(unittest.TestCase):
         self.assertEqual(c.get_by_dict(cf[2]).json()['path'],
                          'dbdir/c/c.txt')
 
+
+
+class TestMROFunc(unittest.TestCase):
+    """
+    Test the C3_mro() function.
+
+    Note: the tests will only succeed for versions of python where C3 is
+    used, i.e. python>=2.3.
+
+    """
+    def mro(self, *bases):
+        return tuple(C3_mro(lambda cls: cls.__bases__, *bases))
+
+    def test_SeriousOrderDisagreement(self):
+        O = object
+        class X(O): pass
+        class Y(O): pass
+        class A(X, Y): pass
+        class B(Y, X): pass
+        bases = (A, B)
+        self.assertRaises(TypeError, self.mro, A, B)
+
+    def test_TrivialSingleInheritance(self):
+        O = object
+        class A(O): pass
+        class B(A): pass
+        class C(B): pass
+        class D(C): pass
+        self.assertEqual(self.mro(D), D.__mro__)
+
+    def test_Example1(self):
+        O = object
+        class F(O): pass
+        class E(O): pass
+        class D(O): pass
+        class C(D, F): pass
+        class B(D, E): pass
+        class A(B, C): pass
+        self.assertEqual(self.mro(A), A.__mro__)
+
+    def test_Example2(self):
+        O = object
+        class F(O): pass
+        class E(O): pass
+        class D(O): pass
+        class C(D, F): pass
+        class B(E, D): pass
+        class A(B, C): pass
+        self.assertEqual(self.mro(A), A.__mro__)
+
+    def test_Example3(self):
+        O = object
+        class A(O): pass
+        class B(O): pass
+        class C(O): pass
+        class D(O): pass
+        class E(O): pass
+        class K1(A, B, C): pass
+        class K2(D, B, E): pass
+        class K3(D, A): pass
+        class Z(K1, K2, K3): pass
+        self.assertEqual(self.mro(A), A.__mro__)
+        self.assertEqual(self.mro(B), B.__mro__)
+        self.assertEqual(self.mro(C), C.__mro__)
+        self.assertEqual(self.mro(D), D.__mro__)
+        self.assertEqual(self.mro(E), E.__mro__)
+        self.assertEqual(self.mro(K1), K1.__mro__)
+        self.assertEqual(self.mro(K2), K2.__mro__)
+        self.assertEqual(self.mro(K3), K3.__mro__)
+        self.assertEqual(self.mro(Z), Z.__mro__)
 
 
 

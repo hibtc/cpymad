@@ -232,6 +232,15 @@ class Model(abc.model.PyMadModel):
 
         return self._sendrecv(('call',filepath))
 
+    def evaluate(self, expr):
+        """
+        Evaluate a string expression and return the resulting float.
+
+        :param string expr:
+
+        """
+        return self._sendrecv(('evaluate',expr))
+
     def has_sequence(self,sequence):
         '''
          Check if model has the sequence.
@@ -640,6 +649,9 @@ class _modelProcess(multiprocessing.Process):
                             twiss_init=cmd[1]['twiss-init'],
                             retdict=True)
                     self.sender.send((r,i))
+                elif cmd[0] == 'evaluate':
+                    r = _madx.evaluate(cmd[1])
+                    self.sender.send(r)
                 else:
                     raise ValueError("You sent a wrong command to subprocess: "+str(cmd))
 

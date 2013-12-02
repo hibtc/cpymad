@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-15 -*-
+# encoding: utf-8
 #----------------------------------------
 # base.py by Thomas Gläßle
 # 
@@ -34,12 +34,16 @@ class ResourceProvider(Interface):
 
     """
     @abstractmethod
-    def open(self, name=''):
+    def open(self, name='', encoding=None):
         """
         Open the specified resource.
 
-        Returns a file-like object. When finished using close() must be
-        called on the returned object.
+        :param string name: Name of the resource, optional.
+        :param string encoding: Either None or encoding to use (optional).
+
+        Returns a file-like object. When finished using ``close()`` must be
+        called on the returned object. If ``encoding`` is ``None`` the
+        stream is opened in binary mode.
 
         """
         pass
@@ -48,6 +52,8 @@ class ResourceProvider(Interface):
     def listdir(self, name=''):
         """
         List directory contents.
+
+        :param string name: Name of the resource, optional.
 
         This works similar to os.listdir().
         restrict can be used to filter for certain file types.
@@ -59,6 +65,8 @@ class ResourceProvider(Interface):
     def get(self, name):
         """
         Get a provider object relative to the specified subdirectory.
+
+        :param string name: Name of the resource, optional.
 
         Returns an instance of the ResourceProvider that opens, lists and
         gets objects relative to the specified subdirectory.
@@ -78,6 +86,9 @@ class ResourceProvider(Interface):
         """
         List resources that match restriction.
 
+        :param string name: Name of the resource, optional.
+        :param string ext: Filename extension to be filtered (including dot).
+
         NOTE: To stay upward compatible ext should only be passed as keyword
         argument.
 
@@ -86,26 +97,33 @@ class ResourceProvider(Interface):
             if res_name.lower().endswith(ext):
                 yield res_name
 
-    def load(self, name=''):
+    def load(self, name='', encoding=None):
         """
         Load the specified resource into memory and return all the data.
 
+        :param string name: Name of the resource, optional.
+        :param string encoding: Either None or encoding to use (optional).
+
+        If ``encoding`` is ``None`` the returned data is binary.
         This is a convenience mixin.
 
         """
-        with self.open(name) as f:
+        with self.open(name, encoding) as f:
             return f.read()
 
-    def json(self, name='', **kwargs):
+    def json(self, name='', encoding='utf-8', **kwargs):
         """
         Load the specified json resource.
+
+        :param string name: Name of the resource, optional.
+        :param string encoding: Encoding to use.
 
         kwargs can be used to pass additional arguments to the json parser.
         This is a convenience mixin.
 
         """
-        with self.open(name) as f:
-            return json.load(f)
+        with self.open(name, encoding=encoding) as f:
+            return json.load(f, **kwargs)
 
     @contextmanager
     def filename(self, name=''):
@@ -125,7 +143,7 @@ class ResourceProvider(Interface):
 
         """
         try:
-            tempfile = tempfile.NamedTemporaryFile(delete=False)
+            tempfile = tempfile.NamedTemporaryFile(mode='wb', delete=False)
             with tempfile as dest:
                 with self.open(name) as src:
                     copyfileobj(src, dest)

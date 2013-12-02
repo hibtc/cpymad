@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-15 -*-
+# encoding: utf-8
 #----------------------------------------
 # file.py by Thomas Gläßle
 # 
@@ -15,6 +15,7 @@ Resource provider for plain filesystem resources.
 __all__ = ['FileResource']
 
 import os
+from io import open
 from contextlib import contextmanager
 
 from .base import ResourceProvider
@@ -36,8 +37,11 @@ class FileResource(ResourceProvider):
         """
         self.path = path
 
-    def open(self, name=''):
-        return open(self._get_path(name))
+    def open(self, name='', encoding=None):
+        if encoding is None:
+            return open(self._get_path(name), 'rb')
+        else:
+            return open(self._get_path(name), 'rt', encoding=encoding)
 
     def listdir(self, name=''):
         return os.listdir(self._get_path(name))
@@ -55,7 +59,7 @@ class FileResource(ResourceProvider):
         elif isinstance(name, list):
             return os.path.join(self.path, *name)
         else:
-            return os.path.join(self.path, name)
+            return os.path.join(self.path, *name.split('/'))
 
     def provider(self):
         return self.__class__(os.path.dirname(self.path))
