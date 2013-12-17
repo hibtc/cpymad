@@ -133,17 +133,32 @@ mods=[Extension('cern.madx',
                     ),
       ]
 
-setup(
-    name='PyMAD',
-    version='.'.join([str(i) for i in PYMADVERSION]),
-    description='Interface to Mad-X, using Cython or Py4J through JMAD',
-    cmdclass = {'build_ext': build_ext},
-    ext_modules = mods,
-    author='PyMAD developers',
-    author_email='pymad@cern.ch',
-    license = 'CERN Standard Copyright License',
-    packages = pythonsrc,
-    package_data={'cern.cpymad': cdata},
-    setup_requires=['numpy', 'Cython'],
-    install_requires=['numpy'],
-    )
+if sys.version_info < (2,7):
+    # can be deleted when we don't support Python 2.6 anymore..
+    setup(
+        name='PyMAD',
+        version='.'.join([str(i) for i in PYMADVERSION]),
+        description='Interface to Mad-X, using Cython or Py4J through JMAD',
+        cmdclass = {'build_ext': build_ext},
+        ext_modules = mods,
+        author='PyMAD developers',
+        author_email='pymad@cern.ch',
+        license = 'CERN Standard Copyright License',
+        packages = pythonsrc,
+        package_data={'cern.cpymad': cdata}
+        )
+else:
+    setup(
+        name='PyMAD',
+        version='.'.join([str(i) for i in PYMADVERSION]),
+        description='Interface to Mad-X, using Cython or Py4J through JMAD',
+        cmdclass = {'build_ext': build_ext},
+        ext_modules = mods,
+        author='PyMAD developers',
+        author_email='pymad@cern.ch',
+        license = 'CERN Standard Copyright License',
+        packages = pythonsrc,
+        package_data={'cern.cpymad': cdata},
+        setup_requires=['numpy', 'Cython'],
+        install_requires=['numpy'],
+        )
