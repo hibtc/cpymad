@@ -22,8 +22,15 @@ import os,sys
 # Version of pymad (major,minor):
 PYMADVERSION=['0','4']
 
-from setuptools import setup
-from setuptools.extension import Extension
+# With Python 2.6, the cythoning does not work
+# with setuptools:
+if sys.version_info < (2,7):
+    from distutils.core import setup
+    from distutils.extension import Extension
+else: # should be default asap
+    from setuptools import setup
+    from setuptools.extension import Extension
+
 from Cython.Distutils import build_ext
 import platform
 from distutils.util import get_platform
