@@ -494,10 +494,12 @@ class madx:
         seqs= madextern_get_sequence_list()
         ret={}
         for i in xrange(seqs.curr):
-            ret[seqs.sequs[i].name]={'name':seqs.sequs[i].name}
+            name = seqs.sequs[i].name.decode('utf-8')
+            ret[name]={'name':name}
             if seqs.sequs[i].tw_table.name is not NULL:
-                ret[seqs.sequs[i].name]['twissname']=seqs.sequs[i].tw_table.name
-                print("Table name:",seqs.sequs[i].tw_table.name)
+                tabname = seqs.sequs[i].tw_table.name.decode('utf-8')
+                ret[name]['twissname'] = tabname
+                print("Table name:", tabname)
                 print("Number of columns:",seqs.sequs[i].tw_table.num_cols)
                 print("Number of columns (orig):",seqs.sequs[i].tw_table.org_cols)
                 print("Number of rows:",seqs.sequs[i].tw_table.curr)

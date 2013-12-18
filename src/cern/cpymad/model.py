@@ -455,7 +455,7 @@ class Model(abc.model.PyMadModel):
         self.set_sequence(sequence)
         sequence=self._active['sequence']
 
-        if not self._twisscalled[sequence]:
+        if not self._twisscalled.get(sequence):
             self.twiss(sequence)
         # Calling "basic aperture files"
         if not self._apercalled[sequence]:
