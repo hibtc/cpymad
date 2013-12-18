@@ -26,13 +26,9 @@ PYMADVERSION=['0','4']
 if sys.version_info < (2,7):
     from distutils.core import setup
     from distutils.extension import Extension
-    extra_setup_args = {}
 else: # should be default asap
     from setuptools import setup
     from setuptools.extension import Extension
-    extra_setup_args = dict(
-        setup_requires=['numpy', 'Cython'],
-        install_requires=['numpy'])
 
 from Cython.Distutils import build_ext
 import platform
@@ -131,6 +127,5 @@ setup(
     include_package_data=True, # include files matched by MANIFEST.in
     author='PyMAD developers',
     author_email='pymad@cern.ch',
-    license = 'CERN Standard Copyright License',
-    **extra_setup_args)
+    license = 'CERN Standard Copyright License')
 
