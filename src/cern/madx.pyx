@@ -28,20 +28,32 @@ Main module to interface with Mad-X library.
 
 from __future__ import print_function
 
-from cern.libmadx.madx_structures cimport sequence_list, name_list, column_info
+from cern.libmadx.madx_structures cimport sequence_list, name_list, column_info, expression, char_p_array, char_array
 from cern.libmadx import table
 
 cdef extern from "madX/mad_api.h":
     sequence_list *madextern_get_sequence_list()
-    #table *getTable()
 cdef extern from "madX/mad_core.h":
     void madx_start()
     void madx_finish()
 
 cdef extern from "madX/mad_str.h":
     void stolower_nq(char*)
+    int mysplit(char*, char_p_array*)
 cdef extern from "madX/mad_eval.h":
     void pro_input(char*)
+
+cdef extern from "madX/mad_expr.h":
+    expression* make_expression(int, char**)
+    double expression_value(expression*, int)
+    expression* delete_expression(expression*)
+cdef extern from "madX/madx.h":
+    char_p_array* tmp_p_array    # temporary buffer for splits
+    char_array* c_dum
+
+cdef extern from "madX/mad_parse.h":
+    void pre_split(char*, char_array*, int)
+
 
 cdef madx_input(char* cmd):
     stolower_nq(cmd)
@@ -490,6 +502,29 @@ class madx:
                 print("Number of columns (orig):",seqs.sequs[i].tw_table.org_cols)
                 print("Number of rows:",seqs.sequs[i].tw_table.curr)
         return ret
-        #print("Currently number of sequenses available:",seqs.curr)
-        #print("Name of list:",seqs.name)
+
+    def evaluate(self, cmd):
+        """
+        Evaluates an expression and returns the result as double.
+
+        :param string cmd: expression to evaluate.
+
+        NOTE: Call this function only from within a process scope where you
+        have called ``madx_start()`` first. This limitation is due to the
+        use of global variables within MAD-X.
+
+        This function uses global variables as temporaries - which is in
+        general an extremely bad design choice. In this case, however, using
+        local variables would only obscure the fact that MAD-X uses global
+        variables internally anyway.
+
+        """
+        # TODO: not sure about the flags (the magic constants 0, 2)
+        cmd = cmd.lower()
+        pre_split(cmd, c_dum, 0)
+        mysplit(c_dum.c, tmp_p_array)
+        expr = make_expression(tmp_p_array.curr, tmp_p_array.p)
+        value = expression_value(expr, 2)
+        delete_expression(expr)
+        return value
 

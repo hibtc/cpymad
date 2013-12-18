@@ -169,15 +169,15 @@ class TestEggResource(Common, unittest.TestCase):
         super(TestEggResource, self).setUp()
         cwd = os.getcwd()
         os.chdir(self.base)
-        with captured_output('stdout'), captured_output('stderr'):
-            setuptools.setup(
+        with captured_output('stdout'):
+            with captured_output('stderr'):
+                setuptools.setup(
                     name=self.mod,
                     packages=[self.mod],
                     script_args=['bdist_egg', '--quiet'],
                     package_data={self.mod:[
                         'a.json',
-                        os.path.join('subdir', 'b.json')]}
-                    )
+                        os.path.join('subdir', 'b.json')]})
         os.chdir(cwd)
         self.eggs = os.listdir(os.path.join(self.base, 'dist'))
         for egg in self.eggs:
@@ -236,4 +236,8 @@ class TestFileResource(Common, unittest.TestCase):
 class TestCouchResource(unittest.TestCase):
     """TODO."""
     pass
+
+
+if __name__ == '__main__':
+    unittest.main()
 

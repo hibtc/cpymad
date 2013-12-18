@@ -57,7 +57,7 @@ class CouchResource(ResourceProvider):
         elif self.doc:
             return BytesIO(self.load())
         else:
-            raise NotImplementedError("Database is not a loadabe resource.")
+            raise NotImplementedError("Database is not a loadable resource.")
 
     def _load_binary(self, name):
         # TODO: is couch data really encoded binary?
@@ -68,7 +68,7 @@ class CouchResource(ResourceProvider):
         elif self.doc:
             return self.db[self.doc]
         else:
-            raise NotImplementedError("Database is not a loadabe resource.")
+            raise NotImplementedError("Database is not a loadable resource.")
 
     def open(self, name='', encoding=None):
         if encoding is None:

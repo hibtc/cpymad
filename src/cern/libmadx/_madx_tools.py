@@ -4,6 +4,7 @@
 import collections
 import re
 
+
 from cern.pymad.io import tfs,tfsDict
 from cern.pymad.domain.tfs import LookupDict
 
@@ -73,7 +74,7 @@ def _add_offsets(offsets):
 
 def _sorted_items(kwargs):
     """Return dictionary items in canonicalized order."""
-    if isinstance(kwargs, collections.OrderedDict):
+    if isinstance(kwargs, getattr(collections, 'OrderedDict', ())):
         return kwargs.items()
     else:
         return sorted(kwargs.items(), key=lambda i: i[0])
