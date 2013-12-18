@@ -520,7 +520,7 @@ class madx:
 
         """
         # TODO: not sure about the flags (the magic constants 0, 2)
-        cmd = cmd.lower()
+        cmd = cmd.lower().encode("utf-8")
         pre_split(cmd, c_dum, 0)
         mysplit(c_dum.c, tmp_p_array)
         expr = make_expression(tmp_p_array.curr, tmp_p_array.p)
