@@ -136,7 +136,7 @@ mods=[Extension('cern.madx',
 if sys.version_info < (2,7):
     # can be deleted when we don't support Python 2.6 anymore..
     setup(
-        name='PyMAD',
+        name='cern-pymad',
         version='.'.join([str(i) for i in PYMADVERSION]),
         description='Interface to Mad-X, using Cython or Py4J through JMAD',
         cmdclass = {'build_ext': build_ext},
@@ -149,7 +149,7 @@ if sys.version_info < (2,7):
         )
 else:
     setup(
-        name='PyMAD',
+        name='cern-pymad',
         version='.'.join([str(i) for i in PYMADVERSION]),
         description='Interface to Mad-X, using Cython or Py4J through JMAD',
         cmdclass = {'build_ext': build_ext},
