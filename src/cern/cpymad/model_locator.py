@@ -133,6 +133,7 @@ class ModelLocator(Interface):
     resource providers.
 
     """
+    @abstractmethod
     def list_models(self):
         """
         Iterate all available models.
@@ -142,6 +143,7 @@ class ModelLocator(Interface):
         """
         pass
 
+    @abstractmethod
     def get_model(self, name, encoding='utf-8'):
         """
         Get the first found model with the specified name.
@@ -179,15 +181,6 @@ class MergedModelLocator(ModelLocator):
                 if d['real']:
                     yield n
 
-        #----------------------------------------
-        # return chain.from_iterable(
-        #     name for name,mdef in (
-        #         self.res_provider.json(res).items()
-        #         for res in self.res_provider.listdir_filter(
-        #             ext='.cpymad.json')
-        #     ) if mdef['real'])
-        #----------------------------------------
-
     def get_model(self, name, encoding='utf-8'):
         for res_name in self.res_provider.listdir_filter(ext='.cpymad.json'):
             mdefs = self.res_provider.json(res_name, encoding=encoding)
@@ -196,9 +189,6 @@ class MergedModelLocator(ModelLocator):
                 break
         else:
             raise ValueError("The model you asked for does not exist in the database")
-
-        # TODO: in previous implementation the bases did overwrite
-        # specialized version. was this intended?
 
         # expand the model using its bases specified in 'extends'. try to
         # provide a useful MRO:
