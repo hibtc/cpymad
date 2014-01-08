@@ -30,11 +30,6 @@ else: # should be default asap
     from setuptools import setup
     from setuptools.extension import Extension
 
-try:
-    long_description = open('../README.rst').read()
-except IOError:
-    long_description = None
-
 from Cython.Distutils import build_ext
 import platform
 from distutils.util import get_platform
@@ -106,15 +101,16 @@ setup(
     name='cern-pymad',
     version='.'.join(map(str, PYMADVERSION)),
     description='Interface to Mad-X, using Cython or Py4J through JMAD',
-    long_description=long_description,
+    long_description=open('README.rst').read(),
     url='http://cern.ch/pymad',
     cmdclass = {'build_ext': build_ext},
+    package_dir={'':'src'},
     ext_modules = [
         Extension('cern.madx',
-                  sources=["cern/madx.pyx"],
+                  sources=["src/cern/madx.pyx"],
                   **cython_args),
         Extension('cern.libmadx.table',
-                  sources=["cern/libmadx/table.pyx"],
+                  sources=["src/cern/libmadx/table.pyx"],
                   **cython_args),
     ],
     packages = [
