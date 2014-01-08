@@ -20,11 +20,14 @@ Created on 15 Aug 2011
 
 @author: kfuchsbe
 '''
-from abc import ABCMeta, abstractmethod, abstractproperty
+from __future__ import absolute_import
 
-class PyMadService():
+from abc import abstractmethod, abstractproperty
+
+from .interface import Interface
+
+class PyMadService(Interface):
     ''' The abstract class for a model-service. '''
-    __metaclass__ = ABCMeta
 
     @abstractproperty
     def mdefs(self):

@@ -31,7 +31,7 @@ class PyMadNotInititalizedError(Exception):
 def get_pms():
     ''' Returns the pymad-service singleton. If pymad is not initialized this raises an error '''
     if not is_initialized():
-        raise(PyMadNotInititalizedError())
+        raise PyMadNotInititalizedError()
 
     return PyMadGlobals.PYMAD_SERVICE()
 
@@ -71,7 +71,7 @@ def cleanup():
     ''' Cleans up the pymad service and sets the global variable back to None again. '''
 
     if not is_initialized():
-        print "pymad is not initialized. Doing nothing."
+        print("pymad is not initialized. Doing nothing.")
         return
 
     pms = PyMadGlobals.PYMAD_SERVICE()

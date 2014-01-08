@@ -26,12 +26,13 @@ Main module to interface with Mad-X library.
 
 '''
 
-from cern.libmadx.madx_structures cimport sequence_list, name_list, column_info,expression,char_p_array,char_array
+from __future__ import print_function
+
+from cern.libmadx.madx_structures cimport sequence_list, name_list, column_info, expression, char_p_array, char_array
 from cern.libmadx import table
 
 cdef extern from "madX/mad_api.h":
     sequence_list *madextern_get_sequence_list()
-    #table *getTable()
 cdef extern from "madX/mad_core.h":
     void madx_start()
     void madx_finish()
@@ -100,7 +101,7 @@ class madx:
             _madstarted=True
         if histfile:
             self._hist=True
-            self._hfile=file(histfile,'w')
+            self._hfile=open(histfile,'w')
             self._rechist=recursive_history
         elif cern.pymad.globals.MAD_HISTORY_BASE:
             base=cern.pymad.globals.MAD_HISTORY_BASE
@@ -108,7 +109,7 @@ class madx:
             i=0
             while os.path.isfile(base+str(i)+'.madx'):
                 i+=1
-            self._hfile=file(base+str(i)+'.madx','w')
+            self._hfile=open(base+str(i)+'.madx','w')
             self._rechist=recursive_history
         else:
             self._hist=False
@@ -151,6 +152,7 @@ class madx:
             else:
                 self._writeHist(cmd+'\n')
         if _madx_tools._checkCommand(cmd.lower()):
+            cmd = cmd.encode('utf-8')
             madx_input(cmd)
         return 0
 
@@ -300,7 +302,7 @@ class madx:
         self.select('aperture',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
         if use:
-            print "Warning, use before aperture is known to cause problems"
+            print("Warning, use before aperture is known to cause problems")
             self.use(sequence) # this seems to cause a bug?
         _cmd='aperture,'+_madx_tools._add_range(madrange)+_madx_tools._add_offsets(offsets)
         if fname:
@@ -477,7 +479,7 @@ class madx:
             cfile=command.split(',')[1].strip().strip('file=').strip('FILE=').strip(';\n').strip('"').strip("'")
             if sys.flags.debug:
                 print("DBG: call file ",cfile)
-            fin=file(cfile,'r')
+            fin=open(cfile,'r')
             for l in fin:
                 self._writeHist(l+'\n')
         else:
@@ -492,16 +494,16 @@ class madx:
         seqs= madextern_get_sequence_list()
         ret={}
         for i in xrange(seqs.curr):
-            ret[seqs.sequs[i].name]={'name':seqs.sequs[i].name}
+            name = seqs.sequs[i].name.decode('utf-8')
+            ret[name]={'name':name}
             if seqs.sequs[i].tw_table.name is not NULL:
-                ret[seqs.sequs[i].name]['twissname']=seqs.sequs[i].tw_table.name
-                print "Table name:",seqs.sequs[i].tw_table.name
-                print "Number of columns:",seqs.sequs[i].tw_table.num_cols
-                print "Number of columns (orig):",seqs.sequs[i].tw_table.org_cols
-                print "Number of rows:",seqs.sequs[i].tw_table.curr
+                tabname = seqs.sequs[i].tw_table.name.decode('utf-8')
+                ret[name]['twissname'] = tabname
+                print("Table name:", tabname)
+                print("Number of columns:",seqs.sequs[i].tw_table.num_cols)
+                print("Number of columns (orig):",seqs.sequs[i].tw_table.org_cols)
+                print("Number of rows:",seqs.sequs[i].tw_table.curr)
         return ret
-        #print "Currently number of sequenses available:",seqs.curr
-        #print "Name of list:",seqs.name
 
     def evaluate(self, cmd):
         """
@@ -520,7 +522,7 @@ class madx:
 
         """
         # TODO: not sure about the flags (the magic constants 0, 2)
-        cmd = cmd.lower()
+        cmd = cmd.lower().encode("utf-8")
         pre_split(cmd, c_dum, 0)
         mysplit(c_dum.c, tmp_p_array)
         expr = make_expression(tmp_p_array.curr, tmp_p_array.p)

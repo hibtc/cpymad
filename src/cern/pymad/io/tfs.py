@@ -61,7 +61,7 @@ def tfsDict(inputfile):
             inputfile+='.TFS'
         else:
             raise ValueError("ERROR: "+inputfile+" is not a valid file path")
-    f=file(inputfile,'r')
+    f=open(inputfile,'r')
     l=f.readline()
     while(l):
         if l.strip()[0]=='@':
@@ -114,7 +114,7 @@ def _read_table(fstream,names):
         elif typ=='%d':
             table[n.lower()]=numpy.array(table[n.lower()],dtype=int)
         elif typ=='%s':
-            for k in xrange(len(table[n.lower()])):
+            for k in range(len(table[n.lower()])):
                 tlst=table[n.lower()][k].split('"')
                 if len(tlst)==1:
                     table[n.lower()][k]=tlst[0]

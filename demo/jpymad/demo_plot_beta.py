@@ -52,7 +52,7 @@ else:
 pms = pm.init(mode)
 
 # print the name of all model definitions
-print pms.mdefnames
+print(pms.mdefnames)
 
 # alternatively use convenience function
 #pm.ls_mdefs()
@@ -69,12 +69,12 @@ model = pms.create_model(mdef)
 pm.ls_models()
 
 # print a list of available sequences:
-print mdef.seqnames
+print(mdef.seqnames)
 
 plot_beta(model, '_inj')
 
 # list the available optics and set a new one
-print mdef.opticnames
+print(mdef.opticnames)
 model.set_optic(opticname)
 
 plot_beta(model, '_coll')

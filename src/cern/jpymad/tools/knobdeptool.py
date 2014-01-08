@@ -52,11 +52,11 @@ class KnobDepTool():
                 data.s = np.array(twresult['s'])
                 data.paramrange = paramrange
                 for madxvar in madxvars:
-                    #print madxvar + ": len=" + len(twresult[madxvar])
+                    #print(madxvar + ": len=" + len(twresult[madxvar]))
                     setattr(data, madxvar, np.array([twresult[madxvar]]))
             else:
                 for madxvar in madxvars:
-                    #print madxvar + ": len=" + len(twresult[madxvar])
+                    #print(madxvar + ": len=" + len(twresult[madxvar]))
                     setattr(data, madxvar, np.append(getattr(data, madxvar), \
                                      np.array([twresult[madxvar]]), axis=0))
 

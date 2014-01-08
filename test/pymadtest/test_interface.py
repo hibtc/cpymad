@@ -45,3 +45,5 @@ class TestInterface(unittest.TestCase):
         self.assertTrue(
                 getdoc(Derived.bar).endswith(getdoc(AbstractBase.bar)))
 
+if __name__ == '__main__':
+    unittest.main()

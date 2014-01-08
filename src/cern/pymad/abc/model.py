@@ -23,10 +23,14 @@ Created on 15 Aug 2011
 .. moduleauthor:: Kajetan Fuchsberger <Kajetan.Fuchsberger@cern.ch>
 
 '''
-from abc import ABCMeta, abstractmethod, abstractproperty
-class PyMadModel():
+from __future__ import absolute_import
+
+from abc import abstractmethod, abstractproperty
+
+from .interface import Interface
+
+class PyMadModel(Interface):
     ''' The abstract class for models '''
-    __metaclass__ = ABCMeta
 
     @abstractproperty
     def name(self):

@@ -23,7 +23,7 @@ def _try_float_convert(value):
         return None
 
 def _convert_value(value):
-    if _VALUE_MAP.has_key(value):
+    if value in _VALUE_MAP:
         return _VALUE_MAP[value]
 
     newval = _try_float_convert(value)
@@ -108,7 +108,7 @@ def _move_beams(new_dict):
             sequence['beam']=mname+'_'+seqname
             for r in sequence['ranges']:
                 if 'default-twiss' not in sequence['ranges'][r]:
-                    sequence['ranges'][r]['default-twiss']=sequence['ranges'][r]['twiss-initial-conditions'].keys()[0]
+                    sequence['ranges'][r]['default-twiss']=list(sequence['ranges'][r]['twiss-initial-conditions'].keys())[0]
 
 def convert_dict(indict):
     '''
@@ -120,9 +120,9 @@ def convert_dict(indict):
     return new_dict
 
 def convert_file(infilename, outfilename):
-    indict = json.loads(file(infilename, 'r').read())
+    indict = json.loads(open(infilename, 'r').read())
     outdict = convert_dict(indict);
-    file(outfilename, 'w').write(json.dumps(outdict, indent=2))
+    open(outfilename, 'w').write(json.dumps(outdict, indent=2))
 
 if __name__ == "__main__":
     skip=['lhc','longti8']
@@ -132,6 +132,6 @@ if __name__ == "__main__":
             convert_file(f, '../_models/'+f[:-9]+'.cpymad.json')
 
             # saving jmad file in pretty print format:
-            #jd=json.load(file(f,'r'))
-            #json.dump(jd,file(f,'w'),indent=2)
+            #jd=json.load(open(f,'r'))
+            #json.dump(jd,open(f,'w'),indent=2)
 

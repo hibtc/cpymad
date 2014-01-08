@@ -9,6 +9,13 @@ from cern.pymad.io import tfs,tfsDict
 from cern.pymad.domain.tfs import LookupDict
 
 
+try:
+    unicode
+except NameError:
+    # Python 3
+    basestring = unicode = str
+
+
 def _checkCommand(cmd):
     ''' give the lowercase version of the command
     this function does some sanity checks...'''
@@ -17,7 +24,7 @@ def _checkCommand(cmd):
         print("Please use madx.finish() or just exit python (CTRL+D)")
         print("Command ignored")
         return False
-    if cmd.split(',')>0 and "plot" in cmd.split(',')[0]:
+    if len(cmd.split(','))>0 and "plot" in cmd.split(',')[0]:
         print("WARNING: Plot functionality does not work through pymadx")
         print("Command ignored")
         return False

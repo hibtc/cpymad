@@ -21,8 +21,10 @@ Created on Tue Nov 16 20:20:15 2010
 
 @author: kaifox
 """
-from conversions import tofl
-from conversions import tostr
+from __future__ import absolute_import
+
+from .conversions import tofl
+from .conversions import tostr
 
 def get_values(optic, madxvarname):
     """

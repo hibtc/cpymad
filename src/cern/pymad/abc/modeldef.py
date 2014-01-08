@@ -20,13 +20,16 @@ Created on 15 Aug 2011
 
 @author: kfuchsbe
 '''
-from abc import ABCMeta, abstractproperty
+from __future__ import absolute_import
 
-class PyMadModelDefinition():
+from abc import abstractproperty
+
+from .interface import Interface
+
+class PyMadModelDefinition(Interface):
     '''
     The base class for a model definition
     '''
-    __metaclass__ = ABCMeta
 
     @abstractproperty
     def name(self):

@@ -56,7 +56,7 @@ class CpymadService(PyMadService):
         self._models=[]
         self.model_locator = model_locator
         for key, value in kwargs.items():
-            print "WARN: unhandled option '" + key + "' for CPyMandService. Ignoring it."
+            print("WARN: unhandled option '" + key + "' for CPyMandService. Ignoring it.")
 
 
     @property

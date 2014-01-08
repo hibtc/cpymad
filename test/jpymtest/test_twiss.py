@@ -20,9 +20,11 @@ Created on Nov 17, 2010
 
 @author: kaifox
 '''
+from __future__ import absolute_import
+
 import unittest
 
-from utils import PyMadTestCase
+from .utils import PyMadTestCase
 
 class Test(unittest.TestCase):
 
@@ -30,7 +32,7 @@ class Test(unittest.TestCase):
         madxvarnames = ["s", "name", "betx", "bety"]
         result, params = PyMadTestCase.pms.am.twiss(madxvarnames)
 
-        print result
+        print(result)
 
         self.assertTrue(result["s"] is not None, "s-values must be returned")
         try:

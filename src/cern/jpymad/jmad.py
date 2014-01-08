@@ -16,7 +16,9 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
-from variables import Enums
+from __future__ import absolute_import
+
+from .variables import Enums
 """
 Created on Tue Nov 16 16:26:03 2010
 
@@ -25,7 +27,7 @@ Created on Tue Nov 16 16:26:03 2010
 
 import os
 import sys
-from globals import JPyMadGlobals
+from .globals import JPyMadGlobals
 from subprocess import Popen
 from py4j.java_gateway import JavaGateway
 from time import sleep
@@ -80,14 +82,11 @@ def _delete_waitfile(filename, ignorefail=True):
                 os.remove(filename)
                 break # exit the loop if succesful
             except:
-                print "WARN: failed to delete file'" + filename + "' try again in " + str(_SLEEP_INTERVAL) + " sec."
+                print("WARN: failed to delete file'" + filename + "' try again in " + str(_SLEEP_INTERVAL) + " sec.")
                 sleep(_SLEEP_INTERVAL)
 
 def _get_env_var(varname):
-    if not os.environ.has_key(varname):
-        return None
-    return os.environ[varname]
-
+    return os.environ.get(varname)
 
 def _search_path_for_bin(binname):
     for d in _get_env_var("PATH").split(':'):
@@ -115,7 +114,7 @@ def _start(scriptname, jmadhome=None):
     cmd = os.path.join(jmadhome, scriptname + _get_extension())
 
     if not os.path.isfile(cmd):
-        print "WARN: start script '" + cmd + "' does not exist. Cannot start."
+        print("WARN: start script '" + cmd + "' does not exist. Cannot start.")
         return False
 
 
@@ -123,10 +122,10 @@ def _start(scriptname, jmadhome=None):
     Popen([cmd,waitfile], cwd=jmadhome)
 
     if _wait_for_file(waitfile):
-        print "... started."
+        print("... started.")
         return True
     else:
-        print "Starting timed out ..."
+        print("Starting timed out ...")
         return False
 
 def start_gui(jmadhome=None):
@@ -146,18 +145,18 @@ def stop():
     ends the java process.
     """
     if not is_connected():
-        print "Not connected to java, cannot stop the process! Try using 'connect()' first and then 'stop()'."
+        print("Not connected to java, cannot stop the process! Try using 'connect()' first and then 'stop()'.")
         return
 
     java_pymadservice = JPyMadGlobals.java_gateway.entry_point #@UndefinedVariable
     try:
         java_pymadservice.end()
-        print "Something might have gone wrong, since we should get a disconnect exception, since the java process is ended"
+        print("Something might have gone wrong, since we should get a disconnect exception, since the java process is ended")
     except:
         JPyMadGlobals.java_gateway = None
         JPyMadGlobals.jmad_service = None
         JPyMadGlobals.enums = None
-        print "Stopping java process seemed to work."
+        print("Stopping java process seemed to work.")
 
 
 def is_connected():

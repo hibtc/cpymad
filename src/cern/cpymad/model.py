@@ -25,6 +25,8 @@ See also :py:class:`cern.pymad.model`
 
 '''
 
+from __future__ import print_function
+
 import json, os, sys
 import multiprocessing
 import signal,atexit
@@ -301,7 +303,7 @@ class Model(abc.model.PyMadModel):
 
     def list_optics(self):
         '''
-         Returns a list of available optics
+         Returns an iterable of available optics
         '''
         return self._mdef['optics'].keys()
 
@@ -316,14 +318,14 @@ class Model(abc.model.PyMadModel):
         if sequence is None:
             ret={}
             for s in self.get_sequences():
-                ret[s]=self._mdef['sequences'][s]['ranges'].keys()
+                ret[s]=list(self._mdef['sequences'][s]['ranges'].keys())
             return ret
 
-        return self._mdef['sequences'][sequence]['ranges'].keys()
+        return list(self._mdef['sequences'][sequence]['ranges'].keys())
 
     def list_beams(self):
         '''
-         Returns a list of available beams
+         Returns an iterable of available beams
         '''
         return self._mdef['beams'].keys()
 
@@ -374,7 +376,7 @@ class Model(abc.model.PyMadModel):
         sequence=self._active['sequence']
         _madrange=self._active['range']
 
-        if self._apercalled[sequence]:
+        if self._apercalled.get(sequence):
             raise ValueError("BUG in Mad-X: Cannot call twiss after aperture..")
 
         seqdict=self._mdef['sequences'][sequence]
@@ -453,12 +455,12 @@ class Model(abc.model.PyMadModel):
         self.set_sequence(sequence)
         sequence=self._active['sequence']
 
-        if not self._twisscalled[sequence]:
+        if not self._twisscalled.get(sequence):
             self.twiss(sequence)
         # Calling "basic aperture files"
         if not self._apercalled[sequence]:
             for afile in self._mdef['sequences'][sequence]['aperfiles']:
-                print "Calling file",afile
+                print("Calling file",afile)
                 self._call(afile)
             self._apercalled[sequence]=True
         # getting offset file if any:
@@ -579,7 +581,7 @@ def save_model(model_def,filename):
         raise TypeError('model_def must be a dictionary!')
     if type(filename)!=type(''):
         raise TypeError('filename must be a string!')
-    file(filename,'w').write(json.dumps(model_def,indent=2))
+    open(filename,'w').write(json.dumps(model_def,indent=2))
 
 class _modelProcess(multiprocessing.Process):
     def __init__(self,sender,receiver,model,history='',recursive_history=False):

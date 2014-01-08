@@ -20,7 +20,9 @@ Created on Nov 26, 2010
 
 @author: kaifox
 '''
-from globals import JPyMadGlobals
+from __future__ import absolute_import
+
+from .globals import JPyMadGlobals
 
 def _iscorrector(element):
     return JPyMadGlobals.java_gateway.jvm.cern.accsoft.steering.jmad.domain.elem.JMadElementType.CORRECTOR.isTypeOf(element) #@UndefinedVariable

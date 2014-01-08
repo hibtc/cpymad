@@ -20,9 +20,11 @@ Created on Nov 17, 2010
 
 @author: kaifox
 '''
+from __future__ import absolute_import
+
 import unittest
 
-from utils import PyMadTestCase
+from .utils import PyMadTestCase
 from jpymad.globals import JPyMadGlobals
 
 class Test(unittest.TestCase):
@@ -33,7 +35,7 @@ class Test(unittest.TestCase):
         self.assertTrue(not JPyMadGlobals.java_gateway is None, 'Must be connected to a java_gateway')
         self.assertTrue(not pms.jmad_service is None, 'JMad service must be available')
         for mdef in pms.mdefs:
-            print mdef
+            print(mdef)
 
 
 if __name__ == "__main__":
