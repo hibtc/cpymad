@@ -1,1 +1,3 @@
 recursive-include cern *.pxd
+recursive-include cern/cpymad/_models *.json
+recursive-include cern/cpymad/_models/re*data *.madx *.str *.seq *.tfs *.xsifx *CLICx *.ind92
