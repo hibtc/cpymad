@@ -1,0 +1,43 @@
+language: python
+
+python:
+  - "2.6"
+  - "2.7"
+  - "3.3"
+
+before_install:
+  # install gfortran
+  - sudo apt-get install gfortran
+
+  # Build MAD-X (takes a lot of time - should use a binary distribution):
+  - svn co http://svnweb.cern.ch/guest/madx/trunk/madX
+  - cd madX
+  - cmake -DCMAKE_C_COMPILER=gcc
+          -DCMAKE_Fortran_COMPILER=gfortran
+          -DMADX_STATIC=OFF
+          -DMADX_ONLINE=OFF
+          -DBUILD_SHARED_LIBS=ON
+          -DCMAKE_INSTALL_PREFIX=/usr
+          -DBINARY_POSTFIX=_dev
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo .
+  - make
+  - sudo make install
+  - cd ..
+
+# Setup (performed within virtualenv)
+install:
+  # Resolve dependencies (numpy will also take some time!):
+  - pip install -r requirements.txt
+
+  # Install package (from the source distribution in order to test its
+  # validity as well):
+  - python setup.py sdist
+  - pip install $(ls ./dist/*.tar.gz | sort -rV | head -n1)
+
+# Actual tests:
+script:
+  - python test/cpymadtest/test_resource.py
+  - python test/cpymadtest/test_madx.py
+  - python test/cpymadtest/test_model_locator.py
+  - python test/cpymadtest/test_survey.py
+
