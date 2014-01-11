@@ -24,6 +24,12 @@ PYMADVERSION=['0','4']
 
 from setuptools import setup, Extension
 
+# setuptools.Extension automatically converts all '.pyx' extensions to '.c'
+# extensions if detecting that neither Cython nor Pyrex is available. Early
+# versions of setuptools don't know about Cython. Since we don't use Pyrex
+# in this module, this leads to problems in the two cases where Cython is
+# available and Pyrex is not or vice versa. Therefore, setuptools.Extension
+# needs to be patched to match our needs:
 try:
     # Use Cython if available:
     from Cython.Build import cythonize
@@ -35,6 +41,13 @@ except ImportError:
         for ext in extensions:
             ext.sources = list(map(pyx_to_c, ext.sources))
         return extensions
+else:
+    orig_Extension = Extension
+    class Extension(orig_Extension):
+        """Extension that *never* replaces '.pyx' by '.c' (using Cython)."""
+        def __init__(self, name, sources, *args, **kwargs):
+            orig_Extension.__init__(self, name, sources, *args, **kwargs)
+            self.sources = sources
 
 import platform
 from distutils.util import get_platform
