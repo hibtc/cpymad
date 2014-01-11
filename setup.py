@@ -24,7 +24,8 @@ PYMADVERSION=['0','4']
 
 from setuptools import setup
 from setuptools.extension import Extension
-from Cython.Distutils import build_ext
+from Cython.Build import cythonize
+
 import platform
 from distutils.util import get_platform
 import numpy
@@ -97,16 +98,15 @@ setup(
     description='Interface to Mad-X, using Cython or Py4J through JMAD',
     long_description=open('README.rst').read(),
     url='http://cern.ch/pymad',
-    cmdclass = {'build_ext': build_ext},
     package_dir={'':'src'},
-    ext_modules = [
+    ext_modules = cythonize([
         Extension('cern.madx',
                   sources=["src/cern/madx.pyx"],
                   **cython_args),
         Extension('cern.libmadx.table',
                   sources=["src/cern/libmadx/table.pyx"],
                   **cython_args),
-    ],
+    ]),
     packages = [
         "cern",
         "cern.libmadx",
