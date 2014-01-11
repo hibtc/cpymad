@@ -22,9 +22,19 @@ from os import path
 # Version of pymad (major,minor):
 PYMADVERSION=['0','4']
 
-from setuptools import setup
-from setuptools.extension import Extension
-from Cython.Build import cythonize
+from setuptools import setup, Extension
+
+try:
+    # Use Cython if available:
+    from Cython.Build import cythonize
+except ImportError:
+    # Otherwise, always use the distributed .c instead of the .pyx file:
+    def cythonize(extensions):
+        def pyx_to_c(source):
+            return source[:-4]+'.c' if source.endswith('.pyx') else source
+        for ext in extensions:
+            ext.sources = list(map(pyx_to_c, ext.sources))
+        return extensions
 
 import platform
 from distutils.util import get_platform
@@ -84,7 +94,7 @@ else:
     libs += ['c']
 
 # common cython arguments
-cython_args = dict(
+extension_args = dict(
     define_macros=[('MAJOR_VERSION', PYMADVERSION[0]),
                    ('MINOR_VERSION', PYMADVERSION[1])],
     include_dirs=includedirs,
@@ -102,10 +112,10 @@ setup(
     ext_modules = cythonize([
         Extension('cern.madx',
                   sources=["src/cern/madx.pyx"],
-                  **cython_args),
+                  **extension_args),
         Extension('cern.libmadx.table',
                   sources=["src/cern/libmadx/table.pyx"],
-                  **cython_args),
+                  **extension_args),
     ]),
     packages = [
         "cern",
@@ -124,5 +134,6 @@ setup(
     include_package_data=True, # include files matched by MANIFEST.in
     author='PyMAD developers',
     author_email='pymad@cern.ch',
-    license = 'CERN Standard Copyright License')
+    license = 'CERN Standard Copyright License'
+)
 

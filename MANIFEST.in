@@ -1,4 +1,4 @@
-recursive-include src *.pxd
+recursive-include src *.pxd *.pyx *.c
 recursive-include src/cern/cpymad/_models *.json
 recursive-include src/cern/cpymad/_models/re*data *.madx *.str *.seq *.tfs *.xsifx *CLICx *.ind92
 recursive-include test *.py *.cmake *.txt
