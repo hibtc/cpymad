@@ -27,7 +27,7 @@ See also :py:class:`cern.pymad.model`
 
 from __future__ import print_function
 
-import json, os, sys
+import yaml, os, sys
 import multiprocessing
 import signal,atexit
 
@@ -571,17 +571,17 @@ class Model(abc.model.PyMadModel):
 def save_model(model_def,filename):
     '''
     Saves the model definition defined by the dictionary model_def
-    to file filename. The file is in json format. We do not check
+    to file filename. The file is in YAML format (or JSON). We do not check
     that the model is valid in any way.
 
     It is recommended that you rather use the modeldefs.model.save_model,
     once it is ready.
     '''
-    if type(model_def)!=dict:
+    if not isinstance(model_def,dict):
         raise TypeError('model_def must be a dictionary!')
-    if type(filename)!=type(''):
+    if not isinstance(filename,str):
         raise TypeError('filename must be a string!')
-    open(filename,'w').write(json.dumps(model_def,indent=2))
+    yaml.dump(model_def,stream=open(filename,'w'))
 
 class _modelProcess(multiprocessing.Process):
     def __init__(self,sender,receiver,model,history='',recursive_history=False):
