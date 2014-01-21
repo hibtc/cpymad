@@ -115,11 +115,18 @@ extension_args = dict(
     library_dirs=libdirs,
     runtime_library_dirs=rlibdirs)
 
+long_description = None
+try:
+    long_description = open('README.rst').read()
+    long_description += '\n' + open('CHANGES.rst').read()
+except IOError:
+    pass
+
 setup(
     name='cern-pymad',
     version='.'.join(map(str, PYMADVERSION)),
     description='Interface to Mad-X, using Cython or Py4J through JMAD',
-    long_description=open('README.rst').read(),
+    long_description=long_description,
     url='http://cern.ch/pymad',
     package_dir={'':'src'},
     ext_modules = cythonize([
