@@ -8,14 +8,17 @@ class TestCpymadSurvey(unittest.TestCase):
     def tearDown(self):
         del self.model
 
-    def test_aperture(self):
-
+    def setUp(self):
         self.model=cpymad.model('lhc')
 
-        sur_c='name,s,l,x,y,z,theta'
+    def test_aperture(self):
+
+        self.assertTrue(hasattr(self,"model"))
 
         tw1,pw1=self.model.twiss('lhcb1')
         t1,p1=self.model.survey('lhcb1')
+        for key in ['angle', 'name', 'l', 's', 'theta', 'y', 'x', 'z']:
+            self.assertTrue(hasattr(t1,key))
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TestCpymadSurvey)
