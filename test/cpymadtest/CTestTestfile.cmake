@@ -1,5 +1,5 @@
 
-foreach(PYTEST clic aperture urvey)
+foreach(PYTEST clic aperture survey)
    add_test(test_${PYTEST} ${PYTHON} test_${PYTEST}.py)
 endforeach()
 
