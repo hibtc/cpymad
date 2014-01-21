@@ -108,10 +108,10 @@ class TestMergedModelLocator(unittest.TestCase):
         de['e']['extends'] = ['d']
 
         create_test_file(self.base,
-                         ['abc.cpymad.json'],
+                         ['abc.cpymad.yml'],
                          json.dumps(abc, ensure_ascii=False))
         create_test_file(self.base,
-                         ['de.cpymad.json'],
+                         ['de.cpymad.yml'],
                          json.dumps(de, ensure_ascii=False))
 
 
@@ -174,19 +174,19 @@ class TestMergedModelLocator(unittest.TestCase):
         cf = c.model['files']
 
         # the first file is defined in resdata/?/a.txt
-        self.assertEqual(b.get_by_dict(bf[0]).json()['path'],
+        self.assertEqual(b.get_by_dict(bf[0]).yaml()['path'],
                          'resdata/b/a.txt')
-        self.assertEqual(c.get_by_dict(cf[0]).json()['path'],
+        self.assertEqual(c.get_by_dict(cf[0]).yaml()['path'],
                          'resdata/c/a.txt')
 
         # second file: resdata/?/b.txt
-        self.assertEqual(b.get_by_dict(bf[1]).json()['path'],
+        self.assertEqual(b.get_by_dict(bf[1]).yaml()['path'],
                          'repdata/b/b.txt')
-        self.assertEqual(c.get_by_dict(cf[1]).json()['path'],
+        self.assertEqual(c.get_by_dict(cf[1]).yaml()['path'],
                          'dbdir/c/b.txt')
 
         # third file: repdata/?/c.txt
-        self.assertEqual(c.get_by_dict(cf[2]).json()['path'],
+        self.assertEqual(c.get_by_dict(cf[2]).yaml()['path'],
                          'dbdir/c/c.txt')
 
 

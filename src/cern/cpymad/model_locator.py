@@ -176,7 +176,7 @@ class MergedModelLocator(ModelLocator):
 
     def list_models(self, encoding='utf-8'):
         for res_name in self.res_provider.listdir_filter(ext='.cpymad.yml'):
-            mdefs = self.res_provider.yml(res_name, encoding=encoding)
+            mdefs = self.res_provider.yaml(res_name, encoding=encoding)
             for n,d in mdefs.items():
                 if d['real']:
                     yield n
@@ -188,7 +188,7 @@ class MergedModelLocator(ModelLocator):
             if name in (n for n,d in mdefs.items() if d['real']):
                 break
         else:
-            raise ValueError("The model you asked for does not exist in the database")
+            raise ValueError("The model "+name+" does not exist in the database")
 
         # expand the model using its bases specified in 'extends'. try to
         # provide a useful MRO:
