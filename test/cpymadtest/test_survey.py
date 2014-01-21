@@ -18,5 +18,4 @@ class TestCpymadSurvey(unittest.TestCase):
         t1,p1=self.model.survey('lhcb1')
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestCpymadSurvey)
-    unittest.TextTestRunner(verbosity=1).run(suite)
+    unittest.main()
