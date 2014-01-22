@@ -88,6 +88,7 @@ def _add_default_cpymads(new_dict):
     '''
     for mname,model in new_dict.items():
         model['dbdirs']=['/afs/cern.ch/eng/']
+        model['real']=True
         for seqname,sequence in model['sequences'].items():
             sequence['aperfiles']=[]
 

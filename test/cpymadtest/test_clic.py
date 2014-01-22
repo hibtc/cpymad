@@ -25,6 +25,5 @@ class TestCLIC(TestCpymad, unittest.TestCase):
         self.model._cmd('option,-twiss_print')
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestCLIC)
-    unittest.TextTestRunner(verbosity=1).run(suite)
+    unittest.main()
 
