@@ -1,5 +1,5 @@
 
-from yaml import dump, safe_load as load
+from yaml import safe_dump as dump, safe_load as load
 
 
 
