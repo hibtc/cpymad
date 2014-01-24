@@ -19,7 +19,7 @@ from cern.resource.couch import CouchResource
 import unittest
 import tempfile
 import shutil
-import yaml
+from yaml import safe_load as load
 import os.path
 import gc
 import sys
@@ -86,11 +86,11 @@ class Common(object):
     def test_open(self):
         with self.res.open('a.yml', 'utf-8') as f:
             self.assertEqual(
-                yaml.load(f.read())['path'],
+                load(f.read())['path'],
                 'a.yml')
         with self.res.get('subdir/b.yml').open(encoding='utf-8') as f:
             self.assertEqual(
-                    yaml.load(f.read())['path'],
+                    load(f.read())['path'],
                     os.path.join('subdir', 'b.yml'))
 
     def test_list(self):
@@ -122,10 +122,10 @@ class Common(object):
 
     def test_load(self):
         self.assertEqual(
-                yaml.load(self.res.load('a.yml', 'utf-8'))['path'],
+                load(self.res.load('a.yml', 'utf-8'))['path'],
                 'a.yml')
         self.assertEqual(
-                yaml.load(self.res.get('subdir').load('b.yml', 'utf-8'))['path'],
+                load(self.res.get('subdir').load('b.yml', 'utf-8'))['path'],
                 os.path.join('subdir', 'b.yml'))
 
     def test_yaml(self):
@@ -154,13 +154,13 @@ class TestPackageResource(Common, unittest.TestCase):
         with self.res.filename('a.yml') as filename:
             with open(filename, encoding='utf-8') as f:
                 self.assertEqual(
-                        yaml.load(f.read())['path'],
+                        load(f.read())['path'],
                         'a.yml')
         self.assertTrue(os.path.exists(filename))
         with self.res.get(['subdir', 'b.yml']).filename() as filename:
             with open(filename, encoding='utf-8') as f:
                 self.assertEqual(
-                        yaml.load(f.read())['path'],
+                        load(f.read())['path'],
                         'subdir/b.yml')
         self.assertTrue(os.path.exists(filename))
 
@@ -195,13 +195,13 @@ class TestEggResource(Common, unittest.TestCase):
         with self.res.filename('a.yml') as filename:
             with open(filename, encoding='utf-8') as f:
                 self.assertEqual(
-                        yaml.load(f.read())['path'],
+                        load(f.read())['path'],
                         'a.yml')
         self.assertFalse(os.path.exists(filename))
         with self.res.get(['subdir', 'b.yml']).filename() as filename:
             with open(filename, encoding='utf-8') as f:
                 self.assertEqual(
-                        yaml.load(f.read())['path'],
+                        load(f.read())['path'],
                         'subdir/b.yml')
         self.assertFalse(os.path.exists(filename))
         # The resource should be accessible again, even though the file was
@@ -209,7 +209,7 @@ class TestEggResource(Common, unittest.TestCase):
         with self.res.get(['subdir', 'b.yml']).filename() as filename:
             with open(filename, encoding='utf-8') as f:
                 self.assertEqual(
-                        yaml.load(f.read())['path'],
+                        load(f.read())['path'],
                         'subdir/b.yml')
         self.assertFalse(os.path.exists(filename))
 

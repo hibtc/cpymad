@@ -125,9 +125,9 @@ class ResourceProvider(Interface):
         not checked to be valid JSON!
 
         """
-        from yaml import load
+        from yaml import safe_load
         with self.open(name, encoding=encoding) as f:
-            return load(f, **kwargs)
+            return safe_load(f, **kwargs)
 
     # backward compatibility alias
     json = yaml
