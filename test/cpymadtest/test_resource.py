@@ -39,7 +39,8 @@ def create_test_file(base, path, content=None):
         pass
     with open(os.path.join(base, *path), 'wt', encoding='utf-8') as f:
         if content is None:
-            # With yaml.dump is not compatible in python2 and python3
+            # json.dump is not compatible in python2 and python3.
+            # Haven't checked yaml.dump() so far, but the old code remains:
             f.write(u'{"path": "%s", "unicode": "%s"}' % (
                 os.path.join(*path),    # this content is predictable
                 u"äæo≤»で"))            # some unicode test data
