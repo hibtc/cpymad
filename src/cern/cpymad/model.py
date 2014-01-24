@@ -163,9 +163,9 @@ class Model(abc.model.PyMadModel):
             self._init_sequence(seq)
         # then we set the default one..
         self.set_sequence(sequence)
-        if type(optics)==type(''):
+        if isinstance(optics, str):
             self.set_optic(optics)
-        elif type(optics)==type([]):
+        elif isinstance(optics, list):
             for o in optics:
                 self.set_optic(o)
         # To keep track of whether or not certain things are already called..
@@ -577,11 +577,7 @@ def save_model(model_def,filename):
     It is recommended that you rather use the modeldefs.model.save_model,
     once it is ready.
     '''
-    if not isinstance(model_def,dict):
-        raise TypeError('model_def must be a dictionary!')
-    if not isinstance(filename,str):
-        raise TypeError('filename must be a string!')
-    yaml.dump(model_def,stream=open(filename,'w'))
+    yaml.safe_dump(model_def,stream=open(filename,'w'))
 
 class _modelProcess(multiprocessing.Process):
     def __init__(self,sender,receiver,model,history='',recursive_history=False):
