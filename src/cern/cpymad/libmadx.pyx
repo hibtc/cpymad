@@ -25,59 +25,6 @@ cimport numpy as np     # Import the C-level symbols of numpy
 # _always_ do that, or you will have segfaults
 np.import_array()
 
-# We need to build an array-wrapper class to deallocate our array when
-# the Python object is deleted.
-cdef class ArrayWrapper:
-    dtype=np.NPY_DOUBLE
-
-    cdef set_data(self, int size, void* data_ptr):
-        """ Set the data of the array
-
-        This cannot be done in the constructor as it must recieve C-level
-        arguments.
-
-        Parameters:
-        -----------
-        size: int
-        Length of the array.
-        data_ptr: void*
-        Pointer to the data
-
-        """
-        self.data_ptr = data_ptr
-        self.size = size
-
-    def __array__(self):
-        """ Here we use the __array__ method, that is called when numpy
-        tries to get an array from the object."""
-        cdef np.npy_intp shape[1]
-        shape[0] = <np.npy_intp> self.size
-        # Create a 1D array, of length 'size'
-        ndarray = np.PyArray_SimpleNewFromData(1, shape,
-                                               np.NPY_DOUBLE, self.data_ptr)
-        return ndarray
-
-    def __dealloc__(self):
-        """
-        Frees the array. This is called by Python when all the
-        references to the object are gone.
-
-        Since we are using the memory which Mad-X might need
-        later on, let's not.
-        """
-        pass
-
-cdef class ArrayWrapperInt(ArrayWrapper):
-    def __array__(self):
-        """ Here we use the __array__ method, that is called when numpy
-        tries to get an array from the object."""
-        cdef np.npy_intp shape[1]
-        shape[0] = <np.npy_intp> self.size
-        # Create a 1D array, of length 'size'
-        ndarray = np.PyArray_SimpleNewFromData(1, shape,
-                                               np.NPY_INT, self.data_ptr)
-        return ndarray
-
 
 cdef _split_header_line(header_line):
     header_line = header_line.decode('utf-8')
@@ -91,14 +38,23 @@ cdef _split_header_line(header_line):
     return key,value
 
 def get_table(table, columns):
+    """
+    Get data from the specified tables.
+
+    :param str table: table name
+    :param list columns: column names
+    :returns: the data in the requested columns
+    :rtype: dict
+
+    CAUTION: Numeric data is wrapped in numpy arrays but not copied. Make
+    sure to copy all data before invoking any further MAD-X commands!
+
+    """
     ret={}
     cdef column_info info
     cdef char_p_array *header
-    cdef np.ndarray _tmp
     cdef char** char_tmp
-    if type(columns)==str:
-        columns=columns.split(',')
-
+    cdef np.npy_intp shape[1]
 
     # reading the header information..
     table = table.encode('utf-8')
@@ -108,21 +64,15 @@ def get_table(table, columns):
         key,value=_split_header_line(header.p[i])
         ret_header[key]=value
 
-
-
     # reading the columns that were requested..
     for c in columns:
         col_bytes = c.encode('utf-8')
         info=table_get_column(table,col_bytes)
-        dtype=<bytes>info.datatype
+        dtype = <bytes>info.datatype
         if dtype==b'd':
-            aw=ArrayWrapper()
-            aw.set_data(info.length,info.data)
-            _tmp = np.array(aw, copy=False)
-            # Assign our object to the 'base' of the ndarray object
-            _tmp.base = <PyObject*> aw
-            Py_INCREF(aw)
-            ret[c.lower()]=_tmp
+            shape[0] = <np.npy_intp> info.length
+            ret[c.lower()] = np.PyArray_SimpleNewFromData(
+                1, shape, np.NPY_DOUBLE, info.data)
         elif dtype==b'S':
             char_tmp=<char**>info.data
             ret[c.lower()]=np.zeros(info.length,'S%d'%info.datasize)

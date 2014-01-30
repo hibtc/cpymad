@@ -115,11 +115,3 @@ cdef extern from "madX/mad_parse.h":
 cdef extern from "madX/mad_table.h":
     column_info  table_get_column(char* table_name,char* column_name)
     char_p_array table_get_header(char* table_name)
-
-# Utility class:
-cdef class ArrayWrapper:
-    cdef void* data_ptr
-    cdef int size
-
-    cdef set_data(self, int size, void* data_ptr)
-
