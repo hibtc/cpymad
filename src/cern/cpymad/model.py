@@ -496,7 +496,7 @@ class Model(abc.model.PyMadModel):
                 'weight': weight,
                 'method': method,
                 'fname': fname}
-        args['madrange']=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]]
+        # args['madrange']=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]]
 
         def is_match_param(v):
             return v.lower() in ['rmatrix', 'chrom', 'beta0', 'deltap',
