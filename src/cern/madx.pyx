@@ -28,7 +28,7 @@ Main module to interface with Mad-X library.
 
 from __future__ import print_function
 
-from cern.libmadx.madx_structures cimport sequence_list, name_list, column_info, expression, char_p_array, char_array
+from cern.cpymad.libmadx cimport sequence_list, name_list, column_info, expression, char_p_array, char_array
 from cern.libmadx import table
 
 cdef extern from "madX/mad_api.h":

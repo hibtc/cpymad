@@ -2,7 +2,7 @@ from __future__ import print_function
 
 from cern.pymad.domain.tfs import TfsTable,TfsSummary
 
-from cern.libmadx.madx_structures cimport column_info,char_p_array
+from cern.cpymad.libmadx cimport column_info,char_p_array
 cdef extern from "madX/mad_table.h":
     column_info  table_get_column(char* table_name,char* column_name)
     char_p_array table_get_header(char* table_name)
