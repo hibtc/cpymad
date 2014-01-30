@@ -61,7 +61,8 @@ cdef extern from "madX/mad_table.h":
         char* name
         int num_cols, org_cols,dynamic,origin,curr
         char_p_array *header #,*node_nm
-        int_array *col_out,*row_out
+        int_array* col_out
+        int_array* row_out
         name_list* columns    #names + types (in inform)
         char ***s_cols
 
