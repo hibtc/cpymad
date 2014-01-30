@@ -122,4 +122,3 @@ cdef class ArrayWrapper:
 
     cdef set_data(self, int size, void* data_ptr)
 
-

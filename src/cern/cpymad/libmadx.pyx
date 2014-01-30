@@ -1,14 +1,30 @@
+"""
+Low level cython binding to MAD-X.
+
+CAUTION: this module maps the global architecture of the MAD-X library
+closely. That means that all functions will operate on a shared global
+state! Take this into account when importing this module.
+
+Probably, you want to interact with MAD-X via the cpymad.madx module. It
+provides higher level abstraction and can deal with multiple instances of
+MAD-X. Furthermore, it enhances the security by boxing all MAD-X calls into
+a subprocess.
+
+"""
+from __future__ import absolute_import
 from __future__ import print_function
 
 from cern.pymad.domain.tfs import TfsTable,TfsSummary
-
-cimport cern.cpymad.libmadx as libmadx
 
 from libc.stdlib cimport free
 from cpython cimport PyObject, Py_INCREF
 
 import numpy as np      # Import the Python-level symbols of numpy
 cimport numpy as np     # Import the C-level symbols of numpy
+
+cimport cern.cpymad.libmadx as libmadx
+
+
 
 # Numpy must be initialized. When using numpy from C or Cython you must
 # _always_ do that, or you will have segfaults
@@ -125,3 +141,88 @@ def get_dict_from_mem(table,columns,retdict):
     if retdict:
         return ret,ret_header
     return TfsTable(ret),TfsSummary(ret_header)
+
+
+# Python-level binding to libmadx:
+
+def start():
+    """
+    Initialize MAD-X.
+    """
+    libmadx.madx_start()
+
+def finish():
+    """
+    Cleanup MAD-X.
+    """
+    libmadx.madx_finish()
+
+def input(cmd):
+    """
+    Pass one input command to MAD-X.
+
+    :param str cmd: command to be executed by the MAD-X interpretor
+
+    """
+    cmd = cmd.encode('utf-8')
+    cdef char* _cmd = cmd
+    libmadx.stolower_nq(_cmd)
+    libmadx.pro_input(_cmd)
+
+def get_sequences():
+    '''
+    Returns the sequences currently in memory
+
+    :returns: mapping of sequence names and their twiss table names
+    :rtype: dict
+
+
+    This is how the return looks like in python pseudo-code:
+
+    ..
+
+        {s.name: {'name': s.name,
+                  'twissname': s.twisstable}
+         for s in sequence}
+
+    The format of the returned data should probably be changed.
+
+    '''
+    cdef libmadx.sequence_list *seqs
+    seqs= libmadx.madextern_get_sequence_list()
+    ret={}
+    for i in xrange(seqs.curr):
+        name = seqs.sequs[i].name.decode('utf-8')
+        ret[name]={'name':name}
+        if seqs.sequs[i].tw_table.name is not NULL:
+            tabname = seqs.sequs[i].tw_table.name.decode('utf-8')
+            ret[name]['twissname'] = tabname
+            print("Table name:", tabname)
+            print("Number of columns:",seqs.sequs[i].tw_table.num_cols)
+            print("Number of columns (orig):",seqs.sequs[i].tw_table.org_cols)
+            print("Number of rows:",seqs.sequs[i].tw_table.curr)
+    return ret
+
+def evaluate(cmd):
+    """
+    Evaluates an expression and returns the result as double.
+
+    :param str cmd: symbolic expression to evaluate
+    :returns: numeric value of the expression
+    :rtype: float
+
+    NOTE: This function uses global variables as temporaries - which is in
+    general an *extremely* bad design choice. Even though MAD-X uses global
+    variables internally anyway, we should probably change this at some
+    time.
+
+    """
+    # TODO: not sure about the flags (the magic constants 0, 2)
+    cmd = cmd.lower().encode("utf-8")
+    libmadx.pre_split(cmd, libmadx.c_dum, 0)
+    libmadx.mysplit(libmadx.c_dum.c, libmadx.tmp_p_array)
+    expr = libmadx.make_expression(libmadx.tmp_p_array.curr, libmadx.tmp_p_array.p)
+    value = libmadx.expression_value(expr, 2)
+    libmadx.delete_expression(expr)
+    return value
+

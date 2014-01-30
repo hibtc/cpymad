@@ -28,12 +28,7 @@ Main module to interface with Mad-X library.
 from __future__ import absolute_import
 from __future__ import print_function
 
-cimport cern.cpymad.libmadx as libmadx
-from cern.cpymad.libmadx import get_dict_from_mem
-
-cdef madx_input(char* cmd):
-    libmadx.stolower_nq(cmd)
-    libmadx.pro_input(cmd)
+import cern.cpymad.libmadx as libmadx
 
 import os,sys
 import collections
@@ -73,7 +68,7 @@ class madx:
         '''
         global _madstarted
         if not _madstarted:
-            libmadx.madx_start()
+            libmadx.start()
             _madstarted=True
         if histfile:
             self._hist=True
@@ -103,7 +98,7 @@ class madx:
         '''
         if self._rechist:
             self._hfile.close()
-        #libmadx.madx_finish()
+        #libmadx.finish()
 
     def command(self,cmd):
         '''
@@ -128,8 +123,7 @@ class madx:
             else:
                 self._writeHist(cmd+'\n')
         if _madx_tools._checkCommand(cmd.lower()):
-            cmd = cmd.encode('utf-8')
-            madx_input(cmd)
+            libmadx.input(cmd)
         return 0
 
     def help(self,cmd=''):
@@ -222,7 +216,7 @@ class madx:
                     else:
                         _tmpcmd+=','+i_var+'='+str(i_val)
         self.command(_tmpcmd+';')
-        return get_dict_from_mem('twiss',columns,retdict)
+        return libmadx.get_dict_from_mem('twiss',columns,retdict)
 
     def survey(self,
               sequence,
@@ -284,7 +278,7 @@ class madx:
         if fname:
             _cmd+=',file="'+fname+'"'
         self.command(_cmd)
-        return get_dict_from_mem('aperture',columns,retdict)
+        return libmadx.get_dict_from_mem('aperture',columns,retdict)
 
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')
@@ -464,45 +458,18 @@ class madx:
 
     def get_sequences(self):
         '''
-         Returns the sequences currently in memory
+        Returns the sequences currently in memory
         '''
-        cdef libmadx.sequence_list *seqs
-        seqs= libmadx.madextern_get_sequence_list()
-        ret={}
-        for i in xrange(seqs.curr):
-            name = seqs.sequs[i].name.decode('utf-8')
-            ret[name]={'name':name}
-            if seqs.sequs[i].tw_table.name is not NULL:
-                tabname = seqs.sequs[i].tw_table.name.decode('utf-8')
-                ret[name]['twissname'] = tabname
-                print("Table name:", tabname)
-                print("Number of columns:",seqs.sequs[i].tw_table.num_cols)
-                print("Number of columns (orig):",seqs.sequs[i].tw_table.org_cols)
-                print("Number of rows:",seqs.sequs[i].tw_table.curr)
-        return ret
+        return libmadx.get_sequences()
 
     def evaluate(self, cmd):
         """
         Evaluates an expression and returns the result as double.
 
         :param string cmd: expression to evaluate.
-
-        NOTE: Call this function only from within a process scope where you
-        have called ``madx_start()`` first. This limitation is due to the
-        use of global variables within MAD-X.
-
-        This function uses global variables as temporaries - which is in
-        general an extremely bad design choice. In this case, however, using
-        local variables would only obscure the fact that MAD-X uses global
-        variables internally anyway.
+        :returns: numeric value of the expression
+        :rtype: float
 
         """
-        # TODO: not sure about the flags (the magic constants 0, 2)
-        cmd = cmd.lower().encode("utf-8")
-        libmadx.pre_split(cmd, libmadx.c_dum, 0)
-        libmadx.mysplit(libmadx.c_dum.c, libmadx.tmp_p_array)
-        expr = libmadx.make_expression(libmadx.tmp_p_array.curr, libmadx.tmp_p_array.p)
-        value = libmadx.expression_value(expr, 2)
-        libmadx.delete_expression(expr)
-        return value
+        return libmadx.evaluate(cmd)
 
