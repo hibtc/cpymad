@@ -2,19 +2,13 @@ from __future__ import print_function
 
 from cern.pymad.domain.tfs import TfsTable,TfsSummary
 
-from cern.cpymad.libmadx cimport column_info,char_p_array
-cdef extern from "madX/mad_table.h":
-    column_info  table_get_column(char* table_name,char* column_name)
-    char_p_array table_get_header(char* table_name)
+cimport cern.cpymad.libmadx as libmadx
 
 from libc.stdlib cimport free
 from cpython cimport PyObject, Py_INCREF
 
-# Import the Python-level symbols of numpy
-import numpy as np
-
-# Import the C-level symbols of numpy
-cimport numpy as np
+import numpy as np      # Import the Python-level symbols of numpy
+cimport numpy as np     # Import the C-level symbols of numpy
 
 # Numpy must be initialized. When using numpy from C or Cython you must
 # _always_ do that, or you will have segfaults
@@ -87,8 +81,8 @@ cdef _split_header_line(header_line):
 
 def get_dict_from_mem(table,columns,retdict):
     ret={}
-    cdef column_info info
-    cdef char_p_array *header
+    cdef libmadx.column_info info
+    cdef libmadx.char_p_array *header
     cdef np.ndarray _tmp
     cdef char** char_tmp
     if type(columns)==str:
@@ -97,7 +91,7 @@ def get_dict_from_mem(table,columns,retdict):
 
     # reading the header information..
     table = table.encode('utf-8')
-    header = <char_p_array*>table_get_header(table)
+    header = <libmadx.char_p_array*>table_get_header(table)
     ret_header={}
     for i in xrange(header.curr):
         key,value=_split_header_line(header.p[i])

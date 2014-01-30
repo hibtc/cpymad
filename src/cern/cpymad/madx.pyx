@@ -25,39 +25,15 @@
 Main module to interface with Mad-X library.
 
 '''
-
+from __future__ import absolute_import
 from __future__ import print_function
 
-from cern.cpymad.libmadx cimport sequence_list, name_list, column_info, expression, char_p_array, char_array
+cimport cern.cpymad.libmadx as libmadx
 from cern.cpymad.libmadx import get_dict_from_mem
 
-cdef extern from "madX/mad_api.h":
-    sequence_list *madextern_get_sequence_list()
-cdef extern from "madX/mad_core.h":
-    void madx_start()
-    void madx_finish()
-
-cdef extern from "madX/mad_str.h":
-    void stolower_nq(char*)
-    int mysplit(char*, char_p_array*)
-cdef extern from "madX/mad_eval.h":
-    void pro_input(char*)
-
-cdef extern from "madX/mad_expr.h":
-    expression* make_expression(int, char**)
-    double expression_value(expression*, int)
-    expression* delete_expression(expression*)
-cdef extern from "madX/madx.h":
-    char_p_array* tmp_p_array    # temporary buffer for splits
-    char_array* c_dum
-
-cdef extern from "madX/mad_parse.h":
-    void pre_split(char*, char_array*, int)
-
-
 cdef madx_input(char* cmd):
-    stolower_nq(cmd)
-    pro_input(cmd)
+    libmadx.stolower_nq(cmd)
+    libmadx.pro_input(cmd)
 
 import os,sys
 import collections
@@ -97,7 +73,7 @@ class madx:
         '''
         global _madstarted
         if not _madstarted:
-            madx_start()
+            libmadx.madx_start()
             _madstarted=True
         if histfile:
             self._hist=True
@@ -127,7 +103,7 @@ class madx:
         '''
         if self._rechist:
             self._hfile.close()
-        #madx_finish()
+        #libmadx.madx_finish()
 
     def command(self,cmd):
         '''
@@ -490,8 +466,8 @@ class madx:
         '''
          Returns the sequences currently in memory
         '''
-        cdef sequence_list *seqs
-        seqs= madextern_get_sequence_list()
+        cdef libmadx.sequence_list *seqs
+        seqs= libmadx.madextern_get_sequence_list()
         ret={}
         for i in xrange(seqs.curr):
             name = seqs.sequs[i].name.decode('utf-8')
@@ -523,10 +499,10 @@ class madx:
         """
         # TODO: not sure about the flags (the magic constants 0, 2)
         cmd = cmd.lower().encode("utf-8")
-        pre_split(cmd, c_dum, 0)
-        mysplit(c_dum.c, tmp_p_array)
-        expr = make_expression(tmp_p_array.curr, tmp_p_array.p)
-        value = expression_value(expr, 2)
-        delete_expression(expr)
+        libmadx.pre_split(cmd, libmadx.c_dum, 0)
+        libmadx.mysplit(libmadx.c_dum.c, libmadx.tmp_p_array)
+        expr = libmadx.make_expression(libmadx.tmp_p_array.curr, libmadx.tmp_p_array.p)
+        value = libmadx.expression_value(expr, 2)
+        libmadx.delete_expression(expr)
         return value
 
