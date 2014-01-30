@@ -25,7 +25,7 @@ Main module to interface with Mad-X library.
 from __future__ import absolute_import
 from __future__ import print_function
 
-import cern.cpymad.libmadx as libmadx
+from . import libmadx
 
 import os,sys
 import collections
