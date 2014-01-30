@@ -22,7 +22,6 @@ from cpython cimport PyObject, Py_INCREF
 import numpy as np      # Import the Python-level symbols of numpy
 cimport numpy as np     # Import the C-level symbols of numpy
 
-cimport cern.cpymad.libmadx as libmadx
 
 
 
@@ -97,8 +96,8 @@ cdef _split_header_line(header_line):
 
 def get_dict_from_mem(table,columns,retdict):
     ret={}
-    cdef libmadx.column_info info
-    cdef libmadx.char_p_array *header
+    cdef column_info info
+    cdef char_p_array *header
     cdef np.ndarray _tmp
     cdef char** char_tmp
     if type(columns)==str:
@@ -107,7 +106,7 @@ def get_dict_from_mem(table,columns,retdict):
 
     # reading the header information..
     table = table.encode('utf-8')
-    header = <libmadx.char_p_array*>table_get_header(table)
+    header = <char_p_array*>table_get_header(table)
     ret_header={}
     for i in xrange(header.curr):
         key,value=_split_header_line(header.p[i])
@@ -149,13 +148,13 @@ def start():
     """
     Initialize MAD-X.
     """
-    libmadx.madx_start()
+    madx_start()
 
 def finish():
     """
     Cleanup MAD-X.
     """
-    libmadx.madx_finish()
+    madx_finish()
 
 def input(cmd):
     """
@@ -166,8 +165,8 @@ def input(cmd):
     """
     cmd = cmd.encode('utf-8')
     cdef char* _cmd = cmd
-    libmadx.stolower_nq(_cmd)
-    libmadx.pro_input(_cmd)
+    stolower_nq(_cmd)
+    pro_input(_cmd)
 
 def get_sequences():
     '''
@@ -188,8 +187,8 @@ def get_sequences():
     The format of the returned data should probably be changed.
 
     '''
-    cdef libmadx.sequence_list *seqs
-    seqs= libmadx.madextern_get_sequence_list()
+    cdef sequence_list *seqs
+    seqs= madextern_get_sequence_list()
     ret={}
     for i in xrange(seqs.curr):
         name = seqs.sequs[i].name.decode('utf-8')
@@ -219,10 +218,10 @@ def evaluate(cmd):
     """
     # TODO: not sure about the flags (the magic constants 0, 2)
     cmd = cmd.lower().encode("utf-8")
-    libmadx.pre_split(cmd, libmadx.c_dum, 0)
-    libmadx.mysplit(libmadx.c_dum.c, libmadx.tmp_p_array)
-    expr = libmadx.make_expression(libmadx.tmp_p_array.curr, libmadx.tmp_p_array.p)
-    value = libmadx.expression_value(expr, 2)
-    libmadx.delete_expression(expr)
+    pre_split(cmd, c_dum, 0)
+    mysplit(c_dum.c, tmp_p_array)
+    expr = make_expression(tmp_p_array.curr, tmp_p_array.p)
+    value = expression_value(expr, 2)
+    delete_expression(expr)
     return value
 
