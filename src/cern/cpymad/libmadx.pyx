@@ -1,3 +1,4 @@
+# cython: embedsignature=True
 """
 Low level cython binding to MAD-X.
 
