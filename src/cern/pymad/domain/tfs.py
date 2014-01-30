@@ -35,6 +35,12 @@ class LookupDict():
         for key, val in values.items():
             self._values[self._unify_key(key)] = val
 
+    def __getstate__(self):
+        return self._values
+
+    def __setstate__(self, state):
+        self._values = state
+
     def __iter__(self):
         return iter(self._values)
 
