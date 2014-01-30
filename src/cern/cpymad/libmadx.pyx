@@ -14,15 +14,11 @@ a subprocess.
 """
 from __future__ import print_function
 
-from cern.pymad.domain.tfs import TfsTable,TfsSummary
-
 from libc.stdlib cimport free
 from cpython cimport PyObject, Py_INCREF
 
 import numpy as np      # Import the Python-level symbols of numpy
 cimport numpy as np     # Import the C-level symbols of numpy
-
-
 
 
 # Numpy must be initialized. When using numpy from C or Cython you must
@@ -94,7 +90,7 @@ cdef _split_header_line(header_line):
         value=float(value)
     return key,value
 
-def get_dict_from_mem(table,columns,retdict):
+def get_table(table, columns):
     ret={}
     cdef column_info info
     cdef char_p_array *header
@@ -137,9 +133,7 @@ def get_dict_from_mem(table,columns,retdict):
         else:
             print("Unknown datatype",dtype,c)
 
-    if retdict:
-        return ret,ret_header
-    return TfsTable(ret),TfsSummary(ret_header)
+    return ret,ret_header
 
 
 # Python-level binding to libmadx:

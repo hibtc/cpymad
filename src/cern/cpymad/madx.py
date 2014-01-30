@@ -51,7 +51,12 @@ import os, sys
 import collections
 import cern.pymad.globals
 from cern.libmadx import _madx_tools
+from cern.pymad.domain.tfs import TfsTable,TfsSummary
 
+try:
+    basestring
+except NameError:
+    basestring = str
 
 # private utility functions
 def _tmp_filename(operation):
@@ -232,8 +237,7 @@ class Madx(object):
                     else:
                         _tmpcmd+=','+i_var+'='+str(i_val)
         self.command(_tmpcmd+';')
-        return rpyc_classic_stdio.obtain(
-            self._libmadx.get_dict_from_mem('twiss',columns,retdict))
+        return self._get_table('twiss',columns,retdict)
 
     def survey(self,
               sequence,
@@ -295,8 +299,7 @@ class Madx(object):
         if fname:
             _cmd+=',file="'+fname+'"'
         self.command(_cmd)
-        return rpyc_classic_stdio.obtain(
-            self._libmadx.get_dict_from_mem('aperture',columns,retdict))
+        return self._get_table('aperture',columns,retdict)
 
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')
@@ -473,6 +476,27 @@ class Madx(object):
         else:
             self._hfile.write(command)
             self._hfile.flush()
+
+    def _get_table(self, table, columns, retdict):
+        """
+        Get the specified table columns as numpy arrays.
+
+        :param str table: table name
+        :param columns: column names
+        :param bool retdict: return plain dictionaries
+        :type columns: list or str (comma separated)
+
+        """
+        if isinstance(columns, basestring):
+            columns = columns.split(',')
+        # NOTE: the obtain() call copies the numpy arrays, so we don't need
+        # to worry about memory faults:
+        t, s = rpyc_classic_stdio.obtain(
+            self._libmadx.get_table(table, columns))
+        if retdict:
+            return t, s
+        else:
+            return TfsTable(t), TfsSummary(s)
 
     def get_sequences(self):
         '''
