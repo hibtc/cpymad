@@ -29,7 +29,7 @@ Main module to interface with Mad-X library.
 from __future__ import print_function
 
 from cern.cpymad.libmadx cimport sequence_list, name_list, column_info, expression, char_p_array, char_array
-from cern.libmadx import table
+from cern.cpymad.libmadx import get_dict_from_mem
 
 cdef extern from "madX/mad_api.h":
     sequence_list *madextern_get_sequence_list()
@@ -246,7 +246,7 @@ class madx:
                     else:
                         _tmpcmd+=','+i_var+'='+str(i_val)
         self.command(_tmpcmd+';')
-        return table.get_dict_from_mem('twiss',columns,retdict)
+        return get_dict_from_mem('twiss',columns,retdict)
 
     def survey(self,
               sequence,
@@ -308,7 +308,7 @@ class madx:
         if fname:
             _cmd+=',file="'+fname+'"'
         self.command(_cmd)
-        return table.get_dict_from_mem('aperture',columns,retdict)
+        return get_dict_from_mem('aperture',columns,retdict)
 
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')

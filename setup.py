@@ -133,8 +133,8 @@ setup(
         Extension('cern.madx',
                   sources=["src/cern/madx.pyx"],
                   **extension_args),
-        Extension('cern.libmadx.table',
-                  sources=["src/cern/libmadx/table.pyx"],
+        Extension('cern.cpymad.libmadx',
+                  sources=["src/cern/cpymad/libmadx.pyx"],
                   **extension_args),
     ]),
     packages = [
