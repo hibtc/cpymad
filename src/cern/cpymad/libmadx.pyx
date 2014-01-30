@@ -12,7 +12,6 @@ MAD-X. Furthermore, it enhances the security by boxing all MAD-X calls into
 a subprocess.
 
 """
-from __future__ import absolute_import
 from __future__ import print_function
 
 from cern.pymad.domain.tfs import TfsTable,TfsSummary
