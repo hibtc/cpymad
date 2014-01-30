@@ -25,14 +25,14 @@ See also :py:class:`cern.pymad.model`
 
 '''
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 import json, os, sys
 import multiprocessing
 import signal,atexit
 
-from cern.cpymad import model_locator
-from cern.madx import madx
+from .model_locator import ModelData
+from .madx import madx
 from cern.pymad import abc
 from cern.pymad.globals import USE_COUCH
 
@@ -61,7 +61,7 @@ class Model(abc.model.PyMadModel):
         own custom cern.cpymad.model_locator.ModelLocator.
 
         """
-        from cern.cpymad.service import default_model_locator
+        from .service import default_model_locator
         mdata = default_model_locator.get_model(model)
         return cls(mdata, *args, **kwargs)
 
@@ -81,10 +81,10 @@ class Model(abc.model.PyMadModel):
         preferred Model.from_name() constructor.
 
         """
-        if isinstance(model, model_locator.ModelData):
+        if isinstance(model, ModelData):
             mdata = model
         else:
-            from cern.cpymad.service import default_model_locator
+            from .service import default_model_locator
             mdata = default_model_locator.get_model(model)
 
         self.mdata = mdata
