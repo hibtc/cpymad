@@ -366,16 +366,24 @@ class Model(abc.model.PyMadModel):
         seqdict=self._mdef['sequences'][sequence]
         rangedict=seqdict['ranges'][_madrange]
 
-        args={'sequence':sequence,'columns':columns,'pattern':pattern,'fname':fname,'use':use, 'retdict':retdict}
-        args['madrange']=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]]
-        args['twiss_init']=None
         if 'twiss-initial-conditions' in rangedict:
-            args['twiss_init']={}
-            for condition,value in self._get_twiss_initial(sequence,_madrange).items():
-                if value:
-                    args['twiss_init'][condition]=value
+            # this looks like a bug check to me (0 evaluates to False):
+            twiss_init = dict(
+                (key, val)
+                for key, val in self._get_twiss_initial(sequence,_madrange).items()
+                if val)
+        else:
+            twiss_init = None
 
-        t,s = self._madx.twiss(**args)
+        t,s = self._madx.twiss(
+            sequence=sequence,
+            pattern=pattern,
+            columns=columns,
+            madrange=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]],
+            fname=fname,
+            retdict=retdict,
+            twiss_init=twiss_init,
+            use=use)
         # we say that when the "full" range has been selected,
         # we can set this to true. Needed for e.g. aperture calls
         if not madrange:
@@ -406,13 +414,13 @@ class Model(abc.model.PyMadModel):
             rangedict=self._get_range_dict(sequence=sequence,madrange=madrange)
             this_range=rangedict['madx-range']
 
-        args={'sequence':sequence,
-              'columns':columns,
-              'madrange':this_range,
-              'fname':fname,
-              'use':use,
-              'retdict':retdict}
-        return self._madx.survey(**args)
+        return self._madx.survey(
+            sequence=sequence,
+            columns=columns,
+            madrange=this_range,
+            fname=fname,
+            use=use,
+            retdict=retdict)
 
     def aperture(self,
                sequence='',
@@ -452,19 +460,17 @@ class Model(abc.model.PyMadModel):
             if 'aper-offset' in rangedict:
                 offsets = self.mdata.get_by_dict(rangedict['aper-offset']).filename()
 
-        args={'sequence':sequence,
-            'madrange':this_range,
-            'columns':columns,
-            'fname':fname,
-            'use':use,
-             'retdict':retdict}
+        args={'sequence': sequence,
+              'madrange': this_range,
+              'columns': columns,
+              'fname': fname,
+              'use': use,
+              'retdict': retdict}
 
         if offsets:
             with offsets as offsets_filename:
-                args['offsets'] = offsets_filename
-                return self._madx.aperture(**args)
+                return self._madx.aperture(offsets=offsets_filename, **args)
         else:
-            args['offsets'] = ''
             return self._madx.aperture(**args)
 
 
@@ -490,27 +496,27 @@ class Model(abc.model.PyMadModel):
         seqdict=self._mdef['sequences'][sequence]
         rangedict=seqdict['ranges'][_madrange]
 
-        args = {'sequence': sequence,
-                'constraints': constraints,
-                'vary': vary,
-                'weight': weight,
-                'method': method,
-                'fname': fname}
-        # args['madrange']=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]]
-
         def is_match_param(v):
             return v.lower() in ['rmatrix', 'chrom', 'beta0', 'deltap',
                     'betx','alfx','mux','x','px','dx','dpx',
                     'bety','alfy','muy','y','py','dy','dpy' ]
 
-        args['twiss_init']=None
         if 'twiss-initial-conditions' in rangedict:
-            args['twiss_init']={}
-            for condition,value in self._get_twiss_initial(sequence,_madrange).items():
-                if is_match_param(condition):
-                    args['twiss_init'][condition]=value
+            twiss_init = dict(
+                (key, val)
+                for key, val in self._get_twiss_initial(sequence,_madrange).items()
+                if is_match_param(key))
+        else:
+            twiss_init = None
 
-        result,initial=self._madx.match(**args)
+        self._madx.match(
+            sequence=sequence,
+            constraints=constraints,
+            vary=vary,
+            weight=weight,
+            method=method,
+            fname=fname,
+            twiss_init=twiss_init)
         return self.twiss(sequence=sequence)
 
 
