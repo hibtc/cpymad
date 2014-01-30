@@ -32,7 +32,7 @@ import multiprocessing
 import signal,atexit
 
 from .model_locator import ModelData
-from .madx import madx
+from .madx import Madx
 from cern.pymad import abc
 from cern.pymad.globals import USE_COUCH
 
@@ -593,7 +593,7 @@ class _modelProcess(multiprocessing.Process):
         multiprocessing.Process.__init__(self)
 
     def run(self):
-        _madx=madx(histfile=self.history,recursive_history=self.recursive_history)
+        _madx=Madx(histfile=self.history,recursive_history=self.recursive_history)
         _madx.verbose(False)
 
         def terminator(num, frame):

@@ -18,3 +18,4 @@
 from __future__ import absolute_import
 
 from .model import Model as model
+from .madx import Madx as madx

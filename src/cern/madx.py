@@ -7,4 +7,4 @@ located at cern.cpymad.madx.
 """
 __all__ = ['madx']
 
-from cern.cpymad.madx import madx
+from cern.cpymad import madx

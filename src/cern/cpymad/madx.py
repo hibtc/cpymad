@@ -50,7 +50,7 @@ def _tmp_filename(operation):
     return tmpfile
 
 # main interface
-class madx:
+class Madx(object):
     '''
     Python class which interfaces to Mad-X library
     '''
