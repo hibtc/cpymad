@@ -232,7 +232,8 @@ class Madx(object):
                     else:
                         _tmpcmd+=','+i_var+'='+str(i_val)
         self.command(_tmpcmd+';')
-        return self._libmadx.get_dict_from_mem('twiss',columns,retdict)
+        return rpyc_classic_stdio.obtain(
+            self._libmadx.get_dict_from_mem('twiss',columns,retdict))
 
     def survey(self,
               sequence,
@@ -262,7 +263,7 @@ class Madx(object):
         tab,param=_madx_tools._get_dict(tmpfile,retdict)
         if not fname:
             os.remove(tmpfile)
-        return tab,param
+        return rpyc_classic_stdio.obtain((tab,param))
 
     def aperture(self,
               sequence,
@@ -294,7 +295,8 @@ class Madx(object):
         if fname:
             _cmd+=',file="'+fname+'"'
         self.command(_cmd)
-        return self._libmadx.get_dict_from_mem('aperture',columns,retdict)
+        return rpyc_classic_stdio.obtain(
+            self._libmadx.get_dict_from_mem('aperture',columns,retdict))
 
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')
@@ -450,7 +452,7 @@ class Madx(object):
         result,initial=_madx_tools._read_knobfile(tmpfile, retdict)
         if not fname:
             os.remove(tmpfile)
-        return result,initial
+        return rpyc_classic_stdio.obtain((result,initial))
 
     # turn on/off verbose outupt..
     def verbose(self,switch):
@@ -476,7 +478,7 @@ class Madx(object):
         '''
         Returns the sequences currently in memory
         '''
-        return self._libmadx.get_sequences()
+        return rpyc_classic_stdio.obtain(self._libmadx.get_sequences())
 
     def evaluate(self, cmd):
         """

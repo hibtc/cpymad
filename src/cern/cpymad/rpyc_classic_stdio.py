@@ -26,7 +26,7 @@ any reliable method that works on python2.6. For more information, see:
 http://www.python.org/dev/peps/pep-0446/
 
 """
-__all__ = ['start']
+__all__ = ['start_server', 'obtain']
 
 import logging, os, sys
 
@@ -34,6 +34,7 @@ import rpyc
 import rpyc.utils.classic
 import rpyc.utils.factory
 
+from rpyc.utils.classic import obtain
 
 def start_server():
     """
@@ -44,7 +45,9 @@ def start_server():
 
     """
     args = [sys.executable, '-u', '-m', __name__]
-    return rpyc.utils.factory.connect_subproc(args, rpyc.SlaveService)
+    return rpyc.utils.factory.connect_subproc(
+        args, rpyc.SlaveService,
+        config={'allow_pickle':True})
 
 def server_main():
     """
