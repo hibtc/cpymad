@@ -148,9 +148,6 @@ setup(
         "cern.pymad.tools",
         "cern.pymad.domain"
     ],
-    py_modules=[
-        'rpyc_classic_stdio'
-    ],
     include_package_data=True, # include files matched by MANIFEST.in
     author='PyMAD developers',
     author_email='pymad@cern.ch',

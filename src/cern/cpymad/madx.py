@@ -45,8 +45,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 from . import libmadx
-
-import rpyc_classic_stdio
+from . import rpyc_classic_stdio
 
 import os, sys
 import collections
