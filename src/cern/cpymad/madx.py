@@ -21,21 +21,38 @@
 
 Main module to interface with Mad-X library.
 
+The class Madx uses a subprocess to execute MAD-X library calls via the
+RPyC protocol.
+
+The remote backend is needed due to the fact that cpymad.libmadx is a low
+level binding to the MAD-X library which in turn uses global variables.
+This means that the cpymad.libmadx module has to be loaded within remote
+processes in order to deal with several isolated instances of MAD-X in
+parallel.
+
+Furthermore, this can be used as a security enhancement: if dealing with
+unverified input, we can't be sure that a faulty MAD-X function
+implementation will give access to a secure resource. This can be executing
+all library calls within a subprocess that does not inherit any handles.
+
+NOTE: this feature is only available on python>=2.7. On python2.6 the
+subprocess will inherit every handle in the current process space. This can
+also cause various other side effects (file handles and sockets don't get
+closed).
+
 '''
 from __future__ import absolute_import
 from __future__ import print_function
 
 from . import libmadx
 
-import os,sys
+import rpyc_classic_stdio
+
+import os, sys
 import collections
 import cern.pymad.globals
 from cern.libmadx import _madx_tools
 
-_madstarted=False
-
-# I think this is deprecated..
-_loaded_models=[]
 
 # private utility functions
 def _tmp_filename(operation):
@@ -48,6 +65,8 @@ def _tmp_filename(operation):
         tmpfile = operation + '.' + str(i) + '.temp.tfs'
         i += 1
     return tmpfile
+
+
 
 # main interface
 class Madx(object):
@@ -63,10 +82,10 @@ class Madx(object):
                                        Instead, recursively writing commands from these files when called.
 
         '''
-        global _madstarted
-        if not _madstarted:
-            libmadx.start()
-            _madstarted=True
+        self._conn = rpyc_classic_stdio.start_server()
+        self._libmadx = self._conn.modules['cern.cpymad.libmadx']
+        self._libmadx.start()
+
         if histfile:
             self._hist=True
             self._hfile=open(histfile,'w')
@@ -95,7 +114,8 @@ class Madx(object):
         '''
         if self._rechist:
             self._hfile.close()
-        #libmadx.finish()
+        self._libmadx.finish()
+        self._conn.close()
 
     def command(self,cmd):
         '''
@@ -120,7 +140,7 @@ class Madx(object):
             else:
                 self._writeHist(cmd+'\n')
         if _madx_tools._checkCommand(cmd.lower()):
-            libmadx.input(cmd)
+            self._libmadx.input(cmd)
         return 0
 
     def help(self,cmd=''):
@@ -213,7 +233,7 @@ class Madx(object):
                     else:
                         _tmpcmd+=','+i_var+'='+str(i_val)
         self.command(_tmpcmd+';')
-        return libmadx.get_dict_from_mem('twiss',columns,retdict)
+        return self._libmadx.get_dict_from_mem('twiss',columns,retdict)
 
     def survey(self,
               sequence,
@@ -275,7 +295,7 @@ class Madx(object):
         if fname:
             _cmd+=',file="'+fname+'"'
         self.command(_cmd)
-        return libmadx.get_dict_from_mem('aperture',columns,retdict)
+        return self._libmadx.get_dict_from_mem('aperture',columns,retdict)
 
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')
@@ -457,7 +477,7 @@ class Madx(object):
         '''
         Returns the sequences currently in memory
         '''
-        return libmadx.get_sequences()
+        return self._libmadx.get_sequences()
 
     def evaluate(self, cmd):
         """
@@ -468,5 +488,5 @@ class Madx(object):
         :rtype: float
 
         """
-        return libmadx.evaluate(cmd)
+        return self._libmadx.evaluate(cmd)
 
