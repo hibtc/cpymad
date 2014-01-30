@@ -130,8 +130,8 @@ setup(
     url='http://cern.ch/pymad',
     package_dir={'':'src'},
     ext_modules = cythonize([
-        Extension('cern.madx',
-                  sources=["src/cern/madx.pyx"],
+        Extension('cern.cpymad.madx',
+                  sources=["src/cern/cpymad/madx.pyx"],
                   **extension_args),
         Extension('cern.cpymad.libmadx',
                   sources=["src/cern/cpymad/libmadx.pyx"],
