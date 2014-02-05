@@ -14,9 +14,6 @@ a subprocess.
 """
 from __future__ import print_function
 
-from libc.stdlib cimport free
-from cpython cimport PyObject, Py_INCREF
-
 import numpy as np      # Import the Python-level symbols of numpy
 cimport numpy as np     # Import the C-level symbols of numpy
 
