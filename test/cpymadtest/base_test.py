@@ -16,10 +16,17 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 
+from cern import cpymad
+
+
 # NOTE: Do not inherit from unittest.TestCase, otherwise unittest will try
 # to invoke all the test_xxx methods which makes no sense for this base
 # class.
 class TestCpymad(object):
+
+    def setUp(self):
+        self.model = cpymad.model(self.name)
+        self.model._cmd('option,-twiss_print')
 
     # It's a bit surprising that this doesn't happen by itself.. Hmmm...
     def tearDown(self):
