@@ -48,9 +48,6 @@ cdef extern from "madX/madx.h":
         int curr
         int *i
 
-    struct node:
-        pass
-
     struct name_list:
         char[NAME_L]  name
         int  max                      # max. pointer array size
@@ -66,11 +63,28 @@ cdef extern from "madX/mad_table.h":
         name_list* columns    #names + types (in inform)
         char ***s_cols
 
+cdef extern from "madX/mad_elem.h":
+    cdef struct element:
+        char[NAME_L] name
+        double length
+
+cdef extern from "madX/mad_node.h":
+    cdef struct node:
+        char[NAME_L] name
+        node* previous # previous node
+        node* next     # next node
+        char* base_name
+        element* p_elem # pointer to element..
+
 cdef extern from "madX/madx.h":
     # to be able to read sequence information..
     struct sequence:
         char[NAME_L] name
         table* tw_table       #pointer to latest twiss table created
+        int n_nodes
+        node* start # first node..
+        node* end   # last node..
+        node** all_nodes
 
     # list of sequences..
     struct sequence_list:

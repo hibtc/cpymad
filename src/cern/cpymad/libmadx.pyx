@@ -143,6 +143,63 @@ def get_sequences():
             print("Number of rows:",seqs.sequs[i].tw_table.curr)
     return ret
 
+def get_element_list(sequence_name):
+    '''
+    Returns list of all nodes...
+    '''
+    cdef sequence_list *seqs
+    seqs= madextern_get_sequence_list()
+    for i in xrange(seqs.curr):
+        _sequ_name=seqs.sequs[i].name.decode('utf-8')
+        if _sequ_name==sequence_name:
+            # this is the sequence we were looking for..
+            _sequence=seqs.sequs[i]
+            # this is the final node in the list:
+            end_node_name=_sequence.end.name
+            # start node:
+            current_node=_sequence.start
+            list_of_nodes=[]
+            while current_node.name!=end_node_name: # will this always be correct? (maybe node name is used twice?)
+                list_of_nodes.append(current_node.name)
+                current_node=current_node.next
+            # append the final node:
+            list_of_nodes.append(current_node.name)
+            return list_of_nodes
+    print("Did not find "+sequence_name)
+    return None
+
+def get_element(sequence_name,element_name):
+    '''
+    Returns data of element...
+    '''
+    cdef sequence_list *seqs
+    seqs= madextern_get_sequence_list()
+    for i in xrange(seqs.curr):
+        _sequ_name=seqs.sequs[i].name.decode('utf-8')
+        if _sequ_name==sequence_name:
+            # this is the sequence we were looking for..
+            _sequence=seqs.sequs[i]
+            # this is the final node in the list:
+            end_node_name=_sequence.end.name
+            # start node:
+            current_node=_sequence.start
+            while current_node.name!=end_node_name:
+                if element_name==current_node.name:
+                    print("Found "+element_name)
+                    base_name=current_node.base_name
+                    if str(base_name) in ['rcollimator']: # list of real element types
+                        _el=current_node.p_elem
+                        el_dict={}
+                        el_dict['name']=_el.name
+                        el_dict['length']=_el.length
+                        print("elname: "+_el.name)
+                        return el_dict
+                    else:
+                        print("This is not a real element.. "+base_name)
+                        return dict(base_name=base_name)
+                current_node=current_node.next
+    return None
+    
 def evaluate(cmd):
     """
     Evaluates an expression and returns the result as double.

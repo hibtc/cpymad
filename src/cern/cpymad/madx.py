@@ -504,6 +504,19 @@ class Madx(object):
         '''
         return rpyc_classic_stdio.obtain(self._libmadx.get_sequences())
 
+
+    def get_element_list(self,sequence_name):
+        '''
+        Returns the ...
+        '''
+        return rpyc_classic_stdio.obtain(self._libmadx.get_element_list(sequence_name))
+
+    def get_element(self,sequence_name,element_name):
+        '''
+        Returns the ...
+        '''
+        return rpyc_classic_stdio.obtain(self._libmadx.get_element(sequence_name,element_name))
+
     def evaluate(self, cmd):
         """
         Evaluates an expression and returns the result as double.
