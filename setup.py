@@ -15,6 +15,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
+from setuptools import setup, Extension
+from setuptools.command.build_ext import build_ext as _build_ext
+from distutils.util import get_platform
+from pkg_resources import resource_filename
+import platform
 
 import sys
 from os import path
@@ -22,7 +27,6 @@ from os import path
 # Version of pymad (major,minor):
 PYMADVERSION=['0','5']
 
-from setuptools import setup, Extension
 
 # setuptools.Extension automatically converts all '.pyx' extensions to '.c'
 # extensions if detecting that neither Cython nor Pyrex is available. Early
@@ -49,9 +53,17 @@ else:
             orig_Extension.__init__(self, name, sources, *args, **kwargs)
             self.sources = sources
 
-import platform
-from distutils.util import get_platform
-import numpy
+# Subclass the build_ext command for building C-extensions. This enables to
+# use the ``setup_requires`` argument of setuptools to install a missing
+# numpy dependency, before having to know the location of the numpy header
+# files. All in all, this should make the setup more properly bootstrapped.
+class build_ext(_build_ext):
+    def finalize_options(self):
+        _build_ext.finalize_options(self)
+        # Add location of numpy headers. This can't be reliably done by
+        # importing numpy. The issue is described here:
+        # http://stackoverflow.com/questions/21605927/why-doesnt-setup-requires-work-properly-for-numpy
+        self.include_dirs.append(resource_filename('numpy', 'core/include'))
 
 # parse command line option: --madxdir=/path/to/madxinstallation
 special_madxdir = ''
@@ -79,9 +91,6 @@ includedirs = [path.join(d, 'include')
                if path.isdir(path.join(d, 'include', 'madX'))]
 if not includedirs:
     raise RuntimeError("Cannot find folder with Mad-X headers")
-
-# Add numpy include directory (for cern.libmadx.table):
-includedirs.append(numpy.get_include())
 
 # static library pathes
 libdirs = []        # static library pathes
@@ -129,6 +138,7 @@ setup(
     long_description=long_description,
     url='http://cern.ch/pymad',
     package_dir={'':'src'},
+    cmdclass={'build_ext':build_ext},
     ext_modules = cythonize([
         Extension('cern.madx',
                   sources=["src/cern/madx.pyx"],
@@ -154,6 +164,8 @@ setup(
     include_package_data=True, # include files matched by MANIFEST.in
     author='PyMAD developers',
     author_email='pymad@cern.ch',
+    setup_requires=['numpy'],
+    install_requires=['numpy'],
     license = 'CERN Standard Copyright License'
 )
 
