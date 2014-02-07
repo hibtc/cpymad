@@ -19,7 +19,6 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext as _build_ext
 from distutils.util import get_platform
 from pkg_resources import resource_filename
-import platform
 
 import sys
 from os import path
@@ -65,65 +64,58 @@ class build_ext(_build_ext):
         # http://stackoverflow.com/questions/21605927/why-doesnt-setup-requires-work-properly-for-numpy
         self.include_dirs.append(resource_filename('numpy', 'core/include'))
 
-# parse command line option: --madxdir=/path/to/madxinstallation
-special_madxdir = ''
-for arg in list(sys.argv):  # avoid problems due to side-effects by copying sys.argv into a temporary list
+# Parse command line option: --madxdir=/path/to/madxinstallation. We could
+# use build_ext.user_options instead, but then the --madxdir argument can
+# be passed only to the 'build_ext' command, not to 'build' or 'install',
+# which is a minor nuisance.
+for arg in sys.argv:
     if arg.startswith('--madxdir='):
-        special_madxdir = arg.split('=', maxsplit=1)[1]
         sys.argv.remove(arg)
-
-def add_dir(dirlist, directory):
-    if path.isdir(directory) and directory not in dirlist:
-        dirlist.append(directory)
-
-# guess prefixes for possible header/library locations
-if special_madxdir:
-    _prefixdirs = [special_madxdir]
-else:
-    _prefixdirs = [sys.prefix]
-add_dir(_prefixdirs, '/usr')
-add_dir(_prefixdirs, '/usr/local')
-add_dir(_prefixdirs, path.join(path.expanduser('~'),'.local'))
-
-# extra include pathes: madx
-includedirs = [path.join(d, 'include')
-               for d in _prefixdirs
-               if path.isdir(path.join(d, 'include', 'madX'))]
-if not includedirs:
-    raise RuntimeError("Cannot find folder with Mad-X headers")
-
-# static library pathes
-libdirs = []        # static library pathes
-for prefixdir in _prefixdirs:
-    add_dir(libdirs, path.join(prefixdir,'lib'))
-    if platform.architecture()[0]=='64bit':
-        add_dir(libdirs, path.join(prefixdir,'lib64'))
-
-# runtime library pathes
-rlibdirs = []
-for ldir in libdirs:
-    if any(path.isfile(path.join(ldir,'libmadx.'+suffix))
-           for suffix in ['so','dll','dylib']):
-        rlibdirs = [ldir]
-        libdirs = [ldir]    # overwrites libdirs, is this intentional?
+        madxdir = arg.split('=', maxsplit=1)[1]
+        prefixes = [madxdir]
         break
+else:
+    prefixes = [sys.prefix,
+                '/usr',
+                '/usr/local',
+                path.expanduser('~/.local')]
+
+# Use the first prefix that has a include/madX folder inside:
+for prefix in prefixes:
+    if path.isdir(path.join(prefix, 'include', 'madX')):
+        include_dirs = [path.join(prefix, 'include')]
+        # Take libraries always from the same prefix. This can make us more
+        # confident that they stem from the same version of MAD-X. If there
+        # are no libraries available, the linker will figure out on its
+        # own, and tell us later:
+        lib_path_candidates = [path.join(prefix, 'lib'),
+                               path.join(prefix, 'lib64')]
+        library_dirs = list(filter(path.isdir, lib_path_candidates))
+        break
+else:
+    # Here, we could take counter measures if we found no headers. But: It
+    # is probably better not to insist on our custom search mechanism,
+    # since we might be doing it wrong anyway (headache with multiple
+    # platforms, etc). The compiler will tell us if it can't find a header
+    # anyway.
+    include_dirs = library_dirs = []
 
 # required libraries
-libs = ['madx', 'stdc++']
 if get_platform() == "win32":
-    libs += ['ptc', 'gfortran', 'msvcrt']
+    libraries = ['madx', 'stdc++', 'ptc', 'gfortran', 'msvcrt']
 else:
-    libs += ['c']
+    libraries = ['madx', 'stdc++', 'c']
 
-# common cython arguments
+# Common arguments for the Cython extensions:
 extension_args = dict(
     define_macros=[('MAJOR_VERSION', PYMADVERSION[0]),
                    ('MINOR_VERSION', PYMADVERSION[1])],
-    include_dirs=includedirs,
-    libraries=libs,
-    library_dirs=libdirs,
-    runtime_library_dirs=rlibdirs)
+    libraries=libraries,
+    include_dirs=include_dirs,
+    library_dirs=library_dirs,
+    runtime_library_dirs=library_dirs)
 
+# Compose a long description for PyPI:
 long_description = None
 try:
     long_description = open('README.rst').read()
