@@ -71,33 +71,14 @@ class build_ext(_build_ext):
 for arg in sys.argv:
     if arg.startswith('--madxdir='):
         sys.argv.remove(arg)
-        madxdir = arg.split('=', maxsplit=1)[1]
-        prefixes = [madxdir]
-        break
-else:
-    prefixes = [sys.prefix,
-                '/usr',
-                '/usr/local',
-                path.expanduser('~/.local')]
-
-# Use the first prefix that has a include/madX folder inside:
-for prefix in prefixes:
-    if path.isdir(path.join(prefix, 'include', 'madX')):
+        prefix = arg.split('=', maxsplit=1)[1]
         include_dirs = [path.join(prefix, 'include')]
-        # Take libraries always from the same prefix. This can make us more
-        # confident that they stem from the same version of MAD-X. If there
-        # are no libraries available, the linker will figure out on its
-        # own, and tell us later:
         lib_path_candidates = [path.join(prefix, 'lib'),
                                path.join(prefix, 'lib64')]
         library_dirs = list(filter(path.isdir, lib_path_candidates))
         break
 else:
-    # Here, we could take counter measures if we found no headers. But: It
-    # is probably better not to insist on our custom search mechanism,
-    # since we might be doing it wrong anyway (headache with multiple
-    # platforms, etc). The compiler will tell us if it can't find a header
-    # anyway.
+    # Let's just use the default system headers:
     include_dirs = library_dirs = []
 
 # required libraries
