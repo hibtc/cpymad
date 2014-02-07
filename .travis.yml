@@ -26,17 +26,23 @@ before_install:
 
 # Setup (performed within virtualenv)
 install:
+  # We need to install cython here, since Travis uses the checkout from the
+  # repository which doesn't contain ".c" source files (unlike the source
+  # distribution from PyPI):
+  - pip install cython
+
   # Check that the setup succeeds without having numpy installed first:
   - python setup.py install
 
-  # Uninstall the package but leave the numpy installation untouched:
-  - pip uninstall cern-pymad
+  # Uninstall the package but leave the numpy installation untouched in
+  # order to test the installation from the distribution later on:
+  - pip uninstall cern-pymad --yes
 
   # Note that if we didn't have numpy installed at this point, the following
   # commands would recompile numpy another 3 times (once in sdist and twice
   # during the pip command)!
 
-  # Now install the package again from the source distribution (file on PyPI):
+  # Now install the package again from the source distribution:
   - python setup.py sdist
   - pip install $(ls ./dist/*.tar.gz | sort -rV | head -n1)
 
