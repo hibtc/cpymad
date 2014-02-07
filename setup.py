@@ -18,7 +18,6 @@
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext as _build_ext
 from distutils.util import get_platform
-from pkg_resources import resource_filename
 
 import sys
 from os import path
@@ -59,10 +58,12 @@ else:
 class build_ext(_build_ext):
     def finalize_options(self):
         _build_ext.finalize_options(self)
-        # Add location of numpy headers. This can't be reliably done by
-        # importing numpy. The issue is described here:
-        # http://stackoverflow.com/questions/21605927/why-doesnt-setup-requires-work-properly-for-numpy
-        self.include_dirs.append(resource_filename('numpy', 'core/include'))
+        # Before importing numpy, we need to make sure it doesn't think it
+        # is still during its setup process:
+        __builtins__.__NUMPY_SETUP__ = False
+        import numpy
+        # Add location of numpy headers:
+        self.include_dirs.append(numpy.get_include())
 
 # Parse command line option: --madxdir=/path/to/madxinstallation. We could
 # use build_ext.user_options instead, but then the --madxdir argument can
