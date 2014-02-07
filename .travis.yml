@@ -26,11 +26,17 @@ before_install:
 
 # Setup (performed within virtualenv)
 install:
-  # Resolve dependencies (numpy will also take some time!):
-  - pip install -r requirements.txt
+  # Check that the setup succeeds without having numpy installed first:
+  - python setup.py install
 
-  # Install package (from the source distribution in order to test its
-  # validity as well):
+  # Uninstall the package but leave the numpy installation untouched:
+  - pip uninstall cern-pymad
+
+  # Note that if we didn't have numpy installed at this point, the following
+  # commands would recompile numpy another 3 times (once in sdist and twice
+  # during the pip command)!
+
+  # Now install the package again from the source distribution (file on PyPI):
   - python setup.py sdist
   - pip install $(ls ./dist/*.tar.gz | sort -rV | head -n1)
 
