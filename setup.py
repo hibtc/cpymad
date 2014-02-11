@@ -134,6 +134,9 @@ setup(
                   sources=["src/cern/cpymad/libmadx.pyx"],
                   **extension_args),
     ]),
+    namespace_packages=[
+        'cern'
+    ],
     packages = [
         "cern",
         "cern.libmadx",
