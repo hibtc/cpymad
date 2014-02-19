@@ -224,15 +224,15 @@ class TestEggResource(Common, unittest.TestCase):
         self.assertFalse(os.path.exists(filename))
 
     def test_use_filename_twice(self):
-        with self.res.filename('a.json') as filename:
+        with self.res.filename('a.yml') as filename:
             self.assertTrue(os.path.exists(filename))
         self.assertFalse(os.path.exists(filename))
-        with self.res.filename('a.json') as filename:
+        with self.res.filename('a.yml') as filename:
             self.assertTrue(os.path.exists(filename))
             with open(filename, encoding='utf-8') as f:
                 self.assertEqual(
-                        json.loads(f.read())['path'],
-                        'a.json')
+                        load(f.read())['path'],
+                        'a.yml')
 
 class TestFileResource(Common, unittest.TestCase):
     def setUp(self):
