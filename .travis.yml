@@ -12,6 +12,7 @@ before_install:
   # Build MAD-X (takes a lot of time - should use a binary distribution):
   - svn co http://svnweb.cern.ch/guest/madx/trunk/madX
   - cd madX
+  - patch -p0 -i ../.madx_install_header.patch
   - cmake -DCMAKE_C_COMPILER=gcc
           -DCMAKE_Fortran_COMPILER=gfortran
           -DMADX_STATIC=OFF

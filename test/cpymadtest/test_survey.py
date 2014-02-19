@@ -21,5 +21,4 @@ class TestCpymadSurvey(unittest.TestCase):
             self.assertTrue(hasattr(t1,key))
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestCpymadSurvey)
-    unittest.TextTestRunner(verbosity=1).run(suite)
+    unittest.main()

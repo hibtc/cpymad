@@ -192,6 +192,15 @@ class TestEggResource(Common, unittest.TestCase):
             sys.path.remove(os.path.join(self.base, 'dist', egg))
         super(TestEggResource, self).tearDown()
 
+    def test_is_valid(self):
+        """
+        Check that the test uses a .egg resource.
+
+        Only then the test results confirm that the package is working.
+
+        """
+        self.assertTrue(self.res._is_extracted)
+
     def test_filename(self):
         with self.res.filename('a.yml') as filename:
             with open(filename, encoding='utf-8') as f:
@@ -213,6 +222,17 @@ class TestEggResource(Common, unittest.TestCase):
                         load(f.read())['path'],
                         'subdir/b.yml')
         self.assertFalse(os.path.exists(filename))
+
+    def test_use_filename_twice(self):
+        with self.res.filename('a.json') as filename:
+            self.assertTrue(os.path.exists(filename))
+        self.assertFalse(os.path.exists(filename))
+        with self.res.filename('a.json') as filename:
+            self.assertTrue(os.path.exists(filename))
+            with open(filename, encoding='utf-8') as f:
+                self.assertEqual(
+                        json.loads(f.read())['path'],
+                        'a.json')
 
 class TestFileResource(Common, unittest.TestCase):
     def setUp(self):
