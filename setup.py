@@ -152,6 +152,9 @@ setup(
         "cern.pymad.domain"
     ],
     include_package_data=True, # include files matched by MANIFEST.in
+    install_requires=[
+        'PyYAML'
+    ],
     author='PyMAD developers',
     author_email='pymad@cern.ch',
     license = 'CERN Standard Copyright License'
