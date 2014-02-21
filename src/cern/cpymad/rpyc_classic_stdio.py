@@ -28,7 +28,9 @@ http://www.python.org/dev/peps/pep-0446/
 """
 __all__ = ['start_server', 'obtain']
 
-import logging, os, sys
+import logging
+import os
+import sys
 
 import rpyc
 import rpyc.utils.classic
@@ -49,28 +51,26 @@ def start_server():
         args, rpyc.SlaveService,
         config={'allow_pickle':True})
 
-def server_main():
+def _server_prepare():
     """
-    Create an RPyC slave server that communicates via STDIN and STDOUT.
+    Setup the streams for an RPC server that communicates on STDIN/STDOUT.
 
-    NOTE: The service is run on the STDIN/STDOUT streams that are initially
+    The service is run on the STDIN/STDOUT streams that are initially
     present. The file descriptor for STDOUT is then remapped to console
-    output, i.e. libraries and modules will still be able to perform output.
+    output, i.e. libraries and modules will still be able to perform
+    output.
 
     """
     STDIN = 0       # POSIX file descriptor == sys.stdin.fileno()
     STDOUT = 1
     STDERR = 2
-
     # Duplicate the initial STDIN/STDOUT streams, so they don't get closed
     # when remapping the file descriptors later. These are the streams that
     # are used for IPC with the client:
     ipc_recv = os.fdopen(os.dup(STDIN), 'rb')
     ipc_send = os.fdopen(os.dup(STDOUT), 'wb')
-
     # virtual file name for console (terminal) IO:
     console = 'con:' if sys.platform == 'win32' else '/dev/tty'
-
     # Create new python file objects for STDIN/STDOUT and remap the
     # corresponding file descriptors:
     try:
@@ -78,7 +78,7 @@ def server_main():
         # to use these streams. Note: these objects are currently not
         # flushed automatically when writing to them.
         sys.stdin = open(os.devnull, 'r')
-        sys.stdout = open(console, 'w')
+        sys.stdout = open(console, 'wt')
         # By duplicating the file descriptors to the STDIN/STDOUT file
         # descriptors non-python libraries can make use of these streams as
         # well:
@@ -87,11 +87,15 @@ def server_main():
     except (IOError, OSError):
         sys.stdin = open(os.devnull, 'r')
         sys.stdout = open(os.devnull, 'w')
+    return ipc_recv, ipc_send
 
+def _server_run(recv, send):
+    """
+    Create an RPyC slave server that communicates with the given file objects.
+    """
     logger = logging.getLogger(__name__)
-
     # Now create a slave server on this connection and serve all requests:
-    conn = rpyc.utils.classic.connect_pipes(ipc_recv, ipc_send)
+    conn = rpyc.utils.classic.connect_pipes(recv, send)
     try:
         try:
             conn.serve_all()
@@ -100,7 +104,14 @@ def server_main():
     finally:
         conn.close()
 
-if __name__ == '__main__':
+def server_main():
+    """
+    Do the full job of preparing and running an RPC service.
+    """
+    recv, send = _server_prepare()
     logging.basicConfig(logLevel=logging.INFO)
+    _server_run(recv, send)
+
+if __name__ == '__main__':
     server_main()
 
