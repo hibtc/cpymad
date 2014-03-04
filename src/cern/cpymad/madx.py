@@ -45,7 +45,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 from . import libmadx
-from . import rpyc_classic_stdio
+from . import _libmadx_rpc
 
 import os, sys
 import collections
@@ -86,7 +86,7 @@ class Madx(object):
                                        Instead, recursively writing commands from these files when called.
 
         '''
-        self._conn = rpyc_classic_stdio.LibMadxClient.spawn_subprocess()
+        self._conn = _libmadx_rpc.LibMadxClient.spawn_subprocess()
         self._libmadx = self._conn.libmadx
         self._libmadx.start()
 
