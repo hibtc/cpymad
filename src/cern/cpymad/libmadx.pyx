@@ -17,74 +17,11 @@ from __future__ import print_function
 import numpy as np      # Import the Python-level symbols of numpy
 cimport numpy as np     # Import the C-level symbols of numpy
 
-
 # Numpy must be initialized. When using numpy from C or Cython you must
 # _always_ do that, or you will have segfaults
 np.import_array()
 
-
-cdef _split_header_line(header_line):
-    header_line = header_line.decode('utf-8')
-    hsplit=header_line.split()
-    if len(hsplit)!=4 or hsplit[0]!='@':
-        raise ValueError("Could not read header line: %s" % header_line)
-    key=hsplit[1]
-    value=hsplit[3]
-    if hsplit[2]=="%le":
-        value=float(value)
-    return key,value
-
-def get_table(table, columns):
-    """
-    Get data from the specified tables.
-
-    :param str table: table name
-    :param list columns: column names
-    :returns: the data in the requested columns
-    :rtype: dict
-
-    CAUTION: Numeric data is wrapped in numpy arrays but not copied. Make
-    sure to copy all data before invoking any further MAD-X commands!
-
-    """
-    ret={}
-    cdef column_info info
-    cdef char_p_array *header
-    cdef char** char_tmp
-    cdef np.npy_intp shape[1]
-
-    # reading the header information..
-    table = table.encode('utf-8')
-    header = <char_p_array*>table_get_header(table)
-    ret_header={}
-    for i in xrange(header.curr):
-        key,value=_split_header_line(header.p[i])
-        ret_header[key]=value
-
-    # reading the columns that were requested..
-    for c in columns:
-        col_bytes = c.encode('utf-8')
-        info=table_get_column(table,col_bytes)
-        dtype = <bytes>info.datatype
-        if dtype==b'd':
-            shape[0] = <np.npy_intp> info.length
-            ret[c.lower()] = np.PyArray_SimpleNewFromData(
-                1, shape, np.NPY_DOUBLE, info.data)
-        elif dtype==b'S':
-            char_tmp=<char**>info.data
-            ret[c.lower()]=np.zeros(info.length,'S%d'%info.datasize)
-            for i in xrange(info.length):
-                ret[c.lower()][i]=char_tmp[i]
-        elif dtype==b'V':
-            print("ERROR:",c,"is not available in table",table)
-        else:
-            print("Unknown datatype",dtype,c)
-
-    return ret,ret_header
-
-
 # Python-level binding to libmadx:
-
 def start():
     """
     Initialize MAD-X.
@@ -143,6 +80,61 @@ def get_sequences():
             print("Number of rows:",seqs.sequs[i].tw_table.curr)
     return ret
 
+def get_table_summary(table):
+    """
+    Get table summary.
+
+    :param str table: table name
+    :returns: mapping of {column: value}
+    :rtype: dict
+
+    """
+    cdef char_p_array *header
+    ctable = table.encode('utf-8')
+    header = <char_p_array*> table_get_header(ctable)
+    return dict(_split_header_line(header.p[i])
+                for i in range(header.curr))
+
+def get_table_column(table, column):
+    """
+    Get data from the specified table.
+
+    :param str table: table name
+    :param str columns: column name
+    :returns: the data in the requested column
+    :rtype: numpy.array
+    :raises ValueError: if the column cannot be found in the table
+    :raises RuntimeError: if the column has unknown type
+
+    CAUTION: Numeric data is wrapped in numpy arrays but not copied. Make
+    sure to copy all data before invoking any further MAD-X commands! This
+    is done automatically for you if using libmadx in a remote service
+    (pickle serialization effectively copies the data).
+
+    """
+    cdef column_info info
+    cdef char** char_tmp
+    cdef np.npy_intp shape[1]
+    ccol = column.encode('utf-8')
+    info = table_get_column(table, ccol)
+    dtype = <bytes> info.datatype
+    # double:
+    if dtype == b'd':
+        shape[0] = <np.npy_intp> info.length
+        return np.PyArray_SimpleNewFromData(1, shape, np.NPY_DOUBLE, info.data)
+    # string:
+    elif dtype == b'S':
+        char_tmp = <char**> info.data
+        return np.array([char_tmp[i] for i in xrange(info.length)])
+    # invalid:
+    elif dtype == b'V':
+        raise ValueError("Column '' is not in table ''."
+                         % (column, table))
+    # unknown:
+    else:
+        raise RuntimeError("Unknown datatype '%s' in column ''."
+                           % (dtype.decode(), column))
+
 def evaluate(cmd):
     """
     Evaluates an expression and returns the result as double.
@@ -165,4 +157,14 @@ def evaluate(cmd):
     value = expression_value(expr, 2)
     delete_expression(expr)
     return value
+
+# internal functions
+cdef _split_header_line(header_line):
+    _, key, kind, value = header_line.decode('utf-8').split(3)
+    if kind == "%le":
+        return key, float(value)    # convert to number
+    elif kind.endswith('s'):
+        return key, value[1:-1]     # strip quotes from string
+    else:
+        return key, value           # 
 
