@@ -29,7 +29,10 @@ http://www.python.org/dev/peps/pep-0446/
 __all__ = ['LibMadxClient']
 
 import sys
-import pickle
+try:                # python2's cPickle is accelerated version of pickle
+    import cPickle as pickle
+except ImportError: # python3 automatically import accelerated version
+    import pickle
 
 
 def remap_stdio():
@@ -86,7 +89,9 @@ class Connection(object):
         return pickle.load(self._recv)
     def send(self, data):
         """Send a pickled message to the remote end."""
-        return pickle.dump(data, self._send)
+        # '-1' instructs pickle to use the latest protocol version. This
+        # improves performance by a factor ~50-100 in my tests:
+        return pickle.dump(data, self._send, -1)
     def close(self):
         self._recv.close()
         self._send.close()
