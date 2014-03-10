@@ -160,7 +160,7 @@ def evaluate(cmd):
 
 # internal functions
 cdef _split_header_line(header_line):
-    _, key, kind, value = header_line.decode('utf-8').split(3)
+    _, key, kind, value = header_line.decode('utf-8').split(None, 3)
     if kind == "%le":
         return key, float(value)    # convert to number
     elif kind.endswith('s'):
