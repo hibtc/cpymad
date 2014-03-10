@@ -27,7 +27,10 @@ __all__ = ['LibMadxClient']
 
 import os
 import sys
-from ._connection.pickle import Connection
+if sys.platform == 'linux':
+    from ._connection.multiprocessing import Connection
+else:
+    from ._connection.pickle import Connection
 
 def remap_stdio():
     """
