@@ -155,6 +155,12 @@ class Connection(object):
         send.close()
         return cls.from_fd(recv_fd, send_fd)
 
+    @classmethod
+    def to_subprocess(cls, args):
+        from subprocess import Popen, PIPE
+        proc = Popen(args, stdin=PIPE, stdout=PIPE)
+        conn = cls.from_stream(proc.stdout, proc.stdin)
+        return conn
 
 # Client side code:
 class Client(object):
@@ -190,10 +196,8 @@ class Client(object):
         performed via its STDIO streams.
 
         """
-        from subprocess import Popen, PIPE
         args = [sys.executable, '-u', '-m', entry]
-        proc = Popen(args, stdin=PIPE, stdout=PIPE)
-        conn = Connection.from_stream(proc.stdout, proc.stdin)
+        conn = Connection.to_subprocess(args)
         return cls(conn)
 
     def close(self):
