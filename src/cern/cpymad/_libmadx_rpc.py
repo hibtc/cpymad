@@ -50,23 +50,21 @@ def reopen_stdio():
     # virtual file name for console (terminal) IO:
     console = 'con:' if sys.platform == 'win32' else '/dev/tty'
     # Create new python file objects for STDIN/STDOUT and remap the
-    # corresponding file descriptors:
+    # corresponding file descriptors: Reopen python standard streams. This
+    # enables all python modules to use these streams. Note: the stdout
+    # buffer length is set to '1', making it line buffered, which behaves
+    # like the default in most circumstances.
+    sys.stdin = open(os.devnull, 'rt')
     try:
-        # Reopen python standard streams. This enables all python modules
-        # to use these streams. Note: the stdout buffer length is set to
-        # zero, so it doesn't need to be flushed after each write. This
-        # requires the stream to be opened in binary mode on python3, which
-        # might have some unexpected effects.
-        sys.stdin = open(os.devnull, 'rb', 0)
-        sys.stdout = open(console, 'wb', 0)
-        # By duplicating the file descriptors to the STDIN/STDOUT file
-        # descriptors non-python libraries can make use of these streams as
-        # well:
-        os.dup2(sys.stdin.fileno(), STDIN)
-        os.dup2(sys.stdout.fileno(), STDOUT)
+        sys.stdout = open(console, 'wt', 1)
     except (IOError, OSError):
-        sys.stdin = open(os.devnull, 'rb', 0)
-        sys.stdout = open(os.devnull, 'wb', 0)
+        sys.stdout = open(os.devnull, 'wt', 1)
+    # By duplicating the file descriptors to the STDIN/STDOUT file
+    # descriptors non-python libraries can make use of these streams as
+    # well:
+    os.dup2(sys.stdin.fileno(), STDIN)
+    os.dup2(sys.stdout.fileno(), STDOUT)
+
 
 class Connection(object):
     """
