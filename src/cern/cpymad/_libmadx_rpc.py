@@ -28,6 +28,7 @@ http://www.python.org/dev/peps/pep-0446/
 """
 __all__ = ['LibMadxClient']
 
+import os
 import sys
 try:                # python2's cPickle is accelerated version of pickle
     import cPickle as pickle
@@ -35,12 +36,9 @@ except ImportError: # python3 automatically import accelerated version
     import pickle
 
 
-def remap_stdio():
+def reopen_stdio():
     """
     Setup the streams for an RPC server that communicates on STDIN/STDOUT.
-
-    :returns: old stdin, old stdout
-    :rtype: tuple
 
     The service is run on the STDIN/STDOUT streams that are initially
     present. The file descriptor for STDOUT is then remapped to console
@@ -48,15 +46,8 @@ def remap_stdio():
     output.
 
     """
-    import os
     STDIN = 0       # POSIX file descriptor == sys.stdin.fileno()
     STDOUT = 1
-    STDERR = 2
-    # Duplicate the initial STDIN/STDOUT streams, so they don't get closed
-    # when remapping the file descriptors later. These are the streams that
-    # are used for IPC with the client:
-    ipc_recv = os.fdopen(os.dup(STDIN), 'rb')
-    ipc_send = os.fdopen(os.dup(STDOUT), 'wb', 0)
     # virtual file name for console (terminal) IO:
     console = 'con:' if sys.platform == 'win32' else '/dev/tty'
     # Create new python file objects for STDIN/STDOUT and remap the
@@ -65,8 +56,8 @@ def remap_stdio():
         # Reopen python standard streams. This enables all python modules
         # to use these streams. Note: these objects are currently not
         # flushed automatically when writing to them.
-        sys.stdin = open(os.devnull, 'r')
-        sys.stdout = open(console, 'wt', 0)
+        sys.stdin = open(os.devnull, 'rb', 0)
+        sys.stdout = open(console, 'wb', 0)
         # By duplicating the file descriptors to the STDIN/STDOUT file
         # descriptors non-python libraries can make use of these streams as
         # well:
@@ -75,7 +66,6 @@ def remap_stdio():
     except (IOError, OSError):
         sys.stdin = open(os.devnull, 'r')
         sys.stdout = open(os.devnull, 'w', 0)
-    return ipc_recv, ipc_send
 
 class Connection(object):
     """
@@ -99,6 +89,27 @@ class Connection(object):
     def closed(self):
         return self._recv.closed and self._send.closed
 
+    @classmethod
+    def from_fd(cls, recv_fd, send_fd):
+        """Create a new Connection object from the given file descriptors."""
+        return cls(os.fdopen(recv_fd, 'rb', 0),
+                   os.fdopen(send_fd, 'wb', 0))
+
+    @classmethod
+    def from_stream(cls, recv, send):
+        """
+        Create a new Connection object using the given streams.
+
+        The given stream objects invalidated (closed) so they cannot
+        accidentally be used anywhere else.
+
+        """
+        recv_fd = os.dup(recv.fileno())
+        send_fd = os.dup(send.fileno())
+        recv.close()
+        send.close()
+        return cls.from_fd(recv_fd, send_fd)
+
 
 # Client side code:
 class Client(object):
@@ -119,7 +130,7 @@ class Client(object):
         from subprocess import Popen, PIPE
         args = [sys.executable, '-u', '-m', __name__]
         proc = Popen(args, stdin=PIPE, stdout=PIPE)
-        conn = Connection(proc.stdout, proc.stdin)
+        conn = Connection.from_stream(proc.stdout, proc.stdin)
         return cls(conn)
 
     def close(self):
@@ -153,7 +164,9 @@ class Service(object):
     @classmethod
     def stdio_main(cls):
         """Do the full job of preparing and running an RPC service."""
-        cls(Connection(*remap_stdio())).run()
+        conn = Connection.from_stream(sys.stdin, sys.stdout)
+        reopen_stdio()
+        cls(conn).run()
 
     def run(self):
         import logging
