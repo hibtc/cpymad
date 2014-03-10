@@ -25,6 +25,7 @@ from __future__ import absolute_import
 
 __all__ = ['LibMadxClient']
 
+import traceback
 import os
 import sys
 if sys.platform == 'linux':
@@ -230,7 +231,9 @@ class Service(object):
 
     def _reply_exception(self, exc_info):
         """Return an exception state to the client."""
-        self._conn.send(('exception', (exc_info[1],)))
+        message = exc_info[0](
+            "\n" + "".join(traceback.format_exception(*exc_info))),
+        self._conn.send(('exception', message))
 
 class LibMadxClient(Client):
     """
