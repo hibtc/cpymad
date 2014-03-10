@@ -151,7 +151,6 @@ setup(
     include_package_data=True, # include files matched by MANIFEST.in
     install_requires=[
         'PyYAML',
-        'rpyc>=3.2'
     ],
     author='PyMAD developers',
     author_email='pymad@cern.ch',
