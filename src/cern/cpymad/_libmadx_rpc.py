@@ -318,8 +318,8 @@ class LibMadxService(Service):
 
     """
     def _dispatch_libmadx(self, funcname, args, kwargs):
-        import libmadx
-        function = getattr(libmadx, funcname)
+        import cern.cpymad.libmadx
+        function = getattr(cern.cpymad.libmadx, funcname)
         return function(*args, **kwargs)
 
 if __name__ == '__main__':
