@@ -115,8 +115,9 @@ def get_table_column(table, column):
     cdef column_info info
     cdef char** char_tmp
     cdef np.npy_intp shape[1]
+    ctab = table.encode('utf-8')
     ccol = column.encode('utf-8')
-    info = table_get_column(table, ccol)
+    info = table_get_column(ctab, ccol)
     dtype = <bytes> info.datatype
     # double:
     if dtype == b'd':
