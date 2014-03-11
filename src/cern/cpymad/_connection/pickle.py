@@ -79,6 +79,13 @@ class Connection(object):
 
     @classmethod
     def to_subprocess(cls, args):
+        """
+        Establish connection to a new remote process.
+
+        :param list args: arguments for the subprocess
+        :returns: connection to subprocess
+
+        """
         from subprocess import Popen, PIPE
         proc = Popen(args, stdin=PIPE, stdout=PIPE)
         conn = cls.from_stream(proc.stdout, proc.stdin)
