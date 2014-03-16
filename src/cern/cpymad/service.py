@@ -20,24 +20,27 @@ Created on 16 Aug 2011
 
 .. moduleauthor:: Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen[at]cern.ch>
 '''
+from __future__ import absolute_import
+
 from cern.pymad.abc.service import PyMadService
 from cern.pymad.globals import USE_COUCH
-from cern.cpymad import model
-from cern.cpymad.model_locator import ChainModelLocator
+
+from .model import Model
+from .model_locator import ChainModelLocator
 
 
 # Create a default ModelLocator:
 # NOTE: we could (and probably should) stop using this global object and
 # use only CpymadService objects instead!
 if USE_COUCH:
-    from cern.cpymad import _couch
-    from cern.cpymad.model_locator import DistinctModelLocator
+    from . import _couch
+    from .model_locator import DistinctModelLocator
     from cern.resource.couch import CouchResource
 
     _couch_server=_couch.couch.Server()
     _locator = DistinctModelLocator(CouchResource(_couch_server._db))
 else:
-    from cern.cpymad.model_locator import MergedModelLocator
+    from .model_locator import MergedModelLocator
     from cern.resource.package import PackageResource
 
     _locator = MergedModelLocator(PackageResource(__package__, '_models'))
@@ -76,7 +79,7 @@ class CpymadService(PyMadService):
 
     def create_model(self, modeldef):
         self._models.append(
-            model(self.model_locator.get_model(modeldef)))
+            Model(self.model_locator.get_model(modeldef)))
         self._am=self._models[-1]
         return self._am
 

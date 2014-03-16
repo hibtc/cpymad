@@ -57,7 +57,7 @@ import numpy
 special_madxdir = ''
 for arg in list(sys.argv):  # avoid problems due to side-effects by copying sys.argv into a temporary list
     if arg.startswith('--madxdir='):
-        special_madxdir = arg.split('=', maxsplit=1)[1]
+        special_madxdir = arg.split('=', 1)[1]
         sys.argv.remove(arg)
 
 def add_dir(dirlist, directory):
@@ -130,11 +130,8 @@ setup(
     url='http://cern.ch/pymad',
     package_dir={'':'src'},
     ext_modules = cythonize([
-        Extension('cern.madx',
-                  sources=["src/cern/madx.pyx"],
-                  **extension_args),
-        Extension('cern.libmadx.table',
-                  sources=["src/cern/libmadx/table.pyx"],
+        Extension('cern.cpymad.libmadx',
+                  sources=["src/cern/cpymad/libmadx.pyx"],
                   **extension_args),
     ]),
     packages = [
@@ -143,6 +140,7 @@ setup(
         "cern.resource",
         "cern.cpymad",
         "cern.cpymad._couch",
+        "cern.cpymad._connection",
         "cern.jpymad",
         "cern.jpymad.tools",
         "cern.pymad",
@@ -153,10 +151,10 @@ setup(
     ],
     include_package_data=True, # include files matched by MANIFEST.in
     install_requires=[
-        'PyYAML'
+        'PyYAML',
     ],
     author='PyMAD developers',
     author_email='pymad@cern.ch',
-    license = 'CERN Standard Copyright License'
+    license = 'CERN Standard Copyright License',
 )
 

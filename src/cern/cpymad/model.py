@@ -25,16 +25,15 @@ See also :py:class:`cern.pymad.model`
 
 '''
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
-import yaml, os, sys
-import multiprocessing
-import signal,atexit
+import yaml
+import os
+import sys
 
-from cern.cpymad import model_locator
-from cern.madx import madx
+from .model_locator import ModelData
+from .madx import Madx
 from cern.pymad import abc
-from cern.pymad.globals import USE_COUCH
 
 
 class Model(abc.model.PyMadModel):
@@ -61,12 +60,15 @@ class Model(abc.model.PyMadModel):
         own custom cern.cpymad.model_locator.ModelLocator.
 
         """
-        from cern.cpymad.service import default_model_locator
+        from .service import default_model_locator
         mdata = default_model_locator.get_model(model)
         return cls(mdata, *args, **kwargs)
 
 
-    def __init__(self, model, sequence='',optics='',histfile='',recursive_history=False):
+    def __init__(self, model,
+                 sequence='',optics='',
+                 histfile='',recursive_history=False,
+                 madx=None):
         """
         Construct a Model object.
 
@@ -81,26 +83,17 @@ class Model(abc.model.PyMadModel):
         preferred Model.from_name() constructor.
 
         """
-        if isinstance(model, model_locator.ModelData):
+        self._madx = madx or Madx(histfile, recursive_history)
+        self._madx.verbose(False)
+
+        if isinstance(model, ModelData):
             mdata = model
         else:
-            from cern.cpymad.service import default_model_locator
+            from .service import default_model_locator
             mdata = default_model_locator.get_model(model)
 
         self.mdata = mdata
         self._mdef = mdata.model
-
-        # Defining two pipes which are used for communicating...
-        _child_pipe_recv,_parent_send=multiprocessing.Pipe(False)
-        _parent_recv,_child_pipe_send=multiprocessing.Pipe(False)
-        self._send=_parent_send.send
-        self._recv=_parent_recv.recv
-
-        self._mprocess=_modelProcess(_child_pipe_send,_child_pipe_recv,self.name,histfile,recursive_history)
-
-        self._mprocess.start()
-
-        atexit.register(self._mprocess.terminate)
 
         self._active={'optic':'','sequence':'','range':''}
 
@@ -204,15 +197,10 @@ class Model(abc.model.PyMadModel):
             bcmd+=','+k+'='+str(v)
         if sys.flags.debug:
             print("Beam command: "+bcmd)
-        self._cmd(bcmd)
+        self._madx.command(bcmd)
 
-
-    def __del__(self):
-        try:
-            self._send('delete_model')
-            self._mprocess.join(5)
-        except TypeError: pass
-        except AttributeError: pass
+    def _cmd(self, cmd):
+        return self._madx.command(cmd)
 
     def __str__(self):
         return self.name
@@ -232,7 +220,7 @@ class Model(abc.model.PyMadModel):
         if sys.flags.debug:
             print("Calling file: "+filepath)
 
-        return self._sendrecv(('call',filepath))
+        return self._madx.call(filepath)
 
     def evaluate(self, expr):
         """
@@ -241,7 +229,7 @@ class Model(abc.model.PyMadModel):
         :param string expr:
 
         """
-        return self._sendrecv(('evaluate',expr))
+        return self._madx.evaluate(expr)
 
     def has_sequence(self,sequence):
         '''
@@ -293,13 +281,13 @@ class Model(abc.model.PyMadModel):
         kdict=self._mdef['knobs']
         for e in kdict[knob]:
             val=str(kdict[knob][e]*value)
-            self._cmd(e+"="+val)
+            self._madx.command(e+"="+val)
 
     def get_sequences(self):
         '''
          Returns a list of loaded sequences.
         '''
-        return self._sendrecv('get_sequences')
+        return self._madx.get_sequences()
 
     def list_optics(self):
         '''
@@ -366,8 +354,6 @@ class Model(abc.model.PyMadModel):
          :param bool retdict: Return dictionaries (default is an extended LookUpDict).
          :param bool use: Call use before twiss.
         '''
-        from cern.pymad.domain import TfsTable, TfsSummary
-
         # set sequence/range...
         if madrange:
             self.set_sequence(sequence,madrange)
@@ -382,22 +368,29 @@ class Model(abc.model.PyMadModel):
         seqdict=self._mdef['sequences'][sequence]
         rangedict=seqdict['ranges'][_madrange]
 
-        args={'sequence':sequence,'columns':columns,'pattern':pattern,'fname':fname,'use':use}
-        args['madrange']=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]]
-        args['twiss-init']=None
         if 'twiss-initial-conditions' in rangedict:
-            args['twiss-init']={}
-            for condition,value in self._get_twiss_initial(sequence,_madrange).items():
-                if value:
-                    args['twiss-init'][condition]=value
-        t,s=self._sendrecv(('twiss',args))
+            # this looks like a bug check to me (0 evaluates to False):
+            twiss_init = dict(
+                (key, val)
+                for key, val in self._get_twiss_initial(sequence,_madrange).items()
+                if val)
+        else:
+            twiss_init = None
+
+        t,s = self._madx.twiss(
+            sequence=sequence,
+            pattern=pattern,
+            columns=columns,
+            madrange=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]],
+            fname=fname,
+            retdict=retdict,
+            twiss_init=twiss_init,
+            use=use)
         # we say that when the "full" range has been selected,
         # we can set this to true. Needed for e.g. aperture calls
         if not madrange:
             self._twisscalled[sequence]=True
-        if retdict:
-            return t,s
-        return TfsTable(t),TfsSummary(s)
+        return t, s
 
     def survey(self,
                sequence='',
@@ -423,16 +416,13 @@ class Model(abc.model.PyMadModel):
             rangedict=self._get_range_dict(sequence=sequence,madrange=madrange)
             this_range=rangedict['madx-range']
 
-        args={'sequence':sequence,
-              'columns':columns,
-              'madrange':this_range,
-              'fname':fname,
-              'use':use}
-        t,s=self._sendrecv(('survey',args))
-        if retdict:
-            return t,s
-        from cern.pymad.domain import TfsTable, TfsSummary
-        return TfsTable(t),TfsSummary(s)
+        return self._madx.survey(
+            sequence=sequence,
+            columns=columns,
+            madrange=this_range,
+            fname=fname,
+            use=use,
+            retdict=retdict)
 
     def aperture(self,
                sequence='',
@@ -451,7 +441,6 @@ class Model(abc.model.PyMadModel):
          :param bool retdict: Return dictionaries (default is an extended LookUpDict).
          :param bool use: Call use before aperture.
         '''
-        from cern.pymad.domain import TfsTable, TfsSummary
         self.set_sequence(sequence)
         sequence=self._active['sequence']
 
@@ -473,23 +462,19 @@ class Model(abc.model.PyMadModel):
             if 'aper-offset' in rangedict:
                 offsets = self.mdata.get_by_dict(rangedict['aper-offset']).filename()
 
-        args={'sequence':sequence,
-            'madrange':this_range,
-            'columns':columns,
-            'fname':fname,
-            'use':use}
+        args={'sequence': sequence,
+              'madrange': this_range,
+              'columns': columns,
+              'fname': fname,
+              'use': use,
+              'retdict': retdict}
 
         if offsets:
             with offsets as offsets_filename:
-                args['offsets'] = offsets_filename
-                t,s=self._sendrecv(('aperture',args))
+                return self._madx.aperture(offsets=offsets_filename, **args)
         else:
-            args['offsets'] = ''
-            t,s=self._sendrecv(('aperture',args))
+            return self._madx.aperture(**args)
 
-        if retdict:
-            return t,s
-        return TfsTable(t),TfsSummary(s)
 
     def match(
             self,
@@ -505,8 +490,6 @@ class Model(abc.model.PyMadModel):
 
         See :func:`cern.madx.match` for a description of the parameters.
         """
-        from cern.pymad.domain.tfs import LookupDict
-
         # set sequence/range...
         self.set_sequence(sequence)
         sequence=self._active['sequence']
@@ -515,27 +498,27 @@ class Model(abc.model.PyMadModel):
         seqdict=self._mdef['sequences'][sequence]
         rangedict=seqdict['ranges'][_madrange]
 
-        args = {'sequence': sequence,
-                'constraints': constraints,
-                'vary': vary,
-                'weight': weight,
-                'method': method,
-                'fname': fname}
-        args['madrange']=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]]
-
         def is_match_param(v):
             return v.lower() in ['rmatrix', 'chrom', 'beta0', 'deltap',
                     'betx','alfx','mux','x','px','dx','dpx',
                     'bety','alfy','muy','y','py','dy','dpy' ]
 
-        args['twiss-init']=None
         if 'twiss-initial-conditions' in rangedict:
-            args['twiss-init']={}
-            for condition,value in self._get_twiss_initial(sequence,_madrange).items():
-                if is_match_param(condition):
-                    args['twiss-init'][condition]=value
+            twiss_init = dict(
+                (key, val)
+                for key, val in self._get_twiss_initial(sequence,_madrange).items()
+                if is_match_param(key))
+        else:
+            twiss_init = None
 
-        result,initial=self._sendrecv(('match',args))
+        self._madx.match(
+            sequence=sequence,
+            constraints=constraints,
+            vary=vary,
+            weight=weight,
+            method=method,
+            fname=fname,
+            twiss_init=twiss_init)
         return self.twiss(sequence=sequence)
 
 
@@ -557,15 +540,6 @@ class Model(abc.model.PyMadModel):
             self.set_range(madrange)
         return seqdict['ranges'][self._active['range']]
 
-    def _cmd(self,command):
-        self._send(('command',command))
-        return self._recv()
-    def _sendrecv(self,func):
-        if sys.flags.debug:
-            print("Sending function call "+str(func))
-        self._send(func)
-        return self._recv()
-
 
 
 def save_model(model_def,filename):
@@ -578,78 +552,4 @@ def save_model(model_def,filename):
     once it is ready.
     '''
     yaml.safe_dump(model_def,stream=open(filename,'w'))
-
-class _modelProcess(multiprocessing.Process):
-    def __init__(self,sender,receiver,model,history='',recursive_history=False):
-        self.sender=sender
-        self.receiver=receiver
-        self.model=model
-        self.history=history
-        self.recursive_history=recursive_history
-        multiprocessing.Process.__init__(self)
-
-    def run(self):
-        _madx=madx(histfile=self.history,recursive_history=self.recursive_history)
-        _madx.verbose(False)
-
-        def terminator(num, frame):
-             sys.exit()
-        signal.signal(signal.SIGTERM, terminator)
-
-        while True:
-            if self.receiver.poll(2):
-                cmd=self.receiver.recv()
-                if cmd=='delete_model':
-                    self.sender.close()
-                    self.receiver.close()
-                    break
-                elif cmd[0]=='call':
-                    _madx.call(cmd[1])
-                    self.sender.send('done')
-                elif cmd=='get_sequences':
-                    self.sender.send( _madx.get_sequences())
-                elif cmd[0]=='command':
-                    _madx.command(cmd[1])
-                    self.sender.send('done')
-                elif cmd[0]=='twiss':
-                    t,s=_madx.twiss(sequence=cmd[1]['sequence'],
-                                     columns=cmd[1]['columns'],
-                                     pattern=cmd[1]['pattern'],
-                                     fname=cmd[1]['fname'],
-                                     twiss_init=cmd[1]['twiss-init'],
-                                     use=cmd[1]['use'],
-                                     retdict=True)
-                    self.sender.send((t,s))
-                elif cmd[0]=='survey':
-                    t,s=_madx.survey(sequence=cmd[1]['sequence'],
-                                     columns=cmd[1]['columns'],
-                                     fname=cmd[1]['fname'],
-                                     use=cmd[1]['use'],
-                                     retdict=True)
-                    self.sender.send((t,s))
-                elif cmd[0]=='aperture':
-                    t,s=_madx.aperture(sequence=cmd[1]['sequence'],
-                                       madrange=cmd[1]['madrange'],
-                                       columns=cmd[1]['columns'],
-                                       offsets=cmd[1]['offsets'],
-                                       fname=cmd[1]['fname'],
-                                       use=cmd[1]['use'],
-                                       retdict=True)
-                    self.sender.send((t,s))
-                elif cmd[0] == 'match':
-                    r,i=_madx.match(
-                            sequence=cmd[1]['sequence'],
-                            constraints=cmd[1]['constraints'],
-                            vary=cmd[1]['vary'],
-                            weight=cmd[1]['weight'],
-                            method=cmd[1]['method'],
-                            fname=cmd[1]['fname'],
-                            twiss_init=cmd[1]['twiss-init'],
-                            retdict=True)
-                    self.sender.send((r,i))
-                elif cmd[0] == 'evaluate':
-                    r = _madx.evaluate(cmd[1])
-                    self.sender.send(r)
-                else:
-                    raise ValueError("You sent a wrong command to subprocess: "+str(cmd))
 
