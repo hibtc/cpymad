@@ -57,7 +57,7 @@ import numpy
 special_madxdir = ''
 for arg in list(sys.argv):  # avoid problems due to side-effects by copying sys.argv into a temporary list
     if arg.startswith('--madxdir='):
-        special_madxdir = arg.split('=', maxsplit=1)[1]
+        special_madxdir = arg.split('=', 1)[1]
         sys.argv.remove(arg)
 
 def add_dir(dirlist, directory):
