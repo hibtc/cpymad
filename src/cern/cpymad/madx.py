@@ -21,8 +21,8 @@
 
 Main module to interface with Mad-X library.
 
-The class Madx uses a subprocess to execute MAD-X library calls via the
-RPyC protocol.
+The class Madx uses a subprocess to execute MAD-X library calls remotely via
+a simple RPC protocol.
 
 The remote backend is needed due to the fact that cpymad.libmadx is a low
 level binding to the MAD-X library which in turn uses global variables.
@@ -44,11 +44,10 @@ closed).
 from __future__ import absolute_import
 from __future__ import print_function
 
-from . import libmadx
-from . import _libmadx_rpc
-
 import os, sys
 import collections
+
+from . import _libmadx_rpc
 import cern.pymad.globals
 from cern.libmadx import _madx_tools
 from cern.pymad.domain.tfs import TfsTable,TfsSummary
