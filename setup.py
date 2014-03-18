@@ -20,7 +20,7 @@ import sys
 from os import path
 
 # Version of pymad (major,minor):
-PYMADVERSION=['0','5']
+PYMADVERSION=['0','6']
 
 from setuptools import setup, Extension
 
@@ -57,7 +57,7 @@ import numpy
 special_madxdir = ''
 for arg in list(sys.argv):  # avoid problems due to side-effects by copying sys.argv into a temporary list
     if arg.startswith('--madxdir='):
-        special_madxdir = arg.split('=', maxsplit=1)[1]
+        special_madxdir = arg.split('=', 1)[1]
         sys.argv.remove(arg)
 
 def add_dir(dirlist, directory):
@@ -140,6 +140,7 @@ setup(
         "cern.resource",
         "cern.cpymad",
         "cern.cpymad._couch",
+        "cern.cpymad._connection",
         "cern.jpymad",
         "cern.jpymad.tools",
         "cern.pymad",
@@ -149,11 +150,11 @@ setup(
         "cern.pymad.domain"
     ],
     include_package_data=True, # include files matched by MANIFEST.in
+    install_requires=[
+        'PyYAML',
+    ],
     author='PyMAD developers',
     author_email='pymad@cern.ch',
     license = 'CERN Standard Copyright License',
-    install_requires=[
-        'rpyc>=3.2'
-    ]
 )
 

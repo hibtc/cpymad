@@ -21,8 +21,8 @@
 
 Main module to interface with Mad-X library.
 
-The class Madx uses a subprocess to execute MAD-X library calls via the
-RPyC protocol.
+The class Madx uses a subprocess to execute MAD-X library calls remotely via
+a simple RPC protocol.
 
 The remote backend is needed due to the fact that cpymad.libmadx is a low
 level binding to the MAD-X library which in turn uses global variables.
@@ -44,11 +44,10 @@ closed).
 from __future__ import absolute_import
 from __future__ import print_function
 
-from . import libmadx
-from . import rpyc_classic_stdio
-
 import os, sys
 import collections
+
+from . import _libmadx_rpc
 import cern.pymad.globals
 from cern.libmadx import _madx_tools
 from cern.pymad.domain.tfs import TfsTable,TfsSummary
@@ -86,8 +85,8 @@ class Madx(object):
                                        Instead, recursively writing commands from these files when called.
 
         '''
-        self._conn = rpyc_classic_stdio.start_server()
-        self._libmadx = self._conn.modules['cern.cpymad.libmadx']
+        self._conn = _libmadx_rpc.LibMadxClient.spawn_subprocess()
+        self._libmadx = self._conn.libmadx
         self._libmadx.start()
 
         if histfile:
@@ -267,7 +266,7 @@ class Madx(object):
         tab,param=_madx_tools._get_dict(tmpfile,retdict)
         if not fname:
             os.remove(tmpfile)
-        return rpyc_classic_stdio.obtain((tab,param))
+        return (tab,param)
 
     def aperture(self,
               sequence,
@@ -455,7 +454,7 @@ class Madx(object):
         result,initial=_madx_tools._read_knobfile(tmpfile, retdict)
         if not fname:
             os.remove(tmpfile)
-        return rpyc_classic_stdio.obtain((result,initial))
+        return (result,initial)
 
     # turn on/off verbose outupt..
     def verbose(self,switch):
@@ -491,8 +490,7 @@ class Madx(object):
             columns = columns.split(',')
         # NOTE: the obtain() call copies the numpy arrays, so we don't need
         # to worry about memory faults:
-        t, s = rpyc_classic_stdio.obtain(
-            self._libmadx.get_table(table, columns))
+        t, s = self._libmadx.get_table(table, columns)
         if retdict:
             return t, s
         else:
@@ -502,7 +500,7 @@ class Madx(object):
         '''
         Returns the sequences currently in memory
         '''
-        return rpyc_classic_stdio.obtain(self._libmadx.get_sequences())
+        return self._libmadx.get_sequences()
 
 
     def get_element_list(self,sequence_name):
