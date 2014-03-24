@@ -1,5 +1,6 @@
 
-import json,os
+import os
+from yaml import safe_dump as dump, safe_load as load
 
 # some fixed conversions:
 _VALUE_MAP = {'true' : True, 'false' : False, 'PLUS': 1, 'MINUS': -1}
@@ -121,16 +122,17 @@ def convert_dict(indict):
     return new_dict
 
 def convert_file(infilename, outfilename):
-    indict = json.loads(open(infilename, 'r').read())
-    outdict = convert_dict(indict);
-    open(outfilename, 'w').write(json.dumps(outdict, indent=2))
+    with open(infilename, 'rt') as f:
+        indict = load(f)
+    with open(outfilename, 'wt') as f:
+        dump(convert_dict(indict), f)
 
 if __name__ == "__main__":
     skip=['lhc','longti8']
     for f in os.listdir('.'):
         if f[-9:]=='.jmd.json' and f[:-9] not in skip:
             print("Converting "+f[:-9])
-            convert_file(f, '../_models/'+f[:-9]+'.cpymad.json')
+            convert_file(f, '../_models/'+f[:-9]+'.cpymad.yml')
 
             # saving jmad file in pretty print format:
             #jd=json.load(open(f,'r'))

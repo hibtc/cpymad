@@ -23,7 +23,7 @@ import sys
 from os import path
 
 # Version of pymad (major,minor):
-PYMADVERSION=['0','5']
+PYMADVERSION=['0','6']
 
 
 # setuptools.Extension automatically converts all '.pyx' extensions to '.c'
@@ -72,7 +72,7 @@ class build_ext(_build_ext):
 for arg in sys.argv:
     if arg.startswith('--madxdir='):
         sys.argv.remove(arg)
-        prefix = arg.split('=', maxsplit=1)[1]
+        prefix = arg.split('=', 1)[1]
         include_dirs = [path.join(prefix, 'include')]
         lib_path_candidates = [path.join(prefix, 'lib'),
                                path.join(prefix, 'lib64')]
@@ -114,11 +114,8 @@ setup(
     package_dir={'':'src'},
     cmdclass={'build_ext':build_ext},
     ext_modules = cythonize([
-        Extension('cern.madx',
-                  sources=["src/cern/madx.pyx"],
-                  **extension_args),
-        Extension('cern.libmadx.table',
-                  sources=["src/cern/libmadx/table.pyx"],
+        Extension('cern.cpymad.libmadx',
+                  sources=["src/cern/cpymad/libmadx.pyx"],
                   **extension_args),
     ]),
     packages = [
@@ -127,6 +124,7 @@ setup(
         "cern.resource",
         "cern.cpymad",
         "cern.cpymad._couch",
+        "cern.cpymad._connection",
         "cern.jpymad",
         "cern.jpymad.tools",
         "cern.pymad",
@@ -139,7 +137,7 @@ setup(
     author='PyMAD developers',
     author_email='pymad@cern.ch',
     setup_requires=['numpy'],
-    install_requires=['numpy'],
+    install_requires=['numpy', 'PyYAML'],
     license = 'CERN Standard Copyright License'
 )
 

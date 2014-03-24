@@ -157,7 +157,7 @@ class ModelLocator(Interface):
 
 class MergedModelLocator(ModelLocator):
     """
-    Model locator for json files that contain multiple model definitions.
+    Model locator for yaml files that contain multiple model definitions.
 
     These are the model definition files that are currently used by default
     for filesystem resources.
@@ -168,27 +168,27 @@ class MergedModelLocator(ModelLocator):
         Initialize a merged model locator instance.
 
         The resource_provider parameter must be a ResourceProvider instance
-        that points to the filesystem location where the .cpymad.json model
+        that points to the filesystem location where the .cpymad.yml model
         files are stored.
 
         """
         self.res_provider = resource_provider
 
     def list_models(self, encoding='utf-8'):
-        for res_name in self.res_provider.listdir_filter(ext='.cpymad.json'):
-            mdefs = self.res_provider.json(res_name, encoding=encoding)
+        for res_name in self.res_provider.listdir_filter(ext='.cpymad.yml'):
+            mdefs = self.res_provider.yaml(res_name, encoding=encoding)
             for n,d in mdefs.items():
                 if d['real']:
                     yield n
 
     def get_model(self, name, encoding='utf-8'):
-        for res_name in self.res_provider.listdir_filter(ext='.cpymad.json'):
-            mdefs = self.res_provider.json(res_name, encoding=encoding)
+        for res_name in self.res_provider.listdir_filter(ext='.cpymad.yml'):
+            mdefs = self.res_provider.yaml(res_name, encoding=encoding)
             # restrict only to 'real' models (don't do that?):
             if name in (n for n,d in mdefs.items() if d['real']):
                 break
         else:
-            raise ValueError("The model you asked for does not exist in the database")
+            raise ValueError("The model "+name+" does not exist in the database")
 
         # expand the model using its bases specified in 'extends'. try to
         # provide a useful MRO:
@@ -240,7 +240,7 @@ class DistinctModelLocator(ModelLocator):
 
     def get_model(self, name, encoding='utf-8'):
         res = self.resource_provider.get(name)
-        mdef = res.json(encoding=encoding)
+        mdef = res.yaml(encoding=encoding)
         res_prov = res.get(mdef['path-offsets']['resource-offset'])
         repo_prov = res.get(mdef['path-offsets']['repository-offset'])
         return ModelData(name,

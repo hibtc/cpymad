@@ -15,13 +15,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
+"""
+cern.cpymad.libmadx is a Cython binding for the MAD-X library.
 
-# This file holds the table struct as defined in madx.h
-#
-# In the current state, this doesn't work very well,
-# segfaults more often than not, and isn't helpful..
-#
+This file contains declarations of data structures and exported functions
+of the C-API of MAD-X.
 
+"""
+
+# Data structures:
 cdef extern from "madX/mad_def.h":
     enum:
         NAME_L
@@ -59,7 +61,8 @@ cdef extern from "madX/mad_table.h":
         char* name
         int num_cols, org_cols,dynamic,origin,curr
         char_p_array *header #,*node_nm
-        int_array *col_out,*row_out
+        int_array* col_out
+        int_array* row_out
         name_list* columns    #names + types (in inform)
         char ***s_cols
 
@@ -85,4 +88,30 @@ cdef extern from "madX/mad_expr.h":
     struct expression:
         pass
 
+# Function declarations:
+cdef extern from "madX/mad_api.h":
+    sequence_list *madextern_get_sequence_list()
+cdef extern from "madX/mad_core.h":
+    void madx_start()
+    void madx_finish()
 
+cdef extern from "madX/mad_str.h":
+    void stolower_nq(char*)
+    int mysplit(char*, char_p_array*)
+cdef extern from "madX/mad_eval.h":
+    void pro_input(char*)
+
+cdef extern from "madX/mad_expr.h":
+    expression* make_expression(int, char**)
+    double expression_value(expression*, int)
+    expression* delete_expression(expression*)
+cdef extern from "madX/madx.h":
+    char_p_array* tmp_p_array    # temporary buffer for splits
+    char_array* c_dum
+
+cdef extern from "madX/mad_parse.h":
+    void pre_split(char*, char_array*, int)
+
+cdef extern from "madX/mad_table.h":
+    column_info  table_get_column(char* table_name,char* column_name)
+    char_p_array table_get_header(char* table_name)

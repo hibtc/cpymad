@@ -14,7 +14,6 @@ Contains base class for resource providers.
 """
 __all__ = ['ResourceProvider']
 
-import json
 import os
 
 from contextlib import contextmanager
@@ -111,19 +110,27 @@ class ResourceProvider(Interface):
         with self.open(name, encoding) as f:
             return f.read()
 
-    def json(self, name='', encoding='utf-8', **kwargs):
+    def yaml(self, name='', encoding='utf-8', **kwargs):
         """
-        Load the specified json resource.
+        Load the specified YAML/JSON resource.
 
         :param string name: Name of the resource, optional.
         :param string encoding: Encoding to use.
 
-        kwargs can be used to pass additional arguments to the json parser.
+        kwargs can be used to pass additional arguments to the YAML parser.
         This is a convenience mixin.
 
+        Note that a YAML parser is used but since JSON is a subset of YAML
+        this function can also be used to load JSON resources. The input is
+        not checked to be valid JSON!
+
         """
+        from yaml import safe_load
         with self.open(name, encoding=encoding) as f:
-            return json.load(f, **kwargs)
+            return safe_load(f, **kwargs)
+
+    # backward compatibility alias
+    json = yaml
 
     @contextmanager
     def filename(self, name=''):

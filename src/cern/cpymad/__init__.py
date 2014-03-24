@@ -17,4 +17,5 @@
 #-------------------------------------------------------------------------------
 from __future__ import absolute_import
 
-from cern.cpymad.model import Model as model
+from .model import Model as model
+from .madx import Madx as madx

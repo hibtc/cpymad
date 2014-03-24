@@ -15,59 +15,47 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
-
-#cython: embedsignature=True
-
 '''
 .. module:: madx
 .. moduleauthor:: Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen.at.cern.ch>
 
 Main module to interface with Mad-X library.
 
-'''
+The class Madx uses a subprocess to execute MAD-X library calls remotely via
+a simple RPC protocol.
 
+The remote backend is needed due to the fact that cpymad.libmadx is a low
+level binding to the MAD-X library which in turn uses global variables.
+This means that the cpymad.libmadx module has to be loaded within remote
+processes in order to deal with several isolated instances of MAD-X in
+parallel.
+
+Furthermore, this can be used as a security enhancement: if dealing with
+unverified input, we can't be sure that a faulty MAD-X function
+implementation will give access to a secure resource. This can be executing
+all library calls within a subprocess that does not inherit any handles.
+
+NOTE: this feature is only available on python>=2.7. On python2.6 the
+subprocess will inherit every handle in the current process space. This can
+also cause various other side effects (file handles and sockets don't get
+closed).
+
+'''
+from __future__ import absolute_import
 from __future__ import print_function
 
-from cern.libmadx.madx_structures cimport sequence_list, name_list, column_info, expression, char_p_array, char_array
-from cern.libmadx import table
-
-cdef extern from "madX/mad_api.h":
-    sequence_list *madextern_get_sequence_list()
-cdef extern from "madX/mad_core.h":
-    void madx_start()
-    void madx_finish()
-
-cdef extern from "madX/mad_str.h":
-    void stolower_nq(char*)
-    int mysplit(char*, char_p_array*)
-cdef extern from "madX/mad_eval.h":
-    void pro_input(char*)
-
-cdef extern from "madX/mad_expr.h":
-    expression* make_expression(int, char**)
-    double expression_value(expression*, int)
-    expression* delete_expression(expression*)
-cdef extern from "madX/madx.h":
-    char_p_array* tmp_p_array    # temporary buffer for splits
-    char_array* c_dum
-
-cdef extern from "madX/mad_parse.h":
-    void pre_split(char*, char_array*, int)
-
-
-cdef madx_input(char* cmd):
-    stolower_nq(cmd)
-    pro_input(cmd)
-
-import os,sys
+import os, sys
 import collections
+
+from . import _libmadx_rpc
 import cern.pymad.globals
 from cern.libmadx import _madx_tools
+from cern.pymad.domain.tfs import TfsTable,TfsSummary
 
-_madstarted=False
-
-# I think this is deprecated..
-_loaded_models=[]
+try:
+    basestring
+except NameError:
+    basestring = str
 
 # private utility functions
 def _tmp_filename(operation):
@@ -81,8 +69,10 @@ def _tmp_filename(operation):
         i += 1
     return tmpfile
 
+
+
 # main interface
-class madx:
+class Madx(object):
     '''
     Python class which interfaces to Mad-X library
     '''
@@ -95,10 +85,10 @@ class madx:
                                        Instead, recursively writing commands from these files when called.
 
         '''
-        global _madstarted
-        if not _madstarted:
-            madx_start()
-            _madstarted=True
+        self._conn = _libmadx_rpc.LibMadxClient.spawn_subprocess()
+        self._libmadx = self._conn.libmadx
+        self._libmadx.start()
+
         if histfile:
             self._hist=True
             self._hfile=open(histfile,'w')
@@ -127,7 +117,8 @@ class madx:
         '''
         if self._rechist:
             self._hfile.close()
-        #madx_finish()
+        self._libmadx.finish()
+        self._conn.close()
 
     def command(self,cmd):
         '''
@@ -152,8 +143,7 @@ class madx:
             else:
                 self._writeHist(cmd+'\n')
         if _madx_tools._checkCommand(cmd.lower()):
-            cmd = cmd.encode('utf-8')
-            madx_input(cmd)
+            self._libmadx.input(cmd)
         return 0
 
     def help(self,cmd=''):
@@ -246,7 +236,7 @@ class madx:
                     else:
                         _tmpcmd+=','+i_var+'='+str(i_val)
         self.command(_tmpcmd+';')
-        return table.get_dict_from_mem('twiss',columns,retdict)
+        return self._get_table('twiss',columns,retdict)
 
     def survey(self,
               sequence,
@@ -276,7 +266,7 @@ class madx:
         tab,param=_madx_tools._get_dict(tmpfile,retdict)
         if not fname:
             os.remove(tmpfile)
-        return tab,param
+        return (tab,param)
 
     def aperture(self,
               sequence,
@@ -308,7 +298,7 @@ class madx:
         if fname:
             _cmd+=',file="'+fname+'"'
         self.command(_cmd)
-        return table.get_dict_from_mem('aperture',columns,retdict)
+        return self._get_table('aperture',columns,retdict)
 
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')
@@ -464,7 +454,7 @@ class madx:
         result,initial=_madx_tools._read_knobfile(tmpfile, retdict)
         if not fname:
             os.remove(tmpfile)
-        return result,initial
+        return (result,initial)
 
     # turn on/off verbose outupt..
     def verbose(self,switch):
@@ -486,47 +476,40 @@ class madx:
             self._hfile.write(command)
             self._hfile.flush()
 
+    def _get_table(self, table, columns, retdict):
+        """
+        Get the specified table columns as numpy arrays.
+
+        :param str table: table name
+        :param columns: column names
+        :param bool retdict: return plain dictionaries
+        :type columns: list or str (comma separated)
+
+        """
+        if isinstance(columns, basestring):
+            columns = columns.split(',')
+        # NOTE: the obtain() call copies the numpy arrays, so we don't need
+        # to worry about memory faults:
+        t, s = self._libmadx.get_table(table, columns)
+        if retdict:
+            return t, s
+        else:
+            return TfsTable(t), TfsSummary(s)
+
     def get_sequences(self):
         '''
-         Returns the sequences currently in memory
+        Returns the sequences currently in memory
         '''
-        cdef sequence_list *seqs
-        seqs= madextern_get_sequence_list()
-        ret={}
-        for i in xrange(seqs.curr):
-            name = seqs.sequs[i].name.decode('utf-8')
-            ret[name]={'name':name}
-            if seqs.sequs[i].tw_table.name is not NULL:
-                tabname = seqs.sequs[i].tw_table.name.decode('utf-8')
-                ret[name]['twissname'] = tabname
-                print("Table name:", tabname)
-                print("Number of columns:",seqs.sequs[i].tw_table.num_cols)
-                print("Number of columns (orig):",seqs.sequs[i].tw_table.org_cols)
-                print("Number of rows:",seqs.sequs[i].tw_table.curr)
-        return ret
+        return self._libmadx.get_sequences()
 
     def evaluate(self, cmd):
         """
         Evaluates an expression and returns the result as double.
 
         :param string cmd: expression to evaluate.
-
-        NOTE: Call this function only from within a process scope where you
-        have called ``madx_start()`` first. This limitation is due to the
-        use of global variables within MAD-X.
-
-        This function uses global variables as temporaries - which is in
-        general an extremely bad design choice. In this case, however, using
-        local variables would only obscure the fact that MAD-X uses global
-        variables internally anyway.
+        :returns: numeric value of the expression
+        :rtype: float
 
         """
-        # TODO: not sure about the flags (the magic constants 0, 2)
-        cmd = cmd.lower().encode("utf-8")
-        pre_split(cmd, c_dum, 0)
-        mysplit(c_dum.c, tmp_p_array)
-        expr = make_expression(tmp_p_array.curr, tmp_p_array.p)
-        value = expression_value(expr, 2)
-        delete_expression(expr)
-        return value
+        return self._libmadx.evaluate(cmd)
 
