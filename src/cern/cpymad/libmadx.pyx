@@ -119,19 +119,16 @@ def get_twiss(sequence_name):
     Get the last calculated twiss table for the given sequence.
 
     :param str sequence_name: sequence name
-    :returns: twiss table
-    :rtype: just like get_table()
+    :returns: twiss table name
+    :rtype: str
     :raises ValueError: if the sequence name is invalid
     :raises RuntimeError: if the twiss table is invalid
-
-    CAUTION: Numeric data is wrapped in numpy arrays but not copied. Make
-    sure to copy all data before invoking any further MAD-X commands!
     """
     cdef sequence* seq
     seq = _find_sequence(sequence_name)
     if not seq.tw_valid:
         raise RuntimeError("TWISS table invalid.")
-    return get_table(seq.tw_table.name)
+    return seq.tw_table.name.decode('utf-8')
 
 
 def get_beam(sequence_name):
