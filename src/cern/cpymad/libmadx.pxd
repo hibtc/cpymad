@@ -75,7 +75,12 @@ cdef extern from "madX/mad_table.h":
 
 cdef extern from "madX/mad_expr.h":
     struct expression:
-        pass
+        char* string
+        double value
+
+    struct expr_list:
+        int curr
+        expression** list
 
 cdef extern from "madX/mad_cmdpar.h":
     struct command_parameter:
@@ -85,9 +90,13 @@ cdef extern from "madX/mad_cmdpar.h":
         double double_value
         double c_min
         double c_max
+        expression* expr
+        expression* min_expr
+        expression* max_expr
         char* string
         int stamp
         double_array* double_array
+        expr_list* expr_list
         char_p_array* m_string
 
     struct command_parameter_list:
@@ -100,7 +109,8 @@ cdef enum:
     PARAM_TYPE_DOUBLE = 2
     PARAM_TYPE_STRING = 3
     PARAM_TYPE_CONSTRAINT = 4
-    PARAM_TYPE_INT_ARRAY = 11
+    PARAM_TYPE_LOGICAL_ARRAY = 10   # I invented this one for symmetry.
+    PARAM_TYPE_INTEGER_ARRAY = 11
     PARAM_TYPE_DOUBLE_ARRAY = 12
     PARAM_TYPE_STRING_ARRAY = 13
 

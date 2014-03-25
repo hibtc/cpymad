@@ -17,7 +17,7 @@ from __future__ import print_function
 import numpy as np      # Import the Python-level symbols of numpy
 cimport numpy as np     # Import the C-level symbols of numpy
 
-from cern.cpymad.types import Constraint
+from cern.cpymad.types import Constraint, Expression
 
 
 # Numpy must be initialized. When using numpy from C or Cython you must
@@ -204,7 +204,18 @@ def evaluate(cmd):
 # called from Cython code. It is necessary to use `cdef functions` whenever
 # we want to pass parameters or return values with a pure C type.
 
+_expr_types = [bool, int, float]
+
+cdef _expr(expression* expr, value, typeid=PARAM_TYPE_DOUBLE):
+    """Return a parameter value with an appropriate type."""
+    type = _expr_types[typeid]
+    if expr is NULL:
+        return type(value)
+    else:
+        return Expression(expr.string.decode('utf-8'), value, type)
+
 cdef _get_param_value(command_parameter* par):
+
     """
     Get the value of a command parameter.
 
@@ -212,32 +223,38 @@ cdef _get_param_value(command_parameter* par):
     :rtype: depends on the parameter type
     :raises ValueError: if the parameter type is invalid
     """
-    if par.type == PARAM_TYPE_LOGICAL:
-        return bool(par.double_value)
-    if par.type == PARAM_TYPE_INTEGER:
-        return int(par.double_value)
-    if par.type == PARAM_TYPE_DOUBLE:
-        return par.double_value
+
+    if par.type in (PARAM_TYPE_LOGICAL,
+                    PARAM_TYPE_INTEGER,
+                    PARAM_TYPE_DOUBLE):
+        return _expr(par.expr, par.double_value, par.type)
+
     if par.type == PARAM_TYPE_STRING:
         return par.string.decode('utf-8')
+
     if par.type == PARAM_TYPE_CONSTRAINT:
         if par.c_type == CONSTR_TYPE_MIN:
-            return Constraint(min=par.c_min)
+            return Constraint(min=_expr(par.min_expr, par.c_min))
         if par.c_type == CONSTR_TYPE_MAX:
-            return Constraint(max=par.c_max)
+            return Constraint(max=_expr(par.max_expr, par.c_max))
         if par.c_type == CONSTR_TYPE_BOTH:
-            return Constraint(min=par.c_min, max=par.c_max)
+            return Constraint(min=_expr(par.min_expr, par.c_min),
+                              max=_expr(par.max_expr, par.c_max))
         if par.c_type == CONSTR_TYPE_VALUE:
-            return Constraint(val=par.double_value)
-    if par.type == PARAM_TYPE_INT_ARRAY:
-        return [int(par.double_array.a[i])
-                for i in xrange(par.double_array.curr)]
-    if par.type == PARAM_TYPE_DOUBLE_ARRAY:
-        return [par.double_array.a[i]
-                for i in xrange(par.double_array.curr)]
+            return Constraint(val=_expr(par.expr, par.double_value))
+
+    if par.type in (PARAM_TYPE_INTEGER_ARRAY, PARAM_TYPE_DOUBLE_ARRAY):
+        return [
+            _expr(NULL if par.expr_list is NULL else par.expr_list.list[i],
+                  par.double_array.a[i],
+                  par.type - PARAM_TYPE_LOGICAL_ARRAY)
+            for i in xrange(par.double_array.curr)
+        ]
+
     if par.type == PARAM_TYPE_STRING_ARRAY:
         return [par.m_string.p[i].decode('utf-8')
                 for i in xrange(par.m_string.curr)]
+
     raise ValueError("Unknown parameter type: {}".format(par.type))
 
 
