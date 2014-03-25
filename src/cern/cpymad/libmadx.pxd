@@ -48,6 +48,10 @@ cdef extern from "madX/mad_array.h":
         int curr
         int* i
 
+    struct double_array:
+        int curr
+        double* a
+
 cdef extern from "madX/mad_name.h":
     struct name_list:
         pass
@@ -73,18 +77,60 @@ cdef extern from "madX/mad_expr.h":
     struct expression:
         pass
 
+cdef extern from "madX/mad_cmdpar.h":
+    struct command_parameter:
+        char[NAME_L] name
+        int type
+        int c_type
+        double double_value
+        double c_min
+        double c_max
+        char* string
+        int stamp
+        double_array* double_array
+        char_p_array* m_string
+
+    struct command_parameter_list:
+        int curr
+        command_parameter** parameters
+
+cdef enum:
+    PARAM_TYPE_LOGICAL = 0
+    PARAM_TYPE_INTEGER = 1
+    PARAM_TYPE_DOUBLE = 2
+    PARAM_TYPE_STRING = 3
+    PARAM_TYPE_CONSTRAINT = 4
+    PARAM_TYPE_INT_ARRAY = 11
+    PARAM_TYPE_DOUBLE_ARRAY = 12
+    PARAM_TYPE_STRING_ARRAY = 13
+
+cdef enum:
+    CONSTR_TYPE_MIN = 1
+    CONSTR_TYPE_MAX = 2
+    CONSTR_TYPE_BOTH = 3
+    CONSTR_TYPE_VALUE = 4
+
+cdef extern from "madX/mad_cmd.h":
+    struct command:
+        int beam_def
+        command_parameter_list* par
+
 cdef extern from "madX/mad_seq.h":
     struct sequence:
         char[NAME_L] name
+        command* beam
         table* tw_table
+        int tw_valid
 
     struct sequence_list:
         int curr
+        name_list* list
         sequence** sequs
 
 
 # Global variables:
 cdef extern from "madX/mad_gvar.h":
+    sequence* current_sequ      # active sequence
     char_p_array* tmp_p_array   # temporary buffer for splits
     char_array* c_dum           # another temporary buffer
 
@@ -96,6 +142,9 @@ cdef extern from "madX/mad_api.h":
 cdef extern from "madX/mad_core.h":
     void madx_start()
     void madx_finish()
+
+cdef extern from "madX/mad_name.h":
+    int name_list_pos(const char*, name_list*)
 
 cdef extern from "madX/mad_str.h":
     void stolower_nq(char*)

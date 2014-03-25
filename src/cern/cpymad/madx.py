@@ -489,11 +489,36 @@ class Madx(object):
         else:
             return TfsTable(t), TfsSummary(s)
 
+    @property
+    def sequence(self):
+        """Get/set the name of the active sequence."""
+        return self._libmadx.get_current_sequence()
+
+    @sequence.setter
+    def sequence(self, name):
+        if self.sequence != name:
+            self.use(name)
+
+    def get_sequence(self, name=None):
+        """
+        Get information about a sequence.
+
+        :param str name: Sequence name. Leave empty to get active sequence.
+        :returns: sequence object that can be used to query further information.
+        :rtype: Sequence
+        :raises RuntimeError: if a sequence with the name doesn't exist
+        """
+        if name:
+            if name not in self.get_sequences():
+                raise RuntimeError("Unknown sequence: {}".format(name))
+            return Sequence(name, self._libmadx)
+        else:
+            return Sequence(self.sequence, self._libmadx)
+
     def get_sequences(self):
-        '''
-        Returns the sequences currently in memory
-        '''
-        return self._libmadx.get_sequences()
+        """Returns list of all sequences currently in memory."""
+        return [Sequence(name, self._libmadx)
+                for name in self._libmadx.get_sequences()]
 
     def evaluate(self, cmd):
         """
@@ -506,3 +531,35 @@ class Madx(object):
         """
         return self._libmadx.evaluate(cmd)
 
+
+class Sequence(object):
+
+    """
+    MAD-X sequence representation.
+    """
+
+    def __init__(self, name, libmadx):
+        """Store sequence name."""
+        self._name = name
+        self._libmadx = libmadx
+
+    def __str__(self):
+        """String representation."""
+        return "<{}({})>".format(self.__class__.__name__, self._name)
+
+    __repr__ = __str__
+
+    @property
+    def name(self):
+        """Get the name of the sequence."""
+        return self._name
+
+    @property
+    def beam(self):
+        """Get the beam dictionary associated to the sequence."""
+        return self._libmadx.get_beam(self._name)
+
+    @property
+    def twiss(self):
+        """Get the TWISS results from the last calculation."""
+        return self._libmadx.get_twiss(self._name)
