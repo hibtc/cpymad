@@ -58,14 +58,14 @@ except NameError:
     basestring = str
 
 # private utility functions
-def _tmp_filename(operation):
+def _tmp_filename(operation, suffix='.temp.tfs'):
     """
     Create a name for a temporary file.
     """
-    tmpfile = operation + '.temp.tfs'
+    tmpfile = operation + suffix
     i = 0
     while os.path.isfile(tmpfile):
-        tmpfile = operation + '.' + str(i) + '.temp.tfs'
+        tmpfile = operation + '.' + str(i) + suffix
         i += 1
     return tmpfile
 
@@ -76,37 +76,33 @@ class Madx(object):
     '''
     Python class which interfaces to Mad-X library
     '''
-    def __init__(self, histfile='', recursive_history=False, libmadx=None):
+    _hist = False
+    _hfile = None
+    _rechist = False
+
+    def __init__(self, histfile=None, recursive_history=False, libmadx=None):
         '''
         Initializing Mad-X instance
 
         :param str histfile: (optional) name of file which will contain all Mad-X commands.
         :param bool recursive_history: If true, history file will contain no calls to other files.
                                        Instead, recursively writing commands from these files when called.
+        :param object libmadx: :mod:`libmadx` compatible object
 
         '''
-        self._hfile = None
         self._libmadx = libmadx or _libmadx_rpc.LibMadxClient.spawn_subprocess().libmadx
         if not getattr(self._libmadx, '_madx_started', False):
             self._libmadx.start()
 
         if histfile:
-            self._hist=True
-            self._hfile=open(histfile,'w')
-            self._rechist=recursive_history
+            self._hist = True
+            self._hfile = open(histfile,'w')
+            self._rechist = recursive_history
         elif cern.pymad.globals.MAD_HISTORY_BASE:
-            base=cern.pymad.globals.MAD_HISTORY_BASE
-            self._hist=True
-            i=0
-            while os.path.isfile(base+str(i)+'.madx'):
-                i+=1
-            self._hfile=open(base+str(i)+'.madx','w')
-            self._rechist=recursive_history
-        else:
-            self._hist=False
-            if recursive_history:
-                print("WARNING: you cannot get recursive history without history file...")
-            self._rechist=False
+            base = cern.pymad.globals.MAD_HISTORY_BASE
+            self._hist = True
+            self._hfile = open(_tmp_filename(base, '.madx'), 'w')
+            self._rechist = recursive_history
 
     def __del__(self):
         """Close history file."""
