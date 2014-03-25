@@ -164,3 +164,10 @@ cdef extern from "madX/mad_parse.h":
 cdef extern from "madX/mad_table.h":
     column_info  table_get_column(char* table_name, char* column_name)
     char_p_array table_get_header(char* table_name)
+
+
+# I have no clue why, but for some reason, it is necessary to include
+# 'madx.h' (or one of the file it includes). Otherwise, importing the Cython
+# module will result in an ImportError: undefined symbol: pro_input
+cdef extern from "madX/madx.h":
+    pass
