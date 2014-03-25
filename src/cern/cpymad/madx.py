@@ -76,7 +76,7 @@ class Madx(object):
     '''
     Python class which interfaces to Mad-X library
     '''
-    def __init__(self,histfile='',recursive_history=False):
+    def __init__(self, histfile='', recursive_history=False, libmadx=None):
         '''
         Initializing Mad-X instance
 
@@ -85,9 +85,10 @@ class Madx(object):
                                        Instead, recursively writing commands from these files when called.
 
         '''
-        self._conn = _libmadx_rpc.LibMadxClient.spawn_subprocess()
-        self._libmadx = self._conn.libmadx
-        self._libmadx.start()
+        self._hfile = None
+        self._libmadx = libmadx or _libmadx_rpc.LibMadxClient.spawn_subprocess().libmadx
+        if not getattr(self._libmadx, '_madx_started', False):
+            self._libmadx.start()
 
         if histfile:
             self._hist=True
@@ -108,17 +109,9 @@ class Madx(object):
             self._rechist=False
 
     def __del__(self):
-        '''
-         Closes history file
-         madx_finish should
-         not be called since
-         other objects might still be
-         running..
-        '''
-        if self._rechist:
+        """Close history file."""
+        if self._hfile:
             self._hfile.close()
-        self._libmadx.finish()
-        self._conn.close()
 
     def command(self,cmd):
         '''

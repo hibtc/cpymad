@@ -235,19 +235,47 @@ class Service(object):
             "\n" + "".join(traceback.format_exception(*exc_info))),
         self._conn.send(('exception', message))
 
+
 class LibMadxClient(Client):
+
     """
     Specialized client for boxing :mod:`cern.cpymad.libmadx` function calls.
 
     Boxing these MAD-X function calls is necessary due the global nature of
     all state within the MAD-X library.
-
     """
+
+    _madx_started = False
+
+    def __del__(self):
+        """Finalize libmadx if it was started."""
+        if self._madx_started:
+            self.libmadx.finish()
+
     @property
     class libmadx(object):
+
         """Wrapper for :mod:`cern.cpymad.libmadx` in a remote process."""
+
         def __init__(self, client):
+            """Store the client connection."""
             self.__client = client
+
+        @property
+        def _madx_started(self):
+            """Check whether madx was already started."""
+            return self.__client._madx_started
+
+        def start(self):
+            """Start libmadx."""
+            self.__client._request('libmadx', 'start', (), {})
+            self.__client._madx_started = True
+
+        def finish(self):
+            """Finalize libmadx."""
+            self.__client._request('libmadx', 'finish', (), {})
+            self.__client._madx_started = False
+
         def __getattr__(self, funcname):
             """Resolve all attribute accesses as remote method calls."""
             def DeferredMethod(*args, **kwargs):
@@ -255,13 +283,15 @@ class LibMadxClient(Client):
                                               funcname, args, kwargs)
             return DeferredMethod
 
+
 class LibMadxService(Service):
+
     """
     Specialized service to dispatch :mod:`cern.cpymad.libmadx` function calls.
 
     Counterpart for :class:`LibMadxClient`.
-
     """
+
     def _dispatch_libmadx(self, funcname, args, kwargs):
         import cern.cpymad.libmadx
         function = getattr(cern.cpymad.libmadx, funcname)
