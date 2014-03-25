@@ -12,8 +12,6 @@ MAD-X. Furthermore, it enhances the security by boxing all MAD-X calls into
 a subprocess.
 
 """
-from __future__ import print_function
-
 import numpy as np      # Import the Python-level symbols of numpy
 cimport numpy as np     # Import the C-level symbols of numpy
 
@@ -25,68 +23,6 @@ from cern.cpymad.types import Constraint, Expression
 np.import_array()
 
 
-
-
-cdef _split_header_line(header_line):
-    header_line = header_line.decode('utf-8')
-    hsplit=header_line.split()
-    if len(hsplit)!=4 or hsplit[0]!='@':
-        raise ValueError("Could not read header line: %s" % header_line)
-    key=hsplit[1]
-    value=hsplit[3]
-    if hsplit[2]=="%le":
-        value=float(value)
-    return key,value
-
-def get_table(table, columns):
-    """
-    Get data from the specified tables.
-
-    :param str table: table name
-    :param list columns: column names
-    :returns: the data in the requested columns
-    :rtype: dict
-
-    CAUTION: Numeric data is wrapped in numpy arrays but not copied. Make
-    sure to copy all data before invoking any further MAD-X commands!
-
-    """
-    ret={}
-    cdef column_info info
-    cdef char_p_array *header
-    cdef char** char_tmp
-    cdef np.npy_intp shape[1]
-
-    # reading the header information..
-    table = table.encode('utf-8')
-    header = <char_p_array*>table_get_header(table)
-    ret_header={}
-    for i in xrange(header.curr):
-        key,value=_split_header_line(header.p[i])
-        ret_header[key]=value
-
-    # reading the columns that were requested..
-    for c in columns:
-        col_bytes = c.encode('utf-8')
-        info=table_get_column(table,col_bytes)
-        dtype = <bytes>info.datatype
-        if dtype==b'd':
-            shape[0] = <np.npy_intp> info.length
-            ret[c.lower()] = np.PyArray_SimpleNewFromData(
-                1, shape, np.NPY_DOUBLE, info.data)
-        elif dtype==b'S':
-            char_tmp=<char**>info.data
-            ret[c.lower()]=np.zeros(info.length,'S%d'%info.datasize)
-            for i in xrange(info.length):
-                ret[c.lower()][i]=char_tmp[i]
-        elif dtype==b'V':
-            print("ERROR:",c,"is not available in table",table)
-        else:
-            print("Unknown datatype",dtype,c)
-
-    return ret,ret_header
-
-
 # Python-level binding to libmadx:
 
 def start():
@@ -95,18 +31,19 @@ def start():
     """
     madx_start()
 
+
 def finish():
     """
     Cleanup MAD-X.
     """
     madx_finish()
 
+
 def input(cmd):
     """
     Pass one input command to MAD-X.
 
     :param str cmd: command to be executed by the MAD-X interpretor
-
     """
     cmd = cmd.encode('utf-8')
     cdef char* _cmd = cmd
@@ -174,6 +111,62 @@ def get_sequences():
             for i in xrange(seqs.curr)]
 
 
+def get_table_summary(table):
+    """
+    Get table summary.
+
+    :param str table: table name
+    :returns: mapping of {column: value}
+    :rtype: dict
+    """
+    cdef char_p_array *header
+    ctable = table.encode('utf-8')
+    header = <char_p_array*> table_get_header(ctable)
+    return dict(_split_header_line(header.p[i])
+                for i in xrange(header.curr))
+
+
+def get_table_column(table, column):
+    """
+    Get data from the specified table.
+
+    :param str table: table name
+    :param str column: column name
+    :returns: the data in the requested column
+    :rtype: numpy.array
+    :raises ValueError: if the column cannot be found in the table
+    :raises RuntimeError: if the column has unknown type
+
+    CAUTION: Numeric data is wrapped in numpy arrays but not copied. Make
+    sure to copy all data before invoking any further MAD-X commands! This
+    is done automatically for you if using libmadx in a remote service
+    (pickle serialization effectively copies the data).
+    """
+    cdef column_info info
+    cdef char** char_tmp
+    cdef np.npy_intp shape[1]
+    ctab = table.encode('utf-8')
+    ccol = column.encode('utf-8')
+    info = table_get_column(ctab, ccol)
+    dtype = <bytes> info.datatype
+    # double:
+    if dtype == b'd':
+        shape[0] = <np.npy_intp> info.length
+        return np.PyArray_SimpleNewFromData(1, shape, np.NPY_DOUBLE, info.data)
+    # string:
+    elif dtype == b'S':
+        char_tmp = <char**> info.data
+        return np.array([char_tmp[i] for i in xrange(info.length)])
+    # invalid:
+    elif dtype == b'V':
+        raise ValueError("Column {!r} is not in table {!r}."
+                         .format(column, table))
+    # unknown:
+    else:
+        raise RuntimeError("Unknown datatype {!r} in column {!r}."
+                           .format(dtype.decode('utf-8'), column))
+
+
 def evaluate(cmd):
     """
     Evaluates an expression and returns the result as double.
@@ -186,7 +179,6 @@ def evaluate(cmd):
     general an *extremely* bad design choice. Even though MAD-X uses global
     variables internally anyway, we should probably change this at some
     time.
-
     """
     # TODO: not sure about the flags (the magic constants 0, 2)
     cmd = cmd.lower().encode("utf-8")
@@ -213,6 +205,7 @@ cdef _expr(expression* expr, value, typeid=PARAM_TYPE_DOUBLE):
         return type(value)
     else:
         return Expression(expr.string.decode('utf-8'), value, type)
+
 
 cdef _get_param_value(command_parameter* par):
 
@@ -288,3 +281,14 @@ cdef sequence* _find_sequence(sequence_name):
     if index == -1:
         raise ValueError("Invalid sequence: {}".format(sequence_name))
     return seqs.sequs[index]
+
+
+cdef _split_header_line(header_line):
+    """Parse a table header value."""
+    _, key, kind, value = header_line.decode('utf-8').split(None, 3)
+    if kind == "%le":
+        return key, float(value)    # convert to number
+    elif kind.endswith('s'):
+        return key, value[1:-1]     # strip quotes from string
+    else:
+        return key, value           # 

@@ -479,9 +479,9 @@ class Madx(object):
         """
         if isinstance(columns, basestring):
             columns = columns.split(',')
-        # NOTE: the obtain() call copies the numpy arrays, so we don't need
-        # to worry about memory faults:
-        t, s = self._libmadx.get_table(table, columns)
+        t = dict((column, self._libmadx.get_table_column(table, column))
+                 for column in columns)
+        s = self._libmadx.get_table_summary(table)
         if retdict:
             return t, s
         else:
