@@ -176,7 +176,7 @@ class Madx(object):
             self.command('SELECT, FLAG='+flag+', PATTERN='+p+';')
 
     def twiss(self,
-              sequence,
+              sequence=None,
               pattern=['full'],
               columns='name,s,betx,bety,x,y,dx,dy,px,py,mux,muy,l,k1l,angle,k2l',
               madrange='',
@@ -205,8 +205,10 @@ class Madx(object):
         '''
         self.select('twiss',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
-        if use:
+        if use and sequence:
             self.use(sequence)
+        elif not sequence:
+            sequence = self.sequence
         _tmpcmd='twiss, sequence='+sequence+','+_madx_tools._add_range(madrange)
         if chrom:
             _tmpcmd+=',chrom'
@@ -228,7 +230,7 @@ class Madx(object):
         return self._get_table('twiss',columns,retdict)
 
     def survey(self,
-              sequence,
+              sequence=None,
               pattern=['full'],
               columns='name,l,s,angle,x,y,z,theta',
               madrange='',
@@ -249,7 +251,7 @@ class Madx(object):
         tmpfile = fname or _tmp_filename('survey')
         self.select('survey',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
-        if use:
+        if use and sequence:
             self.use(sequence)
         self.command('survey,'+_madx_tools._add_range(madrange)+' file="'+tmpfile+'";')
         tab,param=_madx_tools._get_dict(tmpfile,retdict)
@@ -258,7 +260,7 @@ class Madx(object):
         return (tab,param)
 
     def aperture(self,
-              sequence,
+              sequence=None,
               pattern=['full'],
               madrange='',
               columns='name,l,angle,x,y,z,theta',
@@ -280,7 +282,7 @@ class Madx(object):
         tmpfile = fname or _tmp_filename('aperture')
         self.select('aperture',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
-        if use:
+        if use and sequence:
             print("Warning, use before aperture is known to cause problems")
             self.use(sequence) # this seems to cause a bug?
         _cmd='aperture,'+_madx_tools._add_range(madrange)+_madx_tools._add_offsets(offsets)
@@ -429,7 +431,7 @@ class Madx(object):
         tmpfile = fname or _tmp_filename('match')
 
         cmd = self.matchcommand(
-                sequence=sequence,
+                sequence=sequence or self.sequence,
                 constraints=constraints,
                 vary=vary,
                 weight=weight,
