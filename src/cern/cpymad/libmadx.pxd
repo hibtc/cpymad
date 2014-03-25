@@ -20,65 +20,50 @@ cern.cpymad.libmadx is a Cython binding for the MAD-X library.
 
 This file contains declarations of data structures and exported functions
 of the C-API of MAD-X.
-
 """
 
 # Data structures:
+
+# The following declarations are only used by the Cython compiler (so it
+# knows what fields exist in the data types). The C compiler will use the
+# real definitions in the header files.
+# For greater clarity, we should therefore list only those fields, that are
+# actually used in the Cython code and add further fields when needed
+# later:
+
 cdef extern from "madX/mad_def.h":
     enum:
         NAME_L
 
-cdef extern from "madX/madx.h":
-    struct char_p_array:
-        int flag,stamp
-        char** p
-        char[NAME_L] name
-        int  max                     # max. array size
-        int  curr                   # current occupation
-        int* i
-
-    struct char_array:      # dynamic array of char
-        int stamp
-        int max                      # max. array size
-        int curr                     # current occupation
+cdef extern from "madX/mad_array.h":
+    struct char_array:
+        int curr
         char* c
 
-    struct int_array:
-        char* name
-        int curr
-        int *i
+    struct char_p_array:
+        int  curr
+        char** p
 
+    struct int_array:
+        int curr
+        int* i
+
+cdef extern from "madX/mad_name.h":
+    struct name_list:
+        pass
+
+cdef extern from "madX/mad_node.h":
     struct node:
         pass
 
-    struct name_list:
-        char[NAME_L]  name
-        int  max                      # max. pointer array size
-        int  curr                     # current occupation
-
 cdef extern from "madX/mad_table.h":
-    cdef struct table:
-        char* name
-        int num_cols, org_cols,dynamic,origin,curr
-        char_p_array *header #,*node_nm
-        int_array* col_out
-        int_array* row_out
-        name_list* columns    #names + types (in inform)
-        char ***s_cols
-
-cdef extern from "madX/madx.h":
-    # to be able to read sequence information..
-    struct sequence:
+    struct table:
         char[NAME_L] name
-        table* tw_table       #pointer to latest twiss table created
-
-    # list of sequences..
-    struct sequence_list:
-        sequence_list *list       # index list of names
-        sequence **sequs      # sequence pointer list
         int curr
+        char_p_array* header
+        name_list* columns
 
-    cdef struct column_info:
+    struct column_info:
         void * data
         int length
         char datatype
@@ -88,9 +73,26 @@ cdef extern from "madX/mad_expr.h":
     struct expression:
         pass
 
+cdef extern from "madX/mad_seq.h":
+    struct sequence:
+        char[NAME_L] name
+        table* tw_table
+
+    struct sequence_list:
+        int curr
+        sequence** sequs
+
+
+# Global variables:
+cdef extern from "madX/mad_gvar.h":
+    char_p_array* tmp_p_array   # temporary buffer for splits
+    char_array* c_dum           # another temporary buffer
+
+
 # Function declarations:
 cdef extern from "madX/mad_api.h":
     sequence_list *madextern_get_sequence_list()
+
 cdef extern from "madX/mad_core.h":
     void madx_start()
     void madx_finish()
@@ -98,6 +100,7 @@ cdef extern from "madX/mad_core.h":
 cdef extern from "madX/mad_str.h":
     void stolower_nq(char*)
     int mysplit(char*, char_p_array*)
+
 cdef extern from "madX/mad_eval.h":
     void pro_input(char*)
 
@@ -105,13 +108,10 @@ cdef extern from "madX/mad_expr.h":
     expression* make_expression(int, char**)
     double expression_value(expression*, int)
     expression* delete_expression(expression*)
-cdef extern from "madX/madx.h":
-    char_p_array* tmp_p_array    # temporary buffer for splits
-    char_array* c_dum
 
 cdef extern from "madX/mad_parse.h":
     void pre_split(char*, char_array*, int)
 
 cdef extern from "madX/mad_table.h":
-    column_info  table_get_column(char* table_name,char* column_name)
+    column_info  table_get_column(char* table_name, char* column_name)
     char_p_array table_get_header(char* table_name)
