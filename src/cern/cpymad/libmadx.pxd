@@ -54,7 +54,8 @@ cdef extern from "madX/mad_array.h":
 
 cdef extern from "madX/mad_name.h":
     struct name_list:
-        pass
+        int curr
+        char** names
 
 cdef extern from "madX/mad_node.h":
     struct node:
@@ -66,6 +67,11 @@ cdef extern from "madX/mad_table.h":
         int curr
         char_p_array* header
         name_list* columns
+
+    struct table_list:
+        int curr
+        name_list* names
+        table** tables
 
     struct column_info:
         void * data
@@ -141,6 +147,7 @@ cdef extern from "madX/mad_seq.h":
 # Global variables:
 cdef extern from "madX/mad_gvar.h":
     sequence* current_sequ      # active sequence
+    table_list* table_register  # list of all tables
     char_p_array* tmp_p_array   # temporary buffer for splits
     char_array* c_dum           # another temporary buffer
 

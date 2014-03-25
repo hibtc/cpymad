@@ -126,6 +126,22 @@ def get_table_summary(table):
                 for i in xrange(header.curr))
 
 
+def get_table_columns(table):
+    """
+    Get a list of all columns in the table.
+
+    :param str table: table name
+    :returns: column names
+    :rtype: list
+    :raises ValueError: if the table name is invalid
+    """
+    ctab = table.encode('utf-8')
+    index = name_list_pos(ctab, table_register.names)
+    if index == -1:
+        raise ValueError("Invalid table: {!r}".format(table))
+    return _name_list(table_register.tables[index].columns)
+
+
 def get_table_column(table, column):
     """
     Get data from the specified table.
@@ -292,3 +308,8 @@ cdef _split_header_line(header_line):
         return key, value[1:-1]     # strip quotes from string
     else:
         return key, value           # 
+
+
+cdef _name_list(name_list* names):
+    """Return a python list of names for the name_list."""
+    return [names.names[i] for i in xrange(names.curr)]
