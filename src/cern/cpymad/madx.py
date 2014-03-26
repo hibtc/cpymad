@@ -50,7 +50,7 @@ import collections
 from . import _libmadx_rpc
 import cern.pymad.globals
 from cern.libmadx import _madx_tools
-from cern.pymad.domain.tfs import TfsTable,TfsSummary
+from cern.pymad.domain.tfs import TfsSummary
 
 try:
     basestring
@@ -477,15 +477,13 @@ class Madx(object):
         :type columns: list or str (comma separated)
 
         """
-        if isinstance(columns, basestring):
-            columns = columns.split(',')
-        t = dict((column, self._libmadx.get_table_column(table, column))
-                 for column in columns)
-        s = self._libmadx.get_table_summary(table)
+        tab = Table(table, self._libmadx)
         if retdict:
-            return t, s
+            if isinstance(columns, basestring):
+                columns = columns.split(',')
+            return tab.get_all(columns), tab.summary
         else:
-            return TfsTable(t), TfsSummary(s)
+            return tab
 
     @property
     def sequence(self):
@@ -566,3 +564,72 @@ class Sequence(object):
     def twissname(self):
         """Get the name of the table with the TWISS results."""
         return self._libmadx.get_twiss(self._name)
+
+
+class Table(object):
+
+    """
+    MAD-X table access class.
+    """
+
+    def __init__(self, name, libmadx, _check=True):
+        """Just store the table name for now."""
+        self._name = name
+        self._libmadx = libmadx
+        if _check:
+            pass        # TODO
+
+    def __iter__(self):
+        """Old style access."""
+        return iter((self.columns, self.summary))
+
+    @property
+    def name(self):
+        """Get the table name."""
+        return self._name
+
+    @property
+    def columns(self):
+        """Get a lazy accessor for the table columns."""
+        return TableColumns(self.name, self._libmadx)
+
+    @property
+    def summary(self):
+        """Get the table summary."""
+        return TfsSummary(self._libmadx.get_table_summary(self.name))
+
+    def get_all(self, columns=None):
+        """
+        Return a dictionary with the desired columns.
+
+        :param list columns: column names or ``None`` for all columns.
+        :returns: column data
+        :rtype: dict
+        :raises ValueError: if the table name is invalid
+        """
+        if columns is None:
+            columns = self.columns
+        return dict((column,
+                     self._libmadx.get_table_column(self._table, column))
+                    for column in columns)
+
+
+class TableColumns(object):
+
+    """
+    Lazy accessor for table column data.
+    """
+
+    def __init__(self, table, libmadx):
+        """Store tabe name and libmadx connection."""
+        self._table = table
+        self._libmadx = libmadx
+
+    def __getattr__(self, column):
+        """Get the column data."""
+        return self._libmadx.get_table_column(self._table, column)
+
+    def __iter__(self):
+        """Get a list of all column names."""
+        return iter(self._libmadx.get_table_columns(self._table))
+
