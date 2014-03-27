@@ -289,6 +289,12 @@ class Model(abc.model.PyMadModel):
         '''
         return self._madx.get_sequences()
 
+    def get_sequence_names(self):
+        """
+        Return list of all loaded sequences.
+        """
+        return self._madx.get_sequence_names()
+
     def list_optics(self):
         '''
          Returns an iterable of available optics
