@@ -149,8 +149,8 @@ def get_table_summary(table):
     cdef char_p_array *header
     ctable = table.encode('utf-8')
     header = <char_p_array*> table_get_header(ctable)
-    return dict(_split_header_line(header.p[i])
-                for i in xrange(header.curr))
+    return dict([_split_header_line(header.p[i])
+                 for i in xrange(header.curr)])
 
 
 def get_table_columns(table):
