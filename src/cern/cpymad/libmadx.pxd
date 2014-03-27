@@ -161,7 +161,7 @@ cdef extern from "madX/mad_core.h":
     void madx_finish()
 
 cdef extern from "madX/mad_name.h":
-    int name_list_pos(const char*, name_list*)
+    int name_list_pos(char*, name_list*)  # NOTE: C API uses "const char*"
 
 cdef extern from "madX/mad_str.h":
     void stolower_nq(char*)
