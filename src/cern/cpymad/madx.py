@@ -518,6 +518,18 @@ class Madx(object):
         """Returns list of all sequences currently in memory."""
         return self._libmadx.get_sequences()
 
+    def get_element_list(self, sequence_name):
+        '''
+        Returns the list of all elements for the given sequence.
+        '''
+        return self._libmadx.get_element_list(sequence_name)
+
+    def get_element(self, sequence_name, element_name):
+        '''
+        Returns the element with the given name in the specified sequence.
+        '''
+        return self._libmadx.get_element(sequence_name, element_name)
+
     def evaluate(self, cmd):
         """
         Evaluates an expression and returns the result as double.
