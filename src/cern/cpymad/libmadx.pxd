@@ -181,6 +181,7 @@ cdef extern from "madX/mad_parse.h":
 cdef extern from "madX/mad_table.h":
     column_info  table_get_column(char* table_name, char* column_name)
     char_p_array table_get_header(char* table_name)
+    int _table_exists "table_exists" (char* table_name)
 
 
 # I have no clue why, but for some reason, it is necessary to include

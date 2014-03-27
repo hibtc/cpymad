@@ -505,15 +505,13 @@ class Madx(object):
         :raises RuntimeError: if a sequence with the name doesn't exist
         """
         if name:
-            if name not in self.get_sequence_names():
-                raise RuntimeError("Unknown sequence: {}".format(name))
             return Sequence(name, self._libmadx)
         else:
-            return Sequence(self.sequence, self._libmadx)
+            return Sequence(self.sequence, self._libmadx, _check=False)
 
     def get_sequences(self):
         """Returns list of all sequences currently in memory."""
-        return [Sequence(name, self._libmadx)
+        return [Sequence(name, self._libmadx, _check=False)
                 for name in self.get_sequence_names()]
 
     def get_sequence_names(self):
@@ -538,10 +536,12 @@ class Sequence(object):
     MAD-X sequence representation.
     """
 
-    def __init__(self, name, libmadx):
+    def __init__(self, name, libmadx, _check=True):
         """Store sequence name."""
         self._name = name
         self._libmadx = libmadx
+        if _check and not libmadx.sequence_exists(name):
+            raise ValueError("Invalid sequence: {!r}".format(name))
 
     def __str__(self):
         """String representation."""
@@ -580,8 +580,8 @@ class Table(object):
         """Just store the table name for now."""
         self._name = name
         self._libmadx = libmadx
-        if _check:
-            pass        # TODO
+        if _check and not libmadx.table_exists(name):
+            raise ValueError("Invalid table: {!r}".format(name))
 
     def __iter__(self):
         """Old style access."""

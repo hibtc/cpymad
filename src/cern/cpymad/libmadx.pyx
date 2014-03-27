@@ -51,6 +51,21 @@ def input(cmd):
     pro_input(_cmd)
 
 
+def sequence_exists(sequence):
+    """
+    Check if the sequence exists.
+
+    :param str sequence: sequence name
+    :returns: True if the sequence exists
+    :rtype: bool
+    """
+    try:
+        _find_sequence(sequence)
+        return True
+    except ValueError:
+        return False
+
+
 def get_twiss(sequence_name):
     """
     Get the last calculated twiss table for the given sequence.
@@ -109,6 +124,18 @@ def get_sequences():
     seqs = madextern_get_sequence_list()
     return [seqs.sequs[i].name.decode('utf-8')
             for i in xrange(seqs.curr)]
+
+
+def table_exists(table):
+    """
+    Check if the table exists.
+
+    :param str table: table name
+    :returns: True if the table exists
+    :rtype: bool
+    """
+    ctab = table.encode('utf-8')
+    return bool(_table_exists(ctab))
 
 
 def get_table_summary(table):
