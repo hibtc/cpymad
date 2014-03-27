@@ -165,8 +165,8 @@ class Model(abc.model.PyMadModel):
         self._apercalled={}
         self._twisscalled={}
         for seq in self.get_sequences():
-            self._apercalled[seq]=False
-            self._twisscalled[seq]=False
+            self._apercalled[seq.name]=False
+            self._twisscalled[seq.name]=False
 
     def _init_sequence(self,sequence):
         '''
@@ -237,7 +237,7 @@ class Model(abc.model.PyMadModel):
 
          :param string sequence: Sequence name to be checked.
         '''
-        return sequence in self.get_sequences()
+        return sequence in self.get_sequence_names()
 
     def has_optics(self,optics):
         '''
@@ -306,7 +306,7 @@ class Model(abc.model.PyMadModel):
         if sequence is None:
             ret={}
             for s in self.get_sequences():
-                ret[s]=list(self._mdef['sequences'][s]['ranges'].keys())
+                ret[s.name]=list(self._mdef['sequences'][s]['ranges'].keys())
             return ret
 
         return list(self._mdef['sequences'][sequence]['ranges'].keys())

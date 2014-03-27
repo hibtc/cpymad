@@ -505,7 +505,7 @@ class Madx(object):
         :raises RuntimeError: if a sequence with the name doesn't exist
         """
         if name:
-            if name not in self.get_sequences():
+            if name not in self.get_sequence_names():
                 raise RuntimeError("Unknown sequence: {}".format(name))
             return Sequence(name, self._libmadx)
         else:
@@ -514,7 +514,11 @@ class Madx(object):
     def get_sequences(self):
         """Returns list of all sequences currently in memory."""
         return [Sequence(name, self._libmadx)
-                for name in self._libmadx.get_sequences()]
+                for name in self.get_sequence_names()]
+
+    def get_sequence_names(self):
+        """Returns list of all sequences currently in memory."""
+        return self._libmadx.get_sequences()
 
     def evaluate(self, cmd):
         """
