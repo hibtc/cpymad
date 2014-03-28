@@ -72,6 +72,21 @@ def _tmp_filename(operation, suffix='.temp.tfs'):
     return tmpfile
 
 
+def _check_command(cmd):
+    ''' give the lowercase version of the command
+    this function does some sanity checks...'''
+    if cmd in ('stop;', 'exit;'):
+        print("WARNING: found quit in command: "+cmd+"\n")
+        print("Please use madx.finish() or just exit python (CTRL+D)")
+        print("Command ignored")
+        return False
+    if cmd.startswith('plot'):
+        print("WARNING: Plot functionality does not work through pymadx")
+        print("Command ignored")
+        return False
+    # All checks passed..
+    return True
+
 
 # main interface
 class Madx(object):
@@ -111,31 +126,20 @@ class Madx(object):
         if self._hfile:
             self._hfile.close()
 
-    def command(self,cmd):
+    def command(self, cmd):
         '''
-         Send a general Mad-X command.
-         Some sanity checks are performed.
+        Perform sequence of MAD-X commands.
 
-         :param string cmd: command
+        :param string cmd: command sequence
+
+        This function can take multiple commands separated by a semi-colon.
+
         '''
-        cmd=_madx_tools._fixcmd(cmd)
-        if type(cmd)==int: # means we should not execute command
-            return cmd
-        if type(cmd)==list:
-            for c in cmd:
-                self._single_cmd(c)
-        else:
-            self._single_cmd(cmd)
-
-    def _single_cmd(self,cmd):
-        if self._hist:
-            if cmd[-1]=='\n':
-                self._writeHist(cmd)
-            else:
-                self._writeHist(cmd+'\n')
-        if _madx_tools._checkCommand(cmd.lower()):
-            self._libmadx.input(cmd)
-        return 0
+        for c in cmd.split(';'):
+            c = c.strip() + ';'
+            if _check_command(c.lower()):
+                self._writeHist(c + '\n')
+                self._libmadx.input(c)
 
     def help(self,cmd=''):
         if cmd:
@@ -449,6 +453,8 @@ class Madx(object):
 
     def _writeHist(self,command):
         # this still brakes for "multiline commands"...
+        if not self._hfile:
+            return
         if self._rechist and command.split(',')[0].strip().lower()=='call':
             cfile=command.split(',')[1].strip().strip('file=').strip('FILE=').strip(';\n').strip('"').strip("'")
             if sys.flags.debug:
