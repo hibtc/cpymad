@@ -98,11 +98,11 @@ def get_beam(sequence_name):
     return _parse_command(seq.beam)
 
 
-def get_current_sequence():
+def get_active_sequence():
     """
     Get the name of the active sequence.
 
-    :returns: name of current sequence
+    :returns: name of active sequence
     :rtype: str
     :raises RuntimeError: if no sequence is activated
     """

@@ -488,34 +488,51 @@ class Madx(object):
     @property
     def sequence(self):
         """Get/set the name of the active sequence."""
-        return self._libmadx.get_current_sequence()
+        return self._libmadx.get_active_sequence()
 
     @sequence.setter
     def sequence(self, name):
         if self.sequence != name:
             self.use(name)
 
-    def get_sequence(self, name=None):
+    def get_active_sequence(self):
         """
-        Get information about a sequence.
+        Get a handle to the active sequence.
 
-        :param str name: Sequence name. Leave empty to get active sequence.
-        :returns: sequence object that can be used to query further information.
+        :returns: a proxy object for the sequence
         :rtype: Sequence
-        :raises RuntimeError: if a sequence with the name doesn't exist
+        :raises RuntimeError: if there is no active sequence
         """
-        if name:
-            return Sequence(name, self._libmadx)
-        else:
-            return Sequence(self.sequence, self._libmadx, _check=False)
+        return Sequence(self.sequence, self._libmadx, _check=False)
+
+    def get_sequence(self, name):
+        """
+        Get a handle to the specified sequence.
+
+        :param str name: sequence name
+        :returns: a proxy object for the sequence
+        :rtype: Sequence
+        :raises ValueError: if a sequence name is invalid
+        """
+        return Sequence(name, self._libmadx)
 
     def get_sequences(self):
-        """Returns list of all sequences currently in memory."""
+        """
+        Return list of all sequences currently in memory.
+
+        :returns: list of sequence proxy objects
+        :rtype: list(Sequence)
+        """
         return [Sequence(name, self._libmadx, _check=False)
                 for name in self.get_sequence_names()]
 
     def get_sequence_names(self):
-        """Returns list of all sequences currently in memory."""
+        """
+        Return list of all sequences currently in memory.
+
+        :returns: list of all sequences names
+        :rtype: list(str)
+        """
         return self._libmadx.get_sequences()
 
     def evaluate(self, cmd):
@@ -545,7 +562,7 @@ class Sequence(object):
 
     def __str__(self):
         """String representation."""
-        return "<{}({})>".format(self.__class__.__name__, self._name)
+        return "{}({})".format(self.__class__.__name__, self._name)
 
     __repr__ = __str__
 
