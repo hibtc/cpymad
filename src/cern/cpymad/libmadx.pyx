@@ -76,8 +76,7 @@ def get_twiss(sequence_name):
     :raises ValueError: if the sequence name is invalid
     :raises RuntimeError: if the twiss table is invalid
     """
-    cdef clib.sequence* seq
-    seq = _find_sequence(sequence_name)
+    cdef clib.sequence* seq = _find_sequence(sequence_name)
     if not seq.tw_valid:
         raise RuntimeError("TWISS table invalid.")
     return _str(seq.tw_table.name)
@@ -93,8 +92,7 @@ def get_beam(sequence_name):
     :raises ValueError: if the sequence name is invalid
     :raises RuntimeError: if the sequence has no associated beam
     """
-    cdef clib.sequence* seq
-    seq = _find_sequence(sequence_name)
+    cdef clib.sequence* seq = _find_sequence(sequence_name)
     if seq.beam is NULL or not seq.beam.beam_def:
         raise RuntimeError("No beam attached to {}".format(sequence_name))
     return _parse_command(seq.beam)
@@ -120,8 +118,7 @@ def get_sequences():
     :returns: sequence names
     :rtype: list
     """
-    cdef clib.sequence_list* seqs
-    seqs = clib.madextern_get_sequence_list()
+    cdef clib.sequence_list* seqs = clib.madextern_get_sequence_list()
     return [_str(seqs.sequs[i].name)
             for i in xrange(seqs.curr)]
 
@@ -146,9 +143,8 @@ def get_table_summary(table):
     :returns: mapping of {column: value}
     :rtype: dict
     """
-    cdef clib.char_p_array* header
     cdef bytes _table = _cstr(table)
-    header = clib.table_get_header(_table)
+    cdef clib.char_p_array* header = clib.table_get_header(_table)
     return dict([_split_header_line(header.p[i])
                  for i in xrange(header.curr)])
 
@@ -185,12 +181,11 @@ def get_table_column(table, column):
     is done automatically for you if using libmadx in a remote service
     (pickle serialization effectively copies the data).
     """
-    cdef clib.column_info info
     cdef char** char_tmp
     cdef cnp.npy_intp shape[1]
     cdef bytes _table = _cstr(table)
     cdef bytes _column = _cstr(column)
-    info = clib.table_get_column(_table, _column)
+    cdef clib.column_info info = clib.table_get_column(_table, _column)
     dtype = <bytes> info.datatype
     # double:
     if dtype == b'd':
@@ -317,9 +312,8 @@ cdef clib.sequence* _find_sequence(sequence_name):
     :param str sequence_name: sequence name
     :raises ValueError: if the sequence can not be found
     """
-    cdef clib.sequence_list* seqs
     cdef bytes _sequence_name = _cstr(sequence_name)
-    seqs = clib.madextern_get_sequence_list()
+    cdef clib.sequence_list* seqs = clib.madextern_get_sequence_list()
     index = clib.name_list_pos(_sequence_name, seqs.list)
     if index == -1:
         raise ValueError("Invalid sequence: {}".format(sequence_name))
