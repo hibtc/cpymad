@@ -183,7 +183,6 @@ class Madx(object):
               columns='name,s,betx,bety,x,y,dx,dy,px,py,mux,muy,l,k1l,angle,k2l',
               madrange='',
               fname='',
-              retdict=False,
               betx=None,
               bety=None,
               alfx=None,
@@ -200,7 +199,6 @@ class Madx(object):
             :param string fname: name of file to store tfs table
             :param list pattern: pattern to include in table
             :param string columns: columns to include in table, can also be a list of strings
-            :param bool retdict: if true, returns tables as dictionary types
             :param dict twiss_init: dictionary of twiss initialization variables
             :param bool use: Call use before aperture.
             :param bool chrom: Also calculate chromatic functions (slower)
@@ -229,7 +227,7 @@ class Madx(object):
                     else:
                         _tmpcmd+=','+i_var+'='+str(i_val)
         self.command(_tmpcmd+';')
-        return self._get_table('twiss',columns,retdict)
+        return self.get_table('twiss')
 
     def survey(self,
               sequence=None,
@@ -268,7 +266,6 @@ class Madx(object):
               columns='name,l,angle,x,y,z,theta',
               offsets='',
               fname='',
-              retdict=False,
               use=False
               ):
         '''
@@ -278,7 +275,6 @@ class Madx(object):
          :param string fname: name of file to store tfs table
          :param list pattern: pattern to include in table
          :param list columns: columns to include in table (can also be string)
-         :param bool retdict: if true, returns tables as dictionary types
          :param bool use: Call use before aperture.
         '''
         tmpfile = fname or _tmp_filename('aperture')
@@ -291,7 +287,7 @@ class Madx(object):
         if fname:
             _cmd+=',file="'+fname+'"'
         self.command(_cmd)
-        return self._get_table('aperture',columns,retdict)
+        return self.get_table('aperture')
 
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')
@@ -469,7 +465,7 @@ class Madx(object):
             self._hfile.write(command)
             self._hfile.flush()
 
-    def _get_table(self, table, columns, retdict):
+    def get_table(self, table):
         """
         Get the specified table columns as numpy arrays.
 
@@ -479,13 +475,7 @@ class Madx(object):
         :type columns: list or str (comma separated)
 
         """
-        tab = Table(table, self._libmadx)
-        if retdict:
-            if isinstance(columns, basestring):
-                columns = columns.split(',')
-            return tab.get_all(columns), tab.summary
-        else:
-            return tab
+        return Table(table, self._libmadx)
 
     @property
     def sequence(self):
