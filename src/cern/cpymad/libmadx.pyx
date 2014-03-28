@@ -46,8 +46,7 @@ def input(cmd):
 
     :param str cmd: command to be executed by the MAD-X interpretor
     """
-    cmd = cmd.encode('utf-8')
-    cdef char* _cmd = cmd
+    cdef bytes _cmd = _cstr(cmd)
     clib.stolower_nq(_cmd)
     clib.pro_input(_cmd)
 
@@ -81,7 +80,7 @@ def get_twiss(sequence_name):
     seq = _find_sequence(sequence_name)
     if not seq.tw_valid:
         raise RuntimeError("TWISS table invalid.")
-    return seq.tw_table.name.decode('utf-8')
+    return _str(seq.tw_table.name)
 
 
 def get_beam(sequence_name):
@@ -111,7 +110,7 @@ def get_current_sequence():
     """
     if clib.current_sequ is NULL:
         raise RuntimeError("No active sequence!")
-    return clib.current_sequ.name.decode('utf-8')
+    return _str(clib.current_sequ.name)
 
 
 def get_sequences():
@@ -123,7 +122,7 @@ def get_sequences():
     """
     cdef clib.sequence_list* seqs
     seqs = clib.madextern_get_sequence_list()
-    return [seqs.sequs[i].name.decode('utf-8')
+    return [_str(seqs.sequs[i].name)
             for i in xrange(seqs.curr)]
 
 
@@ -135,8 +134,8 @@ def table_exists(table):
     :returns: True if the table exists
     :rtype: bool
     """
-    ctab = table.encode('utf-8')
-    return bool(clib.table_exists(ctab))
+    cdef bytes _table = _cstr(table)
+    return bool(clib.table_exists(_table))
 
 
 def get_table_summary(table):
@@ -148,8 +147,8 @@ def get_table_summary(table):
     :rtype: dict
     """
     cdef clib.char_p_array* header
-    ctable = table.encode('utf-8')
-    header = clib.table_get_header(ctable)
+    cdef bytes _table = _cstr(table)
+    header = clib.table_get_header(_table)
     return dict([_split_header_line(header.p[i])
                  for i in xrange(header.curr)])
 
@@ -163,8 +162,8 @@ def get_table_columns(table):
     :rtype: list
     :raises ValueError: if the table name is invalid
     """
-    ctab = table.encode('utf-8')
-    index = clib.name_list_pos(ctab, clib.table_register.names)
+    cdef bytes _table = _cstr(table)
+    index = clib.name_list_pos(_table, clib.table_register.names)
     if index == -1:
         raise ValueError("Invalid table: {!r}".format(table))
     return _name_list(clib.table_register.tables[index].columns)
@@ -189,9 +188,9 @@ def get_table_column(table, column):
     cdef clib.column_info info
     cdef char** char_tmp
     cdef cnp.npy_intp shape[1]
-    ctab = table.encode('utf-8')
-    ccol = column.encode('utf-8')
-    info = clib.table_get_column(ctab, ccol)
+    cdef bytes _table = _cstr(table)
+    cdef bytes _column = _cstr(column)
+    info = clib.table_get_column(_table, _column)
     dtype = <bytes> info.datatype
     # double:
     if dtype == b'd':
@@ -208,7 +207,7 @@ def get_table_column(table, column):
     # unknown:
     else:
         raise RuntimeError("Unknown datatype {!r} in column {!r}."
-                           .format(dtype.decode('utf-8'), column))
+                           .format(_str(dtype), column))
 
 
 def evaluate(cmd):
@@ -225,8 +224,8 @@ def evaluate(cmd):
     time.
     """
     # TODO: not sure about the flags (the magic constants 0, 2)
-    cmd = cmd.lower().encode("utf-8")
-    clib.pre_split(cmd, clib.c_dum, 0)
+    cdef bytes _cmd = _cstr(cmd.lower())
+    clib.pre_split(_cmd, clib.c_dum, 0)
     clib.mysplit(clib.c_dum.c, clib.tmp_p_array)
     expr = clib.make_expression(clib.tmp_p_array.curr, clib.tmp_p_array.p)
     value = clib.expression_value(expr, 2)
@@ -248,7 +247,7 @@ cdef _expr(clib.expression* expr, value, typeid=clib.PARAM_TYPE_DOUBLE):
     if expr is NULL:
         return type(value)
     else:
-        return Expression(expr.string.decode('utf-8'), value, type)
+        return Expression(_str(expr.string), value, type)
 
 
 cdef _get_param_value(clib.command_parameter* par):
@@ -267,7 +266,7 @@ cdef _get_param_value(clib.command_parameter* par):
         return _expr(par.expr, par.double_value, par.type)
 
     if par.type == clib.PARAM_TYPE_STRING:
-        return par.string.decode('utf-8')
+        return _str(par.string)
 
     if par.type == clib.PARAM_TYPE_CONSTRAINT:
         if par.c_type == clib.CONSTR_TYPE_MIN:
@@ -289,7 +288,7 @@ cdef _get_param_value(clib.command_parameter* par):
         ]
 
     if par.type == clib.PARAM_TYPE_STRING_ARRAY:
-        return [par.m_string.p[i].decode('utf-8')
+        return [_str(par.m_string.p[i])
                 for i in xrange(par.m_string.curr)]
 
     raise ValueError("Unknown parameter type: {}".format(par.type))
@@ -306,7 +305,7 @@ cdef _parse_command(clib.command* cmd):
     # let's do it the hard way:
     res = {}
     for i in xrange(cmd.par.curr):
-        name = cmd.par.parameters[i].name.decode('utf-8')
+        name = _str(cmd.par.parameters[i].name)
         res[name] = _get_param_value(cmd.par.parameters[i])
     return res
 
@@ -319,9 +318,9 @@ cdef clib.sequence* _find_sequence(sequence_name):
     :raises ValueError: if the sequence can not be found
     """
     cdef clib.sequence_list* seqs
-    name = sequence_name.encode('utf-8')
+    cdef bytes _sequence_name = _cstr(sequence_name)
     seqs = clib.madextern_get_sequence_list()
-    index = clib.name_list_pos(name, seqs.list)
+    index = clib.name_list_pos(_sequence_name, seqs.list)
     if index == -1:
         raise ValueError("Invalid sequence: {}".format(sequence_name))
     return seqs.sequs[index]
@@ -329,7 +328,7 @@ cdef clib.sequence* _find_sequence(sequence_name):
 
 cdef _split_header_line(header_line):
     """Parse a table header value."""
-    _, key, kind, value = header_line.decode('utf-8').split(None, 3)
+    _, key, kind, value = _str(header_line).split(None, 3)
     if kind == "%le":
         return key, float(value)    # convert to number
     elif kind.endswith('s'):
@@ -341,3 +340,17 @@ cdef _split_header_line(header_line):
 cdef _name_list(clib.name_list* names):
     """Return a python list of names for the name_list."""
     return [names.names[i] for i in xrange(names.curr)]
+
+
+cdef _str(char* s):
+    """Decode C string to python string."""
+    if s is NULL:
+        return None
+    return s.decode('utf-8')
+
+
+cdef bytes _cstr(s):
+    """Encode python string to C string."""
+    if s is None:
+        return b""
+    return <bytes> s.encode('utf-8')
