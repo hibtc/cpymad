@@ -121,7 +121,7 @@ def get_sequences():
     :returns: sequence names
     :rtype: list
     """
-    cdef clib.sequence_list *seqs
+    cdef clib.sequence_list* seqs
     seqs = clib.madextern_get_sequence_list()
     return [seqs.sequs[i].name.decode('utf-8')
             for i in xrange(seqs.curr)]
