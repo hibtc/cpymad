@@ -612,7 +612,12 @@ class Table(object):
 
     def __iter__(self):
         """Old style access."""
-        return iter((self.columns, self.summary))
+        columns = self.columns
+        try:
+            summary = self.summary
+        except ValueError:
+            summary = None
+        return iter((columns, summary))
 
     @property
     def name(self):

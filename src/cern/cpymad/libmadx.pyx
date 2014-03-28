@@ -162,6 +162,8 @@ def get_table_summary(table):
     cdef bytes _table = _cstr(table)
     cdef clib.char_p_array* header = clib.table_get_header(_table)
     cdef int i
+    if header is NULL:
+        raise ValueError("No summary for table: {!r}".format(table))
     return dict([_split_header_line(header.p[i])
                  for i in xrange(header.curr)])
 
