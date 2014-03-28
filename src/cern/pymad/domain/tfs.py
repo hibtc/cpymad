@@ -15,80 +15,102 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
-'''
+"""
 Created on 16 Aug 2011
 .. module:: tfs
 .. moduleauthor:: kfuchsbe
-'''
+"""
 
-class LookupDict():
-    ''' A dictionary-like structure, which exposes the values of the keys also as attributes with the key names '''
 
-    def __init__(self, values):
-        ''' Initializes the class with the values.
+class LookupDict(object):
 
-        Parameters:
-        values -- A dictionary with strings as keys and lists as values
-        '''
-        # we store the values in a new dict internally, to unify the keys to lowercase
-        self._values = dict()
-        for key, val in values.items():
-            self._values[self._unify_key(key)] = val
+    """
+    An attribute access view for a dictionary.
+
+    The dictionary entries are accessible both via attribute and key access.
+    Attribute (and key) access is always case insensitive.
+    """
+
+    def __init__(self, data):
+        """
+        Initialize the object with a copy of the data dictionary.
+
+        :param dict data: original data
+        """
+        # store the data in a new dict, to unify the keys to lowercase
+        self._data = dict()
+        for key, val in data.items():
+            self._data[self._unify_key(key)] = val
 
     def __getstate__(self):
-        return self._values
+        """Serialize to a primitive dict (pickle)."""
+        return self._data
 
     def __setstate__(self, state):
-        self._values = state
+        """Deserialize from a primitive dict (unpickle)."""
+        self._data = state
 
     def __iter__(self):
-        return iter(self._values)
-
-    def _get_val_or_raise_error(self, key, error):
-        ukey = self._unify_key(key)
-
-        if ukey in self._values:
-            return self._values[key]
-        else:
-            raise(error)
+        """Return iterator over the (lowercase) keys."""
+        return iter(self._data)
 
     def __getattr__(self, name):
-        ''' Exposes the variables as attributes. This allows to use code like the following:
+        """
+        Return value associated to the given key.
 
-        tfs = TfsTable(...)
-        print tfs.x
-
-        '''
-        return self._get_val_or_raise_error(name, AttributeError())
+        :param str name: case-insensitive key
+        """
+        try:
+            return self[name]
+        except KeyError:
+            raise AttributeError(name)
 
     def __getitem__(self, key):
-        ''' Emulates the [] operator, so that TfsTable can be used just like a dictionary.
-            The keys are considered case insensitive.
-        '''
-        return self._get_val_or_raise_error(key, KeyError())
+        """
+        Return value associated to the given key.
+
+        :param str key: case-insensitive key
+        """
+        return self._data[self._unify_key(key)]
 
     def _unify_key(self, key):
+        """
+        Convert key to lowercase.
+
+        :param str key: case-insensitive key
+        """
         return key.lower()
 
     def keys(self):
-        '''
-         Similar to dictionary.keys()...
-        '''
-        return self._values.keys()
+        """
+        Return iterable over all keys in the dictionary.
+        """
+        return self._data.keys()
 
 
 class TfsTable(LookupDict):
-    ''' A class to hold the results of a twiss '''
-    def __init__(self, values):
-        LookupDict.__init__(self, values)
-        if 'name' in self._values:
-            self._names = self._values['name']
 
-    @property
-    def names(self):
-        ''' Returns the names of the elements in the twiss table '''
-        return self._names
+    """Result table of a TWISS calculation with case-insensitive keys."""
+
+    def __init__(self, data):
+        """
+        Initialize the object with a copy of the data dictionary.
+
+        :param dict data: original data
+
+        If not present in the original data, the key 'names' is aliased to
+        'name', whose value contains a list of all element node names.
+        """
+        LookupDict.__init__(self, data)
+        try:
+            self._data.setdefault('names', self._data['name'])
+        except KeyError:
+            pass
+
 
 class TfsSummary(LookupDict):
-    ''' A class to hold the summary table of a twiss with lowercase keys '''
+
+    """Summary table of a TWISS with case-insensitive keys."""
+
     pass
+
