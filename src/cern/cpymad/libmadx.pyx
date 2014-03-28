@@ -119,6 +119,7 @@ def get_sequences():
     :rtype: list
     """
     cdef clib.sequence_list* seqs = clib.madextern_get_sequence_list()
+    cdef int i
     return [_str(seqs.sequs[i].name)
             for i in xrange(seqs.curr)]
 
@@ -145,6 +146,7 @@ def get_table_summary(table):
     """
     cdef bytes _table = _cstr(table)
     cdef clib.char_p_array* header = clib.table_get_header(_table)
+    cdef int i
     return dict([_split_header_line(header.p[i])
                  for i in xrange(header.curr)])
 
@@ -159,7 +161,7 @@ def get_table_columns(table):
     :raises ValueError: if the table name is invalid
     """
     cdef bytes _table = _cstr(table)
-    index = clib.name_list_pos(_table, clib.table_register.names)
+    cdef int index = clib.name_list_pos(_table, clib.table_register.names)
     if index == -1:
         raise ValueError("Invalid table: {!r}".format(table))
     return _name_list(clib.table_register.tables[index].columns)
@@ -299,6 +301,7 @@ cdef _parse_command(clib.command* cmd):
     # generator expressions are not yet supported in cdef functions, so
     # let's do it the hard way:
     res = {}
+    cdef int i
     for i in xrange(cmd.par.curr):
         name = _str(cmd.par.parameters[i].name)
         res[name] = _get_param_value(cmd.par.parameters[i])
@@ -314,7 +317,7 @@ cdef clib.sequence* _find_sequence(sequence_name):
     """
     cdef bytes _sequence_name = _cstr(sequence_name)
     cdef clib.sequence_list* seqs = clib.madextern_get_sequence_list()
-    index = clib.name_list_pos(_sequence_name, seqs.list)
+    cdef int index = clib.name_list_pos(_sequence_name, seqs.list)
     if index == -1:
         raise ValueError("Invalid sequence: {}".format(sequence_name))
     return seqs.sequs[index]
@@ -333,6 +336,7 @@ cdef _split_header_line(header_line):
 
 cdef _name_list(clib.name_list* names):
     """Return a python list of names for the name_list."""
+    cdef int i
     return [names.names[i] for i in xrange(names.curr)]
 
 
