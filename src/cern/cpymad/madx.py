@@ -252,7 +252,7 @@ class Madx(object):
         if use and sequence:
             self.use(sequence)
         self.command('survey,'+_madx_tools._add_range(madrange)+' file="'+tmpfile+'";')
-        return get_table('survey')
+        return self.get_table('survey')
 
     def aperture(self,
               sequence=None,
