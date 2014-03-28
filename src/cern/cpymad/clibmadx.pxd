@@ -61,14 +61,21 @@ cdef extern from "madX/mad_elem.h":
     cdef struct element:
         char[NAME_L] name
         double length
+        command* def_ "def"
 
 cdef extern from "madX/mad_node.h":
     struct node:
         char[NAME_L] name
-        node* previous # previous node
-        node* next     # next node
         char* base_name
-        element* p_elem # pointer to element..
+        double at_value
+        double length
+        expression* at_expr
+        element* p_elem
+        sequence* p_sequ
+
+    struct node_list:
+        int curr
+        node** nodes
 
 cdef extern from "madX/mad_table.h":
     struct table:
@@ -142,14 +149,15 @@ cdef extern from "madX/mad_cmd.h":
 
 cdef extern from "madX/mad_seq.h":
     struct sequence:
+        # original sequence
         char[NAME_L] name
+        node_list* nodes
         command* beam
+        # expanded sequence
+        int n_nodes
+        node** all_nodes
         table* tw_table
         int tw_valid
-        int n_nodes
-        node* start # first node..
-        node* end   # last node..
-        node** all_nodes
 
     struct sequence_list:
         int curr

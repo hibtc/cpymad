@@ -207,63 +207,32 @@ def get_table_column(table, column):
                            .format(_str(dtype), column))
 
 
-def get_element_list(sequence_name):
-    '''
-    Returns list of all nodes...
-    '''
-    cdef clib.sequence_list *seqs
-    seqs= clib.madextern_get_sequence_list()
-    for i in xrange(seqs.curr):
-        _sequ_name=seqs.sequs[i].name.decode('utf-8')
-        if _sequ_name==sequence_name:
-            # this is the sequence we were looking for..
-            _sequence=seqs.sequs[i]
-            # this is the final node in the list:
-            end_node_name=_sequence.end.name
-            # start node:
-            current_node=_sequence.start
-            list_of_nodes=[]
-            while current_node.name!=end_node_name: # will this always be correct? (maybe node name is used twice?)
-                list_of_nodes.append(current_node.name)
-                current_node=current_node.next
-            # append the final node:
-            list_of_nodes.append(current_node.name)
-            return list_of_nodes
-    print("Did not find "+sequence_name)
-    return None
+def get_elements(sequence_name):
+    """
+    Return list of all elements in the original sequence.
+
+    :param str sequence_name: sequence name
+    :returns: all elements in the original sequence
+    :rtype: list
+    :raises ValueError: if the sequence is invalid.
+    """
+    cdef clib.sequence* seq = _find_sequence(sequence_name)
+    return [_get_node(seq.nodes.nodes[i])
+            for i in xrange(seq.nodes.curr)]
 
 
-def get_element(sequence_name,element_name):
-    '''
-    Returns data of element...
-    '''
-    cdef clib.sequence_list *seqs
-    seqs= clib.madextern_get_sequence_list()
-    for i in xrange(seqs.curr):
-        _sequ_name=seqs.sequs[i].name.decode('utf-8')
-        if _sequ_name==sequence_name:
-            # this is the sequence we were looking for..
-            _sequence=seqs.sequs[i]
-            # this is the final node in the list:
-            end_node_name=_sequence.end.name
-            # start node:
-            current_node=_sequence.start
-            while current_node.name!=end_node_name:
-                if element_name==current_node.name:
-                    print("Found "+element_name)
-                    base_name=current_node.base_name
-                    if str(base_name) in ['rcollimator']: # list of real element types
-                        _el=current_node.p_elem
-                        el_dict={}
-                        el_dict['name']=_el.name
-                        el_dict['length']=_el.length
-                        print("elname: "+_el.name)
-                        return el_dict
-                    else:
-                        print("This is not a real element.. "+base_name)
-                        return dict(base_name=base_name)
-                current_node=current_node.next
-    return None
+def get_expanded_elements(sequence_name):
+    """
+    Return list of all elements in the expanded sequence.
+
+    :param str sequence_name: sequence name
+    :returns: all elements in the expanded sequence
+    :rtype: list
+    :raises ValueError: if the sequence is invalid.
+    """
+    cdef clib.sequence* seq = _find_sequence(sequence_name)
+    return [_get_node(seq.all_nodes[i])
+            for i in xrange(seq.n_nodes)]
 
 
 def evaluate(cmd):
@@ -411,3 +380,25 @@ cdef bytes _cstr(s):
     if s is None:
         return b""
     return <bytes> s.encode('utf-8')
+
+
+cdef _get_node(clib.node* node):
+    """Return dictionary with node + element attributes."""
+    if node.p_elem is not NULL:
+        data = _get_element(node.p_elem)
+        data['type'] = _str(node.base_name)
+        return data
+    elif node.p_sequ is not NULL:
+        return {'type': 'sequence',
+                'sequence': _str(node.p_sequ.name)}
+    else:
+        # Maybe this is a valid case, but better detect it with boom!
+        raise RuntimeError("Empty node! Please report this incident!")
+
+
+cdef _get_element(clib.element* elem):
+    """Return dictionary with element attributes."""
+    data = _parse_command(elem.def_)
+    data['name'] =  _str(elem.name)
+    data['length'] = elem.length
+    return data
