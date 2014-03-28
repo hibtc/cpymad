@@ -71,7 +71,6 @@ cdef extern from "madX/mad_node.h":
         double length
         expression* at_expr
         element* p_elem
-        sequence* p_sequ
 
     struct node_list:
         int curr

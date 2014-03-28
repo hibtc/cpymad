@@ -384,16 +384,14 @@ cdef bytes _cstr(s):
 
 cdef _get_node(clib.node* node):
     """Return dictionary with node + element attributes."""
-    if node.p_elem is not NULL:
-        data = _get_element(node.p_elem)
-        data['type'] = _str(node.base_name)
-        return data
-    elif node.p_sequ is not NULL:
-        return {'type': 'sequence',
-                'sequence': _str(node.p_sequ.name)}
-    else:
+    if node.p_elem is NULL:
         # Maybe this is a valid case, but better detect it with boom!
-        raise RuntimeError("Empty node! Please report this incident!")
+        raise RuntimeError("Empty node or subsequence! Please report this incident!")
+    data = _get_element(node.p_elem)
+    data['type'] = _str(node.base_name)
+    data['name'] = _str(node.name)
+    data['at_value'] = node.at_value
+    return data
 
 
 cdef _get_element(clib.element* elem):
