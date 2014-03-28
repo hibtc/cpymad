@@ -60,7 +60,6 @@ cdef extern from "madX/mad_name.h":
 cdef extern from "madX/mad_elem.h":
     cdef struct element:
         char[NAME_L] name
-        double length
         command* def_ "def"
 
 cdef extern from "madX/mad_node.h":
@@ -68,8 +67,6 @@ cdef extern from "madX/mad_node.h":
         char[NAME_L] name
         char* base_name
         double at_value
-        double length
-        expression* at_expr
         element* p_elem
 
     struct node_list:

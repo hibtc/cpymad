@@ -388,15 +388,12 @@ cdef _get_node(clib.node* node):
         # Maybe this is a valid case, but better detect it with boom!
         raise RuntimeError("Empty node or subsequence! Please report this incident!")
     data = _get_element(node.p_elem)
-    data['type'] = _str(node.base_name)
-    data['name'] = _str(node.name)
-    data['at_value'] = node.at_value
+    data.update({'name': _str(node.name),
+                 'type': _str(node.base_name),
+                 'at': node.at_value})
     return data
 
 
 cdef _get_element(clib.element* elem):
     """Return dictionary with element attributes."""
-    data = _parse_command(elem.def_)
-    data['name'] =  _str(elem.name)
-    data['length'] = elem.length
-    return data
+    return _parse_command(elem.def_)
