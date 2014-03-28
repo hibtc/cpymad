@@ -13,14 +13,15 @@ a subprocess.
 
 """
 import numpy as np      # Import the Python-level symbols of numpy
-cimport numpy as np     # Import the C-level symbols of numpy
+cimport numpy as cnp    # Import the C-level symbols of numpy
 
 from cern.cpymad.types import Constraint, Expression
+cimport cern.cpymad.clibmadx as clib
 
 
 # Numpy must be initialized. When using numpy from C or Cython you must
 # _always_ do that, or you will have segfaults
-np.import_array()
+cnp.import_array()
 
 
 # Python-level binding to libmadx:
@@ -29,14 +30,14 @@ def start():
     """
     Initialize MAD-X.
     """
-    madx_start()
+    clib.madx_start()
 
 
 def finish():
     """
     Cleanup MAD-X.
     """
-    madx_finish()
+    clib.madx_finish()
 
 
 def input(cmd):
@@ -47,8 +48,8 @@ def input(cmd):
     """
     cmd = cmd.encode('utf-8')
     cdef char* _cmd = cmd
-    stolower_nq(_cmd)
-    pro_input(_cmd)
+    clib.stolower_nq(_cmd)
+    clib.pro_input(_cmd)
 
 
 def sequence_exists(sequence):
@@ -76,7 +77,7 @@ def get_twiss(sequence_name):
     :raises ValueError: if the sequence name is invalid
     :raises RuntimeError: if the twiss table is invalid
     """
-    cdef sequence* seq
+    cdef clib.sequence* seq
     seq = _find_sequence(sequence_name)
     if not seq.tw_valid:
         raise RuntimeError("TWISS table invalid.")
@@ -93,7 +94,7 @@ def get_beam(sequence_name):
     :raises ValueError: if the sequence name is invalid
     :raises RuntimeError: if the sequence has no associated beam
     """
-    cdef sequence* seq
+    cdef clib.sequence* seq
     seq = _find_sequence(sequence_name)
     if seq.beam is NULL or not seq.beam.beam_def:
         raise RuntimeError("No beam attached to {}".format(sequence_name))
@@ -108,9 +109,9 @@ def get_current_sequence():
     :rtype: str
     :raises RuntimeError: if no sequence is activated
     """
-    if current_sequ is NULL:
+    if clib.current_sequ is NULL:
         raise RuntimeError("No active sequence!")
-    return current_sequ.name.decode('utf-8')
+    return clib.current_sequ.name.decode('utf-8')
 
 
 def get_sequences():
@@ -120,8 +121,8 @@ def get_sequences():
     :returns: sequence names
     :rtype: list
     """
-    cdef sequence_list *seqs
-    seqs = madextern_get_sequence_list()
+    cdef clib.sequence_list *seqs
+    seqs = clib.madextern_get_sequence_list()
     return [seqs.sequs[i].name.decode('utf-8')
             for i in xrange(seqs.curr)]
 
@@ -135,7 +136,7 @@ def table_exists(table):
     :rtype: bool
     """
     ctab = table.encode('utf-8')
-    return bool(_table_exists(ctab))
+    return bool(clib.table_exists(ctab))
 
 
 def get_table_summary(table):
@@ -146,9 +147,9 @@ def get_table_summary(table):
     :returns: mapping of {column: value}
     :rtype: dict
     """
-    cdef char_p_array *header
+    cdef clib.char_p_array* header
     ctable = table.encode('utf-8')
-    header = <char_p_array*> table_get_header(ctable)
+    header = <clib.char_p_array*> clib.table_get_header(ctable)
     return dict([_split_header_line(header.p[i])
                  for i in xrange(header.curr)])
 
@@ -163,10 +164,10 @@ def get_table_columns(table):
     :raises ValueError: if the table name is invalid
     """
     ctab = table.encode('utf-8')
-    index = name_list_pos(ctab, table_register.names)
+    index = clib.name_list_pos(ctab, clib.table_register.names)
     if index == -1:
         raise ValueError("Invalid table: {!r}".format(table))
-    return _name_list(table_register.tables[index].columns)
+    return _name_list(clib.table_register.tables[index].columns)
 
 
 def get_table_column(table, column):
@@ -185,17 +186,17 @@ def get_table_column(table, column):
     is done automatically for you if using libmadx in a remote service
     (pickle serialization effectively copies the data).
     """
-    cdef column_info info
+    cdef clib.column_info info
     cdef char** char_tmp
-    cdef np.npy_intp shape[1]
+    cdef cnp.npy_intp shape[1]
     ctab = table.encode('utf-8')
     ccol = column.encode('utf-8')
-    info = table_get_column(ctab, ccol)
+    info = clib.table_get_column(ctab, ccol)
     dtype = <bytes> info.datatype
     # double:
     if dtype == b'd':
-        shape[0] = <np.npy_intp> info.length
-        return np.PyArray_SimpleNewFromData(1, shape, np.NPY_DOUBLE, info.data)
+        shape[0] = <cnp.npy_intp> info.length
+        return cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_DOUBLE, info.data)
     # string:
     elif dtype == b'S':
         char_tmp = <char**> info.data
@@ -225,11 +226,11 @@ def evaluate(cmd):
     """
     # TODO: not sure about the flags (the magic constants 0, 2)
     cmd = cmd.lower().encode("utf-8")
-    pre_split(cmd, c_dum, 0)
-    mysplit(c_dum.c, tmp_p_array)
-    expr = make_expression(tmp_p_array.curr, tmp_p_array.p)
-    value = expression_value(expr, 2)
-    delete_expression(expr)
+    clib.pre_split(cmd, clib.c_dum, 0)
+    clib.mysplit(clib.c_dum.c, clib.tmp_p_array)
+    expr = clib.make_expression(clib.tmp_p_array.curr, clib.tmp_p_array.p)
+    value = clib.expression_value(expr, 2)
+    clib.delete_expression(expr)
     return value
 
 
@@ -241,7 +242,7 @@ def evaluate(cmd):
 
 _expr_types = [bool, int, float]
 
-cdef _expr(expression* expr, value, typeid=PARAM_TYPE_DOUBLE):
+cdef _expr(clib.expression* expr, value, typeid=clib.PARAM_TYPE_DOUBLE):
     """Return a parameter value with an appropriate type."""
     type = _expr_types[typeid]
     if expr is NULL:
@@ -250,7 +251,7 @@ cdef _expr(expression* expr, value, typeid=PARAM_TYPE_DOUBLE):
         return Expression(expr.string.decode('utf-8'), value, type)
 
 
-cdef _get_param_value(command_parameter* par):
+cdef _get_param_value(clib.command_parameter* par):
 
     """
     Get the value of a command parameter.
@@ -260,41 +261,41 @@ cdef _get_param_value(command_parameter* par):
     :raises ValueError: if the parameter type is invalid
     """
 
-    if par.type in (PARAM_TYPE_LOGICAL,
-                    PARAM_TYPE_INTEGER,
-                    PARAM_TYPE_DOUBLE):
+    if par.type in (clib.PARAM_TYPE_LOGICAL,
+                    clib.PARAM_TYPE_INTEGER,
+                    clib.PARAM_TYPE_DOUBLE):
         return _expr(par.expr, par.double_value, par.type)
 
-    if par.type == PARAM_TYPE_STRING:
+    if par.type == clib.PARAM_TYPE_STRING:
         return par.string.decode('utf-8')
 
-    if par.type == PARAM_TYPE_CONSTRAINT:
-        if par.c_type == CONSTR_TYPE_MIN:
+    if par.type == clib.PARAM_TYPE_CONSTRAINT:
+        if par.c_type == clib.CONSTR_TYPE_MIN:
             return Constraint(min=_expr(par.min_expr, par.c_min))
-        if par.c_type == CONSTR_TYPE_MAX:
+        if par.c_type == clib.CONSTR_TYPE_MAX:
             return Constraint(max=_expr(par.max_expr, par.c_max))
-        if par.c_type == CONSTR_TYPE_BOTH:
+        if par.c_type == clib.CONSTR_TYPE_BOTH:
             return Constraint(min=_expr(par.min_expr, par.c_min),
                               max=_expr(par.max_expr, par.c_max))
-        if par.c_type == CONSTR_TYPE_VALUE:
+        if par.c_type == clib.CONSTR_TYPE_VALUE:
             return Constraint(val=_expr(par.expr, par.double_value))
 
-    if par.type in (PARAM_TYPE_INTEGER_ARRAY, PARAM_TYPE_DOUBLE_ARRAY):
+    if par.type in (clib.PARAM_TYPE_INTEGER_ARRAY, clib.PARAM_TYPE_DOUBLE_ARRAY):
         return [
             _expr(NULL if par.expr_list is NULL else par.expr_list.list[i],
                   par.double_array.a[i],
-                  par.type - PARAM_TYPE_LOGICAL_ARRAY)
+                  par.type - clib.PARAM_TYPE_LOGICAL_ARRAY)
             for i in xrange(par.double_array.curr)
         ]
 
-    if par.type == PARAM_TYPE_STRING_ARRAY:
+    if par.type == clib.PARAM_TYPE_STRING_ARRAY:
         return [par.m_string.p[i].decode('utf-8')
                 for i in xrange(par.m_string.curr)]
 
     raise ValueError("Unknown parameter type: {}".format(par.type))
 
 
-cdef _parse_command(command* cmd):
+cdef _parse_command(clib.command* cmd):
     """
     Get the values of all parameters of a command.
 
@@ -310,17 +311,17 @@ cdef _parse_command(command* cmd):
     return res
 
 
-cdef sequence* _find_sequence(sequence_name):
+cdef clib.sequence* _find_sequence(sequence_name):
     """
     Get pointer to the C sequence struct of the specified sequence or NULL.
 
     :param str sequence_name: sequence name
     :raises ValueError: if the sequence can not be found
     """
-    cdef sequence_list *seqs
+    cdef clib.sequence_list* seqs
     name = sequence_name.encode('utf-8')
-    seqs = madextern_get_sequence_list()
-    index = name_list_pos(name, seqs.list)
+    seqs = clib.madextern_get_sequence_list()
+    index = clib.name_list_pos(name, seqs.list)
     if index == -1:
         raise ValueError("Invalid sequence: {}".format(sequence_name))
     return seqs.sequs[index]
@@ -337,6 +338,6 @@ cdef _split_header_line(header_line):
         return key, value           # 
 
 
-cdef _name_list(name_list* names):
+cdef _name_list(clib.name_list* names):
     """Return a python list of names for the name_list."""
     return [names.names[i] for i in xrange(names.curr)]
