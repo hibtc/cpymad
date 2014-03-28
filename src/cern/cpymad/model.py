@@ -289,6 +289,12 @@ class Model(abc.model.PyMadModel):
         '''
         return self._madx.get_sequences()
 
+    def get_sequence_names(self):
+        """
+        Return list of all loaded sequences.
+        """
+        return self._madx.get_sequence_names()
+
     def get_element_list(self,sequence_name):
         '''
          Returns a list of elements in sequence

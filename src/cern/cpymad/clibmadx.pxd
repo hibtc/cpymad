@@ -41,7 +41,7 @@ cdef extern from "madX/mad_array.h":
         char* c
 
     struct char_p_array:
-        int  curr
+        int curr
         char** p
 
     struct int_array:
@@ -83,7 +83,7 @@ cdef extern from "madX/mad_table.h":
         table** tables
 
     struct column_info:
-        void * data
+        void* data
         int length
         char datatype
         char datasize
@@ -174,7 +174,7 @@ cdef extern from "madX/mad_core.h":
     void madx_finish()
 
 cdef extern from "madX/mad_name.h":
-    int name_list_pos(const char*, name_list*)
+    int name_list_pos(char*, name_list*)  # NOTE: C API uses "const char*"
 
 cdef extern from "madX/mad_str.h":
     void stolower_nq(char*)
@@ -192,9 +192,9 @@ cdef extern from "madX/mad_parse.h":
     void pre_split(char*, char_array*, int)
 
 cdef extern from "madX/mad_table.h":
-    column_info  table_get_column(char* table_name, char* column_name)
-    char_p_array table_get_header(char* table_name)
-    int _table_exists "table_exists" (char* table_name)
+    column_info table_get_column(char* table_name, char* column_name)
+    char_p_array* table_get_header(char* table_name)
+    int table_exists(char* table_name)
 
 
 # I have no clue why, but for some reason, it is necessary to include
