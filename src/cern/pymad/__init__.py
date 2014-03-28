@@ -27,6 +27,3 @@ PyMad is the API which CPyMad and JPyMad should follow.
 from __future__ import absolute_import
 
 from .io.tfs import tfs
-from .tools.run import init
-
-from .tools.ls import ls_models,ls_mdefs

@@ -50,7 +50,6 @@ import collections
 from . import _libmadx_rpc
 from .types import Element
 
-import cern.pymad.globals
 from cern.cpymad import _madx_tools
 from cern.pymad.domain.tfs import TfsSummary
 
@@ -114,11 +113,6 @@ class Madx(object):
         if histfile:
             self._hist = True
             self._hfile = open(histfile,'w')
-            self._rechist = recursive_history
-        elif cern.pymad.globals.MAD_HISTORY_BASE:
-            base = cern.pymad.globals.MAD_HISTORY_BASE
-            self._hist = True
-            self._hfile = open(_tmp_filename(base, '.madx'), 'w')
             self._rechist = recursive_history
 
     def __del__(self):
