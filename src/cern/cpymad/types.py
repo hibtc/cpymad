@@ -1,6 +1,7 @@
 """
 Python type analogues for MAD-X data structures.
 """
+from cern.pymad.domain.tfs import LookupDict
 
 
 class Constraint(object):
@@ -56,3 +57,12 @@ class Expression(object):
     def __float__(self):
         """Get the value as double."""
         return float(self._value)
+
+
+class Element(LookupDict):
+
+    """
+    Case-insensitive property table for a MAD-X beamline element.
+    """
+
+    pass
