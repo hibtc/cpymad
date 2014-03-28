@@ -164,7 +164,7 @@ def get_table_columns(table):
     cdef int index = clib.name_list_pos(_table, clib.table_register.names)
     if index == -1:
         raise ValueError("Invalid table: {!r}".format(table))
-    return _name_list(clib.table_register.tables[index].columns)
+    return _name_list(clib.table_register.tables[index].columns, [2,3])
 
 
 def get_table_column(table, column):
@@ -373,10 +373,11 @@ cdef _split_header_line(header_line):
         return key, value           #
 
 
-cdef _name_list(clib.name_list* names):
+cdef _name_list(clib.name_list* names, inform):
     """Return a python list of names for the name_list."""
     cdef int i
-    return [names.names[i] for i in xrange(names.curr)]
+    return [names.names[i] for i in xrange(names.curr)
+            if names.inform[i] in inform]
 
 
 cdef _str(char* s):

@@ -55,6 +55,7 @@ cdef extern from "madX/mad_array.h":
 cdef extern from "madX/mad_name.h":
     struct name_list:
         int curr
+        int* inform
         char** names
 
 cdef extern from "madX/mad_elem.h":
