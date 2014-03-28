@@ -641,7 +641,7 @@ class Table(object):
         if columns is None:
             columns = self.columns
         return dict((column,
-                     self._libmadx.get_table_column(self._table, column))
+                     self._libmadx.get_table_column(self._name, column))
                     for column in columns)
 
 
