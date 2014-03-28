@@ -149,7 +149,7 @@ def get_table_summary(table):
     """
     cdef clib.char_p_array* header
     ctable = table.encode('utf-8')
-    header = <clib.char_p_array*> clib.table_get_header(ctable)
+    header = clib.table_get_header(ctable)
     return dict([_split_header_line(header.p[i])
                  for i in xrange(header.curr)])
 
