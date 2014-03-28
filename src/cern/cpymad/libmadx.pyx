@@ -207,6 +207,34 @@ def get_table_column(table, column):
                            .format(_str(dtype), column))
 
 
+def get_elements(sequence_name):
+    """
+    Return list of all elements in the original sequence.
+
+    :param str sequence_name: sequence name
+    :returns: all elements in the original sequence
+    :rtype: list
+    :raises ValueError: if the sequence is invalid.
+    """
+    cdef clib.sequence* seq = _find_sequence(sequence_name)
+    return [_get_node(seq.nodes.nodes[i])
+            for i in xrange(seq.nodes.curr)]
+
+
+def get_expanded_elements(sequence_name):
+    """
+    Return list of all elements in the expanded sequence.
+
+    :param str sequence_name: sequence name
+    :returns: all elements in the expanded sequence
+    :rtype: list
+    :raises ValueError: if the sequence is invalid.
+    """
+    cdef clib.sequence* seq = _find_sequence(sequence_name)
+    return [_get_node(seq.all_nodes[i])
+            for i in xrange(seq.n_nodes)]
+
+
 def evaluate(cmd):
     """
     Evaluates an expression and returns the result as double.
@@ -238,13 +266,24 @@ def evaluate(cmd):
 
 _expr_types = [bool, int, float]
 
-cdef _expr(clib.expression* expr, value, typeid=clib.PARAM_TYPE_DOUBLE):
+cdef _expr(clib.expression* expr,
+           float value,
+           int typeid=clib.PARAM_TYPE_DOUBLE):
     """Return a parameter value with an appropriate type."""
-    type = _expr_types[typeid]
-    if expr is NULL:
-        return type(value)
-    else:
-        return Expression(_str(expr.string), value, type)
+    _type = _expr_types[typeid]
+    _value = _type(value)
+    if expr is NULL or expr.string is NULL:
+        return _value
+    _expr = _str(expr.string).strip()
+    if not _expr:
+        return _value
+    try:
+        _eval = _type(float(_expr))
+        if _eval == _value:
+            return _value
+    except ValueError:
+        pass
+    return Expression(_expr, _value, _type)
 
 
 cdef _get_param_value(clib.command_parameter* par):
@@ -331,7 +370,7 @@ cdef _split_header_line(header_line):
     elif kind.endswith('s'):
         return key, value[1:-1]     # strip quotes from string
     else:
-        return key, value           # 
+        return key, value           #
 
 
 cdef _name_list(clib.name_list* names):
@@ -352,3 +391,20 @@ cdef bytes _cstr(s):
     if s is None:
         return b""
     return <bytes> s.encode('utf-8')
+
+
+cdef _get_node(clib.node* node):
+    """Return dictionary with node + element attributes."""
+    if node.p_elem is NULL:
+        # Maybe this is a valid case, but better detect it with boom!
+        raise RuntimeError("Empty node or subsequence! Please report this incident!")
+    data = _get_element(node.p_elem)
+    data.update({'name': _str(node.name),
+                 'type': _str(node.base_name),
+                 'at': node.at_value})
+    return data
+
+
+cdef _get_element(clib.element* elem):
+    """Return dictionary with element attributes."""
+    return _parse_command(elem.def_)

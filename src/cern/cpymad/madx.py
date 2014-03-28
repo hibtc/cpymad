@@ -48,6 +48,8 @@ import os, sys
 import collections
 
 from . import _libmadx_rpc
+from .types import Element
+
 import cern.pymad.globals
 from cern.libmadx import _madx_tools
 from cern.pymad.domain.tfs import TfsSummary
@@ -585,6 +587,29 @@ class Sequence(object):
     def twissname(self):
         """Get the name of the table with the TWISS results."""
         return self._libmadx.get_twiss(self._name)
+
+    def get_elements(self):
+        """
+        Get list of all elements in the original sequence.
+
+        :returns: list of elements in the original (unexpanded) sequence
+        :rtype: list(Element)
+        """
+        return [Element(elem)
+                for elem in self._libmadx.get_elements(self._name)]
+
+    def get_expanded_elements(self):
+        """
+        Get list of all elements in the expanded sequence.
+
+        :returns: list of elements in the expanded (unexpanded) sequence
+        :rtype: list(Element)
+
+        NOTE: this may very well return an empty list, if the sequence has
+        not been expanded (used) yet.
+        """
+        return [Element(elem)
+                for elem in self._libmadx.get_expanded_elements(self._name)]
 
 
 class Table(object):
