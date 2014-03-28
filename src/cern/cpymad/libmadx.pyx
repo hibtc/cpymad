@@ -266,13 +266,24 @@ def evaluate(cmd):
 
 _expr_types = [bool, int, float]
 
-cdef _expr(clib.expression* expr, value, typeid=clib.PARAM_TYPE_DOUBLE):
+cdef _expr(clib.expression* expr,
+           float value,
+           int typeid=clib.PARAM_TYPE_DOUBLE):
     """Return a parameter value with an appropriate type."""
-    type = _expr_types[typeid]
-    if expr is NULL:
-        return type(value)
-    else:
-        return Expression(_str(expr.string), value, type)
+    _type = _expr_types[typeid]
+    _value = _type(value)
+    if expr is NULL or expr.string is NULL:
+        return _value
+    _expr = _str(expr.string).strip()
+    if not _expr:
+        return _value
+    try:
+        _eval = _type(float(_expr))
+        if _eval == _value:
+            return _value
+    except ValueError:
+        pass
+    return Expression(_expr, _value, _type)
 
 
 cdef _get_param_value(clib.command_parameter* par):
