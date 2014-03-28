@@ -235,7 +235,6 @@ class Madx(object):
               columns='name,l,s,angle,x,y,z,theta',
               madrange='',
               fname='',
-              retdict=False,
               use=True
               ):
         '''
@@ -245,7 +244,6 @@ class Madx(object):
             :param string fname: name of file to store tfs table
             :param list pattern: pattern to include in table
             :param string/list columns: Columns to include in table
-            :param bool retdict: if true, returns tables as dictionary types
             :param bool use: Call use before survey.
         '''
         tmpfile = fname or _tmp_filename('survey')
@@ -254,10 +252,7 @@ class Madx(object):
         if use and sequence:
             self.use(sequence)
         self.command('survey,'+_madx_tools._add_range(madrange)+' file="'+tmpfile+'";')
-        tab,param=_madx_tools._get_dict(tmpfile,retdict)
-        if not fname:
-            os.remove(tmpfile)
-        return (tab,param)
+        return get_table('survey')
 
     def aperture(self,
               sequence=None,
