@@ -93,7 +93,7 @@ class Madx(object):
 
         '''
         self._libmadx = libmadx or _libmadx_rpc.LibMadxClient.spawn_subprocess().libmadx
-        if not getattr(self._libmadx, '_madx_started', False):
+        if not self._libmadx.started():
             self._libmadx.start()
 
         if histfile:

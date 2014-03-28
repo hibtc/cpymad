@@ -245,11 +245,9 @@ class LibMadxClient(Client):
     all state within the MAD-X library.
     """
 
-    _madx_started = False
-
     def __del__(self):
         """Finalize libmadx if it was started."""
-        if self._madx_started:
+        if self.libmadx.started():
             self.libmadx.finish()
 
     @property
@@ -260,21 +258,6 @@ class LibMadxClient(Client):
         def __init__(self, client):
             """Store the client connection."""
             self.__client = client
-
-        @property
-        def _madx_started(self):
-            """Check whether madx was already started."""
-            return self.__client._madx_started
-
-        def start(self):
-            """Start libmadx."""
-            self.__client._request('libmadx', 'start', (), {})
-            self.__client._madx_started = True
-
-        def finish(self):
-            """Finalize libmadx."""
-            self.__client._request('libmadx', 'finish', (), {})
-            self.__client._madx_started = False
 
         def __getattr__(self, funcname):
             """Resolve all attribute accesses as remote method calls."""

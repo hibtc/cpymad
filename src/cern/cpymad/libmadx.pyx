@@ -24,13 +24,26 @@ cimport cern.cpymad.clibmadx as clib
 cnp.import_array()
 
 
+# Remember whether start() was called
+_madx_started = False
+
+
 # Python-level binding to libmadx:
+
+def started():
+    """
+    Check whether MAD-X has been initialized.
+    """
+    return _madx_started
+
 
 def start():
     """
     Initialize MAD-X.
     """
     clib.madx_start()
+    global _madx_started
+    _madx_started = True
 
 
 def finish():
@@ -38,6 +51,8 @@ def finish():
     Cleanup MAD-X.
     """
     clib.madx_finish()
+    global _madx_started
+    _madx_started = False
 
 
 def input(cmd):
