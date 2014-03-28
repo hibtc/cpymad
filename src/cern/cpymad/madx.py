@@ -518,18 +518,6 @@ class Madx(object):
         """Returns list of all sequences currently in memory."""
         return self._libmadx.get_sequences()
 
-    def get_element_list(self, sequence_name):
-        '''
-        Returns the list of all elements for the given sequence.
-        '''
-        return self._libmadx.get_element_list(sequence_name)
-
-    def get_element(self, sequence_name, element_name):
-        '''
-        Returns the element with the given name in the specified sequence.
-        '''
-        return self._libmadx.get_element(sequence_name, element_name)
-
     def evaluate(self, cmd):
         """
         Evaluates an expression and returns the result as double.
@@ -580,6 +568,27 @@ class Sequence(object):
     def twissname(self):
         """Get the name of the table with the TWISS results."""
         return self._libmadx.get_twiss(self._name)
+
+    def get_elements(self):
+        """
+        Get list of all elements in the original sequence.
+
+        :returns: list of elements in the original (unexpanded) sequence
+        :rtype: list(Element)
+        """
+        return self._libmadx.get_elements(self._name)
+
+    def get_expanded_elements(self):
+        """
+        Get list of all elements in the expanded sequence.
+
+        :returns: list of elements in the expanded (unexpanded) sequence
+        :rtype: list(Element)
+
+        NOTE: this may very well return an empty list, if the sequence has
+        not been expanded (used) yet.
+        """
+        return self._libmadx.get_expanded_elements(self._name)
 
 
 class Table(object):

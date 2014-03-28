@@ -295,18 +295,6 @@ class Model(abc.model.PyMadModel):
         """
         return self._madx.get_sequence_names()
 
-    def get_element_list(self,sequence_name):
-        '''
-         Returns a list of elements in sequence
-        '''
-        return self._madx.get_element_list(sequence_name)
-
-    def get_element(self,sequence_name,element_name):
-        '''
-         Returns an element from sequence
-        '''
-        return self._madx.get_element(sequence_name,element_name)
-
     def list_optics(self):
         '''
          Returns an iterable of available optics
