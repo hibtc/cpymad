@@ -658,7 +658,17 @@ class TableColumns(object):
 
     def __getattr__(self, column):
         """Get the column data."""
-        return self._libmadx.get_table_column(self._table, column)
+        try:
+            return self._libmadx.get_table_column(self._table, column)
+        except ValueError:
+            raise AttributeError(column)
+
+    def __getitem__(self, column):
+        """Get the column data."""
+        try:
+            return self._libmadx.get_table_column(self._table, column)
+        except ValueError:
+            raise KeyError(column)
 
     def __iter__(self):
         """Get a list of all column names."""
