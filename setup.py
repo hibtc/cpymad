@@ -133,10 +133,6 @@ setup(
         "cern.cpymad._couch",
         "cern.jpymad",
         "cern.jpymad.tools",
-        "cern.pymad",
-        "cern.pymad.io",
-        "cern.pymad.abc",
-        "cern.pymad.domain"
     ],
     include_package_data=True, # include files matched by MANIFEST.in
     author='PyMAD developers',

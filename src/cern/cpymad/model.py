@@ -19,7 +19,6 @@
 .. module: cpymad.model
 
 Cython implementation of the model api.
-See also :py:class:`cern.pymad.model`
 
 .. moduleauthor:: Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen@cern.ch>
 
@@ -33,10 +32,9 @@ import sys
 
 from .model_locator import ModelData
 from .madx import Madx
-from cern.pymad import abc
 
 
-class Model(abc.model.PyMadModel):
+class Model(object):
     '''
     Model class implementation. the model spawns a madx instance in a separate process.
     this has the advantage that you can run separate models which do not affect each other.
