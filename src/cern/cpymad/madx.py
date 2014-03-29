@@ -646,7 +646,7 @@ class Table(object):
         if columns is None:
             columns = self.columns
         return dict((column,
-                     self._libmadx.get_table_column(self._name, column))
+                     self._libmadx.get_table_column(self._name, column.lower()))
                     for column in columns)
 
 
@@ -664,14 +664,14 @@ class TableColumns(object):
     def __getattr__(self, column):
         """Get the column data."""
         try:
-            return self._libmadx.get_table_column(self._table, column)
+            return self._libmadx.get_table_column(self._table, column.lower())
         except ValueError:
             raise AttributeError(column)
 
     def __getitem__(self, column):
         """Get the column data."""
         try:
-            return self._libmadx.get_table_column(self._table, column)
+            return self._libmadx.get_table_column(self._table, column.lower())
         except ValueError:
             raise KeyError(column)
 
