@@ -134,9 +134,11 @@ setup(
                   sources=["src/cern/cpymad/libmadx.pyx"],
                   **extension_args),
     ]),
+    namespace_packages=[
+        'cern'
+    ],
     packages = [
         "cern",
-        "cern.libmadx",
         "cern.resource",
         "cern.cpymad",
         "cern.cpymad._couch",
@@ -146,7 +148,6 @@ setup(
         "cern.pymad",
         "cern.pymad.io",
         "cern.pymad.abc",
-        "cern.pymad.tools",
         "cern.pymad.domain"
     ],
     include_package_data=True, # include files matched by MANIFEST.in

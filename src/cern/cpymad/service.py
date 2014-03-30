@@ -23,7 +23,6 @@ Created on 16 Aug 2011
 from __future__ import absolute_import
 
 from cern.pymad.abc.service import PyMadService
-from cern.pymad.globals import USE_COUCH
 
 from .model import Model
 from .model_locator import ChainModelLocator
@@ -32,18 +31,10 @@ from .model_locator import ChainModelLocator
 # Create a default ModelLocator:
 # NOTE: we could (and probably should) stop using this global object and
 # use only CpymadService objects instead!
-if USE_COUCH:
-    from . import _couch
-    from .model_locator import DistinctModelLocator
-    from cern.resource.couch import CouchResource
+from .model_locator import MergedModelLocator
+from cern.resource.package import PackageResource
 
-    _couch_server=_couch.couch.Server()
-    _locator = DistinctModelLocator(CouchResource(_couch_server._db))
-else:
-    from .model_locator import MergedModelLocator
-    from cern.resource.package import PackageResource
-
-    _locator = MergedModelLocator(PackageResource(__package__, '_models'))
+_locator = MergedModelLocator(PackageResource(__package__, '_models'))
 
 default_model_locator = ChainModelLocator()
 default_model_locator.add_locator(_locator)
