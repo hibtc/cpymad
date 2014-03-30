@@ -306,12 +306,10 @@ cdef _expr(clib.expression* expr,
     if not _expr:
         return _value
     try:
-        _eval = _type(float(_expr))
-        if _eval == _value:
-            return _value
+        return _type(float(_expr))
     except ValueError:
         pass
-    return Expression(_expr, _value, _type)
+    return Expression(_expr, _type(evaluate(_expr)), _type)
 
 
 cdef _get_param_value(clib.command_parameter* par):
