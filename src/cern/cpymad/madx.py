@@ -52,7 +52,7 @@ from .types import Element
 
 import cern.pymad.globals
 from cern.libmadx import _madx_tools
-from cern.pymad.domain.tfs import TfsSummary
+from cern.pymad.domain.tfs import TfsTable, TfsSummary
 
 try:
     basestring
@@ -639,21 +639,6 @@ class Table(object):
         """Get the table summary."""
         return TfsSummary(self._libmadx.get_table_summary(self.name))
 
-    def get_all(self, columns=None):
-        """
-        Return a dictionary with the desired columns.
-
-        :param list columns: column names or ``None`` for all columns.
-        :returns: column data
-        :rtype: dict
-        :raises ValueError: if the table name is invalid
-        """
-        if columns is None:
-            columns = self.columns
-        return dict((column,
-                     self._libmadx.get_table_column(self._name, column.lower()))
-                    for column in columns)
-
 
 class TableColumns(object):
 
@@ -684,3 +669,15 @@ class TableColumns(object):
         """Get a list of all column names."""
         return iter(self._libmadx.get_table_columns(self._table))
 
+    def freeze(self, columns=None):
+        """
+        Return a frozen table with the desired columns.
+
+        :param list columns: column names or ``None`` for all columns.
+        :returns: column data
+        :rtype: TfsTable
+        :raises ValueError: if the table name is invalid
+        """
+        if columns is None:
+            columns = self
+        return TfsTable(dict((column, self[column]) for column in columns))
