@@ -151,6 +151,17 @@ def table_exists(table):
     return bool(clib.table_exists(_table))
 
 
+def get_table_list():
+    """
+    Return list of all table names.
+
+    :returns: table names
+    :rtype: list
+    """
+    return [_str(clib.table_register.names.names[i])
+            for i in xrange(clib.table_register.names.curr)]
+
+
 def get_table_summary(table):
     """
     Get table summary.
