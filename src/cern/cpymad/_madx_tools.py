@@ -4,9 +4,7 @@
 import collections
 import re
 
-
-from cern.pymad.io import tfs,tfsDict
-from cern.pymad.domain.tfs import LookupDict
+from .types import LookupDict
 
 
 try:

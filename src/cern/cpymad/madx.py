@@ -51,7 +51,7 @@ from . import _libmadx_rpc
 from .types import Element
 
 from cern.cpymad import _madx_tools
-from cern.pymad.domain.tfs import TfsSummary
+from cern.cpymad.types import TfsSummary
 
 try:
     basestring
