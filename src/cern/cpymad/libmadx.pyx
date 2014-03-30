@@ -375,7 +375,10 @@ cdef _parse_command(clib.command* cmd):
     return res
 
 
-cdef clib.sequence* _find_sequence(sequence_name):
+# The 'except NULL' clause is needed to forward exceptions from cdef
+# functions with C return values, see:
+# http://docs.cython.org/src/userguide/language_basics.html#error-return-values
+cdef clib.sequence* _find_sequence(sequence_name) except NULL:
     """
     Get pointer to the C sequence struct of the specified sequence or NULL.
 
