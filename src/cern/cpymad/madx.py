@@ -208,7 +208,7 @@ class Madx(object):
         if use and sequence:
             self.use(sequence)
         elif not sequence:
-            sequence = self.sequence
+            sequence = self.active_sequence
         _tmpcmd='twiss, sequence='+sequence+','+_madx_tools._add_range(madrange)
         if chrom:
             _tmpcmd+=',chrom'
@@ -424,7 +424,7 @@ class Madx(object):
         tmpfile = fname or _tmp_filename('match')
 
         cmd = self.matchcommand(
-                sequence=sequence or self.sequence,
+                sequence=sequence or self.active_sequence,
                 constraints=constraints,
                 vary=vary,
                 weight=weight,
@@ -473,14 +473,19 @@ class Madx(object):
         return Table(table, self._libmadx)
 
     @property
-    def sequence(self):
+    def active_sequence(self):
         """Get/set the name of the active sequence."""
         return self._libmadx.get_active_sequence()
 
-    @sequence.setter
-    def sequence(self, name):
-        if self.sequence != name:
+    @active_sequence.setter
+    def active_sequence(self, name):
+        try:
+            active_sequence = self.active_sequence
+        except RuntimeError:
             self.use(name)
+        else:
+            if active_sequence != name:
+                self.use(name)
 
     def get_active_sequence(self):
         """
@@ -490,7 +495,7 @@ class Madx(object):
         :rtype: Sequence
         :raises RuntimeError: if there is no active sequence
         """
-        return Sequence(self.sequence, self._libmadx, _check=False)
+        return Sequence(self.active_sequence, self._libmadx, _check=False)
 
     def get_sequence(self, name):
         """
