@@ -138,6 +138,7 @@ cdef extern from "madX/mad_node.h":
         char[NAME_L] name
         char* base_name
         double at_value
+        double length
         element* p_elem
 
     struct node_list:
@@ -148,6 +149,7 @@ cdef extern from "madX/mad_seq.h":
     struct sequence:
         # original sequence
         char[NAME_L] name
+        int ref_flag
         node_list* nodes
         command* beam
         # expanded sequence
@@ -160,6 +162,11 @@ cdef extern from "madX/mad_seq.h":
         int curr
         name_list* list
         sequence** sequs
+
+cdef enum:
+    REF_EXIT = -1
+    REF_CENTER = 0
+    REF_ENTRY = 1
 
 
 # Global variables:

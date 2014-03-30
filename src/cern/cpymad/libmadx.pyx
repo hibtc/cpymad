@@ -245,7 +245,7 @@ def get_elements(sequence_name):
     :raises ValueError: if the sequence is invalid.
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
-    return [_get_node(seq.nodes.nodes[i])
+    return [_get_node(seq.nodes.nodes[i], seq.ref_flag)
             for i in xrange(seq.nodes.curr)]
 
 
@@ -259,7 +259,7 @@ def get_expanded_elements(sequence_name):
     :raises ValueError: if the sequence is invalid.
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
-    return [_get_node(seq.all_nodes[i])
+    return [_get_node(seq.all_nodes[i], seq.ref_flag)
             for i in xrange(seq.n_nodes)]
 
 
@@ -295,7 +295,7 @@ def evaluate(cmd):
 _expr_types = [bool, int, float]
 
 cdef _expr(clib.expression* expr,
-           float value,
+           double value,
            int typeid=clib.PARAM_TYPE_DOUBLE):
     """Return a parameter value with an appropriate type."""
     _type = _expr_types[typeid]
@@ -422,15 +422,21 @@ cdef bytes _cstr(s):
     return <bytes> s.encode('utf-8')
 
 
-cdef _get_node(clib.node* node):
+cdef _get_node(clib.node* node, int ref_flag):
     """Return dictionary with node + element attributes."""
     if node.p_elem is NULL:
         # Maybe this is a valid case, but better detect it with boom!
         raise RuntimeError("Empty node or subsequence! Please report this incident!")
+    # normalize 'at' value to node entry:
+    cdef double at = node.at_value
+    if ref_flag == clib.REF_CENTER:
+        at -= node.length / 2
+    elif ref_flag == clib.REF_EXIT:
+        at -= node.length
     data = _get_element(node.p_elem)
     data.update({'name': _str(node.name),
                  'type': _str(node.base_name),
-                 'at': node.at_value})
+                 'at': at})
     return data
 
 
