@@ -39,9 +39,10 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
     # def test_help(self):
     # def test_call(self):
 
-    def test_twiss(self):
-        self.mad.command('beam, ex=1, ey=2, particle=electron, sequence=s1;')
-        result = self.mad.twiss(sequence='s1',
+    def _check_twiss(self, seq_name):
+        beam = 'beam, ex=1, ey=2, particle=electron, sequence={0};'.format(seq_name)
+        self.mad.command(beam)
+        result = self.mad.twiss(sequence=seq_name,
                                 alfx=0.5, alfy=1.5,
                                 betx=2.5, bety=3.5)
         columns, summary = result
@@ -53,6 +54,15 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         self.assertAlmostEqual(bety[0], 3.5)
         self.assertAlmostEqual(summary.ex, 1)
         self.assertAlmostEqual(summary.ey, 2)
+
+    def test_twiss_1(self):
+        self._check_twiss('s1')     # s1 can be computed at start
+        self._check_twiss('s1')     # s1 can be computed multiple times
+        self._check_twiss('s2')     # s2 can be computed after s1
+
+    def test_twiss_2(self):
+        self._check_twiss('s2')     # s2 can be computed at start
+        self._check_twiss('s1')     # s1 can be computed after s2
 
     # def test_survey(self):
     # def test_aperture(self):
