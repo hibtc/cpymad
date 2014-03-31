@@ -412,7 +412,9 @@ cdef _name_list(clib.name_list* names, inform):
 cdef _str(char* s):
     """Decode C string to python string."""
     if s is NULL:
-        return None
+        # Returning an empty string will make the type of the parameter
+        # transparent to the inspecting code:
+        return ""
     return s.decode('utf-8')
 
 
