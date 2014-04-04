@@ -20,7 +20,7 @@ import sys
 from os import path
 
 # Version of pymad (major,minor):
-PYMADVERSION=['0','6']
+PYMADVERSION=['0','7']
 
 from setuptools import setup, Extension
 
