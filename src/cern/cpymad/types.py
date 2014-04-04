@@ -1,25 +1,16 @@
-#-------------------------------------------------------------------------------
-# This file is part of PyMad.
-#
-# Copyright (c) 2011, CERN. All rights reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# 	http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#-------------------------------------------------------------------------------
 """
-Created on 16 Aug 2011
-.. module:: tfs
-.. moduleauthor:: kfuchsbe
+Python type analogues for MAD-X data structures.
 """
+
+from collections import namedtuple
+
+__all__ = ['LookupDict',
+           'TfsTable',
+           'TfsSummary',
+           'Range',
+           'Constraint',
+           'Expression',
+           'Element']
 
 
 class LookupDict(object):
@@ -114,3 +105,69 @@ class TfsSummary(LookupDict):
 
     pass
 
+
+Range = namedtuple('Range', ['first', 'last'])
+
+
+class Constraint(object):
+
+    """Represents a MAD-X constraint, which has either min/max/both/value."""
+
+    def __init__(self, val=None, min=None, max=None):
+        """Just store the values"""
+        self.val = val
+        self.min = min
+        self.max = max
+
+
+class Expression(object):
+
+    """
+    Data structure representing input values from madx statements.
+
+    These both an expression (str) and a value (bool/int/float).
+    """
+
+    def __init__(self, expr, value, type=float):
+        """Store string expression and value."""
+        self.expr = expr
+        self._value = value
+        self.type = type
+
+    def __repr__(self):
+        """Return string representation of this object."""
+        return '{}({!r}, {}, {})'.format(self.__class__.__name__,
+                                         self.expr, self.value,
+                                         self.type.__name__)
+
+    def __str__(self):
+        """Get the expression as string."""
+        return self.expr
+
+    @property
+    def value(self):
+        """Get the value with the most accurate type."""
+        return self.type(self._value)
+
+    def __bool__(self):     # python3
+        """Get the value as boolean."""
+        return bool(self._value)
+
+    __nonzero__ = __bool__   # python2
+
+    def __int__(self):
+        """Get the value as integer."""
+        return int(self._value)
+
+    def __float__(self):
+        """Get the value as double."""
+        return float(self._value)
+
+
+class Element(LookupDict):
+
+    """
+    Case-insensitive property table for a MAD-X beamline element.
+    """
+
+    pass

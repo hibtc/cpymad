@@ -48,9 +48,10 @@ import os, sys
 import collections
 
 from . import _libmadx_rpc
-import cern.pymad.globals
-from cern.libmadx import _madx_tools
-from cern.pymad.domain.tfs import TfsTable,TfsSummary
+from .types import Element
+
+from cern.cpymad import _madx_tools
+from cern.cpymad.types import TfsTable, TfsSummary
 
 try:
     basestring
@@ -58,17 +59,32 @@ except NameError:
     basestring = str
 
 # private utility functions
-def _tmp_filename(operation):
+def _tmp_filename(operation, suffix='.temp.tfs'):
     """
     Create a name for a temporary file.
     """
-    tmpfile = operation + '.temp.tfs'
+    tmpfile = operation + suffix
     i = 0
     while os.path.isfile(tmpfile):
-        tmpfile = operation + '.' + str(i) + '.temp.tfs'
+        tmpfile = operation + '.' + str(i) + suffix
         i += 1
     return tmpfile
 
+
+def _check_command(cmd):
+    ''' give the lowercase version of the command
+    this function does some sanity checks...'''
+    if cmd in ('stop;', 'exit;'):
+        print("WARNING: found quit in command: "+cmd+"\n")
+        print("Please use madx.finish() or just exit python (CTRL+D)")
+        print("Command ignored")
+        return False
+    if cmd.startswith('plot'):
+        print("WARNING: Plot functionality does not work through pymadx")
+        print("Command ignored")
+        return False
+    # All checks passed..
+    return True
 
 
 # main interface
@@ -76,75 +92,48 @@ class Madx(object):
     '''
     Python class which interfaces to Mad-X library
     '''
-    def __init__(self,histfile='',recursive_history=False):
+    _hist = False
+    _hfile = None
+    _rechist = False
+
+    def __init__(self, histfile=None, recursive_history=False, libmadx=None):
         '''
         Initializing Mad-X instance
 
         :param str histfile: (optional) name of file which will contain all Mad-X commands.
         :param bool recursive_history: If true, history file will contain no calls to other files.
                                        Instead, recursively writing commands from these files when called.
+        :param object libmadx: :mod:`libmadx` compatible object
 
         '''
-        self._conn = _libmadx_rpc.LibMadxClient.spawn_subprocess()
-        self._libmadx = self._conn.libmadx
-        self._libmadx.start()
+        self._libmadx = libmadx or _libmadx_rpc.LibMadxClient.spawn_subprocess().libmadx
+        if not self._libmadx.started():
+            self._libmadx.start()
 
         if histfile:
-            self._hist=True
-            self._hfile=open(histfile,'w')
-            self._rechist=recursive_history
-        elif cern.pymad.globals.MAD_HISTORY_BASE:
-            base=cern.pymad.globals.MAD_HISTORY_BASE
-            self._hist=True
-            i=0
-            while os.path.isfile(base+str(i)+'.madx'):
-                i+=1
-            self._hfile=open(base+str(i)+'.madx','w')
-            self._rechist=recursive_history
-        else:
-            self._hist=False
-            if recursive_history:
-                print("WARNING: you cannot get recursive history without history file...")
-            self._rechist=False
+            self._hist = True
+            self._hfile = open(histfile,'w')
+            self._rechist = recursive_history
 
     def __del__(self):
-        '''
-         Closes history file
-         madx_finish should
-         not be called since
-         other objects might still be
-         running..
-        '''
-        if self._rechist:
+        """Close history file."""
+        if self._hfile:
             self._hfile.close()
-        self._libmadx.finish()
-        self._conn.close()
 
-    def command(self,cmd):
+    def command(self, cmd):
         '''
-         Send a general Mad-X command.
-         Some sanity checks are performed.
+        Perform sequence of MAD-X commands.
 
-         :param string cmd: command
+        :param string cmd: command sequence
+
+        This function can take multiple commands separated by a semi-colon.
+
         '''
-        cmd=_madx_tools._fixcmd(cmd)
-        if type(cmd)==int: # means we should not execute command
-            return cmd
-        if type(cmd)==list:
-            for c in cmd:
-                self._single_cmd(c)
-        else:
-            self._single_cmd(cmd)
-
-    def _single_cmd(self,cmd):
-        if self._hist:
-            if cmd[-1]=='\n':
-                self._writeHist(cmd)
-            else:
-                self._writeHist(cmd+'\n')
-        if _madx_tools._checkCommand(cmd.lower()):
-            self._libmadx.input(cmd)
-        return 0
+        for c in cmd.split(';'):
+            c = c.strip() + ';'
+            if _check_command(c.lower()):
+                self._writeHist(c + '\n')
+                self._libmadx.input(c)
 
     def help(self,cmd=''):
         if cmd:
@@ -187,12 +176,11 @@ class Madx(object):
             self.command('SELECT, FLAG='+flag+', PATTERN='+p+';')
 
     def twiss(self,
-              sequence,
+              sequence=None,
               pattern=['full'],
               columns='name,s,betx,bety,x,y,dx,dy,px,py,mux,muy,l,k1l,angle,k2l',
               madrange='',
               fname='',
-              retdict=False,
               betx=None,
               bety=None,
               alfx=None,
@@ -209,15 +197,16 @@ class Madx(object):
             :param string fname: name of file to store tfs table
             :param list pattern: pattern to include in table
             :param string columns: columns to include in table, can also be a list of strings
-            :param bool retdict: if true, returns tables as dictionary types
             :param dict twiss_init: dictionary of twiss initialization variables
             :param bool use: Call use before aperture.
             :param bool chrom: Also calculate chromatic functions (slower)
         '''
         self.select('twiss',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
-        if use:
+        if use and sequence:
             self.use(sequence)
+        elif not sequence:
+            sequence = self.active_sequence
         _tmpcmd='twiss, sequence='+sequence+','+_madx_tools._add_range(madrange)
         if chrom:
             _tmpcmd+=',chrom'
@@ -236,15 +225,14 @@ class Madx(object):
                     else:
                         _tmpcmd+=','+i_var+'='+str(i_val)
         self.command(_tmpcmd+';')
-        return self._get_table('twiss',columns,retdict)
+        return self.get_table('twiss')
 
     def survey(self,
-              sequence,
+              sequence=None,
               pattern=['full'],
               columns='name,l,s,angle,x,y,z,theta',
               madrange='',
               fname='',
-              retdict=False,
               use=True
               ):
         '''
@@ -254,28 +242,23 @@ class Madx(object):
             :param string fname: name of file to store tfs table
             :param list pattern: pattern to include in table
             :param string/list columns: Columns to include in table
-            :param bool retdict: if true, returns tables as dictionary types
             :param bool use: Call use before survey.
         '''
         tmpfile = fname or _tmp_filename('survey')
         self.select('survey',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
-        if use:
+        if use and sequence:
             self.use(sequence)
         self.command('survey,'+_madx_tools._add_range(madrange)+' file="'+tmpfile+'";')
-        tab,param=_madx_tools._get_dict(tmpfile,retdict)
-        if not fname:
-            os.remove(tmpfile)
-        return (tab,param)
+        return self.get_table('survey')
 
     def aperture(self,
-              sequence,
+              sequence=None,
               pattern=['full'],
               madrange='',
               columns='name,l,angle,x,y,z,theta',
               offsets='',
               fname='',
-              retdict=False,
               use=False
               ):
         '''
@@ -285,20 +268,19 @@ class Madx(object):
          :param string fname: name of file to store tfs table
          :param list pattern: pattern to include in table
          :param list columns: columns to include in table (can also be string)
-         :param bool retdict: if true, returns tables as dictionary types
          :param bool use: Call use before aperture.
         '''
         tmpfile = fname or _tmp_filename('aperture')
         self.select('aperture',pattern=pattern,columns=columns)
         self.command('set, format="12.6F";')
-        if use:
+        if use and sequence:
             print("Warning, use before aperture is known to cause problems")
             self.use(sequence) # this seems to cause a bug?
         _cmd='aperture,'+_madx_tools._add_range(madrange)+_madx_tools._add_offsets(offsets)
         if fname:
             _cmd+=',file="'+fname+'"'
         self.command(_cmd)
-        return self._get_table('aperture',columns,retdict)
+        return self.get_table('aperture')
 
     def use(self,sequence):
         self.command('use, sequence='+sequence+';')
@@ -440,7 +422,7 @@ class Madx(object):
         tmpfile = fname or _tmp_filename('match')
 
         cmd = self.matchcommand(
-                sequence=sequence,
+                sequence=sequence or self.active_sequence,
                 constraints=constraints,
                 vary=vary,
                 weight=weight,
@@ -465,6 +447,8 @@ class Madx(object):
 
     def _writeHist(self,command):
         # this still brakes for "multiline commands"...
+        if not self._hfile:
+            return
         if self._rechist and command.split(',')[0].strip().lower()=='call':
             cfile=command.split(',')[1].strip().strip('file=').strip('FILE=').strip(';\n').strip('"').strip("'")
             if sys.flags.debug:
@@ -476,7 +460,7 @@ class Madx(object):
             self._hfile.write(command)
             self._hfile.flush()
 
-    def _get_table(self, table, columns, retdict):
+    def get_table(self, table):
         """
         Get the specified table columns as numpy arrays.
 
@@ -486,20 +470,61 @@ class Madx(object):
         :type columns: list or str (comma separated)
 
         """
-        if isinstance(columns, basestring):
-            columns = columns.split(',')
-        # NOTE: the obtain() call copies the numpy arrays, so we don't need
-        # to worry about memory faults:
-        t, s = self._libmadx.get_table(table, columns)
-        if retdict:
-            return t, s
+        return Table(table, self._libmadx)
+
+    @property
+    def active_sequence(self):
+        """Get/set the name of the active sequence."""
+        return self._libmadx.get_active_sequence()
+
+    @active_sequence.setter
+    def active_sequence(self, name):
+        try:
+            active_sequence = self.active_sequence
+        except RuntimeError:
+            self.use(name)
         else:
-            return TfsTable(t), TfsSummary(s)
+            if active_sequence != name:
+                self.use(name)
+
+    def get_active_sequence(self):
+        """
+        Get a handle to the active sequence.
+
+        :returns: a proxy object for the sequence
+        :rtype: Sequence
+        :raises RuntimeError: if there is no active sequence
+        """
+        return Sequence(self.active_sequence, self._libmadx, _check=False)
+
+    def get_sequence(self, name):
+        """
+        Get a handle to the specified sequence.
+
+        :param str name: sequence name
+        :returns: a proxy object for the sequence
+        :rtype: Sequence
+        :raises ValueError: if a sequence name is invalid
+        """
+        return Sequence(name, self._libmadx)
 
     def get_sequences(self):
-        '''
-        Returns the sequences currently in memory
-        '''
+        """
+        Return list of all sequences currently in memory.
+
+        :returns: list of sequence proxy objects
+        :rtype: list(Sequence)
+        """
+        return [Sequence(name, self._libmadx, _check=False)
+                for name in self.get_sequence_names()]
+
+    def get_sequence_names(self):
+        """
+        Return list of all sequences currently in memory.
+
+        :returns: list of all sequences names
+        :rtype: list(str)
+        """
         return self._libmadx.get_sequences()
 
     def evaluate(self, cmd):
@@ -513,3 +538,146 @@ class Madx(object):
         """
         return self._libmadx.evaluate(cmd)
 
+
+class Sequence(object):
+
+    """
+    MAD-X sequence representation.
+    """
+
+    def __init__(self, name, libmadx, _check=True):
+        """Store sequence name."""
+        self._name = name
+        self._libmadx = libmadx
+        if _check and not libmadx.sequence_exists(name):
+            raise ValueError("Invalid sequence: {!r}".format(name))
+
+    def __str__(self):
+        """String representation."""
+        return "{}({})".format(self.__class__.__name__, self._name)
+
+    __repr__ = __str__
+
+    @property
+    def name(self):
+        """Get the name of the sequence."""
+        return self._name
+
+    @property
+    def beam(self):
+        """Get the beam dictionary associated to the sequence."""
+        return self._libmadx.get_beam(self._name)
+
+    @property
+    def twiss(self):
+        """Get the TWISS results from the last calculation."""
+        return self._libmadx.get_table(self.twissname)
+
+    @property
+    def twissname(self):
+        """Get the name of the table with the TWISS results."""
+        return self._libmadx.get_twiss(self._name)
+
+    def get_elements(self):
+        """
+        Get list of all elements in the original sequence.
+
+        :returns: list of elements in the original (unexpanded) sequence
+        :rtype: list(Element)
+        """
+        return [Element(elem)
+                for elem in self._libmadx.get_elements(self._name)]
+
+    def get_expanded_elements(self):
+        """
+        Get list of all elements in the expanded sequence.
+
+        :returns: list of elements in the expanded (unexpanded) sequence
+        :rtype: list(Element)
+
+        NOTE: this may very well return an empty list, if the sequence has
+        not been expanded (used) yet.
+        """
+        return [Element(elem)
+                for elem in self._libmadx.get_expanded_elements(self._name)]
+
+
+class Table(object):
+
+    """
+    MAD-X table access class.
+    """
+
+    def __init__(self, name, libmadx, _check=True):
+        """Just store the table name for now."""
+        self._name = name
+        self._libmadx = libmadx
+        if _check and not libmadx.table_exists(name):
+            raise ValueError("Invalid table: {!r}".format(name))
+
+    def __iter__(self):
+        """Old style access."""
+        columns = self.columns
+        try:
+            summary = self.summary
+        except ValueError:
+            summary = None
+        return iter((columns, summary))
+
+    @property
+    def name(self):
+        """Get the table name."""
+        return self._name
+
+    @property
+    def columns(self):
+        """Get a lazy accessor for the table columns."""
+        return TableColumns(self.name, self._libmadx)
+
+    @property
+    def summary(self):
+        """Get the table summary."""
+        return TfsSummary(self._libmadx.get_table_summary(self.name))
+
+
+class TableColumns(object):
+
+    """
+    Lazy accessor for table column data.
+    """
+
+    def __init__(self, table, libmadx):
+        """Store tabe name and libmadx connection."""
+        self._table = table
+        self._libmadx = libmadx
+
+    def __getattr__(self, column):
+        """Get the column data."""
+        try:
+            return self._libmadx.get_table_column(self._table, column.lower())
+        except ValueError:
+            raise AttributeError(column)
+
+    def __getitem__(self, column):
+        """Get the column data."""
+        try:
+            return self._libmadx.get_table_column(self._table, column.lower())
+        except ValueError:
+            raise KeyError(column)
+
+    def __iter__(self):
+        """Get a list of all column names."""
+        return iter(self._libmadx.get_table_columns(self._table))
+
+    def freeze(self, columns=None):
+        """
+        Return a frozen table with the desired columns.
+
+        :param list columns: column names or ``None`` for all columns.
+        :returns: column data
+        :rtype: TfsTable
+        :raises ValueError: if the table name is invalid
+        """
+        if columns is None:
+            columns = self
+        return TfsTable(dict((column, self[column]) for column in columns))
