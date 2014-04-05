@@ -263,6 +263,19 @@ def get_expanded_elements(sequence_name):
             for i in xrange(seq.n_nodes)]
 
 
+def is_expanded(sequence_name):
+    """
+    Check whether a sequence has already been expanded.
+
+    :param str sequence_name: sequence name
+    :returns: expanded state of the sequence
+    :rtype: bool
+    :raises ValueError: if the sequence is invalid
+    """
+    cdef clib.sequence* seq = _find_sequence(sequence_name)
+    return seq.n_nodes > 0
+
+
 def evaluate(cmd):
     """
     Evaluates an expression and returns the result as double.
