@@ -10,8 +10,8 @@ Probably, you want to interact with MAD-X via the cpymad.madx module. It
 provides higher level abstraction and can deal with multiple instances of
 MAD-X. Furthermore, it enhances the security by boxing all MAD-X calls into
 a subprocess.
-
 """
+
 import numpy as np      # Import the Python-level symbols of numpy
 cimport numpy as cnp    # Import the C-level symbols of numpy
 
@@ -29,10 +29,33 @@ _madx_started = False
 
 
 # Python-level binding to libmadx:
+__all__ = [
+    'started',
+    'start',
+    'finish',
+    'input',
+    'sequence_exists',
+    'get_twiss',
+    'get_beam',
+    'get_active_sequence',
+    'get_sequences',
+    'table_exists',
+    'get_table_list',
+    'get_table_summary',
+    'get_table_column',
+    'get_elements',
+    'get_expanded_elements',
+    'is_expanded',
+    'evaluate'
+]
+
 
 def started():
     """
     Check whether MAD-X has been initialized.
+
+    :returns: whether :func:`start` was called without matching :func:`finish`
+    :rtype: bool
     """
     return _madx_started
 
