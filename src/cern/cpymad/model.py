@@ -165,8 +165,8 @@ class Model(abc.model.PyMadModel):
         self._apercalled={}
         self._twisscalled={}
         for seq in self.get_sequences():
-            self._apercalled[seq]=False
-            self._twisscalled[seq]=False
+            self._apercalled[seq.name]=False
+            self._twisscalled[seq.name]=False
 
     def _init_sequence(self,sequence):
         '''
@@ -237,7 +237,7 @@ class Model(abc.model.PyMadModel):
 
          :param string sequence: Sequence name to be checked.
         '''
-        return sequence in self.get_sequences()
+        return sequence in self.get_sequence_names()
 
     def has_optics(self,optics):
         '''
@@ -289,6 +289,12 @@ class Model(abc.model.PyMadModel):
         '''
         return self._madx.get_sequences()
 
+    def get_sequence_names(self):
+        """
+        Return list of all loaded sequences.
+        """
+        return self._madx.get_sequence_names()
+
     def list_optics(self):
         '''
          Returns an iterable of available optics
@@ -306,7 +312,7 @@ class Model(abc.model.PyMadModel):
         if sequence is None:
             ret={}
             for s in self.get_sequences():
-                ret[s]=list(self._mdef['sequences'][s]['ranges'].keys())
+                ret[s.name]=list(self._mdef['sequences'][s]['ranges'].keys())
             return ret
 
         return list(self._mdef['sequences'][sequence]['ranges'].keys())
@@ -338,7 +344,6 @@ class Model(abc.model.PyMadModel):
               pattern=['full'],
               madrange='',
               fname='',
-              retdict=False,
               use=True
               ):
         '''
@@ -351,7 +356,6 @@ class Model(abc.model.PyMadModel):
          :param string columns: Columns in the twiss table, can also be list of strings
          :param string madrange: Optional, give name of a range defined for the model.
          :param string fname: Optionally, give name of file for tfs table.
-         :param bool retdict: Return dictionaries (default is an extended LookUpDict).
          :param bool use: Call use before twiss.
         '''
         # set sequence/range...
@@ -377,27 +381,25 @@ class Model(abc.model.PyMadModel):
         else:
             twiss_init = None
 
-        t,s = self._madx.twiss(
+        res = self._madx.twiss(
             sequence=sequence,
             pattern=pattern,
             columns=columns,
             madrange=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]],
             fname=fname,
-            retdict=retdict,
             twiss_init=twiss_init,
             use=use)
         # we say that when the "full" range has been selected,
         # we can set this to true. Needed for e.g. aperture calls
         if not madrange:
             self._twisscalled[sequence]=True
-        return t, s
+        return res
 
     def survey(self,
                sequence='',
                columns='name,l,s,angle,x,y,z,theta',
                madrange='',
                fname='',
-               retdict=False,
                use=True):
         '''
          Run a survey on the model.
@@ -405,7 +407,6 @@ class Model(abc.model.PyMadModel):
          :param string sequence: Sequence, if empty, using active sequence.
          :param string columns: Columns in the twiss table, can also be list of strings
          :param string fname: Optionally, give name of file for tfs table.
-         :param bool retdict: Return dictionaries (default is an extended LookUpDict).
          :param bool use: Call use before survey.
         '''
         self.set_sequence(sequence)
@@ -421,15 +422,13 @@ class Model(abc.model.PyMadModel):
             columns=columns,
             madrange=this_range,
             fname=fname,
-            use=use,
-            retdict=retdict)
+            use=use)
 
     def aperture(self,
                sequence='',
                madrange='',
                columns='name,l,s,n1,aper_1,aper_2,aper_3,aper_4',
                fname='',
-               retdict=False,
                use=False):
         '''
          Get the aperture from the model.
@@ -438,7 +437,6 @@ class Model(abc.model.PyMadModel):
          :param string madrange: Range, if empty, the full sequence is chosen.
          :param string columns: Columns in the twiss table, can also be list of strings
          :param string fname: Optionally, give name of file for tfs table.
-         :param bool retdict: Return dictionaries (default is an extended LookUpDict).
          :param bool use: Call use before aperture.
         '''
         self.set_sequence(sequence)
@@ -466,8 +464,7 @@ class Model(abc.model.PyMadModel):
               'madrange': this_range,
               'columns': columns,
               'fname': fname,
-              'use': use,
-              'retdict': retdict}
+              'use': use}
 
         if offsets:
             with offsets as offsets_filename:
@@ -483,8 +480,7 @@ class Model(abc.model.PyMadModel):
             weight=None,
             method=['lmdif'],
             sequence = '',
-            fname='',
-            retdict=False):
+            fname=''):
         """
         Perform a matching operation.
 
@@ -520,7 +516,6 @@ class Model(abc.model.PyMadModel):
             fname=fname,
             twiss_init=twiss_init)
         return self.twiss(sequence=sequence)
-
 
     def _get_ranges(self,sequence):
         return self._mdef['sequences'][sequence]['ranges'].keys()

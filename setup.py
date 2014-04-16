@@ -23,7 +23,7 @@ import sys
 from os import path
 
 # Version of pymad (major,minor):
-PYMADVERSION=['0','6']
+PYMADVERSION=['0','7']
 
 
 # setuptools.Extension automatically converts all '.pyx' extensions to '.c'
@@ -118,9 +118,11 @@ setup(
                   sources=["src/cern/cpymad/libmadx.pyx"],
                   **extension_args),
     ]),
+    namespace_packages=[
+        'cern'
+    ],
     packages = [
         "cern",
-        "cern.libmadx",
         "cern.resource",
         "cern.cpymad",
         "cern.cpymad._couch",
@@ -130,7 +132,6 @@ setup(
         "cern.pymad",
         "cern.pymad.io",
         "cern.pymad.abc",
-        "cern.pymad.tools",
         "cern.pymad.domain"
     ],
     include_package_data=True, # include files matched by MANIFEST.in
