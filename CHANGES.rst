@@ -1,13 +1,18 @@
 Changelog
 ~~~~~~~~~
 
-0.7
+0.8
 ===
 in preparation
 
 - bootstrap the dependency on numpy
 - remove custom MAD-X path discovery. You should use --madxdir if the
   library is not installed in a system location.
+
+0.7
+===
+Date: 16.04.2014
+
 
 0.6
 ===
