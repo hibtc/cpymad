@@ -33,6 +33,25 @@ if sys.platform == 'linux':
 else:
     from ._connection.pickle import Connection
 
+def _close_all_but(keep):
+    """Close all but the given file descriptors."""
+    # first, let the garbage collector run, it may find some unreachable
+    # file objects and close them:
+    import gc
+    gc.collect()
+    try:
+        # highest file descriptor value + 1:
+        MAXFD = os.sysconf("SC_OPEN_MAX")
+    except (AttributeError, ValueError):
+        # on windows there is no os.sysconf, on other systems the
+        # SC_OPEN_MAX may not be available:
+        from subprocess import MAXFD
+    # close all ranges in between the file descriptors to be kept:
+    keep = sorted(set([-1] + keep + [MAXFD]))
+    for s, e in zip(keep[:-1], keep[1:]):
+        if s+1 > e:
+            os.closerange(s+1, e)
+
 def remap_stdio():
     """
     Remap STDIO streams to new file descriptors and create new STDIO streams.
@@ -52,6 +71,8 @@ def remap_stdio():
     # Usually though, these should be the same.
     STDIN = sys.stdin.fileno()
     STDOUT = sys.stdout.fileno()
+    STDERR = sys.stderr.fileno()
+    _close_all_but([STDIN, STDOUT, STDERR])
     # virtual file name for console (terminal) IO:
     console = 'con:' if sys.platform == 'win32' else '/dev/tty'
     stdin_fd = os.open(os.devnull, os.O_RDONLY)
@@ -67,6 +88,7 @@ def remap_stdio():
     send_fd = os.dup(sys.stdout.fileno())
     sys.stdin.close()
     sys.stdout.close()
+    # Make sure, all file handles are closed, except for the RPC streams.
     # By duplicating the file descriptors to the STDIN/STDOUT file
     # descriptors non-python libraries can make use of these streams as
     # well. The initial fds are not needed anymore.
