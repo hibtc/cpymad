@@ -32,7 +32,10 @@ install:
   - pip install cython
 
   # Check that the setup succeeds without having numpy installed first:
-  - python setup.py install
+  # NOTE: the second call is needed because on python3 numpy and pyyaml won't
+  # build from scratch in the same build. This looks like some weird bug in
+  # setuptools.
+  - python setup.py install || python setup.py install
 
   # Uninstall the package but leave the numpy installation untouched in
   # order to test the installation from the distribution later on:
