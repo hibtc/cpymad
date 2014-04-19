@@ -571,7 +571,7 @@ class Sequence(object):
     @property
     def twiss(self):
         """Get the TWISS results from the last calculation."""
-        return self._libmadx.get_table(self.twissname)
+        return Table(self.twissname, self._libmadx)
 
     @property
     def twissname(self):
