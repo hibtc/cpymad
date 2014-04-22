@@ -65,22 +65,22 @@ class build_ext(_build_ext):
         # Add location of numpy headers:
         self.include_dirs.append(numpy.get_include())
 
+# Let's just use the default system headers:
+include_dirs = []
+library_dirs = []
+
 # Parse command line option: --madxdir=/path/to/madxinstallation. We could
 # use build_ext.user_options instead, but then the --madxdir argument can
 # be passed only to the 'build_ext' command, not to 'build' or 'install',
 # which is a minor nuisance.
-for arg in sys.argv:
+for arg in sys.argv[:]:
     if arg.startswith('--madxdir='):
         sys.argv.remove(arg)
-        prefix = arg.split('=', 1)[1]
-        include_dirs = [path.join(prefix, 'include')]
+        prefix = path.expanduser(arg.split('=', 1)[1])
         lib_path_candidates = [path.join(prefix, 'lib'),
                                path.join(prefix, 'lib64')]
-        library_dirs = list(filter(path.isdir, lib_path_candidates))
-        break
-else:
-    # Let's just use the default system headers:
-    include_dirs = library_dirs = []
+        include_dirs += [path.join(prefix, 'include')]
+        library_dirs += list(filter(path.isdir, lib_path_candidates))
 
 # required libraries
 if get_platform() == "win32":
