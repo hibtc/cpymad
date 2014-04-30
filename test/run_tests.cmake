@@ -57,7 +57,7 @@ set(CTEST_BUILD_NAME                    "${osname}-${cpu}")
 
 ## -- Update Command
 set(CTEST_UPDATE_COMMAND "git")
-set(CTEST_BUILD_COMMAND  "python setup.py build")
+set(CTEST_BUILD_COMMAND  "python setup.py build --madxdir=/usr/local")
 
 ctest_start(${DASHBOARD})
 message(${CTEST_SOURCE_DIRECTORY}/src/build)

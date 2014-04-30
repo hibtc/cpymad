@@ -1,8 +1,22 @@
 Changelog
 ~~~~~~~~~
 
+0.8
+===
+in preparation
+
+- bootstrap the dependency on numpy
+- remove custom MAD-X path discovery. You should use --madxdir if the
+  library is not installed in a system location.
+
+0.7
+===
+Date: 16.04.2014
+
+
 0.6
 ===
+Date: 17.03.2014
 
 - raise exception and don't hang up anymore, if libmadx process crashes
 - on python>=2.7, close handles in remote process properly
@@ -17,6 +31,7 @@ Changelog
 
 0.5
 ===
+Date: 21.01.2014
 
 - migrate to setuptools from distutils
 - python3 support

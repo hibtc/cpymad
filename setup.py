@@ -15,14 +15,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
+from setuptools import setup, Extension
+from setuptools.command.build_ext import build_ext as _build_ext
+from distutils.util import get_platform
 
 import sys
 from os import path
 
 # Version of pymad (major,minor):
-PYMADVERSION=['0','7']
+PYMADVERSION=['0','8']
 
-from setuptools import setup, Extension
 
 # setuptools.Extension automatically converts all '.pyx' extensions to '.c'
 # extensions if detecting that neither Cython nor Pyrex is available. Early
@@ -49,72 +51,53 @@ else:
             orig_Extension.__init__(self, name, sources, *args, **kwargs)
             self.sources = sources
 
-import platform
-from distutils.util import get_platform
-import numpy
+# Subclass the build_ext command for building C-extensions. This enables to
+# use the ``setup_requires`` argument of setuptools to install a missing
+# numpy dependency, before having to know the location of the numpy header
+# files. All in all, this should make the setup more properly bootstrapped.
+class build_ext(_build_ext):
+    def finalize_options(self):
+        _build_ext.finalize_options(self)
+        # Before importing numpy, we need to make sure it doesn't think it
+        # is still during its setup process:
+        __builtins__.__NUMPY_SETUP__ = False
+        import numpy
+        # Add location of numpy headers:
+        self.include_dirs.append(numpy.get_include())
 
-# parse command line option: --madxdir=/path/to/madxinstallation
-special_madxdir = ''
-for arg in list(sys.argv):  # avoid problems due to side-effects by copying sys.argv into a temporary list
+# Let's just use the default system headers:
+include_dirs = []
+library_dirs = []
+
+# Parse command line option: --madxdir=/path/to/madxinstallation. We could
+# use build_ext.user_options instead, but then the --madxdir argument can
+# be passed only to the 'build_ext' command, not to 'build' or 'install',
+# which is a minor nuisance.
+for arg in sys.argv[:]:
     if arg.startswith('--madxdir='):
-        special_madxdir = arg.split('=', 1)[1]
         sys.argv.remove(arg)
-
-def add_dir(dirlist, directory):
-    if path.isdir(directory) and directory not in dirlist:
-        dirlist.append(directory)
-
-# guess prefixes for possible header/library locations
-if special_madxdir:
-    _prefixdirs = [special_madxdir]
-else:
-    _prefixdirs = [sys.prefix]
-add_dir(_prefixdirs, '/usr')
-add_dir(_prefixdirs, '/usr/local')
-add_dir(_prefixdirs, path.join(path.expanduser('~'),'.local'))
-
-# extra include pathes: madx
-includedirs = [path.join(d, 'include')
-               for d in _prefixdirs
-               if path.isdir(path.join(d, 'include', 'madX'))]
-if not includedirs:
-    raise RuntimeError("Cannot find folder with Mad-X headers")
-
-# Add numpy include directory (for cern.libmadx.table):
-includedirs.append(numpy.get_include())
-
-# static library pathes
-libdirs = []        # static library pathes
-for prefixdir in _prefixdirs:
-    add_dir(libdirs, path.join(prefixdir,'lib'))
-    if platform.architecture()[0]=='64bit':
-        add_dir(libdirs, path.join(prefixdir,'lib64'))
-
-# runtime library pathes
-rlibdirs = []
-for ldir in libdirs:
-    if any(path.isfile(path.join(ldir,'libmadx.'+suffix))
-           for suffix in ['so','dll','dylib']):
-        rlibdirs = [ldir]
-        libdirs = [ldir]    # overwrites libdirs, is this intentional?
-        break
+        prefix = path.expanduser(arg.split('=', 1)[1])
+        lib_path_candidates = [path.join(prefix, 'lib'),
+                               path.join(prefix, 'lib64')]
+        include_dirs += [path.join(prefix, 'include')]
+        library_dirs += list(filter(path.isdir, lib_path_candidates))
 
 # required libraries
-libs = ['madx', 'stdc++']
 if get_platform() == "win32":
-    libs += ['ptc', 'gfortran', 'msvcrt']
+    libraries = ['madx', 'stdc++', 'ptc', 'gfortran', 'msvcrt']
 else:
-    libs += ['c']
+    libraries = ['madx', 'stdc++', 'c']
 
-# common cython arguments
+# Common arguments for the Cython extensions:
 extension_args = dict(
     define_macros=[('MAJOR_VERSION', PYMADVERSION[0]),
                    ('MINOR_VERSION', PYMADVERSION[1])],
-    include_dirs=includedirs,
-    libraries=libs,
-    library_dirs=libdirs,
-    runtime_library_dirs=rlibdirs)
+    libraries=libraries,
+    include_dirs=include_dirs,
+    library_dirs=library_dirs,
+    runtime_library_dirs=library_dirs)
 
+# Compose a long description for PyPI:
 long_description = None
 try:
     long_description = open('README.rst').read()
@@ -129,6 +112,7 @@ setup(
     long_description=long_description,
     url='http://cern.ch/pymad',
     package_dir={'':'src'},
+    cmdclass={'build_ext':build_ext},
     ext_modules = cythonize([
         Extension('cern.cpymad.libmadx',
                   sources=["src/cern/cpymad/libmadx.pyx"],
@@ -151,11 +135,10 @@ setup(
         "cern.pymad.domain"
     ],
     include_package_data=True, # include files matched by MANIFEST.in
-    install_requires=[
-        'PyYAML',
-    ],
     author='PyMAD developers',
     author_email='pymad@cern.ch',
-    license = 'CERN Standard Copyright License',
+    setup_requires=['numpy'],
+    install_requires=['numpy', 'PyYAML'],
+    license = 'CERN Standard Copyright License'
 )
 

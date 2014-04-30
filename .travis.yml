@@ -26,11 +26,26 @@ before_install:
 
 # Setup (performed within virtualenv)
 install:
-  # Resolve dependencies (numpy will also take some time!):
-  - pip install -r requirements.txt
+  # We need to install cython here, since Travis uses the checkout from the
+  # repository which doesn't contain ".c" source files (unlike the source
+  # distribution from PyPI):
+  - pip install cython
 
-  # Install package (from the source distribution in order to test its
-  # validity as well):
+  # Check that the setup succeeds without having numpy installed first:
+  # NOTE: the second call is needed because on python3 numpy and pyyaml won't
+  # build from scratch in the same build. This looks like some weird bug in
+  # setuptools.
+  - python setup.py install || python setup.py install
+
+  # Uninstall the package but leave the numpy installation untouched in
+  # order to test the installation from the distribution later on:
+  - pip uninstall cern-pymad --yes
+
+  # Note that if we didn't have numpy installed at this point, the following
+  # commands would recompile numpy another 3 times (once in sdist and twice
+  # during the pip command)!
+
+  # Now install the package again from the source distribution:
   - python setup.py sdist
   - pip install $(ls ./dist/*.tar.gz | sort -rV | head -n1)
 
