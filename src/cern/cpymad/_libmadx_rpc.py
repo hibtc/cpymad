@@ -8,19 +8,11 @@ in remote processes and communicate with them via remote procedure calls
 
 CAUTION:
 
-- the service communicates with the remote end via pickling, i.e. both
-  ends can execute arbitrary code on the other side. This means that the
-  remote process can not be used to safely execute unsafe commands.
-
-- When launching the remote process you should make sure on your own that
-  the process does not inherit any system resources. On python>=2.7 all
-  handles will be closed automatically when doing `execv`, i.e. when using
-  `subprocess.Popen` - but NOT with `multiprocessing.Process`. I don't know
-  any reliable method that works on python2.6. For more information, see:
-
-  http://www.python.org/dev/peps/pep-0446/
-
+The service communicates with the remote end via pickling, i.e. both ends
+can execute arbitrary code on the other side. This means that the remote
+process can not be used to safely execute unsafe commands.
 """
+
 from __future__ import absolute_import
 
 __all__ = ['LibMadxClient']
