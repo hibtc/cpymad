@@ -236,9 +236,39 @@ def get_table_column(table, column):
     """
     cdef char** char_tmp
     cdef cnp.npy_intp shape[1]
-    cdef bytes _table = _cstr(table)
-    cdef bytes _column = _cstr(column)
-    cdef clib.column_info info = clib.table_get_column(_table, _column)
+    cdef bytes _tab_name = _cstr(table)
+    cdef bytes _col_name = _cstr(column)
+    cdef clib.column_info info
+    # The following snippet imitates the table_get_column function from the
+    # C API of the MAD-X library. The replacement is needed for proper
+    # handling of integer columns for as long as we support versions of
+    # MAD-X before r4777. When this is not the case anymore, you should be
+    # able to safely revert the commit that introduced this snippet:
+    cdef int tab_i = clib.name_list_pos(_tab_name, clib.table_register.names)
+    if tab_i == -1:
+        raise ValueError("Invalid table: {!r}".format(table))
+    cdef clib.table* _table = clib.table_register.tables[tab_i]
+    cdef int col_i = clib.name_list_pos(_col_name, _table.columns)
+    if col_i == -1:
+        raise ValueError("Invalid column: {!r}".format(column))
+    info.length = _table.curr
+    cdef int inform = _table.columns.inform[col_i]
+    if inform == clib.PARAM_TYPE_INTEGER:
+        # YES, integers are internally stored as doubles in MAD-X:
+        info.data = _table.d_cols[col_i]
+        info.datatype = b'i'
+    elif inform == clib.PARAM_TYPE_DOUBLE:
+        info.data = _table.d_cols[col_i]
+        info.datatype = b'd'
+    elif inform == clib.PARAM_TYPE_STRING:
+        info.data = _table.s_cols[col_i]
+        info.datatype = b'S'
+    else:
+        raise RuntimeError("Unknown column format: {!r}".format(inform))
+    # Although, we are using a custom replacement for table_get_column
+    # above, we still try to be fully compatible with the real function from
+    # MAD-X below, so back-migration will be easier, when the time comes.
+    # This is why the error and data type handling below is left untouched:
     dtype = <bytes> info.datatype
     # double:
     if dtype == b'd':
