@@ -215,7 +215,7 @@ def get_table_columns(table):
     cdef int index = clib.name_list_pos(_table, clib.table_register.names)
     if index == -1:
         raise ValueError("Invalid table: {!r}".format(table))
-    return _name_list(clib.table_register.tables[index].columns, [2,3])
+    return _name_list(clib.table_register.tables[index].columns)
 
 
 def get_table_column(table, column):
@@ -271,7 +271,11 @@ def get_table_column(table, column):
     # This is why the error and data type handling below is left untouched:
     dtype = <bytes> info.datatype
     # double:
-    if dtype == b'd':
+    if dtype == b'i':
+        # YES, integers are internally stored as doubles in MAD-X:
+        shape[0] = <cnp.npy_intp> info.length
+        return cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_DOUBLE, info.data)
+    elif dtype == b'd':
         shape[0] = <cnp.npy_intp> info.length
         return cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_DOUBLE, info.data)
     # string:
@@ -468,11 +472,10 @@ cdef _split_header_line(header_line):
         return key, value           #
 
 
-cdef _name_list(clib.name_list* names, inform):
+cdef _name_list(clib.name_list* names):
     """Return a python list of names for the name_list."""
     cdef int i
-    return [names.names[i] for i in xrange(names.curr)
-            if names.inform[i] in inform]
+    return [names.names[i] for i in xrange(names.curr)]
 
 
 cdef _str(char* s):
