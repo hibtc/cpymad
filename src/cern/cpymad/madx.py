@@ -188,12 +188,13 @@ class Madx(object):
         # of ChangeDirectory:
         return ChangeDirectory(path, self._libmadx)
 
-    def call(self,filename):
-        '''
-         Call a file
+    def call(self, filename, chdir=True):
+        """
+        CALL a file in the MAD-X interpretor.
 
-         :param string filename: Name of input file to call
-        '''
+        :param str filename: file name with path
+        :param bool chdir: temporarily change directory in MAD-X process
+        """
         fname=filename
         if not os.path.isfile(fname):
             fname=filename+'.madx'
@@ -203,7 +204,12 @@ class Madx(object):
             print("ERROR: "+filename+" not found")
             return 1
         cmd='call,file="'+fname+'"'
-        self.command(cmd)
+        # Note, that chdir is a NO-OP if its argument evaluates to False,
+        # which is why we can safely use a False value or the result from
+        # os.path.dirname (which might be an empty string):
+        with self.chdir(chdir and os.path.dirname(fname)):
+            self.command(cmd)
+
     ##
     # @brief run select command for a flag..
     # @param flag [string] the flag to run select on
