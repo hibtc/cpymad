@@ -12,6 +12,8 @@ MAD-X. Furthermore, it enhances the security by boxing all MAD-X calls into
 a subprocess.
 """
 
+from os import chdir, getcwd
+
 import numpy as np      # Import the Python-level symbols of numpy
 cimport numpy as cnp    # Import the C-level symbols of numpy
 
@@ -46,7 +48,11 @@ __all__ = [
     'get_elements',
     'get_expanded_elements',
     'is_expanded',
-    'evaluate'
+    'evaluate',
+    # these are imported from 'os' for convenience in madx.Madx and should
+    # not really be considered part of the public interface:
+    'chdir',
+    'getcwd',
 ]
 
 

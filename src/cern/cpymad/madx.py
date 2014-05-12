@@ -87,6 +87,37 @@ def _check_command(cmd):
     return True
 
 
+class ChangeDirectory(object):
+
+    """Context manager for temporarily changing current working directory."""
+
+    def __init__(self, path, _os=os):
+        """
+        Change the path using the given os module.
+
+        :param str path: new path name
+        :param module _os: module with 'getcwd' and 'chdir' functions
+        """
+        self._os = _os
+        # Contrary to common implementations of a similar context manager,
+        # we change the path immediately in the constructor. That enables
+        # this utility to be used without any 'with' statement:
+        if path:
+            self._restore = _os.getcwd()
+            _os.chdir(path)
+        else:
+            self._restore = None
+
+    def __enter__(self):
+        """Enter 'with' context."""
+        pass
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Exit 'with' context and restore old path."""
+        if self._restore:
+            self._os.chdir(self._restore)
+
+
 # main interface
 class Madx(object):
     '''
@@ -143,6 +174,19 @@ class Madx(object):
             cmd='help'
             print("Available commands in Mad-X: ")
         self.command(cmd)
+
+    def chdir(self, path):
+        """
+        Change the directory. Can be used as context manager.
+
+        :param str path: new path name
+        :returns: a context manager that can change the directory back
+        :rtype: ChangeDirectory
+        """
+        # Note, that the libmadx module includes the functions 'getcwd' and
+        # 'chdir' so it can be used as a valid 'os' module for the purposes
+        # of ChangeDirectory:
+        return ChangeDirectory(path, self._libmadx)
 
     def call(self,filename):
         '''
