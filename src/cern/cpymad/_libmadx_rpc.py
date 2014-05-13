@@ -41,7 +41,7 @@ def _close_all_but(keep):
     # close all ranges in between the file descriptors to be kept:
     keep = sorted(set([-1] + keep + [MAXFD]))
     for s, e in zip(keep[:-1], keep[1:]):
-        if s+1 > e:
+        if s+1 < e:
             os.closerange(s+1, e)
 
 def remap_stdio():
