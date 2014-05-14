@@ -31,13 +31,8 @@ def _close_all_but(keep):
     # file objects and close them:
     import gc
     gc.collect()
-    try:
-        # highest file descriptor value + 1:
-        MAXFD = os.sysconf("SC_OPEN_MAX")
-    except (AttributeError, ValueError):
-        # on windows there is no os.sysconf, on other systems the
-        # SC_OPEN_MAX may not be available:
-        from subprocess import MAXFD
+    # highest file descriptor value + 1:
+    from subprocess import MAXFD
     # close all ranges in between the file descriptors to be kept:
     keep = sorted(set([-1] + keep + [MAXFD]))
     for s, e in zip(keep[:-1], keep[1:]):
