@@ -58,35 +58,3 @@ class Connection(object):
         """
         return cls(os.fdopen(recv_fd, 'rb', 0),
                    os.fdopen(send_fd, 'wb', 0))
-
-    @classmethod
-    def from_stream(cls, recv, send):
-        """
-        Create a :class:`Connection` object using the given streams.
-
-        :param recv: stream object used for receiving data
-        :param send: stream object used for sending data
-
-        The given stream objects invalidated (closed) so they cannot
-        accidentally be used anywhere else.
-
-        """
-        recv_fd = os.dup(recv.fileno())
-        send_fd = os.dup(send.fileno())
-        recv.close()
-        send.close()
-        return cls.from_fd(recv_fd, send_fd)
-
-    @classmethod
-    def to_subprocess(cls, args):
-        """
-        Establish connection to a new remote process.
-
-        :param list args: arguments for the subprocess
-        :returns: connection to subprocess
-
-        """
-        from subprocess import Popen, PIPE
-        proc = Popen(args, stdin=PIPE, stdout=PIPE)
-        conn = cls.from_stream(proc.stdout, proc.stdin)
-        return conn
