@@ -126,7 +126,6 @@ setup(
         "cern.resource",
         "cern.cpymad",
         "cern.cpymad._couch",
-        "cern.cpymad._connection",
         "cern.jpymad",
         "cern.jpymad.tools",
         "cern.pymad",
