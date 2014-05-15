@@ -114,18 +114,31 @@ In the following we will try to keep a list of the various issues users have rep
           from cern.madx import madx
           ImportError: libmadx.so: cannot open shared object file: No such file or directory
 
+      Reason:
+      The runtime path for the MAD-X static library is configured
+      incorrectly.
+
       Solution:
-      Though we try to set the runtime path during compilation, it doesn't always work. Please set
-      the LD_LIBRARY_PATH in your environment. Example, if libmadx.so is installed in
-      $HOME/.local/lib, and you use bash, add to $HOME/.bashrc:
+      You can pass the correct path to the setup script when building:
+
+      .. code-block:: bash
+
+         python setup.py install --madxdir=<prefix>
+         # or alternatively:
+         python setup.py build_ext --rpath=<rpath>
+         python setup.py install
+
+      Where ``<prefix>`` is the base folder, containing the subfolders
+      ``bin``, ``include``, ``lib`` of the MAD-X build and ``<rpath>``
+      contains the dynamic library files.
+
+      If this does not work, you can set the LD_LIBRARY_PATH (or
+      DYLD_LIBRARY_PATH on OSX) environment variable before running pymad,
+      for example:
 
       .. code-block:: bash
 
           export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/
-
-      Please note, on OSX you might need to use the variable DYLD_LIBRARY_PATH instead of
-      LD_LIBRARY_PATH. The authors are not very familiar with OSX, but know of at least one
-      occurence where that was the problem.
 
     * Can't copy 'src/cern/\*\*/\*.c':
 
