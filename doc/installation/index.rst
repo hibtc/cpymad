@@ -76,19 +76,21 @@ At this time you have to build pymad manually.
       `svn <http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&rev=0&isdir=1>`_
       and unpack it.
 
-    * Build the Mad-X library as a **shared library** (``.dll``).
+    * I recommend building MAD-X as a *static* library. This way, you won't
+      need to carry any ``.dll`` files around and you won't run into version
+      problems when having a multiple MAD-X library builds around.
+
       Enter the folder madX and run the commands
 
       .. code-block:: bat
 
           mkdir build && cd build
-          cmake -G "MinGW Makefiles" -DBUILD_SHARED_LIBS:BOOL=ON -DCMAKE_INSTALL_PREFIX=..\madx-redist ..\
+          cmake -G "MinGW Makefiles" -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_INSTALL_PREFIX=..\madx-redist ..\
           make install
 
       This will install the headers, binaries and library files to the folder ``..\madx-redist``.
 
-      Executing CMake from the GUI, you have to add the ``BUILD_SHARED_LIBS`` option manually. Afterwards reconfigure and regenerate.
-
+      Executing CMake from the GUI, you have to disable the ``BUILD_SHARED_LIBS`` option, if present. Afterwards reconfigure and regenerate.
 
     * In the folder ``pymad/src``, run the command
 
@@ -97,10 +99,6 @@ At this time you have to build pymad manually.
           python setup.py install --madxdir=<path-to-your>\madx-redist
 
       It is highly unlikely that your build succeeds at this point. See :ref:`potential-problems` for further information.
-
-
-    * Copy the ``.dll`` library files to either your system or better your applications runtime path.
-
 
 
 
