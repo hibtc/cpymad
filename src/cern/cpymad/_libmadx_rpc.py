@@ -1,5 +1,5 @@
 """
-RPC service module for libmadx.
+Simple RPC module for libmadx.
 
 This module is needed to execute several instances of the `libmadx` module
 in remote processes and communicate with them via remote procedure calls
@@ -43,6 +43,7 @@ def _nop(x):
 if _win:
     import msvcrt
 
+
     try:                    # python2
         import _subprocess as _winapi
         # _subprocess.DuplicateHandle and _subprocess.CreatePipe return a
@@ -53,7 +54,8 @@ if _win:
         # _winapi.DuplicateHandle and _winapi.CreatePipe return plain
         # integers which need to be wrapped in subprocess.Handle to make
         # them closable:
-        from subprocess import Handle
+        Handle = subprocess.Handle
+
 
     def _make_inheritable(handle):
         """Return inheritable Handle, close the original."""
@@ -70,6 +72,7 @@ if _win:
         handle.Close()
         return dup
 
+
     def _pipe():
         """Create a unidirectional pipe."""
         # use _winapi.CreatePipe on windows, just like subprocess.Popen
@@ -77,6 +80,7 @@ if _win:
         # reliable method I have tested so far:
         recv, send = _winapi.CreatePipe(None, 0)
         return Handle(recv), Handle(send)
+
 
     def _open(handle):
         """
@@ -86,15 +90,19 @@ if _win:
         """
         return msvcrt.open_osfhandle(handle, 0)
 
+
     def _close(handle):
         """Close the :class:`Handle` object."""
         handle.Close()
+
 
     def _detach(handle):
         """Return HANDLE after detaching it from a :class:`Handle` object."""
         return handle.Detach()
 
-else:       # POSIX
+
+# POSIX
+else:
     try:
         from os import set_inheritable
     except ImportError:         # python2
@@ -108,7 +116,9 @@ else:       # POSIX
             set_inheritable(dup, inheritable)
             return dup
 
+
     _pipe = os.pipe
+
 
     # handles are just file descriptors on POSIX:
     _open = _nop
@@ -119,13 +129,11 @@ else:       # POSIX
 def _close_all_but(keep):
     """Close all but the given file descriptors."""
     # first, let the garbage collector run, it may find some unreachable
-    # file objects and close them:
+    # file objects (on posix forked processes) and close them:
     import gc
     gc.collect()
-    # highest file descriptor value + 1:
-    from subprocess import MAXFD
     # close all ranges in between the file descriptors to be kept:
-    keep = sorted(set([-1] + keep + [MAXFD]))
+    keep = sorted(set([-1] + keep + [subprocess.MAXFD]))
     for s, e in zip(keep[:-1], keep[1:]):
         if s+1 < e:
             os.closerange(s+1, e)
@@ -179,16 +187,16 @@ class Connection(object):
                    os.fdopen(send_fd, 'wb', 0))
 
 
-# Client side code:
 class Client(object):
+
     """
-    Base class for a very lightweight generic RPC client.
+    Base class for a very lightweight synchronous RPC client.
 
     Uses a connection that shares the interface with :class:`Connection` to
     do synchronous RPC. Synchronous IO means that currently callbacks /
     events are impossible.
-
     """
+
     def __init__(self, conn):
         """Initialize the client with a :class:`Connection` like object."""
         self._conn = conn
@@ -252,13 +260,15 @@ class Client(object):
         """Dispatch returned data."""
         return data
 
+
 class Service(object):
-    """
-    Base class for a very lightweight generic RPC service.
-
-    This is the counterpart to :class:`Client`.
 
     """
+    Base class for a very lightweight synchronous RPC service.
+
+    Counterpart to :class:`Client`.
+    """
+
     def __init__(self, conn):
         """Initialize the service with a :class:`Connection` like object."""
         self._conn = conn
@@ -298,7 +308,6 @@ class Service(object):
         Receive and serve one RPC request.
 
         :returns: ``True`` if the service should continue running.
-
         """
         try:
             request = self._conn.recv()
@@ -387,6 +396,7 @@ class LibMadxService(Service):
         import cern.cpymad.libmadx
         function = getattr(cern.cpymad.libmadx, funcname)
         return function(*args, **kwargs)
+
 
 if __name__ == '__main__':
     LibMadxService.stdio_main(sys.argv[1:])
