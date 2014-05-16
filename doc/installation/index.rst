@@ -140,21 +140,21 @@ In the following we will try to keep a list of the various issues users have rep
 
           export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/
 
-    * Can't copy 'src/cern/\*\*/\*.c':
+    * Missing source file: :file:`src/cern/cpymad/libmadx.c`:
 
       ::
 
-        error: can't copy 'src/cern/libmadx/table.c': doesn't exist or not a regular file
+        OSError: Missing source file: 'src/cern/cpymad/libmadx.c'. Install Cython to resolve this problem.
 
      Solution:
-     If installing from the repository, you need Cython. The easiest way to
-     install Cython is:
+     The easiest way to install Cython is:
 
      .. code-block:: bash
 
         pip install cython
 
-     In order to get cpymad, you need Cython installed on your system. If you cannot obtain that, use jpymad instead.
+     Alternatively, you can install pymad from the PyPI source distribution
+     which includes all source files.
 
     * Unable to find vcvarsall.bat:
 
