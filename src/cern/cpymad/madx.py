@@ -461,10 +461,11 @@ class Madx(object):
         """
         Perform match operation.
 
-        @param sequence [string] name of sequence
-        @param constraints [list] constraints to pose during matching
-        @param vary [list or dict] vary commands
-        @param weight [dict] weights for matching parameters
+        :param string sequence: name of sequence
+        :param list constraints: constraints to pose during matching
+        :param list vary: vary commands
+        :param dict weight: weights for matching parameters
+        :return: new knob values
 
         For further reference, see madx.matchcommand().
 
