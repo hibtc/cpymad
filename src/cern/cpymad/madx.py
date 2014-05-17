@@ -63,18 +63,6 @@ try:
 except NameError:
     basestring = str
 
-# private utility functions
-def _tmp_filename(operation, suffix='.temp.tfs'):
-    """
-    Create a name for a temporary file.
-    """
-    tmpfile = operation + suffix
-    i = 0
-    while os.path.isfile(tmpfile):
-        tmpfile = operation + '.' + str(i) + suffix
-        i += 1
-    return tmpfile
-
 
 class ChangeDirectory(object):
 
@@ -326,12 +314,11 @@ class Madx(object):
         :param list columns: Columns to include in table
         :param bool use: Call use before survey.
         """
-        tmpfile = fname or _tmp_filename('survey')
         self.select('survey', pattern=pattern, columns=columns)
         self.command.set(format="12.6F")
         if use and sequence:
             self.use(sequence)
-        self.command.survey(range=madrange, file=tmpfile)
+        self.command.survey(range=madrange, file=fname)
         return self.get_table('survey')
 
     default_aperture_columns = ['name', 'l', 'angle'
@@ -354,7 +341,6 @@ class Madx(object):
         :param list columns: columns to include in table (may be a str)
         :param bool use: Call use before aperture.
         """
-        tmpfile = fname or _tmp_filename('aperture')
         self.select('aperture', pattern=pattern, columns=columns)
         self.command.set(format="12.6F")
         if use and sequence:
@@ -372,7 +358,7 @@ class Madx(object):
               vary,
               weight=None,
               method=('lmdiff', {}),
-              fname='',
+              fname=None,
               twiss_init={},
               **kwargs):
         """
@@ -382,10 +368,7 @@ class Madx(object):
         :param list constraints: constraints to pose during matching
         :param list vary: vary commands
         :param dict weight: weights for matching parameters
-        :return: new knob values
         """
-        tmpfile = fname or _tmp_filename('match')
-
         twiss_init = dict((k, v) for k,v in twiss_init.items()
                           if k not in ['name','closed-orbit'])
         # explicitly specified keyword arguments overwrite values in
@@ -402,11 +385,7 @@ class Madx(object):
         if weight:
             command.weight(**weight)
         command(method[0], **method[1])
-        command.endmatch(knobfile=tmpfile)
-        result, initial=_madx_tools._read_knobfile(tmpfile, False)
-        if not fname:
-            os.remove(tmpfile)
-        return (result,initial)
+        command.endmatch(knobfile=fname)
 
     # turn on/off verbose outupt..
     def verbose(self, switch):
