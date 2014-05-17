@@ -44,7 +44,9 @@ closed).
 from __future__ import absolute_import
 from __future__ import print_function
 
-import os, sys
+from functools import partial
+import os
+import sys
 import collections
 
 from . import _libmadx_rpc
@@ -69,22 +71,6 @@ def _tmp_filename(operation, suffix='.temp.tfs'):
         tmpfile = operation + '.' + str(i) + suffix
         i += 1
     return tmpfile
-
-
-def _check_command(cmd):
-    ''' give the lowercase version of the command
-    this function does some sanity checks...'''
-    if cmd in ('stop;', 'exit;'):
-        print("WARNING: found quit in command: "+cmd+"\n")
-        print("Please use madx.finish() or just exit python (CTRL+D)")
-        print("Command ignored")
-        return False
-    if cmd.startswith('plot'):
-        print("WARNING: Plot functionality does not work through pymadx")
-        print("Command ignored")
-        return False
-    # All checks passed..
-    return True
 
 
 class ChangeDirectory(object):
@@ -116,6 +102,33 @@ class ChangeDirectory(object):
         """Exit 'with' context and restore old path."""
         if self._restore:
             self._os.chdir(self._restore)
+
+
+class MadxCommands(object):
+
+    """
+    Geniric MAD-X command wrapper.
+
+    Raw python interface to issue MAD-X commands. Usage example:
+
+    >>> command = MadxCommands(libmadx.input)
+    >>> command('twiss', sequence='LEBT')
+    >>> command.title('A meaningful phrase')
+
+    :ivar __dispatch: callable that takes a MAD-X command string.
+    """
+
+    def __init__(self, dispatch):
+        """Set :ivar:`__dispatch` from :var:`dispatch`."""
+        self.__dispatch = dispatch
+
+    def __call__(self, *args, **kwargs):
+        """Create and dispatch a MAD-X command string."""
+        self.__dispatch(_madx_tools._mad_command(*args, **kwargs))
+
+    def __getattr__(self, name):
+        """Return a dispatcher for a specific command."""
+        return partial(self.__call__, name)
 
 
 # main interface
@@ -151,20 +164,39 @@ class Madx(object):
         if self._hfile:
             self._hfile.close()
 
-    def command(self, cmd):
-        '''
-        Perform sequence of MAD-X commands.
+    @property
+    def command(self):
+        """
+        Perform a single MAD-X command.
 
-        :param string cmd: command sequence
+        :param str cmd: command name
+        :param **kwargs: command parameters
+        """
+        return MadxCommands(self._check_command)
 
-        This function can take multiple commands separated by a semi-colon.
+    def _check_command(self, cmd):
+        """Execute command after performing some sanity checks."""
+        if cmd.lower() in ('stop;', 'exit;'):
+            print("WARNING: found quit in command: "+cmd+"\n")
+            print("Please use madx.finish() or just exit python (CTRL+D)")
+            print("Command ignored")
+            return
+        if cmd.lower().startswith('plot'):
+            print("WARNING: Plot functionality does not work through pymadx")
+            print("Command ignored")
+            return
+        self.input(cmd)
 
-        '''
-        for c in cmd.split(';'):
-            c = c.strip() + ';'
-            if _check_command(c.lower()):
-                self._writeHist(c + '\n')
-                self._libmadx.input(c)
+    def input(self, text):
+        """
+        Run any textual MAD-X input.
+
+        :param str text: command text
+        """
+        # write to history before performing the input, so if MAD-X
+        # crashes, it is easier to see, where it happened:
+        self._writeHist(text)
+        self._libmadx.input(text)
 
     def help(self,cmd=''):
         if cmd:
