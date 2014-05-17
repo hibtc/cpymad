@@ -107,7 +107,7 @@ class ChangeDirectory(object):
 class MadxCommands(object):
 
     """
-    Geniric MAD-X command wrapper.
+    Generic MAD-X command wrapper.
 
     Raw python interface to issue MAD-X commands. Usage example:
 
@@ -124,7 +124,7 @@ class MadxCommands(object):
 
     def __call__(self, *args, **kwargs):
         """Create and dispatch a MAD-X command string."""
-        self.__dispatch(_madx_tools._mad_command(*args, **kwargs))
+        self.__dispatch(_madx_tools.mad_command(*args, **kwargs))
 
     def __getattr__(self, name):
         """Return a dispatcher for a specific command."""
