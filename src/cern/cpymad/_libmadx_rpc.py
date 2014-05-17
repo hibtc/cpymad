@@ -273,20 +273,37 @@ class LibMadxClient(Client):
             self.libmadx.finish()
 
     @property
-    class libmadx(object):
+    def libmadx(self):
+        return self.modules['cern.cpymad.libmadx']
 
-        """Wrapper for :mod:`cern.cpymad.libmadx` in a remote process."""
+    @property
+    class modules(object):
+
+        """Provides access to all modules in the remote process."""
 
         def __init__(self, client):
-            """Store the client connection."""
             self.__client = client
 
-        def __getattr__(self, funcname):
-            """Resolve all attribute accesses as remote method calls."""
-            def DeferredMethod(*args, **kwargs):
-                return self.__client._request('libmadx',
-                                              funcname, args, kwargs)
-            return DeferredMethod
+        def __getitem__(self, key):
+            """Get a RemoteModule object by module name."""
+            return RemoteModule(self.__client, key)
+
+
+class RemoteModule(object):
+
+    """Wrapper for :mod:`cern.cpymad.libmadx` in a remote process."""
+
+    def __init__(self, client, module):
+        """Store the client connection."""
+        self.__client = client
+        self.__module = module
+
+    def __getattr__(self, funcname):
+        """Resolve all attribute accesses as remote function calls."""
+        def DeferredMethod(*args, **kwargs):
+            return self.__client._request('function_call', self.__module,
+                                          funcname, args, kwargs)
+        return DeferredMethod
 
 
 class LibMadxService(Service):
@@ -297,10 +314,14 @@ class LibMadxService(Service):
     Counterpart for :class:`LibMadxClient`.
     """
 
-    def _dispatch_libmadx(self, funcname, args, kwargs):
-        import cern.cpymad.libmadx
-        function = getattr(cern.cpymad.libmadx, funcname)
+    def _dispatch_function_call(self, modname, funcname, args, kwargs):
+        """Execute any static function call in the remote process."""
+        # As soon as we drop support for python2.6, we should replace this
+        # with importlib.import_module:
+        module = __import__(modname, None, None, '*')
+        function = getattr(module, funcname)
         return function(*args, **kwargs)
+
 
 if __name__ == '__main__':
     LibMadxService.stdio_main()
