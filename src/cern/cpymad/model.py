@@ -67,7 +67,7 @@ class Model(abc.model.PyMadModel):
 
     def __init__(self, model,
                  sequence='',optics='',
-                 histfile='',recursive_history=False,
+                 histfile='',
                  madx=None):
         """
         Construct a Model object.
@@ -76,14 +76,13 @@ class Model(abc.model.PyMadModel):
         :param string sequence: Name of the default sequence to use
         :param string optics: Name of optics to load, string or list of strings.
         :param string histfile: Name of file which will contain all Mad-X commands called.
-        :param bool recursive_history: Recursively load commands of called files into histfile
 
         For backward compatibility reasons, the first parameter can also be
         the name of the model to be loaded. This is equivalent to the
         preferred Model.from_name() constructor.
 
         """
-        self._madx = madx or Madx(histfile, recursive_history)
+        self._madx = madx or Madx(histfile)
         self._madx.verbose(False)
 
         if isinstance(model, ModelData):
