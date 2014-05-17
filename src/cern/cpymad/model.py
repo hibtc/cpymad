@@ -192,12 +192,7 @@ class Model(abc.model.PyMadModel):
          Set the beam from a beam definition
          (dictionary)
         '''
-        bcmd='beam'
-        for k,v in beam_dict.items():
-            bcmd+=','+k+'='+str(v)
-        if sys.flags.debug:
-            print("Beam command: "+bcmd)
-        self._madx.command(bcmd)
+        self._madx.command.beam(**beam_dict)
 
     def _cmd(self, cmd):
         return self._madx.command(cmd)
@@ -278,10 +273,10 @@ class Model(abc.model.PyMadModel):
         self._active['optic']=optic
 
     def set_knob(self,knob,value):
-        kdict=self._mdef['knobs']
+        kdict = self._mdef['knobs']
         for e in kdict[knob]:
-            val=str(kdict[knob][e]*value)
-            self._madx.command(e+"="+val)
+            val = kdict[knob][e] * value
+            self._madx.command(**{e: val})
 
     def get_sequences(self):
         '''

@@ -33,7 +33,8 @@ def mad_parameter(key, value):
     Format a single MAD-X command parameter.
     """
     key = str(key).lower()
-    if value is None:
+    # the empty string was used in earlier versions in place of None:
+    if value is None or value == '':
         return ''
     if isinstance(value, Range):
         return key + '=' + value.first + '/' + value.last
