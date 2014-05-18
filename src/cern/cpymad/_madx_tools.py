@@ -16,8 +16,6 @@ def is_word(value):
 
 def mad_quote(value):
     """Add quotes to a string value."""
-    if is_word(value):
-        return value
     quoted = repr(value)
     return quoted[1:] if quoted[0] == 'u' else quoted
 
@@ -49,8 +47,17 @@ def mad_parameter(key, value):
             return key + '=' + value
         else:
             return key + '=' + str(value[0]) + '/' + str(value[1])
+    # check for basestrings before collections.Sequence, because every
+    # basestring is also a Sequence:
     elif isinstance(value, basestring):
-        return key + '=' + mad_quote(value)
+        # Although, it kinda makes more sense to quote all `basestring`
+        # instances, this breaks existing models which are using strings
+        # instead of numeric values. So let's only quote keys for now, where
+        # we know that it matters a lot:
+        if key == 'file':
+            return key + '=' + mad_quote(value)
+        else:
+            return key + '=' + str(value)
     elif isinstance(value, collections.Sequence):
         if key == 'column':
             return key + '=' + ','.join(value)
