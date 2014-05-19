@@ -188,7 +188,7 @@ class Madx(object):
         # of ChangeDirectory:
         return ChangeDirectory(path, self._libmadx)
 
-    def call(self, filename, chdir=True):
+    def call(self, filename, chdir=False):
         """
         CALL a file in the MAD-X interpretor.
 
