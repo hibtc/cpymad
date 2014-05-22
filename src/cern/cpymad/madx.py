@@ -34,13 +34,8 @@ Furthermore, this can be used as a security enhancement: if dealing with
 unverified input, we can't be sure that a faulty MAD-X function
 implementation will give access to a secure resource. This can be executing
 all library calls within a subprocess that does not inherit any handles.
-
-NOTE: this feature is only available on python>=2.7. On python2.6 the
-subprocess will inherit every handle in the current process space. This can
-also cause various other side effects (file handles and sockets don't get
-closed).
-
 '''
+
 from __future__ import absolute_import
 from __future__ import print_function
 

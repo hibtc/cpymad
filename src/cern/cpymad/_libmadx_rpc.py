@@ -1,5 +1,5 @@
 """
-RPC service module for libmadx.
+Simple RPC module for libmadx.
 
 This module is needed to execute several instances of the `libmadx` module
 in remote processes and communicate with them via remote procedure calls
@@ -8,114 +8,195 @@ in remote processes and communicate with them via remote procedure calls
 
 CAUTION:
 
-- the service communicates with the remote end via pickling, i.e. both
-  ends can execute arbitrary code on the other side. This means that the
-  remote process can not be used to safely execute unsafe commands.
-
-- When launching the remote process you should make sure on your own that
-  the process does not inherit any system resources. On python>=2.7 all
-  handles will be closed automatically when doing `execv`, i.e. when using
-  `subprocess.Popen` - but NOT with `multiprocessing.Process`. I don't know
-  any reliable method that works on python2.6. For more information, see:
-
-  http://www.python.org/dev/peps/pep-0446/
-
+The service communicates with the remote end via pickling, i.e. both ends
+can execute arbitrary code on the other side. This means that the remote
+process can not be used to safely execute unsafe python code.
 """
+
 from __future__ import absolute_import
 
 __all__ = ['LibMadxClient']
 
 import traceback
 import os
+import subprocess
 import sys
-if sys.platform == 'linux':
-    from ._connection.multiprocessing import Connection
+
+try:
+    # python2's cPickle is an accelerated (C extension) version of pickle:
+    import cPickle as pickle
+except ImportError:
+    # python3's pickle automatically uses the accelerated version and falls
+    # back to the python version, see:
+    # http://docs.python.org/3.3/whatsnew/3.0.html?highlight=cpickle
+    import pickle
+
+
+_win = sys.platform == 'win32'
+
+
+def _nop(x):
+    """NO-OP: do nothing, just return x."""
+    return x
+
+
+if _win:
+    import msvcrt
+
+
+    try:                    # python2
+        import _subprocess as _winapi
+        # _subprocess.DuplicateHandle and _subprocess.CreatePipe return a
+        # handle type with .Close() and .Detach() methods:
+        Handle = _nop
+    except ImportError:     # python3
+        import _winapi
+        # _winapi.DuplicateHandle and _winapi.CreatePipe return plain
+        # integers which need to be wrapped in subprocess.Handle to make
+        # them closable:
+        Handle = subprocess.Handle
+
+
+    def _make_inheritable(handle):
+        """Return inheritable Handle, close the original."""
+        # new handles are created uninheritable by default, but they can be
+        # made inheritable on duplication:
+        current_process = _winapi.GetCurrentProcess()
+        dup = Handle(_winapi.DuplicateHandle(
+            current_process,
+            handle,
+            current_process,
+            0,
+            True,
+            _winapi.DUPLICATE_SAME_ACCESS))
+        handle.Close()
+        return dup
+
+
+    def _pipe():
+        """Create a unidirectional pipe."""
+        # use _winapi.CreatePipe on windows, just like subprocess.Popen
+        # does when requesting PIPE streams. This is the easiest and most
+        # reliable method I have tested so far:
+        recv, send = _winapi.CreatePipe(None, 0)
+        return Handle(recv), Handle(send)
+
+
+    def _open(handle):
+        """
+        Open a file descriptor for the specified HANDLE (int -> int).
+
+        Closing the file descriptor will also close the handle.
+        """
+        return msvcrt.open_osfhandle(handle, 0)
+
+
+    def _close(handle):
+        """Close the :class:`Handle` object."""
+        handle.Close()
+
+
+    def _detach(handle):
+        """Return HANDLE after detaching it from a :class:`Handle` object."""
+        return handle.Detach()
+
+
+# POSIX
 else:
-    from ._connection.pickle import Connection
+    try:
+        from os import set_inheritable
+    except ImportError:         # python2
+        # on POSIX/python2 file descriptors are inheritable by default:
+        _make_inheritable = _nop
+    else:                       # python3
+        def _make_inheritable(fd):
+            """Return inheritable file descriptor, close the original."""
+            dup = os.dup(fd)
+            os.close(fd)
+            set_inheritable(dup, inheritable)
+            return dup
+
+
+    _pipe = os.pipe
+
+
+    # handles are just file descriptors on POSIX:
+    _open = _nop
+    _close = os.close
+    _detach = _nop
+
 
 def _close_all_but(keep):
     """Close all but the given file descriptors."""
     # first, let the garbage collector run, it may find some unreachable
-    # file objects and close them:
+    # file objects (on posix forked processes) and close them:
     import gc
     gc.collect()
-    try:
-        # highest file descriptor value + 1:
-        MAXFD = os.sysconf("SC_OPEN_MAX")
-    except (AttributeError, ValueError):
-        # on windows there is no os.sysconf, on other systems the
-        # SC_OPEN_MAX may not be available:
-        from subprocess import MAXFD
     # close all ranges in between the file descriptors to be kept:
-    keep = sorted(set([-1] + keep + [MAXFD]))
+    keep = sorted(set([-1] + keep + [subprocess.MAXFD]))
     for s, e in zip(keep[:-1], keep[1:]):
-        if s+1 > e:
+        if s+1 < e:
             os.closerange(s+1, e)
 
-def remap_stdio():
-    """
-    Remap STDIO streams to new file descriptors and create new STDIO streams.
 
-    Create new file descriptors for the original STDIO streams. Then
-    replace the python STDIO file objects with newly opened streams:
-
-    :obj:`sys.stdin` is mapped to a NULL stream.
-    :obj:`sys.stdout` is initialized with the current console.
-
-    :returns: the remapped (STDIN, STDOUT) file descriptors
+class Connection(object):
 
     """
-    # This function can only make sure that the original file descriptors
-    # of sys.stdin, sys.stdout, sys.stderr are remapped correctly. It can
-    # make no guarantees about the standard POSIX file descriptors (0, 1).
-    # Usually though, these should be the same.
-    STDIN = sys.stdin.fileno()
-    STDOUT = sys.stdout.fileno()
-    STDERR = sys.stderr.fileno()
-    _close_all_but([STDIN, STDOUT, STDERR])
-    # virtual file name for console (terminal) IO:
-    console = 'con:' if sys.platform == 'win32' else '/dev/tty'
-    stdin_fd = os.open(os.devnull, os.O_RDONLY)
-    try:
-        stdout_fd = os.open(console, os.O_WRONLY)
-    except (IOError, OSError):
-        stdout_fd = os.open(os.devnull, os.O_WRONLY)
-    # The original stdio streams can only be closed *after* opening new
-    # stdio streams to avoid the risk that the file descriptors will be
-    # reused immediately. But before closing, their file descriptors need
-    # to be duplicated:
-    recv_fd = os.dup(sys.stdin.fileno())
-    send_fd = os.dup(sys.stdout.fileno())
-    sys.stdin.close()
-    sys.stdout.close()
-    # Make sure, all file handles are closed, except for the RPC streams.
-    # By duplicating the file descriptors to the STDIN/STDOUT file
-    # descriptors non-python libraries can make use of these streams as
-    # well. The initial fds are not needed anymore.
-    os.dup2(stdin_fd, STDIN)
-    os.dup2(stdout_fd, STDOUT)
-    os.close(stdin_fd)
-    os.close(stdout_fd)
-    # Create new python file objects for STDIN/STDOUT and remap the
-    # corresponding file descriptors: Reopen python standard streams. This
-    # enables all python modules to use these streams. Note: the stdout
-    # buffer length is set to '1', making it line buffered, which behaves
-    # like the default in most circumstances.
-    sys.stdin = os.fdopen(STDIN, 'rt')
-    sys.stdout = os.fdopen(STDOUT, 'wt', 1)
-    # Return the remapped file descriptors of the original STDIO streams
-    return recv_fd, send_fd
+    Pipe-like IPC connection using file objects.
 
-# Client side code:
+    For most purposes this should behave like the connection objects
+    returned by :func:`multiprocessing.Pipe`.
+
+    This class combines two orthogonal functionalities. In general this is
+    bad practice, meaning the class should be refactored into two classes,
+    but for our specific purpose this will do it.
+
+    - build a bidirectional stream from two unidirectional streams
+    - build a serialized connection from pure data streams (pickle)
+    """
+
+    def __init__(self, recv, send):
+        """Create duplex connection from two unidirectional streams."""
+        self._recv = recv
+        self._send = send
+
+    def recv(self):
+        """Receive a pickled message from the remote end."""
+        return pickle.load(self._recv)
+
+    def send(self, data):
+        """Send a pickled message to the remote end."""
+        # '-1' instructs pickle to use the latest protocol version. This
+        # improves performance by a factor ~50-100 in my tests:
+        return pickle.dump(data, self._send, -1)
+
+    def close(self):
+        """Close the connection."""
+        self._recv.close()
+        self._send.close()
+
+    @property
+    def closed(self):
+        """Check if the connection is fully closed."""
+        return self._recv.closed and self._send.closed
+
+    @classmethod
+    def from_fd(cls, recv_fd, send_fd):
+        """Create a connection from two file descriptors."""
+        return cls(os.fdopen(recv_fd, 'rb', 0),
+                   os.fdopen(send_fd, 'wb', 0))
+
+
 class Client(object):
+
     """
-    Base class for a very lightweight generic RPC client.
+    Base class for a very lightweight synchronous RPC client.
 
     Uses a connection that shares the interface with :class:`Connection` to
     do synchronous RPC. Synchronous IO means that currently callbacks /
     events are impossible.
-
     """
+
     def __init__(self, conn):
         """Initialize the client with a :class:`Connection` like object."""
         self._conn = conn
@@ -125,23 +206,31 @@ class Client(object):
         self.close()
 
     @classmethod
-    def spawn_subprocess(cls, entry=__name__):
+    def spawn_subprocess(cls, **Popen_args):
         """
         Create client for a backend service in a subprocess.
 
-        :param str entry: module name for the remote entry point
-        :returns: client object for the spawned subprocess.
-
-        The ``entry`` parameter determines which module to execute in the
-        remote process. The '__main__' code branch in that module should
-        execute :meth:`Service.stdio_main` for the corresponding service.
-
-        Inter-process communication (IPC) with the remote process is
-        performed via its STDIO streams.
-
+        You can use the keyword arguments to pass further arguments to
+        Popen, which is useful for example, if you want to redirect STDIO
+        streams.
         """
-        args = [sys.executable, '-u', '-m', entry]
-        conn = Connection.to_subprocess(args)
+        # create two unidirectional pipes for communication with the
+        # subprocess.  the remote end needs to be inheritable, the local
+        # end is not inheritable by default (or will be closed by
+        # _close_all_but on POSIX/py2):
+        local_recv, _remote_send = _pipe()
+        _remote_recv, local_send = _pipe()
+        remote_recv = _make_inheritable(_remote_recv)
+        remote_send = _make_inheritable(_remote_send)
+        args = [sys.executable, '-u', '-m', __name__]
+        args += [str(int(remote_recv)),
+                 str(int(remote_send))]
+        proc = subprocess.Popen(args, close_fds=False, **Popen_args)
+        # close handles that are not used in this process:
+        _close(remote_recv)
+        _close(remote_send)
+        conn = Connection.from_fd(_open(_detach(local_recv)),
+                                  _open(_detach(local_send)))
         return cls(conn)
 
     def close(self):
@@ -171,21 +260,29 @@ class Client(object):
         """Dispatch returned data."""
         return data
 
+
 class Service(object):
-    """
-    Base class for a very lightweight generic RPC service.
-
-    This is the counterpart to :class:`Client`.
 
     """
+    Base class for a very lightweight synchronous RPC service.
+
+    Counterpart to :class:`Client`.
+    """
+
     def __init__(self, conn):
         """Initialize the service with a :class:`Connection` like object."""
         self._conn = conn
 
     @classmethod
-    def stdio_main(cls):
+    def stdio_main(cls, args):
         """Do the full job of preparing and running an RPC service."""
-        conn = Connection.from_fd(*remap_stdio())
+        passed_handles = [int(arg) for arg in args]
+        _close_all_but([sys.stdin.fileno(),
+                        sys.stdout.fileno(),
+                        sys.stderr.fileno()] + passed_handles)
+        hrecv, hsend = passed_handles[:2]
+        conn = Connection.from_fd(_open(hrecv),
+                                  _open(hsend))
         cls(conn).run()
 
     def run(self):
@@ -194,7 +291,6 @@ class Service(object):
 
         The service is terminated on user interrupts (Ctrl-C), which might
         or might not be desired.
-
         """
         import logging
         logging.basicConfig(logLevel=logging.INFO)
@@ -212,7 +308,6 @@ class Service(object):
         Receive and serve one RPC request.
 
         :returns: ``True`` if the service should continue running.
-
         """
         try:
             request = self._conn.recv()
@@ -324,4 +419,4 @@ class LibMadxService(Service):
 
 
 if __name__ == '__main__':
-    LibMadxService.stdio_main()
+    LibMadxService.stdio_main(sys.argv[1:])
