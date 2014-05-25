@@ -35,16 +35,16 @@ unverified input, we can't be sure that a faulty MAD-X function
 implementation will give access to a secure resource. This can be executing
 all library calls within a subprocess that does not inherit any handles.
 
-NOTE: this feature is only available on python>=2.7. On python2.6 the
-subprocess will inherit every handle in the current process space. This can
-also cause various other side effects (file handles and sockets don't get
-closed).
-
+More importantly: the MAD-X program crashes on the tinyest error. Boxing it
+in a subprocess will prevent the main process from crashing as well.
 '''
+
 from __future__ import absolute_import
 from __future__ import print_function
 
-import os, sys
+from functools import partial
+import os
+import sys
 import collections
 
 from . import _libmadx_rpc
@@ -57,34 +57,6 @@ try:
     basestring
 except NameError:
     basestring = str
-
-# private utility functions
-def _tmp_filename(operation, suffix='.temp.tfs'):
-    """
-    Create a name for a temporary file.
-    """
-    tmpfile = operation + suffix
-    i = 0
-    while os.path.isfile(tmpfile):
-        tmpfile = operation + '.' + str(i) + suffix
-        i += 1
-    return tmpfile
-
-
-def _check_command(cmd):
-    ''' give the lowercase version of the command
-    this function does some sanity checks...'''
-    if cmd in ('stop;', 'exit;'):
-        print("WARNING: found quit in command: "+cmd+"\n")
-        print("Please use madx.finish() or just exit python (CTRL+D)")
-        print("Command ignored")
-        return False
-    if cmd.startswith('plot'):
-        print("WARNING: Plot functionality does not work through pymadx")
-        print("Command ignored")
-        return False
-    # All checks passed..
-    return True
 
 
 class ChangeDirectory(object):
@@ -116,6 +88,33 @@ class ChangeDirectory(object):
         """Exit 'with' context and restore old path."""
         if self._restore:
             self._os.chdir(self._restore)
+
+
+class MadxCommands(object):
+
+    """
+    Generic MAD-X command wrapper.
+
+    Raw python interface to issue MAD-X commands. Usage example:
+
+    >>> command = MadxCommands(libmadx.input)
+    >>> command('twiss', sequence='LEBT')
+    >>> command.title('A meaningful phrase')
+
+    :ivar __dispatch: callable that takes a MAD-X command string.
+    """
+
+    def __init__(self, dispatch):
+        """Set :ivar:`__dispatch` from :var:`dispatch`."""
+        self.__dispatch = dispatch
+
+    def __call__(self, *args, **kwargs):
+        """Create and dispatch a MAD-X command string."""
+        self.__dispatch(_madx_tools.mad_command(*args, **kwargs))
+
+    def __getattr__(self, name):
+        """Return a dispatcher for a specific command."""
+        return partial(self.__call__, name)
 
 
 # main interface
@@ -151,29 +150,49 @@ class Madx(object):
         if self._hfile:
             self._hfile.close()
 
-    def command(self, cmd):
-        '''
-        Perform sequence of MAD-X commands.
+    @property
+    def command(self):
+        """
+        Perform a single MAD-X command.
 
-        :param string cmd: command sequence
+        :param str cmd: command name
+        :param **kwargs: command parameters
+        """
+        return MadxCommands(self._check_command)
 
-        This function can take multiple commands separated by a semi-colon.
+    def _check_command(self, cmd):
+        """Execute command after performing some sanity checks."""
+        if cmd.lower() in ('stop;', 'exit;'):
+            print("WARNING: found quit in command: "+cmd+"\n")
+            print("Please use madx.finish() or just exit python (CTRL+D)")
+            print("Command ignored")
+            return
+        if cmd.lower().startswith('plot'):
+            print("WARNING: Plot functionality does not work through pymadx")
+            print("Command ignored")
+            return
+        self.input(cmd)
 
-        '''
-        for c in cmd.split(';'):
-            c = c.strip() + ';'
-            if _check_command(c.lower()):
-                self._writeHist(c + '\n')
-                self._libmadx.input(c)
+    def input(self, text):
+        """
+        Run any textual MAD-X input.
 
-    def help(self,cmd=''):
-        if cmd:
-            print("Information about command: "+cmd.strip())
-            cmd='help,'+cmd
-        else:
-            cmd='help'
-            print("Available commands in Mad-X: ")
-        self.command(cmd)
+        :param str text: command text
+        """
+        # write to history before performing the input, so if MAD-X
+        # crashes, it is easier to see, where it happened:
+        self._writeHist(text)
+        self._libmadx.input(text)
+
+    def help(self, cmd=None):
+        """
+        Show help about a command or list all MAD-X commands.
+
+        :param str cmd: command name
+        """
+        # The case 'cmd == None' will be handled by mad_command
+        # appropriately.
+        self.command.help(cmd=cmd)
 
     def chdir(self, path):
         """
@@ -203,297 +222,169 @@ class Madx(object):
         if not os.path.isfile(fname):
             print("ERROR: "+filename+" not found")
             return 1
-        cmd='call,file="'+fname+'"'
         # Note, that chdir is a NO-OP if its argument evaluates to False,
         # which is why we can safely use a False value or the result from
         # os.path.dirname (which might be an empty string):
         with self.chdir(chdir and os.path.dirname(fname)):
-            self.command(cmd)
+            self.command.call(file=fname)
 
-    ##
-    # @brief run select command for a flag..
-    # @param flag [string] the flag to run select on
-    # @param pattern [list] the new pattern
-    # @param columns [list/string] the columns you want for the flag
-    def select(self,flag,columns,pattern=[]):
-        self.command('SELECT, FLAG='+flag+', CLEAR;')
-        if type(columns)==list:
-            clms=', '.join(columns)
-        else:
-            clms=columns
-        self.command('SELECT, FLAG='+flag+', COLUMN='+clms+';')
+    def select(self, flag, columns, pattern=[]):
+        """
+        Run SELECT command.
+
+        :param str flag: one of: twiss, makethin, error, seqedit
+        :param list columns: column names
+        :param list pattern: selected patterns
+        """
+        select = self.command.select
+        select(flag=flag, clear=True)
+        select(flag=flag, column=columns)
         for p in pattern:
-            self.command('SELECT, FLAG='+flag+', PATTERN='+p+';')
+            select(flag=flag, pattern=p)
+
+    default_twiss_columns = ['name', 's',
+                             'betx', 'bety',
+                             'x', 'y',
+                             'dx', 'dy',
+                             'px', 'py',
+                             'mux', 'muy'
+                              'l','k1l', 'angle', 'k2l']
 
     def twiss(self,
               sequence=None,
               pattern=['full'],
-              columns='name,s,betx,bety,x,y,dx,dy,px,py,mux,muy,l,k1l,angle,k2l',
-              madrange='',
-              fname='',
-              betx=None,
-              bety=None,
-              alfx=None,
-              alfy=None,
-              twiss_init=None,
-              chrom=True,
-              use=True
-              ):
-        '''
+              columns=default_twiss_columns,
+              madrange=None,
+              fname=None,
+              twiss_init={},
+              use=True,
+              **kwargs):
+        """
+        Run SELECT+USE+TWISS.
 
-            Runs select+use+twiss on the sequence selected
+        :param str sequence: name of sequence
+        :param str fname: name of file to store tfs table
+        :param list pattern: pattern to include in table
+        :param list columns: columns to include in table, (may be a str)
+        :param dict twiss_init: dictionary of twiss initialization variables
+        :param bool use: Call use before aperture.
+        :param bool chrom: Also calculate chromatic functions (slower)
+        :param **kwargs: further keyword arguments to TWISS (betx, bety, ..).
 
-            :param string sequence: name of sequence
-            :param string fname: name of file to store tfs table
-            :param list pattern: pattern to include in table
-            :param string columns: columns to include in table, can also be a list of strings
-            :param dict twiss_init: dictionary of twiss initialization variables
-            :param bool use: Call use before aperture.
-            :param bool chrom: Also calculate chromatic functions (slower)
-        '''
-        self.select('twiss',pattern=pattern,columns=columns)
-        self.command('set, format="12.6F";')
+        Note, that the kwargs overwrite any arguments in twiss_init.
+        """
+        self.select('twiss', columns=columns, pattern=pattern)
+        self.command.set(format="12.6F")
         if use and sequence:
             self.use(sequence)
         elif not sequence:
             sequence = self.active_sequence
-        _tmpcmd='twiss, sequence='+sequence+','+_madx_tools._add_range(madrange)
-        if chrom:
-            _tmpcmd+=',chrom'
-        if _tmpcmd[-1]==',':
-            _tmpcmd=_tmpcmd[:-1]
-        if fname: # we only need this if user wants the file to be written..
-            _tmpcmd+=', file="'+fname+'"'
-        for i_var,i_val in {'betx':betx,'bety':bety,'alfx':alfx,'alfy':alfy}.items():
-            if i_val is not None:
-                _tmpcmd+=','+i_var+'='+str(i_val)
-        if twiss_init:
-            for i_var,i_val in twiss_init.items():
-                if i_var not in ['name','closed-orbit']:
-                    if i_val is True:
-                        _tmpcmd+=','+i_var
-                    else:
-                        _tmpcmd+=','+i_var+'='+str(i_val)
-        self.command(_tmpcmd+';')
+        twiss_init = dict((k, v) for k,v in twiss_init.items()
+                          if k not in ['name','closed-orbit'])
+        # explicitly specified keyword arguments overwrite values in
+        # twiss_init:
+        twiss_init.update(kwargs)
+        self.command.twiss(sequence=sequence,
+                           range=madrange,
+                           file=fname,
+                           **twiss_init)
         return self.get_table('twiss')
 
-    def survey(self,
-              sequence=None,
-              pattern=['full'],
-              columns='name,l,s,angle,x,y,z,theta',
-              madrange='',
-              fname='',
-              use=True
-              ):
-        '''
-            Runs select+use+survey on the sequence selected
+    default_survey_columns = ['name', 'l', 's', 'angle',
+                              'x', 'y', 'z', 'theta']
 
-            :param string sequence: name of sequence
-            :param string fname: name of file to store tfs table
-            :param list pattern: pattern to include in table
-            :param string/list columns: Columns to include in table
-            :param bool use: Call use before survey.
-        '''
-        tmpfile = fname or _tmp_filename('survey')
-        self.select('survey',pattern=pattern,columns=columns)
-        self.command('set, format="12.6F";')
+    def survey(self,
+               sequence=None,
+               pattern=['full'],
+               columns=default_survey_columns,
+               madrange=None,
+               fname=None,
+               use=True):
+        """
+        Run SELECT+USE+SURVEY.
+
+        :param str sequence: name of sequence
+        :param str fname: name of file to store tfs table
+        :param list pattern: pattern to include in table
+        :param list columns: Columns to include in table
+        :param bool use: Call use before survey.
+        """
+        self.select('survey', pattern=pattern, columns=columns)
+        self.command.set(format="12.6F")
         if use and sequence:
             self.use(sequence)
-        self.command('survey,'+_madx_tools._add_range(madrange)+' file="'+tmpfile+'";')
+        self.command.survey(range=madrange, file=fname)
         return self.get_table('survey')
 
-    def aperture(self,
-              sequence=None,
-              pattern=['full'],
-              madrange='',
-              columns='name,l,angle,x,y,z,theta',
-              offsets='',
-              fname='',
-              use=False
-              ):
-        '''
-         Runs select+use+aperture on the sequence selected
+    default_aperture_columns = ['name', 'l', 'angle'
+                                'x', 'y', 'z', 'theta']
 
-         :param string sequence: name of sequence
-         :param string fname: name of file to store tfs table
-         :param list pattern: pattern to include in table
-         :param list columns: columns to include in table (can also be string)
-         :param bool use: Call use before aperture.
-        '''
-        tmpfile = fname or _tmp_filename('aperture')
-        self.select('aperture',pattern=pattern,columns=columns)
-        self.command('set, format="12.6F";')
+    def aperture(self,
+                 sequence=None,
+                 pattern=['full'],
+                 madrange='',
+                 columns=default_aperture_columns,
+                 offsets=None,
+                 fname=None,
+                 use=False):
+        """
+        Run SELECT+USE+APERTURE.
+
+        :param str sequence: name of sequence
+        :param str fname: name of file to store tfs table
+        :param list pattern: pattern to include in table
+        :param list columns: columns to include in table (may be a str)
+        :param bool use: Call use before aperture.
+        """
+        self.select('aperture', pattern=pattern, columns=columns)
+        self.command.set(format="12.6F")
         if use and sequence:
             print("Warning, use before aperture is known to cause problems")
             self.use(sequence) # this seems to cause a bug?
-        _cmd='aperture,'+_madx_tools._add_range(madrange)+_madx_tools._add_offsets(offsets)
-        if fname:
-            _cmd+=',file="'+fname+'"'
-        self.command(_cmd)
+        self.command.aperture(range=madrange, offsetelem=offsets, file=fname)
         return self.get_table('aperture')
 
-    def use(self,sequence):
-        self.command('use, sequence='+sequence+';')
+    def use(self, sequence):
+        self.command.use(sequence=sequence)
 
-    @staticmethod
-    def matchcommand(
-        sequence,
-        constraints,
-        vary,
-        weight=None,
-        method=['lmdif'],
-        fname='',
-        betx=None,
-        bety=None,
-        alfx=None,
-        alfy=None,
-        twiss_init=None):
+    def match(self,
+              sequence,
+              constraints,
+              vary,
+              weight=None,
+              method=('lmdiff', {}),
+              fname=None,
+              twiss_init={},
+              **kwargs):
         """
-        Prepare a match command sequence.
+        Perform simple MATCH operation.
 
         :param string sequence: name of sequence
         :param list constraints: constraints to pose during matching
-        :param list vary: vary commands (can also be dict)
+        :param list vary: vary commands
         :param dict weight: weights for matching parameters
-        :param list method: Which method to apply
-
-        Each item of constraints must be a list or dict directly passable
-        to _mad_command().
-
-        If vary is a list each entry must either be list or a dict which can
-        be passed to _mad_command(). Otherwise the value is taken to be the
-        NAME of the variable.
-        If vary is a dict the key corresponds to the NAME. Its value is a
-        list or dict passable to _mad_command(). If this is not the case the
-        value is taken as the STEP value.
-
-        Examples:
-
-        >>> print(madx.matchcommand(
-        ...     'lhc',
-        ...     constraints=[{'betx':3, 'range':'#e'}, [('bety','<',3)]],
-        ...     vary=['K1', {'name':'K2', 'step':1e-6}],
-        ...     weight=dict(betx=1, bety=2),
-        ...     method=['lmdif', dict(calls=100, tolerance=1e-6)]
-        ... ).rstrip())
-        match, sequence=lhc;
-        constraint, betx=3, range=#e;
-        constraint, bety<3;
-        vary, name=K1;
-        vary, name=K2, step=1e-06;
-        weight, betx=1, bety=2;
-        lmdif, calls=100, tolerance=1e-06;
-        endmatch;
-
-        >>> print(madx.matchcommand(
-        ...     'lhc',
-        ...     constraints=[{'betx':3, 'range':'#e'}],
-        ...     vary={'K1': {'upper':3}, 'K2':1e-6},
-        ...     fname='knobs.txt'
-        ... ).rstrip())
-        match, sequence=lhc;
-        constraint, betx=3, range=#e;
-        vary, upper=3, name=K1;
-        vary, name=K2, step=1e-06;
-        lmdif;
-        endmatch, knobfile=knobs.txt;
-
         """
-        if not twiss_init:
-            twiss_init = {}
-        for k,v in {'betx':betx,'bety':bety,'alfx':alfx,'alfy':alfy}.items():
-            if v is not None:
-                twiss_init[k] = v
+        twiss_init = dict((k, v) for k,v in twiss_init.items()
+                          if k not in ['name','closed-orbit'])
+        # explicitly specified keyword arguments overwrite values in
+        # twiss_init:
+        twiss_init.update(kwargs)
 
+        command = self.command
         # MATCH (=start)
-        cmd = _madx_tools._mad_command('match', ('sequence', sequence), **twiss_init)
-
-        # CONSTRAINT
-        assert isinstance(constraints, collections.Sequence)
+        command.match(sequence=sequence, **twiss_init)
         for c in constraints:
-            cmd += _madx_tools._mad_command_unpack('constraint', c)
-
-        # VARY
-        if isinstance(vary, collections.Mapping):
-            for k,v in _madx_tools._sorted_items(vary):
-                try:
-                    cmd += _madx_tools._mad_command_unpack('vary', v, name=k)
-                except TypeError:
-                    cmd += _madx_tools._mad_command('vary', name=k, step=v)
-        elif isinstance(vary, collections.Sequence):
-            for v in vary:
-                if isinstance(v, basestring):
-                    cmd += _madx_tools._mad_command('vary', name=v)
-                else:
-                    cmd += _madx_tools._mad_command_unpack('vary', v)
-        else:
-            raise TypeError("vary must be list or dict.")
-
-        # WEIGHT
+            command.constraint(**c)
+        for v in vary:
+            command.vary(name=v)
         if weight:
-            cmd += _madx_tools._mad_command_unpack('weight', weight)
-
-        # METHOD
-        cmd += _madx_tools._mad_command_unpack(*method)
-
-        # ENDMATCH
-        if fname:
-            cmd += _madx_tools._mad_command('endmatch', knobfile=fname)
-        else:
-            cmd += _madx_tools._mad_command('endmatch')
-        return cmd
-
-
-    def match(
-            self,
-            sequence,
-            constraints,
-            vary,
-            weight=None,
-            method=['lmdif'],
-            fname='',
-            betx=None,
-            bety=None,
-            alfx=None,
-            alfy=None,
-            twiss_init=None,
-            retdict=False):
-        """
-        Perform match operation.
-
-        @param sequence [string] name of sequence
-        @param constraints [list] constraints to pose during matching
-        @param vary [list or dict] vary commands
-        @param weight [dict] weights for matching parameters
-
-        For further reference, see madx.matchcommand().
-
-        """
-        tmpfile = fname or _tmp_filename('match')
-
-        cmd = self.matchcommand(
-                sequence=sequence or self.active_sequence,
-                constraints=constraints,
-                vary=vary,
-                weight=weight,
-                method=method,
-                fname=tmpfile,
-                betx=betx, bety=bety,
-                alfx=alfx, alfy=alfy,
-                twiss_init=twiss_init)
-
-        self.command(cmd)
-        result,initial=_madx_tools._read_knobfile(tmpfile, retdict)
-        if not fname:
-            os.remove(tmpfile)
-        return (result,initial)
+            command.weight(**weight)
+        command(method[0], **method[1])
+        command.endmatch(knobfile=fname)
 
     # turn on/off verbose outupt..
-    def verbose(self,switch):
-        if switch:
-            self.command("option, echo, warn, info")
-        else:
-            self.command("option, -echo, -warn, -info")
+    def verbose(self, switch):
+        self.command.option(echo=switch, warn=switch, info=switch)
 
     def _writeHist(self,command):
         # this still brakes for "multiline commands"...
@@ -516,7 +407,6 @@ class Madx(object):
 
         :param str table: table name
         :param columns: column names
-        :param bool retdict: return plain dictionaries
         :type columns: list or str (comma separated)
 
         """

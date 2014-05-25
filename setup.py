@@ -42,6 +42,11 @@ except ImportError:
             return source[:-4]+'.c' if source.endswith('.pyx') else source
         for ext in extensions:
             ext.sources = list(map(pyx_to_c, ext.sources))
+            missing_sources = [s for s in ext.sources if not path.exists(s)]
+            if missing_sources:
+                raise OSError(('Missing source file: {0[0]!r}. '
+                               'Install Cython to resolve this problem.')
+                              .format(missing_sources))
         return extensions
 else:
     orig_Extension = Extension
@@ -126,7 +131,6 @@ setup(
         "cern.resource",
         "cern.cpymad",
         "cern.cpymad._couch",
-        "cern.cpymad._connection",
         "cern.jpymad",
         "cern.jpymad.tools",
         "cern.pymad",

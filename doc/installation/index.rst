@@ -1,4 +1,5 @@
-
+.. role:: bash(code)
+   :language: bash
 
 Installation Instructions
 *************************
@@ -10,10 +11,10 @@ JPyMad
 ------
 
 For JPyMad, you first need JMad which you can obtain `here <http://cern.ch/jmad/>`_
-Then, download the `source <https://github.com/pymad/pymad>`_, and in pymad/src, run
+Then, download the `pymad source <https://github.com/pymad/pymad>`_, and in pymad/src, run
 the command
 
-.. code-block:: sh
+.. code-block:: bash
 
     python setup.py install --install-platlib
 
@@ -46,7 +47,7 @@ Third method, manual installation:
       and unpack it.
     * Enter the folder madX and run the commands
 
-      .. code-block:: sh
+      .. code-block:: bash
 
           mkdir build; cd build
           cmake -DMADX_STATIC=OFF -DBUILD_SHARED_LIBS=ON ../
@@ -56,7 +57,7 @@ Third method, manual installation:
       and unpack it
     * In the folder pymad/src, run the command
 
-      .. code-block:: sh
+      .. code-block:: bash
 
           python setup.py install
 
@@ -75,38 +76,21 @@ At this time you have to build pymad manually.
       `svn <http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&rev=0&isdir=1>`_
       and unpack it.
 
-    * Build the Mad-X library as a **shared library** (``.dll``).
+    * I recommend building MAD-X as a *static* library. This way, you won't
+      need to carry any ``.dll`` files around and you won't run into version
+      problems when having a multiple MAD-X library builds around.
+
       Enter the folder madX and run the commands
 
       .. code-block:: bat
 
           mkdir build && cd build
-          cmake -G "MinGW Makefiles" -DBUILD_SHARED_LIBS:BOOL=ON -DCMAKE_INSTALL_PREFIX=..\madx-redist ..\
+          cmake -G "MinGW Makefiles" -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_INSTALL_PREFIX=..\madx-redist ..\
           make install
 
       This will install the headers, binaries and library files to the folder ``..\madx-redist``.
 
-      Executing CMake from the GUI, you have to add the ``BUILD_SHARED_LIBS`` option manually. Afterwards reconfigure and regenerate.
-
-
-    * Alternatively, if you have already built a static library you can convert it to a dynamic library using ``pexports`` and ``dlltool`` like so:
-
-      .. code-block:: bat
-
-          mingw-get install mingw32-pexports
-
-          ar -x libptc.a
-          gcc -shared *.obj -o libptc.dll -lgfortran
-          pexports libptc.dll >libptc.def
-          dlltool --dllname libptc.dll --def libptc.def --output-lib libptc.dll.a
-          del *.obj libptc.def
-
-          ar -x libmadx.a
-          gcc -shared *.obj -o libmadx.dll -L. -lptc.dll -lstdc++ -lgfortran
-          pexports libmadx.dll >libmadx.def
-          dlltool --dllname libmadx.dll --def libmadx.def --output-lib libmadx.dll.a
-          del *.obj libmadx.def
-
+      Executing CMake from the GUI, you have to disable the ``BUILD_SHARED_LIBS`` option, if present. Afterwards reconfigure and regenerate.
 
     * In the folder ``pymad/src``, run the command
 
@@ -115,10 +99,6 @@ At this time you have to build pymad manually.
           python setup.py install --madxdir=<path-to-your>\madx-redist
 
       It is highly unlikely that your build succeeds at this point. See :ref:`potential-problems` for further information.
-
-
-    * Copy the ``.dll`` library files to either your system or better your applications runtime path.
-
 
 
 
@@ -134,60 +114,66 @@ In the following we will try to keep a list of the various issues users have rep
           from cern.madx import madx
           ImportError: libmadx.so: cannot open shared object file: No such file or directory
 
-      Solution:
-      Though we try to set the runtime path during compilation, it doesn't always work. Please set
-      the LD_LIBRARY_PATH in your environment. Example, if libmadx.so is installed in
-      $HOME/.local/lib, and you use bash, add to $HOME/.bashrc:
+      Reason:
+      The runtime path for the MAD-X static library is configured
+      incorrectly.
 
-      .. code-block:: sh
+      Solution:
+      You can pass the correct path to the setup script when building:
+
+      .. code-block:: bash
+
+         python setup.py install --madxdir=<prefix>
+         # or alternatively:
+         python setup.py build_ext --rpath=<rpath>
+         python setup.py install
+
+      Where ``<prefix>`` is the base folder, containing the subfolders
+      ``bin``, ``include``, ``lib`` of the MAD-X build and ``<rpath>``
+      contains the dynamic library files.
+
+      If this does not work, you can set the LD_LIBRARY_PATH (or
+      DYLD_LIBRARY_PATH on OSX) environment variable before running pymad,
+      for example:
+
+      .. code-block:: bash
 
           export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/
 
-      Please note, on OSX you might need to use the variable DYLD_LIBRARY_PATH instead of
-      LD_LIBRARY_PATH. The authors are not very familiar with OSX, but know of at least one
-      occurence where that was the problem.
+    * Missing source file: :file:`src/cern/cpymad/libmadx.c`:
 
-    * Cython.Distutils not found:
+      ::
 
-      .. code-block:: sh
-
-        Traceback (most recent call last):
-         File "setup.py", line 22, in <module>
-          from Cython.Distutils import build_ext
-        ImportError: No module named Cython.Distutils
+        OSError: Missing source file: 'src/cern/cpymad/libmadx.c'. Install Cython to resolve this problem.
 
      Solution:
-     In order to get cpymad, you need Cython installed on your system. If you cannot obtain that, use jpymad instead.
+     The easiest way to install Cython is:
 
-    * Cannot find find -lpthread:
+     .. code-block:: bash
 
-      Occurs:
-      When linking libmadx with the ``-DMADX_STATIC:BOOL=ON`` cmake option specified.
+        pip install cython
 
-      Reason:
-      A static version of pthreads is not installed by default.
-
-      Solution:
-      Download a `prebuilt version of the library <http://www.sourceware.org/pthreads-win32/>`_. You need the file ``libpthreadGC2.a``. Copy it to ``C:\MinGW32-xy\lib\libpthread.a``.
+     Alternatively, you can install pymad from the PyPI source distribution
+     which includes all source files.
 
     * Unable to find vcvarsall.bat:
 
       Occurs:
-      While building ``python setup.py install``.
+      While building :bash:`python setup.py install`.
 
       Reason:
       distutils is not configured to use MinGW.
 
       Solution:
-      Add the following lines to ``C:\Python27\Lib\distutils\distutils.cfg``
+      Add the following lines to :file:`C:\\Python27\\Lib\\distutils\\distutils.cfg``
 
-      .. code-block:: python
+      .. code-block:: cfg
 
         [build]
         compiler=mingw32
 
 
-      If you do not want to modify your python system configuration you can place this as ``setup.cfg`` in the current directory. You can also specify the compiler on the command line:
+      If you do not want to modify your python system configuration you can place this as :file:`setup.cfg` in the current directory. You can also specify the compiler on the command line:
 
       .. code-block:: bat
 
@@ -214,16 +200,23 @@ In the following we will try to keep a list of the various issues users have rep
         TypeError: 'NoneType' object has no attribute '__getitem__'
 
       Occurs:
-      While building ``python setup.py install``.
+      While building :bash:`python setup.py install`.
 
       Reason:
       Bug in distutils (?).
 
       Solution:
-      Add the following line to the function ``_init_nt()`` in the file ``<Python>\Lib\distutils\sysconfig.py`` of the python installation.
+      Add the following line to :file:`C:\\Python27\\Lib\\distutils\\sysconfig.py`:
 
       .. code-block:: python
+        :emphasize-lines: 5
 
-        g['CC'] = 'gcc'
+        def _init_nt():
+            """Initialize the module as appropriate for NT"""
+            g = {}
+            ...
+            g['CC'] = 'gcc'
+            ...
+            _config_vars = g
 
       For further reference see `a related issue <http://bugs.python.org/issue2437>`_.
