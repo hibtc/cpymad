@@ -136,7 +136,7 @@ class Madx(object):
         :param object libmadx: :mod:`libmadx` compatible object
 
         '''
-        self._libmadx = libmadx or _libmadx_rpc.LibMadxClient.spawn_subprocess().libmadx
+        self._libmadx = libmadx or _libmadx_rpc.LibMadxClient.spawn_subprocess()[0].libmadx
         if not self._libmadx.started():
             self._libmadx.start()
 

@@ -231,7 +231,7 @@ class Client(object):
         _close(remote_send)
         conn = Connection.from_fd(_open(_detach(local_recv)),
                                   _open(_detach(local_send)))
-        return cls(conn)
+        return cls(conn), proc
 
     def close(self):
         """Close the connection gracefully, stop the remote service."""
