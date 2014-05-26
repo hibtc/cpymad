@@ -9,11 +9,6 @@ except NameError:   # python3
     basestring = unicode = str
 
 
-def is_word(value):
-    """Check if value is a MAD-X identifier."""
-    return value.isalnum() and value[0].isalpha()
-
-
 def mad_quote(value):
     """Add quotes to a string value."""
     quoted = repr(value)
