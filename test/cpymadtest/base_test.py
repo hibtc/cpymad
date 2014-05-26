@@ -25,7 +25,7 @@ from cern import cpymad
 class TestCpymad(object):
 
     def setUp(self):
-        self.model = cpymad.model(self.name)
+        self.model = cpymad.load_model(self.name)
         self.model._cmd('option,-twiss_print')
 
     # It's a bit surprising that this doesn't happen by itself.. Hmmm...
