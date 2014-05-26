@@ -207,7 +207,7 @@ class Madx(object):
         # of ChangeDirectory:
         return ChangeDirectory(path, self._libmadx)
 
-    def call(self, filename, chdir=True):
+    def call(self, filename, chdir=False):
         """
         CALL a file in the MAD-X interpretor.
 
@@ -222,10 +222,11 @@ class Madx(object):
         if not os.path.isfile(fname):
             print("ERROR: "+filename+" not found")
             return 1
-        # Note, that chdir is a NO-OP if its argument evaluates to False,
-        # which is why we can safely use a False value or the result from
-        # os.path.dirname (which might be an empty string):
-        with self.chdir(chdir and os.path.dirname(fname)):
+        if chdir:
+            dirname, basename = os.path.split(fname)
+            with self.chdir(dirname):
+                self.command.call(file=basename)
+        else:
             self.command.call(file=fname)
 
     def select(self, flag, columns, pattern=[]):
