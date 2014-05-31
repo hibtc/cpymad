@@ -231,7 +231,7 @@ class Client(object):
         _close(remote_send)
         conn = Connection.from_fd(_open(_detach(local_recv)),
                                   _open(_detach(local_send)))
-        return cls(conn)
+        return cls(conn), proc
 
     def close(self):
         """Close the connection gracefully, stop the remote service."""
@@ -362,10 +362,14 @@ class LibMadxClient(Client):
     all state within the MAD-X library.
     """
 
-    def __del__(self):
+    def close(self):
         """Finalize libmadx if it was started."""
-        if self.libmadx.started():
-            self.libmadx.finish()
+        try:
+            if self.libmadx.started():
+                self.libmadx.finish()
+        except ValueError:
+            pass
+        super(LibMadxClient, self).close()
 
     @property
     def libmadx(self):
