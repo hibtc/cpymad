@@ -20,19 +20,17 @@ from contextlib import contextmanager
 from shutil import copyfileobj
 from tempfile import NamedTemporaryFile
 
-from cern.pymad.abc.interface import Interface, abstractmethod
 
+class ResourceProvider(object):
 
-class ResourceProvider(Interface):
     """
     Abstract base class for resource providers.
 
     Resources are read-only (at the moment) data objects such as
     model-data. Resource providers have a common interface to abstract the
     underlying API to access those resources.
-
     """
-    @abstractmethod
+
     def open(self, name='', encoding=None):
         """
         Open the specified resource.
@@ -45,9 +43,8 @@ class ResourceProvider(Interface):
         stream is opened in binary mode.
 
         """
-        pass
+        raise NotImplementedError("ResourceProvider.open")
 
-    @abstractmethod
     def listdir(self, name=''):
         """
         List directory contents.
@@ -58,9 +55,8 @@ class ResourceProvider(Interface):
         restrict can be used to filter for certain file types.
 
         """
-        pass
+        raise NotImplementedError("ResourceProvider.listdir")
 
-    @abstractmethod
     def get(self, name):
         """
         Get a provider object relative to the specified subdirectory.
@@ -71,14 +67,13 @@ class ResourceProvider(Interface):
         gets objects relative to the specified subdirectory.
 
         """
-        pass
+        raise NotImplementedError("ResourceProvider.get")
 
-    @abstractmethod
     def provider(self):
         """
         Get the parent provider object.
         """
-        pass
+        raise NotImplementedError("ResourceProvider.provider")
 
     # mixins:
     def listdir_filter(self, name='', ext=''):

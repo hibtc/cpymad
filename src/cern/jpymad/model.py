@@ -24,10 +24,9 @@ from __future__ import absolute_import
 
 from .tools_optics import get_values
 from . import tools_twiss as tw
-from cern.pymad.abc import PyMadModel
 from .modeldef import JPyMadModelDefinition
 
-class JPyMadModel(PyMadModel):
+class JPyMadModel(object):
     '''
     a wrapper for jmad models
     '''

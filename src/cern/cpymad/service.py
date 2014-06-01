@@ -22,8 +22,6 @@ Created on 16 Aug 2011
 '''
 from __future__ import absolute_import
 
-from cern.pymad.abc.service import PyMadService
-
 from .model import Model
 from .model_locator import ChainModelLocator
 
@@ -41,7 +39,7 @@ default_model_locator.add_locator(_locator)
 
 
 
-class CpymadService(PyMadService):
+class CpymadService(object):
     ''' The CPymad implementation of the
         abstract class PyMadService. '''
 

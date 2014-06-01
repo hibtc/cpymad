@@ -23,4 +23,3 @@ endif()
 include(${CTEST_SOURCE_DIRECTORY}CTestSetup.cmake)
 
 subdirs(test/cpymadtest)
-subdirs(test/pymadtest)

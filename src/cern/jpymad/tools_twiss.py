@@ -25,7 +25,7 @@ from __future__ import absolute_import
 from .conversions import tofl
 from .conversions import tostr
 from .globals import JPyMadGlobals
-from cern.pymad.domain.tfs import TfsTable, TfsSummary
+from .tools.tfs import TfsTable, TfsSummary
 
 def twiss(model, madxvarnames, elementpatterns=['.*']):
 

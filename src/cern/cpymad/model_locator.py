@@ -30,7 +30,6 @@ __all__ = [
     'ChainModelLocator'
 ]
 
-from cern.pymad.abc.interface import Interface, abstractmethod
 from collections import Mapping
 from itertools import chain
 from cern.resource.file import FileResource
@@ -125,7 +124,7 @@ class ModelData(object):
             raise ValueError("Invalid resource kind: %s" % kind)
 
 
-class ModelLocator(Interface):
+class ModelLocator(object):
     """
     Model locator and loader base class.
 
@@ -133,7 +132,6 @@ class ModelLocator(Interface):
     resource providers.
 
     """
-    @abstractmethod
     def list_models(self):
         """
         Iterate all available models.
@@ -141,9 +139,8 @@ class ModelLocator(Interface):
         Returns an iterable that may be a generator object.
 
         """
-        pass
+        raise NotImplementedError("ModelLocator.list_models")
 
-    @abstractmethod
     def get_model(self, name, encoding='utf-8'):
         """
         Get the first found model with the specified name.
@@ -152,7 +149,7 @@ class ModelLocator(Interface):
         Raises a ValueError if no model with the given name is found.
 
         """
-        pass
+        raise NotImplementedError("ModelLocator.get_model")
 
 
 class MergedModelLocator(ModelLocator):

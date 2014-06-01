@@ -25,8 +25,6 @@ Created on Nov 11, 2010
 from __future__ import absolute_import
 
 # py4j for communicating with jmad
-from cern.pymad.abc import PyMadService
-
 from .modeldef import JPyMadModelDefinition
 from .model import JPyMadModel
 from . import jmad as jm
@@ -34,7 +32,7 @@ from . import jmad as jm
 import atexit
 
 
-class JPyMadService(PyMadService):
+class JPyMadService(object):
     """
     the service which is the main facade for the JPyMad - implementation
     """
