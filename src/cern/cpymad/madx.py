@@ -353,7 +353,7 @@ class Madx(object):
               constraints,
               vary,
               weight=None,
-              method=('lmdiff', {}),
+              method=('lmdif', {}),
               fname=None,
               twiss_init={},
               **kwargs):
