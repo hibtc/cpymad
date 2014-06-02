@@ -158,20 +158,7 @@ class Madx(object):
         :param str cmd: command name
         :param **kwargs: command parameters
         """
-        return MadxCommands(self._check_command)
-
-    def _check_command(self, cmd):
-        """Execute command after performing some sanity checks."""
-        if cmd.lower() in ('stop;', 'exit;'):
-            print("WARNING: found quit in command: "+cmd+"\n")
-            print("Please use madx.finish() or just exit python (CTRL+D)")
-            print("Command ignored")
-            return
-        if cmd.lower().startswith('plot'):
-            print("WARNING: Plot functionality does not work through pymadx")
-            print("Command ignored")
-            return
-        self.input(cmd)
+        return MadxCommands(self.input)
 
     def input(self, text):
         """
