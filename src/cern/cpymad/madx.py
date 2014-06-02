@@ -122,17 +122,13 @@ class Madx(object):
     '''
     Python class which interfaces to Mad-X library
     '''
-    _hist = False
     _hfile = None
-    _rechist = False
 
-    def __init__(self, histfile=None, recursive_history=False, libmadx=None):
+    def __init__(self, histfile=None, libmadx=None):
         '''
         Initializing Mad-X instance
 
         :param str histfile: (optional) name of file which will contain all Mad-X commands.
-        :param bool recursive_history: If true, history file will contain no calls to other files.
-                                       Instead, recursively writing commands from these files when called.
         :param object libmadx: :mod:`libmadx` compatible object
 
         '''
@@ -141,9 +137,7 @@ class Madx(object):
             self._libmadx.start()
 
         if histfile:
-            self._hist = True
             self._hfile = open(histfile,'w')
-            self._rechist = recursive_history
 
     def __del__(self):
         """Close history file."""
@@ -376,16 +370,7 @@ class Madx(object):
 
     def _writeHist(self,command):
         # this still brakes for "multiline commands"...
-        if not self._hfile:
-            return
-        if self._rechist and command.split(',')[0].strip().lower()=='call':
-            cfile=command.split(',')[1].strip().strip('file=').strip('FILE=').strip(';\n').strip('"').strip("'")
-            if sys.flags.debug:
-                print("DBG: call file ",cfile)
-            fin=open(cfile,'r')
-            for l in fin:
-                self._writeHist(l+'\n')
-        else:
+        if self._hfile:
             self._hfile.write(command)
             self._hfile.flush()
 
