@@ -195,20 +195,12 @@ class Madx(object):
         :param str filename: file name with path
         :param bool chdir: temporarily change directory in MAD-X process
         """
-        fname=filename
-        if not os.path.isfile(fname):
-            fname=filename+'.madx'
-        if not os.path.isfile(fname):
-            fname=filename+'.mad'
-        if not os.path.isfile(fname):
-            print("ERROR: "+filename+" not found")
-            return 1
         if chdir:
-            dirname, basename = os.path.split(fname)
+            dirname, basename = os.path.split(filename)
             with self.chdir(dirname):
                 self.command.call(file=basename)
         else:
-            self.command.call(file=fname)
+            self.command.call(file=filename)
 
     def select(self, flag, columns, pattern=[]):
         """
