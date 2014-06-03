@@ -9,7 +9,7 @@ class TestCpymadSurvey(unittest.TestCase):
         del self.model
 
     def setUp(self):
-        self.model=cpymad.model('lhc')
+        self.model=cpymad.load_model('lhc')
 
     def test_aperture(self):
 

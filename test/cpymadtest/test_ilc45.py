@@ -16,13 +16,10 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 import unittest
-from cern import cpymad
 from base_test import TestCpymad
 
 class TestILC(TestCpymad, unittest.TestCase):
-    def setUp(self):
-        self.model=cpymad.model('ilc-4.50m')
-        self.model._cmd('option,-twiss_print')
+    name = 'ilc-4.50m'
 
 if __name__ == '__main__':
     unittest.main()

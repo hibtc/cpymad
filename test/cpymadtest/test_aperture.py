@@ -11,7 +11,7 @@ class TestCpymadAperture(unittest.TestCase):
         '''
          Tests a specific aperture from LHC model
         '''
-        self.model=cpymad.model('lhc')
+        self.model=cpymad.load_model('lhc')
         aper,pars=self.model.aperture(madrange='ir2')
 
 
