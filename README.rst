@@ -1,39 +1,48 @@
-PyMAD
------
-
-PyMAD is a python wrapper for MAD-X_ (Methodical Accelerator Design). It can
-be used in either of two modes:
-
-- cpymad uses Cython_ to access the Mad-X_ library directly
-- jpymad uses JMad_ via Py4J_ which then accesses the Mad-X_ library
-
-.. _MAD-X: http://madx.web.cern.ch/madx/
-.. _Cython: http://cython.org/
-.. _JMad: http://jmad.web.cern.ch/jmad/
-.. _Py4J: http://py4j.sourceforge.net/
-
-Prerequisites
-~~~~~~~~~~~~~
-
-General
-=======
-
-- python with numpy
-
 CPyMAD
-======
+------
 
+CPyMad_ is a Cython_ binding to MAD-X_.
+
+MAD-X is a software package to simulate particle accelerators and is used
+at CERN and all around the world. It has its own proprietary scripting
+language and is usually launched from the command line.
+
+There is also a binding via JMad_ called JPyMAD_. This has less features
+but does not require a C compiler for installing.
+
+.. _CPyMAD: https://github.com/pymad/pymad
+.. _Cython: http://cython.org/
+.. _MAD-X: http://cern.ch/mad
+.. _JMad: http://jmad.web.cern.ch/jmad/
+.. _JPyMAD: https://github.com/pymad/jpymad
+
+
+Dependencies
+------------
+
+To build MAD-X and CPyMAD from source you will need
+
+- CMake_
+- python>=2.6
+- C / Fortran compilers.
+
+Furthermore, CPyMAD depends on the following python packages:
+
+- setuptools_
 - Cython_
-- gfortran or similar
-- MAD-X_ shared library
-- ``madextern.h`` in your include path
+- NumPy_
+- PyYAML_
 
-JPyMAD
-======
+The python packages can be installed using pip_.
 
-- Java
-- JMad_
-- Py4J_
+
+.. _CMake: http://www.cmake.org/
+.. _setuptools: https://pypi.python.org/pypi/setuptools
+.. _Cython: http://cython.org/
+.. _NumPy: http://www.numpy.org/
+.. _PyYAML: https://pypi.python.org/pypi/PyYAML
+.. _pip: https://pypi.python.org/pypi/pip
+
 
 Installation
 ~~~~~~~~~~~~

@@ -1,20 +1,25 @@
-.. PyMad documentation master file, created by
-   sphinx-quickstart on Wed Aug 17 17:50:35 2011.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+CERN CPyMad
+***********
 
+CPyMad_ is a Cython_ binding to MAD-X_.
 
-CERN PyMad
-**********
+MAD-X is a software package to simulate particle accelerators and is used
+at CERN and all around the world. It has its own proprietary scripting
+language and is usually launched from the command line.
 
-PyMad is a python API for `Mad-X <http://cern.ch/mad>`_.
+Feel free to report bugs, request features and ask questions on the
+`issue pages`_.
 
-MadX is a software package to simulate particle accelerators and is used at CERN and all around the world.
-MadX has its own proprietary scripting language and is usually launched from the command line.
+There is also a binding via JMad_ called JPyMAD_. This has less features
+but does not require a C compiler for installing.
 
-The source is available at https://github.com/pymad/pymad
+.. _CPyMAD: https://github.com/pymad/pymad
+.. _Cython: http://cython.org/
+.. _MAD-X: http://cern.ch/mad
+.. _issue pages: https://github.com/pymad/pymad/issues
+.. _JMad: http://jmad.web.cern.ch/jmad/
+.. _JPyMAD: https://github.com/pymad/jpymad
 
-Bugs can be reported at https://github.com/pymad/pymad/issues
 
 Contents:
 =========
@@ -24,8 +29,8 @@ Contents:
 
    installation/index
    examples/index
-   api/index
    cpymad/index
+
 
 Indices and tables
 ==================
