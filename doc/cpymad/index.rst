@@ -3,7 +3,7 @@ API Reference
 
 There are two main components in CPyMAD:
 
-* :class:`cern.madx.Madx` serves as a lightweight wrapper for the MAD-X
+* :class:`cern.cpymad.madx.Madx` serves as a lightweight wrapper for the MAD-X
   interpretor.
 
 * :class:`cern.cpymad.model.Model` is derived from the JMad model

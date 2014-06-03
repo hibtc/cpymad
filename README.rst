@@ -55,26 +55,17 @@ Usage
 
 .. code-block:: python
 
-    # Once installed this is a nice example showing current
-    # usability (run from examples folder):
-    from cern import pymad
+    from cern import cpymad
 
-    # select backend,
-    # 'cpymad' is currently default if nothing is provided
-    # Returns a pymad.service object
-    pms = pymad.init('jpymad')
+    # Instanciate a model:
+    m = cpymad.load_model('lhc')
 
-    # Create a model:
-    pm = pms.create_model('lhc')
-
-    # Run twiss:
-    # This returns a "lookup dictionary" containing
-    # numpy arrays. Lowercase keys.
-    twiss,summary = pm.twiss()
+    # Calculate TWISS parameters:
+    twiss, summary = pm.twiss()
 
     # Your own analysis below:
-    import matplotlib.pyplot as plt
-    plt.plot(twiss.s, twiss.betx)
+    from matplotlib import pyplot as plt
+    plt.plot(twiss['s'], twiss['betx'])
 
 
 See http://cern.ch/pymad/ for further documentation.
