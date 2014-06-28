@@ -61,6 +61,8 @@
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Windows</a><ul>
+<li><a class="reference internal" href="#pre-built-binaries">Pre-built binaries</a></li>
+<li><a class="reference internal" href="#install-dependencies">Install dependencies</a></li>
 <li><a class="reference internal" href="#install-libmadx">Install libmadx</a></li>
 <li><a class="reference internal" href="#install-cpymad">Install CPyMAD</a></li>
 </ul>
@@ -101,18 +103,24 @@
             
   <div class="section" id="windows">
 <h1>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pre-built-binaries">
+<h2>Pre-built binaries<a class="headerlink" href="#pre-built-binaries" title="Permalink to this headline">¶</a></h2>
 <p>On a windows platform, you are likely to run into more problems than on
-linux when building from source. Therefore, we will try to provide built
-versions for some platforms. If your platform is supported, you can just
+linux when building from source. Therefore, we will try to provide <a class="reference external" href="https://pypi.python.org/pypi/cern-pymad/0.7">built
+versions</a> for some platforms. If your platform is supported, you can just
 run</p>
 <div class="highlight-bat"><div class="highlight"><pre>pip install cern-pymad
 </pre></div>
 </div>
 <p>from your terminal and that&#8217;s it. If this fails, you will need to build
-from source.</p>
+from source:</p>
+</div>
+<div class="section" id="install-dependencies">
+<h2>Install dependencies<a class="headerlink" href="#install-dependencies" title="Permalink to this headline">¶</a></h2>
 <p>For source builds I recommend <a class="reference external" href="https://code.google.com/p/pythonxy/">Python(x,y)</a>. This is a python distribution
 which includes all <a class="reference internal" href="dependencies.html#dependencies"><em>Dependencies</em></a> except for <a class="reference external" href="http://www.cmake.org/">CMake</a>. Make sure Cython
 and MinGW are marked for installation.</p>
+</div>
 <div class="section" id="install-libmadx">
 <h2>Install libmadx<a class="headerlink" href="#install-libmadx" title="Permalink to this headline">¶</a></h2>
 <p>Download and extract the <a class="reference external" href="http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&amp;rev=0&amp;isdir=1">MAD-X source</a> from SVN.</p>

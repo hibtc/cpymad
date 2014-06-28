@@ -4,6 +4,10 @@ Unix
 On Unix-like system building CPyMAD from source is most convenient and
 should be unproblematic.
 
+
+Install dependencies
+~~~~~~~~~~~~~~~~~~~~
+
 On many distributions all :ref:`dependencies` can be installed from the
 official repositories.
 
