@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>cern.cpymad.madx &mdash; PyMad 0.2.0 documentation</title>
+    <title>cern.cpymad.madx &mdash; PyMad 0.7.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2.0',
+        VERSION:     '0.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyMad 0.2.0 documentation" href="../index.html" />
+    <link rel="top" title="PyMad 0.7.0 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="cern.cpymad.model" href="model.html" />
     <link rel="prev" title="API Reference" href="index.html" /> 
@@ -97,7 +97,7 @@ more convenient Python environment. For example, when you call the <tt class="do
 method, you get numpy arrays containing the information from the table
 generated. Furthermore, we try to reduce the amount of commands needed by
 combining e.g. USE, SELECT, and TWISS into the <tt class="docutils literal"><span class="pre">twiss</span></tt> method itself, and
-define reasonable default patterns/columns etc. See, <em class="xref std std-ref">madx-example</em>.</p>
+define reasonable default patterns/columns etc. See, <a class="reference internal" href="../examples/madx.html#madx-example"><em>Madx example</em></a>.</p>
 <span class="target" id="module-cern.cpymad.madx"></span><span class="target" id="module-madx"></span><p><em>Module author: Yngve Inntjore Levinsen &lt;Yngve.Inntjore.Levinsen.at.cern.ch&gt;</em></p>
 <p>Main module to interface with Mad-X library.</p>
 <p>The class Madx uses a subprocess to execute MAD-X library calls remotely via
@@ -115,7 +115,7 @@ all library calls within a subprocess that does not inherit any handles.</p>
 in a subprocess will prevent the main process from crashing as well.</p>
 <dl class="class">
 <dt id="cern.cpymad.madx.ChangeDirectory">
-<em class="property">class </em><tt class="descclassname">cern.cpymad.madx.</tt><tt class="descname">ChangeDirectory</tt><big>(</big><em>path</em>, <em>_os=&lt;module 'os' from '/usr/lib/python3.4/os.py'&gt;</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#ChangeDirectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.ChangeDirectory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">cern.cpymad.madx.</tt><tt class="descname">ChangeDirectory</tt><big>(</big><em>path</em>, <em>_os=&lt;module 'os' from '/home/thomas/src/work/bundle/.virtualenv/stable/lib/python2.7/os.pyc'&gt;</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#ChangeDirectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.ChangeDirectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Context manager for temporarily changing current working directory.</p>
 </dd></dl>
 

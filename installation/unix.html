@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Unix &mdash; PyMad 0.2.0 documentation</title>
+    <title>Unix &mdash; PyMad 0.7.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2.0',
+        VERSION:     '0.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyMad 0.2.0 documentation" href="../index.html" />
+    <link rel="top" title="PyMad 0.7.0 documentation" href="../index.html" />
     <link rel="up" title="Installation Instructions" href="index.html" />
     <link rel="next" title="Windows" href="windows.html" />
     <link rel="prev" title="Dependencies" href="dependencies.html" /> 
@@ -103,8 +103,8 @@
 <h1>Unix<a class="headerlink" href="#unix" title="Permalink to this headline">¶</a></h1>
 <p>On Unix-like system building CPyMAD from source is most convenient and
 should be unproblematic.</p>
-<p>On many distributions all dependencies can be installed from the official
-repositories.</p>
+<p>On many distributions all <a class="reference internal" href="dependencies.html#dependencies"><em>Dependencies</em></a> can be installed from the
+official repositories.</p>
 <div class="section" id="install-libmadx">
 <h2>Install libmadx<a class="headerlink" href="#install-libmadx" title="Permalink to this headline">¶</a></h2>
 <p>Download the <a class="reference external" href="http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&amp;rev=0&amp;isdir=1">MAD-X source</a> from SVN</p>
@@ -117,12 +117,12 @@ cmake -DMADX_STATIC<span class="o">=</span>OFF -DBUILD_SHARED_LIBS<span class="o
 make <span class="o">&amp;&amp;</span> make install
 </pre></div>
 </div>
-<p>The last step might require root privileges if not changing the
+<p>The install step might require root privileges if not changing the
 installation prefix.</p>
 </div>
 <div class="section" id="install-cpymad">
 <h2>Install CPyMAD<a class="headerlink" href="#install-cpymad" title="Permalink to this headline">¶</a></h2>
-<p>The latest CPyMAD release can conveniently be installed using pip:</p>
+<p>The latest <a class="reference external" href="https://pypi.python.org/pypi/cern-pymad">CPyMAD release</a> can conveniently be installed using <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a>:</p>
 <div class="highlight-bash"><div class="highlight"><pre>pip install cern-pymad
 </pre></div>
 </div>

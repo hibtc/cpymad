@@ -14,8 +14,8 @@ from your terminal and that's it. If this fails, you will need to build
 from source.
 
 For source builds I recommend `Python(x,y)`_. This is a python distribution
-which includes all dependencies except for CMake_. Make sure Cython and
-MinGW are marked for installation.
+which includes all :ref:`dependencies` except for CMake_. Make sure Cython
+and MinGW are marked for installation.
 
 .. _CMake: http://www.cmake.org/
 

@@ -1,8 +1,9 @@
 Installation Instructions
 *************************
 
-There are two basic steps when installing CPyMAD:
+There are three basic steps when installing CPyMAD:
 
+- install dependencies
 - build MAD-X as a library
 - build the CPyMad binding
 
