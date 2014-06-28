@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Unix &mdash; PyMad 0.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyMad 0.2.0 documentation" href="../index.html" />
+    <link rel="up" title="Installation Instructions" href="index.html" />
+    <link rel="next" title="Windows" href="windows.html" />
+    <link rel="prev" title="Dependencies" href="dependencies.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/pymad-logo-text.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="windows.html" title="Windows"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dependencies.html" title="Dependencies"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="index.html" accesskey="U">Installation Instructions</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Unix</a><ul>
+<li><a class="reference internal" href="#install-libmadx">Install libmadx</a></li>
+<li><a class="reference internal" href="#install-cpymad">Install CPyMAD</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dependencies.html"
+                        title="previous chapter">Dependencies</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="windows.html"
+                        title="next chapter">Windows</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/installation/unix.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="unix">
+<h1>Unix<a class="headerlink" href="#unix" title="Permalink to this headline">¶</a></h1>
+<p>On Unix-like system building CPyMAD from source is most convenient and
+should be unproblematic.</p>
+<p>On many distributions all dependencies can be installed from the official
+repositories.</p>
+<div class="section" id="install-libmadx">
+<h2>Install libmadx<a class="headerlink" href="#install-libmadx" title="Permalink to this headline">¶</a></h2>
+<p>Download the <a class="reference external" href="http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&amp;rev=0&amp;isdir=1">MAD-X source</a> from SVN</p>
+<div class="highlight-bash"><div class="highlight"><pre>svn co http://svnweb.cern.ch/guest/madx/trunk/madX
+</pre></div>
+</div>
+<p>Build and install the library</p>
+<div class="highlight-bash"><div class="highlight"><pre>mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd </span>build
+cmake -DMADX_STATIC<span class="o">=</span>OFF -DBUILD_SHARED_LIBS<span class="o">=</span>ON ../madX
+make <span class="o">&amp;&amp;</span> make install
+</pre></div>
+</div>
+<p>The last step might require root privileges if not changing the
+installation prefix.</p>
+</div>
+<div class="section" id="install-cpymad">
+<h2>Install CPyMAD<a class="headerlink" href="#install-cpymad" title="Permalink to this headline">¶</a></h2>
+<p>The latest CPyMAD release can conveniently be installed using pip:</p>
+<div class="highlight-bash"><div class="highlight"><pre>pip install cern-pymad
+</pre></div>
+</div>
+<p>If you run into problems with this, you should manually download and
+install the <a class="reference external" href="https://github.com/pymad/pymad/zipball/master">CPyMad source</a> to see in which step the problem occurs:</p>
+<div class="highlight-bash"><div class="highlight"><pre>git clone git://github.com/pymad/pymad
+<span class="nb">cd </span>pymad
+python setup.py build
+python setup.py install
+</pre></div>
+</div>
+<p>You might need root privileges for the last step if not installing to a
+<a class="reference external" href="http://virtualenv.readthedocs.org/en/latest/virtualenv.html">virtualenv</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="windows.html" title="Windows"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dependencies.html" title="Dependencies"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="index.html" >Installation Instructions</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Y.I. Levinsen, K. Fuchsberger (CERN) .
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

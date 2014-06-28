@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Troubleshooting &mdash; PyMad 0.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyMad 0.2.0 documentation" href="../index.html" />
+    <link rel="up" title="Installation Instructions" href="index.html" />
+    <link rel="next" title="Examples" href="../examples/index.html" />
+    <link rel="prev" title="Windows" href="windows.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/pymad-logo-text.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../examples/index.html" title="Examples"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="windows.html" title="Windows"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="index.html" accesskey="U">Installation Instructions</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#importerror-libmadx-so">ImportError: libmadx.so</a></li>
+<li><a class="reference internal" href="#oserror-missing-source-file">OSError: Missing source file</a></li>
+<li><a class="reference internal" href="#unable-to-find-vcvarsall-bat">Unable to find vcvarsall.bat</a></li>
+<li><a class="reference internal" href="#typeerror-nonetype-object-has-no-attribute-getitem">TypeError: &#8216;NoneType&#8217; object has no attribute &#8216;__getitem__&#8217;</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="windows.html"
+                        title="previous chapter">Windows</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../examples/index.html"
+                        title="next chapter">Examples</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/installation/troubleshooting.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Troubleshooting<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>In the following we will try to keep a list of the various issues and fixes
+that might occur during installation.</p>
+<div class="section" id="importerror-libmadx-so">
+<h2>ImportError: libmadx.so<a class="headerlink" href="#importerror-libmadx-so" title="Permalink to this headline">¶</a></h2>
+<p>Message:</p>
+<div class="highlight-python"><div class="highlight"><pre>from cern.madx import madx
+ImportError: libmadx.so: cannot open shared object file: No such file or directory
+</pre></div>
+</div>
+<p>Reason:
+The runtime path for the MAD-X static library is configured
+incorrectly.</p>
+<p>Solution:
+You can pass the correct path to the setup script when building:</p>
+<div class="highlight-bash"><div class="highlight"><pre>python setup.py install --madxdir<span class="o">=</span>&lt;prefix&gt;
+<span class="c"># or alternatively:</span>
+python setup.py build_ext --rpath<span class="o">=</span>&lt;rpath&gt;
+python setup.py install
+</pre></div>
+</div>
+<p>Where <tt class="docutils literal"><span class="pre">&lt;prefix&gt;</span></tt> is the base folder containing the subfolders <tt class="docutils literal"><span class="pre">bin</span></tt>,
+<tt class="docutils literal"><span class="pre">include</span></tt>, <tt class="docutils literal"><span class="pre">lib</span></tt> of the MAD-X build and <tt class="docutils literal"><span class="pre">&lt;rpath&gt;</span></tt> contains the
+dynamic library files.</p>
+<p>If this does not work, you can set the LD_LIBRARY_PATH (or
+DYLD_LIBRARY_PATH on OSX) environment variable before running pymad, for
+example:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">export </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:<span class="nv">$HOME</span>/.local/lib/
+</pre></div>
+</div>
+</div>
+<div class="section" id="oserror-missing-source-file">
+<h2>OSError: Missing source file<a class="headerlink" href="#oserror-missing-source-file" title="Permalink to this headline">¶</a></h2>
+<p>Message:</p>
+<div class="highlight-python"><div class="highlight"><pre>OSError: Missing source file: &#39;src/cern/cpymad/libmadx.c&#39;. Install Cython to resolve this problem.
+</pre></div>
+</div>
+<p>Solution:
+The easiest way to install Cython is:</p>
+<div class="highlight-bash"><div class="highlight"><pre>pip install cython
+</pre></div>
+</div>
+<p>Alternatively, you can install pymad from the PyPI source distribution
+which includes all source files.</p>
+</div>
+<div class="section" id="unable-to-find-vcvarsall-bat">
+<h2>Unable to find vcvarsall.bat<a class="headerlink" href="#unable-to-find-vcvarsall-bat" title="Permalink to this headline">¶</a></h2>
+<p>Occurs:
+While building <tt class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></tt>.</p>
+<p>Reason:
+distutils is not configured to use MinGW.</p>
+<p>Solution:
+Add the following lines to <tt class="file docutils literal"><span class="pre">C:\Python27\Lib\distutils\distutils.cfg</span></tt></p>
+<div class="highlight-cfg"><div class="highlight"><pre><span class="k">[build]</span>
+<span class="na">compiler</span><span class="o">=</span><span class="s">mingw32</span>
+</pre></div>
+</div>
+<p>If you do not want to modify your python system configuration you can place
+this as <tt class="file docutils literal"><span class="pre">setup.cfg</span></tt> in the current directory. You can also specify
+the compiler on the command line:</p>
+<div class="highlight-bash"><div class="highlight"><pre>python setup.py build --madxdir<span class="o">=</span>&lt;madx-install-path&gt; --compiler<span class="o">=</span>mingw32
+python setup.py install --madxdir<span class="o">=</span>&lt;madx-install-path&gt;
+</pre></div>
+</div>
+<p>See also <a class="reference external" href="http://stackoverflow.com/questions/2817869/error-unable-to-find-vcvarsall-bat">this question on stackoverflow</a>.</p>
+</div>
+<div class="section" id="typeerror-nonetype-object-has-no-attribute-getitem">
+<h2>TypeError: &#8216;NoneType&#8217; object has no attribute &#8216;__getitem__&#8217;<a class="headerlink" href="#typeerror-nonetype-object-has-no-attribute-getitem" title="Permalink to this headline">¶</a></h2>
+<p>Message:</p>
+<div class="highlight-python"><div class="highlight"><pre>Traceback (most recent call last):
+  ...
+  File &quot;C:\Python27\lib\distutils\unixccompiler.py&quot;, line 227, in runtime_library_dir_option
+    compiler = os.path.basename(sysconfig.get_config_var(&quot;CC&quot;))
+  File &quot;C:\Python27\lib\ntpath.py&quot;, line 198, in basename
+    return split(p)[1]
+  File &quot;C:\Python27\lib\ntpath.py&quot;, line 170, in split
+    d, p = splitdrive(p)
+  File &quot;C:\Python27\lib\ntpath.py&quot;, line 125, in splitdrive
+    if p[1:2] == &#39;:&#39;:
+TypeError: &#39;NoneType&#39; object has no attribute &#39;__getitem__&#39;
+</pre></div>
+</div>
+<p>Occurs:
+While building <tt class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></tt>.</p>
+<p>Reason:
+Bug in distutils (?).</p>
+<p>Solution:
+Add the following line to <tt class="file docutils literal"><span class="pre">C:\Python27\Lib\distutils\sysconfig.py</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre> <span class="k">def</span> <span class="nf">_init_nt</span><span class="p">():</span>
+     <span class="sd">&quot;&quot;&quot;Initialize the module as appropriate for NT&quot;&quot;&quot;</span>
+     <span class="n">g</span> <span class="o">=</span> <span class="p">{}</span>
+     <span class="o">...</span>
+<span class="hll">     <span class="n">g</span><span class="p">[</span><span class="s">&#39;CC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;gcc&#39;</span>
+</span>     <span class="o">...</span>
+     <span class="n">_config_vars</span> <span class="o">=</span> <span class="n">g</span>
+</pre></div>
+</div>
+<p>For further reference see <a class="reference external" href="http://bugs.python.org/issue2437">a related issue</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../examples/index.html" title="Examples"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="windows.html" title="Windows"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="index.html" >Installation Instructions</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Y.I. Levinsen, K. Fuchsberger (CERN) .
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

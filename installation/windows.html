@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Windows &mdash; PyMad 0.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyMad 0.2.0 documentation" href="../index.html" />
+    <link rel="up" title="Installation Instructions" href="index.html" />
+    <link rel="next" title="Troubleshooting" href="troubleshooting.html" />
+    <link rel="prev" title="Unix" href="unix.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/pymad-logo-text.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="troubleshooting.html" title="Troubleshooting"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="unix.html" title="Unix"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="index.html" accesskey="U">Installation Instructions</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Windows</a><ul>
+<li><a class="reference internal" href="#install-libmadx">Install libmadx</a></li>
+<li><a class="reference internal" href="#install-cpymad">Install CPyMAD</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="unix.html"
+                        title="previous chapter">Unix</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="troubleshooting.html"
+                        title="next chapter">Troubleshooting</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/installation/windows.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="windows">
+<h1>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h1>
+<p>On a windows platform, you are likely to run into more problems than on
+linux when building from source. Therefore, we will try to provide built
+versions for some platforms. If your platform is supported, you can just
+run</p>
+<div class="highlight-bat"><div class="highlight"><pre>pip install cern-pymad
+</pre></div>
+</div>
+<p>from your terminal and that&#8217;s it. If this fails, you will need to build
+from source.</p>
+<p>For source builds I recommend <a class="reference external" href="https://code.google.com/p/pythonxy/">Python(x,y)</a>. This is a python distribution
+which includes all dependencies except for <a class="reference external" href="http://www.cmake.org/">CMake</a>. Make sure Cython and
+MinGW are marked for installation.</p>
+<div class="section" id="install-libmadx">
+<h2>Install libmadx<a class="headerlink" href="#install-libmadx" title="Permalink to this headline">¶</a></h2>
+<p>Download and extract the <a class="reference external" href="http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&amp;rev=0&amp;isdir=1">MAD-X source</a> from SVN.</p>
+<p>I recommend building MAD-X as a <em>static</em> library. This way, you won&#8217;t
+need to carry any <tt class="docutils literal"><span class="pre">.dll</span></tt> files around and you won&#8217;t run into version
+problems when having a multiple MAD-X library builds around.</p>
+<p><a class="reference external" href="https://code.google.com/p/pythonxy/">Python(x,y)</a> provides an <em>Open enhanced console here</em> context menu item
+when right-clicking on a folder in the explorer. Open the madX folder with
+it (or with <tt class="docutils literal"><span class="pre">cmd.exe</span></tt>) and run the commands:</p>
+<div class="highlight-bat"><div class="highlight"><pre>mkdir build
+<span class="k">cd</span> build
+cmake -G <span class="s2">&quot;MinGW Makefiles&quot;</span> -DBUILD_SHARED_LIBS:BOOL<span class="o">=</span><span class="k">OFF</span> -DCMAKE_INSTALL_PREFIX<span class="o">=</span>..\install ..
+make install
+</pre></div>
+</div>
+<p>This will install the headers, binaries and library files to the
+<tt class="file docutils literal"><span class="pre">madX/install</span></tt> subfolder.</p>
+<p>If executing CMake from the GUI, you have to disable the
+<tt class="docutils literal"><span class="pre">BUILD_SHARED_LIBS</span></tt> option, if present. Afterwards reconfigure and
+regenerate.</p>
+</div>
+<div class="section" id="install-cpymad">
+<h2>Install CPyMAD<a class="headerlink" href="#install-cpymad" title="Permalink to this headline">¶</a></h2>
+<p>Download the <a class="reference external" href="https://github.com/pymad/pymad/zipball/master">CPyMad source</a>. Then go to the pymad folder and build as
+follows:</p>
+<div class="highlight-bat"><div class="highlight"><pre>python setup.py install --madxdir<span class="o">=</span><span class="p">&lt;</span><span class="n">madx</span>-install-path&gt;
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="troubleshooting.html" title="Troubleshooting"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="unix.html" title="Unix"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="index.html" >Installation Instructions</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Y.I. Levinsen, K. Fuchsberger (CERN) .
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
