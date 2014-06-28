@@ -1,4 +1,5 @@
 .. _model-example:
+
 Model example
 =============
 
