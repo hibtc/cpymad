@@ -1,9 +1,12 @@
 Windows
 -------
 
+Pre-built binaries
+~~~~~~~~~~~~~~~~~~
+
 On a windows platform, you are likely to run into more problems than on
-linux when building from source. Therefore, we will try to provide built
-versions for some platforms. If your platform is supported, you can just
+linux when building from source. Therefore, we will try to provide `built
+versions`_ for some platforms. If your platform is supported, you can just
 run
 
 .. code-block:: bat
@@ -11,11 +14,15 @@ run
     pip install cern-pymad
 
 from your terminal and that's it. If this fails, you will need to build
-from source.
+from source:
+
+
+Install dependencies
+~~~~~~~~~~~~~~~~~~~~
 
 For source builds I recommend `Python(x,y)`_. This is a python distribution
-which includes all dependencies except for CMake_. Make sure Cython and
-MinGW are marked for installation.
+which includes all :ref:`dependencies` except for CMake_. Make sure Cython
+and MinGW are marked for installation.
 
 .. _CMake: http://www.cmake.org/
 
@@ -59,6 +66,7 @@ follows:
     python setup.py install --madxdir=<madx-install-path>
 
 
+.. _built versions: https://pypi.python.org/pypi/cern-pymad/0.7
 .. _MAD-X source: http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&rev=0&isdir=1
 .. _CPyMAD source: https://github.com/pymad/pymad/zipball/master
 .. _Python(x,y): https://code.google.com/p/pythonxy/

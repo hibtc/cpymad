@@ -4,8 +4,12 @@ Unix
 On Unix-like system building CPyMAD from source is most convenient and
 should be unproblematic.
 
-On many distributions all dependencies can be installed from the official
-repositories.
+
+Install dependencies
+~~~~~~~~~~~~~~~~~~~~
+
+On many distributions all :ref:`dependencies` can be installed from the
+official repositories.
 
 
 Install libmadx
@@ -25,14 +29,14 @@ Build and install the library
     cmake -DMADX_STATIC=OFF -DBUILD_SHARED_LIBS=ON ../madX
     make && make install
 
-The last step might require root privileges if not changing the
+The install step might require root privileges if not changing the
 installation prefix.
 
 
 Install CPyMAD
 ~~~~~~~~~~~~~~
 
-The latest CPyMAD release can conveniently be installed using pip:
+The latest `CPyMAD release`_ can conveniently be installed using pip_:
 
 .. code-block:: bash
 
@@ -53,5 +57,7 @@ virtualenv_.
 
 
 .. _MAD-X source: http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&rev=0&isdir=1
+.. _CPyMAD release: https://pypi.python.org/pypi/cern-pymad
+.. _pip: https://pypi.python.org/pypi/pip
 .. _CPyMAD source: https://github.com/pymad/pymad/zipball/master
 .. _virtualenv: http://virtualenv.readthedocs.org/en/latest/virtualenv.html
