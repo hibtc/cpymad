@@ -23,7 +23,7 @@ import sys
 from os import path
 
 # Version of pymad (major,minor):
-PYMADVERSION=['0','8']
+PYMADVERSION=(0, 8)
 
 
 # setuptools.Extension automatically converts all '.pyx' extensions to '.c'
@@ -111,12 +111,14 @@ except IOError:
     pass
 
 setup(
-    name='cern-pymad',
+    name='cern-cpymad',
     version='.'.join(map(str, PYMADVERSION)),
-    description='Interface to Mad-X, using Cython or Py4J through JMAD',
+    description='Cython binding to MAD-X',
     long_description=long_description,
-    url='http://cern.ch/pymad',
-    package_dir={'':'src'},
+    url='http://pymad.github.io/cpymad',
+    package_dir={
+        '': 'src'   # look for packages in src/ subfolder
+    },
     cmdclass={'build_ext':build_ext},
     ext_modules = cythonize([
         Extension('cern.cpymad.libmadx',
@@ -135,8 +137,13 @@ setup(
     include_package_data=True, # include files matched by MANIFEST.in
     author='PyMAD developers',
     author_email='pymad@cern.ch',
-    setup_requires=['numpy'],
-    install_requires=['numpy', 'PyYAML'],
+    setup_requires=[
+        'numpy'
+    ],
+    install_requires=[
+        'numpy',
+        'PyYAML'
+    ],
     license = 'CERN Standard Copyright License'
 )
 

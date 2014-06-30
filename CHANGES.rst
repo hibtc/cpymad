@@ -3,12 +3,27 @@ Changelog
 
 0.8
 ===
-in preparation
+Date: 30.06.2014
 
+- isolate cpymad: remove jpymad backend, remove pymad base
 - bootstrap the dependency on numpy
-- remove custom MAD-X path discovery. You should use *--madxdir* if the
-  library is not installed in a system location.
+- remove custom MAD-X path discovery during setup. You should use
+  *--madxdir* if the library is not installed in a system location.
 - add function ``libmadx.is_expanded``
+- add function ``libmadx.chdir``
+- handle MAD-X table columns with integer arrays
+- make ``madx.command`` more powerful (allows ``**kwargs`` and attribute
+  access)
+- use inherited pipes for IPC with remote MAD-X processes (allows to
+  forward stdin/stdout separately)
+- close connection to remote process on finalization of ``LibMadxClient``
+- remove MAD-X command checks, ``recursive_history`` and filename
+  completion
+- fix name clash
+- fix some bugs
+- rename convenience constructors to ``cern.cpymad.load_model`` and
+  ``cern.cpymad.start_madx`` due to name clash with module names
+
 
 0.7
 ===
@@ -38,6 +53,7 @@ Date: 17.03.2014
 - use YAML model files instead of JSON
 - make 'madx' a submodule of 'cpymad'
 - fix test exit status
+
 
 0.5
 ===
