@@ -16,11 +16,13 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 import couchdb
+import logging
 
 class Server():
     def __init__(self,url='137.138.26.237',port=5984,user='jmad_user',password='iAmJmad99',dbname='cpymad_models'):
         self._couch = couchdb.Server('http://'+user+':'+password+'@'+url+':'+str(port))
         self._db = self._couch[dbname]
+        self._log = logging.getLogger(__name__)
 
     def ls_models(self):
         ret=[]
@@ -74,7 +76,7 @@ class Server():
             if len(kwargs['fnames'])!=len(kwargs['fpaths']):
                 raise ValueError("You need to give one filename for each attachment")
             for (a,f) in zip(kwargs['fnames'],kwargs['fpaths']):
-                print("Uploading attachment %s" % a)
+                self._log.info("Uploading attachment %s", a)
                 content=open(f,'r')
                 self._db.put_attachment(self._db[modname], content, filename=a)
 

@@ -24,11 +24,12 @@ Cython implementation of the model api.
 
 '''
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
-import yaml
+import logging
 import os
 import sys
+import yaml
 
 from .model_locator import ModelData
 from .madx import Madx
@@ -82,6 +83,7 @@ class Model(object):
         """
         self._madx = madx or Madx(histfile)
         self._madx.verbose(False)
+        self._log = logging.getLogger(__name__)
 
         if isinstance(model, ModelData):
             mdata = model
@@ -144,8 +146,6 @@ class Model(object):
         Initial setup of the model
         '''
         for ifile in self._mdef['init-files']:
-            if sys.flags.debug:
-                print("Calling file: "+str(ifile))
             self._call(ifile)
 
         # initialize all sequences..
@@ -209,9 +209,7 @@ class Model(object):
         if not os.path.isfile(filepath):
             raise ValueError("You tried to call a file that doesn't exist: "+filepath)
 
-        if sys.flags.debug:
-            print("Calling file: "+filepath)
-
+        self._log.debug("Calling file: %s", filepath)
         return self._madx.call(filepath)
 
     def evaluate(self, expr):
@@ -250,8 +248,8 @@ class Model(object):
 
         if optic=='':
             optic=self._mdef['default-optic']
-        if self._active['optic']==optic:
-            print("INFO: Optics already initialized")
+        if self._active['optic'] == optic:
+            self._log.info("Optics already initialized: %s", optic)
             return 0
 
         # optics dictionary..
@@ -439,7 +437,6 @@ class Model(object):
         # Calling "basic aperture files"
         if not self._apercalled[sequence]:
             for afile in self._mdef['sequences'][sequence]['aperfiles']:
-                print("Calling file",afile)
                 self._call(afile)
             self._apercalled[sequence]=True
         # getting offset file if any:
