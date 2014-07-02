@@ -105,7 +105,7 @@ Currently, two major test services are used:
   pymad itself execute on several python versions. Python{2.6,2.7,3.3} are
   supported. The tests are executed on any update of an upstream branch.
 
-.. _CDash: http://abp-cdash.web.cern.ch/abp-cdash/index.php?project=cpymad
+.. _CDash: http://abp-cdash.web.cern.ch/abp-cdash/index.php?project=pymad
 .. _`Travis CI`: https://travis-ci.org/pymad/cpymad
 
 
