@@ -35,6 +35,10 @@ cdef extern from "madX/mad_def.h":
     enum:
         NAME_L
 
+cdef extern from "madX/mad_gcst.h":
+    char* version_name
+    char* version_date_mod
+
 cdef extern from "madX/mad_array.h":
     struct char_array:
         int curr

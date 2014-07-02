@@ -32,6 +32,8 @@ _madx_started = False
 
 # Python-level binding to libmadx:
 __all__ = [
+    'madx_version',
+    'madx_date',
     'started',
     'start',
     'finish',
@@ -54,6 +56,16 @@ __all__ = [
     'chdir',
     'getcwd',
 ]
+
+
+def _get_rightmost_word(sentence):
+    """Get the work right of the rightmost space character."""
+    return sentence.rsplit(' ', 1)[-1]
+
+
+# MAD-X version introspection
+madx_version = _get_right_word(_str(clib.version_name))
+madx_date = _get_right_word(_str(clib.version_date_mod))
 
 
 def started():
