@@ -32,7 +32,7 @@ _madx_started = False
 
 # Python-level binding to libmadx:
 __all__ = [
-    'madx_version',
+    'madx_release',
     'madx_date',
     'started',
     'start',
@@ -64,7 +64,7 @@ def _get_rightmost_word(sentence):
 
 
 # MAD-X version introspection
-madx_version = _get_right_word(_str(clib.version_name))
+madx_release = _get_right_word(_str(clib.version_name))
 madx_date = _get_right_word(_str(clib.version_date_mod))
 
 
