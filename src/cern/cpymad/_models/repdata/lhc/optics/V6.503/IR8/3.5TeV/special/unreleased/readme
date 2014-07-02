@@ -1,4 +1,0 @@
-This "special" directory corresponds to a special case where the corrector MCBYH.5R8.B1( KICK := acbyhs5.r8b1)  in Q5 is not working.
-It is replaced by another one in Q6: MCBCH.6R8.B1  (KICK := acbch6.r8b1)
-
-This configuration is not released, because it uses three MCBX corrector. For the moment, the OP group only use one MCBX corrector.
