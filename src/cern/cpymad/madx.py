@@ -59,6 +59,16 @@ except NameError:
     basestring = str
 
 
+class Version(object):
+
+    """Version information struct. """
+
+    def __init__(self, release, date):
+        """Store version information."""
+        self.release = release
+        self.date = date
+
+
 class ChangeDirectory(object):
 
     """Context manager for temporarily changing current working directory."""
@@ -143,6 +153,14 @@ class Madx(object):
         """Close history file."""
         if self._hfile:
             self._hfile.close()
+
+    @property
+    def version(self):
+        """
+        Get the MAD-X version.
+        """
+        return Version(self._libmadx.madx_release,
+                       self._libmadx.madx_date)
 
     @property
     def command(self):
