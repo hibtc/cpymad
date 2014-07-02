@@ -10,7 +10,7 @@ language and is usually launched from the command line.
 There is also a binding via JMad_ called JPyMAD_. This has less features
 but does not require a C compiler for installing.
 
-.. _CPyMAD: https://github.com/pymad/pymad
+.. _CPyMAD: https://github.com/pymad/cpymad
 .. _Cython: http://cython.org/
 .. _MAD-X: http://cern.ch/mad
 .. _JMad: http://jmad.web.cern.ch/jmad/
@@ -47,7 +47,7 @@ The python packages can be installed using pip_.
 Installation
 ~~~~~~~~~~~~
 
-Further instructions are available at http://cern.ch/pymad/installation.
+Further instructions are available at http://pymad.github.io/cpymad.
 
 
 Usage
@@ -105,8 +105,8 @@ Currently, two major test services are used:
   pymad itself execute on several python versions. Python{2.6,2.7,3.3} are
   supported. The tests are executed on any update of an upstream branch.
 
-.. _CDash: http://abp-cdash.web.cern.ch/abp-cdash/index.php?project=pymad
-.. _`Travis CI`: https://travis-ci.org/pymad/pymad
+.. _CDash: http://abp-cdash.web.cern.ch/abp-cdash/index.php?project=cpymad
+.. _`Travis CI`: https://travis-ci.org/pymad/cpymad
 
 
 **Contribution work flow:**

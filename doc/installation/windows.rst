@@ -11,7 +11,7 @@ run
 
 .. code-block:: bat
 
-    pip install cern-pymad
+    pip install cern-cpymad
 
 from your terminal and that's it. If this fails, you will need to build
 from source:
@@ -66,7 +66,7 @@ follows:
     python setup.py install --madxdir=<madx-install-path>
 
 
-.. _built versions: https://pypi.python.org/pypi/cern-pymad/0.7
+.. _built versions: https://pypi.python.org/pypi/cern-cpymad/0.7
 .. _MAD-X source: http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&rev=0&isdir=1
-.. _CPyMAD source: https://github.com/pymad/pymad/zipball/master
+.. _CPyMAD source: https://github.com/pymad/cpymad/zipball/master
 .. _Python(x,y): https://code.google.com/p/pythonxy/
