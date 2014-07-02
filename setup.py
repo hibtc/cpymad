@@ -132,7 +132,6 @@ setup(
         "cern",
         "cern.resource",
         "cern.cpymad",
-        "cern.cpymad._couch",
     ],
     include_package_data=True, # include files matched by MANIFEST.in
     author='PyMAD developers',
