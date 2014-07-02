@@ -124,7 +124,7 @@ class Madx(object):
     '''
     _hfile = None
 
-    def __init__(self, histfile=None, libmadx=None):
+    def __init__(self, histfile=None, libmadx=None, logger=None):
         '''
         Initializing Mad-X instance
 
@@ -135,7 +135,7 @@ class Madx(object):
         self._libmadx = libmadx or _libmadx_rpc.LibMadxClient.spawn_subprocess()[0].libmadx
         if not self._libmadx.started():
             self._libmadx.start()
-        self._log = logging.getLogger(__name__)
+        self._log = logger or logging.getLogger(__name__)
 
         if histfile:
             self._hfile = open(histfile,'w')

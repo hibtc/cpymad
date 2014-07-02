@@ -67,7 +67,8 @@ class Model(object):
     def __init__(self, model,
                  sequence='',optics='',
                  histfile='',
-                 madx=None):
+                 madx=None,
+                 logger=None):
         """
         Construct a Model object.
 
@@ -83,7 +84,7 @@ class Model(object):
         """
         self._madx = madx or Madx(histfile)
         self._madx.verbose(False)
-        self._log = logging.getLogger(__name__)
+        self._log = logger or logging.getLogger(__name__)
 
         if isinstance(model, ModelData):
             mdata = model

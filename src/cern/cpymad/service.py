@@ -45,13 +45,13 @@ class CpymadService(object):
     ''' The CPymad implementation of the
         abstract class PyMadService. '''
 
-    def __init__(self, model_locator=default_model_locator, **kwargs):
-        log = logging.getLogger(__name__)
+    def __init__(self, model_locator=default_model_locator, logger=None, **kwargs):
+        self._log = logger or logging.getLogger(__name__)
         self._am=None
         self._models=[]
         self.model_locator = model_locator
         for key, value in kwargs.items():
-            log.warn("unhandled option %s for CPyMandService. Ignoring it.", key)
+            self._log.warn("unhandled option %s for CPyMandService. Ignoring it.", key)
 
 
     @property
