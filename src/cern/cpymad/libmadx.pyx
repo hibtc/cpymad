@@ -64,8 +64,8 @@ def _get_rightmost_word(sentence):
 
 
 # MAD-X version introspection
-madx_release = _get_right_word(_str(clib.version_name))
-madx_date = _get_right_word(_str(clib.version_date_mod))
+madx_release = _get_rightmost_word(_str(clib.version_name))
+madx_date = _get_rightmost_word(_str(clib.version_date_mod))
 
 
 def started():
