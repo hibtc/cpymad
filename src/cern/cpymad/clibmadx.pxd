@@ -38,7 +38,7 @@ cdef extern from "madX/mad_def.h":
 cdef extern from "madX/mad_gcst.h":
     # NOTE: C API uses "const char*"
     char* version_name
-    char* version_date_mod
+    char* version_date
 
 cdef extern from "madX/mad_array.h":
     struct char_array:
