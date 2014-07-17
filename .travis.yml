@@ -39,7 +39,7 @@ install:
 
   # Uninstall the package but leave the numpy installation untouched in
   # order to test the installation from the distribution later on:
-  - pip uninstall cern-pymad --yes
+  - pip uninstall cern-cpymad --yes
 
   # Note that if we didn't have numpy installed at this point, the following
   # commands would recompile numpy another 3 times (once in sdist and twice
