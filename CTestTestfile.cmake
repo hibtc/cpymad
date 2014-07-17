@@ -22,4 +22,4 @@ endif()
 # the variable CTEST_SOURCE_DIRECTORY is empty.. so this is fine
 include(${CTEST_SOURCE_DIRECTORY}CTestSetup.cmake)
 
-subdirs(test/cpymadtest)
+subdirs(test)
