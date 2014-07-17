@@ -40,9 +40,9 @@ in a subprocess will prevent the main process from crashing as well.
 '''
 
 from __future__ import absolute_import
-from __future__ import print_function
 
 from functools import partial
+import logging
 import os
 import sys
 import collections
@@ -124,7 +124,7 @@ class Madx(object):
     '''
     _hfile = None
 
-    def __init__(self, histfile=None, libmadx=None):
+    def __init__(self, histfile=None, libmadx=None, logger=None):
         '''
         Initializing Mad-X instance
 
@@ -135,6 +135,7 @@ class Madx(object):
         self._libmadx = libmadx or _libmadx_rpc.LibMadxClient.spawn_subprocess()[0].libmadx
         if not self._libmadx.started():
             self._libmadx.start()
+        self._log = logger or logging.getLogger(__name__)
 
         if histfile:
             self._hfile = open(histfile,'w')
@@ -313,7 +314,7 @@ class Madx(object):
         self.select('aperture', pattern=pattern, columns=columns)
         self.command.set(format="12.6F")
         if use and sequence:
-            print("Warning, use before aperture is known to cause problems")
+            self._log.warn("USE before APERTURE is known to cause problems.")
             self.use(sequence) # this seems to cause a bug?
         self.command.aperture(range=madrange, offsetelem=offsets, file=fname)
         return self.get_table('aperture')
