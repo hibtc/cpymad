@@ -88,7 +88,7 @@ for arg in sys.argv[:]:
         library_dirs += list(filter(path.isdir, lib_path_candidates))
 
 # required libraries
-if get_platform() == "win32":
+if get_platform() == "win32" or get_platform() == "win-amd64":
     libraries = ['madx', 'stdc++', 'ptc', 'gfortran', 'msvcrt']
 else:
     libraries = ['madx', 'stdc++', 'c']
