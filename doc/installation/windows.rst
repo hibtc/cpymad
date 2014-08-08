@@ -27,8 +27,8 @@ and MinGW are marked for installation.
 .. _CMake: http://www.cmake.org/
 
 
-Install libmadx
-~~~~~~~~~~~~~~~
+Build libmadx
+~~~~~~~~~~~~~
 
 Download and extract the `MAD-X source`_ from SVN.
 
@@ -55,8 +55,8 @@ If executing CMake from the GUI, you have to disable the
 regenerate.
 
 
-Install CPyMAD
-~~~~~~~~~~~~~~
+Build CPyMAD
+~~~~~~~~~~~~
 
 Download the `CPyMad source`_. Then go to the pymad folder and build as
 follows:
