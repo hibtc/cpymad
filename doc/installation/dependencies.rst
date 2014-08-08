@@ -18,7 +18,6 @@ Furthermore, CPyMAD depends on the following python packages:
 
 The python packages can be installed using pip_.
 
-
 .. _CMake: http://www.cmake.org/
 .. _setuptools: https://pypi.python.org/pypi/setuptools
 .. _Cython: http://cython.org/
