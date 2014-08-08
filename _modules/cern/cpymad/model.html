@@ -98,11 +98,12 @@
 
 <span class="sd">&#39;&#39;&#39;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
 
-<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
 
 <span class="kn">from</span> <span class="nn">.model_locator</span> <span class="kn">import</span> <span class="n">ModelData</span>
 <span class="kn">from</span> <span class="nn">.madx</span> <span class="kn">import</span> <span class="n">Madx</span>
@@ -140,7 +141,8 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span>
                  <span class="n">sequence</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span><span class="n">optics</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
                  <span class="n">histfile</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
-                 <span class="n">madx</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+                 <span class="n">madx</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">logger</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct a Model object.</span>
 
@@ -156,6 +158,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_madx</span> <span class="o">=</span> <span class="n">madx</span> <span class="ow">or</span> <span class="n">Madx</span><span class="p">(</span><span class="n">histfile</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_madx</span><span class="o">.</span><span class="n">verbose</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span> <span class="o">=</span> <span class="n">logger</span> <span class="ow">or</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ModelData</span><span class="p">):</span>
             <span class="n">mdata</span> <span class="o">=</span> <span class="n">model</span>
@@ -218,8 +221,6 @@
 <span class="sd">        Initial setup of the model</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">for</span> <span class="n">ifile</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mdef</span><span class="p">[</span><span class="s">&#39;init-files&#39;</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-                <span class="k">print</span><span class="p">(</span><span class="s">&quot;Calling file: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ifile</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_call</span><span class="p">(</span><span class="n">ifile</span><span class="p">)</span>
 
         <span class="c"># initialize all sequences..</span>
@@ -283,9 +284,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;You tried to call a file that doesn&#39;t exist: &quot;</span><span class="o">+</span><span class="n">filepath</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s">&quot;Calling file: &quot;</span><span class="o">+</span><span class="n">filepath</span><span class="p">)</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Calling file: </span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_madx</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Model.evaluate"><a class="viewcode-back" href="../../../cpymad/model.html#cern.cpymad.model.Model.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expr</span><span class="p">):</span>
@@ -324,8 +323,8 @@
 
         <span class="k">if</span> <span class="n">optic</span><span class="o">==</span><span class="s">&#39;&#39;</span><span class="p">:</span>
             <span class="n">optic</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mdef</span><span class="p">[</span><span class="s">&#39;default-optic&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active</span><span class="p">[</span><span class="s">&#39;optic&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">optic</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s">&quot;INFO: Optics already initialized&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active</span><span class="p">[</span><span class="s">&#39;optic&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">optic</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Optics already initialized: </span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">optic</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">0</span>
 
         <span class="c"># optics dictionary..</span>
@@ -513,7 +512,6 @@
         <span class="c"># Calling &quot;basic aperture files&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apercalled</span><span class="p">[</span><span class="n">sequence</span><span class="p">]:</span>
             <span class="k">for</span> <span class="n">afile</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mdef</span><span class="p">[</span><span class="s">&#39;sequences&#39;</span><span class="p">][</span><span class="n">sequence</span><span class="p">][</span><span class="s">&#39;aperfiles&#39;</span><span class="p">]:</span>
-                <span class="k">print</span><span class="p">(</span><span class="s">&quot;Calling file&quot;</span><span class="p">,</span><span class="n">afile</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_call</span><span class="p">(</span><span class="n">afile</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_apercalled</span><span class="p">[</span><span class="n">sequence</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
         <span class="c"># getting offset file if any:</span>

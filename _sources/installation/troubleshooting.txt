@@ -15,10 +15,6 @@ Message::
     from cern.madx import madx
     ImportError: libmadx.so: cannot open shared object file: No such file or directory
 
-Reason:
-The runtime path for the MAD-X static library is configured
-incorrectly.
-
 Solution:
 You can pass the correct path to the setup script when building:
 
@@ -63,14 +59,13 @@ which includes all source files.
 Unable to find vcvarsall.bat
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Occurs:
-While building ``python setup.py install``.
+Message::
 
-Reason:
-distutils is not configured to use MinGW.
+    error: Unable to find vcvarsall.bat
 
 Solution:
-Add the following lines to :file:`C:\\Python27\\Lib\\distutils\\distutils.cfg`
+Open or create the file :file:`C:\\Python27\\Lib\\distutils\\distutils.cfg`
+and add the following lines:
 
 .. code-block:: cfg
 
@@ -78,15 +73,11 @@ Add the following lines to :file:`C:\\Python27\\Lib\\distutils\\distutils.cfg`
     compiler=mingw32
 
 If you do not want to modify your python system configuration you can place
-this as :file:`setup.cfg` in the current directory. You can also specify
-the compiler on the command line:
+this as :file:`setup.cfg` in the current directory.
 
-.. code-block:: bash
+See also:
 
-    python setup.py build --madxdir=<madx-install-path> --compiler=mingw32
-    python setup.py install --madxdir=<madx-install-path>
-
-See also `this question on stackoverflow <http://stackoverflow.com/questions/2817869/error-unable-to-find-vcvarsall-bat>`_.
+* http://stackoverflow.com/q/2817869/650222
 
 
 TypeError: 'NoneType' object has no attribute '__getitem__'
@@ -106,12 +97,6 @@ Message::
         if p[1:2] == ':':
     TypeError: 'NoneType' object has no attribute '__getitem__'
 
-Occurs:
-While building ``python setup.py install``.
-
-Reason:
-Bug in distutils (?).
-
 Solution:
 Add the following line to :file:`C:\\Python27\\Lib\\distutils\\sysconfig.py`:
 
@@ -126,4 +111,58 @@ Add the following line to :file:`C:\\Python27\\Lib\\distutils\\sysconfig.py`:
         ...
         _config_vars = g
 
-For further reference see `a related issue <http://bugs.python.org/issue2437>`_.
+See also:
+
+* http://bugs.python.org/issue2437
+
+
+unrecognized command line option '-mno-cygwin'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Message::
+
+    gcc: error: unrecognized command line option '-mno-cygwin'
+    error: command 'gcc' failed with exit status 1
+
+Solution:
+In the file :file:`C:\\Python27\\Lib\\distutils\\cygwinccompiler.py` delete
+every occurence of the string ``-mno-cygwin`` in the ``class
+Mingw32CCompiler`` (about line 320). Depending on your version of
+distutils, for example:
+
+.. code-block:: diff
+
+    @@ -319,11 +319,11 @@ class Mingw32CCompiler (CygwinCCompiler):
+            else:
+                entry_point = ''
+
+    -       self.set_executables(compiler='gcc -mno-cygwin -O -Wall',
+    -                            compiler_so='gcc -mno-cygwin -mdll -O -Wall',
+    -                            compiler_cxx='g++ -mno-cygwin -O -Wall',
+    -                            linker_exe='gcc -mno-cygwin',
+    -                            linker_so='%s -mno-cygwin %s %s'
+    +       self.set_executables(compiler='gcc -O -Wall',
+    +                            compiler_so='gcc -mdll -O -Wall',
+    +                            compiler_cxx='g++ -O -Wall',
+    +                            linker_exe='gcc ',
+    +                            linker_so='%s %s %s'
+                                            % (self.linker_dll, shared_option,
+                                                entry_point))
+            # Maybe we should also append -mthreads, but then the finished
+
+or:
+
+.. code-block:: diff
+
+    @@ -320,7 +320,7 @@ class Mingw32CCompiler (CygwinCCompiler):
+                entry_point = ''
+
+            if self.gcc_version < '4' or is_cygwingcc():
+    -           no_cygwin = ' -mno-cygwin'
+    +           no_cygwin = ''
+            else:
+                no_cygwin = ''
+
+See also:
+
+* http://stackoverflow.com/q/6034390/650222

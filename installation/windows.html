@@ -63,8 +63,8 @@
 <li><a class="reference internal" href="#">Windows</a><ul>
 <li><a class="reference internal" href="#pre-built-binaries">Pre-built binaries</a></li>
 <li><a class="reference internal" href="#install-dependencies">Install dependencies</a></li>
-<li><a class="reference internal" href="#install-libmadx">Install libmadx</a></li>
-<li><a class="reference internal" href="#install-cpymad">Install CPyMAD</a></li>
+<li><a class="reference internal" href="#build-libmadx">Build libmadx</a></li>
+<li><a class="reference internal" href="#build-cpymad">Build CPyMAD</a></li>
 </ul>
 </li>
 </ul>
@@ -106,49 +106,100 @@
 <div class="section" id="pre-built-binaries">
 <h2>Pre-built binaries<a class="headerlink" href="#pre-built-binaries" title="Permalink to this headline">¶</a></h2>
 <p>On a windows platform, you are likely to run into more problems than on
-linux when building from source. Therefore, we will try to provide <a class="reference external" href="https://pypi.python.org/pypi/cern-cpymad/0.7">built
+linux when building from source. Therefore, we will try to provide <a class="reference external" href="https://pypi.python.org/pypi/cern-cpymad/">built
 versions</a> for some platforms. If your platform is supported, you can just
 run</p>
 <div class="highlight-bat"><div class="highlight"><pre>pip install cern-cpymad
 </pre></div>
 </div>
 <p>from your terminal and that&#8217;s it. If this fails, you will need to build
-from source:</p>
+from source. The following guide assumes that you use <em>MinGW</em> as compiler
+suite.</p>
 </div>
 <div class="section" id="install-dependencies">
 <h2>Install dependencies<a class="headerlink" href="#install-dependencies" title="Permalink to this headline">¶</a></h2>
-<p>For source builds I recommend <a class="reference external" href="https://code.google.com/p/pythonxy/">Python(x,y)</a>. This is a python distribution
-which includes all <a class="reference internal" href="dependencies.html#dependencies"><em>Dependencies</em></a> except for <a class="reference external" href="http://www.cmake.org/">CMake</a>. Make sure Cython
-and MinGW are marked for installation.</p>
+<p>I recommend to use <a class="reference external" href="https://code.google.com/p/pythonxy/">Python(x,y)</a>. This is a python distribution which
+includes all <a class="reference internal" href="dependencies.html#dependencies"><em>Dependencies</em></a> except for <em>CMake</em>. Make sure <em>Cython</em> and
+<em>MinGW</em> are marked for installation.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If you want to use another python installation things will get more
+complicated. I recommend the following resources:</p>
+<ul class="last simple">
+<li><a class="reference external" href="http://www.mingw.org/">MinGW</a>, since you need a compiler to build <em>libmadx</em> and <em>CPyMAD</em></li>
+<li><a class="reference external" href="http://www.lfd.uci.edu/~gohlke/pythonlibs/">Unofficial Windows Binaries for Python Extension Packages</a></li>
+<li><a class="reference external" href="http://eli.thegreenplace.net/2008/06/28/compiling-python-extensions-with-distutils-and-mingw/">Compiling Python extensions with distutils and MinGW</a></li>
+</ul>
 </div>
-<div class="section" id="install-libmadx">
-<h2>Install libmadx<a class="headerlink" href="#install-libmadx" title="Permalink to this headline">¶</a></h2>
-<p>Download and extract the <a class="reference external" href="http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&amp;rev=0&amp;isdir=1">MAD-X source</a> from SVN.</p>
-<p>I recommend building MAD-X as a <em>static</em> library. This way, you won&#8217;t
-need to carry any <tt class="docutils literal"><span class="pre">.dll</span></tt> files around and you won&#8217;t run into version
-problems when having a multiple MAD-X library builds around.</p>
+<p>Now install <a class="reference external" href="http://www.cmake.org/">CMake</a>. In the <em>Install options</em> dialog choose to <em>Add CMake
+to the system PATH for all/current user</em> according to your liking.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>You can also select <em>Do not add CMake to the system PATH</em>. In this case
+you will need to manually extend your PATH later on in the terminal:</p>
+<div class="last highlight-bat"><div class="highlight"><pre><span class="k">set</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">%PATH%</span>;C:\Program Files (x<span class="m">86</span>)\CMake\bin
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="build-libmadx">
+<h2>Build libmadx<a class="headerlink" href="#build-libmadx" title="Permalink to this headline">¶</a></h2>
+<p>Download and extract the <a class="reference external" href="http://svnweb.cern.ch/world/wsvn/madx/tags/">MAD-X source</a> from SVN.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the latest release contains bugs that have been fixed in the
+meantime you may want to download the <a class="reference external" href="http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&amp;rev=0&amp;isdir=1">latest revision</a> from SVN. Be
+aware though, that the latest revision is not at all guaranteed to be
+stable or even buildable.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You might need multiple extraction steps until you get a folder
+containing the file <tt class="file docutils literal"><span class="pre">CMakeLists.txt</span></tt> as well as several other
+files and subdirectories.</p>
+</div>
+<p>I recommend to build MAD-X as a <em>static</em> library as described below. This
+way, you won&#8217;t need to carry any <tt class="docutils literal"><span class="pre">.dll</span></tt> files around and you won&#8217;t run
+into version problems when having a multiple MAD-X library builds around.</p>
 <p><a class="reference external" href="https://code.google.com/p/pythonxy/">Python(x,y)</a> provides an <em>Open enhanced console here</em> context menu item
 when right-clicking on a folder in the explorer. Open the madX folder with
-it (or with <tt class="docutils literal"><span class="pre">cmd.exe</span></tt>) and run the commands:</p>
+it and run the commands:</p>
 <div class="highlight-bat"><div class="highlight"><pre>mkdir build
 <span class="k">cd</span> build
 cmake -G <span class="s2">&quot;MinGW Makefiles&quot;</span> -DBUILD_SHARED_LIBS:BOOL<span class="o">=</span><span class="k">OFF</span> -DCMAKE_INSTALL_PREFIX<span class="o">=</span>..\install ..
+make
 make install
 </pre></div>
 </div>
 <p>This will install the headers, binaries and library files to the
 <tt class="file docutils literal"><span class="pre">madX/install</span></tt> subfolder.</p>
-<p>If executing CMake from the GUI, you have to disable the
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>You can also use the regular console <tt class="docutils literal"><span class="pre">cmd.exe</span></tt>. In this case extend
+the PATH environment variable with your python and MinGW installation:</p>
+<div class="last highlight-bat"><div class="highlight"><pre><span class="k">set</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">%PATH%</span>;C:\MinGW<span class="m">32</span>-xy\bin
+<span class="k">set</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">%PATH%</span>;C:\Python<span class="m">27</span>
+<span class="k">set</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">%PATH%</span>;C:\Python<span class="m">27</span>\Scripts
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If executing CMake from the GUI, you have to disable the
 <tt class="docutils literal"><span class="pre">BUILD_SHARED_LIBS</span></tt> option, if present. Afterwards reconfigure and
 regenerate.</p>
 </div>
-<div class="section" id="install-cpymad">
-<h2>Install CPyMAD<a class="headerlink" href="#install-cpymad" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="build-cpymad">
+<h2>Build CPyMAD<a class="headerlink" href="#build-cpymad" title="Permalink to this headline">¶</a></h2>
 <p>Download the <a class="reference external" href="https://github.com/pymad/cpymad/zipball/master">CPyMad source</a>. Then go to the pymad folder and build as
 follows:</p>
-<div class="highlight-bat"><div class="highlight"><pre>python setup.py install --madxdir<span class="o">=</span><span class="p">&lt;</span><span class="n">madx</span>-install-path&gt;
+<div class="highlight-bat"><div class="highlight"><pre>python setup.py build --compiler<span class="o">=</span>mingw<span class="m">32</span> --madxdir<span class="o">=</span><span class="p">&lt;</span><span class="n">madx</span>-install-path<span class="p">&gt;</span>
+<span class="n">python</span> setup.py install
 </pre></div>
 </div>
+<p>Substitute <tt class="docutils literal"><span class="pre">&lt;madx-install-path&gt;</span></tt> with the <tt class="file docutils literal"><span class="pre">madX\install</span></tt> subfolder
+as specified by <tt class="docutils literal"><span class="pre">CMAKE_INSTALL_PREFIX</span></tt> before.</p>
 </div>
 </div>
 
