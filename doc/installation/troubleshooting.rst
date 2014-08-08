@@ -15,10 +15,6 @@ Message::
     from cern.madx import madx
     ImportError: libmadx.so: cannot open shared object file: No such file or directory
 
-Reason:
-The runtime path for the MAD-X static library is configured
-incorrectly.
-
 Solution:
 You can pass the correct path to the setup script when building:
 
@@ -63,11 +59,9 @@ which includes all source files.
 Unable to find vcvarsall.bat
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Occurs:
-While building ``python setup.py install``.
+Message::
 
-Reason:
-distutils is not configured to use MinGW.
+    error: Unable to find vcvarsall.bat
 
 Solution:
 Open or create the file :file:`C:\\Python27\\Lib\\distutils\\distutils.cfg`
@@ -81,7 +75,9 @@ and add the following lines:
 If you do not want to modify your python system configuration you can place
 this as :file:`setup.cfg` in the current directory.
 
-See also `this question on stackoverflow <http://stackoverflow.com/questions/2817869/error-unable-to-find-vcvarsall-bat>`_.
+See also:
+
+* http://stackoverflow.com/q/2817869/650222
 
 
 TypeError: 'NoneType' object has no attribute '__getitem__'
@@ -101,12 +97,6 @@ Message::
         if p[1:2] == ':':
     TypeError: 'NoneType' object has no attribute '__getitem__'
 
-Occurs:
-While building ``python setup.py install``.
-
-Reason:
-Bug in distutils (?).
-
 Solution:
 Add the following line to :file:`C:\\Python27\\Lib\\distutils\\sysconfig.py`:
 
@@ -121,7 +111,9 @@ Add the following line to :file:`C:\\Python27\\Lib\\distutils\\sysconfig.py`:
         ...
         _config_vars = g
 
-For further reference see `a related issue <http://bugs.python.org/issue2437>`_.
+See also:
+
+* http://bugs.python.org/issue2437
 
 
 unrecognized command line option '-mno-cygwin'
