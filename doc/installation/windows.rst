@@ -111,7 +111,8 @@ follows:
 
 .. code-block:: bat
 
-    python setup.py install --madxdir=<madx-install-path>
+    python setup.py build --compiler=mingw32 --madxdir=<madx-install-path>
+    python setup.py install
 
 Substitute ``<madx-install-path>`` with the :file:`madX\\install` subfolder
 as specified by ``CMAKE_INSTALL_PREFIX`` before.

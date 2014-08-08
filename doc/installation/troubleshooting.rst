@@ -70,7 +70,8 @@ Reason:
 distutils is not configured to use MinGW.
 
 Solution:
-Add the following lines to :file:`C:\\Python27\\Lib\\distutils\\distutils.cfg`
+Open or create the file :file:`C:\\Python27\\Lib\\distutils\\distutils.cfg`
+and add the following lines:
 
 .. code-block:: cfg
 
@@ -78,13 +79,7 @@ Add the following lines to :file:`C:\\Python27\\Lib\\distutils\\distutils.cfg`
     compiler=mingw32
 
 If you do not want to modify your python system configuration you can place
-this as :file:`setup.cfg` in the current directory. You can also specify
-the compiler on the command line:
-
-.. code-block:: bash
-
-    python setup.py build --madxdir=<madx-install-path> --compiler=mingw32
-    python setup.py install --madxdir=<madx-install-path>
+this as :file:`setup.cfg` in the current directory.
 
 See also `this question on stackoverflow <http://stackoverflow.com/questions/2817869/error-unable-to-find-vcvarsall-bat>`_.
 
