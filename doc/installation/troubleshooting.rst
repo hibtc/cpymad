@@ -146,17 +146,4 @@ distutils, for example:
                                                 entry_point))
             # Maybe we should also append -mthreads, but then the finished
 
-or:
-
-.. code-block:: diff
-
-    @@ -320,7 +320,7 @@ class Mingw32CCompiler (CygwinCCompiler):
-                entry_point = ''
-
-            if self.gcc_version < '4' or is_cygwingcc():
-    -           no_cygwin = ' -mno-cygwin'
-    +           no_cygwin = ''
-            else:
-                no_cygwin = ''
-
 .. seealso:: http://stackoverflow.com/q/6034390/650222
