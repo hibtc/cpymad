@@ -75,9 +75,7 @@ and add the following lines:
 If you do not want to modify your python system configuration you can place
 this as :file:`setup.cfg` in the current directory.
 
-See also:
-
-* http://stackoverflow.com/q/2817869/650222
+.. seealso:: http://stackoverflow.com/q/2817869/650222
 
 
 TypeError: 'NoneType' object has no attribute '__getitem__'
@@ -111,9 +109,7 @@ Add the following line to :file:`C:\\Python27\\Lib\\distutils\\sysconfig.py`:
         ...
         _config_vars = g
 
-See also:
-
-* http://bugs.python.org/issue2437
+.. seealso:: http://bugs.python.org/issue2437
 
 
 unrecognized command line option '-mno-cygwin'
@@ -163,6 +159,4 @@ or:
             else:
                 no_cygwin = ''
 
-See also:
-
-* http://stackoverflow.com/q/6034390/650222
+.. seealso:: http://stackoverflow.com/q/6034390/650222
