@@ -122,3 +122,55 @@ Add the following line to :file:`C:\\Python27\\Lib\\distutils\\sysconfig.py`:
         _config_vars = g
 
 For further reference see `a related issue <http://bugs.python.org/issue2437>`_.
+
+
+unrecognized command line option '-mno-cygwin'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Message::
+
+    gcc: error: unrecognized command line option '-mno-cygwin'
+    error: command 'gcc' failed with exit status 1
+
+Solution:
+In the file :file:`C:\\Python27\\Lib\\distutils\\cygwinccompiler.py` delete
+every occurence of the string ``-mno-cygwin`` in the ``class
+Mingw32CCompiler`` (about line 320). Depending on your version of
+distutils, for example:
+
+.. code-block:: diff
+
+    @@ -319,11 +319,11 @@ class Mingw32CCompiler (CygwinCCompiler):
+            else:
+                entry_point = ''
+
+    -       self.set_executables(compiler='gcc -mno-cygwin -O -Wall',
+    -                            compiler_so='gcc -mno-cygwin -mdll -O -Wall',
+    -                            compiler_cxx='g++ -mno-cygwin -O -Wall',
+    -                            linker_exe='gcc -mno-cygwin',
+    -                            linker_so='%s -mno-cygwin %s %s'
+    +       self.set_executables(compiler='gcc -O -Wall',
+    +                            compiler_so='gcc -mdll -O -Wall',
+    +                            compiler_cxx='g++ -O -Wall',
+    +                            linker_exe='gcc ',
+    +                            linker_so='%s %s %s'
+                                            % (self.linker_dll, shared_option,
+                                                entry_point))
+            # Maybe we should also append -mthreads, but then the finished
+
+or:
+
+.. code-block:: diff
+
+    @@ -320,7 +320,7 @@ class Mingw32CCompiler (CygwinCCompiler):
+                entry_point = ''
+
+            if self.gcc_version < '4' or is_cygwingcc():
+    -           no_cygwin = ' -mno-cygwin'
+    +           no_cygwin = ''
+            else:
+                no_cygwin = ''
+
+See also:
+
+* http://stackoverflow.com/q/6034390/650222
