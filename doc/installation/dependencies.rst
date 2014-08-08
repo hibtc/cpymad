@@ -3,6 +3,12 @@
 Dependencies
 ------------
 
+.. note::
+
+    Before installing any dependencies, take a look at the OS specific
+    install recommendations! These contain remarks about the preferred
+    install method.
+
 To build MAD-X and CPyMAD from source you will need
 
 - CMake_
