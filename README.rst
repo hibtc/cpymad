@@ -47,7 +47,7 @@ The python packages can be installed using pip_.
 Installation
 ~~~~~~~~~~~~
 
-Further instructions are available at http://pymad.github.io/cpymad.
+Installation instructions are available at http://pymad.github.io/cpymad/installation.
 
 
 Usage
@@ -68,7 +68,7 @@ Usage
     plt.plot(twiss['s'], twiss['betx'])
 
 
-See http://cern.ch/pymad/ for further documentation.
+See http://pymad.github.io/cpymad for further documentation.
 
 
 Development guidelines
@@ -110,8 +110,6 @@ Currently, two major test services are used:
 
 
 **Contribution work flow:**
-
-This motivates the following work flow when performing any changes:
 
 All changes are reviewed via pull-requests. Before merging to master the
 pull-request must reside aliased by the ``testing`` branch long enough to
