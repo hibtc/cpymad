@@ -16,7 +16,6 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 from setuptools import setup, Extension
-from setuptools.command.build_ext import build_ext as _build_ext
 from distutils.util import get_platform
 
 import sys
@@ -55,20 +54,6 @@ else:
         def __init__(self, name, sources, *args, **kwargs):
             orig_Extension.__init__(self, name, sources, *args, **kwargs)
             self.sources = sources
-
-# Subclass the build_ext command for building C-extensions. This enables to
-# use the ``setup_requires`` argument of setuptools to install a missing
-# numpy dependency, before having to know the location of the numpy header
-# files. All in all, this should make the setup more properly bootstrapped.
-class build_ext(_build_ext):
-    def finalize_options(self):
-        _build_ext.finalize_options(self)
-        # Before importing numpy, we need to make sure it doesn't think it
-        # is still during its setup process:
-        __builtins__.__NUMPY_SETUP__ = False
-        import numpy
-        # Add location of numpy headers:
-        self.include_dirs.append(numpy.get_include())
 
 # Let's just use the default system headers:
 include_dirs = []
@@ -119,7 +104,6 @@ setup(
     package_dir={
         '': 'src'   # look for packages in src/ subfolder
     },
-    cmdclass={'build_ext':build_ext},
     ext_modules = cythonize([
         Extension('cern.cpymad.libmadx',
                   sources=["src/cern/cpymad/libmadx.pyx"],
@@ -137,7 +121,6 @@ setup(
     author='PyMAD developers',
     author_email='pymad@cern.ch',
     setup_requires=[
-        'numpy'
     ],
     install_requires=[
         'numpy',
