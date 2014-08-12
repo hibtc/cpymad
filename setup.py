@@ -32,7 +32,7 @@ import sys
 from os import path
 
 # Version of pymad (major,minor):
-PYMADVERSION=(0, 9)
+PYMADVERSION='0.9'
 
 
 # setuptools.Extension automatically converts all '.pyx' extensions to '.c'
@@ -90,8 +90,6 @@ else:
 
 # Common arguments for the Cython extensions:
 extension_args = dict(
-    define_macros=[('MAJOR_VERSION', PYMADVERSION[0]),
-                   ('MINOR_VERSION', PYMADVERSION[1])],
     libraries=libraries,
     include_dirs=include_dirs,
     library_dirs=library_dirs,
@@ -108,7 +106,7 @@ except IOError:
 
 setup(
     name='cern-cpymad',
-    version='.'.join(map(str, PYMADVERSION)),
+    version=PYMADVERSION,
     description='Cython binding to MAD-X',
     long_description=long_description,
     url='http://pymad.github.io/cpymad',
