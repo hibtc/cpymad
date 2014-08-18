@@ -14,16 +14,16 @@ a subprocess.
 
 from os import chdir, getcwd
 
+import ctypes
 import numpy as np      # Import the Python-level symbols of numpy
-cimport numpy as cnp    # Import the C-level symbols of numpy
+
+# Import a large-enough integer type to hold pointer, see also:
+# http://grokbase.com/t/gg/cython-users/134b21rga8/passing-callback-pointers-to-python-and-back
+cdef extern from "pyport.h":
+    ctypedef int Py_intptr_t
 
 from cern.cpymad.types import Constraint, Expression
 cimport cern.cpymad.clibmadx as clib
-
-
-# Numpy must be initialized. When using numpy from C or Cython you must
-# _always_ do that, or you will have segfaults
-cnp.import_array()
 
 
 # Remember whether start() was called
@@ -241,7 +241,6 @@ def get_table_column(table, column):
     (pickle serialization effectively copies the data).
     """
     cdef char** char_tmp
-    cdef cnp.npy_intp shape[1]
     cdef bytes _tab_name = _cstr(table)
     cdef bytes _col_name = _cstr(column)
     cdef clib.column_info info
@@ -276,14 +275,14 @@ def get_table_column(table, column):
     # MAD-X below, so back-migration will be easier, when the time comes.
     # This is why the error and data type handling below is left untouched:
     dtype = <bytes> info.datatype
+    size = <int> info.length
+    addr = <Py_intptr_t> info.data
     # double:
-    if dtype == b'i':
+    if dtype == b'i' or dtype == b'd':
         # YES, integers are internally stored as doubles in MAD-X:
-        shape[0] = <cnp.npy_intp> info.length
-        return cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_DOUBLE, info.data)
-    elif dtype == b'd':
-        shape[0] = <cnp.npy_intp> info.length
-        return cnp.PyArray_SimpleNewFromData(1, shape, cnp.NPY_DOUBLE, info.data)
+        array_type = ctypes.c_double * size
+        array_data = array_type.from_address(addr)
+        return np.ctypeslib.as_array(array_data)
     # string:
     elif dtype == b'S':
         char_tmp = <char**> info.data
