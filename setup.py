@@ -91,6 +91,7 @@ extension_args = dict(
 long_description = None
 try:
     long_description = open('README.rst').read()
+    long_description += '\n' + open('COPYING.rst').read()
     long_description += '\n' + open('CHANGES.rst').read()
 except IOError:
     pass
