@@ -1,4 +1,4 @@
-from cern import cpymad
+import cern.cpymad.api as cpymad
 import unittest
 
 class TestCpymadAperture(unittest.TestCase):
