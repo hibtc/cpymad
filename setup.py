@@ -15,6 +15,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
+
+# Make sure setuptools is available:
+from ez_setup import use_setuptools
+use_setuptools()
+
 from setuptools import setup, Extension
 from distutils.util import get_platform
 
@@ -123,8 +128,9 @@ setup(
     setup_requires=[
     ],
     install_requires=[
+        'setuptools',
         'numpy',
-        'PyYAML'
+        'PyYAML',
     ],
     license = 'CERN Standard Copyright License'
 )
