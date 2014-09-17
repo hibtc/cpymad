@@ -35,6 +35,16 @@ from .model_locator import ModelData
 from .madx import Madx
 
 
+__all__ = [
+    'Model',
+    'Factory',
+    'default_factory',
+    'get_model_names',
+    'load_model',
+    'save_model',
+]
+
+
 class Model(object):
     '''
     Model class implementation. the model spawns a madx instance in a separate process.
@@ -525,6 +535,29 @@ class Model(object):
             self.set_range(madrange)
         return seqdict['ranges'][self._active['range']]
 
+
+class Factory(object):
+
+    """Model instance factory."""
+
+    def __init__(self, model_locator):
+        """Create Model factory using a specified ModelLocator."""
+        self._model_locator = model_locator
+
+    def get_model_names(self):
+        """Get iterable over all model names."""
+        return self._model_locator.list_models()
+
+    def load_model(self, name, *args, **kwargs):
+        """
+        Create Model instance by name.
+
+        :param str name: model name
+        :param tuple args: Positional parameters as needed by ``__init__``
+        :param dict kwargs: Keyword parameters as needed by ``__init__``
+        """
+        model_data = self._model_locator.get_model(name)
+        return Model(model_data, *args, **kwargs)
 
 
 def save_model(model_def,filename):
