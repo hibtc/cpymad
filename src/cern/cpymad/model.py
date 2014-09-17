@@ -31,7 +31,8 @@ import os
 import sys
 import yaml
 
-from .model_locator import ModelData
+from ..resource.package import PackageResource
+from .model_locator import MergedModelLocator
 from .madx import Madx
 
 
@@ -49,32 +50,9 @@ class Model(object):
     '''
     Model class implementation. the model spawns a madx instance in a separate process.
     this has the advantage that you can run separate models which do not affect each other.
-
-    To load a Model object using the default ModelLocator use the static
-    constructor method ``Model.from_name``. The default constructor should
-    be invoked with a ModelData instance.
-
     '''
-    @classmethod
-    def from_name(cls, model, *args, **kwargs):
-        """
-        Create a Model object from its name.
 
-        :param string model: Name of the model
-        :param tuple args: Positional parameters as needed by ``__init__``
-        :param dict kwargs: Keyword parameters as needed by ``__init__``
-
-        This constructor is provided for backward compatibility. To specify
-        where your model data is loaded from you should create and use your
-        own custom cern.cpymad.model_locator.ModelLocator.
-
-        """
-        from .service import default_model_locator
-        mdata = default_model_locator.get_model(model)
-        return cls(mdata, *args, **kwargs)
-
-
-    def __init__(self, model,
+    def __init__(self, mdata,
                  sequence='',optics='',
                  histfile='',
                  madx=None,
@@ -82,25 +60,14 @@ class Model(object):
         """
         Construct a Model object.
 
-        :param ModelData model: model data as acquired through a ModelLocator
+        :param ModelData mdata: model data as acquired through a ModelLocator
         :param string sequence: Name of the default sequence to use
         :param string optics: Name of optics to load, string or list of strings.
         :param string histfile: Name of file which will contain all Mad-X commands called.
-
-        For backward compatibility reasons, the first parameter can also be
-        the name of the model to be loaded. This is equivalent to the
-        preferred Model.from_name() constructor.
-
         """
         self._madx = madx or Madx(histfile)
         self._madx.verbose(False)
         self._log = logger or logging.getLogger(__name__)
-
-        if isinstance(model, ModelData):
-            mdata = model
-        else:
-            from .service import default_model_locator
-            mdata = default_model_locator.get_model(model)
 
         self.mdata = mdata
         self._mdef = mdata.model
@@ -558,6 +525,14 @@ class Factory(object):
         """
         model_data = self._model_locator.get_model(name)
         return Model(model_data, *args, **kwargs)
+
+
+_default_resources = PackageResource(__package__, '_models')
+_default_locator = MergedModelLocator(_default_resources)
+default_factory = Factory(_default_locator)
+
+get_model_names = default_factory.get_model_names
+load_model = default_factory.load_model
 
 
 def save_model(model_def,filename):
