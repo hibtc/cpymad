@@ -44,6 +44,7 @@ __all__ = [
     'table_exists',
     'get_table_list',
     'get_table_summary',
+    'get_table_columns',
     'get_table_column',
     'get_elements',
     'get_expanded_elements',
@@ -221,6 +222,8 @@ def get_table_columns(table):
     cdef int index = clib.name_list_pos(_table, clib.table_register.names)
     if index == -1:
         raise ValueError("Invalid table: {!r}".format(table))
+    # NOTE: we can't enforce lower-case on the column names here, since this
+    # breaks their usage with get_table_column():
     return _name_list(clib.table_register.tables[index].columns)
 
 
@@ -443,7 +446,8 @@ cdef _parse_command(clib.command* cmd):
     res = {}
     cdef int i
     for i in xrange(cmd.par.curr):
-        name = _str(cmd.par.parameters[i].name)
+        # enforce lower-case keys:
+        name = _str(cmd.par.parameters[i].name).lower()
         res[name] = _get_param_value(cmd.par.parameters[i])
     return res
 
@@ -469,6 +473,7 @@ cdef clib.sequence* _find_sequence(sequence_name) except NULL:
 cdef _split_header_line(header_line):
     """Parse a table header value."""
     _, key, kind, value = _str(header_line).split(None, 3)
+    key = key.lower()
     if kind == "%le":
         return key, float(value)    # convert to number
     elif kind.endswith('s'):
