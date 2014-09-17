@@ -19,7 +19,7 @@ Download the `MAD-X source`_ from SVN
 
 .. code-block:: bash
 
-    svn co http://svnweb.cern.ch/guest/madx/trunk/madX
+    svn co http://svn.cern.ch/guest/madx/trunk/madX
 
 Build and install the library
 
