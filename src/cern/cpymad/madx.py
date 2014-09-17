@@ -555,22 +555,17 @@ class TableColumns(object):
  
     def __getattr__(self, column):
         """Get the column data."""
-        return self[column]
+        try:
+            return self._libmadx.get_table_column(self._table, column.lower())
+        except ValueError:
+            raise AttributeError(column)
 
     def __getitem__(self, column):
         """Get the column data."""
-        if isinstance(column, basestring):
-            try:
-                return self._libmadx.get_table_column(
-                    self._table,
-                    column.lower())
-            except ValueError:
-                raise KeyError(column)
-        elif isinstance(column, collections.Sequence):
-            return column.__class__(self[col] for col in column)
-        else:
-            raise TypeError("Invalid argument type: {0}"
-                            .format(column.__class__.__name__))
+        try:
+            return self._libmadx.get_table_column(self._table, column.lower())
+        except ValueError:
+            raise KeyError(column)
 
     def __iter__(self):
         """Get a list of all column names."""
