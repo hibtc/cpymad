@@ -534,7 +534,7 @@ class Table(object):
     @property
     def columns(self):
         """Get a lazy accessor for the table columns."""
-        return TableColumns(self.name, self._libmadx)
+        return TableProxy(self.name, self._libmadx)
 
     @property
     def summary(self):
@@ -542,23 +542,16 @@ class Table(object):
         return self._libmadx.get_table_summary(self.name)
 
 
-class TableColumns(object):
+class TableProxy(collections.Mapping):
 
     """
-    Lazy accessor for table column data.
+    Proxy object for lazy-loading table column data.
     """
 
     def __init__(self, table, libmadx):
         """Store tabe name and libmadx connection."""
         self._table = table
         self._libmadx = libmadx
- 
-    def __getattr__(self, column):
-        """Get the column data."""
-        try:
-            return self._libmadx.get_table_column(self._table, column.lower())
-        except ValueError:
-            raise AttributeError(column)
 
     def __getitem__(self, column):
         """Get the column data."""
@@ -568,10 +561,14 @@ class TableColumns(object):
             raise KeyError(column)
 
     def __iter__(self):
-        """Get a list of all column names."""
+        """Iterate over all column names."""
         return iter(self._libmadx.get_table_columns(self._table))
 
-    def freeze(self, columns=None):
+    def __len__(self):
+        """Return number of columns."""
+        return len(self._libmadx.get_table_columns(self._table))
+
+    def copy(self, columns=None):
         """
         Return a frozen table with the desired columns.
 
