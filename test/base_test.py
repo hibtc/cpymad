@@ -33,9 +33,10 @@ class TestCpymad(object):
         del self.model
 
     def test_twiss(self):
-        t,p=self.model.twiss()
-        for attr in ['betx','bety','s']:
-            self.assertTrue(hasattr(t,attr))
+        t, p = self.model.twiss()
+        self.assertTrue('betx' in t)
+        self.assertTrue('bety' in t)
+        self.assertTrue('s' in t)
         # check that keys are all lowercase..
         for k in t:
             self.assertEqual(k, k.lower())
@@ -48,7 +49,6 @@ class TestCpymad(object):
          is also loaded into memory
         '''
         for seq in self.model.mdef['sequences']:
-            print("Testing sequence",seq)
             self.assertTrue(self.model.has_sequence(seq))
 
     def test_set_optic(self):
@@ -56,7 +56,6 @@ class TestCpymad(object):
          Sets all optics found in the model definition
         '''
         for optic in self.model.list_optics():
-            print("Testing optics",optic)
             self.model.set_optic(optic)
             self.assertEqual(optic,self.model._active['optic'])
             self.model.twiss()

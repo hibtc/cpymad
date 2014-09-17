@@ -48,10 +48,8 @@ import sys
 import collections
 
 from . import _libmadx_rpc
-from .types import Element
 
 from cern.cpymad import _madx_tools
-from cern.cpymad.types import TfsTable, TfsSummary
 
 try:
     basestring
@@ -489,23 +487,21 @@ class Sequence(object):
         Get list of all elements in the original sequence.
 
         :returns: list of elements in the original (unexpanded) sequence
-        :rtype: list(Element)
+        :rtype: list(dict)
         """
-        return [Element(elem)
-                for elem in self._libmadx.get_elements(self._name)]
+        return self._libmadx.get_elements(self._name)
 
     def get_expanded_elements(self):
         """
         Get list of all elements in the expanded sequence.
 
         :returns: list of elements in the expanded (unexpanded) sequence
-        :rtype: list(Element)
+        :rtype: list(dict)
 
         NOTE: this may very well return an empty list, if the sequence has
         not been expanded (used) yet.
         """
-        return [Element(elem)
-                for elem in self._libmadx.get_expanded_elements(self._name)]
+        return self._libmadx.get_expanded_elements(self._name)
 
 
 class Table(object):
@@ -543,7 +539,7 @@ class Table(object):
     @property
     def summary(self):
         """Get the table summary."""
-        return TfsSummary(self._libmadx.get_table_summary(self.name))
+        return self._libmadx.get_table_summary(self.name)
 
 
 class TableColumns(object):
@@ -556,7 +552,7 @@ class TableColumns(object):
         """Store tabe name and libmadx connection."""
         self._table = table
         self._libmadx = libmadx
-
+ 
     def __getattr__(self, column):
         """Get the column data."""
         return self[column]
@@ -586,9 +582,9 @@ class TableColumns(object):
 
         :param list columns: column names or ``None`` for all columns.
         :returns: column data
-        :rtype: TfsTable
+        :rtype: dict
         :raises ValueError: if the table name is invalid
         """
         if columns is None:
             columns = self
-        return TfsTable(dict((column, self[column]) for column in columns))
+        return dict((column, self[column]) for column in columns)
