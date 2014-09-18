@@ -128,11 +128,6 @@ class Madx(object):
         if histfile:
             self._hfile = open(histfile,'w')
 
-    def __del__(self):
-        """Close history file."""
-        if self._hfile:
-            self._hfile.close()
-
     @property
     def version(self):
         """
