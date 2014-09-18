@@ -52,28 +52,23 @@ class Model(object):
     this has the advantage that you can run separate models which do not affect each other.
     '''
 
-    def __init__(self, mdata,
-                 sequence='',optics='',
-                 histfile='',
-                 madx=None,
-                 logger=None):
+    def __init__(self, mdata, madx, logger, sequence, optics):
         """
-        Construct a Model object.
+        Initialize a Model object.
+
+        Users should use the load_model function instead.
 
         :param ModelData mdata: model data as acquired through a ModelLocator
-        :param string sequence: Name of the default sequence to use
-        :param string optics: Name of optics to load, string or list of strings.
-        :param string histfile: Name of file which will contain all Mad-X commands called.
+        :param str sequence: Name of the default sequence to use
+        :param str optics: Name of optics to load, string or list of strings.
+        :param Madx madx: MAD-X instance to use
+        :param logging.Logger logger:
         """
-        self._madx = madx or Madx(histfile)
-        self._madx.verbose(False)
-        self._log = logger or logging.getLogger(__name__)
-
+        self._madx = madx
+        self._log = logger
         self.mdata = mdata
         self._mdef = mdata.model
-
         self._active={'optic':'','sequence':'','range':''}
-
         self._setup_initial(sequence,optics)
 
     # API stuff:
@@ -507,24 +502,63 @@ class Factory(object):
 
     """Model instance factory."""
 
-    def __init__(self, model_locator):
+    def __init__(self, model_locator, model_cls=None):
         """Create Model factory using a specified ModelLocator."""
         self._model_locator = model_locator
+        self._model_cls = model_cls or Model
 
     def get_model_names(self):
         """Get iterable over all model names."""
         return self._model_locator.list_models()
 
-    def load_model(self, name, *args, **kwargs):
+    def _find(self, name):
+        """Find model definition, return ModelData."""
+        return self._model_locator.get_model(name)
+
+    def _create(self, mdata, sequence, optics, madx, histfile, logger):
         """
-        Create Model instance by name.
+        Create Model instance based on ModelData.
+
+        Parameters as in load_model (except for mdata).
+        """
+        if madx is None:
+            madx = Madx(histfile)
+            madx.verbose(False)
+        elif histfile is not None:
+            raise ValueError("'histfile' cannot be used with 'madx'")
+        if logger is None:
+            logger = logging.getLogger(__name__)
+        return self._model_cls(mdata,
+                               sequence=sequence,
+                               optics=optics,
+                               madx=madx,
+                               logger=logger)
+
+    def load_model(self,
+                   name,
+                   # *,
+                   # These should be passed as keyword-only parameters:,
+                   sequence=None,
+                   optics=None,
+                   madx=None,
+                   histfile=None,
+                   logger=None):
+        """
+        Find model definition by name and create Model instance.
 
         :param str name: model name
-        :param tuple args: Positional parameters as needed by ``__init__``
-        :param dict kwargs: Keyword parameters as needed by ``__init__``
+        :param str sequence: Name of the initial sequence to use
+        :param str optics: Name of optics to load, string or list of strings.
+        :param Madx madx: MAD-X instance to use
+        :param str histfile: history file name; use only if madx is None!
+        :param logging.Logger logger:
         """
-        model_data = self._model_locator.get_model(name)
-        return Model(model_data, *args, **kwargs)
+        return self._create(self._find(name),
+                            sequence=sequence,
+                            optics=optics,
+                            madx=madx,
+                            histfile=histfile,
+                            logger=logger)
 
 
 _default_resources = PackageResource(__package__, '_models')
