@@ -1,5 +1,5 @@
 
-from cern import cpymad
+import cern.cpymad.api as cpymad
 import unittest,os
 
 class TestCpymadSurvey(unittest.TestCase):

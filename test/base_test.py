@@ -16,7 +16,7 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 
-from cern import cpymad
+import cern.cpymad.api as cpymad
 
 
 # NOTE: Do not inherit from unittest.TestCase, otherwise unittest will try
