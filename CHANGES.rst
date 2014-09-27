@@ -1,6 +1,23 @@
 Changelog
 ~~~~~~~~~
 
+0.9
+===
+Date: 17.11.2014
+
+- don't link against numpy anymore (this makes distribution of prebuilt
+  binaries on windows actually useful)
+- add MAD-X license notice (required to distribute binaries)
+- setup.py doesn't require setuptools to be pre-installed anymore (if
+  internet is available)
+- some doc-fixes
+- convert cpymad._couch to a simple module (was a single file package)
+- use ``logging`` through-out the project
+- alow logger to be specified as model/madx constructor argument
+- multi-column access, e.g.: ``table.columns['betx','bety']``
+- move tests one folder level up
+
+
 0.8
 ===
 Date: 30.06.2014
