@@ -4,4 +4,5 @@ recursive-include src/cern/cpymad/_models/re*data *.madx *.str *.seq *.tfs *.xsi
 recursive-include test *.py *.cmake *.txt
 include README.rst CHANGES.rst LICENSE.txt
 include *.cmake
+include setup.py ez_setup.py
 include requirements.txt
