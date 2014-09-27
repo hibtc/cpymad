@@ -15,6 +15,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
+
+# Make sure setuptools is available. NOTE: the try/except hack is required to
+# make installation work with pip: If an older version of setuptools is
+# already imported, `use_setuptools()` will just exit the current process.
+try:
+    import pkg_resources
+except ImportError:
+    from ez_setup import use_setuptools
+    use_setuptools()
+
 from setuptools import setup, Extension
 from distutils.util import get_platform
 
@@ -91,6 +101,7 @@ extension_args = dict(
 long_description = None
 try:
     long_description = open('README.rst').read()
+    long_description += '\n' + open('COPYING.rst').read()
     long_description += '\n' + open('CHANGES.rst').read()
 except IOError:
     pass
@@ -123,8 +134,9 @@ setup(
     setup_requires=[
     ],
     install_requires=[
+        'setuptools',
         'numpy',
-        'PyYAML'
+        'PyYAML',
     ],
     license = 'CERN Standard Copyright License'
 )

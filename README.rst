@@ -16,6 +16,10 @@ but does not require a C compiler for installing.
 .. _JMad: http://jmad.web.cern.ch/jmad/
 .. _JPyMAD: https://github.com/pymad/jpymad
 
+**IMPORTANT:** cern-cpymad links against an unofficial build of MAD-X that
+is not supported by CERN, i.e. in case of problems you will not get help
+there.
+
 
 Dependencies
 ------------
