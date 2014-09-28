@@ -126,11 +126,11 @@ class Model(object):
             self._init_sequence(seq)
         # then we set the default one..
         self.set_sequence(sequence)
-        if isinstance(optics, str):
-            self.set_optic(optics)
-        elif isinstance(optics, list):
+        if isinstance(optics, list):
             for o in optics:
                 self.set_optic(o)
+        else: # str/unicode/None
+            self.set_optic(optics)
         # To keep track of whether or not certain things are already called..
         self._apercalled={}
         self._twisscalled={}
@@ -219,7 +219,7 @@ class Model(object):
          :raises KeyError: In case you try to set an optics not available in model.
         '''
 
-        if optic=='':
+        if not optic:
             optic=self._mdef['default-optic']
         if self._active['optic'] == optic:
             self._log.info("Optics already initialized: %s", optic)
@@ -487,7 +487,7 @@ class Model(object):
         Returns the range dictionary. If sequence/range isn't given,
         returns default for the model
         '''
-        if sequence=='':
+        if not sequence:
             sequence=self._active['sequence']
         elif sequence not in self._mdef['sequences']:
             raise ValueError("%s is not a valid sequence name, available sequences: '%s'" % (sequence,"' '".join(self._mdef['sequences'].keys())))
