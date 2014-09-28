@@ -68,7 +68,7 @@ class Model(object):
         self._log = logger
         self.mdata = mdata
         self._mdef = mdata.model
-        self._active={'optic':'','sequence':'','range':''}
+        self._active={'optic': None, 'sequence': None, 'range': None}
         self._setup_initial(sequence,optics)
 
     # API stuff:
@@ -81,7 +81,7 @@ class Model(object):
         return self._mdef.copy()
 
 
-    def set_sequence(self,sequence='', range=''):
+    def set_sequence(self,sequence=None, range=None):
         '''
         Set a new active sequence...
         '''
@@ -98,7 +98,7 @@ class Model(object):
         else:
             raise KeyError("You tried to activate a non-existing sequence")
 
-    def set_range(self,range=''):
+    def set_range(self, range=None):
         '''
         Sets the active range to range. Must be defined in the
         currently active sequence...
@@ -286,7 +286,7 @@ class Model(object):
         '''
         return self._mdef['beams'].keys()
 
-    def _get_twiss_initial(self,sequence='',range='',name=''):
+    def _get_twiss_initial(self, sequence=None, range=None, name=None):
         '''
         Returns the dictionary for the twiss initial conditions.
         If name is not defined, using default-twiss
@@ -302,11 +302,11 @@ class Model(object):
 
 
     def twiss(self,
-              sequence='',
+              sequence=None,
               columns=['name','s','betx','bety','x','y','dx','dy','px','py','mux','muy','l','k1l','angle','k2l'],
               pattern=['full'],
-              range='',
-              file='',
+              range=None,
+              file=None,
               use=True
               ):
         '''
@@ -359,10 +359,10 @@ class Model(object):
         return res
 
     def survey(self,
-               sequence='',
+               sequence=None,
                columns='name,l,s,angle,x,y,z,theta',
-               range='',
-               file='',
+               range=None,
+               file=None,
                use=True):
         '''
          Run a survey on the model.
@@ -375,7 +375,7 @@ class Model(object):
         self.set_sequence(sequence)
         sequence=self._active['sequence']
 
-        this_range=''
+        this_range=None
         if range:
             rangedict=self._get_range_dict(sequence=sequence,range=range)
             this_range=rangedict['madx-range']
@@ -388,10 +388,10 @@ class Model(object):
             use=use)
 
     def aperture(self,
-               sequence='',
-               range='',
+               sequence=None,
+               range=None,
                columns='name,l,s,n1,aper_1,aper_2,aper_3,aper_4',
-               file='',
+               file=None,
                use=False):
         '''
          Get the aperture from the model.
@@ -415,7 +415,7 @@ class Model(object):
         # getting offset file if any:
         # if no range was selected, we ignore offsets...
         offsets=None
-        this_range=''
+        this_range=None
         if range:
             rangedict=self._get_range_dict(sequence=sequence,range=range)
             this_range=rangedict['madx-range']
@@ -441,8 +441,8 @@ class Model(object):
             vary,
             weight=None,
             method=['lmdif'],
-            sequence = '',
-            file=''):
+            sequence=None,
+            file=None):
         """
         Perform a matching operation.
 
@@ -482,7 +482,7 @@ class Model(object):
     def _get_ranges(self,sequence):
         return self._mdef['sequences'][sequence]['ranges'].keys()
 
-    def _get_range_dict(self,sequence='',range=''):
+    def _get_range_dict(self, sequence=None, range=None):
         '''
         Returns the range dictionary. If sequence/range isn't given,
         returns default for the model

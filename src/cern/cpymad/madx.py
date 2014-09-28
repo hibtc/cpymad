@@ -295,7 +295,7 @@ class Madx(object):
     def aperture(self,
                  sequence=None,
                  pattern=['full'],
-                 range='',
+                 range=None,
                  columns=default_aperture_columns,
                  offsets=None,
                  file=None,
