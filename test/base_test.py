@@ -49,7 +49,7 @@ class TestCpymad(object):
          is also loaded into memory
         '''
         for seq in self.model.mdef['sequences']:
-            print('Testing set_sequence({!r})'.format(seq))
+            print('Testing set_sequence({0!r})'.format(seq))
             self.assertTrue(self.model.has_sequence(seq))
 
     def test_set_optic(self):
@@ -57,7 +57,7 @@ class TestCpymad(object):
          Sets all optics found in the model definition
         '''
         for optic in self.model.list_optics():
-            print('Testing set_optic({!r})'.format(optic))
+            print('Testing set_optic({0!r})'.format(optic))
             self.model.set_optic(optic)
             self.assertEqual(optic,self.model._active['optic'])
             self.model.twiss()
