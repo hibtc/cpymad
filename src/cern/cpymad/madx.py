@@ -359,7 +359,7 @@ class Madx(object):
     def _writeHist(self,command):
         # this still brakes for "multiline commands"...
         if self._hfile:
-            self._hfile.write(command)
+            self._hfile.write(command + '\n')
             self._hfile.flush()
 
     def get_table(self, table):
