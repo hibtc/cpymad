@@ -227,7 +227,7 @@ class Madx(object):
               sequence=None,
               pattern=['full'],
               columns=default_twiss_columns,
-              madrange=None,
+              range=None,
               fname=None,
               twiss_init={},
               use=True,
@@ -258,7 +258,7 @@ class Madx(object):
         # twiss_init:
         twiss_init.update(kwargs)
         self.command.twiss(sequence=sequence,
-                           range=madrange,
+                           range=range,
                            file=fname,
                            **twiss_init)
         return self.get_table('twiss')
@@ -270,7 +270,7 @@ class Madx(object):
                sequence=None,
                pattern=['full'],
                columns=default_survey_columns,
-               madrange=None,
+               range=None,
                fname=None,
                use=True):
         """
@@ -286,7 +286,7 @@ class Madx(object):
         self.command.set(format="12.6F")
         if use and sequence:
             self.use(sequence)
-        self.command.survey(range=madrange, file=fname)
+        self.command.survey(range=range, file=fname)
         return self.get_table('survey')
 
     default_aperture_columns = ['name', 'l', 'angle'
@@ -295,7 +295,7 @@ class Madx(object):
     def aperture(self,
                  sequence=None,
                  pattern=['full'],
-                 madrange='',
+                 range='',
                  columns=default_aperture_columns,
                  offsets=None,
                  fname=None,
@@ -314,7 +314,7 @@ class Madx(object):
         if use and sequence:
             self._log.warn("USE before APERTURE is known to cause problems.")
             self.use(sequence) # this seems to cause a bug?
-        self.command.aperture(range=madrange, offsetelem=offsets, file=fname)
+        self.command.aperture(range=range, offsetelem=offsets, file=fname)
         return self.get_table('aperture')
 
     def use(self, sequence):
