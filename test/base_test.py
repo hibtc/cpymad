@@ -33,14 +33,14 @@ class TestCpymad(object):
         del self.model
 
     def test_twiss(self):
-        t, p = self.model.twiss()
-        self.assertTrue('betx' in t)
-        self.assertTrue('bety' in t)
-        self.assertTrue('s' in t)
+        twiss = self.model.twiss()
+        self.assertTrue('betx' in twiss)
+        self.assertTrue('bety' in twiss)
+        self.assertTrue('s' in twiss)
         # check that keys are all lowercase..
-        for k in t:
+        for k in twiss:
             self.assertEqual(k, k.lower())
-        for k in p:
+        for k in twiss.summary:
             self.assertEqual(k, k.lower())
 
     def test_sequences(self):

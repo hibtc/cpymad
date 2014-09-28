@@ -15,10 +15,10 @@ class TestCpymadSurvey(unittest.TestCase):
 
         self.assertTrue(hasattr(self,"model"))
 
-        tw1,pw1=self.model.twiss('lhcb1')
-        t1,p1=self.model.survey('lhcb1')
+        twiss = self.model.twiss('lhcb1')
+        survey = self.model.survey('lhcb1')
         for key in ['angle', 'name', 'l', 's', 'theta', 'y', 'x', 'z']:
-            self.assertTrue(key in t1)
+            self.assertTrue(key in survey)
 
 if __name__ == '__main__':
     unittest.main()

@@ -20,10 +20,9 @@ inside Python instead of using models.
     # you can also just put an arbitrary MAD-X command string here:
     m.command('beam, sequence=myseq1, particle=PROTON')
 
-    table = m.twiss('myseq1')
-    columns = table.columns
+    twiss = m.twiss('myseq1')
 
-    plt.plot(columns['s'], columns['betx'])
+    plt.plot(twiss['s'], twiss['betx'])
     plt.show()
 
 
