@@ -228,7 +228,6 @@ class Madx(object):
               pattern=['full'],
               columns=default_twiss_columns,
               range=None,
-              file=None,
               twiss_init={},
               use=True,
               **kwargs):
@@ -236,13 +235,12 @@ class Madx(object):
         Run SELECT+USE+TWISS.
 
         :param str sequence: name of sequence
-        :param str file: name of file to store tfs table
         :param list pattern: pattern to include in table
         :param list columns: columns to include in table, (may be a str)
         :param dict twiss_init: dictionary of twiss initialization variables
         :param bool use: Call use before aperture.
         :param bool chrom: Also calculate chromatic functions (slower)
-        :param **kwargs: further keyword arguments to TWISS (betx, bety, ..).
+        :param kwargs: further keyword arguments for the MAD-X command
 
         Note, that the kwargs overwrite any arguments in twiss_init.
         """
@@ -259,7 +257,6 @@ class Madx(object):
         twiss_init.update(kwargs)
         self.command.twiss(sequence=sequence,
                            range=range,
-                           file=file,
                            **twiss_init)
         return self.get_table('twiss')
 
@@ -271,22 +268,22 @@ class Madx(object):
                pattern=['full'],
                columns=default_survey_columns,
                range=None,
-               file=None,
-               use=True):
+               use=True,
+               **kwargs):
         """
         Run SELECT+USE+SURVEY.
 
         :param str sequence: name of sequence
-        :param str file: name of file to store tfs table
         :param list pattern: pattern to include in table
         :param list columns: Columns to include in table
         :param bool use: Call use before survey.
+        :param kwargs: further keyword arguments for the MAD-X command
         """
         self.select('survey', pattern=pattern, columns=columns)
         self.command.set(format="12.6F")
         if use and sequence:
             self.use(sequence)
-        self.command.survey(range=range, file=file)
+        self.command.survey(range=range, **kwargs)
         return self.get_table('survey')
 
     default_aperture_columns = ['name', 'l', 'angle'
@@ -298,23 +295,23 @@ class Madx(object):
                  range=None,
                  columns=default_aperture_columns,
                  offsets=None,
-                 file=None,
-                 use=False):
+                 use=False,
+                 **kwargs):
         """
         Run SELECT+USE+APERTURE.
 
         :param str sequence: name of sequence
-        :param str file: name of file to store tfs table
         :param list pattern: pattern to include in table
         :param list columns: columns to include in table (may be a str)
         :param bool use: Call use before aperture.
+        :param kwargs: further keyword arguments for the MAD-X command
         """
         self.select('aperture', pattern=pattern, columns=columns)
         self.command.set(format="12.6F")
         if use and sequence:
             self._log.warn("USE before APERTURE is known to cause problems.")
             self.use(sequence) # this seems to cause a bug?
-        self.command.aperture(range=range, offsetelem=offsets, file=file)
+        self.command.aperture(range=range, offsetelem=offsets, **kwargs)
         return self.get_table('aperture')
 
     def use(self, sequence):

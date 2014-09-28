@@ -306,9 +306,8 @@ class Model(object):
               columns=['name','s','betx','bety','x','y','dx','dy','px','py','mux','muy','l','k1l','angle','k2l'],
               pattern=['full'],
               range=None,
-              file=None,
-              use=True
-              ):
+              use=True,
+              **kwargs):
         '''
          Run a TWISS on the model.
 
@@ -318,8 +317,8 @@ class Model(object):
          :param string sequence: Sequence, if empty, using active sequence.
          :param string columns: Columns in the twiss table, can also be list of strings
          :param string range: Optional, give name of a range defined for the model.
-         :param string file: Optionally, give name of file for tfs table.
          :param bool use: Call use before twiss.
+         :param kwargs: further keyword arguments for the MAD-X command
         '''
         # set sequence/range...
         if range:
@@ -349,9 +348,9 @@ class Model(object):
             pattern=pattern,
             columns=columns,
             range=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]],
-            file=file,
             twiss_init=twiss_init,
-            use=use)
+            use=use,
+            **kwargs)
         # we say that when the "full" range has been selected,
         # we can set this to true. Needed for e.g. aperture calls
         if not range:
@@ -362,15 +361,15 @@ class Model(object):
                sequence=None,
                columns='name,l,s,angle,x,y,z,theta',
                range=None,
-               file=None,
-               use=True):
+               use=True,
+               **kwargs):
         '''
          Run a survey on the model.
 
          :param string sequence: Sequence, if empty, using active sequence.
          :param string columns: Columns in the twiss table, can also be list of strings
-         :param string file: Optionally, give name of file for tfs table.
          :param bool use: Call use before survey.
+         :param kwargs: further keyword arguments for the MAD-X command
         '''
         self.set_sequence(sequence)
         sequence=self._active['sequence']
@@ -384,23 +383,23 @@ class Model(object):
             sequence=sequence,
             columns=columns,
             range=this_range,
-            file=file,
-            use=use)
+            use=use,
+            **kwargs)
 
     def aperture(self,
                sequence=None,
                range=None,
                columns='name,l,s,n1,aper_1,aper_2,aper_3,aper_4',
-               file=None,
-               use=False):
+               use=False,
+               **kwargs):
         '''
          Get the aperture from the model.
 
          :param string sequence: Sequence, if empty, using active sequence.
          :param string range: Range, if empty, the full sequence is chosen.
          :param string columns: Columns in the twiss table, can also be list of strings
-         :param string file: Optionally, give name of file for tfs table.
          :param bool use: Call use before aperture.
+         :param kwargs: further keyword arguments for the MAD-X command
         '''
         self.set_sequence(sequence)
         sequence=self._active['sequence']
@@ -425,8 +424,8 @@ class Model(object):
         args={'sequence': sequence,
               'range': this_range,
               'columns': columns,
-              'file': file,
               'use': use}
+        args.update(kwargs)
 
         if offsets:
             with offsets as offsets_filename:
@@ -442,7 +441,7 @@ class Model(object):
             weight=None,
             method=['lmdif'],
             sequence=None,
-            file=None):
+            knobfile=None):
         """
         Perform a matching operation.
 
@@ -475,7 +474,7 @@ class Model(object):
             vary=vary,
             weight=weight,
             method=method,
-            file=file,
+            knobfile=knobfile,
             twiss_init=twiss_init)
         return self.twiss(sequence=sequence)
 
