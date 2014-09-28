@@ -409,6 +409,14 @@ class Madx(object):
         """
         return Sequence(name, self._libmadx)
 
+    def has_sequence(self, sequence):
+        """
+        Check if model has the sequence.
+
+        :param string sequence: sequence name to be checked.
+        """
+        return sequence in self.get_sequence_names()
+
     def get_sequences(self):
         """
         Return list of all sequences currently in memory.

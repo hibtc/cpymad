@@ -64,7 +64,7 @@ class Model(object):
         :param Madx madx: MAD-X instance to use
         :param logging.Logger logger:
         """
-        self._madx = madx
+        self.madx = madx
         self._log = logger
         self.mdata = mdata
         self._mdef = mdata.model
@@ -162,10 +162,7 @@ class Model(object):
          Set the beam from a beam definition
          (dictionary)
         '''
-        self._madx.command.beam(**beam_dict)
-
-    def _cmd(self, cmd):
-        return self._madx.command(cmd)
+        self.madx.command.beam(**beam_dict)
 
     def __str__(self):
         return self.name
@@ -183,23 +180,14 @@ class Model(object):
             raise ValueError("You tried to call a file that doesn't exist: "+filepath)
 
         self._log.debug("Calling file: %s", filepath)
-        return self._madx.call(filepath)
-
-    def evaluate(self, expr):
-        """
-        Evaluate a string expression and return the resulting float.
-
-        :param string expr:
-
-        """
-        return self._madx.evaluate(expr)
+        return self.madx.call(filepath)
 
     def has_sequence(self,sequence):
-        '''
-         Check if model has the sequence.
+        """
+        Check if model has the sequence.
 
-         :param string sequence: Sequence name to be checked.
-        '''
+        :param string sequence: Sequence name to be checked.
+        """
         return sequence in self.get_sequence_names()
 
     def has_optics(self,optics):
@@ -244,19 +232,20 @@ class Model(object):
         kdict = self._mdef['knobs']
         for e in kdict[knob]:
             val = kdict[knob][e] * value
-            self._madx.command(**{e: val})
+            self.madx.command(**{e: val})
 
     def get_sequences(self):
-        '''
-         Returns a list of loaded sequences.
-        '''
-        return self._madx.get_sequences()
+        """
+        Return iterable of sequences defined in the model.
+        """
+        return (self.madx.get_sequence(name)
+                for name in self.get_sequence_names())
 
     def get_sequence_names(self):
         """
-        Return list of all loaded sequences.
+        Return iterable of all sequences defined in the model.
         """
-        return self._madx.get_sequence_names()
+        return self._mdef['sequences'].keys()
 
     def list_optics(self):
         '''
@@ -343,7 +332,7 @@ class Model(object):
         else:
             twiss_init = None
 
-        res = self._madx.twiss(
+        res = self.madx.twiss(
             sequence=sequence,
             pattern=pattern,
             columns=columns,
@@ -379,7 +368,7 @@ class Model(object):
             rangedict=self._get_range_dict(sequence=sequence,range=range)
             this_range=rangedict['madx-range']
 
-        return self._madx.survey(
+        return self.madx.survey(
             sequence=sequence,
             columns=columns,
             range=this_range,
@@ -429,9 +418,9 @@ class Model(object):
 
         if offsets:
             with offsets as offsets_filename:
-                return self._madx.aperture(offsets=offsets_filename, **args)
+                return self.madx.aperture(offsets=offsets_filename, **args)
         else:
-            return self._madx.aperture(**args)
+            return self.madx.aperture(**args)
 
 
     def match(
@@ -468,7 +457,7 @@ class Model(object):
         else:
             twiss_init = None
 
-        self._madx.match(
+        self.madx.match(
             sequence=sequence,
             constraints=constraints,
             vary=vary,

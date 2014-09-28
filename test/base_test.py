@@ -26,7 +26,7 @@ class TestCpymad(object):
 
     def setUp(self):
         self.model = cpymad.load_model(self.name)
-        self.model._cmd('option,-twiss_print')
+        self.model.madx.command.option(twiss_print=False)
 
     # It's a bit surprising that this doesn't happen by itself.. Hmmm...
     def tearDown(self):
@@ -48,9 +48,9 @@ class TestCpymad(object):
          Checks that all sequences defined in the model (json)
          is also loaded into memory
         '''
-        for seq in self.model.mdef['sequences']:
+        for seq in self.model.get_sequence_names():
             print('Testing set_sequence({0!r})'.format(seq))
-            self.assertTrue(self.model.has_sequence(seq))
+            self.assertTrue(self.model.madx.has_sequence(seq))
 
     def test_set_optic(self):
         '''
