@@ -228,7 +228,7 @@ class Madx(object):
               pattern=['full'],
               columns=default_twiss_columns,
               range=None,
-              fname=None,
+              file=None,
               twiss_init={},
               use=True,
               **kwargs):
@@ -236,7 +236,7 @@ class Madx(object):
         Run SELECT+USE+TWISS.
 
         :param str sequence: name of sequence
-        :param str fname: name of file to store tfs table
+        :param str file: name of file to store tfs table
         :param list pattern: pattern to include in table
         :param list columns: columns to include in table, (may be a str)
         :param dict twiss_init: dictionary of twiss initialization variables
@@ -259,7 +259,7 @@ class Madx(object):
         twiss_init.update(kwargs)
         self.command.twiss(sequence=sequence,
                            range=range,
-                           file=fname,
+                           file=file,
                            **twiss_init)
         return self.get_table('twiss')
 
@@ -271,13 +271,13 @@ class Madx(object):
                pattern=['full'],
                columns=default_survey_columns,
                range=None,
-               fname=None,
+               file=None,
                use=True):
         """
         Run SELECT+USE+SURVEY.
 
         :param str sequence: name of sequence
-        :param str fname: name of file to store tfs table
+        :param str file: name of file to store tfs table
         :param list pattern: pattern to include in table
         :param list columns: Columns to include in table
         :param bool use: Call use before survey.
@@ -286,7 +286,7 @@ class Madx(object):
         self.command.set(format="12.6F")
         if use and sequence:
             self.use(sequence)
-        self.command.survey(range=range, file=fname)
+        self.command.survey(range=range, file=file)
         return self.get_table('survey')
 
     default_aperture_columns = ['name', 'l', 'angle'
@@ -298,13 +298,13 @@ class Madx(object):
                  range='',
                  columns=default_aperture_columns,
                  offsets=None,
-                 fname=None,
+                 file=None,
                  use=False):
         """
         Run SELECT+USE+APERTURE.
 
         :param str sequence: name of sequence
-        :param str fname: name of file to store tfs table
+        :param str file: name of file to store tfs table
         :param list pattern: pattern to include in table
         :param list columns: columns to include in table (may be a str)
         :param bool use: Call use before aperture.
@@ -314,7 +314,7 @@ class Madx(object):
         if use and sequence:
             self._log.warn("USE before APERTURE is known to cause problems.")
             self.use(sequence) # this seems to cause a bug?
-        self.command.aperture(range=range, offsetelem=offsets, file=fname)
+        self.command.aperture(range=range, offsetelem=offsets, file=file)
         return self.get_table('aperture')
 
     def use(self, sequence):
@@ -326,7 +326,7 @@ class Madx(object):
               vary,
               weight=None,
               method=('lmdif', {}),
-              fname=None,
+              knobfile=None,
               twiss_init={},
               **kwargs):
         """
@@ -353,7 +353,7 @@ class Madx(object):
         if weight:
             command.weight(**weight)
         command(method[0], **method[1])
-        command.endmatch(knobfile=fname)
+        command.endmatch(knobfile=knobfile)
 
     # turn on/off verbose outupt..
     def verbose(self, switch):

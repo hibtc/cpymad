@@ -306,7 +306,7 @@ class Model(object):
               columns=['name','s','betx','bety','x','y','dx','dy','px','py','mux','muy','l','k1l','angle','k2l'],
               pattern=['full'],
               range='',
-              fname='',
+              file='',
               use=True
               ):
         '''
@@ -318,7 +318,7 @@ class Model(object):
          :param string sequence: Sequence, if empty, using active sequence.
          :param string columns: Columns in the twiss table, can also be list of strings
          :param string range: Optional, give name of a range defined for the model.
-         :param string fname: Optionally, give name of file for tfs table.
+         :param string file: Optionally, give name of file for tfs table.
          :param bool use: Call use before twiss.
         '''
         # set sequence/range...
@@ -349,7 +349,7 @@ class Model(object):
             pattern=pattern,
             columns=columns,
             range=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]],
-            fname=fname,
+            file=file,
             twiss_init=twiss_init,
             use=use)
         # we say that when the "full" range has been selected,
@@ -362,14 +362,14 @@ class Model(object):
                sequence='',
                columns='name,l,s,angle,x,y,z,theta',
                range='',
-               fname='',
+               file='',
                use=True):
         '''
          Run a survey on the model.
 
          :param string sequence: Sequence, if empty, using active sequence.
          :param string columns: Columns in the twiss table, can also be list of strings
-         :param string fname: Optionally, give name of file for tfs table.
+         :param string file: Optionally, give name of file for tfs table.
          :param bool use: Call use before survey.
         '''
         self.set_sequence(sequence)
@@ -384,14 +384,14 @@ class Model(object):
             sequence=sequence,
             columns=columns,
             range=this_range,
-            fname=fname,
+            file=file,
             use=use)
 
     def aperture(self,
                sequence='',
                range='',
                columns='name,l,s,n1,aper_1,aper_2,aper_3,aper_4',
-               fname='',
+               file='',
                use=False):
         '''
          Get the aperture from the model.
@@ -399,7 +399,7 @@ class Model(object):
          :param string sequence: Sequence, if empty, using active sequence.
          :param string range: Range, if empty, the full sequence is chosen.
          :param string columns: Columns in the twiss table, can also be list of strings
-         :param string fname: Optionally, give name of file for tfs table.
+         :param string file: Optionally, give name of file for tfs table.
          :param bool use: Call use before aperture.
         '''
         self.set_sequence(sequence)
@@ -425,7 +425,7 @@ class Model(object):
         args={'sequence': sequence,
               'range': this_range,
               'columns': columns,
-              'fname': fname,
+              'file': file,
               'use': use}
 
         if offsets:
@@ -442,7 +442,7 @@ class Model(object):
             weight=None,
             method=['lmdif'],
             sequence = '',
-            fname=''):
+            file=''):
         """
         Perform a matching operation.
 
@@ -475,7 +475,7 @@ class Model(object):
             vary=vary,
             weight=weight,
             method=method,
-            fname=fname,
+            file=file,
             twiss_init=twiss_init)
         return self.twiss(sequence=sequence)
 
