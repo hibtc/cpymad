@@ -113,7 +113,7 @@ else:
             """Return inheritable file descriptor, close the original."""
             dup = os.dup(fd)
             os.close(fd)
-            set_inheritable(dup, inheritable)
+            set_inheritable(dup, True)
             return dup
 
 

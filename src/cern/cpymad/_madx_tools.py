@@ -40,6 +40,8 @@ def mad_parameter(key, value):
     elif key == 'range':
         if isinstance(value, basestring):
             return key + '=' + value
+        elif isinstance(value, collections.Mapping):
+            return key + '=' + str(value['first']) + '/' + str(value['last'])
         else:
             return key + '=' + str(value[0]) + '/' + str(value[1])
     # check for basestrings before collections.Sequence, because every

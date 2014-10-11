@@ -70,6 +70,7 @@ Usage
     # Your own analysis below:
     from matplotlib import pyplot as plt
     plt.plot(twiss['s'], twiss['betx'])
+    plt.show()
 
 
 See http://pymad.github.io/cpymad for further documentation.
