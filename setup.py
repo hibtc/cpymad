@@ -32,7 +32,7 @@ import sys
 from os import path
 
 # Version of pymad (major,minor):
-PYMADVERSION='0.9'
+PYMADVERSION='0.10.0'
 
 
 # setuptools.Extension automatically converts all '.pyx' extensions to '.c'
