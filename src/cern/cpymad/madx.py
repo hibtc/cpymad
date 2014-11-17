@@ -227,8 +227,7 @@ class Madx(object):
               sequence=None,
               pattern=['full'],
               columns=default_twiss_columns,
-              madrange=None,
-              fname=None,
+              range=None,
               twiss_init={},
               use=True,
               **kwargs):
@@ -236,13 +235,12 @@ class Madx(object):
         Run SELECT+USE+TWISS.
 
         :param str sequence: name of sequence
-        :param str fname: name of file to store tfs table
         :param list pattern: pattern to include in table
         :param list columns: columns to include in table, (may be a str)
         :param dict twiss_init: dictionary of twiss initialization variables
         :param bool use: Call use before aperture.
         :param bool chrom: Also calculate chromatic functions (slower)
-        :param **kwargs: further keyword arguments to TWISS (betx, bety, ..).
+        :param kwargs: further keyword arguments for the MAD-X command
 
         Note, that the kwargs overwrite any arguments in twiss_init.
         """
@@ -258,8 +256,7 @@ class Madx(object):
         # twiss_init:
         twiss_init.update(kwargs)
         self.command.twiss(sequence=sequence,
-                           range=madrange,
-                           file=fname,
+                           range=range,
                            **twiss_init)
         return self.get_table('twiss')
 
@@ -270,23 +267,23 @@ class Madx(object):
                sequence=None,
                pattern=['full'],
                columns=default_survey_columns,
-               madrange=None,
-               fname=None,
-               use=True):
+               range=None,
+               use=True,
+               **kwargs):
         """
         Run SELECT+USE+SURVEY.
 
         :param str sequence: name of sequence
-        :param str fname: name of file to store tfs table
         :param list pattern: pattern to include in table
         :param list columns: Columns to include in table
         :param bool use: Call use before survey.
+        :param kwargs: further keyword arguments for the MAD-X command
         """
         self.select('survey', pattern=pattern, columns=columns)
         self.command.set(format="12.6F")
         if use and sequence:
             self.use(sequence)
-        self.command.survey(range=madrange, file=fname)
+        self.command.survey(range=range, **kwargs)
         return self.get_table('survey')
 
     default_aperture_columns = ['name', 'l', 'angle'
@@ -295,26 +292,26 @@ class Madx(object):
     def aperture(self,
                  sequence=None,
                  pattern=['full'],
-                 madrange='',
+                 range=None,
                  columns=default_aperture_columns,
                  offsets=None,
-                 fname=None,
-                 use=False):
+                 use=False,
+                 **kwargs):
         """
         Run SELECT+USE+APERTURE.
 
         :param str sequence: name of sequence
-        :param str fname: name of file to store tfs table
         :param list pattern: pattern to include in table
         :param list columns: columns to include in table (may be a str)
         :param bool use: Call use before aperture.
+        :param kwargs: further keyword arguments for the MAD-X command
         """
         self.select('aperture', pattern=pattern, columns=columns)
         self.command.set(format="12.6F")
         if use and sequence:
             self._log.warn("USE before APERTURE is known to cause problems.")
             self.use(sequence) # this seems to cause a bug?
-        self.command.aperture(range=madrange, offsetelem=offsets, file=fname)
+        self.command.aperture(range=range, offsetelem=offsets, **kwargs)
         return self.get_table('aperture')
 
     def use(self, sequence):
@@ -326,7 +323,7 @@ class Madx(object):
               vary,
               weight=None,
               method=('lmdif', {}),
-              fname=None,
+              knobfile=None,
               twiss_init={},
               **kwargs):
         """
@@ -353,7 +350,7 @@ class Madx(object):
         if weight:
             command.weight(**weight)
         command(method[0], **method[1])
-        command.endmatch(knobfile=fname)
+        command.endmatch(knobfile=knobfile)
 
     # turn on/off verbose outupt..
     def verbose(self, switch):
@@ -362,7 +359,7 @@ class Madx(object):
     def _writeHist(self,command):
         # this still brakes for "multiline commands"...
         if self._hfile:
-            self._hfile.write(command)
+            self._hfile.write(command + '\n')
             self._hfile.flush()
 
     def get_table(self, table):
@@ -374,7 +371,7 @@ class Madx(object):
         :type columns: list or str (comma separated)
 
         """
-        return Table(table, self._libmadx)
+        return TableProxy(table, self._libmadx)
 
     @property
     def active_sequence(self):
@@ -411,6 +408,14 @@ class Madx(object):
         :raises ValueError: if a sequence name is invalid
         """
         return Sequence(name, self._libmadx)
+
+    def has_sequence(self, sequence):
+        """
+        Check if model has the sequence.
+
+        :param string sequence: sequence name to be checked.
+        """
+        return sequence in self.get_sequence_names()
 
     def get_sequences(self):
         """
@@ -475,7 +480,7 @@ class Sequence(object):
     @property
     def twiss(self):
         """Get the TWISS results from the last calculation."""
-        return Table(self.twissname, self._libmadx)
+        return TableProxy(self.twissname, self._libmadx)
 
     @property
     def twissname(self):
@@ -504,10 +509,10 @@ class Sequence(object):
         return self._libmadx.get_expanded_elements(self._name)
 
 
-class Table(object):
+class TableProxy(collections.Mapping):
 
     """
-    MAD-X table access class.
+    Proxy object for lazy-loading table column data.
     """
 
     def __init__(self, name, libmadx, _check=True):
@@ -517,56 +522,25 @@ class Table(object):
         if _check and not libmadx.table_exists(name):
             raise ValueError("Invalid table: {!r}".format(name))
 
-    def __iter__(self):
-        """Old style access."""
-        columns = self.columns
-        try:
-            summary = self.summary
-        except ValueError:
-            summary = None
-        return iter((columns, summary))
-
-    @property
-    def name(self):
-        """Get the table name."""
-        return self._name
-
-    @property
-    def columns(self):
-        """Get a lazy accessor for the table columns."""
-        return TableProxy(self.name, self._libmadx)
-
-    @property
-    def summary(self):
-        """Get the table summary."""
-        return self._libmadx.get_table_summary(self.name)
-
-
-class TableProxy(collections.Mapping):
-
-    """
-    Proxy object for lazy-loading table column data.
-    """
-
-    def __init__(self, table, libmadx):
-        """Store tabe name and libmadx connection."""
-        self._table = table
-        self._libmadx = libmadx
-
     def __getitem__(self, column):
         """Get the column data."""
         try:
-            return self._libmadx.get_table_column(self._table, column.lower())
+            return self._libmadx.get_table_column(self._name, column.lower())
         except ValueError:
             raise KeyError(column)
 
     def __iter__(self):
         """Iterate over all column names."""
-        return iter(self._libmadx.get_table_columns(self._table))
+        return iter(self._libmadx.get_table_columns(self._name))
 
     def __len__(self):
         """Return number of columns."""
-        return len(self._libmadx.get_table_columns(self._table))
+        return len(self._libmadx.get_table_columns(self._name))
+
+    @property
+    def summary(self):
+        """Get the table summary."""
+        return self._libmadx.get_table_summary(self._name)
 
     def copy(self, columns=None):
         """

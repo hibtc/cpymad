@@ -26,21 +26,21 @@ class TestCpymad(object):
 
     def setUp(self):
         self.model = cpymad.load_model(self.name)
-        self.model._cmd('option,-twiss_print')
+        self.model.madx.command.option(twiss_print=False)
 
     # It's a bit surprising that this doesn't happen by itself.. Hmmm...
     def tearDown(self):
         del self.model
 
     def test_twiss(self):
-        t, p = self.model.twiss()
-        self.assertTrue('betx' in t)
-        self.assertTrue('bety' in t)
-        self.assertTrue('s' in t)
+        twiss = self.model.twiss()
+        self.assertTrue('betx' in twiss)
+        self.assertTrue('bety' in twiss)
+        self.assertTrue('s' in twiss)
         # check that keys are all lowercase..
-        for k in t:
+        for k in twiss:
             self.assertEqual(k, k.lower())
-        for k in p:
+        for k in twiss.summary:
             self.assertEqual(k, k.lower())
 
     def test_sequences(self):
@@ -48,9 +48,9 @@ class TestCpymad(object):
          Checks that all sequences defined in the model (json)
          is also loaded into memory
         '''
-        for seq in self.model.mdef['sequences']:
+        for seq in self.model.get_sequence_names():
             print('Testing set_sequence({0!r})'.format(seq))
-            self.assertTrue(self.model.has_sequence(seq))
+            self.assertTrue(self.model.madx.has_sequence(seq))
 
     def test_set_optic(self):
         '''

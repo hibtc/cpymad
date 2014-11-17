@@ -11,6 +11,7 @@ optics and sequences. For example:
     from cern.cpymad.api import load_model
 
     model = load_model('lhc')
-    twiss, summary = model.twiss()
+    twiss = model.twiss()
     print("max/min beta x:", max(twiss['betx']), min(twiss['betx']))
+    print("ex: {0}, ey: {1}", twiss.summary['ex'], twiss.summary['ey'])
 

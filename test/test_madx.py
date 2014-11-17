@@ -42,18 +42,17 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
     def _check_twiss(self, seq_name):
         beam = 'beam, ex=1, ey=2, particle=electron, sequence={0};'.format(seq_name)
         self.mad.command(beam)
-        result = self.mad.twiss(sequence=seq_name,
-                                alfx=0.5, alfy=1.5,
-                                betx=2.5, bety=3.5)
-        columns, summary = result
-        betx, bety = columns['betx'], columns['bety']
-        alfx, alfy = columns['alfx'], columns['alfy']
+        twiss = self.mad.twiss(sequence=seq_name,
+                               alfx=0.5, alfy=1.5,
+                               betx=2.5, bety=3.5)
+        betx, bety = twiss['betx'], twiss['bety']
+        alfx, alfy = twiss['alfx'], twiss['alfy']
         self.assertAlmostEqual(alfx[0], 0.5)
         self.assertAlmostEqual(alfy[0], 1.5)
         self.assertAlmostEqual(betx[0], 2.5)
         self.assertAlmostEqual(bety[0], 3.5)
-        self.assertAlmostEqual(summary['ex'], 1)
-        self.assertAlmostEqual(summary['ey'], 2)
+        self.assertAlmostEqual(twiss.summary['ex'], 1)
+        self.assertAlmostEqual(twiss.summary['ey'], 2)
 
     def test_twiss_1(self):
         self._check_twiss('s1')     # s1 can be computed at start

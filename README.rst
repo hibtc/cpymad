@@ -65,7 +65,7 @@ Usage
     m = cpymad.load_model('lhc')
 
     # Calculate TWISS parameters:
-    twiss, summary = m.twiss()
+    twiss = m.twiss()
 
     # Your own analysis below:
     from matplotlib import pyplot as plt
