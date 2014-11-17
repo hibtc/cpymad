@@ -59,7 +59,7 @@ Usage
 
 .. code-block:: python
 
-    from cern import cpymad
+    import cern.cpymad.api as cpymad
 
     # Instanciate a model:
     m = cpymad.load_model('lhc')

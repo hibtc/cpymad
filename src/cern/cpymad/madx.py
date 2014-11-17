@@ -48,10 +48,8 @@ import sys
 import collections
 
 from . import _libmadx_rpc
-from .types import Element
 
 from cern.cpymad import _madx_tools
-from cern.cpymad.types import TfsTable, TfsSummary
 
 try:
     basestring
@@ -489,23 +487,21 @@ class Sequence(object):
         Get list of all elements in the original sequence.
 
         :returns: list of elements in the original (unexpanded) sequence
-        :rtype: list(Element)
+        :rtype: list(dict)
         """
-        return [Element(elem)
-                for elem in self._libmadx.get_elements(self._name)]
+        return self._libmadx.get_elements(self._name)
 
     def get_expanded_elements(self):
         """
         Get list of all elements in the expanded sequence.
 
         :returns: list of elements in the expanded (unexpanded) sequence
-        :rtype: list(Element)
+        :rtype: list(dict)
 
         NOTE: this may very well return an empty list, if the sequence has
         not been expanded (used) yet.
         """
-        return [Element(elem)
-                for elem in self._libmadx.get_expanded_elements(self._name)]
+        return self._libmadx.get_expanded_elements(self._name)
 
 
 class Table(object):
@@ -538,18 +534,18 @@ class Table(object):
     @property
     def columns(self):
         """Get a lazy accessor for the table columns."""
-        return TableColumns(self.name, self._libmadx)
+        return TableProxy(self.name, self._libmadx)
 
     @property
     def summary(self):
         """Get the table summary."""
-        return TfsSummary(self._libmadx.get_table_summary(self.name))
+        return self._libmadx.get_table_summary(self.name)
 
 
-class TableColumns(object):
+class TableProxy(collections.Mapping):
 
     """
-    Lazy accessor for table column data.
+    Proxy object for lazy-loading table column data.
     """
 
     def __init__(self, table, libmadx):
@@ -557,38 +553,30 @@ class TableColumns(object):
         self._table = table
         self._libmadx = libmadx
 
-    def __getattr__(self, column):
-        """Get the column data."""
-        return self[column]
-
     def __getitem__(self, column):
         """Get the column data."""
-        if isinstance(column, basestring):
-            try:
-                return self._libmadx.get_table_column(
-                    self._table,
-                    column.lower())
-            except ValueError:
-                raise KeyError(column)
-        elif isinstance(column, collections.Sequence):
-            return column.__class__(self[col] for col in column)
-        else:
-            raise TypeError("Invalid argument type: {0}"
-                            .format(column.__class__.__name__))
+        try:
+            return self._libmadx.get_table_column(self._table, column.lower())
+        except ValueError:
+            raise KeyError(column)
 
     def __iter__(self):
-        """Get a list of all column names."""
+        """Iterate over all column names."""
         return iter(self._libmadx.get_table_columns(self._table))
 
-    def freeze(self, columns=None):
+    def __len__(self):
+        """Return number of columns."""
+        return len(self._libmadx.get_table_columns(self._table))
+
+    def copy(self, columns=None):
         """
         Return a frozen table with the desired columns.
 
         :param list columns: column names or ``None`` for all columns.
         :returns: column data
-        :rtype: TfsTable
+        :rtype: dict
         :raises ValueError: if the table name is invalid
         """
         if columns is None:
             columns = self
-        return TfsTable(dict((column, self[column]) for column in columns))
+        return dict((column, self[column]) for column in columns)

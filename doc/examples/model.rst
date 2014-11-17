@@ -8,7 +8,7 @@ optics and sequences. For example:
 
 .. code-block:: python
 
-    from cern.cpymad import load_model
+    from cern.cpymad.api import load_model
 
     model = load_model('lhc')
     twiss, summary = model.twiss()

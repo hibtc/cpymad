@@ -31,72 +31,44 @@ import os
 import sys
 import yaml
 
-from .model_locator import ModelData
+from ..resource.package import PackageResource
+from .model_locator import MergedModelLocator
 from .madx import Madx
+
+
+__all__ = [
+    'Model',
+    'Factory',
+    'default_factory',
+    'get_model_names',
+    'load_model',
+    'save_model',
+]
 
 
 class Model(object):
     '''
     Model class implementation. the model spawns a madx instance in a separate process.
     this has the advantage that you can run separate models which do not affect each other.
-
-    To load a Model object using the default ModelLocator use the static
-    constructor method ``Model.from_name``. The default constructor should
-    be invoked with a ModelData instance.
-
     '''
-    @classmethod
-    def from_name(cls, model, *args, **kwargs):
+
+    def __init__(self, mdata, madx, logger, sequence, optics):
         """
-        Create a Model object from its name.
+        Initialize a Model object.
 
-        :param string model: Name of the model
-        :param tuple args: Positional parameters as needed by ``__init__``
-        :param dict kwargs: Keyword parameters as needed by ``__init__``
+        Users should use the load_model function instead.
 
-        This constructor is provided for backward compatibility. To specify
-        where your model data is loaded from you should create and use your
-        own custom cern.cpymad.model_locator.ModelLocator.
-
+        :param ModelData mdata: model data as acquired through a ModelLocator
+        :param str sequence: Name of the default sequence to use
+        :param str optics: Name of optics to load, string or list of strings.
+        :param Madx madx: MAD-X instance to use
+        :param logging.Logger logger:
         """
-        from .service import default_model_locator
-        mdata = default_model_locator.get_model(model)
-        return cls(mdata, *args, **kwargs)
-
-
-    def __init__(self, model,
-                 sequence='',optics='',
-                 histfile='',
-                 madx=None,
-                 logger=None):
-        """
-        Construct a Model object.
-
-        :param ModelData model: model data as acquired through a ModelLocator
-        :param string sequence: Name of the default sequence to use
-        :param string optics: Name of optics to load, string or list of strings.
-        :param string histfile: Name of file which will contain all Mad-X commands called.
-
-        For backward compatibility reasons, the first parameter can also be
-        the name of the model to be loaded. This is equivalent to the
-        preferred Model.from_name() constructor.
-
-        """
-        self._madx = madx or Madx(histfile)
-        self._madx.verbose(False)
-        self._log = logger or logging.getLogger(__name__)
-
-        if isinstance(model, ModelData):
-            mdata = model
-        else:
-            from .service import default_model_locator
-            mdata = default_model_locator.get_model(model)
-
+        self._madx = madx
+        self._log = logger
         self.mdata = mdata
         self._mdef = mdata.model
-
         self._active={'optic':'','sequence':'','range':''}
-
         self._setup_initial(sequence,optics)
 
     # API stuff:
@@ -154,11 +126,11 @@ class Model(object):
             self._init_sequence(seq)
         # then we set the default one..
         self.set_sequence(sequence)
-        if isinstance(optics, str):
-            self.set_optic(optics)
-        elif isinstance(optics, list):
+        if isinstance(optics, list):
             for o in optics:
                 self.set_optic(o)
+        else: # str/unicode/None
+            self.set_optic(optics)
         # To keep track of whether or not certain things are already called..
         self._apercalled={}
         self._twisscalled={}
@@ -247,7 +219,7 @@ class Model(object):
          :raises KeyError: In case you try to set an optics not available in model.
         '''
 
-        if optic=='':
+        if not optic:
             optic=self._mdef['default-optic']
         if self._active['optic'] == optic:
             self._log.info("Optics already initialized: %s", optic)
@@ -515,7 +487,7 @@ class Model(object):
         Returns the range dictionary. If sequence/range isn't given,
         returns default for the model
         '''
-        if sequence=='':
+        if not sequence:
             sequence=self._active['sequence']
         elif sequence not in self._mdef['sequences']:
             raise ValueError("%s is not a valid sequence name, available sequences: '%s'" % (sequence,"' '".join(self._mdef['sequences'].keys())))
@@ -525,6 +497,76 @@ class Model(object):
             self.set_range(madrange)
         return seqdict['ranges'][self._active['range']]
 
+
+class Factory(object):
+
+    """Model instance factory."""
+
+    def __init__(self, model_locator, model_cls=None):
+        """Create Model factory using a specified ModelLocator."""
+        self._model_locator = model_locator
+        self._model_cls = model_cls or Model
+
+    def get_model_names(self):
+        """Get iterable over all model names."""
+        return self._model_locator.list_models()
+
+    def _find(self, name):
+        """Find model definition, return ModelData."""
+        return self._model_locator.get_model(name)
+
+    def _create(self, mdata, sequence, optics, madx, histfile, logger):
+        """
+        Create Model instance based on ModelData.
+
+        Parameters as in load_model (except for mdata).
+        """
+        if madx is None:
+            madx = Madx(histfile)
+            madx.verbose(False)
+        elif histfile is not None:
+            raise ValueError("'histfile' cannot be used with 'madx'")
+        if logger is None:
+            logger = logging.getLogger(__name__)
+        return self._model_cls(mdata,
+                               sequence=sequence,
+                               optics=optics,
+                               madx=madx,
+                               logger=logger)
+
+    def load_model(self,
+                   name,
+                   # *,
+                   # These should be passed as keyword-only parameters:,
+                   sequence=None,
+                   optics=None,
+                   madx=None,
+                   histfile=None,
+                   logger=None):
+        """
+        Find model definition by name and create Model instance.
+
+        :param str name: model name
+        :param str sequence: Name of the initial sequence to use
+        :param str optics: Name of optics to load, string or list of strings.
+        :param Madx madx: MAD-X instance to use
+        :param str histfile: history file name; use only if madx is None!
+        :param logging.Logger logger:
+        """
+        return self._create(self._find(name),
+                            sequence=sequence,
+                            optics=optics,
+                            madx=madx,
+                            histfile=histfile,
+                            logger=logger)
+
+
+_default_resources = PackageResource(__package__, '_models')
+_default_locator = MergedModelLocator(_default_resources)
+default_factory = Factory(_default_locator)
+
+get_model_names = default_factory.get_model_names
+load_model = default_factory.load_model
 
 
 def save_model(model_def,filename):
