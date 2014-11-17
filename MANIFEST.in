@@ -1,4 +1,4 @@
-recursive-include src *.pxd *.pyx *.c
+recursive-include cern *.pxd *.pyx *.c
 recursive-include test *.py *.cmake *.txt
 include README.rst CHANGES.rst LICENSE.txt COPYING.txt
 include *.cmake

@@ -110,12 +110,9 @@ setup(
     description='Cython binding to MAD-X',
     long_description=long_description,
     url='http://pymad.github.io/cpymad',
-    package_dir={
-        '': 'src'   # look for packages in src/ subfolder
-    },
     ext_modules = cythonize([
         Extension('cern.cpymad.libmadx',
-                  sources=["src/cern/cpymad/libmadx.pyx"],
+                  sources=["cern/cpymad/libmadx.pyx"],
                   **extension_args),
     ]),
     namespace_packages=[
