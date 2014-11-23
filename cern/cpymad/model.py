@@ -18,7 +18,6 @@ from ..resource.file import FileResource
 __all__ = [
     'Model',
     'Factory',
-    'ModelData',
     'Locator',
 ]
 
@@ -29,13 +28,12 @@ class Model(object):
     this has the advantage that you can run separate models which do not affect each other.
     """
 
-    def __init__(self, mdata, madx, logger, sequence, optics):
+    def __init__(self, name, mdef, repo, madx, logger, sequence, optics):
         """
         Initialize a Model object.
 
         Users should use the load_model function instead.
 
-        :param ModelData mdata: model data as acquired through a ModelLocator
         :param str sequence: Name of the default sequence to use
         :param str optics: Name of optics to load, string or list of strings.
         :param Madx madx: MAD-X instance to use
@@ -43,20 +41,13 @@ class Model(object):
         """
         self.madx = madx
         self._log = logger
-        self.mdata = mdata
-        self._mdef = mdata.model
+        self.name = name
+        self.mdef = mdef
+        self._repo = repo
         self._active={'optic': None, 'sequence': None, 'range': None}
         self._setup_initial(sequence, optics)
 
     # API stuff:
-    @property
-    def name(self):
-        return self.mdata.name
-
-    @property
-    def mdef(self):
-        return self._mdef.copy()
-
     def set_sequence(self, sequence=None, range=None):
         """
         Set a new active sequence...
@@ -142,7 +133,7 @@ class Model(object):
         return self.name
 
     def _call(self, fdict):
-        with self.mdata.get_by_dict(fdict).filename() as fpath:
+        with self._repo.get(fdict).filename() as fpath:
             self.call(fpath)
 
     def call(self, filepath):
@@ -380,7 +371,7 @@ class Model(object):
             rangedict=self._get_range_dict(sequence=sequence, range=range)
             this_range=rangedict['madx-range']
             if 'aper-offset' in rangedict:
-                offsets = self.mdata.get_by_dict(rangedict['aper-offset']).filename()
+                offsets = self._repo.get(rangedict['aper-offset']).filename()
 
         args={'sequence': sequence,
               'range': this_range,
@@ -471,11 +462,7 @@ class Factory(object):
         """Get iterable over all model names."""
         return self._model_locator.list_models()
 
-    def _find(self, name):
-        """Find model definition, return ModelData."""
-        return self._model_locator.get_model(name)
-
-    def _create(self, mdata, sequence, optics, madx, command_log, logger):
+    def _create(self, name, mdef, repo, sequence, optics, madx, command_log, logger):
         """
         Create Model instance based on ModelData.
 
@@ -488,7 +475,7 @@ class Factory(object):
             madx.verbose(False)
         elif command_log is not None:
             raise ValueError("'command_log' cannot be used with 'madx'")
-        return self._model_cls(mdata,
+        return self._model_cls(name, mdef, repo,
                                sequence=sequence,
                                optics=optics,
                                madx=madx,
@@ -513,59 +500,16 @@ class Factory(object):
         :param str command_log: history file name; use only if madx is None!
         :param logging.Logger logger:
         """
-        return self._create(self._find(name),
+        mdef = self._model_locator.get_definition(name)
+        repo = self._model_locator.get_repository(mdef)
+        return self._create(name,
+                            mdef,
+                            repo,
                             sequence=sequence,
                             optics=optics,
                             madx=madx,
                             command_log=command_log,
                             logger=logger)
-
-
-class ModelData(object):
-
-    """
-    Loader for individual data objects from a model resource collection.
-
-    Has four public fields: name, model, resource, repository. `model` is a
-    dictionary containing the fully expanded model definition. The latter
-    two are ResourceProvider instances able to load actual data for
-    repository/resource data respectively. 
-    """
-
-    __slots__ = ['name', 'model', 'resource', 'repository']
-
-    def __init__(self, name, model, resource, repository):
-        """
-        Initialize the ModelData instance.
-        """
-        self.name = name
-        self.model = model
-        self.resource = resource
-        self.repository = repository
-
-    def get_by_dict(self, file_dict):
-        """
-        Get a ResourceProvider object for the given file.
-
-        file_dict is a mapping in the form found in model definitions,
-        containing a 'location' and a 'path' key.
-        """
-        return self.get(file_dict['path'],
-                        file_dict.get('location', 'repository'))
-
-    def get(self, filename, kind='repository'):
-        """
-        Get a ResourceProvider object for the given file.
-
-        :param string filename: name of the resource
-        :param string kind: one of ('repository', 'resource')
-        """
-        if kind.lower() == 'repository':
-            return self.repository.get(filename)
-        elif kind.lower() == 'resource':
-            return self.resource.get(filename)
-        else:
-            raise ValueError("Invalid resource kind: %s" % kind)
 
 
 class Locator(ModelLocator):
@@ -602,12 +546,12 @@ class Locator(ModelLocator):
                 if d['real']:
                     yield n
 
-    def get_model(self, name, encoding='utf-8'):
+    def get_definition(self, name, encoding='utf-8'):
         """
         Get the first found model with the specified name.
 
-        Returns a ModelData instance.
-        Raises a ValueError if no model with the given name is found.
+        :returns: the model definition
+        :raises ValueError: if no model with the given name is found.
         """
         for res_name in self.res_provider.listdir_filter(ext='.cpymad.yml'):
             mdefs = self.res_provider.yaml(res_name, encoding=encoding)
@@ -630,21 +574,16 @@ class Locator(ModelLocator):
         for base in reversed(mro):
             util.deep_update(real_mdef, mdefs[base])
 
+        return real_mdef
+
+    def get_repository(self, mdef):
+        """
+        Get the resource loader for the given model.
+        """
         # instantiate the resource providers for model resource data
-        res_offs = real_mdef['path-offsets']['resource-offset']
-        repo_offs = real_mdef['path-offsets']['repository-offset']
-        res_prov = self.res_provider.get('resdata').get(res_offs)
-
+        repo_offs = mdef['path-offsets']['repository-offset']
         # the repository location may be overwritten by dbdirs:
-        for dbdir in real_mdef.get('dbdirs', []):
+        for dbdir in mdef.get('dbdirs', []):
             if os.path.isdir(dbdir):
-                repo_prov = FileResource(os.path.join(dbdir, repo_offs))
-                break
-        else:
-            repo_prov = self.res_provider.get('repdata').get(repo_offs)
-
-        # return a wrapper for the modeldata
-        return ModelData(name,
-                         real_mdef,
-                         resource=res_prov,
-                         repository=repo_prov)
+                return FileResource(os.path.join(dbdir, repo_offs))
+        return self.res_provider.get('repdata').get(repo_offs)
