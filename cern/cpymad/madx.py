@@ -272,7 +272,6 @@ class Madx(object):
         Note, that the kwargs overwrite any arguments in twiss_init.
         """
         self.select('twiss', columns=columns, pattern=pattern)
-        self.command.set(format="12.6F")
         sequence = self._use(sequence)
         twiss_init = dict((k, v) for k,v in twiss_init.items()
                           if k not in ['name','closed-orbit'])
@@ -304,7 +303,6 @@ class Madx(object):
         :param kwargs: further keyword arguments for the MAD-X command
         """
         self.select('survey', pattern=pattern, columns=columns)
-        self.command.set(format="12.6F")
         self._use(sequence)
         self.command.survey(range=range, **kwargs)
         return self.get_table('survey')
@@ -330,7 +328,6 @@ class Madx(object):
         :param kwargs: further keyword arguments for the MAD-X command
         """
         self.select('aperture', pattern=pattern, columns=columns)
-        self.command.set(format="12.6F")
         if use and sequence:
             self._error_log.warn("USE before APERTURE is known to cause problems.")
             self._use(sequence)
