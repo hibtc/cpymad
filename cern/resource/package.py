@@ -2,7 +2,6 @@
 """
 Resource provider for python package resources.
 """
-__all__ = ['PackageResource']
 
 import pkg_resources
 from contextlib import contextmanager, closing
@@ -13,10 +12,17 @@ from io import StringIO, BytesIO, open
 
 from .base import ResourceProvider
 
+
+__all__ = [
+    'PackageResource',
+]
+
+
 _manager = pkg_resources.ResourceManager()
 
 
 class PackageResource(ResourceProvider):
+
     """
     Provider for resources that are inside a python package.
 
@@ -25,15 +31,14 @@ class PackageResource(ResourceProvider):
 
     Uses pkg_resources.resource_stream() to open resources and
     pkg_resources.listdir() to list available resources.
-
     """
+
     def __init__(self, package, path=''):
         """
         Initialize package resource provider.
 
         :param string package: python package/module name or object
         :param string path: name of a resource relative to the package
-
         """
         self.package = package
         self.path = path
@@ -114,4 +119,3 @@ class PackageResource(ResourceProvider):
     def provider(self):
         parts = self.path.rsplit('/', 1)
         return self.__class__(self.package, parts[0] if len(parts) > 1 else '')
-
