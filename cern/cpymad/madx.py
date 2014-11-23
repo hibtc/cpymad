@@ -111,10 +111,19 @@ def NOP(s):
 
 class CommandLog(object):
 
+    """Log MAD-X command history to a file text."""
+
+    @classmethod
+    def create(cls, filename):
+        """Create CommandLog from filename (overwrite/create)."""
+        return cls(open(filename, 'wt'))
+
     def __init__(self, file):
+        """Create CommandLog from file instance."""
         self._file = file
 
     def __call__(self, command):
+        """Log a single history line and flush to file immediately."""
         log_file.write(command + '\n')
         log_file.flush()
 
@@ -132,7 +141,7 @@ class Madx(object):
         Users should call the start_madx() function instead.
 
         :param libmadx: :mod:`libmadx` compatible object
-        :param command_log: logs MAD-X history either str or CommandLog
+        :param command_log: logs MAD-X history either filename or CommandLog
         :param error_log: logger instance ``logging.Logger``
         """
         # get logger
@@ -140,7 +149,7 @@ class Madx(object):
             logger = logging.getLogger(__name__)
         # open history file
         if isinstance(command_log, basestring):
-            command_log = CommandLog(open(command_log, 'wt'))
+            command_log = CommandLog.create(command_log)
         elif command_log is None:
             command_log = NOP
         # start libmadx subprocess
