@@ -19,8 +19,7 @@ __all__ = [
     'Model',
     'Factory',
     'ModelData',
-    'ModelLocator',
-    'MergedModelLocator',
+    'Locator',
 ]
 
 
@@ -569,40 +568,16 @@ class ModelData(object):
             raise ValueError("Invalid resource kind: %s" % kind)
 
 
-class ModelLocator(object):
-
-    """
-    Model locator and loader base class.
-
-    Serves the purpose of locating models and returning corresponding
-    resource providers.
-    """
-
-    def list_models(self):
-        """
-        Iterate all available models.
-
-        Returns an iterable that may be a generator object.
-        """
-        raise NotImplementedError("ModelLocator.list_models")
-
-    def get_model(self, name, encoding='utf-8'):
-        """
-        Get the first found model with the specified name.
-
-        Returns a ModelData instance.
-        Raises a ValueError if no model with the given name is found.
-        """
-        raise NotImplementedError("ModelLocator.get_model")
-
-
-class MergedModelLocator(ModelLocator):
+class Locator(ModelLocator):
 
     """
     Model locator for yaml files that contain multiple model definitions.
 
     These are the model definition files that are currently used by default
     for filesystem resources.
+
+    Serves the purpose of locating models and returning corresponding
+    resource providers.
     """
 
     def __init__(self, resource_provider):
@@ -616,6 +591,11 @@ class MergedModelLocator(ModelLocator):
         self.res_provider = resource_provider
 
     def list_models(self, encoding='utf-8'):
+        """
+        Iterate all available models.
+
+        Returns an iterable that may be a generator object.
+        """
         for res_name in self.res_provider.listdir_filter(ext='.cpymad.yml'):
             mdefs = self.res_provider.yaml(res_name, encoding=encoding)
             for n, d in mdefs.items():
@@ -623,6 +603,12 @@ class MergedModelLocator(ModelLocator):
                     yield n
 
     def get_model(self, name, encoding='utf-8'):
+        """
+        Get the first found model with the specified name.
+
+        Returns a ModelData instance.
+        Raises a ValueError if no model with the given name is found.
+        """
         for res_name in self.res_provider.listdir_filter(ext='.cpymad.yml'):
             mdefs = self.res_provider.yaml(res_name, encoding=encoding)
             # restrict only to 'real' models (don't do that?):
