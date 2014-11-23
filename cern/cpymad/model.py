@@ -527,14 +527,6 @@ class Factory(object):
                             logger=logger)
 
 
-_default_resources = PackageResource(__package__, '_models')
-_default_locator = MergedModelLocator(_default_resources)
-default_factory = Factory(_default_locator)
-
-get_model_names = default_factory.get_model_names
-load_model = default_factory.load_model
-
-
 def save_model(model_def,filename):
     '''
     Saves the model definition defined by the dictionary model_def
