@@ -15,14 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #-------------------------------------------------------------------------------
-'''
-.. module: cpymad.model
-
+"""
 Cython implementation of the model api.
-
-.. moduleauthor:: Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen@cern.ch>
-
-'''
+"""
 
 from __future__ import absolute_import
 
