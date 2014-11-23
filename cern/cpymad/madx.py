@@ -256,7 +256,6 @@ class Madx(object):
               columns=default_twiss_columns,
               range=None,
               twiss_init={},
-              use=True,
               **kwargs):
         """
         Run SELECT+USE+TWISS.
@@ -265,7 +264,6 @@ class Madx(object):
         :param list pattern: pattern to include in table
         :param list columns: columns to include in table, (may be a str)
         :param dict twiss_init: dictionary of twiss initialization variables
-        :param bool use: Call use before aperture.
         :param bool chrom: Also calculate chromatic functions (slower)
         :param kwargs: further keyword arguments for the MAD-X command
 
@@ -291,7 +289,6 @@ class Madx(object):
                pattern=['full'],
                columns=default_survey_columns,
                range=None,
-               use=True,
                **kwargs):
         """
         Run SELECT+USE+SURVEY.
@@ -299,7 +296,6 @@ class Madx(object):
         :param str sequence: name of sequence
         :param list pattern: pattern to include in table
         :param list columns: Columns to include in table
-        :param bool use: Call use before survey.
         :param kwargs: further keyword arguments for the MAD-X command
         """
         self.select('survey', pattern=pattern, columns=columns)
@@ -316,10 +312,9 @@ class Madx(object):
                  range=None,
                  columns=default_aperture_columns,
                  offsets=None,
-                 use=False,
                  **kwargs):
         """
-        Run SELECT+USE+APERTURE.
+        Run SELECT+APERTURE.
 
         :param str sequence: name of sequence
         :param list pattern: pattern to include in table
@@ -328,9 +323,6 @@ class Madx(object):
         :param kwargs: further keyword arguments for the MAD-X command
         """
         self.select('aperture', pattern=pattern, columns=columns)
-        if use and sequence:
-            self._error_log.warn("USE before APERTURE is known to cause problems.")
-            self._use(sequence)
         self.command.aperture(range=range, offsetelem=offsets, **kwargs)
         return self.get_table('aperture')
 

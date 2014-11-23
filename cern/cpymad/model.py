@@ -258,7 +258,6 @@ class Model(object):
               columns=['name','s','betx','bety','x','y','dx','dy','px','py','mux','muy','l','k1l','angle','k2l'],
               pattern=['full'],
               range=None,
-              use=True,
               **kwargs):
         """
         Run a TWISS on the model.
@@ -269,7 +268,6 @@ class Model(object):
         :param string sequence: Sequence, if empty, using active sequence.
         :param string columns: Columns in the twiss table, can also be list of strings
         :param string range: Optional, give name of a range defined for the model.
-        :param bool use: Call use before twiss.
         :param kwargs: further keyword arguments for the MAD-X command
         """
         # set sequence/range...
@@ -301,7 +299,6 @@ class Model(object):
             columns=columns,
             range=[rangedict["madx-range"]["first"], rangedict["madx-range"]["last"]],
             twiss_init=twiss_init,
-            use=use,
             **kwargs)
         # we say that when the "full" range has been selected,
         # we can set this to true. Needed for e.g. aperture calls
@@ -313,14 +310,12 @@ class Model(object):
                sequence=None,
                columns='name,l,s,angle,x,y,z,theta',
                range=None,
-               use=True,
                **kwargs):
         """
         Run a survey on the model.
 
         :param string sequence: Sequence, if empty, using active sequence.
         :param string columns: Columns in the twiss table, can also be list of strings
-        :param bool use: Call use before survey.
         :param kwargs: further keyword arguments for the MAD-X command
         """
         self.set_sequence(sequence)
@@ -335,14 +330,12 @@ class Model(object):
             sequence=sequence,
             columns=columns,
             range=this_range,
-            use=use,
             **kwargs)
 
     def aperture(self,
                sequence=None,
                range=None,
                columns='name,l,s,n1,aper_1,aper_2,aper_3,aper_4',
-               use=False,
                **kwargs):
         """
         Get the aperture from the model.
@@ -350,7 +343,6 @@ class Model(object):
         :param string sequence: Sequence, if empty, using active sequence.
         :param string range: Range, if empty, the full sequence is chosen.
         :param string columns: Columns in the twiss table, can also be list of strings
-        :param bool use: Call use before aperture.
         :param kwargs: further keyword arguments for the MAD-X command
         """
         self.set_sequence(sequence)
@@ -376,7 +368,7 @@ class Model(object):
         args={'sequence': sequence,
               'range': this_range,
               'columns': columns,
-              'use': use}
+              }
         args.update(kwargs)
 
         if offsets:
