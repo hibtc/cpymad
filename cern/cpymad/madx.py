@@ -1,24 +1,4 @@
-#-------------------------------------------------------------------------------
-# This file is part of PyMad.
-#
-# Copyright (c) 2011, CERN. All rights reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# 	http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#-------------------------------------------------------------------------------
-'''
-.. module:: madx
-.. moduleauthor:: Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen.at.cern.ch>
-
+"""
 Main module to interface with Mad-X library.
 
 The class Madx uses a subprocess to execute MAD-X library calls remotely via
@@ -37,7 +17,7 @@ all library calls within a subprocess that does not inherit any handles.
 
 More importantly: the MAD-X program crashes on the tinyest error. Boxing it
 in a subprocess will prevent the main process from crashing as well.
-'''
+"""
 
 from __future__ import absolute_import
 

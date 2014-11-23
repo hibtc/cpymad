@@ -1,6 +1,5 @@
-recursive-include cern *.pxd *.pyx *.c
-recursive-include test *.py *.cmake *.txt
-include README.rst CHANGES.rst LICENSE.txt COPYING.txt
-include *.cmake
+recursive-include cern *.pxd *.pyx *.c COPYING.rst
+recursive-include test *.py
+include LICENSE/*
+include README.rst CHANGES.rst COPYING.rst
 include setup.py ez_setup.py
-include requirements.txt
