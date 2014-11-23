@@ -273,10 +273,7 @@ class Madx(object):
         """
         self.select('twiss', columns=columns, pattern=pattern)
         self.command.set(format="12.6F")
-        if use and sequence:
-            self.use(sequence)
-        elif not sequence:
-            sequence = self.active_sequence
+        sequence = self._use(sequence)
         twiss_init = dict((k, v) for k,v in twiss_init.items()
                           if k not in ['name','closed-orbit'])
         # explicitly specified keyword arguments overwrite values in
@@ -308,8 +305,7 @@ class Madx(object):
         """
         self.select('survey', pattern=pattern, columns=columns)
         self.command.set(format="12.6F")
-        if use and sequence:
-            self.use(sequence)
+        self._use(sequence)
         self.command.survey(range=range, **kwargs)
         return self.get_table('survey')
 
@@ -337,30 +333,71 @@ class Madx(object):
         self.command.set(format="12.6F")
         if use and sequence:
             self._error_log.warn("USE before APERTURE is known to cause problems.")
-            self.use(sequence) # this seems to cause a bug?
+            self._use(sequence)
         self.command.aperture(range=range, offsetelem=offsets, **kwargs)
         return self.get_table('aperture')
 
     def use(self, sequence):
+        """
+        Run USE to expand a sequence.
+
+        :param str sequence: sequence name
+        :returns: name of active sequence
+        """
         self.command.use(sequence=sequence)
 
+    def _use(self, sequence):
+        """
+        USE sequence if it is not active.
+
+        :param str sequence: sequence name, may be None
+        :returns: new active sequence name
+        :rtype: str
+        :raises RuntimeError: if there is no active sequence
+        """
+        try:
+            active_sequence = self.active_sequence
+        except RuntimeError:
+            if not sequence:
+                raise
+            active_sequence = None
+        if sequence != active_sequence:
+            self.use(sequence)
+        return sequence
+
     def match(self,
-              sequence,
-              constraints,
-              vary,
+              sequence=None,
+              constraints=[],
+              vary=[],
               weight=None,
               method=('lmdif', {}),
               knobfile=None,
               twiss_init={},
               **kwargs):
         """
-        Perform simple MATCH operation.
+        Perform a simple MATCH operation.
 
-        :param string sequence: name of sequence
+        For more advanced cases, you should issue the commands manually.
+
+        :param str sequence: name of sequence
         :param list constraints: constraints to pose during matching
-        :param list vary: vary commands
+        :param list vary: knob names to be varied
         :param dict weight: weights for matching parameters
+        :returns: final knob values
+        :rtype: dict
+
+        Example:
+
+        >>> mad.match(
+        ...     constraints=[
+        ...         dict(range='marker1->betx',
+        ...              betx=Constraint(min=1, max=3),
+        ...              bety=2)
+        ...     ],
+        ...     vary=['qp1->k1',
+        ...           'qp2->k1'])
         """
+        sequence = self._use(sequence)
         twiss_init = dict((k, v) for k,v in twiss_init.items()
                           if k not in ['name','closed-orbit'])
         # explicitly specified keyword arguments overwrite values in
@@ -378,6 +415,7 @@ class Madx(object):
             command.weight(**weight)
         command(method[0], **method[1])
         command.endmatch(knobfile=knobfile)
+        return dict((knob, self.evaluate(knob)) for knob in vary)
 
     # turn on/off verbose outupt..
     def verbose(self, switch):
@@ -385,12 +423,11 @@ class Madx(object):
 
     def get_table(self, table):
         """
-        Get the specified table columns as numpy arrays.
+        Get the specified table from MAD-X.
 
         :param str table: table name
-        :param columns: column names
-        :type columns: list or str (comma separated)
-
+        :returns: a proxy for the table data
+        :rtype: TableProxy
         """
         return TableProxy(table, self._libmadx)
 
