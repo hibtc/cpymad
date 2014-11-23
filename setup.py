@@ -117,6 +117,6 @@ setup(
         'numpy',
         'PyYAML',
     ],
-    license = 'CERN Standard Copyright License'
+    license = 'Apache',
 )
 
