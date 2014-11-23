@@ -26,9 +26,8 @@ import logging
 import os
 import collections
 
-from . import _libmadx_rpc
-
-from cern.cpymad import _madx_tools
+from . import _rpc
+from . import util
 
 try:
     basestring
@@ -97,7 +96,7 @@ class MadxCommands(object):
 
     def __call__(self, *args, **kwargs):
         """Create and dispatch a MAD-X command string."""
-        self.__dispatch(_madx_tools.mad_command(*args, **kwargs))
+        self.__dispatch(util.mad_command(*args, **kwargs))
 
     def __getattr__(self, name):
         """Return a dispatcher for a specific command."""
@@ -154,7 +153,7 @@ class Madx(object):
             command_log = NOP
         # start libmadx subprocess
         if libmadx is None:
-            svc, proc = _libmadx_rpc.LibMadxClient.spawn_subprocess()
+            svc, proc = _rpc.LibMadxClient.spawn_subprocess()
             libmadx = svc.libmadx
         if not libmadx.started():
             libmadx.start()
