@@ -481,19 +481,19 @@ class Factory(object):
         """Find model definition, return ModelData."""
         return self._model_locator.get_model(name)
 
-    def _create(self, mdata, sequence, optics, madx, histfile, logger):
+    def _create(self, mdata, sequence, optics, madx, command_log, logger):
         """
         Create Model instance based on ModelData.
 
         Parameters as in load_model (except for mdata).
         """
-        if madx is None:
-            madx = Madx(histfile)
-            madx.verbose(False)
-        elif histfile is not None:
-            raise ValueError("'histfile' cannot be used with 'madx'")
         if logger is None:
             logger = logging.getLogger(__name__)
+        if madx is None:
+            madx = Madx(command_log=command_log, error_log=logger)
+            madx.verbose(False)
+        elif command_log is not None:
+            raise ValueError("'command_log' cannot be used with 'madx'")
         return self._model_cls(mdata,
                                sequence=sequence,
                                optics=optics,
@@ -507,7 +507,7 @@ class Factory(object):
                    sequence=None,
                    optics=None,
                    madx=None,
-                   histfile=None,
+                   command_log=None,
                    logger=None):
         """
         Find model definition by name and create Model instance.
@@ -516,14 +516,14 @@ class Factory(object):
         :param str sequence: Name of the initial sequence to use
         :param str optics: Name of optics to load, string or list of strings.
         :param Madx madx: MAD-X instance to use
-        :param str histfile: history file name; use only if madx is None!
+        :param str command_log: history file name; use only if madx is None!
         :param logging.Logger logger:
         """
         return self._create(self._find(name),
                             sequence=sequence,
                             optics=optics,
                             madx=madx,
-                            histfile=histfile,
+                            command_log=command_log,
                             logger=logger)
 
 

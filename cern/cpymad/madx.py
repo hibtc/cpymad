@@ -24,7 +24,6 @@ from __future__ import absolute_import
 from functools import partial
 import logging
 import os
-import sys
 import collections
 
 from . import _libmadx_rpc
@@ -105,28 +104,55 @@ class MadxCommands(object):
         return partial(self.__call__, name)
 
 
-# main interface
+def NOP(s):
+    """Do nothing."""
+    pass
+
+
+class CommandLog(object):
+
+    def __init__(self, file):
+        self._file = file
+
+    def __call__(self, command):
+        log_file.write(command + '\n')
+        log_file.flush()
+
+
 class Madx(object):
-    '''
-    Python class which interfaces to Mad-X library
-    '''
-    _hfile = None
 
-    def __init__(self, histfile=None, libmadx=None, logger=None):
-        '''
-        Initializing Mad-X instance
+    """
+    Wrapper for MAD-X.
+    """
 
-        :param str histfile: (optional) name of file which will contain all Mad-X commands.
-        :param object libmadx: :mod:`libmadx` compatible object
+    def __init__(self, libmadx=None, command_log=None, error_log=None):
+        """
+        Initialize instance variables.
 
-        '''
-        self._libmadx = libmadx or _libmadx_rpc.LibMadxClient.spawn_subprocess()[0].libmadx
-        if not self._libmadx.started():
-            self._libmadx.start()
-        self._log = logger or logging.getLogger(__name__)
+        Users should call the start_madx() function instead.
 
-        if histfile:
-            self._hfile = open(histfile,'w')
+        :param libmadx: :mod:`libmadx` compatible object
+        :param command_log: logs MAD-X history either str or CommandLog
+        :param error_log: logger instance ``logging.Logger``
+        """
+        # get logger
+        if logger is None:
+            logger = logging.getLogger(__name__)
+        # open history file
+        if isinstance(command_log, basestring):
+            command_log = CommandLog(open(command_log, 'wt'))
+        elif command_log is None:
+            command_log = NOP
+        # start libmadx subprocess
+        if libmadx is None:
+            svc, proc = _libmadx_rpc.LibMadxClient.spawn_subprocess()
+            libmadx = svc.libmadx
+        if not libmadx.started():
+            libmadx.start()
+        # init instance variables:
+        self._libmadx = libmadx
+        self._command_log = command_log
+        self._error_log = error_log
 
     @property
     def version(self):
@@ -154,7 +180,7 @@ class Madx(object):
         """
         # write to history before performing the input, so if MAD-X
         # crashes, it is easier to see, where it happened:
-        self._writeHist(text)
+        self._command_log(text)
         self._libmadx.input(text)
 
     def help(self, cmd=None):
@@ -302,7 +328,7 @@ class Madx(object):
         self.select('aperture', pattern=pattern, columns=columns)
         self.command.set(format="12.6F")
         if use and sequence:
-            self._log.warn("USE before APERTURE is known to cause problems.")
+            self._error_log.warn("USE before APERTURE is known to cause problems.")
             self.use(sequence) # this seems to cause a bug?
         self.command.aperture(range=range, offsetelem=offsets, **kwargs)
         return self.get_table('aperture')
@@ -348,12 +374,6 @@ class Madx(object):
     # turn on/off verbose outupt..
     def verbose(self, switch):
         self.command.option(echo=switch, warn=switch, info=switch)
-
-    def _writeHist(self,command):
-        # this still brakes for "multiline commands"...
-        if self._hfile:
-            self._hfile.write(command + '\n')
-            self._hfile.flush()
 
     def get_table(self, table):
         """
