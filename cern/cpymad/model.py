@@ -7,8 +7,6 @@ from __future__ import absolute_import
 import collections
 import logging
 import os
-import sys
-import yaml
 
 from . import madx
 from . import util
@@ -44,7 +42,7 @@ class Model(object):
         self.name = name
         self.mdef = mdef
         self._repo = repo
-        self._active={'optic': None, 'sequence': None, 'range': None}
+        self._active = {'optic': None, 'sequence': None, 'range': None}
         self._setup_initial(sequence, optics)
 
     # API stuff:
@@ -55,9 +53,9 @@ class Model(object):
         if not sequence:
             if not self._active['sequence']:
                 self._active['sequence']=self._mdef['default-sequence']
-            sequence=self._active['sequence']
+            sequence = self._active['sequence']
         if sequence in self._mdef['sequences']:
-            self._active['sequence']=sequence
+            self._active['sequence'] = sequence
             if range:
                 self.set_range(range)
             else:
@@ -72,14 +70,14 @@ class Model(object):
         If range is empty, sets the range to default-range unless
         another range is already set.
         """
-        seqdict=self._mdef['sequences'][self._active['sequence']]
+        seqdict = self._mdef['sequences'][self._active['sequence']]
         if range:
             if range not in seqdict['ranges']:
                 raise KeyError("%s is not a valid range name, available ranges: '%s'" % (range, "' '".join(seq['ranges'].keys())))
-            self._active['range']=range
+            self._active['range'] = range
         else:
             if not self._active['range']:
-                self._active['range']=seqdict['default-range']
+                self._active['range'] = seqdict['default-range']
 
     def _setup_initial(self, sequence, optics):
         """
@@ -99,18 +97,18 @@ class Model(object):
         else: # str/unicode/None
             self.set_optic(optics)
         # To keep track of whether or not certain things are already called..
-        self._apercalled={}
-        self._twisscalled={}
+        self._apercalled = {}
+        self._twisscalled = {}
         for seq in self.get_sequences():
-            self._apercalled[seq.name]=False
-            self._twisscalled[seq.name]=False
+            self._apercalled[seq.name] = False
+            self._twisscalled[seq.name] = False
 
     def _init_sequence(self, sequence):
         """
         Initialize sequence
         """
-        bname=self._mdef['sequences'][sequence]['beam']
-        bdict=self.get_beam(bname)
+        bname = self._mdef['sequences'][sequence]['beam']
+        bdict = self.get_beam(bname)
         self.set_beam(bdict)
 
     def get_beam(self, bname):
@@ -171,13 +169,13 @@ class Model(object):
         """
 
         if not optic:
-            optic=self._mdef['default-optic']
+            optic = self._mdef['default-optic']
         if self._active['optic'] == optic:
             self._log.info("Optics already initialized: %s", optic)
             return 0
 
         # optics dictionary..
-        odict=self._mdef['optics'][optic]
+        odict = self._mdef['optics'][optic]
 
         for strfile in odict['init-files']:
             self._call(strfile)
@@ -189,7 +187,7 @@ class Model(object):
             #else:
                 #self.set_knob(f, 0.0)
 
-        self._active['optic']=optic
+        self._active['optic'] = optic
 
     def set_knob(self, knob, value):
         kdict = self._mdef['knobs']
@@ -225,9 +223,9 @@ class Model(object):
         :param string sequence: sequence name.
         """
         if sequence is None:
-            ret={}
+            ret = {}
             for s in self.get_sequences():
-                ret[s.name]=list(self._mdef['sequences'][s]['ranges'].keys())
+                ret[s.name] = list(self._mdef['sequences'][s]['ranges'].keys())
             return ret
 
         return list(self._mdef['sequences'][sequence]['ranges'].keys())
@@ -243,8 +241,8 @@ class Model(object):
         Returns the dictionary for the twiss initial conditions.
         If name is not defined, using default-twiss
         """
-        rangedict=self._get_range_dict(sequence=sequence, range=range)
-        range=self._active['range']
+        rangedict = self._get_range_dict(sequence=sequence, range=range)
+        range = self._active['range']
         if name:
             if name not in rangedict['twiss-initial-conditions']:
                 raise ValueError('twiss initial conditions with name '+name+' not found in range '+range)
@@ -275,14 +273,14 @@ class Model(object):
             self.set_sequence(sequence, range)
         else:
             self.set_sequence(sequence)
-        sequence=self._active['sequence']
-        _range=self._active['range']
+        sequence = self._active['sequence']
+        _range = self._active['range']
 
         if self._apercalled.get(sequence):
             raise ValueError("BUG in Mad-X: Cannot call twiss after aperture..")
 
-        seqdict=self._mdef['sequences'][sequence]
-        rangedict=seqdict['ranges'][_range]
+        seqdict = self._mdef['sequences'][sequence]
+        rangedict = seqdict['ranges'][_range]
 
         if 'twiss-initial-conditions' in rangedict:
             # this looks like a bug check to me (0 evaluates to False):
@@ -303,7 +301,7 @@ class Model(object):
         # we say that when the "full" range has been selected,
         # we can set this to true. Needed for e.g. aperture calls
         if not range:
-            self._twisscalled[sequence]=True
+            self._twisscalled[sequence] = True
         return res
 
     def survey(self,
@@ -319,12 +317,12 @@ class Model(object):
         :param kwargs: further keyword arguments for the MAD-X command
         """
         self.set_sequence(sequence)
-        sequence=self._active['sequence']
+        sequence = self._active['sequence']
 
-        this_range=None
+        this_range = None
         if range:
-            rangedict=self._get_range_dict(sequence=sequence, range=range)
-            this_range=rangedict['madx-range']
+            rangedict = self._get_range_dict(sequence=sequence, range=range)
+            this_range = rangedict['madx-range']
 
         return self.madx.survey(
             sequence=sequence,
@@ -346,7 +344,7 @@ class Model(object):
         :param kwargs: further keyword arguments for the MAD-X command
         """
         self.set_sequence(sequence)
-        sequence=self._active['sequence']
+        sequence = self._active['sequence']
 
         if not self._twisscalled.get(sequence):
             self.twiss(sequence)
@@ -354,18 +352,18 @@ class Model(object):
         if not self._apercalled[sequence]:
             for afile in self._mdef['sequences'][sequence]['aperfiles']:
                 self._call(afile)
-            self._apercalled[sequence]=True
+            self._apercalled[sequence] = True
         # getting offset file if any:
         # if no range was selected, we ignore offsets...
-        offsets=None
-        this_range=None
+        offsets = None
+        this_range = None
         if range:
-            rangedict=self._get_range_dict(sequence=sequence, range=range)
-            this_range=rangedict['madx-range']
+            rangedict = self._get_range_dict(sequence=sequence, range=range)
+            this_range = rangedict['madx-range']
             if 'aper-offset' in rangedict:
                 offsets = self._repo.get(rangedict['aper-offset']).filename()
 
-        args={'sequence': sequence,
+        args = {'sequence': sequence,
               'range': this_range,
               'columns': columns,
               }
@@ -393,11 +391,11 @@ class Model(object):
         """
         # set sequence/range...
         self.set_sequence(sequence)
-        sequence=self._active['sequence']
-        _range=self._active['range']
+        sequence = self._active['sequence']
+        _range = self._active['range']
 
-        seqdict=self._mdef['sequences'][sequence]
-        rangedict=seqdict['ranges'][_range]
+        seqdict = self._mdef['sequences'][sequence]
+        rangedict = seqdict['ranges'][_range]
 
         def is_match_param(v):
             return v.lower() in ['rmatrix', 'chrom', 'beta0', 'deltap',
@@ -431,11 +429,11 @@ class Model(object):
         returns default for the model
         """
         if not sequence:
-            sequence=self._active['sequence']
+            sequence = self._active['sequence']
         elif sequence not in self._mdef['sequences']:
             raise ValueError("%s is not a valid sequence name, available sequences: '%s'" % (sequence, "' '".join(self._mdef['sequences'].keys())))
 
-        seqdict=self._mdef['sequences'][sequence]
+        seqdict = self._mdef['sequences'][sequence]
         if range:
             self.set_range(range)
         return seqdict['ranges'][self._active['range']]
