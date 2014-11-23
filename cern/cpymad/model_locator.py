@@ -9,8 +9,6 @@ __all__ = [
     'ModelData',
     'ModelLocator',
     'MergedModelLocator',
-    'DistinctModelLocator',
-    'ChainModelLocator'
 ]
 
 from collections import Mapping
@@ -201,57 +199,3 @@ class MergedModelLocator(ModelLocator):
                          real_mdef,
                          resource=res_prov,
                          repository=repo_prov)
-
-
-
-class DistinctModelLocator(ModelLocator):
-    """
-    Model locator for a resource provider that handles each model distinctly.
-
-    This behaviour is found in couchdb model resources.
-
-    """
-    def __init__(self, resource_provider):
-        """Initialize using a ResourceProvider."""
-        self.resource_provider = resource_provider
-
-    def list_models(self):
-        return self.resource_provider.listdir()
-
-    def get_model(self, name, encoding='utf-8'):
-        res = self.resource_provider.get(name)
-        mdef = res.yaml(encoding=encoding)
-        res_prov = res.get(mdef['path-offsets']['resource-offset'])
-        repo_prov = res.get(mdef['path-offsets']['repository-offset'])
-        return ModelData(name,
-                         mdef,
-                         resource=res_prov,
-                         repository=repo_prov)
-
-
-
-class ChainModelLocator(ModelLocator):
-    """
-    Chain multiple model locators.
-    """
-    def __init__(self):
-        """Initialize empty chain."""
-        self._locators = []
-
-    def add_locator(self, locator):
-        """Append (chain) a ModelLocator."""
-        self._locators.append(locator)
-
-    def list_models(self):
-        return chain.from_iterable(locator.list_models()
-                                   for locator in self._locators)
-
-    def get_model(self, name, encoding='utf-8'):
-        for locator in self._locators:
-            try:
-                return locator.get_model(name, encoding)
-            except ValueError:
-                pass
-        else:
-            raise ValueError("Model not found: %s" % name)
-
