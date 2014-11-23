@@ -24,6 +24,20 @@ applies to the python source of the cern-cpymad package::
     See the License for the specific language governing permissions and
     limitations under the License.
 
+Note that this package is a heavily modified fork of the original version
+developed at CERN and all modifications are CC0 (basically public domain)::
+
+    Copyright (c) 2013-2014, HIT - Heidelberg Ion-Therapy Center
+
+    To the extent possible under law, the person who associated CC0 with
+    cern-cpymad has waived all copyright and related or neighboring rights
+    to cern-cpymad.
+
+    You should have received a copy of the CC0 legalcode along with this
+    work. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+
+For details, see the version history or ask the package maintainer.
+
 
 License for MAD-X
 =================
