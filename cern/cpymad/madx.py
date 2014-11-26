@@ -238,7 +238,8 @@ class Madx(object):
         """
         select = self.command.select
         select(flag=flag, clear=True)
-        select(flag=flag, column=columns)
+        if columns:
+            select(flag=flag, column=columns)
         for p in pattern:
             select(flag=flag, pattern=p)
 

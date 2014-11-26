@@ -144,12 +144,6 @@ def C3_mro(get_bases, *bases):
           if seq[0] == head:
               del seq[0]
 
-def map_dict(data, func, *args, **kwargs):
-    return {
-        key: func(key, val, *args, **kwargs)
-        for key, val in data.items()
-    }
-
 
 def is_match_param(v):
     return v.lower() in ['rmatrix', 'chrom', 'beta0', 'deltap',

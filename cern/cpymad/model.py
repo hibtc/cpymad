@@ -20,6 +20,14 @@ __all__ = [
 ]
 
 
+def deserialize(data, cls, *args):
+    return {key: cls(key, val, *args) for key, val in data.items()}
+
+
+def serialize(data):
+    return {key: val.data for key, val in data.items()}
+
+
 class Model(object):
 
     """
@@ -68,21 +76,32 @@ class Model(object):
         self._data = data
         self._repo = repo
         self.madx = madx
+        self._loaded = False
         # create Beam/Optic/Sequence instances:
-        self.beams = util.map_dict(data['beams'], Beam, self)
-        self.optics = util.map_dict(data['optics'], Optic, self)
-        self.sequences = util.map_dict(data['sequences'], Sequence, self)
-        # initialize MAD-X:
+        self.beams = deserialize(data['beams'], Beam, self)
+        self.optics = deserialize(data['optics'], Optic, self)
+        self.sequences = deserialize(data['sequences'], Sequence, self)
+
+    def load(self):
+        """Load model in MAD-X interpreter."""
+        if self._loaded:
+            return
         self._load(*self._data['init-files'])
+        for seq in self.sequences.values():
+            seq.beam.load()
+        self._loaded = True
 
     def __repr__(self):
         return "{0}({1!r})".format(self.__class__.__name__, self.name)
 
     @property
     def data(self):
-        """Return model definition dictionary (can be serialized as YAML)."""
-        # TODO: generate dictionary from instance variables
-        return self._data
+        """Get a serializable representation of this sequence."""
+        data = self._data.copy()
+        data['beams'] = serialize(self.beams)
+        data['optics'] = serialize(self.optics)
+        data['sequences'] = serialize(self.sequences)
+        return data
 
     @property
     def default_optic(self):
@@ -139,6 +158,7 @@ class Beam(object):
         """Define the beam in MAD-X."""
         if self._loaded:
             return
+        self._model.load()
         self._model.madx.beam(**self.data)
 
 
@@ -166,7 +186,7 @@ class Optic(object):
     def __init__(self, name, data, model):
         """Initialize instance variables."""
         self.name = name
-        self._data = data
+        self.data = data
         self._model = model
         self._loaded = False
 
@@ -174,6 +194,7 @@ class Optic(object):
         """Load the optic in the MAD-X process."""
         if self._loaded:
             return
+        self._model.load()
         self._model._load(*self._data.get('init-files', ()))
         self._loaded = True
 
@@ -210,7 +231,18 @@ class Sequence(object):
         self._model = model
         self._twiss_called = False
         self._aperture_called = False
-        self.ranges = util.map_dict(data['ranges'], Range, self)
+        self.ranges = deserialize(data['ranges'], Range, self)
+
+    def load(self):
+        """Load model in MAD-X interpreter."""
+        self._model.load()
+
+    @property
+    def data(self):
+        """Get a serializable representation of this sequence."""
+        data = self._data.copy()
+        data['ranges'] = serialize(self.ranges)
+        return data
 
     @property
     def beam(self):
@@ -224,6 +256,7 @@ class Sequence(object):
 
     def range(self, start, stop):
         """Create a :class:`Range` within (start, stop) for this sequence."""
+        # TODO
         pass
 
     # MAD-X commands:
@@ -241,6 +274,8 @@ class Sequence(object):
         return self.default_range.aperture(**kwargs)
 
     def _prepare_aperture(self):
+        """Load all content needed for APERTURE operations."""
+        self.load()
         if self._aperture_called:
             return
         if not self._twiss_called:
@@ -270,8 +305,12 @@ class Range(object):
     def __init__(self, name, data, sequence):
         """Initialize instance variables."""
         self.name = name
-        self._data = data
+        self.data = data
         self._sequence = sequence
+
+    def load(self):
+        """Load model in MAD-X interpreter."""
+        self._sequence.load()
 
     @property
     def bounds(self):
@@ -287,6 +326,7 @@ class Range(object):
 
     def twiss(self, **kwargs):
         """Run TWISS on this range."""
+        self.load()
         kw = self.get_twiss_initial(None, kwargs)
         result = self.madx.twiss(sequence=self.sequence.name,
                                  range=self.bounds, **kw)
@@ -298,12 +338,14 @@ class Range(object):
 
     def survey(self, **kwargs):
         """Run SURVEY on this range."""
+        self.load()
         kw = self.get_twiss_initial(None, kwargs)
         return self.madx.survey(sequence=self._sequence.name,
                                 range=self.bounds, **kw)
 
     def aperture(self, **kwargs):
         """Run APERTURE on this range."""
+        self.load()
         self._sequence._prepare_aperture()
         offsets = self.offsets
         if 'offsets' not in kwargs and offsets:
