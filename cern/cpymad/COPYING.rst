@@ -10,6 +10,18 @@ License for cern-cpymad source
 
 applies to the python source of the cern-cpymad package::
 
+    Copyright (c) 2013-2014, HIT - Heidelberg Ion-Therapy Center
+
+    To the extent possible under law, the person who associated CC0 with
+    cern-cpymad has waived all copyright and related or neighboring rights
+    to cern-cpymad.
+
+    You should have received a copy of the CC0 legalcode along with this
+    work. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+
+Note that this package is a heavily modified fork of the original version
+developed at CERN::
+
     Copyright (c) 2011, CERN. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,18 +35,6 @@ applies to the python source of the cern-cpymad package::
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
-Note that this package is a heavily modified fork of the original version
-developed at CERN and all modifications are CC0 (basically public domain)::
-
-    Copyright (c) 2013-2014, HIT - Heidelberg Ion-Therapy Center
-
-    To the extent possible under law, the person who associated CC0 with
-    cern-cpymad has waived all copyright and related or neighboring rights
-    to cern-cpymad.
-
-    You should have received a copy of the CC0 legalcode along with this
-    work. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 
 For details, see the version history or ask the package maintainer.
 
