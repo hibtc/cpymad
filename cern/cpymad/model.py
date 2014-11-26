@@ -342,45 +342,42 @@ class Range(object):
 
 class Factory(object):
 
-    """Model instance factory."""
+    """
+    Model instance factory.
 
-    def __init__(self, model_locator, model_cls=None):
+    :ivar Locator locator: model definition locator and loader
+    :ivar _Model: Model class
+    :ivar _Madx: Madx class
+    """
+
+    def __init__(self, locator):
         """Create Model factory using a specified ModelLocator."""
-        self._model_locator = model_locator
-        self._model_cls = model_cls or Model
+        self._locator = locator
+        self._Model = Model
+        self._Madx = Madx
 
-    def get_model_names(self):
-        """Get iterable over all model names."""
-        return self._model_locator.list_models()
-
-    def _create(self, name, data, repo, sequence, optics, madx, command_log, logger):
+    def _create(self, name, data, repo, madx, command_log, error_log):
         """
         Create Model instance based on ModelData.
 
         Parameters as in load_model (except for mdata).
         """
-        if logger is None:
-            logger = logging.getLogger(__name__)
+        if error_log is None:
+            error_log = logging.getLogger(__name__)
         if madx is None:
-            madx = Madx(command_log=command_log, error_log=logger)
+            madx = Madx(command_log=command_log, error_log=error_log)
             madx.verbose(False)
         elif command_log is not None:
             raise ValueError("'command_log' cannot be used with 'madx'")
-        return self._model_cls(name, data, repo,
-                               sequence=sequence,
-                               optics=optics,
-                               madx=madx,
-                               logger=logger)
+        return self._Model(name, data, repo=repo, madx=madx)
 
-    def load_model(self,
-                   name,
-                   # *,
-                   # These should be passed as keyword-only parameters:,
-                   sequence=None,
-                   optics=None,
-                   madx=None,
-                   command_log=None,
-                   logger=None):
+    def __call__(self,
+                 name,
+                 # *,
+                 # These should be passed as keyword-only parameters:,
+                 madx=None,
+                 command_log=None,
+                 error_log=None):
         """
         Find model definition by name and create Model instance.
 
@@ -389,18 +386,16 @@ class Factory(object):
         :param str optics: Name of optics to load, string or list of strings.
         :param Madx madx: MAD-X instance to use
         :param str command_log: history file name; use only if madx is None!
-        :param logging.Logger logger:
+        :param logging.Logger error_log:
         """
         data = self._model_locator.get_definition(name)
         repo = self._model_locator.get_repository(data)
         return self._create(name,
                             data,
-                            repo,
-                            sequence=sequence,
-                            optics=optics,
+                            repo=repo,
                             madx=madx,
                             command_log=command_log,
-                            logger=logger)
+                            error_log=error_log)
 
 
 class Locator(ModelLocator):
@@ -423,7 +418,7 @@ class Locator(ModelLocator):
         that points to the filesystem location where the .cpymad.yml model
         files are stored.
         """
-        self.res_provider = resource_provider
+        self._repo = resource_provider
 
     def list_models(self, encoding='utf-8'):
         """
@@ -431,8 +426,8 @@ class Locator(ModelLocator):
 
         Returns an iterable that may be a generator object.
         """
-        for res_name in self.res_provider.listdir_filter(ext='.cpymad.yml'):
-            mdefs = self.res_provider.yaml(res_name, encoding=encoding)
+        for res_name in self._repo.listdir_filter(ext='.cpymad.yml'):
+            mdefs = self._repo.yaml(res_name, encoding=encoding)
             for n, d in mdefs.items():
                 if d['real']:
                     yield n
@@ -444,28 +439,23 @@ class Locator(ModelLocator):
         :returns: the model definition
         :raises ValueError: if no model with the given name is found.
         """
-        for res_name in self.res_provider.listdir_filter(ext='.cpymad.yml'):
-            mdefs = self.res_provider.yaml(res_name, encoding=encoding)
-            # restrict only to 'real' models (don't do that?):
-            if name in (n for n, d in mdefs.items() if d['real']):
+        for res_name in self._repo.listdir_filter(ext='.cpymad.yml'):
+            mdefs = self._repo.yaml(res_name, encoding=encoding)
+            mdef = mdefs.get(name)
+            if mdef and mdef['real']:
                 break
         else:
-            raise ValueError("The model "+name+" does not exist in the database")
-
-        # expand the model using its bases specified in 'extends'. try to
-        # provide a useful MRO:
+            raise ValueError("The model {!r} does not exist in the database"
+                             .format(name))
+        # Expand the model definition using its bases as specified by
+        # 'extends'. This corresponds to a graph linearization:
         def get_bases(model_name):
             return mdefs[model_name].get('extends', [])
         mro = util.C3_mro(get_bases, name)
-
-        # TODO: this could be done using some sort of ChainMap, i.e.
-        # merging at lookup time instead of at creation time. but this is
-        # probably not worth the trouble for now.
-        real_mdef = {}
+        expanded_mdef = {}
         for base in reversed(mro):
-            util.deep_update(real_mdef, mdefs[base])
-
-        return real_mdef
+            util.deep_update(expanded_mdef, mdefs[base])
+        return expanded_mdef
 
     def get_repository(self, data):
         """
@@ -477,4 +467,4 @@ class Locator(ModelLocator):
         for dbdir in data.get('dbdirs', []):
             if os.path.isdir(dbdir):
                 return FileResource(os.path.join(dbdir, repo_offs))
-        return self.res_provider.get('repdata').get(repo_offs)
+        return self._repo.get('repdata').get(repo_offs)
