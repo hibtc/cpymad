@@ -1,10 +1,21 @@
 """
-Cython implementation of the model api.
+Models encapsulate metadata for accelerator machines.
+
+For more information about models, see :class:`Model`.
+
+The following example demonstrates how to create a Model instance given that
+you have model definition files ready on your file system:
+
+.. code-block:: python
+
+    >>> from cern.resource.file import FileResource
+    >>> from cern.cpymad.model import Factory
+    >>> load_model = Factory(FileResource('/path/to/model/definitions'))
+    >>> model = load_model('LHC')
 """
 
 from __future__ import absolute_import
 
-import collections
 import logging
 import os
 
@@ -15,16 +26,22 @@ from ..resource.file import FileResource
 
 __all__ = [
     'Model',
+    'Beam',
+    'Optic',
+    'Sequence',
+    'Range',
     'Factory',
     'Locator',
 ]
 
 
-def deserialize(data, cls, *args):
+def _deserialize(data, cls, *args):
+    """Create an instance dictionary from a data dictionary."""
     return {key: cls(key, val, *args) for key, val in data.items()}
 
 
-def serialize(data):
+def _serialize(data):
+    """Create a data dictionary from an instance dictionary."""
     return {key: val.data for key, val in data.items()}
 
 
@@ -78,9 +95,9 @@ class Model(object):
         self.madx = madx
         self._loaded = False
         # create Beam/Optic/Sequence instances:
-        self.beams = deserialize(data['beams'], Beam, self)
-        self.optics = deserialize(data['optics'], Optic, self)
-        self.sequences = deserialize(data['sequences'], Sequence, self)
+        self.beams = _deserialize(data['beams'], Beam, self)
+        self.optics = _deserialize(data['optics'], Optic, self)
+        self.sequences = _deserialize(data['sequences'], Sequence, self)
 
     def load(self):
         """Load model in MAD-X interpreter."""
@@ -98,9 +115,9 @@ class Model(object):
     def data(self):
         """Get a serializable representation of this sequence."""
         data = self._data.copy()
-        data['beams'] = serialize(self.beams)
-        data['optics'] = serialize(self.optics)
-        data['sequences'] = serialize(self.sequences)
+        data['beams'] = _serialize(self.beams)
+        data['optics'] = _serialize(self.optics)
+        data['sequences'] = _serialize(self.sequences)
         return data
 
     @property
@@ -231,7 +248,7 @@ class Sequence(object):
         self._model = model
         self._twiss_called = False
         self._aperture_called = False
-        self.ranges = deserialize(data['ranges'], Range, self)
+        self.ranges = _deserialize(data['ranges'], Range, self)
 
     def load(self):
         """Load model in MAD-X interpreter."""
@@ -241,7 +258,7 @@ class Sequence(object):
     def data(self):
         """Get a serializable representation of this sequence."""
         data = self._data.copy()
-        data['ranges'] = serialize(self.ranges)
+        data['ranges'] = _serialize(self.ranges)
         return data
 
     @property
@@ -358,11 +375,7 @@ class Range(object):
                                        range=self.bounds, **kwargs)
 
     def match(self, **kwargs):
-        """
-        Perform a MATCH operation.
-
-        See :func:`cern.madx.match` for a description of the parameters.
-        """
+        """Perform a MATCH operation on this range."""
         kw = self.get_twiss_initial(None, {})
         kw = {key: val
               for key, val in twiss_init.items()
@@ -382,21 +395,28 @@ class Range(object):
         return result
 
 
+def _get_logger(model_name):
+    """Create a logger."""
+    return logging.getLogger(__name__ + '.' + model_name)
+
+
 class Factory(object):
 
     """
     Model instance factory.
 
     :ivar Locator locator: model definition locator and loader
-    :ivar _Model: Model class
-    :ivar _Madx: Madx class
+    :ivar _Model: instanciates models
+    :ivar _Madx: instanciates MAD-X interpreters
+    :ivar _Logger: instanciates loggers
     """
 
     def __init__(self, locator):
         """Create Model factory using a specified ModelLocator."""
         self._locator = locator
         self._Model = Model
-        self._Madx = Madx
+        self._Madx = madx.Madx
+        self._Logger = _get_logger
 
     def _create(self, name, data, repo, madx, command_log, error_log):
         """
@@ -405,13 +425,15 @@ class Factory(object):
         Parameters as in load_model (except for mdata).
         """
         if error_log is None:
-            error_log = logging.getLogger(__name__)
+            error_log = self._Logger(name)
         if madx is None:
-            madx = Madx(command_log=command_log, error_log=error_log)
+            madx = self._Madx(command_log=command_log, error_log=error_log)
             madx.verbose(False)
         elif command_log is not None:
             raise ValueError("'command_log' cannot be used with 'madx'")
-        return self._Model(name, data, repo=repo, madx=madx)
+        model = self._Model(name, data, repo=repo, madx=madx)
+        model.load()
+        return model
 
     def __call__(self,
                  name,
