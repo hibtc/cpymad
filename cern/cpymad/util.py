@@ -143,3 +143,15 @@ def C3_mro(get_bases, *bases):
       for seq in seqs:
           if seq[0] == head:
               del seq[0]
+
+def map_dict(data, func, *args, **kwargs):
+    return {
+        key: func(key, val, *args, **kwargs)
+        for key, val in data.items()
+    }
+
+
+def is_match_param(v):
+    return v.lower() in ['rmatrix', 'chrom', 'beta0', 'deltap',
+            'betx','alfx','mux','x','px','dx','dpx',
+            'bety','alfy','muy','y','py','dy','dpy' ]
