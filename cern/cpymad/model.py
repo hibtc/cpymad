@@ -103,10 +103,10 @@ class Model(object):
         """Load model in MAD-X interpreter."""
         if self._loaded:
             return
+        self._loaded = True
         self._load(*self._data['init-files'])
         for seq in self.sequences.values():
             seq.beam.load()
-        self._loaded = True
 
     def __repr__(self):
         return "{0}({1!r})".format(self.__class__.__name__, self.name)
@@ -175,8 +175,9 @@ class Beam(object):
         """Define the beam in MAD-X."""
         if self._loaded:
             return
+        self._loaded = True
         self._model.load()
-        self._model.madx.beam(**self.data)
+        self._model.madx.command.beam(**self.data)
 
 
 
@@ -211,9 +212,9 @@ class Optic(object):
         """Load the optic in the MAD-X process."""
         if self._loaded:
             return
-        self._model.load()
-        self._model._load(*self._data.get('init-files', ()))
         self._loaded = True
+        self._model.load()
+        self._model._load(*self.data.get('init-files', ()))
 
 
 class Sequence(object):
@@ -278,7 +279,7 @@ class Sequence(object):
     def survey(self, **kwargs):
         """Run SURVEY on this sequence."""
         self.load()
-        return self.madx.survey(sequence=self.name, **kwargs)
+        return self._model.madx.survey(sequence=self.name, **kwargs)
 
     def match(self, **kwargs):
         """Run MATCH on this sequence."""
@@ -315,22 +316,23 @@ class Range(object):
 
     @property
     def bounds(self):
-        return (self._data["madx-range"]["first"],
-                self._data["madx-range"]["last"])
+        return (self.data["madx-range"]["first"],
+                self.data["madx-range"]["last"])
 
     @property
     def offsets_file(self):
-        if 'aper-offset' not in self._data:
+        if 'aper-offset' not in self.data:
             return None
         repo = self._sequence._model._repo
-        return _repo.get(self._data['aper-offset'])
+        return _repo.get(self.data['aper-offset'])
 
     def twiss(self, **kwargs):
         """Run TWISS on this range."""
         self.load()
         kw = self._set_twiss_init(kwargs)
-        result = self.madx.twiss(sequence=self.sequence.name,
-                                 range=self.bounds, **kw)
+        madx = self._sequence._model.madx
+        result = madx.twiss(sequence=self._sequence.name,
+                            range=self.bounds, **kw)
         return result
 
     def match(self, **kwargs):
@@ -347,8 +349,8 @@ class Range(object):
     def get_twiss_initial(self, name=None):
         """Return the twiss initial conditions."""
         if name is None:
-            name = self._data['default-twiss']
-        return self._data['twiss-initial-conditions'][name]
+            name = self.data['default-twiss']
+        return self.data['twiss-initial-conditions'][name]
 
     def _set_twiss_init(self, kwargs):
         kw = kwargs.copy()
@@ -415,8 +417,8 @@ class Factory(object):
         :param str command_log: history file name; use only if madx is None!
         :param logging.Logger error_log:
         """
-        data = self._model_locator.get_definition(name)
-        repo = self._model_locator.get_repository(data)
+        data = self._locator.get_definition(name)
+        repo = self._locator.get_repository(data)
         return self._create(name,
                             data,
                             repo=repo,
