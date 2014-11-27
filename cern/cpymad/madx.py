@@ -142,8 +142,8 @@ class Madx(object):
         :param error_log: logger instance ``logging.Logger``
         """
         # get logger
-        if logger is None:
-            logger = logging.getLogger(__name__)
+        if error_log is None:
+            error_log = logging.getLogger(__name__)
         # open history file
         if isinstance(command_log, basestring):
             command_log = CommandLog.create(command_log)
@@ -323,7 +323,11 @@ class Madx(object):
             if not sequence:
                 raise
             active_sequence = None
-        if sequence != active_sequence:
+        else:
+            if not sequence:
+                sequence = active_sequence
+        if (sequence != active_sequence
+                or not self._libmadx.is_expanded(sequence)):
             self.use(sequence)
         return sequence
 
