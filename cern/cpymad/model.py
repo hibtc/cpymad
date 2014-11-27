@@ -344,7 +344,7 @@ class Range(object):
     def twiss(self, **kwargs):
         """Run TWISS on this range."""
         self.load()
-        kw = self.get_twiss_initial(None, kwargs)
+        kw = self._set_twiss_init(kwargs)
         result = self.madx.twiss(sequence=self.sequence.name,
                                  range=self.bounds, **kw)
         if _range == ('#s', '#e'):
@@ -356,7 +356,7 @@ class Range(object):
     def survey(self, **kwargs):
         """Run SURVEY on this range."""
         self.load()
-        kw = self.get_twiss_initial(None, kwargs)
+        kw = self._set_twiss_init(kwargs)
         return self.madx.survey(sequence=self._sequence.name,
                                 range=self.bounds, **kw)
 
@@ -376,23 +376,27 @@ class Range(object):
 
     def match(self, **kwargs):
         """Perform a MATCH operation on this range."""
-        kw = self.get_twiss_initial(None, {})
-        kw = {key: val
-              for key, val in twiss_init.items()
-              if util.is_match_param(key)}
-        kw.update(kwargs)
+        kw = self._set_twiss_init(kwargs)
+        kw['twiss_init'] = {
+            key: val
+            for key, val in kw['twiss_init'].items()
+            if util.is_match_param(key)
+        }
         return self.twiss(sequence=self._sequence.name,
                           range=self.bounds, **kw)
 
-    def get_twiss_initial(self, name=None, kwargs=None):
+    def get_twiss_initial(self, name=None):
         """Return the twiss initial conditions."""
         if name is None:
             name = self._data['default-twiss']
-        result = self._data['twiss-initial-conditions'][name]
-        if kwargs is not None:
-            result = result.copy()
-            result.update(kwargs)
-        return result
+        return self._data['twiss-initial-conditions'][name]
+
+    def _set_twiss_init(self, kwargs):
+        kw = kwargs.copy()
+        twiss_init = kw.get('twiss_init', {}).copy()
+        twiss_init.update(self.get_twiss_initial())
+        kw['twiss_init'] = twiss_init
+        return kw
 
 
 def _get_logger(model_name):
