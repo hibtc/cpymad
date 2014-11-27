@@ -1,5 +1,8 @@
 # standard library
 import unittest
+import os
+
+# utilities
 import _compat
 
 # tested class
@@ -11,26 +14,9 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
 
     def setUp(self):
         self.mad = Madx()
-        self.doc = """
-            ! constants
-            QP_K1 = 2;
-
-            ! elements
-            qp: quadrupole, k1:=QP_K1, l=1;
-            sb: sbend, l=2, angle=3.14/4;
-
-            ! sequences
-            s1: sequence, l=4, refer=center;
-            qp, at=0.5;
-            qp, at=1.5;
-            sb, at=3;
-            endsequence;
-
-            s2: sequence, l=3, refer=entry;
-            qp1: qp, at=0, k1=3;
-            qp2: qp, at=1, l=2;
-            endsequence;
-        """
+        here = os.path.dirname(__file__)
+        there = os.path.join(here, 'data', 'lebt', 'init.madx')
+        self.doc = open(there).read()
         for line in self.doc.splitlines():
             self.mad._libmadx.input(line)
 
