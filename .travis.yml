@@ -40,6 +40,4 @@ install:
 script:
   - python test/test_resource.py
   - python test/test_madx.py
-  - python test/test_model_locator.py
-  - python test/test_survey.py
-
+  - python test/test_locator.py

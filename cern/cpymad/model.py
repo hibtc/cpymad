@@ -139,7 +139,7 @@ class Model(object):
 
         :param tuple files: file names to be loaded from resource repository.
         """
-        for file in *files:
+        for file in files:
             with self._repo.get(file).filename() as fpath:
                 self.madx.call(fpath)
 
@@ -375,7 +375,7 @@ class Factory(object):
     """
 
     def __init__(self, locator):
-        """Create Model factory using a specified ModelLocator."""
+        """Create Model factory using a specified model Locator."""
         self._locator = locator
         self._Model = Model
         self._Madx = madx.Madx
@@ -425,7 +425,7 @@ class Factory(object):
                             error_log=error_log)
 
 
-class Locator(ModelLocator):
+class Locator(object):
 
     """
     Model locator for yaml files that contain multiple model definitions.
@@ -489,9 +489,4 @@ class Locator(ModelLocator):
         Get the resource loader for the given model.
         """
         # instantiate the resource providers for model resource data
-        repo_offs = data['path-offsets']['repository-offset']
-        # the repository location may be overwritten by dbdirs:
-        for dbdir in data.get('dbdirs', []):
-            if os.path.isdir(dbdir):
-                return FileResource(os.path.join(dbdir, repo_offs))
-        return self._repo.get('repdata').get(repo_offs)
+        return self._repo.get(data['path-offset'])

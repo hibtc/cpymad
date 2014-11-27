@@ -13,39 +13,15 @@ Unit tests for the resource components
 # tested classes
 from cern.resource.package import PackageResource
 from cern.resource.file import FileResource
-from cern.resource.couch import CouchResource
 
 # test utilities
 import unittest
-import tempfile
-import shutil
 from yaml import safe_load as load
 import os.path
-import gc
 import sys
 import setuptools
 import contextlib
 from io import open
-
-def create_test_file(base, path, content=None):
-    """
-    Create a file with defined content under base/path.
-    """
-    try:
-        os.makedirs(os.path.join(base, *path[:-1]))
-    except OSError:
-        # directory already exists. the exist_ok parameter exists not until
-        # python3.2
-        pass
-    with open(os.path.join(base, *path), 'wt', encoding='utf-8') as f:
-        if content is None:
-            # json.dump is not compatible in python2 and python3.
-            # Haven't checked yaml.dump() so far, but the old code remains:
-            f.write(u'{"path": "%s", "unicode": "%s"}' % (
-                os.path.join(*path),    # this content is predictable
-                u"äæo≤»で"))            # some unicode test data
-        else:
-            f.write(content)
 
 def set_(iterable):
     return set((s for s in iterable
@@ -72,17 +48,15 @@ def captured_output(stream_name):
 # common test code
 
 class Common(object):
+
     def setUp(self):
-        self.mod = 'dummy_mod_124'
-        self.base = tempfile.mkdtemp()
+        here = os.path.dirname(__file__)
+        self.base = os.path.join(here, 'data')
+        self.mod = 'package'
         self.path = os.path.join(self.base, self.mod)
-        create_test_file(self.path, ['__init__.py'], u'')
-        create_test_file(self.path, ['a.yml'])
-        create_test_file(self.path, ['subdir', 'b.yml'])
 
     def tearDown(self):
-        gc.collect()
-        shutil.rmtree(self.base)
+        pass
 
     def test_open(self):
         with self.res.open('a.yml', 'utf-8') as f:
@@ -140,6 +114,7 @@ class Common(object):
 
 # test cases
 class TestPackageResource(Common, unittest.TestCase):
+
     def setUp(self):
         super(TestPackageResource, self).setUp()
         sys.path.append(self.base)
@@ -166,6 +141,7 @@ class TestPackageResource(Common, unittest.TestCase):
         self.assertTrue(os.path.exists(filename))
 
 class TestEggResource(Common, unittest.TestCase):
+
     def setUp(self):
         super(TestEggResource, self).setUp()
         cwd = os.getcwd()
@@ -235,6 +211,7 @@ class TestEggResource(Common, unittest.TestCase):
                         'a.yml')
 
 class TestFileResource(Common, unittest.TestCase):
+
     def setUp(self):
         super(TestFileResource, self).setUp()
         self.res = FileResource(self.path)
@@ -254,11 +231,5 @@ class TestFileResource(Common, unittest.TestCase):
                     os.path.join(self.path, 'subdir', 'b.yml'))
 
 
-class TestCouchResource(unittest.TestCase):
-    """TODO."""
-    pass
-
-
 if __name__ == '__main__':
     unittest.main()
-
