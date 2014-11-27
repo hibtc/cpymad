@@ -2,13 +2,16 @@
 """
 Contains base class for resource providers.
 """
-__all__ = ['ResourceProvider']
 
 import os
-
 from contextlib import contextmanager
 from shutil import copyfileobj
 from tempfile import NamedTemporaryFile
+
+
+__all__ = [
+    'ResourceProvider',
+]
 
 
 class ResourceProvider(object):
@@ -31,7 +34,6 @@ class ResourceProvider(object):
         Returns a file-like object. When finished using ``close()`` must be
         called on the returned object. If ``encoding`` is ``None`` the
         stream is opened in binary mode.
-
         """
         raise NotImplementedError("ResourceProvider.open")
 
@@ -43,7 +45,6 @@ class ResourceProvider(object):
 
         This works similar to os.listdir().
         restrict can be used to filter for certain file types.
-
         """
         raise NotImplementedError("ResourceProvider.listdir")
 
@@ -55,7 +56,6 @@ class ResourceProvider(object):
 
         Returns an instance of the ResourceProvider that opens, lists and
         gets objects relative to the specified subdirectory.
-
         """
         raise NotImplementedError("ResourceProvider.get")
 
@@ -75,7 +75,6 @@ class ResourceProvider(object):
 
         NOTE: To stay upward compatible ext should only be passed as keyword
         argument.
-
         """
         for res_name in self.listdir(name):
             if res_name.lower().endswith(ext):
@@ -90,7 +89,6 @@ class ResourceProvider(object):
 
         If ``encoding`` is ``None`` the returned data is binary.
         This is a convenience mixin.
-
         """
         with self.open(name, encoding) as f:
             return f.read()
@@ -108,7 +106,6 @@ class ResourceProvider(object):
         Note that a YAML parser is used but since JSON is a subset of YAML
         this function can also be used to load JSON resources. The input is
         not checked to be valid JSON!
-
         """
         from yaml import safe_load
         with self.open(name, encoding=encoding) as f:
@@ -132,7 +129,6 @@ class ResourceProvider(object):
                 with open(filename) as file:
                     content = file.read()
             # temporarily extracted files are deleted at this point
-
         """
         try:
             tempfile = tempfile.NamedTemporaryFile(mode='wb', delete=False)
@@ -142,4 +138,3 @@ class ResourceProvider(object):
             yield tempfile.name
         finally:
             os.remove(tempfile.name)
-

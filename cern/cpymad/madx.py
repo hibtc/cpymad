@@ -24,12 +24,10 @@ from __future__ import absolute_import
 from functools import partial
 import logging
 import os
-import sys
 import collections
 
-from . import _libmadx_rpc
-
-from cern.cpymad import _madx_tools
+from . import _rpc
+from . import util
 
 try:
     basestring
@@ -98,40 +96,71 @@ class MadxCommands(object):
 
     def __call__(self, *args, **kwargs):
         """Create and dispatch a MAD-X command string."""
-        self.__dispatch(_madx_tools.mad_command(*args, **kwargs))
+        self.__dispatch(util.mad_command(*args, **kwargs))
 
     def __getattr__(self, name):
         """Return a dispatcher for a specific command."""
         return partial(self.__call__, name)
 
 
-# main interface
+def NOP(s):
+    """Do nothing."""
+    pass
+
+
+class CommandLog(object):
+
+    """Log MAD-X command history to a file text."""
+
+    @classmethod
+    def create(cls, filename):
+        """Create CommandLog from filename (overwrite/create)."""
+        return cls(open(filename, 'wt'))
+
+    def __init__(self, file):
+        """Create CommandLog from file instance."""
+        self._file = file
+
+    def __call__(self, command):
+        """Log a single history line and flush to file immediately."""
+        log_file.write(command + '\n')
+        log_file.flush()
+
+
 class Madx(object):
-    '''
-    Python class which interfaces to Mad-X library
-    '''
-    _hfile = None
 
-    def __init__(self, histfile=None, libmadx=None, logger=None):
-        '''
-        Initializing Mad-X instance
+    """
+    Wrapper for MAD-X.
+    """
 
-        :param str histfile: (optional) name of file which will contain all Mad-X commands.
-        :param object libmadx: :mod:`libmadx` compatible object
+    def __init__(self, libmadx=None, command_log=None, error_log=None):
+        """
+        Initialize instance variables.
 
-        '''
-        self._libmadx = libmadx or _libmadx_rpc.LibMadxClient.spawn_subprocess()[0].libmadx
-        if not self._libmadx.started():
-            self._libmadx.start()
-        self._log = logger or logging.getLogger(__name__)
+        Users should call the start_madx() function instead.
 
-        if histfile:
-            self._hfile = open(histfile,'w')
-
-    def __del__(self):
-        """Close history file."""
-        if self._hfile:
-            self._hfile.close()
+        :param libmadx: :mod:`libmadx` compatible object
+        :param command_log: logs MAD-X history either filename or CommandLog
+        :param error_log: logger instance ``logging.Logger``
+        """
+        # get logger
+        if logger is None:
+            logger = logging.getLogger(__name__)
+        # open history file
+        if isinstance(command_log, basestring):
+            command_log = CommandLog.create(command_log)
+        elif command_log is None:
+            command_log = NOP
+        # start libmadx subprocess
+        if libmadx is None:
+            svc, proc = _rpc.LibMadxClient.spawn_subprocess()
+            libmadx = svc.libmadx
+        if not libmadx.started():
+            libmadx.start()
+        # init instance variables:
+        self._libmadx = libmadx
+        self._command_log = command_log
+        self._error_log = error_log
 
     @property
     def version(self):
@@ -159,7 +188,7 @@ class Madx(object):
         """
         # write to history before performing the input, so if MAD-X
         # crashes, it is easier to see, where it happened:
-        self._writeHist(text)
+        self._command_log(text)
         self._libmadx.input(text)
 
     def help(self, cmd=None):
@@ -209,7 +238,8 @@ class Madx(object):
         """
         select = self.command.select
         select(flag=flag, clear=True)
-        select(flag=flag, column=columns)
+        if columns:
+            select(flag=flag, column=columns)
         for p in pattern:
             select(flag=flag, pattern=p)
 
@@ -227,7 +257,6 @@ class Madx(object):
               columns=default_twiss_columns,
               range=None,
               twiss_init={},
-              use=True,
               **kwargs):
         """
         Run SELECT+USE+TWISS.
@@ -236,18 +265,13 @@ class Madx(object):
         :param list pattern: pattern to include in table
         :param list columns: columns to include in table, (may be a str)
         :param dict twiss_init: dictionary of twiss initialization variables
-        :param bool use: Call use before aperture.
         :param bool chrom: Also calculate chromatic functions (slower)
         :param kwargs: further keyword arguments for the MAD-X command
 
         Note, that the kwargs overwrite any arguments in twiss_init.
         """
         self.select('twiss', columns=columns, pattern=pattern)
-        self.command.set(format="12.6F")
-        if use and sequence:
-            self.use(sequence)
-        elif not sequence:
-            sequence = self.active_sequence
+        sequence = self._use(sequence)
         twiss_init = dict((k, v) for k,v in twiss_init.items()
                           if k not in ['name','closed-orbit'])
         # explicitly specified keyword arguments overwrite values in
@@ -266,7 +290,6 @@ class Madx(object):
                pattern=['full'],
                columns=default_survey_columns,
                range=None,
-               use=True,
                **kwargs):
         """
         Run SELECT+USE+SURVEY.
@@ -274,13 +297,10 @@ class Madx(object):
         :param str sequence: name of sequence
         :param list pattern: pattern to include in table
         :param list columns: Columns to include in table
-        :param bool use: Call use before survey.
         :param kwargs: further keyword arguments for the MAD-X command
         """
         self.select('survey', pattern=pattern, columns=columns)
-        self.command.set(format="12.6F")
-        if use and sequence:
-            self.use(sequence)
+        self._use(sequence)
         self.command.survey(range=range, **kwargs)
         return self.get_table('survey')
 
@@ -293,10 +313,9 @@ class Madx(object):
                  range=None,
                  columns=default_aperture_columns,
                  offsets=None,
-                 use=False,
                  **kwargs):
         """
-        Run SELECT+USE+APERTURE.
+        Run SELECT+APERTURE.
 
         :param str sequence: name of sequence
         :param list pattern: pattern to include in table
@@ -305,33 +324,70 @@ class Madx(object):
         :param kwargs: further keyword arguments for the MAD-X command
         """
         self.select('aperture', pattern=pattern, columns=columns)
-        self.command.set(format="12.6F")
-        if use and sequence:
-            self._log.warn("USE before APERTURE is known to cause problems.")
-            self.use(sequence) # this seems to cause a bug?
         self.command.aperture(range=range, offsetelem=offsets, **kwargs)
         return self.get_table('aperture')
 
     def use(self, sequence):
+        """
+        Run USE to expand a sequence.
+
+        :param str sequence: sequence name
+        :returns: name of active sequence
+        """
         self.command.use(sequence=sequence)
 
+    def _use(self, sequence):
+        """
+        USE sequence if it is not active.
+
+        :param str sequence: sequence name, may be None
+        :returns: new active sequence name
+        :rtype: str
+        :raises RuntimeError: if there is no active sequence
+        """
+        try:
+            active_sequence = self.active_sequence
+        except RuntimeError:
+            if not sequence:
+                raise
+            active_sequence = None
+        if sequence != active_sequence:
+            self.use(sequence)
+        return sequence
+
     def match(self,
-              sequence,
-              constraints,
-              vary,
+              sequence=None,
+              constraints=[],
+              vary=[],
               weight=None,
               method=('lmdif', {}),
               knobfile=None,
               twiss_init={},
               **kwargs):
         """
-        Perform simple MATCH operation.
+        Perform a simple MATCH operation.
 
-        :param string sequence: name of sequence
+        For more advanced cases, you should issue the commands manually.
+
+        :param str sequence: name of sequence
         :param list constraints: constraints to pose during matching
-        :param list vary: vary commands
+        :param list vary: knob names to be varied
         :param dict weight: weights for matching parameters
+        :returns: final knob values
+        :rtype: dict
+
+        Example:
+
+        >>> mad.match(
+        ...     constraints=[
+        ...         dict(range='marker1->betx',
+        ...              betx=Constraint(min=1, max=3),
+        ...              bety=2)
+        ...     ],
+        ...     vary=['qp1->k1',
+        ...           'qp2->k1'])
         """
+        sequence = self._use(sequence)
         twiss_init = dict((k, v) for k,v in twiss_init.items()
                           if k not in ['name','closed-orbit'])
         # explicitly specified keyword arguments overwrite values in
@@ -349,25 +405,19 @@ class Madx(object):
             command.weight(**weight)
         command(method[0], **method[1])
         command.endmatch(knobfile=knobfile)
+        return dict((knob, self.evaluate(knob)) for knob in vary)
 
     # turn on/off verbose outupt..
     def verbose(self, switch):
         self.command.option(echo=switch, warn=switch, info=switch)
 
-    def _writeHist(self,command):
-        # this still brakes for "multiline commands"...
-        if self._hfile:
-            self._hfile.write(command + '\n')
-            self._hfile.flush()
-
     def get_table(self, table):
         """
-        Get the specified table columns as numpy arrays.
+        Get the specified table from MAD-X.
 
         :param str table: table name
-        :param columns: column names
-        :type columns: list or str (comma separated)
-
+        :returns: a proxy for the table data
+        :rtype: TableProxy
         """
         return TableProxy(table, self._libmadx)
 

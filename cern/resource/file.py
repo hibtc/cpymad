@@ -2,7 +2,6 @@
 """
 Resource provider for plain filesystem resources.
 """
-__all__ = ['FileResource']
 
 import os
 from io import open
@@ -10,20 +9,26 @@ from contextlib import contextmanager
 
 from .base import ResourceProvider
 
+
+__all__ = [
+    'FileResource',
+]
+
+
 class FileResource(ResourceProvider):
+
     """
     File system resource provider.
 
     Uses the builtins open() to open ordinary files and os.listdir() to list
     directory contents.
-
     """
+
     def __init__(self, path):
         """
         Initialize the filesystem resource provider.
 
         :param string path: name of a filesystem object (file/folder).
-
         """
         self.path = path
 
@@ -53,4 +58,3 @@ class FileResource(ResourceProvider):
 
     def provider(self):
         return self.__class__(os.path.dirname(self.path))
-

@@ -1,514 +1,447 @@
 """
-Cython implementation of the model api.
+Models encapsulate metadata for accelerator machines.
+
+For more information about models, see :class:`Model`.
+
+The following example demonstrates how to create a Model instance given that
+you have model definition files ready on your file system:
+
+.. code-block:: python
+
+    >>> from cern.resource.file import FileResource
+    >>> from cern.cpymad.model import Factory
+    >>> load_model = Factory(FileResource('/path/to/model/definitions'))
+    >>> model = load_model('LHC')
 """
 
 from __future__ import absolute_import
 
 import logging
 import os
-import sys
-import yaml
 
-from ..resource.package import PackageResource
-from .model_locator import MergedModelLocator
-from .madx import Madx
+from . import madx
+from . import util
+from ..resource.file import FileResource
 
 
 __all__ = [
     'Model',
+    'Beam',
+    'Optic',
+    'Sequence',
+    'Range',
     'Factory',
-    'default_factory',
-    'get_model_names',
-    'load_model',
-    'save_model',
+    'Locator',
 ]
 
 
-class Model(object):
-    '''
-    Model class implementation. the model spawns a madx instance in a separate process.
-    this has the advantage that you can run separate models which do not affect each other.
-    '''
+def _deserialize(data, cls, *args):
+    """Create an instance dictionary from a data dictionary."""
+    return {key: cls(key, val, *args) for key, val in data.items()}
 
-    def __init__(self, mdata, madx, logger, sequence, optics):
+
+def _serialize(data):
+    """Create a data dictionary from an instance dictionary."""
+    return {key: val.data for key, val in data.items()}
+
+
+class Model(object):
+
+    """
+    A model is a complete description of an accelerator machine.
+
+    This class is used to bundle all metadata related to an accelerator and
+    all its configurations. It takes care of loading the proper MAD-X files
+    when needed.
+
+    Model instances are created using :class:`Factory` instances which require
+    a :class:`ResourceProvider` to iterate and load available model
+    definitions.
+
+    Instance variables
+    ==================
+
+    Only GET access is allowed to all instance variables at the moment.
+
+    Model attributes
+    ~~~~~~~~~~~~~~~~
+
+    :ivar str name: model name
+    :ivar dict beams: known :class:`Beam`s
+    :ivar dict optics: known :class:`Optic`s
+    :ivar dict sequences: known :class:`Sequence`s
+
+    Underlying resources and handlers
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    :ivar Madx madx: handle to the MAD-X library
+    :ivar dict _data: model definition data
+    :ivar ResourceProvider _repo: resource access
+    """
+
+    def __init__(self, name, data, repo, madx):
         """
         Initialize a Model object.
 
-        Users should use the load_model function instead.
-
-        :param ModelData mdata: model data as acquired through a ModelLocator
-        :param str sequence: Name of the default sequence to use
-        :param str optics: Name of optics to load, string or list of strings.
+        :param str name: model name
+        :param dict data: model definition data
+        :param ResourceProvider repo: resource repository
         :param Madx madx: MAD-X instance to use
-        :param logging.Logger logger:
         """
+        # init instance variables
+        self.name = name
+        self._data = data
+        self._repo = repo
         self.madx = madx
-        self._log = logger
-        self.mdata = mdata
-        self._mdef = mdata.model
-        self._active={'optic': None, 'sequence': None, 'range': None}
-        self._setup_initial(sequence,optics)
+        self._loaded = False
+        # create Beam/Optic/Sequence instances:
+        self.beams = _deserialize(data['beams'], Beam, self)
+        self.optics = _deserialize(data['optics'], Optic, self)
+        self.sequences = _deserialize(data['sequences'], Sequence, self)
 
-    # API stuff:
+    def load(self):
+        """Load model in MAD-X interpreter."""
+        if self._loaded:
+            return
+        self._load(*self._data['init-files'])
+        for seq in self.sequences.values():
+            seq.beam.load()
+        self._loaded = True
+
+    def __repr__(self):
+        return "{0}({1!r})".format(self.__class__.__name__, self.name)
+
     @property
-    def name(self):
-        return self.mdata.name
+    def data(self):
+        """Get a serializable representation of this sequence."""
+        data = self._data.copy()
+        data['beams'] = _serialize(self.beams)
+        data['optics'] = _serialize(self.optics)
+        data['sequences'] = _serialize(self.sequences)
+        return data
 
     @property
-    def mdef(self):
-        return self._mdef.copy()
+    def default_optic(self):
+        """Get default optic name."""
+        return self.optics[self._data['default-optic']]
+
+    @property
+    def default_sequence(self):
+        """Get default sequence name."""
+        return self.sequences[self._data['default-sequence']]
+
+    # TODO: add setters for default_optic / default_sequence
+    # TODO: remove default_sequence?
+
+    def _load(self, *files):
+        """
+        Load MAD-X files.
+
+        :param tuple files: file names to be loaded from resource repository.
+        """
+        for file in *files:
+            with self._repo.get(file).filename() as fpath:
+                self.madx.call(fpath)
 
 
-    def set_sequence(self,sequence=None, range=None):
-        '''
-        Set a new active sequence...
-        '''
-        if not sequence:
-            if not self._active['sequence']:
-                self._active['sequence']=self._mdef['default-sequence']
-            sequence=self._active['sequence']
-        if sequence in self._mdef['sequences']:
-            self._active['sequence']=sequence
-            if range:
-                self.set_range(range)
-            else:
-                self.set_range(self._mdef['sequences'][sequence]['default-range'])
+class Beam(object):
+
+    """
+    Beam for :class:`Model`s.
+
+    A beam defines the mass, charge, energy, etc. of the particles moved
+    through the accelerator.
+
+    Instance variables
+    ==================
+
+    :ivar str name: beam name
+    :ivar dict data: beam parameters (keywords to BEAM command in MAD-X)
+
+    Private:
+
+    :ivar Model _model: owning model
+    :ivar bool _loaded: beam has been initialized in MAD-X
+    """
+
+    def __init__(self, name, data, model):
+        """Initialize instance variables."""
+        self.name = name
+        self.data = data
+        self._model = model
+        self._loaded = False
+
+    def load(self):
+        """Define the beam in MAD-X."""
+        if self._loaded:
+            return
+        self._model.load()
+        self._model.madx.beam(**self.data)
+
+
+
+class Optic(object):
+
+    """
+    Optic for :class:`Model`s.
+
+    An optic (as far as I understand) defines a variant of the accelerator
+    setup, e.g. different injection mechanisms.
+
+    Instance variables
+    ==================
+
+    :ivar str name: optic name
+
+    Private:
+
+    :ivar dict _data: optic definition
+    :ivar Model _model: owning model
+    :ivar bool _loaded: beam has been initialized in MAD-X
+    """
+
+    def __init__(self, name, data, model):
+        """Initialize instance variables."""
+        self.name = name
+        self.data = data
+        self._model = model
+        self._loaded = False
+
+    def load(self):
+        """Load the optic in the MAD-X process."""
+        if self._loaded:
+            return
+        self._model.load()
+        self._model._load(*self._data.get('init-files', ()))
+        self._loaded = True
+
+
+class Sequence(object):
+
+    """
+    Sequence for :class:`Model`s.
+
+    A sequence defines an arrangement of beam line elements. It can be
+    subdivided into multiple ranges.
+
+    Instance variables
+    ==================
+
+    :ivar str name: sequence name
+    :ivar dict ranges: known :class:`Range`s
+
+    Private:
+
+    :ivar dict _data:
+    :ivar Model _model:
+
+    Keep track whether TWISS/APERTURE commands have been called:
+
+    :ivar bool _aperture_called:
+    :ivar bool _twiss_called:
+    """
+
+    def __init__(self, name, data, model):
+        """Initialize instance variables."""
+        self.name = name
+        self._data = data
+        self._model = model
+        self._twiss_called = False
+        self._aperture_called = False
+        self.ranges = _deserialize(data['ranges'], Range, self)
+
+    def load(self):
+        """Load model in MAD-X interpreter."""
+        self._model.load()
+
+    @property
+    def data(self):
+        """Get a serializable representation of this sequence."""
+        data = self._data.copy()
+        data['ranges'] = _serialize(self.ranges)
+        return data
+
+    @property
+    def beam(self):
+        """Get :class:`Beam` instance for this sequence."""
+        return self._model.beams[self._data['beam']]
+
+    @property
+    def default_range(self):
+        """Get default :class:`Range`."""
+        return self.ranges[self._data['default-range']]
+
+    def range(self, start, stop):
+        """Create a :class:`Range` within (start, stop) for this sequence."""
+        # TODO
+        pass
+
+    # MAD-X commands:
+
+    def twiss(self, **kwargs):
+        """Execute a TWISS command on the default range."""
+        return self.default_range.twiss(**kwargs)
+
+    def aperture(self, **kwargs):
+        """Execute a TWISS command on the default range."""
+        return self.default_range.aperture(**kwargs)
+
+    def survey(self, **kwargs):
+        """Execute a TWISS command on the default range."""
+        return self.default_range.aperture(**kwargs)
+
+    def _prepare_aperture(self):
+        """Load all content needed for APERTURE operations."""
+        self.load()
+        if self._aperture_called:
+            return
+        if not self._twiss_called:
+            self.twiss()
+        self._load(*self._data['aperfiles'])
+        self._aperture_called = True
+
+
+class Range(object):
+
+    """
+    Range for :class:`Model`s.
+
+    A range is a subsequence of elements within a :class:`Sequence`.
+
+    Instance variables
+    ==================
+
+    :ivar str name: sequence name
+
+    Private:
+
+    :ivar dict _data:
+    :ivar Sequence _sequence:
+    """
+
+    def __init__(self, name, data, sequence):
+        """Initialize instance variables."""
+        self.name = name
+        self.data = data
+        self._sequence = sequence
+
+    def load(self):
+        """Load model in MAD-X interpreter."""
+        self._sequence.load()
+
+    @property
+    def bounds(self):
+        return (self._data["madx-range"]["first"],
+                self._data["madx-range"]["last"])
+
+    @property
+    def offsets(self):
+        if 'aper-offset' not in self._data:
+            return None
+        repo = self._sequence._model._repo
+        return _repo.get(self._data['aper-offset'])
+
+    def twiss(self, **kwargs):
+        """Run TWISS on this range."""
+        self.load()
+        kw = self.get_twiss_initial(None, kwargs)
+        result = self.madx.twiss(sequence=self.sequence.name,
+                                 range=self.bounds, **kw)
+        if _range == ('#s', '#e'):
+            # we say that when the "full" range has been selected,
+            # we can set this to true. Needed for e.g. aperture calls
+            self._sequence._twiss_called = True
+        return result
+
+    def survey(self, **kwargs):
+        """Run SURVEY on this range."""
+        self.load()
+        kw = self.get_twiss_initial(None, kwargs)
+        return self.madx.survey(sequence=self._sequence.name,
+                                range=self.bounds, **kw)
+
+    def aperture(self, **kwargs):
+        """Run APERTURE on this range."""
+        self.load()
+        self._sequence._prepare_aperture()
+        offsets = self.offsets
+        if 'offsets' not in kwargs and offsets:
+            with offsets.filename() as _offsets:
+                return self._madx.aperture(sequence=self._sequence.name,
+                                           range=self.bounds,
+                                           offsets=_offsets, **kwargs)
         else:
-            raise KeyError("You tried to activate a non-existing sequence")
+            return self._madx.aperture(sequence=self._sequence.name,
+                                       range=self.bounds, **kwargs)
 
-    def set_range(self, range=None):
-        '''
-        Sets the active range to range. Must be defined in the
-        currently active sequence...
-        If range is empty, sets the range to default-range unless
-        another range is already set.
-        '''
-        seqdict=self._mdef['sequences'][self._active['sequence']]
-        if range:
-            if range not in seqdict['ranges']:
-                raise KeyError("%s is not a valid range name, available ranges: '%s'" % (range,"' '".join(seq['ranges'].keys())))
-            self._active['range']=range
-        else:
-            if not self._active['range']:
-                self._active['range']=seqdict['default-range']
+    def match(self, **kwargs):
+        """Perform a MATCH operation on this range."""
+        kw = self.get_twiss_initial(None, {})
+        kw = {key: val
+              for key, val in twiss_init.items()
+              if util.is_match_param(key)}
+        kw.update(kwargs)
+        return self.twiss(sequence=self._sequence.name,
+                          range=self.bounds, **kw)
 
-    def _setup_initial(self,sequence,optics):
-        '''
-        Initial setup of the model
-        '''
-        for ifile in self._mdef['init-files']:
-            self._call(ifile)
-
-        # initialize all sequences..
-        for seq in self._mdef['sequences']:
-            self._init_sequence(seq)
-        # then we set the default one..
-        self.set_sequence(sequence)
-        if isinstance(optics, list):
-            for o in optics:
-                self.set_optic(o)
-        else: # str/unicode/None
-            self.set_optic(optics)
-        # To keep track of whether or not certain things are already called..
-        self._apercalled={}
-        self._twisscalled={}
-        for seq in self.get_sequences():
-            self._apercalled[seq.name]=False
-            self._twisscalled[seq.name]=False
-
-    def _init_sequence(self,sequence):
-        '''
-        Initialize sequence
-        '''
-        bname=self._mdef['sequences'][sequence]['beam']
-        bdict=self.get_beam(bname)
-        self.set_beam(bdict)
-
-    def get_beam(self,bname):
-        '''
-         Returns the beam definition in form
-         of a dictionary.
-
-         You can then change parameters in this dictionary
-         as you see fit, and use set_beam() to activate that
-         beam.
-        '''
-        return self._mdef['beams'][bname]
-
-    def set_beam(self,beam_dict):
-        '''
-         Set the beam from a beam definition
-         (dictionary)
-        '''
-        self.madx.command.beam(**beam_dict)
-
-    def __str__(self):
-        return self.name
-
-    def _call(self,fdict):
-        with self.mdata.get_by_dict(fdict).filename() as fpath:
-            self.call(fpath)
-
-    def call(self,filepath):
-        '''
-         Call a file in Mad-X. Give either
-         full file path or relative.
-        '''
-        if not os.path.isfile(filepath):
-            raise ValueError("You tried to call a file that doesn't exist: "+filepath)
-
-        self._log.debug("Calling file: %s", filepath)
-        return self.madx.call(filepath)
-
-    def has_sequence(self,sequence):
-        """
-        Check if model has the sequence.
-
-        :param string sequence: Sequence name to be checked.
-        """
-        return sequence in self.get_sequence_names()
-
-    def has_optics(self,optics):
-        '''
-         Check if model has the optics.
-
-         :param string optics: Optics name to be checked.
-        '''
-        return optics in self._mdef['optics']
-
-    def set_optic(self,optic):
-        '''
-         Set new optics.
-
-         :param string optics: Optics name.
-
-         :raises KeyError: In case you try to set an optics not available in model.
-        '''
-
-        if not optic:
-            optic=self._mdef['default-optic']
-        if self._active['optic'] == optic:
-            self._log.info("Optics already initialized: %s", optic)
-            return 0
-
-        # optics dictionary..
-        odict=self._mdef['optics'][optic]
-
-        for strfile in odict['init-files']:
-            self._call(strfile)
-
-        # knobs dictionary.. we don't have that yet..
-        #for f in odict['knobs']:
-            #if odict['knobs'][f]:
-                #self.set_knob(f,1.0)
-            #else:
-                #self.set_knob(f,0.0)
-
-        self._active['optic']=optic
-
-    def set_knob(self,knob,value):
-        kdict = self._mdef['knobs']
-        for e in kdict[knob]:
-            val = kdict[knob][e] * value
-            self.madx.command(**{e: val})
-
-    def get_sequences(self):
-        """
-        Return iterable of sequences defined in the model.
-        """
-        return (self.madx.get_sequence(name)
-                for name in self.get_sequence_names())
-
-    def get_sequence_names(self):
-        """
-        Return iterable of all sequences defined in the model.
-        """
-        return self._mdef['sequences'].keys()
-
-    def list_optics(self):
-        '''
-         Returns an iterable of available optics
-        '''
-        return self._mdef['optics'].keys()
-
-    def list_ranges(self,sequence=None):
-        '''
-         Returns a list of available ranges for the sequence.
-         If sequence is not given, returns a dictionary structured as
-         {sequence1:[range1,range2,...],sequence2:...}
-
-         :param string sequence: sequence name.
-        '''
-        if sequence is None:
-            ret={}
-            for s in self.get_sequences():
-                ret[s.name]=list(self._mdef['sequences'][s]['ranges'].keys())
-            return ret
-
-        return list(self._mdef['sequences'][sequence]['ranges'].keys())
-
-    def list_beams(self):
-        '''
-         Returns an iterable of available beams
-        '''
-        return self._mdef['beams'].keys()
-
-    def _get_twiss_initial(self, sequence=None, range=None, name=None):
-        '''
-        Returns the dictionary for the twiss initial conditions.
-        If name is not defined, using default-twiss
-        '''
-        rangedict=self._get_range_dict(sequence=sequence,range=range)
-        range=self._active['range']
-        if name:
-            if name not in rangedict['twiss-initial-conditions']:
-                raise ValueError('twiss initial conditions with name '+name+' not found in range '+range)
-            return rangedict['twiss-initial-conditions'][name]
-        else:
-            return rangedict['twiss-initial-conditions'][rangedict['default-twiss']]
+    def get_twiss_initial(self, name=None, kwargs=None):
+        """Return the twiss initial conditions."""
+        if name is None:
+            name = self._data['default-twiss']
+        result = self._data['twiss-initial-conditions'][name]
+        if kwargs is not None:
+            result = result.copy()
+            result.update(kwargs)
+        return result
 
 
-    def twiss(self,
-              sequence=None,
-              columns=['name','s','betx','bety','x','y','dx','dy','px','py','mux','muy','l','k1l','angle','k2l'],
-              pattern=['full'],
-              range=None,
-              use=True,
-              **kwargs):
-        '''
-         Run a TWISS on the model.
-
-         Warning for ranges: Currently TWISS with initial conditions is NOT
-         implemented!
-
-         :param string sequence: Sequence, if empty, using active sequence.
-         :param string columns: Columns in the twiss table, can also be list of strings
-         :param string range: Optional, give name of a range defined for the model.
-         :param bool use: Call use before twiss.
-         :param kwargs: further keyword arguments for the MAD-X command
-        '''
-        # set sequence/range...
-        if range:
-            self.set_sequence(sequence,range)
-        else:
-            self.set_sequence(sequence)
-        sequence=self._active['sequence']
-        _range=self._active['range']
-
-        if self._apercalled.get(sequence):
-            raise ValueError("BUG in Mad-X: Cannot call twiss after aperture..")
-
-        seqdict=self._mdef['sequences'][sequence]
-        rangedict=seqdict['ranges'][_range]
-
-        if 'twiss-initial-conditions' in rangedict:
-            # this looks like a bug check to me (0 evaluates to False):
-            twiss_init = dict(
-                (key, val)
-                for key, val in self._get_twiss_initial(sequence,_range).items()
-                if val)
-        else:
-            twiss_init = None
-
-        res = self.madx.twiss(
-            sequence=sequence,
-            pattern=pattern,
-            columns=columns,
-            range=[rangedict["madx-range"]["first"],rangedict["madx-range"]["last"]],
-            twiss_init=twiss_init,
-            use=use,
-            **kwargs)
-        # we say that when the "full" range has been selected,
-        # we can set this to true. Needed for e.g. aperture calls
-        if not range:
-            self._twisscalled[sequence]=True
-        return res
-
-    def survey(self,
-               sequence=None,
-               columns='name,l,s,angle,x,y,z,theta',
-               range=None,
-               use=True,
-               **kwargs):
-        '''
-         Run a survey on the model.
-
-         :param string sequence: Sequence, if empty, using active sequence.
-         :param string columns: Columns in the twiss table, can also be list of strings
-         :param bool use: Call use before survey.
-         :param kwargs: further keyword arguments for the MAD-X command
-        '''
-        self.set_sequence(sequence)
-        sequence=self._active['sequence']
-
-        this_range=None
-        if range:
-            rangedict=self._get_range_dict(sequence=sequence,range=range)
-            this_range=rangedict['madx-range']
-
-        return self.madx.survey(
-            sequence=sequence,
-            columns=columns,
-            range=this_range,
-            use=use,
-            **kwargs)
-
-    def aperture(self,
-               sequence=None,
-               range=None,
-               columns='name,l,s,n1,aper_1,aper_2,aper_3,aper_4',
-               use=False,
-               **kwargs):
-        '''
-         Get the aperture from the model.
-
-         :param string sequence: Sequence, if empty, using active sequence.
-         :param string range: Range, if empty, the full sequence is chosen.
-         :param string columns: Columns in the twiss table, can also be list of strings
-         :param bool use: Call use before aperture.
-         :param kwargs: further keyword arguments for the MAD-X command
-        '''
-        self.set_sequence(sequence)
-        sequence=self._active['sequence']
-
-        if not self._twisscalled.get(sequence):
-            self.twiss(sequence)
-        # Calling "basic aperture files"
-        if not self._apercalled[sequence]:
-            for afile in self._mdef['sequences'][sequence]['aperfiles']:
-                self._call(afile)
-            self._apercalled[sequence]=True
-        # getting offset file if any:
-        # if no range was selected, we ignore offsets...
-        offsets=None
-        this_range=None
-        if range:
-            rangedict=self._get_range_dict(sequence=sequence,range=range)
-            this_range=rangedict['madx-range']
-            if 'aper-offset' in rangedict:
-                offsets = self.mdata.get_by_dict(rangedict['aper-offset']).filename()
-
-        args={'sequence': sequence,
-              'range': this_range,
-              'columns': columns,
-              'use': use}
-        args.update(kwargs)
-
-        if offsets:
-            with offsets as offsets_filename:
-                return self.madx.aperture(offsets=offsets_filename, **args)
-        else:
-            return self.madx.aperture(**args)
-
-
-    def match(
-            self,
-            constraints,
-            vary,
-            weight=None,
-            method=['lmdif'],
-            sequence=None,
-            knobfile=None):
-        """
-        Perform a matching operation.
-
-        See :func:`cern.madx.match` for a description of the parameters.
-        """
-        # set sequence/range...
-        self.set_sequence(sequence)
-        sequence=self._active['sequence']
-        _range=self._active['range']
-
-        seqdict=self._mdef['sequences'][sequence]
-        rangedict=seqdict['ranges'][_range]
-
-        def is_match_param(v):
-            return v.lower() in ['rmatrix', 'chrom', 'beta0', 'deltap',
-                    'betx','alfx','mux','x','px','dx','dpx',
-                    'bety','alfy','muy','y','py','dy','dpy' ]
-
-        if 'twiss-initial-conditions' in rangedict:
-            twiss_init = dict(
-                (key, val)
-                for key, val in self._get_twiss_initial(sequence,_range).items()
-                if is_match_param(key))
-        else:
-            twiss_init = None
-
-        self.madx.match(
-            sequence=sequence,
-            constraints=constraints,
-            vary=vary,
-            weight=weight,
-            method=method,
-            knobfile=knobfile,
-            twiss_init=twiss_init)
-        return self.twiss(sequence=sequence)
-
-    def _get_ranges(self,sequence):
-        return self._mdef['sequences'][sequence]['ranges'].keys()
-
-    def _get_range_dict(self, sequence=None, range=None):
-        '''
-        Returns the range dictionary. If sequence/range isn't given,
-        returns default for the model
-        '''
-        if not sequence:
-            sequence=self._active['sequence']
-        elif sequence not in self._mdef['sequences']:
-            raise ValueError("%s is not a valid sequence name, available sequences: '%s'" % (sequence,"' '".join(self._mdef['sequences'].keys())))
-
-        seqdict=self._mdef['sequences'][sequence]
-        if range:
-            self.set_range(range)
-        return seqdict['ranges'][self._active['range']]
+def _get_logger(model_name):
+    """Create a logger."""
+    return logging.getLogger(__name__ + '.' + model_name)
 
 
 class Factory(object):
 
-    """Model instance factory."""
+    """
+    Model instance factory.
 
-    def __init__(self, model_locator, model_cls=None):
+    :ivar Locator locator: model definition locator and loader
+    :ivar _Model: instanciates models
+    :ivar _Madx: instanciates MAD-X interpreters
+    :ivar _Logger: instanciates loggers
+    """
+
+    def __init__(self, locator):
         """Create Model factory using a specified ModelLocator."""
-        self._model_locator = model_locator
-        self._model_cls = model_cls or Model
+        self._locator = locator
+        self._Model = Model
+        self._Madx = madx.Madx
+        self._Logger = _get_logger
 
-    def get_model_names(self):
-        """Get iterable over all model names."""
-        return self._model_locator.list_models()
-
-    def _find(self, name):
-        """Find model definition, return ModelData."""
-        return self._model_locator.get_model(name)
-
-    def _create(self, mdata, sequence, optics, madx, histfile, logger):
+    def _create(self, name, data, repo, madx, command_log, error_log):
         """
         Create Model instance based on ModelData.
 
         Parameters as in load_model (except for mdata).
         """
+        if error_log is None:
+            error_log = self._Logger(name)
         if madx is None:
-            madx = Madx(histfile)
+            madx = self._Madx(command_log=command_log, error_log=error_log)
             madx.verbose(False)
-        elif histfile is not None:
-            raise ValueError("'histfile' cannot be used with 'madx'")
-        if logger is None:
-            logger = logging.getLogger(__name__)
-        return self._model_cls(mdata,
-                               sequence=sequence,
-                               optics=optics,
-                               madx=madx,
-                               logger=logger)
+        elif command_log is not None:
+            raise ValueError("'command_log' cannot be used with 'madx'")
+        model = self._Model(name, data, repo=repo, madx=madx)
+        model.load()
+        return model
 
-    def load_model(self,
-                   name,
-                   # *,
-                   # These should be passed as keyword-only parameters:,
-                   sequence=None,
-                   optics=None,
-                   madx=None,
-                   histfile=None,
-                   logger=None):
+    def __call__(self,
+                 name,
+                 # *,
+                 # These should be passed as keyword-only parameters:,
+                 madx=None,
+                 command_log=None,
+                 error_log=None):
         """
         Find model definition by name and create Model instance.
 
@@ -516,33 +449,86 @@ class Factory(object):
         :param str sequence: Name of the initial sequence to use
         :param str optics: Name of optics to load, string or list of strings.
         :param Madx madx: MAD-X instance to use
-        :param str histfile: history file name; use only if madx is None!
-        :param logging.Logger logger:
+        :param str command_log: history file name; use only if madx is None!
+        :param logging.Logger error_log:
         """
-        return self._create(self._find(name),
-                            sequence=sequence,
-                            optics=optics,
+        data = self._model_locator.get_definition(name)
+        repo = self._model_locator.get_repository(data)
+        return self._create(name,
+                            data,
+                            repo=repo,
                             madx=madx,
-                            histfile=histfile,
-                            logger=logger)
+                            command_log=command_log,
+                            error_log=error_log)
 
 
-_default_resources = PackageResource(__package__, '_models')
-_default_locator = MergedModelLocator(_default_resources)
-default_factory = Factory(_default_locator)
+class Locator(ModelLocator):
 
-get_model_names = default_factory.get_model_names
-load_model = default_factory.load_model
+    """
+    Model locator for yaml files that contain multiple model definitions.
 
+    These are the model definition files that are currently used by default
+    for filesystem resources.
 
-def save_model(model_def,filename):
-    '''
-    Saves the model definition defined by the dictionary model_def
-    to file filename. The file is in YAML format (or JSON). We do not check
-    that the model is valid in any way.
+    Serves the purpose of locating models and returning corresponding
+    resource providers.
+    """
 
-    It is recommended that you rather use the modeldefs.model.save_model,
-    once it is ready.
-    '''
-    yaml.safe_dump(model_def,stream=open(filename,'w'))
+    def __init__(self, resource_provider):
+        """
+        Initialize a merged model locator instance.
 
+        The resource_provider parameter must be a ResourceProvider instance
+        that points to the filesystem location where the .cpymad.yml model
+        files are stored.
+        """
+        self._repo = resource_provider
+
+    def list_models(self, encoding='utf-8'):
+        """
+        Iterate all available models.
+
+        Returns an iterable that may be a generator object.
+        """
+        for res_name in self._repo.listdir_filter(ext='.cpymad.yml'):
+            mdefs = self._repo.yaml(res_name, encoding=encoding)
+            for n, d in mdefs.items():
+                if d['real']:
+                    yield n
+
+    def get_definition(self, name, encoding='utf-8'):
+        """
+        Get the first found model with the specified name.
+
+        :returns: the model definition
+        :raises ValueError: if no model with the given name is found.
+        """
+        for res_name in self._repo.listdir_filter(ext='.cpymad.yml'):
+            mdefs = self._repo.yaml(res_name, encoding=encoding)
+            mdef = mdefs.get(name)
+            if mdef and mdef['real']:
+                break
+        else:
+            raise ValueError("The model {!r} does not exist in the database"
+                             .format(name))
+        # Expand the model definition using its bases as specified by
+        # 'extends'. This corresponds to a graph linearization:
+        def get_bases(model_name):
+            return mdefs[model_name].get('extends', [])
+        mro = util.C3_mro(get_bases, name)
+        expanded_mdef = {}
+        for base in reversed(mro):
+            util.deep_update(expanded_mdef, mdefs[base])
+        return expanded_mdef
+
+    def get_repository(self, data):
+        """
+        Get the resource loader for the given model.
+        """
+        # instantiate the resource providers for model resource data
+        repo_offs = data['path-offsets']['repository-offset']
+        # the repository location may be overwritten by dbdirs:
+        for dbdir in data.get('dbdirs', []):
+            if os.path.isdir(dbdir):
+                return FileResource(os.path.join(dbdir, repo_offs))
+        return self._repo.get('repdata').get(repo_offs)

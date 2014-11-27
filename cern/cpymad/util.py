@@ -1,6 +1,18 @@
+"""
+Utility functions used in other parts of the pymad package.
+"""
 import collections
 
 from .types import Range, Constraint
+
+
+__all__ = [
+    'mad_quote',
+    'mad_parameter',
+    'mad_command',
+    'deep_update',
+    'C3_mro',
+]
 
 
 try:
@@ -89,3 +101,51 @@ def mad_command(*args, **kwargs):
     _args = list(args)
     _args += [mad_parameter(k, v) for k,v in kwargs.items()]
     return ', '.join(filter(None, _args)) + ';'
+
+
+def deep_update(d, u):
+    """Recursively update a nested dictionary."""
+    for k, v in u.items():
+        if isinstance(v, collections.Mapping):
+            d[k] = deep_update(d.get(k, {}), v)
+        elif isinstance(v, list) and k in d:
+            d[k].extend(v)
+        else:
+            d[k] = v
+    return d
+
+
+def C3_mro(get_bases, *bases):
+    """
+    Calculate the C3 MRO of bases.
+
+    Suppose you intended creating a class K with the given base classes. This
+    function returns the MRO which K would have, *excluding* K itself (since
+    it doesn't yet exist), as if you had actually created the class.
+
+    Another way of looking at this, if you pass a single class K, this will
+    return the linearization of K (the MRO of K, *including* itself).
+
+    http://code.activestate.com/recipes/577748-calculate-the-mro-of-a-class/
+    """
+    seqs = [[C] + C3_mro(get_bases, *get_bases(C)) for C in bases] + [list(bases)]
+    result = []
+    while True:
+      seqs = list(filter(None, seqs))
+      if not seqs:
+          return result
+      try:
+          head = next(seq[0] for seq in seqs
+                      if not any(seq[0] in s[1:] for s in seqs))
+      except StopIteration:
+          raise TypeError("inconsistent hierarchy, no C3 MRO is possible")
+      result.append(head)
+      for seq in seqs:
+          if seq[0] == head:
+              del seq[0]
+
+
+def is_match_param(v):
+    return v.lower() in ['rmatrix', 'chrom', 'beta0', 'deltap',
+            'betx','alfx','mux','x','px','dx','dpx',
+            'bety','alfy','muy','y','py','dy','dpy' ]
