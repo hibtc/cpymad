@@ -280,6 +280,10 @@ class Sequence(object):
         self.load()
         return self.madx.survey(sequence=self.name, **kwargs)
 
+    def match(self, **kwargs):
+        """Run MATCH on this sequence."""
+        return self.default_range.match(**kwargs)
+
 
 class Range(object):
 
