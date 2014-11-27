@@ -489,9 +489,4 @@ class Locator(ModelLocator):
         Get the resource loader for the given model.
         """
         # instantiate the resource providers for model resource data
-        repo_offs = data['path-offsets']['repository-offset']
-        # the repository location may be overwritten by dbdirs:
-        for dbdir in data.get('dbdirs', []):
-            if os.path.isdir(dbdir):
-                return FileResource(os.path.join(dbdir, repo_offs))
-        return self._repo.get('repdata').get(repo_offs)
+        return self._repo.get(data['path-offset'])
