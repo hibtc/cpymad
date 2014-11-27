@@ -299,29 +299,6 @@ class Madx(object):
         self.command.survey(**kwargs)
         return self.get_table('survey')
 
-    default_aperture_columns = ['name', 'l', 'angle'
-                                'x', 'y', 'z', 'theta']
-
-    def aperture(self,
-                 sequence=None,
-                 pattern=['full'],
-                 range=None,
-                 columns=default_aperture_columns,
-                 offsets=None,
-                 **kwargs):
-        """
-        Run SELECT+APERTURE.
-
-        :param str sequence: name of sequence
-        :param list pattern: pattern to include in table
-        :param list columns: columns to include in table (may be a str)
-        :param bool use: Call use before aperture.
-        :param kwargs: further keyword arguments for the MAD-X command
-        """
-        self.select('aperture', pattern=pattern, columns=columns)
-        self.command.aperture(range=range, offsetelem=offsets, **kwargs)
-        return self.get_table('aperture')
-
     def use(self, sequence):
         """
         Run USE to expand a sequence.

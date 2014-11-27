@@ -234,11 +234,6 @@ class Sequence(object):
 
     :ivar dict _data:
     :ivar Model _model:
-
-    Keep track whether TWISS/APERTURE commands have been called:
-
-    :ivar bool _aperture_called:
-    :ivar bool _twiss_called:
     """
 
     def __init__(self, name, data, model):
@@ -246,8 +241,6 @@ class Sequence(object):
         self.name = name
         self._data = data
         self._model = model
-        self._twiss_called = False
-        self._aperture_called = False
         self.ranges = _deserialize(data['ranges'], Range, self)
 
     def load(self):
@@ -282,24 +275,10 @@ class Sequence(object):
         """Execute a TWISS command on the default range."""
         return self.default_range.twiss(**kwargs)
 
-    def aperture(self, **kwargs):
-        """Execute a TWISS command on the default range."""
-        return self.default_range.aperture(**kwargs)
-
     def survey(self, **kwargs):
         """Run SURVEY on this sequence."""
         self.load()
         return self.madx.survey(sequence=self.name, **kwargs)
-
-    def _prepare_aperture(self):
-        """Load all content needed for APERTURE operations."""
-        self.load()
-        if self._aperture_called:
-            return
-        if not self._twiss_called:
-            self.twiss()
-        self._load(*self._data['aperfiles'])
-        self._aperture_called = True
 
 
 class Range(object):
@@ -348,25 +327,7 @@ class Range(object):
         kw = self._set_twiss_init(kwargs)
         result = self.madx.twiss(sequence=self.sequence.name,
                                  range=self.bounds, **kw)
-        if self.bounds == ('#s', '#e'):
-            # we say that when the "full" range has been selected,
-            # we can set this to true. Needed for e.g. aperture calls
-            self._sequence._twiss_called = True
         return result
-
-    def aperture(self, **kwargs):
-        """Run APERTURE on this range."""
-        self.load()
-        self._sequence._prepare_aperture()
-        offsets_file = self.offsets_file
-        if 'offsets' not in kwargs and offsets_file:
-            with offsets_file.filename() as offsets:
-                return self._madx.aperture(sequence=self._sequence.name,
-                                           range=self.bounds,
-                                           offsets=offsets, **kwargs)
-        else:
-            return self._madx.aperture(sequence=self._sequence.name,
-                                       range=self.bounds, **kwargs)
 
     def match(self, **kwargs):
         """Perform a MATCH operation on this range."""
