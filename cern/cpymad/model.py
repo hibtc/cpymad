@@ -287,8 +287,9 @@ class Sequence(object):
         return self.default_range.aperture(**kwargs)
 
     def survey(self, **kwargs):
-        """Execute a TWISS command on the default range."""
-        return self.default_range.aperture(**kwargs)
+        """Run SURVEY on this sequence."""
+        self.load()
+        return self.madx.survey(sequence=self.name, **kwargs)
 
     def _prepare_aperture(self):
         """Load all content needed for APERTURE operations."""
@@ -352,13 +353,6 @@ class Range(object):
             # we can set this to true. Needed for e.g. aperture calls
             self._sequence._twiss_called = True
         return result
-
-    def survey(self, **kwargs):
-        """Run SURVEY on this range."""
-        self.load()
-        kw = self._set_twiss_init(kwargs)
-        return self.madx.survey(sequence=self._sequence.name,
-                                range=self.bounds, **kw)
 
     def aperture(self, **kwargs):
         """Run APERTURE on this range."""
