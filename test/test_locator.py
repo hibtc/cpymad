@@ -1,11 +1,7 @@
 # encoding: utf-8
 """
-Tests for the classes defined in cern.cpymad.model_locator.
+Tests for the model.Locator functionality.
 """
-
-__all__ = [
-    'TestLocator',
-]
 
 # tested classes
 from cern.cpymad.model import Locator
@@ -14,6 +10,10 @@ from cern.cpymad.model import Locator
 import unittest
 import os
 from cern.resource.file import FileResource
+
+__all__ = [
+    'TestLocator',
+]
 
 
 class TestLocator(unittest.TestCase):

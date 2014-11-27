@@ -20,6 +20,9 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         for line in self.doc.splitlines():
             self.mad._libmadx.input(line)
 
+    def tearDown(self):
+        del self.mad
+
     # TODO:
     # def test_command(self):
     # def test_help(self):
