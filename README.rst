@@ -7,22 +7,20 @@ MAD-X is a software package to simulate particle accelerators and is used
 at CERN and all around the world. It has its own proprietary scripting
 language and is usually launched from the command line.
 
-There is also a binding via JMad_ called JPyMAD_. This has less features
-but does not require a C compiler for installing.
-
 .. _CPyMAD: https://github.com/pymad/cpymad
 .. _Cython: http://cython.org/
 .. _MAD-X: http://cern.ch/mad
-.. _JMad: http://jmad.web.cern.ch/jmad/
-.. _JPyMAD: https://github.com/pymad/jpymad
 
 **IMPORTANT:** cern-cpymad links against an unofficial build of MAD-X that
 is not supported by CERN, i.e. in case of problems you will not get help
 there.
 
+**IMPORTANT:** this is a heavily modified fork of the cern-cpymad package.
+The fork does NOT originate from CERN members.
+
 
 Dependencies
-------------
+~~~~~~~~~~~~
 
 To build MAD-X and CPyMAD from source you will need
 
@@ -38,7 +36,6 @@ Furthermore, CPyMAD depends on the following python packages:
 - PyYAML_
 
 The python packages can be installed using pip_.
-
 
 .. _CMake: http://www.cmake.org/
 .. _setuptools: https://pypi.python.org/pypi/setuptools
@@ -57,68 +54,79 @@ Installation instructions are available at http://pymad.github.io/cpymad/install
 Usage
 ~~~~~
 
+The ``Madx`` class provides a basic binding to the MAD-X interpreter:
+
 .. code-block:: python
 
-    import cern.cpymad.api as cpymad
+    from cern.cpymad.madx import Madx
 
-    # Instanciate a model:
-    m = cpymad.load_model('lhc')
+    # create a new interpreter instance:
+    # the optional 'command_log' parameter can be used to store MAD-X
+    # command history.
+    madx = Madx(command_log="log.madx")
+
+    # you execute arbitrary textual MAD-X commands:
+    madx.input('call, file="input_file.madx";')
+
+    # there is a more convenient syntax available which does the same:
+    madx.command.call(file="input_file.madx")
+
+    # And for some commands there exist direct shortcuts:
+    madx.call('/path/to/some/input_file.madx')
 
     # Calculate TWISS parameters:
-    twiss = m.twiss()
+    twiss = madx.twiss(sequence='LEBT',
+                       betx=0.1, bety=0.1,
+                       alfx=0.1, alfy=0.1)
 
     # Your own analysis below:
     from matplotlib import pyplot as plt
     plt.plot(twiss['s'], twiss['betx'])
     plt.show()
 
+There is also a ``Model`` class which encapsulates more metadata for complex
+accelerator machines. If you have ready-to-use model definitions on your
+filesystem, models can be instanciated and used as follows:
+
+.. code-block:: python
+
+    from cern.cpymad import model
+    from cern.resource.file import FileResource
+
+    locator = model.Locator(FileResource('/path/to/folder/with/definitions'))
+    factory = model.Factory(locator)
+    model = factory('model-name')
+
+    for sequence in model.sequences.values():
+        twiss = sequence.twiss()
 
 See http://pymad.github.io/cpymad for further documentation.
 
 
-Development guidelines
-~~~~~~~~~~~~~~~~~~~~~~
+Contributing
+~~~~~~~~~~~~
 
-**Coding:**
-
-Try to be consistent with the PEP8_ guidelines as far as you are familiar
-with it. Add `unit tests`_ for all non-trivial functionality.
-`Dependency injection`_ is a great pattern to keep modules testable.
-
-.. _PEP8: http://www.python.org/dev/peps/pep-0008/
-.. _`unit tests`: http://docs.python.org/2/library/unittest.html
-.. _`Dependency injection`: http://www.youtube.com/watch?v=RlfLCWKxHJ0
-
-**Version control:**
+Try to be consistent with the PEP8_ guidelines. Add `unit tests`_ for all
+non-trivial functionality. `Dependency injection`_ is a great pattern to
+keep modules testable.
 
 Commits should be reversible, independent units if possible. Use descriptive
 titles and also add an explaining commit message unless the modification is
 trivial. See also: `A Note About Git Commit Messages`_.
 
+.. _PEP8: http://www.python.org/dev/peps/pep-0008/
+.. _`unit tests`: http://docs.python.org/2/library/unittest.html
+.. _`Dependency injection`: http://www.youtube.com/watch?v=RlfLCWKxHJ0
 .. _`A Note About Git Commit Messages`: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
 
-**Tests:**
 
-Currently, two major test services are used:
+Tests
+~~~~~
 
-- The tests on CDash_ are run on a daily basis on the ``master`` branch and
-  on update of the ``testing`` branch. It ensures that the integration
-  tests for the LHC models are working correctly on all tested platforms.
-  The tests are run only on specific python versions.
+Currently, tests run on:
 
 - The `Travis CI`_ service is mainly used to check that the unit tests for
-  pymad itself execute on several python versions. Python{2.6,2.7,3.3} are
+  pymad itself execute on several python versions. Python{2.7,3.3} are
   supported. The tests are executed on any update of an upstream branch.
 
-.. _CDash: http://abp-cdash.web.cern.ch/abp-cdash/index.php?project=pymad
 .. _`Travis CI`: https://travis-ci.org/pymad/cpymad
-
-
-**Contribution work flow:**
-
-All changes are reviewed via pull-requests. Before merging to master the
-pull-request must reside aliased by the ``testing`` branch long enough to
-be confirmed as stable.  Any issues are discussed in the associated issue
-thread.  Concrete suggestions for changes are best posed as pull-requests
-onto the feature branch.
-

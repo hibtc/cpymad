@@ -113,7 +113,7 @@ class Model(object):
 
     @property
     def data(self):
-        """Get a serializable representation of this sequence."""
+        """Get a serializable representation of this model."""
         data = self._data.copy()
         data['beams'] = _serialize(self.beams)
         data['optics'] = _serialize(self.optics)
@@ -122,23 +122,19 @@ class Model(object):
 
     @property
     def default_optic(self):
-        """Get default optic name."""
+        """Get default Optic."""
         return self.optics[self._data['default-optic']]
 
     @property
     def default_sequence(self):
-        """Get default sequence name."""
+        """Get default Sequence."""
         return self.sequences[self._data['default-sequence']]
 
     # TODO: add setters for default_optic / default_sequence
     # TODO: remove default_sequence?
 
     def _load(self, *files):
-        """
-        Load MAD-X files.
-
-        :param tuple files: file names to be loaded from resource repository.
-        """
+        """Load MAD-X files in interpreter."""
         for file in files:
             with self._repo.get(file).filename() as fpath:
                 self.madx.call(fpath)
@@ -178,7 +174,6 @@ class Beam(object):
         self._loaded = True
         self._model.load()
         self._model.madx.command.beam(**self.data)
-
 
 
 class Optic(object):
@@ -316,11 +311,13 @@ class Range(object):
 
     @property
     def bounds(self):
+        """Get a tuple (first, last)."""
         return (self.data["madx-range"]["first"],
                 self.data["madx-range"]["last"])
 
     @property
     def offsets_file(self):
+        """Get a :class:`ResourceProvider` for the offsets file."""
         if 'aper-offset' not in self.data:
             return None
         repo = self._sequence._model._repo
@@ -411,8 +408,6 @@ class Factory(object):
         Find model definition by name and create Model instance.
 
         :param str name: model name
-        :param str sequence: Name of the initial sequence to use
-        :param str optics: Name of optics to load, string or list of strings.
         :param Madx madx: MAD-X instance to use
         :param str command_log: history file name; use only if madx is None!
         :param logging.Logger error_log:

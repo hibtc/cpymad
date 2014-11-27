@@ -10,15 +10,10 @@ language and is usually launched from the command line.
 Feel free to report bugs, request features and ask questions on the
 `issue pages`_.
 
-There is also a binding via JMad_ called JPyMAD_. This has less features
-but does not require a C compiler for installing.
-
 .. _CPyMAD: https://github.com/pymad/cpymad
 .. _Cython: http://cython.org/
 .. _MAD-X: http://cern.ch/mad
 .. _issue pages: https://github.com/pymad/cpymad/issues
-.. _JMad: http://jmad.web.cern.ch/jmad/
-.. _JPyMAD: https://github.com/pymad/jpymad
 
 
 Contents:
