@@ -137,8 +137,6 @@ class Madx(object):
         """
         Initialize instance variables.
 
-        Users should call the start_madx() function instead.
-
         :param libmadx: :mod:`libmadx` compatible object
         :param command_log: logs MAD-X history either filename or CommandLog
         :param error_log: logger instance ``logging.Logger``
@@ -164,9 +162,7 @@ class Madx(object):
 
     @property
     def version(self):
-        """
-        Get the MAD-X version.
-        """
+        """Get the MAD-X version."""
         return Version(self._libmadx.madx_release,
                        self._libmadx.madx_date)
 
@@ -289,7 +285,6 @@ class Madx(object):
                sequence=None,
                pattern=['full'],
                columns=default_survey_columns,
-               range=None,
                **kwargs):
         """
         Run SELECT+USE+SURVEY.
@@ -301,7 +296,7 @@ class Madx(object):
         """
         self.select('survey', pattern=pattern, columns=columns)
         self._use(sequence)
-        self.command.survey(range=range, **kwargs)
+        self.command.survey(**kwargs)
         return self.get_table('survey')
 
     default_aperture_columns = ['name', 'l', 'angle'
@@ -491,7 +486,6 @@ class Madx(object):
         :param string cmd: expression to evaluate.
         :returns: numeric value of the expression
         :rtype: float
-
         """
         return self._libmadx.evaluate(cmd)
 

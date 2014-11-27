@@ -336,7 +336,7 @@ class Range(object):
                 self._data["madx-range"]["last"])
 
     @property
-    def offsets(self):
+    def offsets_file(self):
         if 'aper-offset' not in self._data:
             return None
         repo = self._sequence._model._repo
@@ -348,7 +348,7 @@ class Range(object):
         kw = self._set_twiss_init(kwargs)
         result = self.madx.twiss(sequence=self.sequence.name,
                                  range=self.bounds, **kw)
-        if _range == ('#s', '#e'):
+        if self.bounds == ('#s', '#e'):
             # we say that when the "full" range has been selected,
             # we can set this to true. Needed for e.g. aperture calls
             self._sequence._twiss_called = True
@@ -358,12 +358,12 @@ class Range(object):
         """Run APERTURE on this range."""
         self.load()
         self._sequence._prepare_aperture()
-        offsets = self.offsets
-        if 'offsets' not in kwargs and offsets:
-            with offsets.filename() as _offsets:
+        offsets_file = self.offsets_file
+        if 'offsets' not in kwargs and offsets_file:
+            with offsets_file.filename() as offsets:
                 return self._madx.aperture(sequence=self._sequence.name,
                                            range=self.bounds,
-                                           offsets=_offsets, **kwargs)
+                                           offsets=offsets, **kwargs)
         else:
             return self._madx.aperture(sequence=self._sequence.name,
                                        range=self.bounds, **kwargs)
@@ -376,7 +376,7 @@ class Range(object):
             for key, val in kw['twiss_init'].items()
             if util.is_match_param(key)
         }
-        return self.twiss(sequence=self._sequence.name,
+        return self.match(sequence=self._sequence.name,
                           range=self.bounds, **kw)
 
     def get_twiss_initial(self, name=None):
