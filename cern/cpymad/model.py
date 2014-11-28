@@ -377,17 +377,18 @@ class Factory(object):
     Model instance factory.
 
     :ivar Locator locator: model definition locator and loader
-    :ivar _Model: instanciates models
-    :ivar _Madx: instanciates MAD-X interpreters
-    :ivar _Logger: instanciates loggers
+    :cvar _Model: instanciates models
+    :cvar _Madx: instanciates MAD-X interpreters
+    :cvar _Logger: instanciates loggers
     """
+
+    _Model = Model
+    _Madx = madx.Madx
+    _Logger = _get_logger
 
     def __init__(self, locator):
         """Create Model factory using a specified model Locator."""
         self._locator = locator
-        self._Model = Model
-        self._Madx = madx.Madx
-        self._Logger = _get_logger
 
     def _create(self, name, data, repo, madx, command_log, error_log):
         """
