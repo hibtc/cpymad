@@ -31,17 +31,23 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
     def _check_twiss(self, seq_name):
         beam = 'beam, ex=1, ey=2, particle=electron, sequence={0};'.format(seq_name)
         self.mad.command(beam)
-        twiss = self.mad.twiss(sequence=seq_name,
-                               alfx=0.5, alfy=1.5,
-                               betx=2.5, bety=3.5)
+        initial = dict(alfx=0.5, alfy=1.5,
+                       betx=2.5, bety=3.5)
+        twiss = self.mad.twiss(sequence=seq_name, **initial)
         betx, bety = twiss['betx'], twiss['bety']
         alfx, alfy = twiss['alfx'], twiss['alfy']
-        self.assertAlmostEqual(alfx[0], 0.5)
-        self.assertAlmostEqual(alfy[0], 1.5)
-        self.assertAlmostEqual(betx[0], 2.5)
-        self.assertAlmostEqual(bety[0], 3.5)
+        # Check initial values:
+        self.assertAlmostEqual(twiss['alfx'][0], initial['alfx'])
+        self.assertAlmostEqual(twiss['alfy'][0], initial['alfy'])
+        self.assertAlmostEqual(twiss['betx'][0], initial['betx'])
+        self.assertAlmostEqual(twiss['bety'][0], initial['bety'])
         self.assertAlmostEqual(twiss.summary['ex'], 1)
         self.assertAlmostEqual(twiss.summary['ey'], 2)
+        # Check that keys are all lowercase:
+        for k in twiss:
+            self.assertEqual(k, k.lower())
+        for k in twiss.summary:
+            self.assertEqual(k, k.lower())
 
     def test_twiss_1(self):
         self._check_twiss('s1')     # s1 can be computed at start
