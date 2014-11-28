@@ -322,6 +322,7 @@ class Range(object):
 
     def match(self, **kwargs):
         """Perform a MATCH operation on this range."""
+        self.load()
         kw = self._set_twiss_init(kwargs)
         kw['twiss_init'] = {
             key: val
