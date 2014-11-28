@@ -8,14 +8,11 @@ optics and sequences. For example:
 
 .. code-block:: python
 
-    from cern.cpymad import model
-    from cern.resource.file import FileResource
+    from cern.cpymad.model import Model
 
-    locator = model.Locator(FileResource('/path/to/folder/with/definitions'))
-    factory = model.Factory(locator)
-    model = factory('model-name')
-    sequence = model.default_sequence
-    twiss = sequence.twiss()
+    model = Model.load('/path/to/model/definition.cpymad.yml')
+
+    twiss = model.default_sequence.twiss()
 
     print("max/min beta x:", max(twiss['betx']), min(twiss['betx']))
     print("ex: {0}, ey: {1}", twiss.summary['ex'], twiss.summary['ey'])
