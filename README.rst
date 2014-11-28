@@ -90,12 +90,9 @@ filesystem, models can be instanciated and used as follows:
 
 .. code-block:: python
 
-    from cern.cpymad import model
-    from cern.resource.file import FileResource
+    from cern.cpymad.model import Model
 
-    locator = model.Locator(FileResource('/path/to/folder/with/definitions'))
-    factory = model.Factory(locator)
-    model = factory('model-name')
+    model = Model.load('/path/to/model/definition.cpymad.yml')
 
     for sequence in model.sequences.values():
         twiss = sequence.twiss()

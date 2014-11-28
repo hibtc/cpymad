@@ -2,14 +2,6 @@
 Models encapsulate metadata for accelerator machines.
 
 For more information about models, see :class:`Model`.
-
-The following example demonstrates how to create a Model instance given that
-you have model definition files ready on your file system:
-
->>> from cern.resource.file import FileResource
->>> from cern.cpymad.model import Factory
->>> load_model = Factory(FileResource('/path/to/model/definitions'))
->>> model = load_model('LHC')
 """
 
 from __future__ import absolute_import
@@ -28,7 +20,6 @@ __all__ = [
     'Optic',
     'Sequence',
     'Range',
-    'Factory',
     'Locator',
 ]
 
@@ -72,17 +63,15 @@ class Model(object):
     :ivar ResourceProvider _repo: resource access
     """
 
-    def __init__(self, name, data, repo, madx):
+    def __init__(self, data, repo, madx):
         """
         Initialize a Model object.
 
-        :param str name: model name
         :param dict data: model definition data
         :param ResourceProvider repo: resource repository
         :param Madx madx: MAD-X instance to use
         """
         # init instance variables
-        self.name = name
         self._data = data
         self._repo = repo
         self.madx = madx
@@ -91,6 +80,46 @@ class Model(object):
         self.beams = _deserialize(data['beams'], Beam, self)
         self.optics = _deserialize(data['optics'], Optic, self)
         self.sequences = _deserialize(data['sequences'], Sequence, self)
+
+    @classmethod
+    def load(cls,
+             name,
+             # *,
+             # These should be passed as keyword-only parameters:
+             locator=None,
+             madx=None,
+             command_log=None,
+             error_log=None):
+        """
+        Create Model instance from a model definition file.
+
+        :param str name: model definition file name
+        :param Locator locator: model locator
+        :param Madx madx: MAD-X instance to use
+        :param str command_log: history file name; use only if madx is None!
+        :param logging.Logger error_log:
+
+        If the ``locator`` is not specified ``name`` is assumed to be an
+        absolute path of a model definition file living in the ordinary file
+        system.
+        """
+        if locator is None:
+            path, name = os.path.split(name)
+            locator = Locator(FileResource(path))
+        data = locator.get_definition(name)
+        repo = locator.get_repository(data)
+        if madx is None:
+            if error_log is None:
+                error_log = logging.getLogger(__name__ + '.' + model_name)
+            madx = madx.Madx(command_log=command_log, error_log=error_log)
+            madx.verbose(False)
+        elif command_log is not None:
+            raise ValueError("'command_log' cannot be used with 'madx'")
+        elif error_log is not None:
+            raise ValueError("'error_log' cannot be used with 'madx'")
+        model = cls(name, data, repo=repo, madx=madx)
+        model.init()
+        return model
 
     def init(self):
         """Load model in MAD-X interpreter."""
@@ -101,6 +130,11 @@ class Model(object):
 
     def __repr__(self):
         return "{0}({1!r})".format(self.__class__.__name__, self.name)
+
+    @property
+    def name(self):
+        """Model name."""
+        return self._data['name']
 
     @property
     def data(self):
@@ -355,71 +389,6 @@ class Range(object):
         return kw
 
 
-
-class Factory(object):
-
-    """
-    Model instance factory.
-
-    :ivar Locator locator: model definition locator and loader
-    :cvar _Model: instanciates models
-    :cvar _Madx: instanciates MAD-X interpreters
-    :cvar _Logger: instanciates loggers
-    """
-
-    _Model = Model
-    _Madx = madx.Madx
-
-    def _Logger(self, model_name):
-        """Create a logger."""
-        return logging.getLogger(__name__ + '.' + model_name)
-
-    def __init__(self, locator):
-        """Create Model factory using a specified model Locator."""
-        self._locator = locator
-
-    def _create(self, name, data, repo, madx, command_log, error_log):
-        """
-        Create Model instance based on ModelData.
-
-        Parameters as in load_model (except for mdata).
-        """
-        if error_log is None:
-            error_log = self._Logger(name)
-        if madx is None:
-            madx = self._Madx(command_log=command_log, error_log=error_log)
-            madx.verbose(False)
-        elif command_log is not None:
-            raise ValueError("'command_log' cannot be used with 'madx'")
-        model = self._Model(name, data, repo=repo, madx=madx)
-        model.init()
-        return model
-
-    def __call__(self,
-                 name,
-                 # *,
-                 # These should be passed as keyword-only parameters:,
-                 madx=None,
-                 command_log=None,
-                 error_log=None):
-        """
-        Find model definition by name and create Model instance.
-
-        :param str name: model name
-        :param Madx madx: MAD-X instance to use
-        :param str command_log: history file name; use only if madx is None!
-        :param logging.Logger error_log:
-        """
-        data = self._locator.get_definition(name)
-        repo = self._locator.get_repository(data)
-        return self._create(name,
-                            data,
-                            repo=repo,
-                            madx=madx,
-                            command_log=command_log,
-                            error_log=error_log)
-
-
 class Locator(object):
 
     """
@@ -461,7 +430,8 @@ class Locator(object):
         :raises ValueError: if no model with the given name is found.
         """
         try:
-            res_name = name + self.ext
+            if not name.endswith(self.ext):
+                name += self.ext
             return self._repo.yaml(res_name, encoding=encoding)
         except IOError:
             raise ValueError("The model {!r} does not exist in the database"

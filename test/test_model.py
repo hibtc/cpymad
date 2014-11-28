@@ -4,7 +4,7 @@ Tests for the model.Model runtime hierarchy.
 """
 
 # tested classes
-import cern.cpymad.model
+from cern.cpymad.model import Model
 from cern.resource.file import FileResource
 
 # test utilities
@@ -24,17 +24,13 @@ class TestModel(unittest.TestCase):
 
     # test configuration:
 
-    path = os.path.join(os.path.dirname(__file__), 'data')
-    name = 'lebt'
+    path = os.path.join(os.path.dirname(__file__), 'data', 'lebt.cpymad.yml')
 
     # helper methods for tests:
 
     def load_model(self, path, name):
         """Load model with given name from specified path."""
-        repository = FileResource(path)
-        locator = cern.cpymad.model.Locator(repository)
-        factory = cern.cpymad.model.Factory(locator)
-        model = factory(name)
+        model = Model.load(self.path)
         model.madx.command.option(twiss_print=False)
         return model
 
@@ -54,7 +50,7 @@ class TestModel(unittest.TestCase):
         self.assertEqual(model.name, 'lebt')
         # data
         repository = FileResource(self.path)
-        self.assertEqual(model.data, repository.yaml('lebt.cpymad.yml'))
+        self.assertEqual(model.data, repository.yaml())
         # beams
         self.assertItemsEqual(model.beams.keys(), ['carbon', 'other'])
         # optics
