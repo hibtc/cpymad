@@ -58,7 +58,7 @@ The ``Madx`` class provides a basic binding to the MAD-X interpreter:
 
 .. code-block:: python
 
-    from cern.cpymad.madx import Madx
+    from cpymad.madx import Madx
 
     # create a new interpreter instance:
     # the optional 'command_log' parameter can be used to store MAD-X
@@ -90,7 +90,7 @@ filesystem, models can be instanciated and used as follows:
 
 .. code-block:: python
 
-    from cern.cpymad.model import Model
+    from cpymad.model import Model
 
     model = Model.load('/path/to/model/definition.cpymad.yml')
 

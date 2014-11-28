@@ -128,7 +128,7 @@ class Madx(object):
 
     .. code-block:: python
 
-        from cern.cpymad.madx import Madx
+        from cpymad.madx import Madx
 
         m = Madx()
 

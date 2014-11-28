@@ -1,5 +1,5 @@
-cern.cpymad.madx
-----------------
+cpymad.madx
+-----------
 
-.. automodule:: cern.cpymad.madx
+.. automodule:: cpymad.madx
     :members:

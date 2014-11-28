@@ -369,7 +369,7 @@ class Service(object):
 class LibMadxClient(Client):
 
     """
-    Specialized client for boxing :mod:`cern.cpymad.libmadx` function calls.
+    Specialized client for boxing :mod:`cpymad.libmadx` function calls.
 
     Boxing these MAD-X function calls is necessary due the global nature of
     all state within the MAD-X library.
@@ -386,7 +386,7 @@ class LibMadxClient(Client):
 
     @property
     def libmadx(self):
-        return self.modules['cern.cpymad.libmadx']
+        return self.modules['cpymad.libmadx']
 
     @property
     class modules(object):
@@ -403,7 +403,7 @@ class LibMadxClient(Client):
 
 class RemoteModule(object):
 
-    """Wrapper for :mod:`cern.cpymad.libmadx` in a remote process."""
+    """Wrapper for :mod:`cpymad.libmadx` in a remote process."""
 
     def __init__(self, client, module):
         """Store the client connection."""
@@ -421,7 +421,7 @@ class RemoteModule(object):
 class LibMadxService(Service):
 
     """
-    Specialized service to dispatch :mod:`cern.cpymad.libmadx` function calls.
+    Specialized service to dispatch :mod:`cpymad.libmadx` function calls.
 
     Counterpart for :class:`LibMadxClient`.
     """

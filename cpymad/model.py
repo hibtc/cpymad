@@ -11,7 +11,7 @@ import os
 
 from . import madx
 from . import util
-from ..resource.file import FileResource
+from .resource.file import FileResource
 
 
 __all__ = [
@@ -66,7 +66,7 @@ class Model(object):
 
     .. code-block:: python
 
-        from cern.cpymad.model import Model
+        from cpymad.model import Model
 
         model = Model.load('/path/to/model/definition.cpymad.yml')
 

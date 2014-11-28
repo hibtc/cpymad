@@ -95,17 +95,13 @@ setup(
     long_description=long_description,
     url='http://pymad.github.io/cpymad',
     ext_modules = cythonize([
-        Extension('cern.cpymad.libmadx',
-                  sources=["cern/cpymad/libmadx.pyx"],
+        Extension('cpymad.libmadx',
+                  sources=["cpymad/libmadx.pyx"],
                   **extension_args),
     ]),
-    namespace_packages=[
-        'cern'
-    ],
     packages = [
-        "cern",
-        "cern.resource",
-        "cern.cpymad",
+        "cpymad",
+        "cpymad.resource",
     ],
     include_package_data=True, # include files matched by MANIFEST.in
     author='PyMAD developers',

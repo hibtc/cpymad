@@ -1,5 +1,5 @@
-cern.cpymad.model
------------------
+cpymad.model
+------------
 
-.. automodule:: cern.cpymad.model
+.. automodule:: cpymad.model
     :members:

@@ -4,12 +4,12 @@ Tests for the model.Locator functionality.
 """
 
 # tested classes
-from cern.cpymad.model import Locator
+from cpymad.model import Locator
+from cpymad.resource.file import FileResource
 
 # test utilities
 import unittest
 import os
-from cern.resource.file import FileResource
 
 __all__ = [
     'TestLocator',
