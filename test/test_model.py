@@ -4,7 +4,7 @@ Tests for the model.Model runtime hierarchy.
 """
 
 # tested classes
-from cern.cpymad import model
+import cern.cpymad.model
 from cern.resource.file import FileResource
 
 # test utilities
@@ -18,49 +18,126 @@ __all__ = [
 
 class TestModel(unittest.TestCase):
 
+    """
+    Tests for the Model class.
+    """
+
+    # test configuration:
+
     path = os.path.join(os.path.dirname(__file__), 'data')
     name = 'lebt'
 
-    def load_model(self):
-        locator = model.Locator(FileResource(self.path))
-        factory = model.Factory(locator)
-        return factory(self.name)
+    # helper methods for tests:
+
+    def load_model(self, path, name):
+        """Load model with given name from specified path."""
+        repository = FileResource(path)
+        locator = cern.cpymad.model.Locator(repository)
+        factory = cern.cpymad.model.Factory(locator)
+        model = factory(name)
+        model.madx.command.option(twiss_print=False)
+        return model
 
     def setUp(self):
-        self.model = self.load_model()
-        self.model.madx.command.option(twiss_print=False)
+        self.model = self.load_model(self.path, self.name)
 
     def tearDown(self):
         del self.model
 
-    def test_twiss(self):
+    # tests for Model API
+
+    def test_Model_API(self):
+        """Check that the public Model attributes/methods behave reasonably."""
+        model = self.model
+        madx = model.madx
+        # name
+        self.assertEqual(model.name, 'lebt')
+        # data
+        repository = FileResource(self.path)
+        self.assertEqual(model.data,
+                         repository.yaml('lebt.cpymad.yml')['lebt'])
+        # beams
+        self.assertItemsEqual(model.beams.keys(), ['carbon', 'other'])
+        # optics
+        self.assertItemsEqual(model.optics.keys(), ['thick'])
+        # sequences
+        self.assertItemsEqual(model.sequences.keys(), ['s1', 's2'])
+        self.assertTrue(madx.has_sequence('s1'))
+        self.assertTrue(madx.has_sequence('s2'))
+        # default_optic
+        self.assertIs(model.default_optic, model.optics['thick'])
+        # default_sequence
+        self.assertIs(model.default_sequence, model.sequences['s1'])
+
+    # tests for Optic API
+
+    def test_Optic_load(self):
+        """Check that the Optic init-files are executed upon load()."""
+        evaluate = self.model.madx.evaluate
+        self.assertAlmostEqual(evaluate('NOT_ZERO'), 0.0)
+        self.model.optics['thick'].load()
+        self.assertAlmostEqual(evaluate('NOT_ZERO'), 1.0)
+
+    # tests for Sequence API
+
+    def test_Sequence_API(self):
+        """Check that the general Sequence API behaves reasonable."""
+        sequence = self.model.sequences['s1']
+        # name
+        self.assertEqual(sequence.name, 's1')
+        # ranges
+        self.assertItemsEqual(sequence.ranges.keys(), ['ALL'])
+        # beam
+        self.assertIs(sequence.beam, self.model.beams['carbon'])
+        # default_range
+        self.assertIs(sequence.default_range, sequence.ranges['ALL'])
+
+    # def test_Sequence_twiss(self):        # see test_Optic_twiss for now
+    # def test_Sequence_match(self):        # see test_Optic_match for now
+
+    def test_Sequence_survey(self):
+        """Execute survey() and check that it returns usable values."""
         seq = self.model.default_sequence
-        twiss = seq.twiss()
-        self.assertTrue('betx' in twiss)
-        self.assertTrue('bety' in twiss)
-        self.assertTrue('s' in twiss)
-        # check that keys are all lowercase..
-        for k in twiss:
-            self.assertEqual(k, k.lower())
-        for k in twiss.summary:
-            self.assertEqual(k, k.lower())
+        survey = seq.survey()
+        # access some data to make sure the table was generated:
+        s = survey['s']
+        x = survey['x']
+        y = survey['y']
+        z = survey['z']
 
-    def test_sequences(self):
-        """
-        Checks that all sequences defined in the model (json)
-        is also loaded into memory
-        """
-        for seq in self.model.sequences:
-            print('Testing set_sequence({0!r})'.format(seq))
-            self.assertTrue(self.model.madx.has_sequence(seq))
+    # tests for Range API
 
-    def test_set_optic(self):
-        """Sets all optics found in the model definition."""
-        sequence = self.model.default_sequence
-        for optic in self.model.optics.values():
-            print('Testing set_optic({0!r})'.format(optic.name))
-            optic.load()
-            sequence.twiss()
+    def test_Range_API(self):
+        """Check that the general Range API behaves reasonable."""
+        range = self.model.default_sequence.default_range
+        # name
+        self.assertEqual(range.name, 'ALL')
+        # bounds
+        self.assertEqual(range.bounds, ('#s', '#e'))
+        # initial_conditions
+        self.assertItemsEqual(range.initial_conditions.keys(), ['default'])
+        # default_initial_conditions
+        self.assertIs(range.default_initial_conditions,
+                      range.initial_conditions['default'])
+
+    def test_Optic_twiss(self):
+        """Execute twiss() and check that it returns usable values."""
+        range = self.model.default_sequence.default_range
+        twiss = range.twiss()
+        # access some data to make sure the table was generated:
+        betx = twiss['betx']
+        bety = twiss['bety']
+        alfx = twiss['alfx']
+        alfy = twiss['alfy']
+
+    def test_Optic_match(self):
+        """Execute match() and check that it returns usable values."""
+        range = self.model.sequences['s1'].default_range
+        knobs = range.match(
+            constraints=[dict(range='sb', betx=0.3)],
+            vary=['QP_K1'],
+        )
+        knobs['QP_K1']
 
 
 if __name__ == '__main__':

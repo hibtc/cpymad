@@ -55,4 +55,7 @@ lebt:
               alfy: 0.0
 
   default-optic: thick
-  optics: {}
+  optics:
+    thick:
+      init-files:
+        - thick.madx
