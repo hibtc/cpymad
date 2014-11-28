@@ -263,7 +263,7 @@ class Sequence(object):
     def range(self, start, stop):
         """Create a :class:`Range` within (start, stop) for this sequence."""
         # TODO
-        pass
+        raise NotImplementedError()
 
     # MAD-X commands:
 
@@ -340,19 +340,28 @@ class Range(object):
             for key, val in kw['twiss_init'].items()
             if util.is_match_param(key)
         }
-        return self.match(sequence=self._sequence.name,
+        madx = self._sequence._model.madx
+        return madx.match(sequence=self._sequence.name,
                           range=self.bounds, **kw)
 
-    def get_twiss_initial(self, name=None):
-        """Return the twiss initial conditions."""
-        if name is None:
-            name = self.data['default-twiss']
-        return self.data['twiss-initial-conditions'][name]
+    @property
+    def initial_conditions(self):
+        """
+        Return a dict of all defined initial conditions.
+
+        Each item is a dict of TWISS parameters.
+        """
+        return self.data['twiss-initial-conditions']
+
+    @property
+    def default_initial_conditions(self):
+        """Return the default twiss initial conditions."""
+        return self.initial_conditions[self.data['default-twiss']]
 
     def _set_twiss_init(self, kwargs):
         kw = kwargs.copy()
         twiss_init = kw.get('twiss_init', {}).copy()
-        twiss_init.update(self.get_twiss_initial())
+        twiss_init.update(self.default_initial_conditions)
         kw['twiss_init'] = twiss_init
         return kw
 
