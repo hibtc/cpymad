@@ -355,10 +355,6 @@ class Range(object):
         return kw
 
 
-def _get_logger(model_name):
-    """Create a logger."""
-    return logging.getLogger(__name__ + '.' + model_name)
-
 
 class Factory(object):
 
@@ -373,7 +369,10 @@ class Factory(object):
 
     _Model = Model
     _Madx = madx.Madx
-    _Logger = _get_logger
+
+    def _Logger(self, model_name):
+        """Create a logger."""
+        return logging.getLogger(__name__ + '.' + model_name)
 
     def __init__(self, locator):
         """Create Model factory using a specified model Locator."""
