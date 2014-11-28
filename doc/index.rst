@@ -23,7 +23,6 @@ Contents:
    :maxdepth: 2
 
    installation/index
-   examples/index
    cpymad/index
 
 

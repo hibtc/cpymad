@@ -1,22 +1,7 @@
 """
-Main module to interface with Mad-X library.
+This module defines a convenience layer to access the MAD-X interpreter.
 
-The class Madx uses a subprocess to execute MAD-X library calls remotely via
-a simple RPC protocol.
-
-The remote backend is needed due to the fact that cpymad.libmadx is a low
-level binding to the MAD-X library which in turn uses global variables.
-This means that the cpymad.libmadx module has to be loaded within remote
-processes in order to deal with several isolated instances of MAD-X in
-parallel.
-
-Furthermore, this can be used as a security enhancement: if dealing with
-unverified input, we can't be sure that a faulty MAD-X function
-implementation will give access to a secure resource. This can be executing
-all library calls within a subprocess that does not inherit any handles.
-
-More importantly: the MAD-X program crashes on the tinyest error. Boxing it
-in a subprocess will prevent the main process from crashing as well.
+The most interesting class for users is :class:`Madx`.
 """
 
 from __future__ import absolute_import
@@ -130,7 +115,42 @@ class CommandLog(object):
 class Madx(object):
 
     """
-    Wrapper for MAD-X.
+    Each instance controls one MAD-X process.
+
+    This class aims to expose a pythonic interface to the full functionality
+    of the MAD-X library. For example, when you call the ``twiss`` method, you
+    get numpy arrays containing the information from the table generated.
+    Furthermore, we try to reduce the amount of commands needed by combining
+    e.g. USE, SELECT, and TWISS into the ``twiss`` method itself, and define
+    reasonable default patterns/columns.
+
+    The following very simple example demonstrates basic usage:
+
+    .. code-block:: python
+
+        from cern.cpymad.madx import Madx
+
+        m = Madx()
+
+        m.call('my-sequences.seq')
+        m.call('my-strengths.str')
+
+        m.command.beam(sequence='myseq1', particle='PROTON')
+        # you can also just put an arbitrary MAD-X command string here:
+        m.command('beam, sequence=myseq1, particle=PROTON')
+
+        twiss = m.twiss('myseq1')
+
+        # now do your own analysis:
+        from matplotlib import pyplot as plt
+        plt.plot(twiss['s'], twiss['betx'])
+        plt.show()
+
+    By default :class:`Madx` uses a subprocess to execute MAD-X library calls
+    remotely via a simple RPC protocol which is defined in :mod:`_rpc`. If
+    required this behaviour can be customized by passing a custom ``libmadx``
+    object to the constructor. This object must expose an interface similar to
+    :mod:`libmadx`.
     """
 
     def __init__(self, libmadx=None, command_log=None, error_log=None):
