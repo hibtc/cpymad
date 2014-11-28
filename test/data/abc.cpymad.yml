@@ -1,0 +1,41 @@
+
+a:
+  # virtual models should not be listed:
+  real: false
+  path-offset: "a"
+  # some data that will partly be overwriten in 'b' and 'c':
+  data:
+    a: a
+    ab: a
+    ac: a
+    abc: a
+  files:
+    - "a.yml"
+
+b:
+  real: true
+  # subclasses 'a':
+  extends: [a]
+  path-offset: "b"
+  data:
+    b: b
+    ab: b
+    bc: b
+    abc: b
+  files:
+    - "b.yml"
+  # some unicode test data:
+  unicode: €®æة《±∓
+
+c:
+  real: true
+  # subclasses 'b' -> 'a':
+  extends: ['b']
+  path-offset: "c"
+  data:
+    c: c
+    ac: c
+    bc: c
+    abc: c
+  files:
+    - "c.yml"

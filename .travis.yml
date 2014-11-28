@@ -1,7 +1,6 @@
 language: python
 
 python:
-  - "2.6"
   - "2.7"
   - "3.3"
 
@@ -40,6 +39,5 @@ install:
 script:
   - python test/test_resource.py
   - python test/test_madx.py
-  - python test/test_model_locator.py
-  - python test/test_survey.py
-
+  - python test/test_model.py
+  - python test/test_locator.py

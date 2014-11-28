@@ -1,0 +1,58 @@
+lebt:
+  real: true
+  extends: []
+  path-offset: "lebt"
+  init-files:
+    - init.madx
+  beams:
+    carbon:
+      mass: 12.0
+      charge: 4.0
+      energy: 12.08
+      ex: 0.0003
+      ey: 0.0003
+      sigt: 0.001
+      sige: 0.001
+      radiate: false
+      sequence: s1
+    other:
+      particle: electron
+      energy: 0.1
+      sequence: s2
+
+  default-sequence: s1
+
+  sequences:
+    s1:
+      beam: carbon
+      default-range: ALL
+      ranges:
+        ALL:
+          madx-range:
+            first: '#s'
+            last: '#e'
+          default-twiss: default
+          twiss-initial-conditions:
+            default:
+              betx: 0.1
+              bety: 0.1
+              alfx: 0.0
+              alfy: 0.0
+    s2:
+      beam: other
+      default-range: ALL
+      ranges:
+        ALL:
+          madx-range:
+            first: '#s'
+            last: '#e'
+          default-twiss: default
+          twiss-initial-conditions:
+            default:
+              betx: 0.1
+              bety: 0.1
+              alfx: 0.0
+              alfy: 0.0
+
+  default-optic: thick
+  optics: {}

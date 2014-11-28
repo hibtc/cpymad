@@ -1,21 +1,3 @@
-#-------------------------------------------------------------------------------
-# This file is part of PyMad.
-#
-# Copyright (c) 2011, CERN. All rights reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# 	http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#-------------------------------------------------------------------------------
-
 # Make sure setuptools is available. NOTE: the try/except hack is required to
 # make installation work with pip: If an older version of setuptools is
 # already imported, `use_setuptools()` will just exit the current process.
@@ -32,7 +14,7 @@ import sys
 from os import path
 
 # Version of pymad (major,minor):
-PYMADVERSION=(0, 9)
+PYMADVERSION='0.10.0'
 
 
 # setuptools.Extension automatically converts all '.pyx' extensions to '.c'
@@ -90,12 +72,12 @@ else:
 
 # Common arguments for the Cython extensions:
 extension_args = dict(
-    define_macros=[('MAJOR_VERSION', PYMADVERSION[0]),
-                   ('MINOR_VERSION', PYMADVERSION[1])],
     libraries=libraries,
     include_dirs=include_dirs,
     library_dirs=library_dirs,
-    runtime_library_dirs=library_dirs)
+    runtime_library_dirs=library_dirs,
+    extra_compile_args=['-std=c99'],
+)
 
 # Compose a long description for PyPI:
 long_description = None
@@ -108,16 +90,13 @@ except IOError:
 
 setup(
     name='cern-cpymad',
-    version='.'.join(map(str, PYMADVERSION)),
+    version=PYMADVERSION,
     description='Cython binding to MAD-X',
     long_description=long_description,
     url='http://pymad.github.io/cpymad',
-    package_dir={
-        '': 'src'   # look for packages in src/ subfolder
-    },
     ext_modules = cythonize([
         Extension('cern.cpymad.libmadx',
-                  sources=["src/cern/cpymad/libmadx.pyx"],
+                  sources=["cern/cpymad/libmadx.pyx"],
                   **extension_args),
     ]),
     namespace_packages=[
@@ -138,6 +117,6 @@ setup(
         'numpy',
         'PyYAML',
     ],
-    license = 'CERN Standard Copyright License'
+    license = 'Apache',
 )
 

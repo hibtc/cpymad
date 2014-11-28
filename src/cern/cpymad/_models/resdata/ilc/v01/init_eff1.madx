@@ -1,4 +1,0 @@
-
-! trick to get used sequences in memory..
-beam,particle=electron,energy=250;
-use,sequence=EFF1;

@@ -1,6 +1,0 @@
-
-E0_BDS := 250.0;
-
-Efact  := E0_BDS/500; !for scaling 500 GeV B-values
-Efact2 := E0_BDS/250; !for scaling 250 GeV B-values
-Bsign  := -1;
