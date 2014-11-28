@@ -1,7 +1,6 @@
 
 a:
   path-offset: "a"
-  # some data that will partly be overwriten in 'b' and 'c':
   data:
     a: a
     ab: a
@@ -11,8 +10,6 @@ a:
     - "a.yml"
 
 b:
-  # subclasses 'a':
-  extends: [a]
   path-offset: "b"
   data:
     b: b
@@ -25,8 +22,6 @@ b:
   unicode: €®æة《±∓
 
 c:
-  # subclasses 'b' -> 'a':
-  extends: ['b']
   path-offset: "c"
   data:
     c: c

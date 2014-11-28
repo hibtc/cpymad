@@ -53,21 +53,6 @@ class TestLocator(unittest.TestCase):
         self.assertEqual(b['unicode'],
                          self.unicode_data)
 
-    def test_mro(self):
-        """Test the resolution order when using 'extends'."""
-        b = self.locator.get_definition('b')['data']
-        c = self.locator.get_definition('c')['data']
-        # overwritten properties:
-        self.assertEqual((b['b'], b['ab'], b['bc'], b['abc']),
-                         ('b', 'b', 'b', 'b'))
-        self.assertEqual((c['c'], c['ac'], c['bc'], c['abc']),
-                         ('c', 'c', 'c', 'c'))
-        # inherited properties:
-        self.assertEqual(b['a'], 'a')
-        self.assertEqual(c['a'], 'a')
-        self.assertEqual(c['ab'], 'b')
-        self.assertEqual(c['b'], 'b')
-
     def test_path_resolution(self):
         """Test the .get and .get_by_dict methods of ModelData."""
         b = self.locator.get_definition('b')
@@ -76,18 +61,9 @@ class TestLocator(unittest.TestCase):
         cf = c['files']
         br = self.locator.get_repository(b)
         cr = self.locator.get_repository(c)
-        # the first file is defined in ?/a.yml
         self.assertEqual(br.get(bf[0]).yaml()['path'],
-                         'b/a.yml')
-        self.assertEqual(cr.get(cf[0]).yaml()['path'],
-                         'c/a.yml')
-        # second file: ?/b.yml
-        self.assertEqual(br.get(bf[1]).yaml()['path'],
                          'b/b.yml')
-        self.assertEqual(cr.get(cf[1]).yaml()['path'],
-                         'c/b.yml')
-        # third file: ?/c.yml
-        self.assertEqual(cr.get(cf[2]).yaml()['path'],
+        self.assertEqual(cr.get(cf[0]).yaml()['path'],
                          'c/c.yml')
 
 

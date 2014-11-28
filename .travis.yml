@@ -41,4 +41,3 @@ script:
   - python test/test_madx.py
   - python test/test_model.py
   - python test/test_locator.py
-  - python test/test_mro.py

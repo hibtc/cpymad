@@ -1,6 +1,5 @@
 d:
   path-offset: "a"
-  # some data that will partly be overwriten in 'e':
   data:
     a: a
     ab: a
@@ -10,8 +9,6 @@ d:
     - "a.yml"
 
 e:
-  # subclasses 'd':
-  extends: [d]
   path-offset: "b"
   data:
     b: b

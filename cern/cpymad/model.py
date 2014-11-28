@@ -461,21 +461,11 @@ class Locator(object):
         """
         for res_name in self._repo.listdir_filter(ext='.cpymad.yml'):
             mdefs = self._repo.yaml(res_name, encoding=encoding)
-            mdef = mdefs.get(name)
-            if mdef:
-                break
+            if name in  mdefs:
+                return mdefs[name]
         else:
             raise ValueError("The model {!r} does not exist in the database"
                              .format(name))
-        # Expand the model definition using its bases as specified by
-        # 'extends'. This corresponds to a graph linearization:
-        def get_bases(model_name):
-            return mdefs[model_name].get('extends', [])
-        mro = util.C3_mro(get_bases, name)
-        expanded_mdef = {}
-        for base in reversed(mro):
-            util.deep_update(expanded_mdef, mdefs[base])
-        return expanded_mdef
 
     def get_repository(self, data):
         """

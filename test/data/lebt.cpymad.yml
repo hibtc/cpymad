@@ -1,5 +1,4 @@
 lebt:
-  extends: []
   path-offset: "lebt"
   init-files:
     - init.madx
