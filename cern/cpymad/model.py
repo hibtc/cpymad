@@ -431,6 +431,8 @@ class Locator(object):
     resource providers.
     """
 
+    ext = '.cpymad.yml'
+
     def __init__(self, resource_provider):
         """
         Initialize a merged model locator instance.
@@ -447,10 +449,8 @@ class Locator(object):
 
         Returns an iterable that may be a generator object.
         """
-        for res_name in self._repo.listdir_filter(ext='.cpymad.yml'):
-            mdefs = self._repo.yaml(res_name, encoding=encoding)
-            for n, d in mdefs.items():
-                yield n
+        for res_name in self._repo.listdir_filter(ext=self.ext):
+            yield res_name[:-len(self.ext)]
 
     def get_definition(self, name, encoding='utf-8'):
         """
@@ -459,11 +459,10 @@ class Locator(object):
         :returns: the model definition
         :raises ValueError: if no model with the given name is found.
         """
-        for res_name in self._repo.listdir_filter(ext='.cpymad.yml'):
-            mdefs = self._repo.yaml(res_name, encoding=encoding)
-            if name in  mdefs:
-                return mdefs[name]
-        else:
+        try:
+            res_name = name + self.ext
+            return self._repo.yaml(res_name, encoding=encoding)
+        except IOError:
             raise ValueError("The model {!r} does not exist in the database"
                              .format(name))
 

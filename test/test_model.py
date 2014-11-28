@@ -54,8 +54,7 @@ class TestModel(unittest.TestCase):
         self.assertEqual(model.name, 'lebt')
         # data
         repository = FileResource(self.path)
-        self.assertEqual(model.data,
-                         repository.yaml('lebt.cpymad.yml')['lebt'])
+        self.assertEqual(model.data, repository.yaml('lebt.cpymad.yml'))
         # beams
         self.assertItemsEqual(model.beams.keys(), ['carbon', 'other'])
         # optics
