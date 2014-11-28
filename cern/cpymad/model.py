@@ -6,12 +6,10 @@ For more information about models, see :class:`Model`.
 The following example demonstrates how to create a Model instance given that
 you have model definition files ready on your file system:
 
-.. code-block:: python
-
-    >>> from cern.resource.file import FileResource
-    >>> from cern.cpymad.model import Factory
-    >>> load_model = Factory(FileResource('/path/to/model/definitions'))
-    >>> model = load_model('LHC')
+>>> from cern.resource.file import FileResource
+>>> from cern.cpymad.model import Factory
+>>> load_model = Factory(FileResource('/path/to/model/definitions'))
+>>> model = load_model('LHC')
 """
 
 from __future__ import absolute_import
@@ -58,23 +56,18 @@ class Model(object):
     a :class:`ResourceProvider` to iterate and load available model
     definitions.
 
-    Instance variables
-    ==================
-
     Only GET access is allowed to all instance variables at the moment.
 
-    Model attributes
-    ~~~~~~~~~~~~~~~~
+    Public attributes:
 
     :ivar str name: model name
-    :ivar dict beams: known :class:`Beam`s
-    :ivar dict optics: known :class:`Optic`s
-    :ivar dict sequences: known :class:`Sequence`s
-
-    Underlying resources and handlers
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+    :ivar dict beams: known :class:`Beam` objects
+    :ivar dict optics: known :class:`Optic` objects
+    :ivar dict sequences: known :class:`Sequence` objects
     :ivar Madx madx: handle to the MAD-X library
+
+    Private variables:
+
     :ivar dict _data: model definition data
     :ivar ResourceProvider _repo: resource access
     """
@@ -143,18 +136,17 @@ class Model(object):
 class Beam(object):
 
     """
-    Beam for :class:`Model`s.
+    Beam for :class:`Model`.
 
     A beam defines the mass, charge, energy, etc. of the particles moved
     through the accelerator.
 
-    Instance variables
-    ==================
+    Public attributes:
 
     :ivar str name: beam name
     :ivar dict data: beam parameters (keywords to BEAM command in MAD-X)
 
-    Private:
+    Private variables:
 
     :ivar Model _model: owning model
     :ivar bool _loaded: beam has been initialized in MAD-X
@@ -179,17 +171,16 @@ class Beam(object):
 class Optic(object):
 
     """
-    Optic for :class:`Model`s.
+    Optic for :class:`Model`.
 
     An optic (as far as I understand) defines a variant of the accelerator
     setup, e.g. different injection mechanisms.
 
-    Instance variables
-    ==================
+    Public attributes:
 
     :ivar str name: optic name
 
-    Private:
+    Private variables:
 
     :ivar dict _data: optic definition
     :ivar Model _model: owning model
@@ -215,18 +206,17 @@ class Optic(object):
 class Sequence(object):
 
     """
-    Sequence for :class:`Model`s.
+    Sequence for :class:`Model`.
 
     A sequence defines an arrangement of beam line elements. It can be
     subdivided into multiple ranges.
 
-    Instance variables
-    ==================
+    Public attributes:
 
     :ivar str name: sequence name
-    :ivar dict ranges: known :class:`Range`s
+    :ivar dict ranges: known :class:`Range` objects
 
-    Private:
+    Private variables:
 
     :ivar dict _data:
     :ivar Model _model:
@@ -284,16 +274,15 @@ class Sequence(object):
 class Range(object):
 
     """
-    Range for :class:`Model`s.
+    Range for :class:`Model`.
 
     A range is a subsequence of elements within a :class:`Sequence`.
 
-    Instance variables
-    ==================
+    Public attributes:
 
     :ivar str name: sequence name
 
-    Private:
+    Private variables:
 
     :ivar dict _data:
     :ivar Sequence _sequence:
