@@ -92,7 +92,7 @@ class Model(object):
         self.optics = _deserialize(data['optics'], Optic, self)
         self.sequences = _deserialize(data['sequences'], Sequence, self)
 
-    def load(self):
+    def init(self):
         """Load model in MAD-X interpreter."""
         if self._loaded:
             return
@@ -157,12 +157,12 @@ class Beam(object):
         self._model = model
         self._loaded = False
 
-    def load(self):
+    def init(self):
         """Define the beam in MAD-X."""
         if self._loaded:
             return
         self._loaded = True
-        self._model.load()
+        self._model.init()
         self._model.madx.command.beam(**self.data)
 
 
@@ -192,12 +192,12 @@ class Optic(object):
         self._model = model
         self._loaded = False
 
-    def load(self):
+    def init(self):
         """Load the optic in the MAD-X process."""
         if self._loaded:
             return
         self._loaded = True
-        self._model.load()
+        self._model.init()
         self._model._load(*self.data.get('init-files', ()))
 
 
@@ -227,10 +227,10 @@ class Sequence(object):
         self._model = model
         self.ranges = _deserialize(data['ranges'], Range, self)
 
-    def load(self):
+    def init(self):
         """Load model in MAD-X interpreter."""
-        self._model.load()
-        self.beam.load()
+        self._model.init()
+        self.beam.init()
 
     @property
     def data(self):
@@ -262,7 +262,7 @@ class Sequence(object):
 
     def survey(self, **kwargs):
         """Run SURVEY on this sequence."""
-        self.load()
+        self.init()
         return self._model.madx.survey(sequence=self.name, **kwargs)
 
     def match(self, **kwargs):
@@ -293,9 +293,9 @@ class Range(object):
         self.data = data
         self._sequence = sequence
 
-    def load(self):
+    def init(self):
         """Load model in MAD-X interpreter."""
-        self._sequence.load()
+        self._sequence.init()
 
     @property
     def bounds(self):
@@ -313,7 +313,7 @@ class Range(object):
 
     def twiss(self, **kwargs):
         """Run TWISS on this range."""
-        self.load()
+        self.init()
         kw = self._set_twiss_init(kwargs)
         madx = self._sequence._model.madx
         result = madx.twiss(sequence=self._sequence.name,
@@ -322,7 +322,7 @@ class Range(object):
 
     def match(self, **kwargs):
         """Perform a MATCH operation on this range."""
-        self.load()
+        self.init()
         kw = self._set_twiss_init(kwargs)
         kw['twiss_init'] = {
             key: val
@@ -392,7 +392,7 @@ class Factory(object):
         elif command_log is not None:
             raise ValueError("'command_log' cannot be used with 'madx'")
         model = self._Model(name, data, repo=repo, madx=madx)
-        model.load()
+        model.init()
         return model
 
     def __call__(self,
