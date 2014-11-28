@@ -33,19 +33,17 @@ class TestLocator(unittest.TestCase):
         """Verify the results of the list_models method."""
         self.assertEqual(
             set(self.locator.list_models()),
-            # these are the 'real' model definitions:
-            set(('b', 'c', 'e', 'lebt')))
+            set(('a', 'b', 'c', 'd', 'e', 'lebt')))
 
     def test_get(self):
         """Test that ValueError is raised iff model does not exist."""
-        # cannot get virtual model ATM:
-        self.assertRaises(ValueError, self.locator.get_definition, 'a')
-        self.assertRaises(ValueError, self.locator.get_definition, 'd')
         # cannot get non-existing model:
         self.assertRaises(ValueError, self.locator.get_definition, 'f')
         # can get existing real models:
+        self.locator.get_definition('a')
         self.locator.get_definition('b')
         self.locator.get_definition('c')
+        self.locator.get_definition('d')
         self.locator.get_definition('e')
         self.locator.get_definition('lebt')
 

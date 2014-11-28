@@ -1,6 +1,4 @@
 d:
-  # virtual models should not be listed:
-  real: false
   path-offset: "a"
   # some data that will partly be overwriten in 'e':
   data:
@@ -12,7 +10,6 @@ d:
     - "a.yml"
 
 e:
-  real: true
   # subclasses 'd':
   extends: [d]
   path-offset: "b"

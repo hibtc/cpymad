@@ -450,8 +450,7 @@ class Locator(object):
         for res_name in self._repo.listdir_filter(ext='.cpymad.yml'):
             mdefs = self._repo.yaml(res_name, encoding=encoding)
             for n, d in mdefs.items():
-                if d['real']:
-                    yield n
+                yield n
 
     def get_definition(self, name, encoding='utf-8'):
         """
@@ -463,7 +462,7 @@ class Locator(object):
         for res_name in self._repo.listdir_filter(ext='.cpymad.yml'):
             mdefs = self._repo.yaml(res_name, encoding=encoding)
             mdef = mdefs.get(name)
-            if mdef and mdef['real']:
+            if mdef:
                 break
         else:
             raise ValueError("The model {!r} does not exist in the database"

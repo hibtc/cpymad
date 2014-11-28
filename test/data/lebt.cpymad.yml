@@ -1,5 +1,4 @@
 lebt:
-  real: true
   extends: []
   path-offset: "lebt"
   init-files:

@@ -1,7 +1,5 @@
 
 a:
-  # virtual models should not be listed:
-  real: false
   path-offset: "a"
   # some data that will partly be overwriten in 'b' and 'c':
   data:
@@ -13,7 +11,6 @@ a:
     - "a.yml"
 
 b:
-  real: true
   # subclasses 'a':
   extends: [a]
   path-offset: "b"
@@ -28,7 +25,6 @@ b:
   unicode: €®æة《±∓
 
 c:
-  real: true
   # subclasses 'b' -> 'a':
   extends: ['b']
   path-offset: "c"
