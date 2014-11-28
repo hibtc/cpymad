@@ -98,8 +98,6 @@ class Model(object):
             return
         self._loaded = True
         self._load(*self._data['init-files'])
-        for seq in self.sequences.values():
-            seq.beam.load()
 
     def __repr__(self):
         return "{0}({1!r})".format(self.__class__.__name__, self.name)
@@ -232,6 +230,7 @@ class Sequence(object):
     def load(self):
         """Load model in MAD-X interpreter."""
         self._model.load()
+        self.beam.load()
 
     @property
     def data(self):
