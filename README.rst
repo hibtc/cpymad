@@ -53,7 +53,7 @@ The python packages can be installed using pip_.
 Installation
 ~~~~~~~~~~~~
 
-Installation instructions are available at http://coldfix.github.io/pymad/installation.
+Installation instructions are available at http://coldfix.github.io/cpymad/installation.
 
 
 Usage
