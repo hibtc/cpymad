@@ -259,20 +259,14 @@ class Madx(object):
         for p in pattern:
             select(flag=flag, pattern=p)
 
-    default_twiss_columns = ['name', 's',
-                             'betx', 'bety',
-                             'x', 'y',
-                             'dx', 'dy',
-                             'px', 'py',
-                             'mux', 'muy'
-                              'l','k1l', 'angle', 'k2l']
-
     def twiss(self,
               sequence=None,
-              pattern=['full'],
-              columns=default_twiss_columns,
               range=None,
+              # *,
+              # These should be passed as keyword-only parameters:
               twiss_init={},
+              columns=None,
+              pattern=['full'],
               **kwargs):
         """
         Run SELECT+USE+TWISS.
@@ -296,15 +290,12 @@ class Madx(object):
         self.command.twiss(sequence=sequence,
                            range=range,
                            **twiss_init)
-        return self.get_table('twiss')
-
-    default_survey_columns = ['name', 'l', 's', 'angle',
-                              'x', 'y', 'z', 'theta']
+        return self.get_table('twiss', columns)
 
     def survey(self,
                sequence=None,
+               columns=None,
                pattern=['full'],
-               columns=default_survey_columns,
                **kwargs):
         """
         Run SELECT+USE+SURVEY.
@@ -317,7 +308,7 @@ class Madx(object):
         self.select('survey', pattern=pattern, columns=columns)
         self._use(sequence)
         self.command.survey(**kwargs)
-        return self.get_table('survey')
+        return self.get_table('survey', columns)
 
     def use(self, sequence):
         """
@@ -407,7 +398,7 @@ class Madx(object):
     def verbose(self, switch):
         self.command.option(echo=switch, warn=switch, info=switch)
 
-    def get_table(self, table):
+    def get_table(self, table, columns=None):
         """
         Get the specified table from MAD-X.
 
@@ -415,7 +406,11 @@ class Madx(object):
         :returns: a proxy for the table data
         :rtype: TableProxy
         """
-        return TableProxy(table, self._libmadx)
+        proxy = TableProxy(table, self._libmadx)
+        if columns is None:
+            return proxy
+        else:
+            return proxy.copy(columns)
 
     @property
     def active_sequence(self):
