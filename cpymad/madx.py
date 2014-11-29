@@ -205,7 +205,11 @@ class Madx(object):
         # write to history before performing the input, so if MAD-X
         # crashes, it is easier to see, where it happened:
         self._command_log(text)
-        self._libmadx.input(text)
+        try:
+            self._libmadx.input(text)
+        except _rpc.RemoteProcessCrashed:
+            # catch + reraise in order to shorten stack trace (~3-5 levels):
+            raise RuntimeError("MAD-X has stopped working!")
 
     def help(self, cmd=None):
         """

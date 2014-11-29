@@ -28,7 +28,10 @@ process can not be used to safely execute unsafe python code.
 
 from __future__ import absolute_import
 
-__all__ = ['LibMadxClient']
+__all__ = [
+    'LibMadxClient',
+    'RemoteProcessCrashed',
+]
 
 import traceback
 import os
@@ -51,6 +54,10 @@ _win = sys.platform == 'win32'
 def _nop(x):
     """NO-OP: do nothing, just return x."""
     return x
+
+
+class RemoteProcessCrashed(RuntimeError):
+    pass
 
 
 if _win:
@@ -216,7 +223,11 @@ class Client(object):
 
     def __del__(self):
         """Close the client and the associated connection with it."""
-        self.close()
+        try:
+            self.close()
+        except IOError:
+            # catch ugly follow-up warnings after a MAD-X process has crashed
+            pass
 
     @classmethod
     def spawn_subprocess(cls, **Popen_args):
@@ -256,8 +267,12 @@ class Client(object):
 
     def _request(self, kind, *args):
         """Communicate with the remote service synchronously."""
-        self._conn.send((kind, args))
-        return self._dispatch(self._conn.recv())
+        try:
+            self._conn.send((kind, args))
+            response = self._conn.recv()
+        except EOFError:
+            raise RemoteProcessCrashed()
+        return self._dispatch(response)
 
     def _dispatch(self, response):
         """Dispatch an answer from the remote service."""

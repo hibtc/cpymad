@@ -135,5 +135,11 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
 
     # def test_sequence_get_expanded_elements(self):
 
+    def test_crash(self):
+        """Check that a RuntimeError is raised in case MAD-X crashes."""
+        # a.t.m. MAD-X crashes on this input, because the L (length)
+        # parametere is missing:
+        self.assertRaises(RuntimeError, self.mad.input, 'XXX: sequence;')
+
 if __name__ == '__main__':
     unittest.main()
