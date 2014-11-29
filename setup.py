@@ -8,13 +8,10 @@ except ImportError:
     use_setuptools()
 
 from setuptools import setup, Extension
-from distutils.util import get_platform
+from distutils.util import get_platform, convert_path
 
 import sys
 from os import path
-
-# Version of pymad (major,minor):
-PYMADVERSION='0.10.0'
 
 
 # setuptools.Extension automatically converts all '.pyx' extensions to '.c'
@@ -88,12 +85,28 @@ try:
 except IOError:
     pass
 
+# read metadata from cpymad/__init__.py
+def exec_file(path):
+    """Execute a python file and return the `globals` dictionary."""
+    namespace = {}
+    with open(convert_path(path)) as f:
+        exec(f.read(), namespace, namespace)
+    return namespace
+
+metadata = exec_file('cpymad/__init__.py')
+
 setup(
     name='cpymad',
-    version=PYMADVERSION,
-    description='Cython binding to MAD-X',
+    version=metadata['__version__'],
+    description=metadata['__summary__'],
     long_description=long_description,
-    url='http://coldfix.github.io/cpymad',
+    author=metadata['__author__'],
+    author_email=metadata['__author_email__'],
+    maintainer=metadata['__maintainer__'],
+    maintainer_email=metadata['__maintainer_email__'],
+    url=metadata['__uri__'],
+    license=metadata['__license__'],
+
     ext_modules = cythonize([
         Extension('cpymad.libmadx',
                   sources=["cpymad/libmadx.pyx"],
@@ -104,15 +117,23 @@ setup(
         "cpymad.resource",
     ],
     include_package_data=True, # include files matched by MANIFEST.in
-    author='PyMAD developers',
-    author_email='pymad@cern.ch',
-    setup_requires=[
-    ],
     install_requires=[
         'setuptools',
         'numpy',
         'PyYAML',
     ],
-    license = 'Apache',
+
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Science/Research',
+        'License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication',
+        'License :: OSI Approved :: Apache Software License',
+        'License :: Other/Proprietary License',
+        'Operating System :: Microsoft :: Windows',
+        'Operating System :: POSIX :: Linux',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.4',
+        'Topic :: Scientific/Engineering :: Physics',
+    ],
 )
 
