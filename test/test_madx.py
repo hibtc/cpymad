@@ -8,6 +8,7 @@ import _compat
 # tested class
 from cpymad.madx import Madx
 
+
 class TestMadx(unittest.TestCase, _compat.TestCase):
 
     """Test methods for the Madx class."""

@@ -7,7 +7,10 @@ Tests for the model.Model runtime hierarchy.
 from cpymad.model import Model
 from cpymad.resource.file import FileResource
 
-# test utilities
+# utilities
+import _compat
+
+# standard library
 import unittest
 import os
 
@@ -16,7 +19,7 @@ __all__ = [
 ]
 
 
-class TestModel(unittest.TestCase):
+class TestModel(unittest.TestCase, _compat.TestCase):
 
     """
     Tests for the Model class.
