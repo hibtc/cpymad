@@ -28,14 +28,14 @@ class TestModel(unittest.TestCase):
 
     # helper methods for tests:
 
-    def load_model(self, path, name):
+    def load_model(self, path):
         """Load model with given name from specified path."""
         model = Model.load(self.path)
         model.madx.command.option(twiss_print=False)
         return model
 
     def setUp(self):
-        self.model = self.load_model(self.path, self.name)
+        self.model = self.load_model(self.path)
 
     def tearDown(self):
         del self.model
@@ -67,10 +67,10 @@ class TestModel(unittest.TestCase):
     # tests for Optic API
 
     def test_Optic_load(self):
-        """Check that the Optic init-files are executed upon load()."""
+        """Check that the Optic init-files are executed upon init()."""
         evaluate = self.model.madx.evaluate
         self.assertAlmostEqual(evaluate('NOT_ZERO'), 0.0)
-        self.model.optics['thick'].load()
+        self.model.optics['thick'].init()
         self.assertAlmostEqual(evaluate('NOT_ZERO'), 1.0)
 
     # tests for Sequence API

@@ -9,8 +9,8 @@ from __future__ import absolute_import
 import logging
 import os
 
-from . import madx
-from . import util
+from .madx import Madx
+from .util import is_match_param
 from .resource.file import FileResource
 
 
@@ -123,14 +123,14 @@ class Model(object):
         repo = locator.get_repository(data)
         if madx is None:
             if error_log is None:
-                error_log = logging.getLogger(__name__ + '.' + model_name)
-            madx = madx.Madx(command_log=command_log, error_log=error_log)
+                error_log = logging.getLogger(__name__ + '.' + name)
+            madx = Madx(command_log=command_log, error_log=error_log)
             madx.verbose(False)
         elif command_log is not None:
             raise ValueError("'command_log' cannot be used with 'madx'")
         elif error_log is not None:
             raise ValueError("'error_log' cannot be used with 'madx'")
-        model = cls(name, data, repo=repo, madx=madx)
+        model = cls(data, repo=repo, madx=madx)
         model.init()
         return model
 
@@ -374,7 +374,7 @@ class Range(object):
         kw['twiss_init'] = {
             key: val
             for key, val in kw['twiss_init'].items()
-            if util.is_match_param(key)
+            if is_match_param(key)
         }
         madx = self._sequence._model.madx
         return madx.match(sequence=self._sequence.name,
@@ -445,7 +445,7 @@ class Locator(object):
         try:
             if not name.endswith(self.ext):
                 name += self.ext
-            return self._repo.yaml(res_name, encoding=encoding)
+            return self._repo.yaml(name, encoding=encoding)
         except IOError:
             raise ValueError("The model {!r} does not exist in the database"
                              .format(name))
