@@ -7,7 +7,7 @@ MAD-X is a software package to simulate particle accelerators and is used
 at CERN and all around the world. It has its own proprietary scripting
 language and is usually launched from the command line.
 
-.. _CPyMAD: https://github.com/coldfix/cpymad
+.. _CPyMAD: https://github.com/hibtc/cpymad
 .. _Cython: http://cython.org/
 .. _MAD-X: http://cern.ch/mad
 
@@ -53,7 +53,7 @@ The python packages can be installed using pip_.
 Installation
 ~~~~~~~~~~~~
 
-Installation instructions are available at http://coldfix.github.io/cpymad/installation.
+Installation instructions are available at http://hibtc.github.io/cpymad/installation.
 
 
 Usage
@@ -102,7 +102,7 @@ filesystem, models can be instanciated and used as follows:
     for sequence in model.sequences.values():
         twiss = sequence.twiss()
 
-See http://coldfix.github.io/cpymad for further documentation.
+See http://hibtc.github.io/cpymad for further documentation.
 
 
 Contributing
@@ -131,4 +131,4 @@ Currently, tests run on:
   pymad itself execute on several python versions. Python{2.7,3.3} are
   supported. The tests are executed on any update of an upstream branch.
 
-.. _`Travis CI`: https://travis-ci.org/coldfix/cpymad
+.. _`Travis CI`: https://travis-ci.org/hibtc/cpymad

@@ -5,7 +5,7 @@ Usage:
     python setup.py install --madxdir=/path/to/madx/installation
 
 For more information, see
-    http://coldfix.github.io/cpymad/installation
+    http://hibtc.github.io/cpymad/installation
 """
 # Make sure setuptools is available. NOTE: the try/except hack is required to
 # make installation work with pip: If an older version of setuptools is

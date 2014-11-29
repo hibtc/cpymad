@@ -5,7 +5,7 @@ __title__ = 'cpymad'
 __version__ = '0.10.0'
 
 __summary__ = 'Cython binding to MAD-X'
-__uri__ = 'https://github.com/coldfix/cpymad'
+__uri__ = 'https://github.com/hibtc/cpymad'
 
 __author__ = 'PyMAD developers'
 __author_email__ = 'pymad@cern.ch'
