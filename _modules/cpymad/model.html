@@ -58,8 +58,8 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">madx</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">util</span>
+<span class="kn">from</span> <span class="nn">.madx</span> <span class="kn">import</span> <span class="n">Madx</span>
+<span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">is_match_param</span>
 <span class="kn">from</span> <span class="nn">.resource.file</span> <span class="kn">import</span> <span class="n">FileResource</span>
 
 
@@ -172,14 +172,14 @@
         <span class="n">repo</span> <span class="o">=</span> <span class="n">locator</span><span class="o">.</span><span class="n">get_repository</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">madx</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">error_log</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">error_log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="n">model_name</span><span class="p">)</span>
-            <span class="n">madx</span> <span class="o">=</span> <span class="n">madx</span><span class="o">.</span><span class="n">Madx</span><span class="p">(</span><span class="n">command_log</span><span class="o">=</span><span class="n">command_log</span><span class="p">,</span> <span class="n">error_log</span><span class="o">=</span><span class="n">error_log</span><span class="p">)</span>
+                <span class="n">error_log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">madx</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">(</span><span class="n">command_log</span><span class="o">=</span><span class="n">command_log</span><span class="p">,</span> <span class="n">error_log</span><span class="o">=</span><span class="n">error_log</span><span class="p">)</span>
             <span class="n">madx</span><span class="o">.</span><span class="n">verbose</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">command_log</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;&#39;command_log&#39; cannot be used with &#39;madx&#39;&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">error_log</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;&#39;error_log&#39; cannot be used with &#39;madx&#39;&quot;</span><span class="p">)</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">cls</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">repo</span><span class="o">=</span><span class="n">repo</span><span class="p">,</span> <span class="n">madx</span><span class="o">=</span><span class="n">madx</span><span class="p">)</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">cls</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">repo</span><span class="o">=</span><span class="n">repo</span><span class="p">,</span> <span class="n">madx</span><span class="o">=</span><span class="n">madx</span><span class="p">)</span>
         <span class="n">model</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">model</span>
 </div>
@@ -423,7 +423,7 @@
         <span class="n">kw</span><span class="p">[</span><span class="s">&#39;twiss_init&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">key</span><span class="p">:</span> <span class="n">val</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">[</span><span class="s">&#39;twiss_init&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">util</span><span class="o">.</span><span class="n">is_match_param</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">is_match_param</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
         <span class="p">}</span>
         <span class="n">madx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">madx</span>
         <span class="k">return</span> <span class="n">madx</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
@@ -494,7 +494,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ext</span><span class="p">):</span>
                 <span class="n">name</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ext</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repo</span><span class="o">.</span><span class="n">yaml</span><span class="p">(</span><span class="n">res_name</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repo</span><span class="o">.</span><span class="n">yaml</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;The model {!r} does not exist in the database&quot;</span>
                              <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
