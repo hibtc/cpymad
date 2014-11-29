@@ -33,7 +33,12 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         self.mad.command(beam)
         initial = dict(alfx=0.5, alfy=1.5,
                        betx=2.5, bety=3.5)
-        twiss = self.mad.twiss(sequence=seq_name, **initial)
+        # by explicitly specifying the 'columns' parameter a persistent copy
+        # is returned. We check that this copy contains the data we want and
+        # that it has a 'summary' attribute:
+        twiss = self.mad.twiss(sequence=seq_name,
+                               columns=['betx', 'bety', 'alfx', 'alfy'],
+                               **initial)
         betx, bety = twiss['betx'], twiss['bety']
         alfx, alfy = twiss['alfx'], twiss['alfy']
         # Check initial values:

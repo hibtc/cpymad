@@ -547,6 +547,10 @@ class Sequence(object):
         return self._libmadx.get_expanded_elements(self._name)
 
 
+class Dict(dict):
+    pass
+
+
 class TableProxy(collections.Mapping):
 
     """
@@ -591,4 +595,6 @@ class TableProxy(collections.Mapping):
         """
         if columns is None:
             columns = self
-        return dict((column, self[column]) for column in columns)
+        table = Dict((column, self[column]) for column in columns)
+        table.summary = self.summary
+        return table
