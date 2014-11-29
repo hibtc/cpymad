@@ -1,3 +1,12 @@
+"""
+Installation script for CPyMAD.
+
+Usage:
+    python setup.py install --madxdir=/path/to/madx/installation
+
+For more information, see
+    http://coldfix.github.io/pymad/installation
+"""
 # Make sure setuptools is available. NOTE: the try/except hack is required to
 # make installation work with pip: If an older version of setuptools is
 # already imported, `use_setuptools()` will just exit the current process.
