@@ -34,6 +34,9 @@ install:
   # without having any dependencies installed other than Cython:
   - python setup.py sdist
   - pip install $(ls ./dist/*.tar.gz | sort -rV | head -n1)
+  # Need to remove cpymad folder otherwise it will be imported, but we want
+  # to check the version installed from the source distribution:
+  - rm -r cpymad
 
 # Actual tests:
 script:
