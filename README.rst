@@ -102,7 +102,7 @@ filesystem, models can be instanciated and used as follows:
     for sequence in model.sequences.values():
         twiss = sequence.twiss()
 
-See http://coldfix.github.io/pymad for further documentation.
+See http://coldfix.github.io/cpymad for further documentation.
 
 
 Contributing
@@ -131,4 +131,4 @@ Currently, tests run on:
   pymad itself execute on several python versions. Python{2.7,3.3} are
   supported. The tests are executed on any update of an upstream branch.
 
-.. _`Travis CI`: https://travis-ci.org/coldfix/pymad
+.. _`Travis CI`: https://travis-ci.org/coldfix/cpymad
