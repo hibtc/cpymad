@@ -4,24 +4,21 @@ python:
   - "2.7"
   - "3.3"
 
+env:
+  - MADX_VERSION=5.02.04
+    MADX_URL=http://madx.web.cern.ch/madx/releases
+
 before_install:
   # install gfortran
   - sudo apt-get install gfortran
 
-  # Build MAD-X (takes a lot of time - should use a binary distribution):
-  - svn co http://svn.cern.ch/guest/madx/trunk/madX
-  - cd madX
-  - cmake -DCMAKE_C_COMPILER=gcc
-          -DCMAKE_Fortran_COMPILER=gfortran
-          -DMADX_STATIC=OFF
-          -DMADX_ONLINE=OFF
-          -DBUILD_SHARED_LIBS=ON
-          -DCMAKE_INSTALL_PREFIX=/usr
-          -DBINARY_POSTFIX=_dev
-          -DCMAKE_BUILD_TYPE=RelWithDebInfo .
-  - make
-  - sudo make install
-  - cd ..
+  # Download and "install" binary version from official website:
+  - wget $MADX_URL/$MADX_VERSION/libmadx-linux64.so
+  - wget $MADX_URL/$MADX_VERSION/madx-$MADX_VERSION.tgz
+  - tar -xzf madx-$MADX_VERSION.tgz
+  - sudo mv libmadx-linux64.so /usr/lib/libmadx.so
+  - sudo mkdir /usr/include/madX
+  - sudo mv madx-$MADX_VERSION/src/*.h /usr/include/madX
 
 # Setup (performed within virtualenv)
 install:
