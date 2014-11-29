@@ -254,7 +254,11 @@
         <span class="c"># write to history before performing the input, so if MAD-X</span>
         <span class="c"># crashes, it is easier to see, where it happened:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_command_log</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">_rpc</span><span class="o">.</span><span class="n">RemoteProcessCrashed</span><span class="p">:</span>
+            <span class="c"># catch + reraise in order to shorten stack trace (~3-5 levels):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;MAD-X has stopped working!&quot;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Madx.help"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.help">[docs]</a>    <span class="k">def</span> <span class="nf">help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -308,20 +312,14 @@
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pattern</span><span class="p">:</span>
             <span class="n">select</span><span class="p">(</span><span class="n">flag</span><span class="o">=</span><span class="n">flag</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
 </div>
-    <span class="n">default_twiss_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;s&#39;</span><span class="p">,</span>
-                             <span class="s">&#39;betx&#39;</span><span class="p">,</span> <span class="s">&#39;bety&#39;</span><span class="p">,</span>
-                             <span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span>
-                             <span class="s">&#39;dx&#39;</span><span class="p">,</span> <span class="s">&#39;dy&#39;</span><span class="p">,</span>
-                             <span class="s">&#39;px&#39;</span><span class="p">,</span> <span class="s">&#39;py&#39;</span><span class="p">,</span>
-                             <span class="s">&#39;mux&#39;</span><span class="p">,</span> <span class="s">&#39;muy&#39;</span>
-                              <span class="s">&#39;l&#39;</span><span class="p">,</span><span class="s">&#39;k1l&#39;</span><span class="p">,</span> <span class="s">&#39;angle&#39;</span><span class="p">,</span> <span class="s">&#39;k2l&#39;</span><span class="p">]</span>
-
 <div class="viewcode-block" id="Madx.twiss"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.twiss">[docs]</a>    <span class="k">def</span> <span class="nf">twiss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
               <span class="n">sequence</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-              <span class="n">pattern</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;full&#39;</span><span class="p">],</span>
-              <span class="n">columns</span><span class="o">=</span><span class="n">default_twiss_columns</span><span class="p">,</span>
               <span class="nb">range</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+              <span class="c"># *,</span>
+              <span class="c"># These should be passed as keyword-only parameters:</span>
               <span class="n">twiss_init</span><span class="o">=</span><span class="p">{},</span>
+              <span class="n">columns</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+              <span class="n">pattern</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;full&#39;</span><span class="p">],</span>
               <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Run SELECT+USE+TWISS.</span>
@@ -345,15 +343,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">twiss</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="n">sequence</span><span class="p">,</span>
                            <span class="nb">range</span><span class="o">=</span><span class="nb">range</span><span class="p">,</span>
                            <span class="o">**</span><span class="n">twiss_init</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="s">&#39;twiss&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="s">&#39;twiss&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span>
 </div>
-    <span class="n">default_survey_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;l&#39;</span><span class="p">,</span> <span class="s">&#39;s&#39;</span><span class="p">,</span> <span class="s">&#39;angle&#39;</span><span class="p">,</span>
-                              <span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">,</span> <span class="s">&#39;theta&#39;</span><span class="p">]</span>
-
 <div class="viewcode-block" id="Madx.survey"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.survey">[docs]</a>    <span class="k">def</span> <span class="nf">survey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                <span class="n">sequence</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+               <span class="n">columns</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                <span class="n">pattern</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;full&#39;</span><span class="p">],</span>
-               <span class="n">columns</span><span class="o">=</span><span class="n">default_survey_columns</span><span class="p">,</span>
                <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Run SELECT+USE+SURVEY.</span>
@@ -366,7 +361,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;survey&#39;</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="n">pattern</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_use</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">survey</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="s">&#39;survey&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="s">&#39;survey&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Madx.use"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -456,7 +451,7 @@
     <span class="k">def</span> <span class="nf">verbose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">switch</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="n">echo</span><span class="o">=</span><span class="n">switch</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="n">switch</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">switch</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Madx.get_table"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.get_table">[docs]</a>    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+<div class="viewcode-block" id="Madx.get_table"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.get_table">[docs]</a>    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the specified table from MAD-X.</span>
 
@@ -464,7 +459,11 @@
 <span class="sd">        :returns: a proxy for the table data</span>
 <span class="sd">        :rtype: TableProxy</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">TableProxy</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">)</span>
+        <span class="n">proxy</span> <span class="o">=</span> <span class="n">TableProxy</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">proxy</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">proxy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
 </div>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">active_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -601,6 +600,10 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_expanded_elements</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
 
 </div></div>
+<span class="k">class</span> <span class="nc">Dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
 <div class="viewcode-block" id="TableProxy"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.TableProxy">[docs]</a><span class="k">class</span> <span class="nc">TableProxy</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
@@ -645,7 +648,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span>
-        <span class="k">return</span> <span class="nb">dict</span><span class="p">((</span><span class="n">column</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">column</span><span class="p">])</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">)</span></div></div>
+        <span class="n">table</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">((</span><span class="n">column</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">column</span><span class="p">])</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">summary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">summary</span>
+        <span class="k">return</span> <span class="n">table</span></div></div>
 </pre></div>
 
           </div>

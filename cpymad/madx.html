@@ -264,7 +264,7 @@ object to the constructor. This object must expose an interface similar to
 
 <dl class="method">
 <dt id="cpymad.madx.Madx.get_table">
-<tt class="descname">get_table</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.get_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.get_table" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_table</tt><big>(</big><em>table</em>, <em>columns=None</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.get_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.get_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the specified table from MAD-X.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -381,7 +381,7 @@ object to the constructor. This object must expose an interface similar to
 
 <dl class="method">
 <dt id="cpymad.madx.Madx.survey">
-<tt class="descname">survey</tt><big>(</big><em>sequence=None, pattern=['full'], columns=['name', 'l', 's', 'angle', 'x', 'y', 'z', 'theta'], **kwargs</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.survey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.survey" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">survey</tt><big>(</big><em>sequence=None, columns=None, pattern=['full'], **kwargs</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.survey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.survey" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run SELECT+USE+SURVEY.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -401,7 +401,7 @@ object to the constructor. This object must expose an interface similar to
 
 <dl class="method">
 <dt id="cpymad.madx.Madx.twiss">
-<tt class="descname">twiss</tt><big>(</big><em>sequence=None, pattern=['full'], columns=['name', 's', 'betx', 'bety', 'x', 'y', 'dx', 'dy', 'px', 'py', 'mux', 'muyl', 'k1l', 'angle', 'k2l'], range=None, twiss_init={}, **kwargs</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.twiss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.twiss" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">twiss</tt><big>(</big><em>sequence=None, range=None, twiss_init={}, columns=None, pattern=['full'], **kwargs</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.twiss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.twiss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run SELECT+USE+TWISS.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

@@ -7,7 +7,7 @@ MAD-X is a software package to simulate particle accelerators and is used
 at CERN and all around the world. It has its own proprietary scripting
 language and is usually launched from the command line.
 
-.. _CPyMAD: https://github.com/coldfix/cpymad
+.. _CPyMAD: https://github.com/hibtc/cpymad
 .. _Cython: http://cython.org/
 .. _MAD-X: http://cern.ch/mad
 
@@ -40,7 +40,7 @@ Contact
 Feel free to report bugs, request features and ask questions on the
 `issue pages`_.
 
-.. _issue pages: https://github.com/coldfix/cpymad/issues
+.. _issue pages: https://github.com/hibtc/cpymad/issues
 
 
 Indices and tables
