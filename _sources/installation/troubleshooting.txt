@@ -12,7 +12,6 @@ ImportError: libmadx.so
 
 Message::
 
-    from cern.madx import madx
     ImportError: libmadx.so: cannot open shared object file: No such file or directory
 
 Solution:
@@ -43,7 +42,7 @@ OSError: Missing source file
 
 Message::
 
-    OSError: Missing source file: 'src/cern/cpymad/libmadx.c'. Install Cython to resolve this problem.
+    OSError: Missing source file: 'cpymad/libmadx.c'. Install Cython to resolve this problem.
 
 Solution:
 The easiest way to install Cython is:
@@ -145,18 +144,5 @@ distutils, for example:
                                             % (self.linker_dll, shared_option,
                                                 entry_point))
             # Maybe we should also append -mthreads, but then the finished
-
-or:
-
-.. code-block:: diff
-
-    @@ -320,7 +320,7 @@ class Mingw32CCompiler (CygwinCCompiler):
-                entry_point = ''
-
-            if self.gcc_version < '4' or is_cygwingcc():
-    -           no_cygwin = ' -mno-cygwin'
-    +           no_cygwin = ''
-            else:
-                no_cygwin = ''
 
 .. seealso:: http://stackoverflow.com/q/6034390/650222

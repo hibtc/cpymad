@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>CERN CPyMad &mdash; PyMad 0.7.0 documentation</title>
+    <title>CPyMad &mdash; CPyMAD 0.10.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.7.0',
+        VERSION:     '0.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,15 +23,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PyMad 0.7.0 documentation" href="#" />
+    <link rel="top" title="CPyMAD 0.10.0 documentation" href="#" />
     <link rel="next" title="Installation Instructions" href="installation/index.html" /> 
   </head>
   <body>
-
-<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
-<a href="#"><img src="_static/pymad-logo-text.png" border="0" alt="py4sci"/></a>
-</div>
-
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -44,18 +39,75 @@
         <li class="right" >
           <a href="installation/index.html" title="Installation Instructions"
              accesskey="N">next</a> |</li>
-        <li><a href="#">home</a>|&nbsp;</li>
-        <li><a href="search.html">search</a>|&nbsp;</li>
- 
+        <li><a href="#">CPyMAD 0.10.0 documentation</a> &raquo;</li> 
       </ul>
-    </div>
+    </div>  
 
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="cpymad">
+<h1>CPyMad<a class="headerlink" href="#cpymad" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/coldfix/pymad">CPyMad</a> is a <a class="reference external" href="http://cython.org/">Cython</a> binding to <a class="reference external" href="http://cern.ch/mad">MAD-X</a>.</p>
+<p>MAD-X is a software package to simulate particle accelerators and is used
+at CERN and all around the world. It has its own proprietary scripting
+language and is usually launched from the command line.</p>
+<div class="section" id="disclaimer">
+<h2>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this headline">¶</a></h2>
+<p>This is a heavily modified fork of the <a class="reference external" href="https://github.com/pymad/cpymad">cern-cpymad</a> package. The fork is
+not authored or maintained by CERN members.</p>
+<p>CPyMAD links against an unofficial build of MAD-X that is not supported by
+CERN, i.e. in case of problems you will not get help there.</p>
+</div>
+<div class="section" id="contents">
+<h2>Contents:<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation/index.html">Installation Instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation/dependencies.html">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation/unix.html">Unix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation/windows.html">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpymad/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpymad/madx.html">cpymad.madx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpymad/model.html">cpymad.model</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="contact">
+<h2>Contact<a class="headerlink" href="#contact" title="Permalink to this headline">¶</a></h2>
+<p>Feel free to report bugs, request features and ask questions on the
+<a class="reference external" href="https://github.com/coldfix/pymad/issues">issue pages</a>.</p>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+<p>Documentation updated: November 29, 2014</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">CERN CPyMad</a><ul>
+<li><a class="reference internal" href="#">CPyMad</a><ul>
+<li><a class="reference internal" href="#disclaimer">Disclaimer</a></li>
 <li><a class="reference internal" href="#contents">Contents:</a></li>
+<li><a class="reference internal" href="#contact">Contact</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
@@ -84,61 +136,6 @@
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
-  <div class="section" id="cern-cpymad">
-<h1>CERN CPyMad<a class="headerlink" href="#cern-cpymad" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference external" href="https://github.com/pymad/cpymad">CPyMad</a> is a <a class="reference external" href="http://cython.org/">Cython</a> binding to <a class="reference external" href="http://cern.ch/mad">MAD-X</a>.</p>
-<p>MAD-X is a software package to simulate particle accelerators and is used
-at CERN and all around the world. It has its own proprietary scripting
-language and is usually launched from the command line.</p>
-<p>Feel free to report bugs, request features and ask questions on the
-<a class="reference external" href="https://github.com/pymad/cpymad/issues">issue pages</a>.</p>
-<p>There is also a binding via <a class="reference external" href="http://jmad.web.cern.ch/jmad/">JMad</a> called <a class="reference external" href="https://github.com/pymad/jpymad">JPyMAD</a>. This has less features
-but does not require a C compiler for installing.</p>
-<div class="section" id="contents">
-<h2>Contents:<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="installation/index.html">Installation Instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation/dependencies.html">Dependencies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation/unix.html">Unix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation/windows.html">Windows</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation/troubleshooting.html">Troubleshooting</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="examples/index.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/model.html">Model example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/madx.html">Madx example</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cpymad/index.html">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cpymad/madx.html">cern.cpymad.madx</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cpymad/model.html">cern.cpymad.model</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
-</ul>
-<p>Documentation updated: August 08, 2014</p>
-</div>
-</div>
-
-
-          </div>
-        </div>
-      </div>
       <div class="clearer"></div>
     </div>
     <div class="related">
@@ -153,14 +150,12 @@ but does not require a C compiler for installing.</p>
         <li class="right" >
           <a href="installation/index.html" title="Installation Instructions"
              >next</a> |</li>
-        <li><a href="#">home</a>|&nbsp;</li>
-        <li><a href="search.html">search</a>|&nbsp;</li>
- 
+        <li><a href="#">CPyMAD 0.10.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Y.I. Levinsen, K. Fuchsberger (CERN) .
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+        &copy; Copyright 2014, T. Gläßle (HIT), 2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

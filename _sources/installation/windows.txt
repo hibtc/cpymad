@@ -11,7 +11,7 @@ run
 
 .. code-block:: bat
 
-    pip install cern-cpymad
+    pip install cpymad
 
 from your terminal and that's it. If this fails, you will need to build
 from source. The following guide assumes that you use *MinGW* as compiler
@@ -118,7 +118,7 @@ Substitute ``<madx-install-path>`` with the :file:`madX\\install` subfolder
 as specified by ``CMAKE_INSTALL_PREFIX`` before.
 
 
-.. _built versions: https://pypi.python.org/pypi/cern-cpymad/
+.. _built versions: https://pypi.python.org/pypi/cpymad/
 .. _MAD-X source: http://svnweb.cern.ch/world/wsvn/madx/tags/
 .. _latest revision: http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&rev=0&isdir=1
 .. _CPyMAD source: https://github.com/pymad/cpymad/zipball/master

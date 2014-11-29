@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Troubleshooting &mdash; PyMad 0.7.0 documentation</title>
+    <title>Troubleshooting &mdash; CPyMAD 0.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,17 +23,12 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyMad 0.7.0 documentation" href="../index.html" />
+    <link rel="top" title="CPyMAD 0.10.0 documentation" href="../index.html" />
     <link rel="up" title="Installation Instructions" href="index.html" />
-    <link rel="next" title="Examples" href="../examples/index.html" />
+    <link rel="next" title="API Reference" href="../cpymad/index.html" />
     <link rel="prev" title="Windows" href="windows.html" /> 
   </head>
   <body>
-
-<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
-<a href="../index.html"><img src="../_static/pymad-logo-text.png" border="0" alt="py4sci"/></a>
-</div>
-
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -44,58 +39,15 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../examples/index.html" title="Examples"
+          <a href="../cpymad/index.html" title="API Reference"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="windows.html" title="Windows"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
-
+        <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Installation Instructions</a> &raquo;</li> 
       </ul>
-    </div>
-
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Troubleshooting</a><ul>
-<li><a class="reference internal" href="#importerror-libmadx-so">ImportError: libmadx.so</a></li>
-<li><a class="reference internal" href="#oserror-missing-source-file">OSError: Missing source file</a></li>
-<li><a class="reference internal" href="#unable-to-find-vcvarsall-bat">Unable to find vcvarsall.bat</a></li>
-<li><a class="reference internal" href="#typeerror-nonetype-object-has-no-attribute-getitem">TypeError: &#8216;NoneType&#8217; object has no attribute &#8216;__getitem__&#8217;</a></li>
-<li><a class="reference internal" href="#unrecognized-command-line-option-mno-cygwin">unrecognized command line option &#8216;-mno-cygwin&#8217;</a></li>
-</ul>
-</li>
-</ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="windows.html"
-                        title="previous chapter">Windows</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../examples/index.html"
-                        title="next chapter">Examples</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/installation/troubleshooting.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -109,8 +61,7 @@ that might occur during installation.</p>
 <div class="section" id="importerror-libmadx-so">
 <h2>ImportError: libmadx.so<a class="headerlink" href="#importerror-libmadx-so" title="Permalink to this headline">¶</a></h2>
 <p>Message:</p>
-<div class="highlight-python"><div class="highlight"><pre>from cern.madx import madx
-ImportError: libmadx.so: cannot open shared object file: No such file or directory
+<div class="highlight-python"><div class="highlight"><pre>ImportError: libmadx.so: cannot open shared object file: No such file or directory
 </pre></div>
 </div>
 <p>Solution:
@@ -134,7 +85,7 @@ example:</p>
 <div class="section" id="oserror-missing-source-file">
 <h2>OSError: Missing source file<a class="headerlink" href="#oserror-missing-source-file" title="Permalink to this headline">¶</a></h2>
 <p>Message:</p>
-<div class="highlight-python"><div class="highlight"><pre>OSError: Missing source file: &#39;src/cern/cpymad/libmadx.c&#39;. Install Cython to resolve this problem.
+<div class="highlight-python"><div class="highlight"><pre>OSError: Missing source file: &#39;cpymad/libmadx.c&#39;. Install Cython to resolve this problem.
 </pre></div>
 </div>
 <p>Solution:
@@ -228,17 +179,6 @@ distutils, for example:</p>
         # Maybe we should also append -mthreads, but then the finished
 </pre></div>
 </div>
-<p>or:</p>
-<div class="highlight-diff"><div class="highlight"><pre><span class="gu">@@ -320,7 +320,7 @@ class Mingw32CCompiler (CygwinCCompiler):</span>
-            entry_point = &#39;&#39;
-
-        if self.gcc_version &lt; &#39;4&#39; or is_cygwingcc():
-<span class="gd">-           no_cygwin = &#39; -mno-cygwin&#39;</span>
-<span class="gi">+           no_cygwin = &#39;&#39;</span>
-        else:
-            no_cygwin = &#39;&#39;
-</pre></div>
-</div>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference external" href="http://stackoverflow.com/q/6034390/650222">http://stackoverflow.com/q/6034390/650222</a></p>
@@ -248,6 +188,46 @@ distutils, for example:</p>
 
 
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#importerror-libmadx-so">ImportError: libmadx.so</a></li>
+<li><a class="reference internal" href="#oserror-missing-source-file">OSError: Missing source file</a></li>
+<li><a class="reference internal" href="#unable-to-find-vcvarsall-bat">Unable to find vcvarsall.bat</a></li>
+<li><a class="reference internal" href="#typeerror-nonetype-object-has-no-attribute-getitem">TypeError: &#8216;NoneType&#8217; object has no attribute &#8216;__getitem__&#8217;</a></li>
+<li><a class="reference internal" href="#unrecognized-command-line-option-mno-cygwin">unrecognized command line option &#8216;-mno-cygwin&#8217;</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="windows.html"
+                        title="previous chapter">Windows</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../cpymad/index.html"
+                        title="next chapter">API Reference</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/installation/troubleshooting.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -262,20 +242,18 @@ distutils, for example:</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../examples/index.html" title="Examples"
+          <a href="../cpymad/index.html" title="API Reference"
              >next</a> |</li>
         <li class="right" >
           <a href="windows.html" title="Windows"
              >previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
-
+        <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
           <li><a href="index.html" >Installation Instructions</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Y.I. Levinsen, K. Fuchsberger (CERN) .
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+        &copy; Copyright 2014, T. Gläßle (HIT), 2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

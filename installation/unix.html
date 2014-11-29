@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Unix &mdash; PyMad 0.7.0 documentation</title>
+    <title>Unix &mdash; CPyMAD 0.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,17 +23,12 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyMad 0.7.0 documentation" href="../index.html" />
+    <link rel="top" title="CPyMAD 0.10.0 documentation" href="../index.html" />
     <link rel="up" title="Installation Instructions" href="index.html" />
     <link rel="next" title="Windows" href="windows.html" />
     <link rel="prev" title="Dependencies" href="dependencies.html" /> 
   </head>
   <body>
-
-<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
-<a href="../index.html"><img src="../_static/pymad-logo-text.png" border="0" alt="py4sci"/></a>
-</div>
-
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -49,13 +44,63 @@
         <li class="right" >
           <a href="dependencies.html" title="Dependencies"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
-
+        <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Installation Instructions</a> &raquo;</li> 
       </ul>
-    </div>
+    </div>  
 
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="unix">
+<h1>Unix<a class="headerlink" href="#unix" title="Permalink to this headline">¶</a></h1>
+<p>On Unix-like system building CPyMAD from source is most convenient and
+should be unproblematic.</p>
+<div class="section" id="install-dependencies">
+<h2>Install dependencies<a class="headerlink" href="#install-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>On many distributions all <a class="reference internal" href="dependencies.html#dependencies"><em>Dependencies</em></a> can be installed from the
+official repositories.</p>
+</div>
+<div class="section" id="install-libmadx">
+<h2>Install libmadx<a class="headerlink" href="#install-libmadx" title="Permalink to this headline">¶</a></h2>
+<p>Download the <a class="reference external" href="http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&amp;rev=0&amp;isdir=1">MAD-X source</a> from SVN</p>
+<div class="highlight-bash"><div class="highlight"><pre>svn co http://svn.cern.ch/guest/madx/trunk/madX
+</pre></div>
+</div>
+<p>Build and install the library</p>
+<div class="highlight-bash"><div class="highlight"><pre>mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd </span>build
+cmake -DMADX_STATIC<span class="o">=</span>OFF -DBUILD_SHARED_LIBS<span class="o">=</span>ON ../madX
+make <span class="o">&amp;&amp;</span> make install
+</pre></div>
+</div>
+<p>The install step might require root privileges if not changing the
+installation prefix.</p>
+</div>
+<div class="section" id="install-cpymad">
+<h2>Install CPyMAD<a class="headerlink" href="#install-cpymad" title="Permalink to this headline">¶</a></h2>
+<p>The latest <a class="reference external" href="https://pypi.python.org/pypi/cpymad">CPyMAD release</a> can conveniently be installed using <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a>:</p>
+<div class="highlight-bash"><div class="highlight"><pre>pip install cpymad
+</pre></div>
+</div>
+<p>If you run into problems with this, you should manually download and
+install the <a class="reference external" href="https://github.com/pymad/cpymad/zipball/master">CPyMad source</a> to see in which step the problem occurs:</p>
+<div class="highlight-bash"><div class="highlight"><pre>git clone git://github.com/pymad/cpymad
+<span class="nb">cd </span>pymad
+python setup.py build
+python setup.py install
+</pre></div>
+</div>
+<p>You might need root privileges for the last step if not installing to a
+<a class="reference external" href="http://virtualenv.readthedocs.org/en/latest/virtualenv.html">virtualenv</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
@@ -94,59 +139,6 @@
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
-  <div class="section" id="unix">
-<h1>Unix<a class="headerlink" href="#unix" title="Permalink to this headline">¶</a></h1>
-<p>On Unix-like system building CPyMAD from source is most convenient and
-should be unproblematic.</p>
-<div class="section" id="install-dependencies">
-<h2>Install dependencies<a class="headerlink" href="#install-dependencies" title="Permalink to this headline">¶</a></h2>
-<p>On many distributions all <a class="reference internal" href="dependencies.html#dependencies"><em>Dependencies</em></a> can be installed from the
-official repositories.</p>
-</div>
-<div class="section" id="install-libmadx">
-<h2>Install libmadx<a class="headerlink" href="#install-libmadx" title="Permalink to this headline">¶</a></h2>
-<p>Download the <a class="reference external" href="http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&amp;rev=0&amp;isdir=1">MAD-X source</a> from SVN</p>
-<div class="highlight-bash"><div class="highlight"><pre>svn co http://svnweb.cern.ch/guest/madx/trunk/madX
-</pre></div>
-</div>
-<p>Build and install the library</p>
-<div class="highlight-bash"><div class="highlight"><pre>mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd </span>build
-cmake -DMADX_STATIC<span class="o">=</span>OFF -DBUILD_SHARED_LIBS<span class="o">=</span>ON ../madX
-make <span class="o">&amp;&amp;</span> make install
-</pre></div>
-</div>
-<p>The install step might require root privileges if not changing the
-installation prefix.</p>
-</div>
-<div class="section" id="install-cpymad">
-<h2>Install CPyMAD<a class="headerlink" href="#install-cpymad" title="Permalink to this headline">¶</a></h2>
-<p>The latest <a class="reference external" href="https://pypi.python.org/pypi/cern-cpymad">CPyMAD release</a> can conveniently be installed using <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a>:</p>
-<div class="highlight-bash"><div class="highlight"><pre>pip install cern-cpymad
-</pre></div>
-</div>
-<p>If you run into problems with this, you should manually download and
-install the <a class="reference external" href="https://github.com/pymad/cpymad/zipball/master">CPyMad source</a> to see in which step the problem occurs:</p>
-<div class="highlight-bash"><div class="highlight"><pre>git clone git://github.com/pymad/cpymad
-<span class="nb">cd </span>pymad
-python setup.py build
-python setup.py install
-</pre></div>
-</div>
-<p>You might need root privileges for the last step if not installing to a
-<a class="reference external" href="http://virtualenv.readthedocs.org/en/latest/virtualenv.html">virtualenv</a>.</p>
-</div>
-</div>
-
-
-          </div>
-        </div>
-      </div>
       <div class="clearer"></div>
     </div>
     <div class="related">
@@ -164,15 +156,13 @@ python setup.py install
         <li class="right" >
           <a href="dependencies.html" title="Dependencies"
              >previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
-
+        <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
           <li><a href="index.html" >Installation Instructions</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Y.I. Levinsen, K. Fuchsberger (CERN) .
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+        &copy; Copyright 2014, T. Gläßle (HIT), 2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

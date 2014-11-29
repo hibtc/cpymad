@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API Reference &mdash; PyMad 0.7.0 documentation</title>
+    <title>API Reference &mdash; CPyMAD 0.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,16 +23,11 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyMad 0.7.0 documentation" href="../index.html" />
-    <link rel="next" title="cern.cpymad.madx" href="madx.html" />
-    <link rel="prev" title="Madx example" href="../examples/madx.html" /> 
+    <link rel="top" title="CPyMAD 0.10.0 documentation" href="../index.html" />
+    <link rel="next" title="cpymad.madx" href="madx.html" />
+    <link rel="prev" title="Troubleshooting" href="../installation/troubleshooting.html" /> 
   </head>
   <body>
-
-<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
-<a href="../index.html"><img src="../_static/pymad-logo-text.png" border="0" alt="py4sci"/></a>
-</div>
-
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -43,25 +38,42 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="madx.html" title="cern.cpymad.madx"
+          <a href="madx.html" title="cpymad.madx"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../examples/madx.html" title="Madx example"
+          <a href="../installation/troubleshooting.html" title="Troubleshooting"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
- 
+        <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li> 
       </ul>
-    </div>
+    </div>  
 
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="madx.html">cpymad.madx</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">cpymad.model</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../examples/madx.html"
-                        title="previous chapter">Madx example</a></p>
+  <p class="topless"><a href="../installation/troubleshooting.html"
+                        title="previous chapter">Troubleshooting</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="madx.html"
-                        title="next chapter">cern.cpymad.madx</a></p>
+                        title="next chapter">cpymad.madx</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/cpymad/index.txt"
@@ -82,35 +94,6 @@
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
-  <div class="section" id="api-reference">
-<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
-<p>There are two main components in CPyMAD:</p>
-<ul class="simple">
-<li><a class="reference internal" href="madx.html#cern.cpymad.madx.Madx" title="cern.cpymad.madx.Madx"><tt class="xref py py-class docutils literal"><span class="pre">cern.cpymad.madx.Madx</span></tt></a> serves as a lightweight wrapper for the MAD-X
-interpretor.</li>
-<li><a class="reference internal" href="model.html#cern.cpymad.model.Model" title="cern.cpymad.model.Model"><tt class="xref py py-class docutils literal"><span class="pre">cern.cpymad.model.Model</span></tt></a> is derived from the JMad model
-definitions. It stores all preliminary setup for a given machine in
-built-in files, including knowledge about available optics and strength
-files to use for each, etc.</li>
-</ul>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="madx.html">cern.cpymad.madx</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model.html">cern.cpymad.model</a></li>
-</ul>
-</div>
-</div>
-
-
-          </div>
-        </div>
-      </div>
       <div class="clearer"></div>
     </div>
     <div class="related">
@@ -123,19 +106,17 @@ files to use for each, etc.</li>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="madx.html" title="cern.cpymad.madx"
+          <a href="madx.html" title="cpymad.madx"
              >next</a> |</li>
         <li class="right" >
-          <a href="../examples/madx.html" title="Madx example"
+          <a href="../installation/troubleshooting.html" title="Troubleshooting"
              >previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
- 
+        <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Y.I. Levinsen, K. Fuchsberger (CERN) .
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+        &copy; Copyright 2014, T. Gläßle (HIT), 2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

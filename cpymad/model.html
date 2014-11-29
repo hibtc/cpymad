@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>cern.cpymad.model &mdash; PyMad 0.7.0 documentation</title>
+    <title>cpymad.model &mdash; CPyMAD 0.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,16 +23,11 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyMad 0.7.0 documentation" href="../index.html" />
+    <link rel="top" title="CPyMAD 0.10.0 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
-    <link rel="prev" title="cern.cpymad.madx" href="madx.html" /> 
+    <link rel="prev" title="cpymad.madx" href="madx.html" /> 
   </head>
   <body>
-
-<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
-<a href="../index.html"><img src="../_static/pymad-logo-text.png" border="0" alt="py4sci"/></a>
-</div>
-
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -43,20 +38,411 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="madx.html" title="cern.cpymad.madx"
+          <a href="madx.html" title="cpymad.madx"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
-
+        <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
-    </div>
+    </div>  
 
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cpymad.model">
+<span id="cpymad-model"></span><h1>cpymad.model<a class="headerlink" href="#module-cpymad.model" title="Permalink to this headline">¶</a></h1>
+<p>Models encapsulate metadata for accelerator machines.</p>
+<p>For more information about models, see <a class="reference internal" href="#cpymad.model.Model" title="cpymad.model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a>.</p>
+<dl class="class">
+<dt id="cpymad.model.Model">
+<em class="property">class </em><tt class="descclassname">cpymad.model.</tt><tt class="descname">Model</tt><big>(</big><em>data</em>, <em>repo</em>, <em>madx</em><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>A model is a complete description of an accelerator machine.</p>
+<p>This class is used to bundle all metadata related to an accelerator and
+all its configurations. It takes care of loading the proper MAD-X files
+when needed. Models are conceptually derived from the JMad models, but
+have evolved to a more pythonic and simple API.</p>
+<p>To create a model instance from a model definition file, use the
+<tt class="docutils literal"><span class="pre">Model.load</span></tt> constructor.</p>
+<p>Only GET access is allowed to all instance variables at the moment.</p>
+<p>Public attributes:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; model name</li>
+<li><strong>beams</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; known <a class="reference internal" href="#cpymad.model.Beam" title="cpymad.model.Beam"><tt class="xref py py-class docutils literal"><span class="pre">Beam</span></tt></a> objects</li>
+<li><strong>optics</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; known <a class="reference internal" href="#cpymad.model.Optic" title="cpymad.model.Optic"><tt class="xref py py-class docutils literal"><span class="pre">Optic</span></tt></a> objects</li>
+<li><strong>sequences</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; known <a class="reference internal" href="#cpymad.model.Sequence" title="cpymad.model.Sequence"><tt class="xref py py-class docutils literal"><span class="pre">Sequence</span></tt></a> objects</li>
+<li><strong>madx</strong> (<em>Madx</em>) &#8211; handle to the MAD-X library</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Private variables:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>_data</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; model definition data</li>
+<li><strong>_repo</strong> (<em>ResourceProvider</em>) &#8211; resource access</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The following example demonstrates the basic usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cpymad.model</span> <span class="kn">import</span> <span class="n">Model</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;/path/to/model/definition.cpymad.yml&#39;</span><span class="p">)</span>
+
+<span class="n">twiss</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">default_sequence</span><span class="o">.</span><span class="n">twiss</span><span class="p">()</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;max/min beta x:&quot;</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">twiss</span><span class="p">[</span><span class="s">&#39;betx&#39;</span><span class="p">]),</span> <span class="nb">min</span><span class="p">(</span><span class="n">twiss</span><span class="p">[</span><span class="s">&#39;betx&#39;</span><span class="p">]))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;ex: {0}, ey: {1}&quot;</span><span class="p">,</span> <span class="n">twiss</span><span class="o">.</span><span class="n">summary</span><span class="p">[</span><span class="s">&#39;ex&#39;</span><span class="p">],</span> <span class="n">twiss</span><span class="o">.</span><span class="n">summary</span><span class="p">[</span><span class="s">&#39;ey&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="cpymad.model.Model.data">
+<tt class="descname">data</tt><a class="reference internal" href="../_modules/cpymad/model.html#Model.data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Model.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a serializable representation of this model.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cpymad.model.Model.default_optic">
+<tt class="descname">default_optic</tt><a class="reference internal" href="../_modules/cpymad/model.html#Model.default_optic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Model.default_optic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get default Optic.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cpymad.model.Model.default_sequence">
+<tt class="descname">default_sequence</tt><a class="reference internal" href="../_modules/cpymad/model.html#Model.default_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Model.default_sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get default Sequence.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.model.Model.init">
+<tt class="descname">init</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Model.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Model.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load model in MAD-X interpreter.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cpymad.model.Model.load">
+<em class="property">classmethod </em><tt class="descname">load</tt><big>(</big><em>name</em>, <em>locator=None</em>, <em>madx=None</em>, <em>command_log=None</em>, <em>error_log=None</em><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Model.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Model.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create Model instance from a model definition file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; model definition file name</li>
+<li><strong>locator</strong> (<em>Locator</em>) &#8211; model locator</li>
+<li><strong>madx</strong> (<em>Madx</em>) &#8211; MAD-X instance to use</li>
+<li><strong>command_log</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; history file name; use only if madx is None!</li>
+<li><strong>error_log</strong> (<a class="reference external" href="http://docs.python.org/library/logging.html#logging.Logger" title="(in Python v2.7)"><em>logging.Logger</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If the <tt class="docutils literal"><span class="pre">locator</span></tt> is not specified <tt class="docutils literal"><span class="pre">name</span></tt> is assumed to be an
+absolute path of a model definition file living in the ordinary file
+system.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cpymad.model.Model.name">
+<tt class="descname">name</tt><a class="reference internal" href="../_modules/cpymad/model.html#Model.name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Model.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model name.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cpymad.model.Beam">
+<em class="property">class </em><tt class="descclassname">cpymad.model.</tt><tt class="descname">Beam</tt><big>(</big><em>name</em>, <em>data</em>, <em>model</em><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Beam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Beam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Beam for <a class="reference internal" href="#cpymad.model.Model" title="cpymad.model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a>.</p>
+<p>A beam defines the mass, charge, energy, etc. of the particles moved
+through the accelerator.</p>
+<p>Public attributes:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; beam name</li>
+<li><strong>data</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; beam parameters (keywords to BEAM command in MAD-X)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Private variables:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>_model</strong> (<em>Model</em>) &#8211; owning model</li>
+<li><strong>_loaded</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; beam has been initialized in MAD-X</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cpymad.model.Beam.init">
+<tt class="descname">init</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Beam.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Beam.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the beam in MAD-X.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cpymad.model.Optic">
+<em class="property">class </em><tt class="descclassname">cpymad.model.</tt><tt class="descname">Optic</tt><big>(</big><em>name</em>, <em>data</em>, <em>model</em><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Optic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Optic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optic for <a class="reference internal" href="#cpymad.model.Model" title="cpymad.model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a>.</p>
+<p>An optic (as far as I understand) defines a variant of the accelerator
+setup, e.g. different injection mechanisms.</p>
+<p>Public attributes:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; optic name</td>
+</tr>
+</tbody>
+</table>
+<p>Private variables:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>_data</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; optic definition</li>
+<li><strong>_model</strong> (<em>Model</em>) &#8211; owning model</li>
+<li><strong>_loaded</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; beam has been initialized in MAD-X</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cpymad.model.Optic.init">
+<tt class="descname">init</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Optic.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Optic.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the optic in the MAD-X process.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cpymad.model.Sequence">
+<em class="property">class </em><tt class="descclassname">cpymad.model.</tt><tt class="descname">Sequence</tt><big>(</big><em>name</em>, <em>data</em>, <em>model</em><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence for <a class="reference internal" href="#cpymad.model.Model" title="cpymad.model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a>.</p>
+<p>A sequence defines an arrangement of beam line elements. It can be
+subdivided into multiple ranges.</p>
+<p>Public attributes:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; sequence name</li>
+<li><strong>ranges</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; known <a class="reference internal" href="#cpymad.model.Range" title="cpymad.model.Range"><tt class="xref py py-class docutils literal"><span class="pre">Range</span></tt></a> objects</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Private variables:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>_data</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; </li>
+<li><strong>_model</strong> (<em>Model</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="cpymad.model.Sequence.beam">
+<tt class="descname">beam</tt><a class="reference internal" href="../_modules/cpymad/model.html#Sequence.beam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Sequence.beam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get <a class="reference internal" href="#cpymad.model.Beam" title="cpymad.model.Beam"><tt class="xref py py-class docutils literal"><span class="pre">Beam</span></tt></a> instance for this sequence.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cpymad.model.Sequence.data">
+<tt class="descname">data</tt><a class="reference internal" href="../_modules/cpymad/model.html#Sequence.data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Sequence.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a serializable representation of this sequence.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cpymad.model.Sequence.default_range">
+<tt class="descname">default_range</tt><a class="reference internal" href="../_modules/cpymad/model.html#Sequence.default_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Sequence.default_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get default <a class="reference internal" href="#cpymad.model.Range" title="cpymad.model.Range"><tt class="xref py py-class docutils literal"><span class="pre">Range</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.model.Sequence.init">
+<tt class="descname">init</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Sequence.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Sequence.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load model in MAD-X interpreter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.model.Sequence.match">
+<tt class="descname">match</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Sequence.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Sequence.match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run MATCH on this sequence.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.model.Sequence.range">
+<tt class="descname">range</tt><big>(</big><em>start</em>, <em>stop</em><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Sequence.range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Sequence.range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <a class="reference internal" href="#cpymad.model.Range" title="cpymad.model.Range"><tt class="xref py py-class docutils literal"><span class="pre">Range</span></tt></a> within (start, stop) for this sequence.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.model.Sequence.survey">
+<tt class="descname">survey</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Sequence.survey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Sequence.survey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run SURVEY on this sequence.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.model.Sequence.twiss">
+<tt class="descname">twiss</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Sequence.twiss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Sequence.twiss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute a TWISS command on the default range.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cpymad.model.Range">
+<em class="property">class </em><tt class="descclassname">cpymad.model.</tt><tt class="descname">Range</tt><big>(</big><em>name</em>, <em>data</em>, <em>sequence</em><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Range for <a class="reference internal" href="#cpymad.model.Model" title="cpymad.model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a>.</p>
+<p>A range is a subsequence of elements within a <a class="reference internal" href="#cpymad.model.Sequence" title="cpymad.model.Sequence"><tt class="xref py py-class docutils literal"><span class="pre">Sequence</span></tt></a>.</p>
+<p>Public attributes:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; sequence name</td>
+</tr>
+</tbody>
+</table>
+<p>Private variables:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>_data</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; </li>
+<li><strong>_sequence</strong> (<em>Sequence</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="cpymad.model.Range.bounds">
+<tt class="descname">bounds</tt><a class="reference internal" href="../_modules/cpymad/model.html#Range.bounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Range.bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a tuple (first, last).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cpymad.model.Range.default_initial_conditions">
+<tt class="descname">default_initial_conditions</tt><a class="reference internal" href="../_modules/cpymad/model.html#Range.default_initial_conditions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Range.default_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the default twiss initial conditions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.model.Range.init">
+<tt class="descname">init</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Range.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Range.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load model in MAD-X interpreter.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cpymad.model.Range.initial_conditions">
+<tt class="descname">initial_conditions</tt><a class="reference internal" href="../_modules/cpymad/model.html#Range.initial_conditions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Range.initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dict of all defined initial conditions.</p>
+<p>Each item is a dict of TWISS parameters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.model.Range.match">
+<tt class="descname">match</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Range.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Range.match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a MATCH operation on this range.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cpymad.model.Range.offsets_file">
+<tt class="descname">offsets_file</tt><a class="reference internal" href="../_modules/cpymad/model.html#Range.offsets_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Range.offsets_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a <tt class="xref py py-class docutils literal"><span class="pre">ResourceProvider</span></tt> for the offsets file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.model.Range.twiss">
+<tt class="descname">twiss</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Range.twiss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Range.twiss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run TWISS on this range.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cpymad.model.Locator">
+<em class="property">class </em><tt class="descclassname">cpymad.model.</tt><tt class="descname">Locator</tt><big>(</big><em>resource_provider</em><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Locator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Locator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model locator for yaml files that contain multiple model definitions.</p>
+<p>These are the model definition files that are currently used by default
+for filesystem resources.</p>
+<p>Serves the purpose of locating models and returning corresponding
+resource providers.</p>
+<dl class="method">
+<dt id="cpymad.model.Locator.get_definition">
+<tt class="descname">get_definition</tt><big>(</big><em>name</em>, <em>encoding='utf-8'</em><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Locator.get_definition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Locator.get_definition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the first found model with the specified name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the model definition</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises ValueError:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">if no model with the given name is found.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.model.Locator.get_repository">
+<tt class="descname">get_repository</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Locator.get_repository"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Locator.get_repository" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the resource loader for the given model.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.model.Locator.list_models">
+<tt class="descname">list_models</tt><big>(</big><em>encoding='utf-8'</em><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Locator.list_models"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Locator.list_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate all available models.</p>
+<p>Returns an iterable that may be a generator object.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="madx.html"
-                        title="previous chapter">cern.cpymad.madx</a></p>
+                        title="previous chapter">cpymad.madx</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/cpymad/model.txt"
@@ -77,276 +463,6 @@
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
-  <div class="section" id="cern-cpymad-model">
-<h1>cern.cpymad.model<a class="headerlink" href="#cern-cpymad-model" title="Permalink to this headline">¶</a></h1>
-<p>This module provides a model class which is conceptually derived from the
-jmad models, but uses <a class="reference internal" href="madx.html#cern.cpymad.madx.Madx" title="cern.cpymad.madx.Madx"><tt class="xref py py-class docutils literal"><span class="pre">cern.cpymad.madx.Madx</span></tt></a> as the backend. See,
-<a class="reference internal" href="../examples/model.html#model-example"><em>Model example</em></a>.</p>
-<span class="target" id="module-cern.cpymad.model"></span><p>Cython implementation of the model api.</p>
-<p><em>Module author: Yngve Inntjore Levinsen &lt;<a class="reference external" href="mailto:Yngve&#46;Inntjore&#46;Levinsen&#37;&#52;&#48;cern&#46;ch">Yngve<span>&#46;</span>Inntjore<span>&#46;</span>Levinsen<span>&#64;</span>cern<span>&#46;</span>ch</a>&gt;</em></p>
-<dl class="class">
-<dt id="cern.cpymad.model.Model">
-<em class="property">class </em><tt class="descclassname">cern.cpymad.model.</tt><tt class="descname">Model</tt><big>(</big><em>model</em>, <em>sequence=''</em>, <em>optics=''</em>, <em>histfile=''</em>, <em>madx=None</em>, <em>logger=None</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Model class implementation. the model spawns a madx instance in a separate process.
-this has the advantage that you can run separate models which do not affect each other.</p>
-<p>To load a Model object using the default ModelLocator use the static
-constructor method <tt class="docutils literal"><span class="pre">Model.from_name</span></tt>. The default constructor should
-be invoked with a ModelData instance.</p>
-<dl class="method">
-<dt id="cern.cpymad.model.Model.aperture">
-<tt class="descname">aperture</tt><big>(</big><em>sequence=''</em>, <em>madrange=''</em>, <em>columns='name</em>, <em>l</em>, <em>s</em>, <em>n1</em>, <em>aper_1</em>, <em>aper_2</em>, <em>aper_3</em>, <em>aper_4'</em>, <em>fname=''</em>, <em>use=False</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.aperture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.aperture" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the aperture from the model.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sequence</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Sequence, if empty, using active sequence.</li>
-<li><strong>madrange</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Range, if empty, the full sequence is chosen.</li>
-<li><strong>columns</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Columns in the twiss table, can also be list of strings</li>
-<li><strong>fname</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Optionally, give name of file for tfs table.</li>
-<li><strong>use</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Call use before aperture.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.model.Model.call">
-<tt class="descname">call</tt><big>(</big><em>filepath</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.call" title="Permalink to this definition">¶</a></dt>
-<dd><p>Call a file in Mad-X. Give either
-full file path or relative.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.model.Model.evaluate">
-<tt class="descname">evaluate</tt><big>(</big><em>expr</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate a string expression and return the resulting float.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expr</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; </td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="classmethod">
-<dt id="cern.cpymad.model.Model.from_name">
-<em class="property">classmethod </em><tt class="descname">from_name</tt><big>(</big><em>model</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.from_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.from_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a Model object from its name.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>model</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Name of the model</li>
-<li><strong>args</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; Positional parameters as needed by <tt class="docutils literal"><span class="pre">__init__</span></tt></li>
-<li><strong>kwargs</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; Keyword parameters as needed by <tt class="docutils literal"><span class="pre">__init__</span></tt></li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>This constructor is provided for backward compatibility. To specify
-where your model data is loaded from you should create and use your
-own custom cern.cpymad.model_locator.ModelLocator.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.model.Model.get_beam">
-<tt class="descname">get_beam</tt><big>(</big><em>bname</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.get_beam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.get_beam" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the beam definition in form
-of a dictionary.</p>
-<p>You can then change parameters in this dictionary
-as you see fit, and use set_beam() to activate that
-beam.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.model.Model.get_sequence_names">
-<tt class="descname">get_sequence_names</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.get_sequence_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.get_sequence_names" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return list of all loaded sequences.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.model.Model.get_sequences">
-<tt class="descname">get_sequences</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.get_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.get_sequences" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a list of loaded sequences.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.model.Model.has_optics">
-<tt class="descname">has_optics</tt><big>(</big><em>optics</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.has_optics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.has_optics" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if model has the optics.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>optics</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Optics name to be checked.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.model.Model.has_sequence">
-<tt class="descname">has_sequence</tt><big>(</big><em>sequence</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.has_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.has_sequence" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if model has the sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Sequence name to be checked.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.model.Model.list_beams">
-<tt class="descname">list_beams</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.list_beams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.list_beams" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an iterable of available beams</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.model.Model.list_optics">
-<tt class="descname">list_optics</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.list_optics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.list_optics" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an iterable of available optics</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.model.Model.list_ranges">
-<tt class="descname">list_ranges</tt><big>(</big><em>sequence=None</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.list_ranges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.list_ranges" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a list of available ranges for the sequence.
-If sequence is not given, returns a dictionary structured as
-{sequence1:[range1,range2,...],sequence2:...}</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; sequence name.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.model.Model.match">
-<tt class="descname">match</tt><big>(</big><em>constraints, vary, weight=None, method=['lmdif'], sequence='', fname=''</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.match" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform a matching operation.</p>
-<p>See <tt class="xref py py-func docutils literal"><span class="pre">cern.madx.match()</span></tt> for a description of the parameters.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.model.Model.set_beam">
-<tt class="descname">set_beam</tt><big>(</big><em>beam_dict</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.set_beam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.set_beam" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the beam from a beam definition
-(dictionary)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.model.Model.set_optic">
-<tt class="descname">set_optic</tt><big>(</big><em>optic</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.set_optic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.set_optic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set new optics.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>optics</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Optics name.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">Raises KeyError:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body">In case you try to set an optics not available in model.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.model.Model.set_range">
-<tt class="descname">set_range</tt><big>(</big><em>madrange=''</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.set_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.set_range" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the active range to madrange. Must be defined in the
-currently active sequence...
-If madrange is empty, sets the range to default-range unless
-another range is already set.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.model.Model.set_sequence">
-<tt class="descname">set_sequence</tt><big>(</big><em>sequence=''</em>, <em>madrange=''</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.set_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.set_sequence" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set a new active sequence...</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.model.Model.survey">
-<tt class="descname">survey</tt><big>(</big><em>sequence=''</em>, <em>columns='name</em>, <em>l</em>, <em>s</em>, <em>angle</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>theta'</em>, <em>madrange=''</em>, <em>fname=''</em>, <em>use=True</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.survey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.survey" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run a survey on the model.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sequence</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Sequence, if empty, using active sequence.</li>
-<li><strong>columns</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Columns in the twiss table, can also be list of strings</li>
-<li><strong>fname</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Optionally, give name of file for tfs table.</li>
-<li><strong>use</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Call use before survey.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.model.Model.twiss">
-<tt class="descname">twiss</tt><big>(</big><em>sequence='', columns=['name', 's', 'betx', 'bety', 'x', 'y', 'dx', 'dy', 'px', 'py', 'mux', 'muy', 'l', 'k1l', 'angle', 'k2l'], pattern=['full'], madrange='', fname='', use=True</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#Model.twiss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.Model.twiss" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run a TWISS on the model.</p>
-<p>Warning for ranges: Currently TWISS with initial conditions is NOT
-implemented!</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sequence</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Sequence, if empty, using active sequence.</li>
-<li><strong>columns</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Columns in the twiss table, can also be list of strings</li>
-<li><strong>madrange</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Optional, give name of a range defined for the model.</li>
-<li><strong>fname</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Optionally, give name of file for tfs table.</li>
-<li><strong>use</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Call use before twiss.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="cern.cpymad.model.save_model">
-<tt class="descclassname">cern.cpymad.model.</tt><tt class="descname">save_model</tt><big>(</big><em>model_def</em>, <em>filename</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/model.html#save_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.model.save_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the model definition defined by the dictionary model_def
-to file filename. The file is in YAML format (or JSON). We do not check
-that the model is valid in any way.</p>
-<p>It is recommended that you rather use the modeldefs.model.save_model,
-once it is ready.</p>
-</dd></dl>
-
-</div>
-
-
-          </div>
-        </div>
-      </div>
       <div class="clearer"></div>
     </div>
     <div class="related">
@@ -359,17 +475,15 @@ once it is ready.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="madx.html" title="cern.cpymad.madx"
+          <a href="madx.html" title="cpymad.madx"
              >previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
-
+        <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Y.I. Levinsen, K. Fuchsberger (CERN) .
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+        &copy; Copyright 2014, T. Gläßle (HIT), 2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

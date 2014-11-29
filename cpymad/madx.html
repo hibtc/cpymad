@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>cern.cpymad.madx &mdash; PyMad 0.7.0 documentation</title>
+    <title>cpymad.madx &mdash; CPyMAD 0.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,17 +23,12 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyMad 0.7.0 documentation" href="../index.html" />
+    <link rel="top" title="CPyMAD 0.10.0 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
-    <link rel="next" title="cern.cpymad.model" href="model.html" />
+    <link rel="next" title="cpymad.model" href="model.html" />
     <link rel="prev" title="API Reference" href="index.html" /> 
   </head>
   <body>
-
-<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
-<a href="../index.html"><img src="../_static/pymad-logo-text.png" border="0" alt="py4sci"/></a>
-</div>
-
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -44,18 +39,548 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="model.html" title="cern.cpymad.model"
+          <a href="model.html" title="cpymad.model"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="API Reference"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
-
+        <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
-    </div>
+    </div>  
 
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cpymad.madx">
+<span id="cpymad-madx"></span><h1>cpymad.madx<a class="headerlink" href="#module-cpymad.madx" title="Permalink to this headline">¶</a></h1>
+<p>This module defines a convenience layer to access the MAD-X interpreter.</p>
+<p>The most interesting class for users is <a class="reference internal" href="#cpymad.madx.Madx" title="cpymad.madx.Madx"><tt class="xref py py-class docutils literal"><span class="pre">Madx</span></tt></a>.</p>
+<dl class="class">
+<dt id="cpymad.madx.ChangeDirectory">
+<em class="property">class </em><tt class="descclassname">cpymad.madx.</tt><tt class="descname">ChangeDirectory</tt><big>(</big><em>path</em>, <em>_os=&lt;module 'os' from '/usr/lib/python3.4/os.py'&gt;</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#ChangeDirectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.ChangeDirectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context manager for temporarily changing current working directory.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cpymad.madx.CommandLog">
+<em class="property">class </em><tt class="descclassname">cpymad.madx.</tt><tt class="descname">CommandLog</tt><big>(</big><em>file</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#CommandLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.CommandLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log MAD-X command history to a file text.</p>
+<dl class="classmethod">
+<dt id="cpymad.madx.CommandLog.create">
+<em class="property">classmethod </em><tt class="descname">create</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#CommandLog.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.CommandLog.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create CommandLog from filename (overwrite/create).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cpymad.madx.Madx">
+<em class="property">class </em><tt class="descclassname">cpymad.madx.</tt><tt class="descname">Madx</tt><big>(</big><em>libmadx=None</em>, <em>command_log=None</em>, <em>error_log=None</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Each instance controls one MAD-X process.</p>
+<p>This class aims to expose a pythonic interface to the full functionality
+of the MAD-X library. For example, when you call the <tt class="docutils literal"><span class="pre">twiss</span></tt> method, you
+get numpy arrays containing the information from the table generated.
+Furthermore, we try to reduce the amount of commands needed by combining
+e.g. USE, SELECT, and TWISS into the <tt class="docutils literal"><span class="pre">twiss</span></tt> method itself, and define
+reasonable default patterns/columns.</p>
+<p>The following very simple example demonstrates basic usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cpymad.madx</span> <span class="kn">import</span> <span class="n">Madx</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">()</span>
+
+<span class="n">m</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s">&#39;my-sequences.seq&#39;</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s">&#39;my-strengths.str&#39;</span><span class="p">)</span>
+
+<span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">beam</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="s">&#39;myseq1&#39;</span><span class="p">,</span> <span class="n">particle</span><span class="o">=</span><span class="s">&#39;PROTON&#39;</span><span class="p">)</span>
+<span class="c"># you can also just put an arbitrary MAD-X command string here:</span>
+<span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s">&#39;beam, sequence=myseq1, particle=PROTON&#39;</span><span class="p">)</span>
+
+<span class="n">twiss</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">twiss</span><span class="p">(</span><span class="s">&#39;myseq1&#39;</span><span class="p">)</span>
+
+<span class="c"># now do your own analysis:</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">twiss</span><span class="p">[</span><span class="s">&#39;s&#39;</span><span class="p">],</span> <span class="n">twiss</span><span class="p">[</span><span class="s">&#39;betx&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>By default <a class="reference internal" href="#cpymad.madx.Madx" title="cpymad.madx.Madx"><tt class="xref py py-class docutils literal"><span class="pre">Madx</span></tt></a> uses a subprocess to execute MAD-X library calls
+remotely via a simple RPC protocol which is defined in <tt class="xref py py-mod docutils literal"><span class="pre">_rpc</span></tt>. If
+required this behaviour can be customized by passing a custom <tt class="docutils literal"><span class="pre">libmadx</span></tt>
+object to the constructor. This object must expose an interface similar to
+<tt class="xref py py-mod docutils literal"><span class="pre">libmadx</span></tt>.</p>
+<dl class="attribute">
+<dt id="cpymad.madx.Madx.active_sequence">
+<tt class="descname">active_sequence</tt><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.active_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.active_sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get/set the name of the active sequence.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Madx.call">
+<tt class="descname">call</tt><big>(</big><em>filename</em>, <em>chdir=False</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.call" title="Permalink to this definition">¶</a></dt>
+<dd><p>CALL a file in the MAD-X interpretor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; file name with path</li>
+<li><strong>chdir</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; temporarily change directory in MAD-X process</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Madx.chdir">
+<tt class="descname">chdir</tt><big>(</big><em>path</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.chdir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.chdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the directory. Can be used as context manager.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; new path name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a context manager that can change the directory back</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">ChangeDirectory</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cpymad.madx.Madx.command">
+<tt class="descname">command</tt><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a single MAD-X command.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cmd</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; command name</li>
+<li><strong>**kwargs</strong> &#8211; <p>command parameters</p>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Madx.evaluate">
+<tt class="descname">evaluate</tt><big>(</big><em>cmd</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates an expression and returns the result as double.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; expression to evaluate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">numeric value of the expression</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Madx.get_active_sequence">
+<tt class="descname">get_active_sequence</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.get_active_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.get_active_sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a handle to the active sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a proxy object for the sequence</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Sequence</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Raises RuntimeError:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">if there is no active sequence</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Madx.get_sequence">
+<tt class="descname">get_sequence</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.get_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.get_sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a handle to the specified sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; sequence name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a proxy object for the sequence</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Sequence</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises ValueError:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">if a sequence name is invalid</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Madx.get_sequence_names">
+<tt class="descname">get_sequence_names</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.get_sequence_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.get_sequence_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of all sequences currently in memory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of all sequences names</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list(str)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Madx.get_sequences">
+<tt class="descname">get_sequences</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.get_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.get_sequences" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of all sequences currently in memory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of sequence proxy objects</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list(Sequence)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Madx.get_table">
+<tt class="descname">get_table</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.get_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.get_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the specified table from MAD-X.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; table name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a proxy for the table data</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">TableProxy</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Madx.has_sequence">
+<tt class="descname">has_sequence</tt><big>(</big><em>sequence</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.has_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.has_sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if model has the sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; sequence name to be checked.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Madx.help">
+<tt class="descname">help</tt><big>(</big><em>cmd=None</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show help about a command or list all MAD-X commands.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; command name</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Madx.input">
+<tt class="descname">input</tt><big>(</big><em>text</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run any textual MAD-X input.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; command text</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Madx.match">
+<tt class="descname">match</tt><big>(</big><em>sequence=None</em>, <em>constraints=[]</em>, <em>vary=[]</em>, <em>weight=None</em>, <em>method=('lmdif'</em>, <em>{})</em>, <em>knobfile=None</em>, <em>twiss_init={}</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a simple MATCH operation.</p>
+<p>For more advanced cases, you should issue the commands manually.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sequence</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of sequence</li>
+<li><strong>constraints</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; constraints to pose during matching</li>
+<li><strong>vary</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; knob names to be varied</li>
+<li><strong>weight</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; weights for matching parameters</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">final knob values</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mad</span><span class="o">.</span><span class="n">match</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">constraints</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">... </span>        <span class="nb">dict</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="s">&#39;marker1-&gt;betx&#39;</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">betx</span><span class="o">=</span><span class="n">Constraint</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+<span class="gp">... </span>             <span class="n">bety</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="p">],</span>
+<span class="gp">... </span>    <span class="n">vary</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;qp1-&gt;k1&#39;</span><span class="p">,</span>
+<span class="gp">... </span>          <span class="s">&#39;qp2-&gt;k1&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Madx.select">
+<tt class="descname">select</tt><big>(</big><em>flag</em>, <em>columns</em>, <em>pattern=[]</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run SELECT command.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>flag</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; one of: twiss, makethin, error, seqedit</li>
+<li><strong>columns</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; column names</li>
+<li><strong>pattern</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; selected patterns</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Madx.survey">
+<tt class="descname">survey</tt><big>(</big><em>sequence=None, pattern=['full'], columns=['name', 'l', 's', 'angle', 'x', 'y', 'z', 'theta'], **kwargs</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.survey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.survey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run SELECT+USE+SURVEY.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sequence</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of sequence</li>
+<li><strong>pattern</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; pattern to include in table</li>
+<li><strong>columns</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; Columns to include in table</li>
+<li><strong>kwargs</strong> &#8211; further keyword arguments for the MAD-X command</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Madx.twiss">
+<tt class="descname">twiss</tt><big>(</big><em>sequence=None, pattern=['full'], columns=['name', 's', 'betx', 'bety', 'x', 'y', 'dx', 'dy', 'px', 'py', 'mux', 'muyl', 'k1l', 'angle', 'k2l'], range=None, twiss_init={}, **kwargs</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.twiss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.twiss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run SELECT+USE+TWISS.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sequence</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of sequence</li>
+<li><strong>pattern</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; pattern to include in table</li>
+<li><strong>columns</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; columns to include in table, (may be a str)</li>
+<li><strong>twiss_init</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary of twiss initialization variables</li>
+<li><strong>chrom</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Also calculate chromatic functions (slower)</li>
+<li><strong>kwargs</strong> &#8211; further keyword arguments for the MAD-X command</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Note, that the kwargs overwrite any arguments in twiss_init.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Madx.use">
+<tt class="descname">use</tt><big>(</big><em>sequence</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.use"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.use" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run USE to expand a sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; sequence name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">name of active sequence</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cpymad.madx.Madx.version">
+<tt class="descname">version</tt><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the MAD-X version.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cpymad.madx.MadxCommands">
+<em class="property">class </em><tt class="descclassname">cpymad.madx.</tt><tt class="descname">MadxCommands</tt><big>(</big><em>dispatch</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#MadxCommands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.MadxCommands" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic MAD-X command wrapper.</p>
+<p>Raw python interface to issue MAD-X commands. Usage example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">command</span> <span class="o">=</span> <span class="n">MadxCommands</span><span class="p">(</span><span class="n">libmadx</span><span class="o">.</span><span class="n">input</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">command</span><span class="p">(</span><span class="s">&#39;twiss&#39;</span><span class="p">,</span> <span class="n">sequence</span><span class="o">=</span><span class="s">&#39;LEBT&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">command</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;A meaningful phrase&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><strong>__dispatch</strong> &#8211; callable that takes a MAD-X command string.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.madx.NOP">
+<tt class="descclassname">cpymad.madx.</tt><tt class="descname">NOP</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#NOP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.NOP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do nothing.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cpymad.madx.Sequence">
+<em class="property">class </em><tt class="descclassname">cpymad.madx.</tt><tt class="descname">Sequence</tt><big>(</big><em>name</em>, <em>libmadx</em>, <em>_check=True</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>MAD-X sequence representation.</p>
+<dl class="attribute">
+<dt id="cpymad.madx.Sequence.beam">
+<tt class="descname">beam</tt><a class="reference internal" href="../_modules/cpymad/madx.html#Sequence.beam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Sequence.beam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the beam dictionary associated to the sequence.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Sequence.get_elements">
+<tt class="descname">get_elements</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Sequence.get_elements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Sequence.get_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of all elements in the original sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of elements in the original (unexpanded) sequence</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list(dict)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Sequence.get_expanded_elements">
+<tt class="descname">get_expanded_elements</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Sequence.get_expanded_elements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Sequence.get_expanded_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of all elements in the expanded sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of elements in the expanded (unexpanded) sequence</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list(dict)</td>
+</tr>
+</tbody>
+</table>
+<p>NOTE: this may very well return an empty list, if the sequence has
+not been expanded (used) yet.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cpymad.madx.Sequence.name">
+<tt class="descname">name</tt><a class="reference internal" href="../_modules/cpymad/madx.html#Sequence.name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Sequence.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of the sequence.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cpymad.madx.Sequence.twiss">
+<tt class="descname">twiss</tt><a class="reference internal" href="../_modules/cpymad/madx.html#Sequence.twiss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Sequence.twiss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the TWISS results from the last calculation.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cpymad.madx.Sequence.twissname">
+<tt class="descname">twissname</tt><a class="reference internal" href="../_modules/cpymad/madx.html#Sequence.twissname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Sequence.twissname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of the table with the TWISS results.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cpymad.madx.TableProxy">
+<em class="property">class </em><tt class="descclassname">cpymad.madx.</tt><tt class="descname">TableProxy</tt><big>(</big><em>name</em>, <em>libmadx</em>, <em>_check=True</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#TableProxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.TableProxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proxy object for lazy-loading table column data.</p>
+<dl class="method">
+<dt id="cpymad.madx.TableProxy.copy">
+<tt class="descname">copy</tt><big>(</big><em>columns=None</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#TableProxy.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.TableProxy.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a frozen table with the desired columns.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>columns</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; column names or <tt class="docutils literal"><span class="pre">None</span></tt> for all columns.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">column data</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises ValueError:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">if the table name is invalid</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cpymad.madx.TableProxy.summary">
+<tt class="descname">summary</tt><a class="reference internal" href="../_modules/cpymad/madx.html#TableProxy.summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.TableProxy.summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the table summary.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cpymad.madx.Version">
+<em class="property">class </em><tt class="descclassname">cpymad.madx.</tt><tt class="descname">Version</tt><big>(</big><em>release</em>, <em>date</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Version information struct.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
@@ -63,7 +588,7 @@
                         title="previous chapter">API Reference</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="model.html"
-                        title="next chapter">cern.cpymad.model</a></p>
+                        title="next chapter">cpymad.model</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/cpymad/madx.txt"
@@ -84,492 +609,6 @@
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
-  <div class="section" id="cern-cpymad-madx">
-<h1>cern.cpymad.madx<a class="headerlink" href="#cern-cpymad-madx" title="Permalink to this headline">¶</a></h1>
-<p>This module aims to provide the full functionality of the MAD-X library in a
-more convenient Python environment. For example, when you call the <tt class="docutils literal"><span class="pre">twiss</span></tt>
-method, you get numpy arrays containing the information from the table
-generated. Furthermore, we try to reduce the amount of commands needed by
-combining e.g. USE, SELECT, and TWISS into the <tt class="docutils literal"><span class="pre">twiss</span></tt> method itself, and
-define reasonable default patterns/columns etc. See, <a class="reference internal" href="../examples/madx.html#madx-example"><em>Madx example</em></a>.</p>
-<span class="target" id="module-cern.cpymad.madx"></span><span class="target" id="module-madx"></span><p><em>Module author: Yngve Inntjore Levinsen &lt;Yngve.Inntjore.Levinsen.at.cern.ch&gt;</em></p>
-<p>Main module to interface with Mad-X library.</p>
-<p>The class Madx uses a subprocess to execute MAD-X library calls remotely via
-a simple RPC protocol.</p>
-<p>The remote backend is needed due to the fact that cpymad.libmadx is a low
-level binding to the MAD-X library which in turn uses global variables.
-This means that the cpymad.libmadx module has to be loaded within remote
-processes in order to deal with several isolated instances of MAD-X in
-parallel.</p>
-<p>Furthermore, this can be used as a security enhancement: if dealing with
-unverified input, we can&#8217;t be sure that a faulty MAD-X function
-implementation will give access to a secure resource. This can be executing
-all library calls within a subprocess that does not inherit any handles.</p>
-<p>More importantly: the MAD-X program crashes on the tinyest error. Boxing it
-in a subprocess will prevent the main process from crashing as well.</p>
-<dl class="class">
-<dt id="cern.cpymad.madx.ChangeDirectory">
-<em class="property">class </em><tt class="descclassname">cern.cpymad.madx.</tt><tt class="descname">ChangeDirectory</tt><big>(</big><em>path</em>, <em>_os=&lt;module 'os' from '/usr/lib/python3.4/os.py'&gt;</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#ChangeDirectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.ChangeDirectory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Context manager for temporarily changing current working directory.</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="cern.cpymad.madx.Madx">
-<em class="property">class </em><tt class="descclassname">cern.cpymad.madx.</tt><tt class="descname">Madx</tt><big>(</big><em>histfile=None</em>, <em>libmadx=None</em>, <em>logger=None</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Python class which interfaces to Mad-X library</p>
-<dl class="attribute">
-<dt id="cern.cpymad.madx.Madx.active_sequence">
-<tt class="descname">active_sequence</tt><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx.active_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx.active_sequence" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get/set the name of the active sequence.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.madx.Madx.aperture">
-<tt class="descname">aperture</tt><big>(</big><em>sequence=None, pattern=['full'], madrange='', columns=['name', 'l', 'anglex', 'y', 'z', 'theta'], offsets=None, fname=None, use=False</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx.aperture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx.aperture" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run SELECT+USE+APERTURE.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sequence</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of sequence</li>
-<li><strong>fname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of file to store tfs table</li>
-<li><strong>pattern</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; pattern to include in table</li>
-<li><strong>columns</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; columns to include in table (may be a str)</li>
-<li><strong>use</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Call use before aperture.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.madx.Madx.call">
-<tt class="descname">call</tt><big>(</big><em>filename</em>, <em>chdir=False</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx.call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx.call" title="Permalink to this definition">¶</a></dt>
-<dd><p>CALL a file in the MAD-X interpretor.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filename</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; file name with path</li>
-<li><strong>chdir</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; temporarily change directory in MAD-X process</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.madx.Madx.chdir">
-<tt class="descname">chdir</tt><big>(</big><em>path</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx.chdir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx.chdir" title="Permalink to this definition">¶</a></dt>
-<dd><p>Change the directory. Can be used as context manager.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; new path name</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a context manager that can change the directory back</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">ChangeDirectory</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cern.cpymad.madx.Madx.command">
-<tt class="descname">command</tt><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx.command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx.command" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform a single MAD-X command.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>cmd</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; command name</li>
-<li><strong>**kwargs</strong> &#8211; <p>command parameters</p>
-</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.madx.Madx.evaluate">
-<tt class="descname">evaluate</tt><big>(</big><em>cmd</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluates an expression and returns the result as double.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; expression to evaluate.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">numeric value of the expression</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.madx.Madx.get_active_sequence">
-<tt class="descname">get_active_sequence</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx.get_active_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx.get_active_sequence" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a handle to the active sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a proxy object for the sequence</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Sequence</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">Raises RuntimeError:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">if there is no active sequence</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.madx.Madx.get_sequence">
-<tt class="descname">get_sequence</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx.get_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx.get_sequence" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a handle to the specified sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; sequence name</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a proxy object for the sequence</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Sequence</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">Raises ValueError:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body">if a sequence name is invalid</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.madx.Madx.get_sequence_names">
-<tt class="descname">get_sequence_names</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx.get_sequence_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx.get_sequence_names" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return list of all sequences currently in memory.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of all sequences names</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list(str)</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.madx.Madx.get_sequences">
-<tt class="descname">get_sequences</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx.get_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx.get_sequences" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return list of all sequences currently in memory.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of sequence proxy objects</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list(Sequence)</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.madx.Madx.get_table">
-<tt class="descname">get_table</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx.get_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx.get_table" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the specified table columns as numpy arrays.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>table</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; table name</li>
-<li><strong>columns</strong> (<em>list or str (comma separated)</em>) &#8211; column names</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.madx.Madx.help">
-<tt class="descname">help</tt><big>(</big><em>cmd=None</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx.help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx.help" title="Permalink to this definition">¶</a></dt>
-<dd><p>Show help about a command or list all MAD-X commands.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; command name</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.madx.Madx.input">
-<tt class="descname">input</tt><big>(</big><em>text</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx.input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx.input" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run any textual MAD-X input.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; command text</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.madx.Madx.match">
-<tt class="descname">match</tt><big>(</big><em>sequence</em>, <em>constraints</em>, <em>vary</em>, <em>weight=None</em>, <em>method=('lmdif'</em>, <em>{})</em>, <em>fname=None</em>, <em>twiss_init={}</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx.match" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform simple MATCH operation.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sequence</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; name of sequence</li>
-<li><strong>constraints</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; constraints to pose during matching</li>
-<li><strong>vary</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; vary commands</li>
-<li><strong>weight</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; weights for matching parameters</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.madx.Madx.select">
-<tt class="descname">select</tt><big>(</big><em>flag</em>, <em>columns</em>, <em>pattern=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx.select" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run SELECT command.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>flag</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; one of: twiss, makethin, error, seqedit</li>
-<li><strong>columns</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; column names</li>
-<li><strong>pattern</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; selected patterns</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.madx.Madx.survey">
-<tt class="descname">survey</tt><big>(</big><em>sequence=None, pattern=['full'], columns=['name', 'l', 's', 'angle', 'x', 'y', 'z', 'theta'], madrange=None, fname=None, use=True</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx.survey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx.survey" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run SELECT+USE+SURVEY.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sequence</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of sequence</li>
-<li><strong>fname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of file to store tfs table</li>
-<li><strong>pattern</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; pattern to include in table</li>
-<li><strong>columns</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; Columns to include in table</li>
-<li><strong>use</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Call use before survey.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.madx.Madx.twiss">
-<tt class="descname">twiss</tt><big>(</big><em>sequence=None, pattern=['full'], columns=['name', 's', 'betx', 'bety', 'x', 'y', 'dx', 'dy', 'px', 'py', 'mux', 'muyl', 'k1l', 'angle', 'k2l'], madrange=None, fname=None, twiss_init={}, use=True, **kwargs</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Madx.twiss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Madx.twiss" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run SELECT+USE+TWISS.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sequence</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of sequence</li>
-<li><strong>fname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of file to store tfs table</li>
-<li><strong>pattern</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; pattern to include in table</li>
-<li><strong>columns</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; columns to include in table, (may be a str)</li>
-<li><strong>twiss_init</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary of twiss initialization variables</li>
-<li><strong>use</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Call use before aperture.</li>
-<li><strong>chrom</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Also calculate chromatic functions (slower)</li>
-<li><strong>**kwargs</strong> &#8211; <p>further keyword arguments to TWISS (betx, bety, ..).</p>
-</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>Note, that the kwargs overwrite any arguments in twiss_init.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="cern.cpymad.madx.MadxCommands">
-<em class="property">class </em><tt class="descclassname">cern.cpymad.madx.</tt><tt class="descname">MadxCommands</tt><big>(</big><em>dispatch</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#MadxCommands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.MadxCommands" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generic MAD-X command wrapper.</p>
-<p>Raw python interface to issue MAD-X commands. Usage example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">command</span> <span class="o">=</span> <span class="n">MadxCommands</span><span class="p">(</span><span class="n">libmadx</span><span class="o">.</span><span class="n">input</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">command</span><span class="p">(</span><span class="s">&#39;twiss&#39;</span><span class="p">,</span> <span class="n">sequence</span><span class="o">=</span><span class="s">&#39;LEBT&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">command</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;A meaningful phrase&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><strong>__dispatch</strong> &#8211; callable that takes a MAD-X command string.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="cern.cpymad.madx.Sequence">
-<em class="property">class </em><tt class="descclassname">cern.cpymad.madx.</tt><tt class="descname">Sequence</tt><big>(</big><em>name</em>, <em>libmadx</em>, <em>_check=True</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Sequence" title="Permalink to this definition">¶</a></dt>
-<dd><p>MAD-X sequence representation.</p>
-<dl class="attribute">
-<dt id="cern.cpymad.madx.Sequence.beam">
-<tt class="descname">beam</tt><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Sequence.beam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Sequence.beam" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the beam dictionary associated to the sequence.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.madx.Sequence.get_elements">
-<tt class="descname">get_elements</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Sequence.get_elements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Sequence.get_elements" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get list of all elements in the original sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of elements in the original (unexpanded) sequence</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list(Element)</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cern.cpymad.madx.Sequence.get_expanded_elements">
-<tt class="descname">get_expanded_elements</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Sequence.get_expanded_elements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Sequence.get_expanded_elements" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get list of all elements in the expanded sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of elements in the expanded (unexpanded) sequence</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list(Element)</td>
-</tr>
-</tbody>
-</table>
-<p>NOTE: this may very well return an empty list, if the sequence has
-not been expanded (used) yet.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cern.cpymad.madx.Sequence.name">
-<tt class="descname">name</tt><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Sequence.name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Sequence.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the name of the sequence.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cern.cpymad.madx.Sequence.twiss">
-<tt class="descname">twiss</tt><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Sequence.twiss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Sequence.twiss" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the TWISS results from the last calculation.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cern.cpymad.madx.Sequence.twissname">
-<tt class="descname">twissname</tt><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Sequence.twissname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Sequence.twissname" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the name of the table with the TWISS results.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="cern.cpymad.madx.Table">
-<em class="property">class </em><tt class="descclassname">cern.cpymad.madx.</tt><tt class="descname">Table</tt><big>(</big><em>name</em>, <em>libmadx</em>, <em>_check=True</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Table" title="Permalink to this definition">¶</a></dt>
-<dd><p>MAD-X table access class.</p>
-<dl class="attribute">
-<dt id="cern.cpymad.madx.Table.columns">
-<tt class="descname">columns</tt><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Table.columns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Table.columns" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a lazy accessor for the table columns.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cern.cpymad.madx.Table.name">
-<tt class="descname">name</tt><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Table.name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Table.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the table name.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cern.cpymad.madx.Table.summary">
-<tt class="descname">summary</tt><a class="reference internal" href="../_modules/cern/cpymad/madx.html#Table.summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.Table.summary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the table summary.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="cern.cpymad.madx.TableColumns">
-<em class="property">class </em><tt class="descclassname">cern.cpymad.madx.</tt><tt class="descname">TableColumns</tt><big>(</big><em>table</em>, <em>libmadx</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#TableColumns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.TableColumns" title="Permalink to this definition">¶</a></dt>
-<dd><p>Lazy accessor for table column data.</p>
-<dl class="method">
-<dt id="cern.cpymad.madx.TableColumns.freeze">
-<tt class="descname">freeze</tt><big>(</big><em>columns=None</em><big>)</big><a class="reference internal" href="../_modules/cern/cpymad/madx.html#TableColumns.freeze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cern.cpymad.madx.TableColumns.freeze" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a frozen table with the desired columns.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>columns</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; column names or <tt class="docutils literal"><span class="pre">None</span></tt> for all columns.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">column data</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">TfsTable</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">Raises ValueError:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body">if the table name is invalid</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-
-
-          </div>
-        </div>
-      </div>
       <div class="clearer"></div>
     </div>
     <div class="related">
@@ -582,20 +621,18 @@ not been expanded (used) yet.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="model.html" title="cern.cpymad.model"
+          <a href="model.html" title="cpymad.model"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="API Reference"
              >previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
-
+        <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Y.I. Levinsen, K. Fuchsberger (CERN) .
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+        &copy; Copyright 2014, T. Gläßle (HIT), 2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>
