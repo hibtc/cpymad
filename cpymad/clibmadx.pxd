@@ -1,5 +1,5 @@
 """
-cern.cpymad.libmadx is a Cython binding for the MAD-X library.
+cpymad.libmadx is a Cython binding for the MAD-X library.
 
 This file contains declarations of data structures and exported functions
 of the C-API of MAD-X.

@@ -40,7 +40,7 @@ The latest `CPyMAD release`_ can conveniently be installed using pip_:
 
 .. code-block:: bash
 
-    pip install cern-cpymad
+    pip install cpymad
 
 If you run into problems with this, you should manually download and
 install the `CPyMad source`_ to see in which step the problem occurs:
@@ -57,7 +57,7 @@ virtualenv_.
 
 
 .. _MAD-X source: http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&rev=0&isdir=1
-.. _CPyMAD release: https://pypi.python.org/pypi/cern-cpymad
+.. _CPyMAD release: https://pypi.python.org/pypi/cpymad
 .. _pip: https://pypi.python.org/pypi/pip
 .. _CPyMAD source: https://github.com/pymad/cpymad/zipball/master
 .. _virtualenv: http://virtualenv.readthedocs.org/en/latest/virtualenv.html

@@ -4,8 +4,8 @@ Tests for the model.Model runtime hierarchy.
 """
 
 # tested classes
-from cern.cpymad.model import Model
-from cern.resource.file import FileResource
+from cpymad.model import Model
+from cpymad.resource.file import FileResource
 
 # test utilities
 import unittest

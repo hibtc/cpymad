@@ -22,8 +22,8 @@ import numpy as np      # Import the Python-level symbols of numpy
 cdef extern from "pyport.h":
     ctypedef int Py_intptr_t
 
-from cern.cpymad.types import Constraint, Expression
-cimport cern.cpymad.clibmadx as clib
+from cpymad.types import Constraint, Expression
+cimport cpymad.clibmadx as clib
 
 
 # Remember whether start() was called

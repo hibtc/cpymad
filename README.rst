@@ -7,16 +7,21 @@ MAD-X is a software package to simulate particle accelerators and is used
 at CERN and all around the world. It has its own proprietary scripting
 language and is usually launched from the command line.
 
-.. _CPyMAD: https://github.com/pymad/cpymad
+.. _CPyMAD: https://github.com/coldfix/cpymad
 .. _Cython: http://cython.org/
 .. _MAD-X: http://cern.ch/mad
 
-**IMPORTANT:** cern-cpymad links against an unofficial build of MAD-X that
-is not supported by CERN, i.e. in case of problems you will not get help
-there.
 
-**IMPORTANT:** this is a heavily modified fork of the cern-cpymad package.
-The fork does NOT originate from CERN members.
+Disclaimer
+~~~~~~~~~~
+
+This is a heavily modified fork of the cern-cpymad_ package. The fork is
+not authored or maintained by CERN members.
+
+CPyMAD links against an unofficial build of MAD-X that is not supported by
+CERN, i.e. in case of problems you will not get help there.
+
+.. _cern-cpymad: https://github.com/pymad/cpymad
 
 
 Dependencies
@@ -48,7 +53,7 @@ The python packages can be installed using pip_.
 Installation
 ~~~~~~~~~~~~
 
-Installation instructions are available at http://pymad.github.io/cpymad/installation.
+Installation instructions are available at http://coldfix.github.io/pymad/installation.
 
 
 Usage
@@ -58,7 +63,7 @@ The ``Madx`` class provides a basic binding to the MAD-X interpreter:
 
 .. code-block:: python
 
-    from cern.cpymad.madx import Madx
+    from cpymad.madx import Madx
 
     # create a new interpreter instance:
     # the optional 'command_log' parameter can be used to store MAD-X
@@ -90,14 +95,14 @@ filesystem, models can be instanciated and used as follows:
 
 .. code-block:: python
 
-    from cern.cpymad.model import Model
+    from cpymad.model import Model
 
     model = Model.load('/path/to/model/definition.cpymad.yml')
 
     for sequence in model.sequences.values():
         twiss = sequence.twiss()
 
-See http://pymad.github.io/cpymad for further documentation.
+See http://coldfix.github.io/pymad for further documentation.
 
 
 Contributing
@@ -126,4 +131,4 @@ Currently, tests run on:
   pymad itself execute on several python versions. Python{2.7,3.3} are
   supported. The tests are executed on any update of an upstream branch.
 
-.. _`Travis CI`: https://travis-ci.org/pymad/cpymad
+.. _`Travis CI`: https://travis-ci.org/coldfix/pymad

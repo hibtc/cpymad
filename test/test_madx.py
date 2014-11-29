@@ -6,7 +6,7 @@ import os
 import _compat
 
 # tested class
-from cern.cpymad.madx import Madx
+from cpymad.madx import Madx
 
 class TestMadx(unittest.TestCase, _compat.TestCase):
 

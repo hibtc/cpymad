@@ -11,7 +11,7 @@ import os
 
 from . import madx
 from . import util
-from ..resource.file import FileResource
+from .resource.file import FileResource
 
 
 __all__ = [
@@ -41,11 +41,11 @@ class Model(object):
 
     This class is used to bundle all metadata related to an accelerator and
     all its configurations. It takes care of loading the proper MAD-X files
-    when needed.
+    when needed. Models are conceptually derived from the JMad models, but
+    have evolved to a more pythonic and simple API.
 
-    Model instances are created using :class:`Factory` instances which require
-    a :class:`ResourceProvider` to iterate and load available model
-    definitions.
+    To create a model instance from a model definition file, use the
+    ``Model.load`` constructor.
 
     Only GET access is allowed to all instance variables at the moment.
 
@@ -61,6 +61,19 @@ class Model(object):
 
     :ivar dict _data: model definition data
     :ivar ResourceProvider _repo: resource access
+
+    The following example demonstrates the basic usage:
+
+    .. code-block:: python
+
+        from cpymad.model import Model
+
+        model = Model.load('/path/to/model/definition.cpymad.yml')
+
+        twiss = model.default_sequence.twiss()
+
+        print("max/min beta x:", max(twiss['betx']), min(twiss['betx']))
+        print("ex: {0}, ey: {1}", twiss.summary['ex'], twiss.summary['ey'])
     """
 
     def __init__(self, data, repo, madx):

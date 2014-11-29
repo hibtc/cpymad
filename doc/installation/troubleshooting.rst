@@ -12,7 +12,6 @@ ImportError: libmadx.so
 
 Message::
 
-    from cern.madx import madx
     ImportError: libmadx.so: cannot open shared object file: No such file or directory
 
 Solution:
@@ -43,7 +42,7 @@ OSError: Missing source file
 
 Message::
 
-    OSError: Missing source file: 'src/cern/cpymad/libmadx.c'. Install Cython to resolve this problem.
+    OSError: Missing source file: 'cpymad/libmadx.c'. Install Cython to resolve this problem.
 
 Solution:
 The easiest way to install Cython is:

@@ -11,8 +11,8 @@ Unit tests for the resource components
 # python3 this is not possible, but not needed.
 
 # tested classes
-from cern.resource.package import PackageResource
-from cern.resource.file import FileResource
+from cpymad.resource.package import PackageResource
+from cpymad.resource.file import FileResource
 
 # test utilities
 import unittest
