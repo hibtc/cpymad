@@ -89,11 +89,11 @@ except IOError:
     pass
 
 setup(
-    name='cern-cpymad',
+    name='cpymad',
     version=PYMADVERSION,
     description='Cython binding to MAD-X',
     long_description=long_description,
-    url='http://pymad.github.io/cpymad',
+    url='http://coldfix.github.io/cpymad',
     ext_modules = cythonize([
         Extension('cpymad.libmadx',
                   sources=["cpymad/libmadx.pyx"],
