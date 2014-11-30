@@ -5,23 +5,10 @@ python:
   - "3.3"
 
 before_install:
-  # install gfortran
-  - sudo apt-get install gfortran
-
-  # Build MAD-X (takes a lot of time - should use a binary distribution):
-  - svn co http://svn.cern.ch/guest/madx/trunk/madX
-  - cd madX
-  - cmake -DCMAKE_C_COMPILER=gcc
-          -DCMAKE_Fortran_COMPILER=gfortran
-          -DMADX_STATIC=OFF
-          -DMADX_ONLINE=OFF
-          -DBUILD_SHARED_LIBS=ON
-          -DCMAKE_INSTALL_PREFIX=/usr
-          -DBINARY_POSTFIX=_dev
-          -DCMAKE_BUILD_TYPE=RelWithDebInfo .
-  - make
-  - sudo make install
-  - cd ..
+  # Install MAD-X:
+  - sudo add-apt-repository ppa:coldfix/madx -y
+  - sudo apt-get update -q
+  - sudo apt-get install libmadx-dev
 
 # Setup (performed within virtualenv)
 install:
