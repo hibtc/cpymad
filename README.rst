@@ -134,3 +134,4 @@ Currently, tests run on:
   avoid having to rebuild the entire MAD-X library on each invocation.
 
 .. _`Travis CI`: https://travis-ci.org/hibtc/cpymad
+.. _libmadx-dev: https://github.com/hibtc/madx-debian
