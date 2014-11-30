@@ -11,7 +11,7 @@ For more information, see
 # make installation work with pip: If an older version of setuptools is
 # already imported, `use_setuptools()` will just exit the current process.
 try:
-    import pkg_resources
+    import setuptools
 except ImportError:
     from ez_setup import use_setuptools
     use_setuptools()
