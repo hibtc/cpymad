@@ -130,5 +130,7 @@ Currently, tests run on:
 - The `Travis CI`_ service is mainly used to check that the unit tests for
   pymad itself execute on several python versions. Python{2.7,3.3} are
   supported. The tests are executed on any update of an upstream branch.
+  The Travis builds use a unofficial precompiled libmadx-dev_ package to
+  avoid having to rebuild the entire MAD-X library on each invocation.
 
 .. _`Travis CI`: https://travis-ci.org/hibtc/cpymad

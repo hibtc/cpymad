@@ -5,7 +5,8 @@ python:
   - "3.3"
 
 before_install:
-  # Install MAD-X:
+  # Install MAD-X from PPA (see https://github.com/hibtc/madx-debian):
+  # if this breaks, please revert 140d5ee59abd7763464019be0bdd116dc351d7fc:
   - sudo add-apt-repository ppa:coldfix/madx -y
   - sudo apt-get update -q
   - sudo apt-get install libmadx-dev
