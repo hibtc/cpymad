@@ -108,8 +108,8 @@ class CommandLog(object):
 
     def __call__(self, command):
         """Log a single history line and flush to file immediately."""
-        log_file.write(command + '\n')
-        log_file.flush()
+        self._file.write(command + '\n')
+        self._file.flush()
 
 
 class Madx(object):

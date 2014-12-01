@@ -11,7 +11,15 @@ from cpymad.madx import Madx
 
 class TestMadx(unittest.TestCase, _compat.TestCase):
 
-    """Test methods for the Madx class."""
+    """
+    Test methods for the Madx class.
+
+    The tests are directly based on the specifics of the sequence in
+
+        test/data/lebt/init.madx
+
+    Please compare this file for reference.
+    """
 
     def setUp(self):
         self.mad = Madx()
@@ -23,6 +31,31 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
 
     def tearDown(self):
         del self.mad
+
+    def test_independent_instances(self):
+        # create a second Madx instance (1st one is created in setUp)
+        madxness = Madx()
+        # Check independence by defining a variable differently in each
+        # instance:
+        self.mad.input('ANSWER=42;')
+        madxness.input('ANSWER=43;')
+        self.assertEqual(self.mad.evaluate('ANSWER'), 42);
+        self.assertEqual(madxness.evaluate('ANSWER'), 43);
+
+    def test_command_log(self):
+        """Check that the command log contains all input commands."""
+        # create a new Madx instance that uses the history feature:
+        history_filename = '_test_madx.madx.tmp'
+        mad = Madx(command_log=history_filename)
+        # feed some input and compare with history file:
+        for line in self.doc.splitlines():
+            mad.input(line)
+        with open(history_filename) as history_file:
+            history = history_file.read()
+        self.assertEqual(history.strip(), self.doc.strip())
+        # remove history file
+        del mad
+        os.remove(history_filename)
 
     # TODO:
     # def test_command(self):
@@ -63,6 +96,31 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
     def test_twiss_2(self):
         self._check_twiss('s2')     # s2 can be computed at start
         self._check_twiss('s1')     # s1 can be computed after s2
+
+    def test_twiss_with_range(self):
+        beam = 'beam, ex=1, ey=2, particle=electron, sequence=s1;'
+        self.mad.command(beam)
+        params = dict(alfx=0.5, alfy=1.5,
+                      betx=2.5, bety=3.5,
+                      columns=['betx', 'bety'],
+                      sequence='s1')
+        # Compute TWISS on full sequence, then on a sub-range, then again on
+        # the full sequence. This checks that none of the range selections
+        # have side-effects on each other:
+        betx_full1 = self.mad.twiss(**params)['betx']
+        betx_range = self.mad.twiss(range=('dr[2]', 'sb'), **params)['betx']
+        betx_full2 = self.mad.twiss(**params)['betx']
+        # Check that the results have the expected lengths:
+        self.assertEqual(len(betx_full1), 9)
+        self.assertEqual(len(betx_range), 4)
+        self.assertEqual(len(betx_full2), 9)
+        # Check numeric results. Since the first 3 elements of range and full
+        # sequence are identical, equal results are expected. And non-equal
+        # results afterwards.
+        self.assertAlmostEqual(betx_range[0], betx_full1[1]) # dr:2, dr:1
+        self.assertAlmostEqual(betx_range[1], betx_full1[2]) # qp:2, qp:1
+        self.assertAlmostEqual(betx_range[2], betx_full1[3]) # dr:3, dr:2
+        self.assertNotAlmostEqual(betx_range[3], betx_full1[4]) # sb, qp:2
 
     # def test_survey(self):
     # def test_aperture(self):
@@ -110,9 +168,9 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         sb1 = s1['sb:1']
         self.assertLess(idx['qp:1'], idx['qp:2'])
         self.assertLess(idx['qp:2'], idx['sb:1'])
-        self.assertAlmostEqual(qp1['at'], 0)
-        self.assertAlmostEqual(qp2['at'], 1)
-        self.assertAlmostEqual(sb1['at'], 2)
+        self.assertAlmostEqual(qp1['at'], 1)
+        self.assertAlmostEqual(qp2['at'], 3)
+        self.assertAlmostEqual(sb1['at'], 5)
         self.assertAlmostEqual(qp1['l'], 1)
         self.assertAlmostEqual(qp2['l'], 1)
         self.assertAlmostEqual(sb1['l'], 2)
