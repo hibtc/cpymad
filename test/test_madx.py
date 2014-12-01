@@ -24,6 +24,21 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
     def tearDown(self):
         del self.mad
 
+    def test_command_log(self):
+        """Check that the command log contains all input commands."""
+        # create a new Madx instance that uses the history feature:
+        history_filename = '_test_madx.madx.tmp'
+        mad = Madx(command_log=history_filename)
+        # feed some input and compare with history file:
+        for line in self.doc.splitlines():
+            mad.input(line)
+        with open(history_filename) as history_file:
+            history = history_file.read()
+        self.assertEqual(history.strip(), self.doc.strip())
+        # remove history file
+        del mad
+        os.remove(history_filename)
+
     # TODO:
     # def test_command(self):
     # def test_help(self):
