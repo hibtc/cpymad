@@ -29,6 +29,11 @@ class Version(object):
         self.release = release
         self.date = date
 
+    def __repr__(self):
+        """Show nice version string to user."""
+        return "MAD-X {} ({})".format(self.release, self.date)
+
+
 
 class ChangeDirectory(object):
 
@@ -183,8 +188,8 @@ class Madx(object):
     @property
     def version(self):
         """Get the MAD-X version."""
-        return Version(self._libmadx.madx_release,
-                       self._libmadx.madx_date)
+        return Version(self._libmadx.version(),
+                       self._libmadx.release_date())
 
     @property
     def command(self):

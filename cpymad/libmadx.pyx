@@ -64,9 +64,24 @@ def _get_rightmost_word(sentence):
     return sentence.rsplit(' ', 1)[-1]
 
 
-# MAD-X version introspection
-madx_release = _get_rightmost_word(_str(clib.version_name))
-madx_date = _get_rightmost_word(_str(clib.version_date))
+def version():
+    """
+    Get the version number of loaded MAD-X interpreter.
+
+    :returns: full version number
+    :rtype: str
+    """
+    return _get_rightmost_word(_str(clib.version_name))
+
+
+def release_date():
+    """
+    Get the release date of loaded MAD-X interpreter.
+
+    :returns: release date in YYYY.MM.DD format
+    :rtype: str
+    """
+    return _get_rightmost_word(_str(clib.version_date))
 
 
 def started():
