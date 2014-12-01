@@ -1,4 +1,6 @@
 name: lebt
+api_version: 0
+
 path-offset: "lebt"
 init-files:
   - init.madx

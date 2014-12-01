@@ -45,6 +45,20 @@ class TestModel(unittest.TestCase, _compat.TestCase):
 
     # tests for Model API
 
+    def test_compatibility_check(self):
+        data = {
+            'beams': {},
+            'optics': {},
+            'sequences': {},
+        }
+        with self.assertRaises(ValueError):
+            Model(data=data, repo=None, madx=None)
+        with self.assertRaises(ValueError):
+            Model(data=dict(data, api_version=-1), repo=None, madx=None)
+        with self.assertRaises(ValueError):
+            Model(data=dict(data, api_version=1), repo=None, madx=None)
+        Model(data=dict(data, api_version=0), repo=None, madx=None)
+
     def test_Model_API(self):
         """Check that the public Model attributes/methods behave reasonably."""
         model = self.model

@@ -76,6 +76,9 @@ class Model(object):
         print("ex: {0}, ey: {1}", twiss.summary['ex'], twiss.summary['ey'])
     """
 
+    # current version of model API
+    API_VERSION = 0
+
     def __init__(self, data, repo, madx):
         """
         Initialize a Model object.
@@ -84,6 +87,7 @@ class Model(object):
         :param ResourceProvider repo: resource repository
         :param Madx madx: MAD-X instance to use
         """
+        self.check_compatibility(data)
         # init instance variables
         self._data = data
         self._repo = repo
@@ -93,6 +97,20 @@ class Model(object):
         self.beams = _deserialize(data['beams'], Beam, self)
         self.optics = _deserialize(data['optics'], Optic, self)
         self.sequences = _deserialize(data['sequences'], Sequence, self)
+
+    @classmethod
+    def check_compatibility(cls, data):
+        """
+        Check a model definition for compatibility.
+
+        :param dict data: a model definition to be tested
+        :raises ValueError: if the model definition is incompatible
+        """
+        model_api = data.get('api_version', 'undefined')
+        if model_api != cls.API_VERSION:
+            raise ValueError(("Incompatible model API version: {!r},\n"
+                              "              Required version: {!r}")
+                             .format(model_api, cls.API_VERSION))
 
     @classmethod
     def load(cls,
