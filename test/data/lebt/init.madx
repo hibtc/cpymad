@@ -8,12 +8,12 @@ dr: drift, l=1;
 
 ! sequences
 s1: sequence, l=8, refer=center;
-dr, at=0.5;
+dr, at=0.5; ! dr[1] ~ betx_full1[1]
 qp, at=1.5;
-dr, at=2.5;
-qp, at=3.5;
+dr, at=2.5; ! dr[2] ~ betx_full1[3] ~ betx_range[0]
+qp, at=3.5; !       ~ betx_full1[4] ~ betx_range[1]
 dr, at=4.5;
-sb, at=6.0;
+sb, at=6.0; !                       ~ betx_range[3]
 dr, at=7.5;
 endsequence;
 
