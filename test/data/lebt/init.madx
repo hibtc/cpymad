@@ -4,12 +4,17 @@ QP_K1 = 2;
 ! elements
 qp: quadrupole, k1:=QP_K1, l=1;
 sb: sbend, l=2, angle=3.14/4;
+dr: drift, l=1;
 
 ! sequences
-s1: sequence, l=4, refer=center;
-qp, at=0.5;
+s1: sequence, l=8, refer=center;
+dr, at=0.5;
 qp, at=1.5;
-sb, at=3;
+dr, at=2.5;
+qp, at=3.5;
+dr, at=4.5;
+sb, at=6.0;
+dr, at=7.5;
 endsequence;
 
 s2: sequence, l=3, refer=entry;

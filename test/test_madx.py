@@ -125,9 +125,9 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         sb1 = s1['sb:1']
         self.assertLess(idx['qp:1'], idx['qp:2'])
         self.assertLess(idx['qp:2'], idx['sb:1'])
-        self.assertAlmostEqual(qp1['at'], 0)
-        self.assertAlmostEqual(qp2['at'], 1)
-        self.assertAlmostEqual(sb1['at'], 2)
+        self.assertAlmostEqual(qp1['at'], 1)
+        self.assertAlmostEqual(qp2['at'], 3)
+        self.assertAlmostEqual(sb1['at'], 5)
         self.assertAlmostEqual(qp1['l'], 1)
         self.assertAlmostEqual(qp2['l'], 1)
         self.assertAlmostEqual(sb1['l'], 2)
