@@ -32,6 +32,16 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
     def tearDown(self):
         del self.mad
 
+    def test_independent_instances(self):
+        # create a second Madx instance (1st one is created in setUp)
+        madxness = Madx()
+        # Check independence by defining a variable differently in each
+        # instance:
+        self.mad.input('ANSWER=42;')
+        madxness.input('ANSWER=43;')
+        self.assertEqual(self.mad.evaluate('ANSWER'), 42);
+        self.assertEqual(madxness.evaluate('ANSWER'), 43);
+
     def test_command_log(self):
         """Check that the command log contains all input commands."""
         # create a new Madx instance that uses the history feature:
