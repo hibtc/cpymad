@@ -116,7 +116,7 @@ def input(cmd):
     """
     Pass one input command to MAD-X.
 
-    :param str cmd: command to be executed by the MAD-X interpretor
+    :param str cmd: command to be executed by the MAD-X interpreter
     """
     cdef bytes _cmd = _cstr(cmd)
     clib.stolower_nq(_cmd)

@@ -241,7 +241,7 @@ class Madx(object):
 
     def call(self, filename, chdir=False):
         """
-        CALL a file in the MAD-X interpretor.
+        CALL a file in the MAD-X interpreter.
 
         :param str filename: file name with path
         :param bool chdir: temporarily change directory in MAD-X process
@@ -403,8 +403,8 @@ class Madx(object):
         command.endmatch(knobfile=knobfile)
         return dict((knob, self.evaluate(knob)) for knob in vary)
 
-    # turn on/off verbose outupt..
-    def verbose(self, switch):
+    def verbose(self, switch=True):
+        """Turn verbose output on/off."""
         self.command.option(echo=switch, warn=switch, info=switch)
 
     def get_table(self, table, columns=None):
