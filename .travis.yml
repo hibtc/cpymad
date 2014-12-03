@@ -27,9 +27,13 @@ install:
   # to check the version installed from the source distribution:
   - rm -r cpymad
 
+  - pip install nose coverage coveralls
 # Actual tests:
 script:
-  - python test/test_resource.py
-  - python test/test_madx.py
-  - python test/test_model.py
-  - python test/test_locator.py
+  - coverage run --source=cpymad    test/test_resource.py
+  - coverage run --source=cpymad -a test/test_madx.py
+  - coverage run --source=cpymad -a test/test_model.py
+  - coverage run --source=cpymad -a test/test_locator.py
+
+after_success:
+  - coveralls
