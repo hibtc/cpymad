@@ -1,12 +1,18 @@
 # standard library
-import unittest
 import os
+import sys
+import unittest
 
 # utilities
 import _compat
 
 # tested class
 from cpymad.madx import Madx
+
+
+def command_log(cmd):
+    sys.stdout.write("X:> " + cmd + "\n")
+    sys.stdout.flush()
 
 
 class TestMadx(unittest.TestCase, _compat.TestCase):
@@ -22,7 +28,7 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
     """
 
     def setUp(self):
-        self.mad = Madx()
+        self.mad = Madx(command_log=command_log)
         here = os.path.dirname(__file__)
         there = os.path.join(here, 'data', 'lebt', 'init.madx')
         self.doc = open(there).read()
