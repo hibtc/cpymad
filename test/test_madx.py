@@ -224,5 +224,24 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         # parametere is missing:
         self.assertRaises(RuntimeError, self.mad.input, 'XXX: sequence;')
 
+    def test_libmadx_get_element(self):
+        iqp1 = self.mad._libmadx.get_element_index('s1', 'qp:1')
+        iqp2 = self.mad._libmadx.get_element_index('s1', 'qp:2')
+        qp1 = self.mad._libmadx.get_element('s1', iqp1)
+        qp2 = self.mad._libmadx.get_element('s1', iqp2)
+        self.assertAlmostEqual(qp1['at'], 1)
+        self.assertAlmostEqual(qp2['at'], 3)
+
+    def test_libmadx_get_expanded_element(self):
+        beam = 'beam, ex=1, ey=2, particle=electron, sequence=s1;'
+        self.mad.command(beam)
+        self.mad.use('s1')
+        iqp1 = self.mad._libmadx.get_expanded_element_index('s1', 'qp:1')
+        iqp2 = self.mad._libmadx.get_expanded_element_index('s1', 'qp:2')
+        qp1 = self.mad._libmadx.get_expanded_element('s1', iqp1)
+        qp2 = self.mad._libmadx.get_expanded_element('s1', iqp2)
+        self.assertAlmostEqual(qp1['at'], 1)
+        self.assertAlmostEqual(qp2['at'], 3)
+
 if __name__ == '__main__':
     unittest.main()

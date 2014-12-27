@@ -134,6 +134,7 @@ cdef extern from "madX/mad_node.h":
     struct node_list:
         int curr
         node** nodes
+        name_list* list
 
 cdef extern from "madX/mad_seq.h":
     struct sequence:
