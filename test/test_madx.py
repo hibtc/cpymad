@@ -174,6 +174,8 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
 
     def _get_elems(self, seq_name):
         elems = self.mad.get_sequence(seq_name).get_elements()
+        self.assertEqual(len(elems),
+                         self.mad._libmadx.get_no_elements(seq_name))
         elem_dict = dict((el['name'], el) for el in elems)
         elem_idx = dict((el['name'], i) for i, el in enumerate(elems))
         return elem_dict, elem_idx

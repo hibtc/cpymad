@@ -49,7 +49,9 @@ __all__ = [
     'get_table_columns',
     'get_table_column',
     'get_elements',
+    'get_no_elements',
     'get_expanded_elements',
+    'get_no_expanded_elements',
     'is_expanded',
     'evaluate',
     # these are imported from 'os' for convenience in madx.Madx and should
@@ -341,6 +343,19 @@ def get_elements(sequence_name):
             for i in xrange(seq.nodes.curr)]
 
 
+def get_no_elements(sequence_name):
+    """
+    Return number of elements in the original sequence.
+
+    :param str sequence_name: sequence name
+    :returns: number of elements in the original sequence
+    :rtype: int
+    :raises ValueError: if the sequence is invalid.
+    """
+    cdef clib.sequence* seq = _find_sequence(sequence_name)
+    return seq.nodes.curr
+
+
 def get_expanded_elements(sequence_name):
     """
     Return list of all elements in the expanded sequence.
@@ -353,6 +368,19 @@ def get_expanded_elements(sequence_name):
     cdef clib.sequence* seq = _find_sequence(sequence_name)
     return [_get_node(seq.all_nodes[i], seq.ref_flag)
             for i in xrange(seq.n_nodes)]
+
+
+def get_no_expanded_elements(sequence_name):
+    """
+    Return number of elements in the expanded sequence.
+
+    :param str sequence_name: sequence name
+    :returns: number of elements in the expanded sequence
+    :rtype: int
+    :raises ValueError: if the sequence is invalid.
+    """
+    cdef clib.sequence* seq = _find_sequence(sequence_name)
+    return seq.n_nodes
 
 
 def is_expanded(sequence_name):
