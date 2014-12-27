@@ -132,7 +132,7 @@ class TestModel(unittest.TestCase, _compat.TestCase):
         self.assertIs(range.default_initial_conditions,
                       range.initial_conditions['default'])
 
-    def test_Optic_twiss(self):
+    def test_Range_twiss(self):
         """Execute twiss() and check that it returns usable values."""
         range = self.model.default_sequence.default_range
         twiss = range.twiss()
@@ -142,7 +142,7 @@ class TestModel(unittest.TestCase, _compat.TestCase):
         alfx = twiss['alfx']
         alfy = twiss['alfy']
 
-    def test_Optic_match(self):
+    def test_Range_match(self):
         """Execute match() and check that it returns usable values."""
         range = self.model.sequences['s1'].default_range
         knobs = range.match(
