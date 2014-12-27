@@ -11,12 +11,18 @@ from cpymad.resource.file import FileResource
 import _compat
 
 # standard library
-import unittest
 import os
+import sys
+import unittest
 
 __all__ = [
     'TestModel',
 ]
+
+
+def command_log(cmd):
+    sys.stdout.write("X:> " + cmd + "\n")
+    sys.stdout.flush()
 
 
 class TestModel(unittest.TestCase, _compat.TestCase):
@@ -33,7 +39,7 @@ class TestModel(unittest.TestCase, _compat.TestCase):
 
     def load_model(self, path):
         """Load model with given name from specified path."""
-        model = Model.load(self.path)
+        model = Model.load(self.path, command_log=command_log)
         model.madx.command.option(twiss_print=False)
         return model
 

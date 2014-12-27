@@ -25,6 +25,50 @@ def mad_quote(value):
     return quoted[1:] if quoted[0] == 'u' else quoted
 
 
+SOON = 1
+SAFE = 10
+LATE = 100
+LAST = 1000
+
+
+def mad_param_order(key, value):
+    """
+    Determine parameter order.
+
+    Sadly, the parameter order actually matters - because of deficiencies in
+    the MAD-X language and parser. For example the following cases can be
+    problematic:
+
+    - booleans after strings: "beam, sequence=s1, -radiate;"
+    - after string lists: "select, flag=twiss, column=x,y, -full;"
+    """
+    key = str(key).lower()
+    # the empty string was used in earlier versions in place of None:
+    if value is None or value == '':
+        return SAFE
+    if isinstance(value, Range):
+        return LATE
+    elif isinstance(value, Constraint):
+        return SAFE
+    elif isinstance(value, bool):
+        return SOON
+    elif key == 'range':
+        return LATE
+    # check for basestrings before collections.Sequence, because every
+    # basestring is also a Sequence:
+    elif isinstance(value, basestring):
+        return SAFE
+    elif isinstance(value, collections.Sequence):
+        if key == 'column':
+            return LAST
+        elif value and all(isinstance(v, basestring) for v in value):
+            return LAST
+        else:
+            return SAFE
+    else:
+        return LATE
+
+
 def mad_parameter(key, value):
     """
     Format a single MAD-X command parameter.
@@ -57,14 +101,14 @@ def mad_parameter(key, value):
     # check for basestrings before collections.Sequence, because every
     # basestring is also a Sequence:
     elif isinstance(value, basestring):
-        # Although, it kinda makes more sense to quote all `basestring`
-        # instances, this breaks existing models which are using strings
-        # instead of numeric values. So let's only quote keys for now, where
-        # we know that it matters a lot:
         if key == 'file':
             return key + '=' + mad_quote(value)
         else:
-            return key + '=' + str(value)
+            # MAD-X parses strings incorrectly, if followed by a boolean.
+            # E.g.: "beam, sequence=s1, -radiate;" does NOT work! Therefore,
+            # these values need to be quoted. (NOTE: MAD-X uses lower-case
+            # internally and the quotes prevent automatic case conversion)
+            return key + '=' + mad_quote(value.lower())
     elif isinstance(value, collections.Sequence):
         if key == 'column':
             return key + '=' + ','.join(value)
@@ -97,7 +141,8 @@ def mad_command(*args, **kwargs):
     'constraint, betx<3.13;'
     """
     _args = list(args)
-    _args += [mad_parameter(k, v) for k,v in kwargs.items()]
+    _items = sorted(kwargs.items(), key=lambda v: mad_param_order(*v))
+    _args += [mad_parameter(k, v) for k,v in _items]
     return ', '.join(filter(None, _args)) + ';'
 
 
