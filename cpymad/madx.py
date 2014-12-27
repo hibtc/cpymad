@@ -534,16 +534,16 @@ class Sequence(object):
         """Get the name of the table with the TWISS results."""
         return self._libmadx.get_twiss(self._name)
 
-    def get_elements(self):
+    def get_element_list(self):
         """
         Get list of all elements in the original sequence.
 
         :returns: list of elements in the original (unexpanded) sequence
         :rtype: list(dict)
         """
-        return self._libmadx.get_elements(self._name)
+        return self._libmadx.get_element_list(self._name)
 
-    def get_expanded_elements(self):
+    def get_expanded_element_list(self):
         """
         Get list of all elements in the expanded sequence.
 
@@ -553,7 +553,7 @@ class Sequence(object):
         NOTE: this may very well return an empty list, if the sequence has
         not been expanded (used) yet.
         """
-        return self._libmadx.get_expanded_elements(self._name)
+        return self._libmadx.get_expanded_element_list(self._name)
 
 
 class Dict(dict):

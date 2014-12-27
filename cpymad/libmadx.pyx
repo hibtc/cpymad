@@ -48,10 +48,10 @@ __all__ = [
     'get_table_summary',
     'get_table_columns',
     'get_table_column',
-    'get_elements',
-    'get_no_elements',
-    'get_expanded_elements',
-    'get_no_expanded_elements',
+    'get_element_list',
+    'get_element_count',
+    'get_expanded_element_list',
+    'get_expanded_element_count',
     'is_expanded',
     'evaluate',
     # these are imported from 'os' for convenience in madx.Madx and should
@@ -329,7 +329,7 @@ def get_table_column(table, column):
                            .format(_str(dtype), column))
 
 
-def get_elements(sequence_name):
+def get_element_list(sequence_name):
     """
     Return list of all elements in the original sequence.
 
@@ -343,7 +343,7 @@ def get_elements(sequence_name):
             for i in xrange(seq.nodes.curr)]
 
 
-def get_no_elements(sequence_name):
+def get_element_count(sequence_name):
     """
     Return number of elements in the original sequence.
 
@@ -356,7 +356,7 @@ def get_no_elements(sequence_name):
     return seq.nodes.curr
 
 
-def get_expanded_elements(sequence_name):
+def get_expanded_element_list(sequence_name):
     """
     Return list of all elements in the expanded sequence.
 
@@ -370,7 +370,7 @@ def get_expanded_elements(sequence_name):
             for i in xrange(seq.n_nodes)]
 
 
-def get_no_expanded_elements(sequence_name):
+def get_expanded_element_count(sequence_name):
     """
     Return number of elements in the expanded sequence.
 
