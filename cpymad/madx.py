@@ -460,7 +460,7 @@ class Madx(object):
         """
         Check if model has the sequence.
 
-        :param string sequence: sequence name to be checked.
+        :param str sequence: sequence name to be checked.
         """
         return sequence in self.get_sequence_names()
 
@@ -487,7 +487,7 @@ class Madx(object):
         """
         Evaluates an expression and returns the result as double.
 
-        :param string cmd: expression to evaluate.
+        :param str cmd: expression to evaluate.
         :returns: numeric value of the expression
         :rtype: float
         """

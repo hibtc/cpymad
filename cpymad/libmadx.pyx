@@ -2,14 +2,13 @@
 """
 Low level cython binding to MAD-X.
 
-CAUTION: this module maps the global architecture of the MAD-X library
-closely. That means that all functions will operate on a shared global
-state! Take this into account when importing this module.
+CAUTION: Do not import this module directly! Use :class:`Madx` instead.
 
-Probably, you want to interact with MAD-X via the cpymad.madx module. It
-provides higher level abstraction and can deal with multiple instances of
-MAD-X. Furthermore, it enhances the security by boxing all MAD-X calls into
-a subprocess.
+- Importing this module means loading MAD-X directly into the process space.
+  This means that any crash in the (extremely fragile) MAD-X interpreter will
+  crash the importing process with it.
+- All functions in this module operate on a shared global state.
+- this module exposes a very C-ish API that is not convenient to work with.
 """
 
 from os import chdir, getcwd
@@ -185,7 +184,7 @@ def get_sequence_beam(sequence_name):
     Get the beam associated to the sequence.
 
     :param str sequence_name: sequence name
-    :returns: beam properties as set with the BEAM command
+    :returns: beam properties as set with the BEAM command (and some more)
     :rtype: dict
     :raises ValueError: if the sequence name is invalid
     :raises RuntimeError: if the sequence has no associated beam
@@ -224,10 +223,10 @@ def get_sequence_names():
 
 def get_sequence_count():
     """
-    Get a list of all sequences currently in memory.
+    Get the number of all sequences currently in memory.
 
-    :returns: sequence names
-    :rtype: list
+    :returns: number of sequences
+    :rtype: int
     """
     return clib.madextern_get_sequence_list().curr
 
@@ -590,12 +589,11 @@ def evaluate(expression):
     :param str expression: symbolic expression to evaluate
     :returns: numeric value of the expression
     :rtype: float
-
-    NOTE: This function uses global variables as temporaries - which is in
-    general an *extremely* bad design choice. Even though MAD-X uses global
-    variables internally anyway, we should probably change this at some
-    time.
     """
+    # TODO: This function uses global variables as temporaries - which is in
+    # general an *extremely* bad design choice. Even though MAD-X uses global
+    # variables internally anyway, this is no excuse for cpymad to copy that
+    # behaviour.
     try:
         # handle instance of type Expression:
         expression = expression.expr
