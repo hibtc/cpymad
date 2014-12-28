@@ -34,7 +34,6 @@ class Version(object):
         return "MAD-X {} ({})".format(self.release, self.date)
 
 
-
 class ChangeDirectory(object):
 
     """Context manager for temporarily changing current working directory."""
@@ -604,6 +603,9 @@ class ElementList(collections.Sequence):
 
     def __getitem__(self, index):
         """Return element with specified index."""
+        if isinstance(index, (dict, basestring)):
+            # allow element names to be passed for convenience:
+            index = self.index(index)
         return self._get_element(self._sequence_name, index)
 
     def __len__(self):
@@ -622,10 +624,7 @@ class ElementList(collections.Sequence):
             name = element['name']
         else:
             name = element
-        index = self._get_element_index(self._sequence_name, name)
-        if index == -1:
-            raise ValueError("Element name not in list: {}".format(name))
-        return index
+        return self._get_element_index(self._sequence_name, name)
 
     def at(self, pos):
         """Find the element at specified S position."""
