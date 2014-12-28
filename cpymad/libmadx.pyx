@@ -529,11 +529,11 @@ def is_expanded(sequence_name):
     return seq.n_nodes > 0
 
 
-def evaluate(cmd):
+def evaluate(expression):
     """
     Evaluates an expression and returns the result as double.
 
-    :param str cmd: symbolic expression to evaluate
+    :param str expression: symbolic expression to evaluate
     :returns: numeric value of the expression
     :rtype: float
 
@@ -542,9 +542,14 @@ def evaluate(cmd):
     variables internally anyway, we should probably change this at some
     time.
     """
+    try:
+        # handle instance of type Expression:
+        expression = expression.expr
+    except AttributeError:
+        pass
     # TODO: not sure about the flags (the magic constants 0, 2)
-    cdef bytes _cmd = _cstr(cmd.lower())
-    clib.pre_split(_cmd, clib.c_dum, 0)
+    cdef bytes _expr = _cstr(expression.lower())
+    clib.pre_split(_expr, clib.c_dum, 0)
     clib.mysplit(clib.c_dum.c, clib.tmp_p_array)
     expr = clib.make_expression(clib.tmp_p_array.curr, clib.tmp_p_array.p)
     value = clib.expression_value(expr, 2)
