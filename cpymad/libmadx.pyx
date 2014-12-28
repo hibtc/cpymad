@@ -67,14 +67,12 @@ __all__ = [
     'get_element',
     'get_element_index',
     'get_element_index_by_position',
-    'get_element_list',
     'get_element_count',
 
     # expanded sequence element access
     'get_expanded_element',
     'get_expanded_element_index',
     'get_expanded_element_index_by_position',
-    'get_expanded_element_list',
     'get_expanded_element_count',
 
     # these are imported from 'os' for convenience in madx.Madx and should
@@ -449,20 +447,6 @@ def get_element_index_by_position(sequence_name, position):
     raise ValueError("No element found at position: {0}".format(position))
 
 
-def get_element_list(sequence_name):
-    """
-    Return list of all elements in the original sequence.
-
-    :param str sequence_name: sequence name
-    :returns: all elements in the original sequence
-    :rtype: list
-    :raises ValueError: if the sequence is invalid.
-    """
-    cdef clib.sequence* seq = _find_sequence(sequence_name)
-    return [_get_node(seq.nodes.nodes[i], seq.ref_flag)
-            for i in xrange(seq.nodes.curr)]
-
-
 def get_element_count(sequence_name):
     """
     Return number of elements in the original sequence.
@@ -540,20 +524,6 @@ def get_expanded_element_index_by_position(sequence_name, position):
         if _position >= at and _position <= at+elem.length:
             return i
     raise ValueError("No element found at position: {0}".format(position))
-
-
-def get_expanded_element_list(sequence_name):
-    """
-    Return list of all elements in the expanded sequence.
-
-    :param str sequence_name: sequence name
-    :returns: all elements in the expanded sequence
-    :rtype: list
-    :raises ValueError: if the sequence is invalid.
-    """
-    cdef clib.sequence* seq = _find_sequence(sequence_name)
-    return [_get_node(seq.all_nodes[i], seq.ref_flag)
-            for i in xrange(seq.n_nodes)]
 
 
 def get_expanded_element_count(sequence_name):

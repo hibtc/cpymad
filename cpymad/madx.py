@@ -564,27 +564,6 @@ class Sequence(object):
         """Get list of elements in expanded sequence."""
         return ElementList(self._name, self._libmadx, expanded=True)
 
-    def get_element_list(self):
-        """
-        Get list of all elements in the original sequence.
-
-        :returns: list of elements in the original (unexpanded) sequence
-        :rtype: list(dict)
-        """
-        return self._libmadx.get_element_list(self._name)
-
-    def get_expanded_element_list(self):
-        """
-        Get list of all elements in the expanded sequence.
-
-        :returns: list of elements in the expanded (unexpanded) sequence
-        :rtype: list(dict)
-
-        NOTE: this may very well return an empty list, if the sequence has
-        not been expanded (used) yet.
-        """
-        return self._libmadx.get_expanded_element_list(self._name)
-
 
 class ElementList(collections.Sequence):
 
