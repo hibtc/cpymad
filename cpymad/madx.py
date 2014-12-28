@@ -583,10 +583,12 @@ class ElementList(collections.Sequence):
             self._get_element = libmadx.get_expanded_element
             self._get_element_count = libmadx.get_expanded_element_count
             self._get_element_index = libmadx.get_expanded_element_index
+            self._get_element_at = libmadx.get_expanded_element_index_by_position
         else:
             self._get_element = libmadx.get_element
             self._get_element_count = libmadx.get_element_count
             self._get_element_index = libmadx.get_element_index
+            self._get_element_at = libmadx.get_element_index_by_position
 
     def __contains__(self, element):
         """
@@ -624,6 +626,10 @@ class ElementList(collections.Sequence):
         if index == -1:
             raise ValueError("Element name not in list: {}".format(name))
         return index
+
+    def at(self, pos):
+        """Find the element at specified S position."""
+        return self._get_element_at(self._sequence_name, pos)
 
 
 class Dict(dict):
