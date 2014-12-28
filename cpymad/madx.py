@@ -34,7 +34,6 @@ class Version(object):
         return "MAD-X {} ({})".format(self.release, self.date)
 
 
-
 class ChangeDirectory(object):
 
     """Context manager for temporarily changing current working directory."""

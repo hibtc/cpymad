@@ -355,7 +355,7 @@ def get_element(sequence_name, element_index):
 
 def get_element_index(sequence_name, element_name):
     """
-    Return requested element in the original sequence.
+    Return index of element with specified name in the original sequence.
 
     :param str sequence_name: sequence name
     :param str element_name: element index
@@ -370,7 +370,7 @@ def get_element_index(sequence_name, element_name):
 
 def get_element_index_by_position(sequence_name, position):
     """
-    Return requested element in the original sequence.
+    Return index of element at specified position in the original sequence.
 
     :param str sequence_name: sequence name
     :param double position: position (S coordinate)
@@ -440,7 +440,7 @@ def get_expanded_element(sequence_name, element_index):
 
 def get_expanded_element_index(sequence_name, element_name):
     """
-    Return requested element in the expanded sequence.
+    Return index of element with specified name in the expanded sequence.
 
     NOTE: this is the brute-force linear-time algorithm and therefore not
     recommended for frequent execution.
@@ -463,7 +463,7 @@ def get_expanded_element_index(sequence_name, element_name):
 
 def get_expanded_element_index_by_position(sequence_name, position):
     """
-    Return requested element in the expanded sequence.
+    Return index of element at specified position in the expanded sequence.
 
     :param str sequence_name: sequence name
     :param double position: position (S coordinate)
