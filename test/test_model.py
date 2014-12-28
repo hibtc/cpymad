@@ -80,8 +80,8 @@ class TestModel(unittest.TestCase, _compat.TestCase):
         self.assertItemsEqual(model.optics.keys(), ['thick'])
         # sequences
         self.assertItemsEqual(model.sequences.keys(), ['s1', 's2'])
-        self.assertTrue(madx.has_sequence('s1'))
-        self.assertTrue(madx.has_sequence('s2'))
+        self.assertTrue('s1' in madx.sequences)
+        self.assertTrue('s2' in madx.sequences)
         # default_optic
         self.assertIs(model.default_optic, model.optics['thick'])
         # default_sequence

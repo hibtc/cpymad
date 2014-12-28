@@ -154,21 +154,17 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
     def test_active_sequence(self):
         self.mad.command('beam, ex=1, ey=2, particle=electron, sequence=s1;')
         self.mad.active_sequence = 's1'
-        self.assertEqual(self.mad.active_sequence, 's1')
+        self.assertEqual(self.mad.active_sequence.name, 's1')
 
     def test_get_sequence(self):
-        self.assertRaises(ValueError, self.mad.get_sequence, 'sN')
-        s1 = self.mad.get_sequence('s1')
+        with self.assertRaises(KeyError):
+            self.mad.sequences['sN']
+        s1 = self.mad.sequences['s1']
         self.assertEqual(s1.name, 's1')
 
     def test_get_sequences(self):
-        seqs = self.mad.get_sequences()
-        self.assertItemsEqual([seq.name for seq in seqs],
-                              ['s1', 's2'])
-
-    def test_get_sequence_names(self):
-        self.assertItemsEqual(self.mad.get_sequence_names(),
-                              ['s1', 's2'])
+        seqs = self.mad.sequences
+        self.assertItemsEqual(seqs, ['s1', 's2'])
 
     def test_evaluate(self):
         val = self.mad.evaluate("1/QP_K1")
@@ -179,7 +175,7 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
     # def test_sequence_twissname(self):
 
     def _get_elems(self, seq_name):
-        elems = self.mad.get_sequence(seq_name).elements
+        elems = self.mad.sequences[seq_name].elements
         elem_dict = dict((el['name'], el) for el in elems)
         elem_idx = dict((el['name'], i) for i, el in enumerate(elems))
         return elem_dict, elem_idx
@@ -223,7 +219,7 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         self.assertRaises(RuntimeError, self.mad.input, 'XXX: sequence;')
 
     def test_sequence_elements(self):
-        elements = self.mad.get_sequence('s1').elements
+        elements = self.mad.sequences['s1'].elements
         iqp2 = elements.index('qp:2')
         qp1 = elements['qp:1']
         qp2 = elements[iqp2]
@@ -235,7 +231,7 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         beam = 'beam, ex=1, ey=2, particle=electron, sequence=s1;'
         self.mad.command(beam)
         self.mad.use('s1')
-        elements = self.mad.get_sequence('s1').expanded_elements
+        elements = self.mad.sequences['s1'].expanded_elements
         iqp2 = elements.index('qp:2')
         qp1 = elements['qp:1']
         qp2 = elements[iqp2]
