@@ -603,6 +603,9 @@ class ElementList(collections.Sequence):
 
     def __getitem__(self, index):
         """Return element with specified index."""
+        if isinstance(index, (dict, basestring)):
+            # allow element names to be passed for convenience:
+            index = self.index(index)
         return self._get_element(self._sequence_name, index)
 
     def __len__(self):
