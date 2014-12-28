@@ -621,10 +621,7 @@ class ElementList(collections.Sequence):
             name = element['name']
         else:
             name = element
-        index = self._get_element_index(self._sequence_name, name)
-        if index == -1:
-            raise ValueError("Element name not in list: {}".format(name))
-        return index
+        return self._get_element_index(self._sequence_name, name)
 
     def at(self, pos):
         """Find the element at specified S position."""

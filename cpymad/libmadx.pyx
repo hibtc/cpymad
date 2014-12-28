@@ -359,13 +359,16 @@ def get_element_index(sequence_name, element_name):
 
     :param str sequence_name: sequence name
     :param str element_name: element index
-    :returns: the index of the specified element, -1 if not found
+    :returns: the index of the specified element
     :rtype: int
-    :raises ValueError: if the sequence is invalid
+    :raises ValueError: if the sequence or element name is invalid
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
     cdef bytes _element_name = _cstr(element_name)
-    return clib.name_list_pos(_element_name, seq.nodes.list)
+    cdef int index = clib.name_list_pos(_element_name, seq.nodes.list)
+    if index == -1:
+        raise ValueError("Element name not found: {0}".format(element_name))
+    return index
 
 
 def get_element_index_by_position(sequence_name, position):
@@ -458,7 +461,7 @@ def get_expanded_element_index(sequence_name, element_name):
     for i in xrange(seq.n_nodes):
         if seq.all_nodes[i].name == _element_name:
             return i
-    return -1
+    raise ValueError("Element name not found: {0}".format(element_name))
 
 
 def get_expanded_element_index_by_position(sequence_name, position):
