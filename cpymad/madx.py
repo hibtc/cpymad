@@ -177,7 +177,7 @@ class Madx(object):
         if libmadx is None:
             svc, proc = _rpc.LibMadxClient.spawn_subprocess()
             libmadx = svc.libmadx
-        if not libmadx.started():
+        if not libmadx.is_started():
             libmadx.start()
         # init instance variables:
         self._libmadx = libmadx
@@ -187,8 +187,8 @@ class Madx(object):
     @property
     def version(self):
         """Get the MAD-X version."""
-        return Version(self._libmadx.version(),
-                       self._libmadx.release_date())
+        return Version(self._libmadx.get_version_number(),
+                       self._libmadx.get_version_date())
 
     @property
     def command(self):
@@ -346,7 +346,7 @@ class Madx(object):
             if not sequence:
                 sequence = active_sequence
         if (sequence != active_sequence
-                or not self._libmadx.is_expanded(sequence)):
+                or not self._libmadx.is_sequence_expanded(sequence)):
             self.use(sequence)
         return sequence
 
@@ -423,7 +423,7 @@ class Madx(object):
     @property
     def active_sequence(self):
         """Get/set the name of the active sequence."""
-        return self._libmadx.get_active_sequence()
+        return self._libmadx.get_active_sequence_name()
 
     @active_sequence.setter
     def active_sequence(self, name):
@@ -481,7 +481,7 @@ class Madx(object):
         :returns: list of all sequences names
         :rtype: list(str)
         """
-        return self._libmadx.get_sequences()
+        return self._libmadx.get_sequence_names()
 
     def evaluate(self, cmd):
         """
@@ -521,7 +521,7 @@ class Sequence(object):
     @property
     def beam(self):
         """Get the beam dictionary associated to the sequence."""
-        return self._libmadx.get_beam(self._name)
+        return self._libmadx.get_sequence_beam(self._name)
 
     @property
     def twiss(self):
@@ -531,7 +531,7 @@ class Sequence(object):
     @property
     def twissname(self):
         """Get the name of the table with the TWISS results."""
-        return self._libmadx.get_twiss(self._name)
+        return self._libmadx.get_sequence_twiss_table_name(self._name)
 
     @property
     def elements(self):
@@ -657,11 +657,11 @@ class TableProxy(collections.Mapping):
 
     def __iter__(self):
         """Iterate over all column names."""
-        return iter(self._libmadx.get_table_columns(self._name))
+        return iter(self._libmadx.get_table_column_names(self._name))
 
     def __len__(self):
         """Return number of columns."""
-        return len(self._libmadx.get_table_columns(self._name))
+        return len(self._libmadx.get_table_column_names(self._name))
 
     @property
     def summary(self):

@@ -393,7 +393,7 @@ class LibMadxClient(Client):
     def close(self):
         """Finalize libmadx if it was started."""
         try:
-            if self.libmadx.started():
+            if self.libmadx.is_started():
                 self.libmadx.finish()
         except ValueError:
             pass
