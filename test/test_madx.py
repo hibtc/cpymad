@@ -179,9 +179,7 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
     # def test_sequence_twissname(self):
 
     def _get_elems(self, seq_name):
-        elems = self.mad.get_sequence(seq_name).get_elements()
-        self.assertEqual(len(elems),
-                         self.mad._libmadx.get_no_elements(seq_name))
+        elems = self.mad.get_sequence(seq_name).elements
         elem_dict = dict((el['name'], el) for el in elems)
         elem_idx = dict((el['name'], i) for i, el in enumerate(elems))
         return elem_dict, elem_idx
@@ -223,6 +221,29 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         # a.t.m. MAD-X crashes on this input, because the L (length)
         # parametere is missing:
         self.assertRaises(RuntimeError, self.mad.input, 'XXX: sequence;')
+
+    def test_libmadx_get_element(self):
+        elements = self.mad.get_sequence('s1').elements
+        iqp1 = elements.index('qp:1')
+        iqp2 = elements.index('qp:2')
+        qp1 = elements[iqp1]
+        qp2 = elements[iqp2]
+        self.assertAlmostEqual(qp1['at'], 1)
+        self.assertAlmostEqual(qp2['at'], 3)
+        self.assertEqual(iqp2, elements.at(3.1))
+
+    def test_libmadx_get_expanded_element(self):
+        beam = 'beam, ex=1, ey=2, particle=electron, sequence=s1;'
+        self.mad.command(beam)
+        self.mad.use('s1')
+        elements = self.mad.get_sequence('s1').expanded_elements
+        iqp1 = elements.index('qp:1')
+        iqp2 = elements.index('qp:2')
+        qp1 = elements[iqp1]
+        qp2 = elements[iqp2]
+        self.assertAlmostEqual(qp1['at'], 1)
+        self.assertAlmostEqual(qp2['at'], 3)
+        self.assertEqual(iqp2, elements.at(3.1))
 
 if __name__ == '__main__':
     unittest.main()

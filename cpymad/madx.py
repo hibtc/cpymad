@@ -534,16 +534,26 @@ class Sequence(object):
         """Get the name of the table with the TWISS results."""
         return self._libmadx.get_twiss(self._name)
 
-    def get_elements(self):
+    @property
+    def elements(self):
+        """Get list of elements."""
+        return ElementList(self._name, self._libmadx, expanded=False)
+
+    @property
+    def expanded_elements(self):
+        """Get list of elements in expanded sequence."""
+        return ElementList(self._name, self._libmadx, expanded=True)
+
+    def get_element_list(self):
         """
         Get list of all elements in the original sequence.
 
         :returns: list of elements in the original (unexpanded) sequence
         :rtype: list(dict)
         """
-        return self._libmadx.get_elements(self._name)
+        return self._libmadx.get_element_list(self._name)
 
-    def get_expanded_elements(self):
+    def get_expanded_element_list(self):
         """
         Get list of all elements in the expanded sequence.
 
@@ -553,7 +563,73 @@ class Sequence(object):
         NOTE: this may very well return an empty list, if the sequence has
         not been expanded (used) yet.
         """
-        return self._libmadx.get_expanded_elements(self._name)
+        return self._libmadx.get_expanded_element_list(self._name)
+
+
+class ElementList(collections.Sequence):
+
+    """
+    Immutable list of beam line elements.
+
+    Each element is a dictionary containing its properties.
+    """
+
+    def __init__(self, sequence_name, libmadx, expanded):
+        """
+        Initialize instance.
+        """
+        self._sequence_name = sequence_name
+        if expanded:
+            self._get_element = libmadx.get_expanded_element
+            self._get_element_count = libmadx.get_expanded_element_count
+            self._get_element_index = libmadx.get_expanded_element_index
+            self._get_element_at = libmadx.get_expanded_element_index_by_position
+        else:
+            self._get_element = libmadx.get_element
+            self._get_element_count = libmadx.get_element_count
+            self._get_element_index = libmadx.get_element_index
+            self._get_element_at = libmadx.get_element_index_by_position
+
+    def __contains__(self, element):
+        """
+        Check if sequence contains element with specified name.
+
+        Can be invoked with either the element dict or the element name.
+        """
+        try:
+            self.index(element)
+            return True
+        except ValueError:
+            return False
+
+    def __getitem__(self, index):
+        """Return element with specified index."""
+        return self._get_element(self._sequence_name, index)
+
+    def __len__(self):
+        """Get number of elements."""
+        return self._get_element_count(self._sequence_name)
+
+    def index(self, element):
+        """
+        Find index of element with specified name.
+
+        Can be invoked with either the element dict or the element name.
+
+        :raises ValueError:
+        """
+        if isinstance(element, dict):
+            name = element['name']
+        else:
+            name = element
+        index = self._get_element_index(self._sequence_name, name)
+        if index == -1:
+            raise ValueError("Element name not in list: {}".format(name))
+        return index
+
+    def at(self, pos):
+        """Find the element at specified S position."""
+        return self._get_element_at(self._sequence_name, pos)
 
 
 class Dict(dict):
