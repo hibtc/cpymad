@@ -179,9 +179,7 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
     # def test_sequence_twissname(self):
 
     def _get_elems(self, seq_name):
-        elems = self.mad.get_sequence(seq_name).get_element_list()
-        self.assertEqual(len(elems),
-                         self.mad._libmadx.get_element_count(seq_name))
+        elems = self.mad.get_sequence(seq_name).elements
         elem_dict = dict((el['name'], el) for el in elems)
         elem_idx = dict((el['name'], i) for i, el in enumerate(elems))
         return elem_dict, elem_idx
@@ -225,8 +223,9 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         self.assertRaises(RuntimeError, self.mad.input, 'XXX: sequence;')
 
     def test_libmadx_get_element(self):
-        iqp1 = self.mad._libmadx.get_element_index('s1', 'qp:1')
-        iqp2 = self.mad._libmadx.get_element_index('s1', 'qp:2')
+        elements = self.mad.get_sequence('s1').elements
+        iqp1 = elements.index('qp:1')
+        iqp2 = elements.index('qp:2')
         qp1 = self.mad._libmadx.get_element('s1', iqp1)
         qp2 = self.mad._libmadx.get_element('s1', iqp2)
         self.assertAlmostEqual(qp1['at'], 1)
@@ -236,10 +235,11 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         beam = 'beam, ex=1, ey=2, particle=electron, sequence=s1;'
         self.mad.command(beam)
         self.mad.use('s1')
-        iqp1 = self.mad._libmadx.get_expanded_element_index('s1', 'qp:1')
-        iqp2 = self.mad._libmadx.get_expanded_element_index('s1', 'qp:2')
-        qp1 = self.mad._libmadx.get_expanded_element('s1', iqp1)
-        qp2 = self.mad._libmadx.get_expanded_element('s1', iqp2)
+        elements = self.mad.get_sequence('s1').expanded_elements
+        iqp1 = elements.index('qp:1')
+        iqp2 = elements.index('qp:2')
+        qp1 = elements[iqp1]
+        qp2 = elements[iqp2]
         self.assertAlmostEqual(qp1['at'], 1)
         self.assertAlmostEqual(qp2['at'], 3)
 
