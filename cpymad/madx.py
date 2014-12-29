@@ -177,7 +177,7 @@ class Madx(object):
         if libmadx is None:
             svc, proc = _rpc.LibMadxClient.spawn_subprocess()
             libmadx = svc.libmadx
-        if not libmadx.started():
+        if not libmadx.is_started():
             libmadx.start()
         # init instance variables:
         self._libmadx = libmadx
@@ -187,8 +187,8 @@ class Madx(object):
     @property
     def version(self):
         """Get the MAD-X version."""
-        return Version(self._libmadx.version(),
-                       self._libmadx.release_date())
+        return Version(self._libmadx.get_version_number(),
+                       self._libmadx.get_version_date())
 
     @property
     def command(self):
@@ -346,7 +346,7 @@ class Madx(object):
             if not sequence:
                 sequence = active_sequence
         if (sequence != active_sequence
-                or not self._libmadx.is_expanded(sequence)):
+                or not self._libmadx.is_sequence_expanded(sequence)):
             self.use(sequence)
         return sequence
 
@@ -422,66 +422,27 @@ class Madx(object):
 
     @property
     def active_sequence(self):
-        """Get/set the name of the active sequence."""
-        return self._libmadx.get_active_sequence()
+        """The active :class:`Sequence` (may be None)."""
+        try:
+            return Sequence(self._libmadx.get_active_sequence_name(),
+                            self._libmadx,
+                            _check=False)
+        except RuntimeError:
+            return None
 
     @active_sequence.setter
-    def active_sequence(self, name):
+    def active_sequence(self, sequence):
+        if isinstance(sequence, Sequence):
+            name = sequence.name
+        elif isinstance(sequence, basestring):
+            name = sequence
         try:
             active_sequence = self.active_sequence
         except RuntimeError:
             self.use(name)
         else:
-            if active_sequence != name:
+            if active_sequence.name != name:
                 self.use(name)
-
-    def get_active_sequence(self):
-        """
-        Get a handle to the active sequence.
-
-        :returns: a proxy object for the sequence
-        :rtype: Sequence
-        :raises RuntimeError: if there is no active sequence
-        """
-        return Sequence(self.active_sequence, self._libmadx, _check=False)
-
-    def get_sequence(self, name):
-        """
-        Get a handle to the specified sequence.
-
-        :param str name: sequence name
-        :returns: a proxy object for the sequence
-        :rtype: Sequence
-        :raises ValueError: if a sequence name is invalid
-        """
-        return Sequence(name, self._libmadx)
-
-    def has_sequence(self, sequence):
-        """
-        Check if model has the sequence.
-
-        :param string sequence: sequence name to be checked.
-        """
-        return sequence in self.get_sequence_names()
-
-    def get_sequences(self):
-        """
-        Return list of all sequences currently in memory.
-
-        :returns: list of sequence proxy objects
-        :rtype: list(Sequence)
-        """
-        return [Sequence(name, self._libmadx, _check=False)
-                for name in self.get_sequence_names()]
-
-    def get_sequence_names(self):
-        """
-        Return list of all sequences currently in memory.
-
-        :returns: list of all sequences names
-        :rtype: list(str)
-        """
-        return self._libmadx.get_sequences()
 
     def evaluate(self, cmd):
         """
@@ -492,6 +453,66 @@ class Madx(object):
         :rtype: float
         """
         return self._libmadx.evaluate(cmd)
+
+    @property
+    def sequences(self):
+        """A dict like view of all sequences in memory."""
+        return SequenceMap(self._libmadx)
+
+    @property
+    def tables(self):
+        """A dict like view of all tables in memory."""
+        return TableMap(self._libmadx)
+
+
+class SequenceMap(collections.Mapping):
+
+    """
+    A dict like view of all sequences (:class:`Sequence`) in memory.
+    """
+
+    def __init__(self, libmadx):
+        self._libmadx = libmadx
+
+    def __iter__(self):
+        return iter(self._libmadx.get_sequence_names())
+
+    def __getitem__(self, name):
+        try:
+            return Sequence(name, self._libmadx)
+        except ValueError:
+            raise KeyError
+
+    def __contains__(self, name):
+        return self._libmadx.sequence_exists(name)
+
+    def __len__(self):
+        return self._libmadx.get_sequence_count()
+
+
+class TableMap(collections.Mapping):
+
+    """
+    A dict like view of all tables (:class:`TableProxy`) in memory.
+    """
+
+    def __init__(self, libmadx):
+        self._libmadx = libmadx
+
+    def __iter__(self):
+        return iter(self._libmadx.get_table_names())
+
+    def __getitem__(self, name):
+        try:
+            return TableProxy(name, self._libmadx)
+        except ValueError:
+            raise KeyError
+
+    def __contains__(self, name):
+        return self._libmadx.table_exists(name)
+
+    def __len__(self):
+        return self._libmadx.get_table_count()
 
 
 class Sequence(object):
@@ -521,17 +542,17 @@ class Sequence(object):
     @property
     def beam(self):
         """Get the beam dictionary associated to the sequence."""
-        return self._libmadx.get_beam(self._name)
+        return self._libmadx.get_sequence_beam(self._name)
 
     @property
-    def twiss(self):
+    def twiss_table(self):
         """Get the TWISS results from the last calculation."""
-        return TableProxy(self.twissname, self._libmadx)
+        return TableProxy(self.twiss_table_name, self._libmadx)
 
     @property
-    def twissname(self):
+    def twiss_table_name(self):
         """Get the name of the table with the TWISS results."""
-        return self._libmadx.get_twiss(self._name)
+        return self._libmadx.get_sequence_twiss_table_name(self._name)
 
     @property
     def elements(self):
@@ -542,27 +563,6 @@ class Sequence(object):
     def expanded_elements(self):
         """Get list of elements in expanded sequence."""
         return ElementList(self._name, self._libmadx, expanded=True)
-
-    def get_element_list(self):
-        """
-        Get list of all elements in the original sequence.
-
-        :returns: list of elements in the original (unexpanded) sequence
-        :rtype: list(dict)
-        """
-        return self._libmadx.get_element_list(self._name)
-
-    def get_expanded_element_list(self):
-        """
-        Get list of all elements in the expanded sequence.
-
-        :returns: list of elements in the expanded (unexpanded) sequence
-        :rtype: list(dict)
-
-        NOTE: this may very well return an empty list, if the sequence has
-        not been expanded (used) yet.
-        """
-        return self._libmadx.get_expanded_element_list(self._name)
 
 
 class ElementList(collections.Sequence):
@@ -606,6 +606,10 @@ class ElementList(collections.Sequence):
         if isinstance(index, (dict, basestring)):
             # allow element names to be passed for convenience:
             index = self.index(index)
+        # _get_element accepts indices in the range [0, len-1]. The following
+        # extends the accepted range to [-len, len+1], just like for lists:
+        if index < 0:
+            index += len(self)
         return self._get_element(self._sequence_name, index)
 
     def __len__(self):
@@ -657,11 +661,11 @@ class TableProxy(collections.Mapping):
 
     def __iter__(self):
         """Iterate over all column names."""
-        return iter(self._libmadx.get_table_columns(self._name))
+        return iter(self._libmadx.get_table_column_names(self._name))
 
     def __len__(self):
         """Return number of columns."""
-        return len(self._libmadx.get_table_columns(self._name))
+        return len(self._libmadx.get_table_column_names(self._name))
 
     @property
     def summary(self):

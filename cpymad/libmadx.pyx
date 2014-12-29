@@ -2,14 +2,13 @@
 """
 Low level cython binding to MAD-X.
 
-CAUTION: this module maps the global architecture of the MAD-X library
-closely. That means that all functions will operate on a shared global
-state! Take this into account when importing this module.
+CAUTION: Do not import this module directly! Use :class:`Madx` instead.
 
-Probably, you want to interact with MAD-X via the cpymad.madx module. It
-provides higher level abstraction and can deal with multiple instances of
-MAD-X. Furthermore, it enhances the security by boxing all MAD-X calls into
-a subprocess.
+- Importing this module means loading MAD-X directly into the process space.
+  This means that any crash in the (extremely fragile) MAD-X interpreter will
+  crash the importing process with it.
+- All functions in this module operate on a shared global state.
+- this module exposes a very C-ish API that is not convenient to work with.
 """
 
 from os import chdir, getcwd
@@ -32,34 +31,50 @@ _madx_started = False
 
 # Python-level binding to libmadx:
 __all__ = [
-    'madx_release',
-    'madx_date',
-    'started',
+    # MAD-X version
+    'get_version_number',
+    'get_version_date',
+
+    # control the interpreter
+    'is_started',
     'start',
     'finish',
     'input',
+    'evaluate',
+
+    # iterate sequences
     'sequence_exists',
-    'get_twiss',
-    'get_beam',
-    'get_active_sequence',
-    'get_sequences',
+    'get_sequence_names',
+    'get_sequence_count',
+    'get_active_sequence_name',
+
+    # sequence access
+    'get_sequence_twiss_table_name',
+    'get_sequence_beam',
+    'is_sequence_expanded',
+
+    # iterate tables
     'table_exists',
-    'get_table_list',
+    'get_table_names',
+    'get_table_count',
+
+    # table access
     'get_table_summary',
-    'get_table_columns',
+    'get_table_column_names',
     'get_table_column',
+
+    # sequence element list access
     'get_element',
     'get_element_index',
     'get_element_index_by_position',
-    'get_element_list',
     'get_element_count',
+
+    # expanded sequence element access
     'get_expanded_element',
     'get_expanded_element_index',
     'get_expanded_element_index_by_position',
-    'get_expanded_element_list',
     'get_expanded_element_count',
-    'is_expanded',
-    'evaluate',
+
     # these are imported from 'os' for convenience in madx.Madx and should
     # not really be considered part of the public interface:
     'chdir',
@@ -72,7 +87,7 @@ def _get_rightmost_word(sentence):
     return sentence.rsplit(' ', 1)[-1]
 
 
-def version():
+def get_version_number():
     """
     Get the version number of loaded MAD-X interpreter.
 
@@ -82,7 +97,7 @@ def version():
     return _get_rightmost_word(_str(clib.version_name))
 
 
-def release_date():
+def get_version_date():
     """
     Get the release date of loaded MAD-X interpreter.
 
@@ -92,7 +107,7 @@ def release_date():
     return _get_rightmost_word(_str(clib.version_date))
 
 
-def started():
+def is_started():
     """
     Check whether MAD-X has been initialized.
 
@@ -131,7 +146,7 @@ def input(cmd):
     clib.pro_input(_cmd)
 
 
-def sequence_exists(sequence):
+def sequence_exists(sequence_name):
     """
     Check if the sequence exists.
 
@@ -140,13 +155,13 @@ def sequence_exists(sequence):
     :rtype: bool
     """
     try:
-        _find_sequence(sequence)
+        _find_sequence(sequence_name)
         return True
     except ValueError:
         return False
 
 
-def get_twiss(sequence_name):
+def get_sequence_twiss_table_name(sequence_name):
     """
     Get the last calculated twiss table for the given sequence.
 
@@ -162,12 +177,12 @@ def get_twiss(sequence_name):
     return _str(seq.tw_table.name)
 
 
-def get_beam(sequence_name):
+def get_sequence_beam(sequence_name):
     """
     Get the beam associated to the sequence.
 
     :param str sequence_name: sequence name
-    :returns: beam properties as set with the BEAM command
+    :returns: beam properties as set with the BEAM command (and some more)
     :rtype: dict
     :raises ValueError: if the sequence name is invalid
     :raises RuntimeError: if the sequence has no associated beam
@@ -178,7 +193,7 @@ def get_beam(sequence_name):
     return _parse_command(seq.beam)
 
 
-def get_active_sequence():
+def get_active_sequence_name():
     """
     Get the name of the active sequence.
 
@@ -191,7 +206,7 @@ def get_active_sequence():
     return _str(clib.current_sequ.name)
 
 
-def get_sequences():
+def get_sequence_names():
     """
     Get a list of all sequences currently in memory.
 
@@ -204,7 +219,17 @@ def get_sequences():
             for i in xrange(seqs.curr)]
 
 
-def table_exists(table):
+def get_sequence_count():
+    """
+    Get the number of all sequences currently in memory.
+
+    :returns: number of sequences
+    :rtype: int
+    """
+    return clib.madextern_get_sequence_list().curr
+
+
+def table_exists(table_name):
     """
     Check if the table exists.
 
@@ -212,11 +237,11 @@ def table_exists(table):
     :returns: True if the table exists
     :rtype: bool
     """
-    cdef bytes _table = _cstr(table)
-    return bool(clib.table_exists(_table))
+    cdef bytes _table_name = _cstr(table_name)
+    return bool(clib.table_exists(_table_name))
 
 
-def get_table_list():
+def get_table_names():
     """
     Return list of all table names.
 
@@ -227,47 +252,73 @@ def get_table_list():
             for i in xrange(clib.table_register.names.curr)]
 
 
-def get_table_summary(table):
+def get_table_count():
+    """
+    Return number of existing tables.
+
+    :returns: number of tables in memory
+    :rtype: int
+    """
+    return clib.table_register.names.curr
+
+
+def get_table_summary(table_name):
     """
     Get table summary.
 
-    :param str table: table name
+    :param str table_name: table name
     :returns: mapping of {column: value}
     :rtype: dict
     """
-    cdef bytes _table = _cstr(table)
-    cdef clib.char_p_array* header = clib.table_get_header(_table)
+    cdef bytes _table_name = _cstr(table_name)
+    cdef clib.char_p_array* header = clib.table_get_header(_table_name)
     cdef int i
     if header is NULL:
-        raise ValueError("No summary for table: {!r}".format(table))
+        raise ValueError("No summary for table: {!r}".format(table_name))
     return dict([_split_header_line(header.p[i])
                  for i in xrange(header.curr)])
 
 
-def get_table_columns(table):
+def get_table_column_names(table_name):
     """
-    Get a list of all columns in the table.
+    Get a list of all column names in the table.
 
-    :param str table: table name
+    :param str table_name: table name
     :returns: column names
     :rtype: list
     :raises ValueError: if the table name is invalid
     """
-    cdef bytes _table = _cstr(table)
-    cdef int index = clib.name_list_pos(_table, clib.table_register.names)
+    cdef bytes _table_name = _cstr(table_name)
+    cdef int index = clib.name_list_pos(_table_name, clib.table_register.names)
     if index == -1:
-        raise ValueError("Invalid table: {!r}".format(table))
+        raise ValueError("Invalid table: {!r}".format(table_name))
     # NOTE: we can't enforce lower-case on the column names here, since this
     # breaks their usage with get_table_column():
     return _name_list(clib.table_register.tables[index].columns)
 
 
-def get_table_column(table, column):
+def get_table_column_count(table_name):
+    """
+    Get a number of columns in the table.
+
+    :param str table_name: table name
+    :returns: number of columns
+    :rtype: int
+    :raises ValueError: if the table name is invalid
+    """
+    cdef bytes _table_name = _cstr(table_name)
+    cdef int index = clib.name_list_pos(_table_name, clib.table_register.names)
+    if index == -1:
+        raise ValueError("Invalid table: {!r}".format(table_name))
+    return clib.table_register.tables[index].columns.curr
+
+
+def get_table_column(table_name, column_name):
     """
     Get data from the specified table.
 
-    :param str table: table name
-    :param str column: column name
+    :param str table_name: table name
+    :param str column_name: column name
     :returns: the data in the requested column
     :rtype: numpy.array
     :raises ValueError: if the column cannot be found in the table
@@ -279,8 +330,8 @@ def get_table_column(table, column):
     (pickle serialization effectively copies the data).
     """
     cdef char** char_tmp
-    cdef bytes _tab_name = _cstr(table)
-    cdef bytes _col_name = _cstr(column)
+    cdef bytes _tab_name = _cstr(table_name)
+    cdef bytes _col_name = _cstr(column_name)
     cdef clib.column_info info
     # The following snippet imitates the table_get_column function from the
     # C API of the MAD-X library. The replacement is needed for proper
@@ -289,11 +340,11 @@ def get_table_column(table, column):
     # able to safely revert the commit that introduced this snippet:
     cdef int tab_i = clib.name_list_pos(_tab_name, clib.table_register.names)
     if tab_i == -1:
-        raise ValueError("Invalid table: {!r}".format(table))
+        raise ValueError("Invalid table: {!r}".format(table_name))
     cdef clib.table* _table = clib.table_register.tables[tab_i]
     cdef int col_i = clib.name_list_pos(_col_name, _table.columns)
     if col_i == -1:
-        raise ValueError("Invalid column: {!r}".format(column))
+        raise ValueError("Invalid column: {!r}".format(column_name))
     info.length = _table.curr
     cdef int inform = _table.columns.inform[col_i]
     if inform == clib.PARAM_TYPE_INTEGER:
@@ -328,11 +379,11 @@ def get_table_column(table, column):
     # invalid:
     elif dtype == b'V':
         raise ValueError("Column {!r} is not in table {!r}."
-                         .format(column, table))
+                         .format(column_name, table_name))
     # unknown:
     else:
         raise RuntimeError("Unknown datatype {!r} in column {!r}."
-                           .format(_str(dtype), column))
+                           .format(_str(dtype), column_name))
 
 
 def get_element(sequence_name, element_index):
@@ -394,20 +445,6 @@ def get_element_index_by_position(sequence_name, position):
         if _position >= at and _position <= at+elem.length:
             return i
     raise ValueError("No element found at position: {0}".format(position))
-
-
-def get_element_list(sequence_name):
-    """
-    Return list of all elements in the original sequence.
-
-    :param str sequence_name: sequence name
-    :returns: all elements in the original sequence
-    :rtype: list
-    :raises ValueError: if the sequence is invalid.
-    """
-    cdef clib.sequence* seq = _find_sequence(sequence_name)
-    return [_get_node(seq.nodes.nodes[i], seq.ref_flag)
-            for i in xrange(seq.nodes.curr)]
 
 
 def get_element_count(sequence_name):
@@ -489,20 +526,6 @@ def get_expanded_element_index_by_position(sequence_name, position):
     raise ValueError("No element found at position: {0}".format(position))
 
 
-def get_expanded_element_list(sequence_name):
-    """
-    Return list of all elements in the expanded sequence.
-
-    :param str sequence_name: sequence name
-    :returns: all elements in the expanded sequence
-    :rtype: list
-    :raises ValueError: if the sequence is invalid.
-    """
-    cdef clib.sequence* seq = _find_sequence(sequence_name)
-    return [_get_node(seq.all_nodes[i], seq.ref_flag)
-            for i in xrange(seq.n_nodes)]
-
-
 def get_expanded_element_count(sequence_name):
     """
     Return number of elements in the expanded sequence.
@@ -516,7 +539,7 @@ def get_expanded_element_count(sequence_name):
     return seq.n_nodes
 
 
-def is_expanded(sequence_name):
+def is_sequence_expanded(sequence_name):
     """
     Check whether a sequence has already been expanded.
 
@@ -536,12 +559,11 @@ def evaluate(expression):
     :param str expression: symbolic expression to evaluate
     :returns: numeric value of the expression
     :rtype: float
-
-    NOTE: This function uses global variables as temporaries - which is in
-    general an *extremely* bad design choice. Even though MAD-X uses global
-    variables internally anyway, we should probably change this at some
-    time.
     """
+    # TODO: This function uses global variables as temporaries - which is in
+    # general an *extremely* bad design choice. Even though MAD-X uses global
+    # variables internally anyway, this is no excuse for cpymad to copy that
+    # behaviour.
     try:
         # handle instance of type Expression:
         expression = expression.expr
