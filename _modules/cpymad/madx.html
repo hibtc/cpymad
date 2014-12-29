@@ -78,6 +78,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">release</span> <span class="o">=</span> <span class="n">release</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">date</span> <span class="o">=</span> <span class="n">date</span>
 
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show nice version string to user.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&quot;MAD-X {} ({})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
+
+
 </div>
 <div class="viewcode-block" id="ChangeDirectory"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.ChangeDirectory">[docs]</a><span class="k">class</span> <span class="nc">ChangeDirectory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
@@ -157,8 +162,8 @@
 
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Log a single history line and flush to file immediately.&quot;&quot;&quot;</span>
-        <span class="n">log_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">command</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
-        <span class="n">log_file</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">command</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_file</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 
 </div>
 <div class="viewcode-block" id="Madx"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx">[docs]</a><span class="k">class</span> <span class="nc">Madx</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -232,8 +237,8 @@
     <span class="nd">@property</span>
 <div class="viewcode-block" id="Madx.version"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.version">[docs]</a>    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the MAD-X version.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">Version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">madx_release</span><span class="p">,</span>
-                       <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">madx_date</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">version</span><span class="p">(),</span>
+                       <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">release_date</span><span class="p">())</span>
 </div>
     <span class="nd">@property</span>
 <div class="viewcode-block" id="Madx.command"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.command">[docs]</a>    <span class="k">def</span> <span class="nf">command</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -285,7 +290,7 @@
 </div>
 <div class="viewcode-block" id="Madx.call"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.call">[docs]</a>    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">chdir</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        CALL a file in the MAD-X interpretor.</span>
+<span class="sd">        CALL a file in the MAD-X interpreter.</span>
 
 <span class="sd">        :param str filename: file name with path</span>
 <span class="sd">        :param bool chdir: temporarily change directory in MAD-X process</span>
@@ -446,11 +451,11 @@
         <span class="n">command</span><span class="p">(</span><span class="n">method</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">**</span><span class="n">method</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">command</span><span class="o">.</span><span class="n">endmatch</span><span class="p">(</span><span class="n">knobfile</span><span class="o">=</span><span class="n">knobfile</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">dict</span><span class="p">((</span><span class="n">knob</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">knob</span><span class="p">))</span> <span class="k">for</span> <span class="n">knob</span> <span class="ow">in</span> <span class="n">vary</span><span class="p">)</span>
-
-    <span class="c"># turn on/off verbose outupt..</span></div>
-    <span class="k">def</span> <span class="nf">verbose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">switch</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Madx.verbose"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.verbose">[docs]</a>    <span class="k">def</span> <span class="nf">verbose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">switch</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Turn verbose output on/off.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="n">echo</span><span class="o">=</span><span class="n">switch</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="n">switch</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">switch</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Madx.get_table"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.get_table">[docs]</a>    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the specified table from MAD-X.</span>

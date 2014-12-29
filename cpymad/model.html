@@ -105,6 +105,23 @@ have evolved to a more pythonic and simple API.</p>
 <span class="k">print</span><span class="p">(</span><span class="s">&quot;ex: {0}, ey: {1}&quot;</span><span class="p">,</span> <span class="n">twiss</span><span class="o">.</span><span class="n">summary</span><span class="p">[</span><span class="s">&#39;ex&#39;</span><span class="p">],</span> <span class="n">twiss</span><span class="o">.</span><span class="n">summary</span><span class="p">[</span><span class="s">&#39;ey&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
+<dl class="classmethod">
+<dt id="cpymad.model.Model.check_compatibility">
+<em class="property">classmethod </em><tt class="descname">check_compatibility</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="../_modules/cpymad/model.html#Model.check_compatibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Model.check_compatibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check a model definition for compatibility.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; a model definition to be tested</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises ValueError:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">if the model definition is incompatible</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="cpymad.model.Model.data">
 <tt class="descname">data</tt><a class="reference internal" href="../_modules/cpymad/model.html#Model.data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Model.data" title="Permalink to this definition">¶</a></dt>

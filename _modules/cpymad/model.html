@@ -125,6 +125,9 @@
 <span class="sd">        print(&quot;ex: {0}, ey: {1}&quot;, twiss.summary[&#39;ex&#39;], twiss.summary[&#39;ey&#39;])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c"># current version of model API</span>
+    <span class="n">API_VERSION</span> <span class="o">=</span> <span class="mi">0</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">madx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize a Model object.</span>
@@ -133,6 +136,7 @@
 <span class="sd">        :param ResourceProvider repo: resource repository</span>
 <span class="sd">        :param Madx madx: MAD-X instance to use</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_compatibility</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="c"># init instance variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_repo</span> <span class="o">=</span> <span class="n">repo</span>
@@ -143,6 +147,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">optics</span> <span class="o">=</span> <span class="n">_deserialize</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;optics&#39;</span><span class="p">],</span> <span class="n">Optic</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sequences</span> <span class="o">=</span> <span class="n">_deserialize</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;sequences&#39;</span><span class="p">],</span> <span class="n">Sequence</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
 
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Model.check_compatibility"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Model.check_compatibility">[docs]</a>    <span class="k">def</span> <span class="nf">check_compatibility</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check a model definition for compatibility.</span>
+
+<span class="sd">        :param dict data: a model definition to be tested</span>
+<span class="sd">        :raises ValueError: if the model definition is incompatible</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model_api</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;api_version&#39;</span><span class="p">,</span> <span class="s">&#39;undefined&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">model_api</span> <span class="o">!=</span> <span class="n">cls</span><span class="o">.</span><span class="n">API_VERSION</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s">&quot;Incompatible model API version: {!r},</span><span class="se">\n</span><span class="s">&quot;</span>
+                              <span class="s">&quot;              Required version: {!r}&quot;</span><span class="p">)</span>
+                             <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_api</span><span class="p">,</span> <span class="n">cls</span><span class="o">.</span><span class="n">API_VERSION</span><span class="p">))</span>
+</div>
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="Model.load"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Model.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span>
              <span class="n">name</span><span class="p">,</span>
