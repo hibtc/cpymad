@@ -606,6 +606,10 @@ class ElementList(collections.Sequence):
         if isinstance(index, (dict, basestring)):
             # allow element names to be passed for convenience:
             index = self.index(index)
+        # _get_element accepts indices in the range [0, len-1]. The following
+        # extends the accepted range to [-len, len+1], just like for lists:
+        if index < 0:
+            index += len(self)
         return self._get_element(self._sequence_name, index)
 
     def __len__(self):
