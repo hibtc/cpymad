@@ -4,6 +4,7 @@ Tests for the model.Model runtime hierarchy.
 """
 
 # tested classes
+from cpymad.madx import CommandLog
 from cpymad.model import Model
 from cpymad.resource.file import FileResource
 
@@ -20,11 +21,6 @@ __all__ = [
 ]
 
 
-def command_log(cmd):
-    sys.stdout.write("X:> " + cmd + "\n")
-    sys.stdout.flush()
-
-
 class TestModel(unittest.TestCase, _compat.TestCase):
 
     """
@@ -39,6 +35,7 @@ class TestModel(unittest.TestCase, _compat.TestCase):
 
     def load_model(self, path):
         """Load model with given name from specified path."""
+        command_log = CommandLog(sys.stdout, 'X:> ')
         model = Model.load(self.path, command_log=command_log)
         model.madx.command.option(twiss_print=False)
         return model

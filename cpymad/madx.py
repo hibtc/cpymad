@@ -106,13 +106,15 @@ class CommandLog(object):
         """Create CommandLog from filename (overwrite/create)."""
         return cls(open(filename, 'wt'))
 
-    def __init__(self, file):
+    def __init__(self, file, prefix='', suffix='\n'):
         """Create CommandLog from file instance."""
         self._file = file
+        self._prefix = prefix
+        self._suffix = suffix
 
     def __call__(self, command):
         """Log a single history line and flush to file immediately."""
-        self._file.write(command + '\n')
+        self._file.write(self._prefix + command + self._suffix)
         self._file.flush()
 
 
