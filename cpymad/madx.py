@@ -196,7 +196,7 @@ class Madx(object):
         Perform a single MAD-X command.
 
         :param str cmd: command name
-        :param **kwargs: command parameters
+        :param kwargs: command parameters
         """
         return MadxCommands(self.input)
 
@@ -286,7 +286,7 @@ class Madx(object):
         :param bool chrom: Also calculate chromatic functions (slower)
         :param kwargs: further keyword arguments for the MAD-X command
 
-        Note, that the kwargs overwrite any arguments in twiss_init.
+        Note that the kwargs overwrite any arguments in twiss_init.
         """
         self.select('twiss', columns=columns, pattern=pattern)
         sequence = self._use(sequence)
@@ -448,7 +448,7 @@ class Madx(object):
         """
         Evaluates an expression and returns the result as double.
 
-        :param string cmd: expression to evaluate.
+        :param str cmd: expression to evaluate.
         :returns: numeric value of the expression
         :rtype: float
         """
