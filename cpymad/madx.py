@@ -186,6 +186,15 @@ class Madx(object):
         self._command_log = command_log
         self._error_log = error_log
 
+    def __bool__(self):
+        """Check if MAD-X is up and running."""
+        try:
+            return self._libmadx.is_started()
+        except (_rpc.RemoteProcessClosed, _rpc.RemoteProcessCrashed):
+            return False
+
+    __nonzero__ = __bool__      # alias for python2 compatibility
+
     @property
     def version(self):
         """Get the MAD-X version."""
