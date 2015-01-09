@@ -82,7 +82,7 @@ extension_args = dict(
     include_dirs=include_dirs,
     library_dirs=library_dirs,
     runtime_library_dirs=library_dirs,
-    extra_compile_args=['-std=c99'],
+    extra_compile_args=['-std=gnu99'],
 )
 
 # Compose a long description for PyPI:
