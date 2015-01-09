@@ -56,7 +56,13 @@ def _nop(x):
     return x
 
 
+class RemoteProcessClosed(RuntimeError):
+    """The MAD-X remote process has already been closed."""
+    pass
+
+
 class RemoteProcessCrashed(RuntimeError):
+    """The MAD-X remote process has crashed."""
     pass
 
 
@@ -265,10 +271,20 @@ class Client(object):
             pass
         self._conn.close()
 
+    @property
+    def closed(self):
+        """Check if connection is closed."""
+        return self._conn.closed
+
     def _request(self, kind, *args):
         """Communicate with the remote service synchronously."""
         try:
             self._conn.send((kind, args))
+        except ValueError:
+            if self.closed:
+                raise RemoteProcessClosed()
+            raise
+        try:
             response = self._conn.recv()
         except EOFError:
             raise RemoteProcessCrashed()
@@ -349,7 +365,6 @@ class Service(object):
         Dispatch one RPC request.
 
         :returns: ``True`` if the service should continue running.
-
         """
         kind, args = request
         handler = getattr(self, '_dispatch_%s' % (kind,))
