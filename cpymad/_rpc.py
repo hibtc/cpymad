@@ -284,6 +284,8 @@ class Client(object):
             if self.closed:
                 raise RemoteProcessClosed()
             raise
+        except IOError:
+            raise RemoteProcessCrashed()
         try:
             response = self._conn.recv()
         except EOFError:
