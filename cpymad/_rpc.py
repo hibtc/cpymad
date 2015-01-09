@@ -231,7 +231,7 @@ class Client(object):
         """Close the client and the associated connection with it."""
         try:
             self.close()
-        except IOError:
+        except (RemoteProcessCrashed, RemoteProcessClosed):
             # catch ugly follow-up warnings after a MAD-X process has crashed
             pass
 
@@ -408,11 +408,11 @@ class LibMadxClient(Client):
     """
 
     def close(self):
-        """Finalize libmadx if it was started."""
+        """Finalize libmadx if it is running."""
         try:
             if self.libmadx.is_started():
                 self.libmadx.finish()
-        except ValueError:
+        except (RemoteProcessClosed, RemoteProcessCrashed):
             pass
         super(LibMadxClient, self).close()
 
