@@ -1,6 +1,21 @@
 Changelog
 ~~~~~~~~~
 
+0.10.0 Fork
+===========
+
+This is the first independent version released for the `HIT cpymad fork`_.
+The changes on the public API are so heavy, that this is basically a new
+library.
+
+- rename package from ``cern.cpymad`` to ``cpymad``
+- remove LHC models from repository
+- redesign API to make more use of OOP (no stable API yet!)
+- removed some obsolete / unused modules
+
+.. _HIT cpymad fork: https://github.com/hibtc/cpymad
+
+
 0.9
 ===
 Date: 17.11.2014
