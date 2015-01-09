@@ -1,8 +1,19 @@
 Changelog
 ~~~~~~~~~
 
+0.10.1
+======
+Date: 09.01.2015
+
+- convert IOError to RemoteProcessCrashed, which can occur on transmission
+  if the remote process is already down
+- convert ValueError to RemoteProcessClosed, which can occur on transmission
+  if the remote process was already closed
+
+
 0.10.0 Fork
 ===========
+Date: 09.01.2015
 
 This is the first independent version released for the `HIT cpymad fork`_.
 The changes on the public API are so heavy, that this is basically a new
