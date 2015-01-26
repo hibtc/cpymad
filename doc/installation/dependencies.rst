@@ -12,7 +12,7 @@ Dependencies
 To build MAD-X and CPyMAD from source you will need
 
 - CMake_
-- python>=2.6
+- python>=2.7
 - C / Fortran compilers.
 
 Furthermore, CPyMAD depends on the following python packages:
