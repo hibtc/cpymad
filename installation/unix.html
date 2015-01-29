@@ -25,8 +25,8 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="CPyMAD 0.10.0 documentation" href="../index.html" />
     <link rel="up" title="Installation Instructions" href="index.html" />
-    <link rel="next" title="Windows" href="windows.html" />
-    <link rel="prev" title="Dependencies" href="dependencies.html" /> 
+    <link rel="next" title="Windows" href="windows/index.html" />
+    <link rel="prev" title="Installation Instructions" href="index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,10 +39,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="windows.html" title="Windows"
+          <a href="windows/index.html" title="Windows"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="dependencies.html" title="Dependencies"
+          <a href="index.html" title="Installation Instructions"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Installation Instructions</a> &raquo;</li> 
@@ -59,9 +59,24 @@
 <p>On Unix-like system building CPyMAD from source is most convenient and
 should be unproblematic.</p>
 <div class="section" id="install-dependencies">
-<h2>Install dependencies<a class="headerlink" href="#install-dependencies" title="Permalink to this headline">¶</a></h2>
-<p>On many distributions all <a class="reference internal" href="dependencies.html#dependencies"><em>Dependencies</em></a> can be installed from the
-official repositories.</p>
+<span id="dependencies"></span><h2>Install dependencies<a class="headerlink" href="#install-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>On many linux distributions most or all of the following dependencies will
+be available in the official repositories. Use these as the preferred
+install method.</p>
+<p>To build MAD-X and CPyMAD from source you will need</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.cmake.org/">CMake</a></li>
+<li>Python&gt;=2.7</li>
+<li>C / Fortran compilers</li>
+</ul>
+<p>Furthermore, CPyMAD depends on the following python packages:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://pypi.python.org/pypi/setuptools">setuptools</a></li>
+<li><a class="reference external" href="http://cython.org/">Cython</a></li>
+<li><a class="reference external" href="http://www.numpy.org/">NumPy</a></li>
+<li><a class="reference external" href="https://pypi.python.org/pypi/PyYAML">PyYAML</a></li>
+</ul>
+<p>The python packages can be installed using <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a>.</p>
 </div>
 <div class="section" id="install-libmadx">
 <h2>Install libmadx<a class="headerlink" href="#install-libmadx" title="Permalink to this headline">¶</a></h2>
@@ -87,7 +102,7 @@ installation prefix.</p>
 <p>If you run into problems with this, you should manually download and
 install the <a class="reference external" href="https://github.com/hibtc/cpymad/zipball/master">CPyMad source</a> to see in which step the problem occurs:</p>
 <div class="highlight-bash"><div class="highlight"><pre>git clone git://github.com/hibtc/cpymad
-<span class="nb">cd </span>pymad
+<span class="nb">cd </span>cpymad
 python setup.py build
 python setup.py install
 </pre></div>
@@ -114,10 +129,10 @@ python setup.py install
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="dependencies.html"
-                        title="previous chapter">Dependencies</a></p>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Installation Instructions</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="windows.html"
+  <p class="topless"><a href="windows/index.html"
                         title="next chapter">Windows</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
@@ -151,10 +166,10 @@ python setup.py install
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="windows.html" title="Windows"
+          <a href="windows/index.html" title="Windows"
              >next</a> |</li>
         <li class="right" >
-          <a href="dependencies.html" title="Dependencies"
+          <a href="index.html" title="Installation Instructions"
              >previous</a> |</li>
         <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
           <li><a href="index.html" >Installation Instructions</a> &raquo;</li> 

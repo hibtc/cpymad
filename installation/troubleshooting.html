@@ -26,7 +26,7 @@
     <link rel="top" title="CPyMAD 0.10.0 documentation" href="../index.html" />
     <link rel="up" title="Installation Instructions" href="index.html" />
     <link rel="next" title="API Reference" href="../cpymad/index.html" />
-    <link rel="prev" title="Windows" href="windows.html" /> 
+    <link rel="prev" title="Other distributions" href="windows/other.html" /> 
   </head>
   <body>
     <div class="related">
@@ -42,7 +42,7 @@
           <a href="../cpymad/index.html" title="API Reference"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="windows.html" title="Windows"
+          <a href="windows/other.html" title="Other distributions"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Installation Instructions</a> &raquo;</li> 
@@ -116,38 +116,6 @@ this as <tt class="file docutils literal"><span class="pre">setup.cfg</span></tt
 <p class="last"><a class="reference external" href="http://stackoverflow.com/q/2817869/650222">http://stackoverflow.com/q/2817869/650222</a></p>
 </div>
 </div>
-<div class="section" id="typeerror-nonetype-object-has-no-attribute-getitem">
-<h2>TypeError: &#8216;NoneType&#8217; object has no attribute &#8216;__getitem__&#8217;<a class="headerlink" href="#typeerror-nonetype-object-has-no-attribute-getitem" title="Permalink to this headline">¶</a></h2>
-<p>Message:</p>
-<div class="highlight-python"><div class="highlight"><pre>Traceback (most recent call last):
-  ...
-  File &quot;C:\Python27\lib\distutils\unixccompiler.py&quot;, line 227, in runtime_library_dir_option
-    compiler = os.path.basename(sysconfig.get_config_var(&quot;CC&quot;))
-  File &quot;C:\Python27\lib\ntpath.py&quot;, line 198, in basename
-    return split(p)[1]
-  File &quot;C:\Python27\lib\ntpath.py&quot;, line 170, in split
-    d, p = splitdrive(p)
-  File &quot;C:\Python27\lib\ntpath.py&quot;, line 125, in splitdrive
-    if p[1:2] == &#39;:&#39;:
-TypeError: &#39;NoneType&#39; object has no attribute &#39;__getitem__&#39;
-</pre></div>
-</div>
-<p>Solution:
-Add the following line to <tt class="file docutils literal"><span class="pre">C:\Python27\Lib\distutils\sysconfig.py</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre> <span class="k">def</span> <span class="nf">_init_nt</span><span class="p">():</span>
-     <span class="sd">&quot;&quot;&quot;Initialize the module as appropriate for NT&quot;&quot;&quot;</span>
-     <span class="n">g</span> <span class="o">=</span> <span class="p">{}</span>
-     <span class="o">...</span>
-<span class="hll">     <span class="n">g</span><span class="p">[</span><span class="s">&#39;CC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;gcc&#39;</span>
-</span>     <span class="o">...</span>
-     <span class="n">_config_vars</span> <span class="o">=</span> <span class="n">g</span>
-</pre></div>
-</div>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference external" href="http://bugs.python.org/issue2437">http://bugs.python.org/issue2437</a></p>
-</div>
-</div>
 <div class="section" id="unrecognized-command-line-option-mno-cygwin">
 <h2>unrecognized command line option &#8216;-mno-cygwin&#8217;<a class="headerlink" href="#unrecognized-command-line-option-mno-cygwin" title="Permalink to this headline">¶</a></h2>
 <p>Message:</p>
@@ -198,15 +166,14 @@ distutils, for example:</p>
 <li><a class="reference internal" href="#importerror-libmadx-so">ImportError: libmadx.so</a></li>
 <li><a class="reference internal" href="#oserror-missing-source-file">OSError: Missing source file</a></li>
 <li><a class="reference internal" href="#unable-to-find-vcvarsall-bat">Unable to find vcvarsall.bat</a></li>
-<li><a class="reference internal" href="#typeerror-nonetype-object-has-no-attribute-getitem">TypeError: &#8216;NoneType&#8217; object has no attribute &#8216;__getitem__&#8217;</a></li>
 <li><a class="reference internal" href="#unrecognized-command-line-option-mno-cygwin">unrecognized command line option &#8216;-mno-cygwin&#8217;</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="windows.html"
-                        title="previous chapter">Windows</a></p>
+  <p class="topless"><a href="windows/other.html"
+                        title="previous chapter">Other distributions</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../cpymad/index.html"
                         title="next chapter">API Reference</a></p>
@@ -245,7 +212,7 @@ distutils, for example:</p>
           <a href="../cpymad/index.html" title="API Reference"
              >next</a> |</li>
         <li class="right" >
-          <a href="windows.html" title="Windows"
+          <a href="windows/other.html" title="Other distributions"
              >previous</a> |</li>
         <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
           <li><a href="index.html" >Installation Instructions</a> &raquo;</li> 

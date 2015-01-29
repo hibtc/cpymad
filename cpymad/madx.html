@@ -66,12 +66,41 @@
 
 <dl class="class">
 <dt id="cpymad.madx.CommandLog">
-<em class="property">class </em><tt class="descclassname">cpymad.madx.</tt><tt class="descname">CommandLog</tt><big>(</big><em>file</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#CommandLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.CommandLog" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">cpymad.madx.</tt><tt class="descname">CommandLog</tt><big>(</big><em>file</em>, <em>prefix=''</em>, <em>suffix='n'</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#CommandLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.CommandLog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Log MAD-X command history to a file text.</p>
 <dl class="classmethod">
 <dt id="cpymad.madx.CommandLog.create">
 <em class="property">classmethod </em><tt class="descname">create</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#CommandLog.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.CommandLog.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create CommandLog from filename (overwrite/create).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cpymad.madx.ElementList">
+<em class="property">class </em><tt class="descclassname">cpymad.madx.</tt><tt class="descname">ElementList</tt><big>(</big><em>sequence_name</em>, <em>libmadx</em>, <em>expanded</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#ElementList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.ElementList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Immutable list of beam line elements.</p>
+<p>Each element is a dictionary containing its properties.</p>
+<dl class="method">
+<dt id="cpymad.madx.ElementList.at">
+<tt class="descname">at</tt><big>(</big><em>pos</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#ElementList.at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.ElementList.at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the element at specified S position.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.ElementList.index">
+<tt class="descname">index</tt><big>(</big><em>element</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#ElementList.index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.ElementList.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find index of element with specified name.</p>
+<p>Can be invoked with either the element dict or the element name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Raises ValueError:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -114,7 +143,7 @@ object to the constructor. This object must expose an interface similar to
 <dl class="attribute">
 <dt id="cpymad.madx.Madx.active_sequence">
 <tt class="descname">active_sequence</tt><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.active_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.active_sequence" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get/set the name of the active sequence.</p>
+<dd><p>The active <a class="reference internal" href="#cpymad.madx.Sequence" title="cpymad.madx.Sequence"><tt class="xref py py-class docutils literal"><span class="pre">Sequence</span></tt></a> (may be None).</p>
 </dd></dl>
 
 <dl class="method">
@@ -163,8 +192,7 @@ object to the constructor. This object must expose an interface similar to
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>cmd</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; command name</li>
-<li><strong>**kwargs</strong> &#8211; <p>command parameters</p>
-</li>
+<li><strong>kwargs</strong> &#8211; command parameters</li>
 </ul>
 </td>
 </tr>
@@ -180,83 +208,11 @@ object to the constructor. This object must expose an interface similar to
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; expression to evaluate.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; expression to evaluate.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">numeric value of the expression</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cpymad.madx.Madx.get_active_sequence">
-<tt class="descname">get_active_sequence</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.get_active_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.get_active_sequence" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a handle to the active sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a proxy object for the sequence</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Sequence</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">Raises RuntimeError:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">if there is no active sequence</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cpymad.madx.Madx.get_sequence">
-<tt class="descname">get_sequence</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.get_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.get_sequence" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a handle to the specified sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; sequence name</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a proxy object for the sequence</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Sequence</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">Raises ValueError:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body">if a sequence name is invalid</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cpymad.madx.Madx.get_sequence_names">
-<tt class="descname">get_sequence_names</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.get_sequence_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.get_sequence_names" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return list of all sequences currently in memory.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of all sequences names</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list(str)</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cpymad.madx.Madx.get_sequences">
-<tt class="descname">get_sequences</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.get_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.get_sequences" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return list of all sequences currently in memory.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of sequence proxy objects</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list(Sequence)</td>
 </tr>
 </tbody>
 </table>
@@ -275,20 +231,6 @@ object to the constructor. This object must expose an interface similar to
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a proxy for the table data</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">TableProxy</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cpymad.madx.Madx.has_sequence">
-<tt class="descname">has_sequence</tt><big>(</big><em>sequence</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.has_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.has_sequence" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if model has the sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; sequence name to be checked.</td>
 </tr>
 </tbody>
 </table>
@@ -379,6 +321,12 @@ object to the constructor. This object must expose an interface similar to
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="cpymad.madx.Madx.sequences">
+<tt class="descname">sequences</tt><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.sequences" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dict like view of all sequences in memory.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="cpymad.madx.Madx.survey">
 <tt class="descname">survey</tt><big>(</big><em>sequence=None, columns=None, pattern=['full'], **kwargs</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.survey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.survey" title="Permalink to this definition">¶</a></dt>
@@ -397,6 +345,12 @@ object to the constructor. This object must expose an interface similar to
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cpymad.madx.Madx.tables">
+<tt class="descname">tables</tt><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dict like view of all tables in memory.</p>
 </dd></dl>
 
 <dl class="method">
@@ -419,7 +373,7 @@ object to the constructor. This object must expose an interface similar to
 </tr>
 </tbody>
 </table>
-<p>Note, that the kwargs overwrite any arguments in twiss_init.</p>
+<p>Note that the kwargs overwrite any arguments in twiss_init.</p>
 </dd></dl>
 
 <dl class="method">
@@ -488,38 +442,16 @@ object to the constructor. This object must expose an interface similar to
 <dd><p>Get the beam dictionary associated to the sequence.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="cpymad.madx.Sequence.get_elements">
-<tt class="descname">get_elements</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Sequence.get_elements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Sequence.get_elements" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get list of all elements in the original sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of elements in the original (unexpanded) sequence</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list(dict)</td>
-</tr>
-</tbody>
-</table>
+<dl class="attribute">
+<dt id="cpymad.madx.Sequence.elements">
+<tt class="descname">elements</tt><a class="reference internal" href="../_modules/cpymad/madx.html#Sequence.elements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Sequence.elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of elements.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="cpymad.madx.Sequence.get_expanded_elements">
-<tt class="descname">get_expanded_elements</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Sequence.get_expanded_elements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Sequence.get_expanded_elements" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get list of all elements in the expanded sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of elements in the expanded (unexpanded) sequence</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list(dict)</td>
-</tr>
-</tbody>
-</table>
-<p>NOTE: this may very well return an empty list, if the sequence has
-not been expanded (used) yet.</p>
+<dl class="attribute">
+<dt id="cpymad.madx.Sequence.expanded_elements">
+<tt class="descname">expanded_elements</tt><a class="reference internal" href="../_modules/cpymad/madx.html#Sequence.expanded_elements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Sequence.expanded_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of elements in expanded sequence.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -529,17 +461,29 @@ not been expanded (used) yet.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="cpymad.madx.Sequence.twiss">
-<tt class="descname">twiss</tt><a class="reference internal" href="../_modules/cpymad/madx.html#Sequence.twiss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Sequence.twiss" title="Permalink to this definition">¶</a></dt>
+<dt id="cpymad.madx.Sequence.twiss_table">
+<tt class="descname">twiss_table</tt><a class="reference internal" href="../_modules/cpymad/madx.html#Sequence.twiss_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Sequence.twiss_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the TWISS results from the last calculation.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="cpymad.madx.Sequence.twissname">
-<tt class="descname">twissname</tt><a class="reference internal" href="../_modules/cpymad/madx.html#Sequence.twissname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Sequence.twissname" title="Permalink to this definition">¶</a></dt>
+<dt id="cpymad.madx.Sequence.twiss_table_name">
+<tt class="descname">twiss_table_name</tt><a class="reference internal" href="../_modules/cpymad/madx.html#Sequence.twiss_table_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Sequence.twiss_table_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the name of the table with the TWISS results.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="class">
+<dt id="cpymad.madx.SequenceMap">
+<em class="property">class </em><tt class="descclassname">cpymad.madx.</tt><tt class="descname">SequenceMap</tt><big>(</big><em>libmadx</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#SequenceMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.SequenceMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dict like view of all sequences (<a class="reference internal" href="#cpymad.madx.Sequence" title="cpymad.madx.Sequence"><tt class="xref py py-class docutils literal"><span class="pre">Sequence</span></tt></a>) in memory.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cpymad.madx.TableMap">
+<em class="property">class </em><tt class="descclassname">cpymad.madx.</tt><tt class="descname">TableMap</tt><big>(</big><em>libmadx</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#TableMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.TableMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dict like view of all tables (<a class="reference internal" href="#cpymad.madx.TableProxy" title="cpymad.madx.TableProxy"><tt class="xref py py-class docutils literal"><span class="pre">TableProxy</span></tt></a>) in memory.</p>
 </dd></dl>
 
 <dl class="class">

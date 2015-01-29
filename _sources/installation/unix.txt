@@ -5,11 +5,36 @@ On Unix-like system building CPyMAD from source is most convenient and
 should be unproblematic.
 
 
+.. _dependencies:
+
 Install dependencies
 ~~~~~~~~~~~~~~~~~~~~
 
-On many distributions all :ref:`dependencies` can be installed from the
-official repositories.
+On many linux distributions most or all of the following dependencies will
+be available in the official repositories. Use these as the preferred
+install method.
+
+To build MAD-X and CPyMAD from source you will need
+
+- CMake_
+- Python>=2.7
+- C / Fortran compilers
+
+Furthermore, CPyMAD depends on the following python packages:
+
+- setuptools_
+- Cython_
+- NumPy_
+- PyYAML_
+
+The python packages can be installed using pip_.
+
+.. _CMake: http://www.cmake.org/
+.. _setuptools: https://pypi.python.org/pypi/setuptools
+.. _Cython: http://cython.org/
+.. _NumPy: http://www.numpy.org/
+.. _PyYAML: https://pypi.python.org/pypi/PyYAML
+.. _pip: https://pypi.python.org/pypi/pip
 
 
 Install libmadx
@@ -48,7 +73,7 @@ install the `CPyMad source`_ to see in which step the problem occurs:
 .. code-block:: bash
 
     git clone git://github.com/hibtc/cpymad
-    cd pymad
+    cd cpymad
     python setup.py build
     python setup.py install
 

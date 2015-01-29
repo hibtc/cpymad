@@ -6,46 +6,47 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Windows &mdash; CPyMAD 0.10.0 documentation</title>
+    <title>Python(x,y) &mdash; CPyMAD 0.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
+        URL_ROOT:    '../../',
         VERSION:     '0.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="CPyMAD 0.10.0 documentation" href="../index.html" />
-    <link rel="up" title="Installation Instructions" href="index.html" />
-    <link rel="next" title="Troubleshooting" href="troubleshooting.html" />
-    <link rel="prev" title="Unix" href="unix.html" /> 
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="CPyMAD 0.10.0 documentation" href="../../index.html" />
+    <link rel="up" title="Windows" href="index.html" />
+    <link rel="next" title="WinPython" href="winpython.html" />
+    <link rel="prev" title="Windows" href="index.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
+          <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
+          <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="troubleshooting.html" title="Troubleshooting"
+          <a href="winpython.html" title="WinPython"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="unix.html" title="Unix"
+          <a href="index.html" title="Windows"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Installation Instructions</a> &raquo;</li> 
+        <li><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Installation Instructions</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Windows</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -54,37 +55,14 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="windows">
-<h1>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="pre-built-binaries">
-<h2>Pre-built binaries<a class="headerlink" href="#pre-built-binaries" title="Permalink to this headline">¶</a></h2>
-<p>On a windows platform, you are likely to run into more problems than on
-linux when building from source. Therefore, we will try to provide <a class="reference external" href="https://pypi.python.org/pypi/cpymad/">built
-versions</a> for some platforms. If your platform is supported, you can just
-run</p>
-<div class="highlight-bat"><div class="highlight"><pre>pip install cpymad
-</pre></div>
-</div>
-<p>from your terminal and that&#8217;s it. If this fails, you will need to build
-from source. The following guide assumes that you use <em>MinGW</em> as compiler
-suite.</p>
-</div>
+  <div class="section" id="python-x-y">
+<h1>Python(x,y)<a class="headerlink" href="#python-x-y" title="Permalink to this headline">¶</a></h1>
+<p>I recommend <a class="reference external" href="https://code.google.com/p/pythonxy/">Python(x,y)</a> if you want a single ready-to-use python
+installation with a large variety of packages and features. Make sure <em>Cython</em>
+and <em>MinGW</em> are marked for installation.</p>
 <div class="section" id="install-dependencies">
 <h2>Install dependencies<a class="headerlink" href="#install-dependencies" title="Permalink to this headline">¶</a></h2>
-<p>I recommend to use <a class="reference external" href="https://code.google.com/p/pythonxy/">Python(x,y)</a>. This is a python distribution which
-includes all <a class="reference internal" href="dependencies.html#dependencies"><em>Dependencies</em></a> except for <em>CMake</em>. Make sure <em>Cython</em> and
-<em>MinGW</em> are marked for installation.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>If you want to use another python installation things will get more
-complicated. I recommend the following resources:</p>
-<ul class="last simple">
-<li><a class="reference external" href="http://www.mingw.org/">MinGW</a>, since you need a compiler to build <em>libmadx</em> and <em>CPyMAD</em></li>
-<li><a class="reference external" href="http://www.lfd.uci.edu/~gohlke/pythonlibs/">Unofficial Windows Binaries for Python Extension Packages</a></li>
-<li><a class="reference external" href="http://eli.thegreenplace.net/2008/06/28/compiling-python-extensions-with-distutils-and-mingw/">Compiling Python extensions with distutils and MinGW</a></li>
-</ul>
-</div>
-<p>Now install <a class="reference external" href="http://www.cmake.org/">CMake</a>. In the <em>Install options</em> dialog choose to <em>Add CMake
+<p>First install <a class="reference external" href="http://www.cmake.org/">CMake</a>. In the <em>Install options</em> dialog choose to <em>Add CMake
 to the system PATH for all/current user</em> according to your liking.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -97,7 +75,7 @@ you will need to manually extend your PATH later on in the terminal:</p>
 </div>
 <div class="section" id="build-libmadx">
 <h2>Build libmadx<a class="headerlink" href="#build-libmadx" title="Permalink to this headline">¶</a></h2>
-<p>Download and extract the <a class="reference external" href="http://svnweb.cern.ch/world/wsvn/madx/tags/">MAD-X source</a> from SVN.</p>
+<p>Download and extract the latest <a class="reference external" href="http://svnweb.cern.ch/world/wsvn/madx/tags/">MAD-X source</a> tag from SVN.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">If the latest release contains bugs that have been fixed in the
@@ -125,7 +103,7 @@ make install
 </pre></div>
 </div>
 <p>This will install the headers, binaries and library files to the
-<tt class="file docutils literal"><span class="pre">madX/install</span></tt> subfolder.</p>
+<tt class="file docutils literal"><span class="pre">madX\install</span></tt> subfolder.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>You can also use the regular console <tt class="docutils literal"><span class="pre">cmd.exe</span></tt>. In this case extend
@@ -162,10 +140,9 @@ as specified by <tt class="docutils literal"><span class="pre">CMAKE_INSTALL_PRE
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Windows</a><ul>
-<li><a class="reference internal" href="#pre-built-binaries">Pre-built binaries</a></li>
+<li><a class="reference internal" href="#">Python(x,y)</a><ul>
 <li><a class="reference internal" href="#install-dependencies">Install dependencies</a></li>
 <li><a class="reference internal" href="#build-libmadx">Build libmadx</a></li>
 <li><a class="reference internal" href="#build-cpymad">Build CPyMAD</a></li>
@@ -174,19 +151,19 @@ as specified by <tt class="docutils literal"><span class="pre">CMAKE_INSTALL_PRE
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="unix.html"
-                        title="previous chapter">Unix</a></p>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Windows</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="troubleshooting.html"
-                        title="next chapter">Troubleshooting</a></p>
+  <p class="topless"><a href="winpython.html"
+                        title="next chapter">WinPython</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/installation/windows.txt"
+    <li><a href="../../_sources/installation/windows/pythonxy.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
+    <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -205,19 +182,20 @@ as specified by <tt class="docutils literal"><span class="pre">CMAKE_INSTALL_PRE
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
+          <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
+          <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="troubleshooting.html" title="Troubleshooting"
+          <a href="winpython.html" title="WinPython"
              >next</a> |</li>
         <li class="right" >
-          <a href="unix.html" title="Unix"
+          <a href="index.html" title="Windows"
              >previous</a> |</li>
-        <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Installation Instructions</a> &raquo;</li> 
+        <li><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Installation Instructions</a> &raquo;</li>
+          <li><a href="index.html" >Windows</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
