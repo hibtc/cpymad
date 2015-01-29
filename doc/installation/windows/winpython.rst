@@ -48,10 +48,26 @@ follows:
 .. code-block:: bat
 
     python setup.py build --compiler=mingw32 --madxdir=<madx-install-path>
-    python setup.py install
 
-If the build step fails with linker error, try adding ``'quadmath'`` to the
-``libaries`` variable in :file:`setup.py`.
+You may encounter linker errors like the following::
+
+    .../libgfortran.a(write.o):(.text$write_float+0xbb): undefined reference to `signbitq'
+    .../lib/gcc/i686-w64-mingw32/4.9.2/libgfortran.a(write.o):(.text$write_float+0xe7): undefined reference to `finiteq'
+
+If so, try the following instead:
+
+.. code-block:: bat
+
+    python setup.py build_ext -c mingw32 --madxdir=<...> -lquadmath
+    python setup.py build
+
+Now that the package is built, you can create binary distributions for
+deployment and/or install the package directly on your machine:
+
+.. code-block:: bat
+
+    python setup.py bdist_egg bdist_wheel bdist_wininst
+    python setup.py install
 
 
 .. _WinPython: http://winpython.sourceforge.net/
