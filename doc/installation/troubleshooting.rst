@@ -77,40 +77,6 @@ this as :file:`setup.cfg` in the current directory.
 .. seealso:: http://stackoverflow.com/q/2817869/650222
 
 
-TypeError: 'NoneType' object has no attribute '__getitem__'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Message::
-
-    Traceback (most recent call last):
-      ...
-      File "C:\Python27\lib\distutils\unixccompiler.py", line 227, in runtime_library_dir_option
-        compiler = os.path.basename(sysconfig.get_config_var("CC"))
-      File "C:\Python27\lib\ntpath.py", line 198, in basename
-        return split(p)[1]
-      File "C:\Python27\lib\ntpath.py", line 170, in split
-        d, p = splitdrive(p)
-      File "C:\Python27\lib\ntpath.py", line 125, in splitdrive
-        if p[1:2] == ':':
-    TypeError: 'NoneType' object has no attribute '__getitem__'
-
-Solution:
-Add the following line to :file:`C:\\Python27\\Lib\\distutils\\sysconfig.py`:
-
-.. code-block:: python
-   :emphasize-lines: 5
-
-    def _init_nt():
-        """Initialize the module as appropriate for NT"""
-        g = {}
-        ...
-        g['CC'] = 'gcc'
-        ...
-        _config_vars = g
-
-.. seealso:: http://bugs.python.org/issue2437
-
-
 unrecognized command line option '-mno-cygwin'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

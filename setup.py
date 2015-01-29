@@ -23,6 +23,14 @@ import sys
 from os import path
 
 
+# When using windows and MinGW, in distutils.sysconfig the compiler (CC) is
+# not initialized at all, see http://bugs.python.org/issue2437. The following
+# manual fix for this problem may cause other issues, but it's a good shot:
+from distutils import sysconfig
+if sysconfig.get_config_var('CC') is None:
+    sysconfig._config_vars['CC'] = 'gcc'
+
+
 # setuptools.Extension automatically converts all '.pyx' extensions to '.c'
 # extensions if detecting that neither Cython nor Pyrex is available. Early
 # versions of setuptools don't know about Cython. Since we don't use Pyrex
