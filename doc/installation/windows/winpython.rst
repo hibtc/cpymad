@@ -47,7 +47,7 @@ follows:
 
 .. code-block:: bat
 
-    python setup.py build --compiler=mingw32 --madxdir=<madx-install-path>
+    python setup.py build --madxdir=<madx-install-path>
 
 You may encounter linker errors like the following::
 
@@ -58,19 +58,27 @@ If so, try the following instead:
 
 .. code-block:: bat
 
-    python setup.py build_ext -c mingw32 --madxdir=<...> -lquadmath
+    python setup.py build_ext --madxdir=<...> -lquadmath
     python setup.py build
 
-Now that the package is built, you can create binary distributions for
-deployment and/or install the package directly on your machine:
+From the built package you can create a so called wheel_, which is
+essentially a zip archive containing all the files ready for installation:
 
 .. code-block:: bat
 
-    python setup.py bdist_egg bdist_wheel bdist_wininst
-    python setup.py install
+    python setup.py bdist_wheel
+
+This will create a ``.whl`` file named after the package and its target
+platform. This file can now be used for installation in your favorite
+python distribution, like so:
+
+.. code-block:: bat
+
+    pip install dist\cpymad-0.10.1-cp27-none-win32.whl
 
 
 .. _WinPython: http://winpython.sourceforge.net/
 .. _CMake: http://www.cmake.org/
 .. _MAD-X source: http://svnweb.cern.ch/world/wsvn/madx/tags/
 .. _CPyMAD source: https://github.com/pymad/cpymad/zipball/master
+.. _wheel: https://wheel.readthedocs.org/en/latest/
