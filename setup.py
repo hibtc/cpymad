@@ -72,7 +72,7 @@ for arg in sys.argv[:]:
 
 # required libraries
 if get_platform() == "win32" or get_platform() == "win-amd64":
-    libraries = ['madx', 'stdc++', 'ptc', 'gfortran', 'msvcrt']
+    libraries = ['madx', 'stdc++', 'ptc', 'gfortran']
 else:
     libraries = ['madx', 'stdc++', 'c']
 

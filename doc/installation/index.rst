@@ -13,9 +13,6 @@ Depending on your platform, this can be more or less complicated.
 .. toctree::
    :maxdepth: 2
 
-   dependencies
    unix
-   windows
+   windows/index
    troubleshooting
-
-
