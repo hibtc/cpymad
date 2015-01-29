@@ -1,12 +1,13 @@
 Other distributions
 ===================
 
-If you want to use another python installation things will get more
-complicated. I recommend the following resources:
+If you want to build on another python installation things may get more
+complicated. You may want to have a look at the following resources:
 
-* MinGW_, since you need a compiler to build *libmadx* and *CPyMAD*
-* `Unofficial Windows Binaries for Python Extension Packages`_
+* :ref:`dependencies` (but without the comfort of a linux package manager)
+* MinGW_ as your compiler suite
 * `Compiling Python extensions with distutils and MinGW`_
+* `Unofficial Windows Binaries for Python Extension Packages`_
 
 
 .. _MinGW: http://www.mingw.org/
