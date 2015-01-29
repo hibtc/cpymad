@@ -24,4 +24,4 @@ If you want to build from source, have a look at the following guides:
    other
 
 
-.. _built versions: https://pypi.python.org/pypi/cpymad/
+.. _built versions: https://pypi.python.org/pypi/cpymad/#downloads
