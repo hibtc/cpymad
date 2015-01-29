@@ -15,7 +15,7 @@ Depending on your platform, this can be more or less complicated.
 
    dependencies
    unix
-   windows
+   windows/index
    troubleshooting
 
 

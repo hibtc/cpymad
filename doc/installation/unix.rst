@@ -48,7 +48,7 @@ install the `CPyMad source`_ to see in which step the problem occurs:
 .. code-block:: bash
 
     git clone git://github.com/hibtc/cpymad
-    cd pymad
+    cd cpymad
     python setup.py build
     python setup.py install
 
