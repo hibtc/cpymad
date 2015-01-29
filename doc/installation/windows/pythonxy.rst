@@ -26,7 +26,7 @@ to the system PATH for all/current user* according to your liking.
 Build libmadx
 ~~~~~~~~~~~~~
 
-Download and extract the `MAD-X source`_ from SVN.
+Download and extract the latest `MAD-X source`_ tag from SVN.
 
 .. note::
 
@@ -58,7 +58,7 @@ it and run the commands:
     make install
 
 This will install the headers, binaries and library files to the
-:file:`madX/install` subfolder.
+:file:`madX\\install` subfolder.
 
 .. note::
 
