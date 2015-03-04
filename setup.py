@@ -7,6 +7,7 @@ Usage:
 For more information, see
     http://hibtc.github.io/cpymad/installation
 """
+
 # Make sure setuptools is available. NOTE: the try/except hack is required to
 # make installation work with pip: If an older version of setuptools is
 # already imported, `use_setuptools()` will just exit the current process.
@@ -129,6 +130,7 @@ setup(
     maintainer_email=metadata['__maintainer_email__'],
     url=metadata['__uri__'],
     license=metadata['__license__'],
+    classifiers=metadata['__classifiers__'],
 
     ext_modules = cythonize([
         Extension('cpymad.libmadx',
@@ -144,19 +146,6 @@ setup(
         'setuptools',
         'numpy',
         'PyYAML',
-    ],
-
-    classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Science/Research',
-        'License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication',
-        'License :: OSI Approved :: Apache Software License',
-        'License :: Other/Proprietary License',
-        'Operating System :: Microsoft :: Windows',
-        'Operating System :: POSIX :: Linux',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.4',
-        'Topic :: Scientific/Engineering :: Physics',
     ],
 )
 
