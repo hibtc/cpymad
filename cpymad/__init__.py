@@ -14,3 +14,17 @@ __maintainer_email__ = 't_glaessle@gmx.de'
 
 __license__ = 'CC0, Apache, Non-Free'
 __copyright__ = 'See file COPYING.rst'
+
+# Trove classifiers: https://pypi.python.org/pypi?:action=list_classifiers
+__classifiers__ = [
+    'Development Status :: 4 - Beta',
+    'Intended Audience :: Science/Research',
+    'License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication',
+    'License :: OSI Approved :: Apache Software License',
+    'License :: Other/Proprietary License',
+    'Operating System :: Microsoft :: Windows',
+    'Operating System :: POSIX :: Linux',
+    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3.4',
+    'Topic :: Scientific/Engineering :: Physics',
+]
