@@ -93,12 +93,19 @@ extension_args = dict(
     extra_compile_args=['-std=gnu99'],
 )
 
+
+def read_file(path):
+    """Read a file in binary mode."""
+    with open(convert_path(path), 'rb') as f:
+        return f.read()
+
+
 # Compose a long description for PyPI:
 long_description = None
 try:
-    long_description = open('README.rst').read()
-    long_description += '\n' + open('COPYING.rst').read()
-    long_description += '\n' + open('CHANGES.rst').read()
+    long_description = read_file('README.rst')
+    long_description += '\n' + read_file('COPYING.rst')
+    long_description += '\n' + read_file('CHANGES.rst')
 except IOError:
     pass
 
@@ -106,8 +113,7 @@ except IOError:
 def exec_file(path):
     """Execute a python file and return the `globals` dictionary."""
     namespace = {}
-    with open(convert_path(path)) as f:
-        exec(f.read(), namespace, namespace)
+    exec(read_file(path), namespace, namespace)
     return namespace
 
 metadata = exec_file('cpymad/__init__.py')
