@@ -84,10 +84,10 @@ def get_long_description():
     """Compose a long description for PyPI."""
     long_description = None
     try:
-        long_description = read_file('README.rst')
-        long_description += '\n' + read_file('COPYING.rst')
-        long_description += '\n' + read_file('CHANGES.rst')
-    except IOError:
+        long_description = read_file('README.rst').decode('utf-8')
+        long_description += '\n' + read_file('COPYING.rst').decode('utf-8')
+        long_description += '\n' + read_file('CHANGES.rst').decode('utf-8')
+    except (IOError, UnicodeDecodeError):
         pass
     return long_description
 
