@@ -61,6 +61,22 @@ def add_element_suffix(element_name):
     return element_name + ':1'
 
 
+def normalize_range_name(name):
+    """Make element name usable as argument to the RANGE attribute."""
+    if isinstance(name, tuple):
+        return tuple(map(normalize_range_name, name))
+    # MAD-X does not allow the ":d" suffix in the 'range' parameter string.
+    # This means that name becomes less unique, but that's the only way right
+    # now:
+    name = strip_element_suffix(name)
+    name = name.lower()
+    if name.endswith('$end'):
+        return '#e'
+    if name.endswith('$start'):
+        return '#s'
+    return name
+
+
 SOON = 1
 SAFE = 10
 LATE = 100

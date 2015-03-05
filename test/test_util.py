@@ -31,6 +31,11 @@ class TestUtil(unittest.TestCase, _compat.TestCase):
         # TODO: this should raise:
         self.assertEqual(util.add_element_suffix('foo:23o'), 'foo:23o:1')
 
+    def test_normalize_range_name(self):
+        self.assertEqual(util.normalize_range_name('dr:1'), 'dr')
+        self.assertEqual(util.normalize_range_name('lebt$end'), '#e')
+        self.assertEqual(util.normalize_range_name('dr'), 'dr')
+
     # TODO: test other functions
 
 
