@@ -249,5 +249,6 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         self.assertAlmostEqual(qp2['at'], 3)
         self.assertEqual(iqp2, elements.at(3.1))
 
+
 if __name__ == '__main__':
     unittest.main()

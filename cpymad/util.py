@@ -2,12 +2,16 @@
 Utility functions used in other parts of the pymad package.
 """
 import collections
+import re
 
 from .types import Range, Constraint
 
 
 __all__ = [
     'mad_quote',
+    'is_identifier',
+    'strip_element_suffix',
+    'add_element_suffix',
     'mad_parameter',
     'mad_command',
 ]
@@ -23,6 +27,38 @@ def mad_quote(value):
     """Add quotes to a string value."""
     quoted = repr(value)
     return quoted[1:] if quoted[0] == 'u' else quoted
+
+
+# precompile regexes for performance:
+_re_is_identifier = re.compile(r'^[a-z_]\w*$', re.IGNORECASE)
+_re_element_suffix = re.compile(':\d+$')
+
+
+def is_identifier(name):
+    """Check if ``name`` is a valid identifier in MAD-X."""
+    return bool(_re_is_identifier.match(name))
+
+
+def strip_element_suffix(element_name):
+    """
+    Strip the :d suffix from an element name.
+
+    The :d suffix is needed for some parts of the MAD-X API, but must not be
+    used in other parts.
+    """
+    return _re_element_suffix.sub('', element_name)
+
+
+def add_element_suffix(element_name):
+    """
+    Add a :1 suffix to an element name if missing.
+
+    The :d suffix is needed for some parts of the MAD-X API, but must not be
+    used in other parts.
+    """
+    if _re_element_suffix.search(element_name):
+        return element_name
+    return element_name + ':1'
 
 
 SOON = 1
