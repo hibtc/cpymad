@@ -165,6 +165,21 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         val = self.mad.evaluate("1/QP_K1")
         self.assertAlmostEqual(val, 0.5)
 
+    def test_set_value(self):
+        self.mad.set_value('FOO', 1)
+        self.mad.set_value('BAR', 'FOO')
+        self.mad.set_value('FOO', 2)
+        self.assertEqual(self.mad.evaluate('FOO'), 2)
+        self.assertEqual(self.mad.evaluate('BAR'), 1)
+
+    def test_set_expression(self):
+        self.mad.set_expression('FOO', 'BAR')
+        self.mad.set_value('BAR', 42)
+        self.mad.evaluate('FOO')
+        self.assertEqual(self.mad.evaluate('FOO'), 42)
+        self.mad.set_value('BAR', 43)
+        self.assertEqual(self.mad.evaluate('FOO'), 43)
+
     # def test_sequence_beam(self):
     # def test_sequence_twiss(self):
     # def test_sequence_twissname(self):

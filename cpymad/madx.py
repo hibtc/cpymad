@@ -226,6 +226,34 @@ class Madx(object):
             # catch + reraise in order to shorten stack trace (~3-5 levels):
             raise RuntimeError("MAD-X has stopped working!")
 
+    def set_value(self, name, value):
+        """
+        Set a variable value ("=" operator in MAD-X).
+
+        Example:
+
+            >>> madx.set_value('R1QS1->K1', '42')
+            >>> madx.evaluate('R1QS1->K1')
+            42
+        """
+        self.input(name + ' = ' + str(value) + ';')
+
+    def set_expression(self, name, expr):
+        """
+        Set a variable expression (":=" operator in MAD-X).
+
+        Example:
+
+            >>> madx.set_expression('FOO', 'BAR')
+            >>> madx.set_value('BAR', 42)
+            >>> madx.evaluate('FOO')
+            42
+            >>> madx.set_value('BAR', 43)
+            >>> madx.evaluate('FOO')
+            43
+        """
+        self.input(name + ' := ' + str(expr) + ';')
+
     def help(self, cmd=None):
         """
         Show help about a command or list all MAD-X commands.
