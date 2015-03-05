@@ -130,7 +130,8 @@ def mad_parameter(key, value):
     if value is None or value == '':
         return ''
     if isinstance(value, Range):
-        return key + '=' + value.first + '/' + value.last
+        begin, end = normalize_range_name((value.first, value.last))
+        return key + '=' + begin + '/' + end
     elif isinstance(value, Constraint):
         constr = []
         if value.min is not None:
@@ -145,11 +146,13 @@ def mad_parameter(key, value):
         return ('' if value else '-') + key
     elif key == 'range':
         if isinstance(value, basestring):
-            return key + '=' + value
+            return key + '=' + normalize_range_name(value)
         elif isinstance(value, collections.Mapping):
-            return key + '=' + str(value['first']) + '/' + str(value['last'])
+            begin, end = value['first'], value['last']
         else:
-            return key + '=' + str(value[0]) + '/' + str(value[1])
+            begin, end = value[0], value[1]
+        begin, end = normalize_range_name((str(begin), str(end)))
+        return key + '=' + begin + '/' + end
     # check for basestrings before collections.Sequence, because every
     # basestring is also a Sequence:
     elif isinstance(value, basestring):
