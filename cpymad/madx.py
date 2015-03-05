@@ -476,6 +476,11 @@ class Madx(object):
         return TableMap(self._libmadx)
 
 
+def _map_repr(self):
+    """String representation of a custom mapping object."""
+    return str(dict(self))
+
+
 class SequenceMap(collections.Mapping):
 
     """
@@ -484,6 +489,9 @@ class SequenceMap(collections.Mapping):
 
     def __init__(self, libmadx):
         self._libmadx = libmadx
+
+    __repr__ = _map_repr
+    __str__ = _map_repr
 
     def __iter__(self):
         return iter(self._libmadx.get_sequence_names())
@@ -509,6 +517,9 @@ class TableMap(collections.Mapping):
 
     def __init__(self, libmadx):
         self._libmadx = libmadx
+
+    __repr__ = _map_repr
+    __str__ = _map_repr
 
     def __iter__(self):
         return iter(self._libmadx.get_table_names())
@@ -541,7 +552,7 @@ class Sequence(object):
 
     def __str__(self):
         """String representation."""
-        return "{}({})".format(self.__class__.__name__, self._name)
+        return "<{}: {}>".format(self.__class__.__name__, self._name)
 
     __repr__ = __str__
 
