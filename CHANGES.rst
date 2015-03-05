@@ -1,6 +1,18 @@
 Changelog
 ~~~~~~~~~
 
+0.10.2
+======
+Date: 05.03.2015
+
+- add some utility functions to work with MAD-X element names and identifiers
+- add a setter method for values to Madx
+- improve install instructions. In particular, recommend WinPython as build
+  environment
+- fix the MinGW build error due to broken sysconfig inline
+- run setup only if invoked as main script
+
+
 0.10.1
 ======
 Date: 09.01.2015
