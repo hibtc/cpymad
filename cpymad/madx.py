@@ -226,6 +226,34 @@ class Madx(object):
             # catch + reraise in order to shorten stack trace (~3-5 levels):
             raise RuntimeError("MAD-X has stopped working!")
 
+    def set_value(self, name, value):
+        """
+        Set a variable value ("=" operator in MAD-X).
+
+        Example:
+
+            >>> madx.set_value('R1QS1->K1', '42')
+            >>> madx.evaluate('R1QS1->K1')
+            42
+        """
+        self.input(name + ' = ' + str(value) + ';')
+
+    def set_expression(self, name, expr):
+        """
+        Set a variable expression (":=" operator in MAD-X).
+
+        Example:
+
+            >>> madx.set_expression('FOO', 'BAR')
+            >>> madx.set_value('BAR', 42)
+            >>> madx.evaluate('FOO')
+            42
+            >>> madx.set_value('BAR', 43)
+            >>> madx.evaluate('FOO')
+            43
+        """
+        self.input(name + ' := ' + str(expr) + ';')
+
     def help(self, cmd=None):
         """
         Show help about a command or list all MAD-X commands.
@@ -476,6 +504,11 @@ class Madx(object):
         return TableMap(self._libmadx)
 
 
+def _map_repr(self):
+    """String representation of a custom mapping object."""
+    return str(dict(self))
+
+
 class SequenceMap(collections.Mapping):
 
     """
@@ -484,6 +517,9 @@ class SequenceMap(collections.Mapping):
 
     def __init__(self, libmadx):
         self._libmadx = libmadx
+
+    __repr__ = _map_repr
+    __str__ = _map_repr
 
     def __iter__(self):
         return iter(self._libmadx.get_sequence_names())
@@ -509,6 +545,9 @@ class TableMap(collections.Mapping):
 
     def __init__(self, libmadx):
         self._libmadx = libmadx
+
+    __repr__ = _map_repr
+    __str__ = _map_repr
 
     def __iter__(self):
         return iter(self._libmadx.get_table_names())
@@ -541,7 +580,7 @@ class Sequence(object):
 
     def __str__(self):
         """String representation."""
-        return "{}({})".format(self.__class__.__name__, self._name)
+        return "<{}: {}>".format(self.__class__.__name__, self._name)
 
     __repr__ = __str__
 

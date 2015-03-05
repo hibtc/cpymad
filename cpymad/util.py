@@ -2,12 +2,16 @@
 Utility functions used in other parts of the pymad package.
 """
 import collections
+import re
 
 from .types import Range, Constraint
 
 
 __all__ = [
     'mad_quote',
+    'is_identifier',
+    'strip_element_suffix',
+    'add_element_suffix',
     'mad_parameter',
     'mad_command',
 ]
@@ -23,6 +27,54 @@ def mad_quote(value):
     """Add quotes to a string value."""
     quoted = repr(value)
     return quoted[1:] if quoted[0] == 'u' else quoted
+
+
+# precompile regexes for performance:
+_re_is_identifier = re.compile(r'^[a-z_]\w*$', re.IGNORECASE)
+_re_element_suffix = re.compile(':\d+$')
+
+
+def is_identifier(name):
+    """Check if ``name`` is a valid identifier in MAD-X."""
+    return bool(_re_is_identifier.match(name))
+
+
+def strip_element_suffix(element_name):
+    """
+    Strip the :d suffix from an element name.
+
+    The :d suffix is needed for some parts of the MAD-X API, but must not be
+    used in other parts.
+    """
+    return _re_element_suffix.sub('', element_name)
+
+
+def add_element_suffix(element_name):
+    """
+    Add a :1 suffix to an element name if missing.
+
+    The :d suffix is needed for some parts of the MAD-X API, but must not be
+    used in other parts.
+    """
+    if _re_element_suffix.search(element_name):
+        return element_name
+    return element_name + ':1'
+
+
+def normalize_range_name(name):
+    """Make element name usable as argument to the RANGE attribute."""
+    if isinstance(name, tuple):
+        return tuple(map(normalize_range_name, name))
+    # MAD-X does not allow the ":d" suffix in the 'range' parameter string.
+    # This means that name becomes less unique, but that's the only way right
+    # now:
+    name = strip_element_suffix(name)
+    name = name.lower()
+    if name.endswith('$end'):
+        return '#e'
+    if name.endswith('$start'):
+        return '#s'
+    return name
 
 
 SOON = 1
@@ -78,7 +130,8 @@ def mad_parameter(key, value):
     if value is None or value == '':
         return ''
     if isinstance(value, Range):
-        return key + '=' + value.first + '/' + value.last
+        begin, end = normalize_range_name((value.first, value.last))
+        return key + '=' + begin + '/' + end
     elif isinstance(value, Constraint):
         constr = []
         if value.min is not None:
@@ -93,11 +146,13 @@ def mad_parameter(key, value):
         return ('' if value else '-') + key
     elif key == 'range':
         if isinstance(value, basestring):
-            return key + '=' + value
+            return key + '=' + normalize_range_name(value)
         elif isinstance(value, collections.Mapping):
-            return key + '=' + str(value['first']) + '/' + str(value['last'])
+            begin, end = value['first'], value['last']
         else:
-            return key + '=' + str(value[0]) + '/' + str(value[1])
+            begin, end = value[0], value[1]
+        begin, end = normalize_range_name((str(begin), str(end)))
+        return key + '=' + begin + '/' + end
     # check for basestrings before collections.Sequence, because every
     # basestring is also a Sequence:
     elif isinstance(value, basestring):
