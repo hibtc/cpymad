@@ -275,6 +275,34 @@
             <span class="c"># catch + reraise in order to shorten stack trace (~3-5 levels):</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;MAD-X has stopped working!&quot;</span><span class="p">)</span>
 </div>
+<div class="viewcode-block" id="Madx.set_value"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.set_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set a variable value (&quot;=&quot; operator in MAD-X).</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">            &gt;&gt;&gt; madx.set_value(&#39;R1QS1-&gt;K1&#39;, &#39;42&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; madx.evaluate(&#39;R1QS1-&gt;K1&#39;)</span>
+<span class="sd">            42</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39; = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;;&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Madx.set_expression"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.set_expression">[docs]</a>    <span class="k">def</span> <span class="nf">set_expression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">expr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set a variable expression (&quot;:=&quot; operator in MAD-X).</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">            &gt;&gt;&gt; madx.set_expression(&#39;FOO&#39;, &#39;BAR&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; madx.set_value(&#39;BAR&#39;, 42)</span>
+<span class="sd">            &gt;&gt;&gt; madx.evaluate(&#39;FOO&#39;)</span>
+<span class="sd">            42</span>
+<span class="sd">            &gt;&gt;&gt; madx.set_value(&#39;BAR&#39;, 43)</span>
+<span class="sd">            &gt;&gt;&gt; madx.evaluate(&#39;FOO&#39;)</span>
+<span class="sd">            43</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39; := &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;;&#39;</span><span class="p">)</span>
+</div>
 <div class="viewcode-block" id="Madx.help"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.help">[docs]</a>    <span class="k">def</span> <span class="nf">help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Show help about a command or list all MAD-X commands.</span>
@@ -525,6 +553,11 @@
         <span class="k">return</span> <span class="n">TableMap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">)</span>
 
 </div></div>
+<span class="k">def</span> <span class="nf">_map_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;String representation of a custom mapping object.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+
 <div class="viewcode-block" id="SequenceMap"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.SequenceMap">[docs]</a><span class="k">class</span> <span class="nc">SequenceMap</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
@@ -533,6 +566,9 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">libmadx</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span> <span class="o">=</span> <span class="n">libmadx</span>
+
+    <span class="n">__repr__</span> <span class="o">=</span> <span class="n">_map_repr</span>
+    <span class="n">__str__</span> <span class="o">=</span> <span class="n">_map_repr</span>
 
     <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_sequence_names</span><span class="p">())</span>
@@ -558,6 +594,9 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">libmadx</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span> <span class="o">=</span> <span class="n">libmadx</span>
+
+    <span class="n">__repr__</span> <span class="o">=</span> <span class="n">_map_repr</span>
+    <span class="n">__str__</span> <span class="o">=</span> <span class="n">_map_repr</span>
 
     <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_table_names</span><span class="p">())</span>
@@ -590,7 +629,7 @@
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;String representation.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s">&quot;{}({})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">&quot;&lt;{}: {}&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
 
     <span class="n">__repr__</span> <span class="o">=</span> <span class="n">__str__</span>
 

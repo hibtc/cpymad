@@ -328,6 +328,34 @@ object to the constructor. This object must expose an interface similar to
 </dd></dl>
 
 <dl class="method">
+<dt id="cpymad.madx.Madx.set_expression">
+<tt class="descname">set_expression</tt><big>(</big><em>name</em>, <em>expr</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.set_expression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.set_expression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a variable expression (&#8221;:=&#8221; operator in MAD-X).</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">set_expression</span><span class="p">(</span><span class="s">&#39;FOO&#39;</span><span class="p">,</span> <span class="s">&#39;BAR&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="s">&#39;BAR&#39;</span><span class="p">,</span> <span class="mi">42</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="s">&#39;FOO&#39;</span><span class="p">)</span>
+<span class="go">42</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="s">&#39;BAR&#39;</span><span class="p">,</span> <span class="mi">43</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="s">&#39;FOO&#39;</span><span class="p">)</span>
+<span class="go">43</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.Madx.set_value">
+<tt class="descname">set_value</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.set_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.set_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a variable value (&#8220;=&#8221; operator in MAD-X).</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="s">&#39;R1QS1-&gt;K1&#39;</span><span class="p">,</span> <span class="s">&#39;42&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="s">&#39;R1QS1-&gt;K1&#39;</span><span class="p">)</span>
+<span class="go">42</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
 <dt id="cpymad.madx.Madx.survey">
 <tt class="descname">survey</tt><big>(</big><em>sequence=None, columns=None, pattern=['full'], **kwargs</em><big>)</big><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.survey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.survey" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run SELECT+USE+SURVEY.</p>
