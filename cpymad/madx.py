@@ -678,6 +678,7 @@ class ElementList(collections.Sequence):
             name = element['name']
         else:
             name = element
+        name = util.add_element_suffix(name)
         return self._get_element_index(self._sequence_name, name)
 
     def at(self, pos):
