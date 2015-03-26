@@ -34,6 +34,7 @@ script:
   - coverage run --source=cpymad -a test/test_madx.py     -v
   - coverage run --source=cpymad -a test/test_model.py    -v
   - coverage run --source=cpymad -a test/test_locator.py  -v
+  - coverage run --source=cpymad -a test/test_util.py     -v
 
 after_success:
   - coveralls
