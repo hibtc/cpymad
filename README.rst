@@ -140,22 +140,22 @@ Currently, tests run on:
 |Build| |Coverage| |Version| |Downloads| |License|
 
 
-.. |Build| image:: https://api.travis-ci.org/hibtc/cpymad.png?branch=master
+.. |Build| image:: https://api.travis-ci.org/hibtc/cpymad.svg?branch=master
    :target: https://travis-ci.org/hibtc/cpymad
    :alt: Build Status
 
-.. |Coverage| image:: https://coveralls.io/repos/hibtc/cpymad/badge.png?branch=master
+.. |Coverage| image:: https://coveralls.io/repos/hibtc/cpymad/badge.svg?branch=master
    :target: https://coveralls.io/r/hibtc/cpymad
    :alt: Coverage
 
-.. |Version| image:: https://pypip.in/v/cpymad/badge.png
+.. |Version| image:: https://pypip.in/v/cpymad/badge.svg
    :target: https://pypi.python.org/pypi/cpymad/
    :alt: Latest Version
 
-.. |Downloads| image:: https://pypip.in/d/cpymad/badge.png
-   :target: https://pypi.python.org/pypi/cpymad/
+.. |Downloads| image:: https://pypip.in/d/cpymad/badge.svg
+   :target: https://pypi.python.org/pypi/cpymad#downloads
    :alt: Downloads
 
-.. |License| image:: https://pypip.in/license/cpymad/badge.png
-   :target: https://pypi.python.org/pypi/cpymad/
+.. |License| image:: http://img.shields.io/badge/license-CC0,_Apache,_Non--Free-red.svg
+   :target: https://github.com/hibtc/cpymad/blob/master/COPYING.rst
    :alt: License
