@@ -156,6 +156,6 @@ Currently, tests run on:
    :target: https://pypi.python.org/pypi/cpymad/
    :alt: Downloads
 
-.. |License| image:: https://pypip.in/license/cpymad/badge.png
+.. |License| image:: http://img.shields.io/badge/license-CC0,_Apache,_Non--Free-red.png
    :target: https://pypi.python.org/pypi/cpymad/
    :alt: License
