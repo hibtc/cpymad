@@ -153,9 +153,9 @@ Currently, tests run on:
    :alt: Latest Version
 
 .. |Downloads| image:: https://pypip.in/d/cpymad/badge.svg
-   :target: https://pypi.python.org/pypi/cpymad/
+   :target: https://pypi.python.org/pypi/cpymad#downloads
    :alt: Downloads
 
 .. |License| image:: http://img.shields.io/badge/license-CC0,_Apache,_Non--Free-red.svg
-   :target: https://pypi.python.org/pypi/cpymad/
+   :target: https://github.com/hibtc/cpymad/blob/master/COPYING.rst
    :alt: License
