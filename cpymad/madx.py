@@ -678,6 +678,12 @@ class ElementList(collections.Sequence):
             name = element['name']
         else:
             name = element
+        if len(self) == 0:
+            raise ValueError('Empty element list.')
+        if name == '#s':
+            return 0
+        elif name == '#e':
+            return len(self) - 1
         name = util.add_element_suffix(name)
         return self._get_element_index(self._sequence_name, name)
 
