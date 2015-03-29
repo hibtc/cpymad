@@ -1,6 +1,14 @@
 Changelog
 ~~~~~~~~~
 
+0.10.3
+======
+Date: 29.03.2015
+
+- make sequence.elements.index more convenient: can now handle names with or
+  without the ':d' suffix as well as the special names '#s' and '#e'
+
+
 0.10.2
 ======
 Date: 05.03.2015
