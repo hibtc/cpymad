@@ -344,8 +344,6 @@ class Service(object):
         try:
             while self._communicate():
                 pass
-        except KeyboardInterrupt:
-            logger.info('User interrupt!')
         finally:
             self._conn.close()
 
@@ -359,6 +357,13 @@ class Service(object):
             request = self._conn.recv()
         except EOFError:
             return False
+        except KeyboardInterrupt:
+            # Prevent the child process from exiting prematurely if a
+            # KeyboardInterrupt (Ctrl-C) is propagated from the parent
+            # process. This is important since the parent process might
+            # - not exit at all (e.g. interactive python interpretor!) OR
+            # - need to perform clean-up that depends on the child process
+            return True
         else:
             return self._dispatch(request)
 
