@@ -1,6 +1,18 @@
 Changelog
 ~~~~~~~~~
 
+(dates are in the form dd.mm.yyyy)
+
+
+0.10.4
+======
+Date: 22.04.2015
+
+- prevent MAD-X process from exiting on Ctrl-C (this was an especially
+  nasty feature when using the interactive python interpretor)
+- upgrade to `MAD-X 5.02.05` (development release from 10.04.2015)
+
+
 0.10.3
 ======
 Date: 29.03.2015
