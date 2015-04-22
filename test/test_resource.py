@@ -66,7 +66,7 @@ class Common(object):
         with self.res.get('subdir/b.yml').open(encoding='utf-8') as f:
             self.assertEqual(
                     load(f.read())['path'],
-                    os.path.join('subdir', 'b.yml'))
+                    'subdir/b.yml')
 
     def test_list(self):
         self.assertEqual(
@@ -101,7 +101,7 @@ class Common(object):
                 'a.yml')
         self.assertEqual(
                 load(self.res.get('subdir').load('b.yml', 'utf-8'))['path'],
-                os.path.join('subdir', 'b.yml'))
+                'subdir/b.yml')
 
     def test_yaml(self):
         self.assertEqual(
@@ -109,7 +109,7 @@ class Common(object):
                 'a.yml')
         self.assertEqual(
                 self.res.get(['subdir', 'b.yml']).yaml()['path'],
-                os.path.join('subdir', 'b.yml'))
+                'subdir/b.yml')
 
 
 # test cases
