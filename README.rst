@@ -1,6 +1,6 @@
 CPyMAD
 ------
-|Build| |Coverage| |Version| |Downloads| |License| |Python|
+|Version| |Downloads| |License| |Python|
 
 CPyMAD_ is a Cython_ binding to MAD-X_.
 
@@ -120,10 +120,10 @@ Currently, tests run on:
   The Travis builds use a unofficial precompiled libmadx-dev_ package to
   avoid having to rebuild the entire MAD-X library on each invocation.
 
+  |Build| |Coverage|
+
 .. _`Travis CI`: https://travis-ci.org/hibtc/cpymad
 .. _libmadx-dev: https://github.com/hibtc/madx-debian
-
-|Build| |Coverage| |Version| |Downloads| |License|
 
 
 .. |Build| image:: https://api.travis-ci.org/hibtc/cpymad.svg?branch=master
