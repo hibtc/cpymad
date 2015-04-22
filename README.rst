@@ -1,6 +1,6 @@
 CPyMAD
 ------
-|Build| |Coverage| |Version| |Downloads| |License|
+|Build| |Coverage| |Version| |Downloads| |License| |Python|
 
 CPyMAD_ is a Cython_ binding to MAD-X_.
 
@@ -145,3 +145,7 @@ Currently, tests run on:
 .. |License| image:: http://img.shields.io/badge/license-CC0,_Apache,_Non--Free-red.svg
    :target: https://github.com/hibtc/cpymad/blob/master/COPYING.rst
    :alt: License
+
+.. |Python| image:: https://pypip.in/py_versions/cpymad/badge.svg
+   :target: https://pypi.python.org/pypi/cpymad#downloads
+   :alt: Supported Python versions
