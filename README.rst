@@ -1,6 +1,6 @@
 CPyMAD
 ------
-|Build| |Coverage| |Version| |Downloads| |License|
+|Build| |Coverage| |Version| |Downloads| |License| |Python|
 
 CPyMAD_ is a Cython_ binding to MAD-X_.
 
@@ -34,36 +34,10 @@ CERN, i.e. in case of problems you will not get help there.
 .. _cern-cpymad: https://github.com/pymad/cpymad
 
 
-Dependencies
-~~~~~~~~~~~~
-
-To build MAD-X and CPyMAD from source you will need
-
-- CMake_
-- python>=2.7
-- C / Fortran compilers.
-
-Furthermore, CPyMAD depends on the following python packages:
-
-- setuptools_
-- Cython_
-- NumPy_
-- PyYAML_
-
-The python packages can be installed using pip_.
-
-.. _CMake: http://www.cmake.org/
-.. _setuptools: https://pypi.python.org/pypi/setuptools
-.. _Cython: http://cython.org/
-.. _NumPy: http://www.numpy.org/
-.. _PyYAML: https://pypi.python.org/pypi/PyYAML
-.. _pip: https://pypi.python.org/pypi/pip
-
-
 Installation
 ~~~~~~~~~~~~
 
-Installation instructions are available at http://hibtc.github.io/cpymad/installation.
+See http://hibtc.github.io/cpymad/installation.
 
 
 Usage
@@ -171,3 +145,7 @@ Currently, tests run on:
 .. |License| image:: http://img.shields.io/badge/license-CC0,_Apache,_Non--Free-red.svg
    :target: https://github.com/hibtc/cpymad/blob/master/COPYING.rst
    :alt: License
+
+.. |Python| image:: https://pypip.in/py_versions/cpymad/badge.svg
+   :target: https://pypi.python.org/pypi/cpymad#downloads
+   :alt: Supported Python versions
