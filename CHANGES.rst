@@ -11,6 +11,7 @@ Date: 22.04.2015
 - prevent MAD-X process from exiting on Ctrl-C (this was an especially
   nasty feature when using the interactive python interpretor)
 - upgrade to `MAD-X 5.02.05`_ (development release from 10.04.2015)
+- fix leakage of open file handles into remote process on py2/windows
 
 .. _`MAD-X 5.02.05`: http://madx.web.cern.ch/madx/releases/5.02.05/
 
