@@ -29,14 +29,15 @@ class Handle(object):
     The API is a compromise aimed at compatibility with win32.
     """
 
-    def __init__(self, handle):
+    def __init__(self, handle, own=True):
         """Store a file descriptor (int)."""
         self.handle = handle
+        self.own = own
 
     @classmethod
-    def from_fd(cls, fd):
+    def from_fd(cls, fd, own):
         """Create a :class:`Handle` instance from a file descriptor (int)."""
-        return cls(fd)
+        return cls(fd, own)
 
     @classmethod
     def pipe(cls):
@@ -66,7 +67,7 @@ class Handle(object):
 
     def close(self):
         """Close the file descriptor."""
-        if self.handle is not None:
+        if self.own and self.handle is not None:
             os.close(self.handle)
             self.handle = None
 

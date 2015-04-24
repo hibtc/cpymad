@@ -9,6 +9,7 @@ import msvcrt
 
 py2 = sys.version_info[0] == 2
 if py2:
+    from . import file_monitor
     import _subprocess as _winapi
     import _multiprocessing
     _CloseHandle = _multiprocessing.win32.CloseHandle
@@ -23,6 +24,8 @@ __all__ = [
 
 
 if py2:
+    file_monitor.monkey_patch()
+
     # _subprocess.DuplicateHandle and _subprocess.CreatePipe return a
     # handle object similar to the type defined below.
     def _unwrap(handle):
@@ -41,15 +44,16 @@ class Handle(object):
     Wrap a native HANDLE. Close on deletion.
     """
 
-    def __init__(self, handle):
+    def __init__(self, handle, own=True):
         """Store a native HANDLE (int)."""
         self.handle = handle
+        self.own = own
 
     @classmethod
-    def from_fd(cls, fd):
+    def from_fd(cls, fd, own):
         """Create a :class:`Handle` instance from a file descriptor (int)."""
         handle = msvcrt.get_osfhandle(fd)
-        return cls(handle)
+        return cls(handle, own)
 
     @classmethod
     def pipe(cls):
@@ -82,7 +86,7 @@ class Handle(object):
 
     def close(self):
         """Close the handle."""
-        if self.handle is not None:
+        if self.own and self.handle is not None:
             _CloseHandle(self.handle)
             self.handle = None
 

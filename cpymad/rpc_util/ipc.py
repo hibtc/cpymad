@@ -8,9 +8,15 @@ import os
 import subprocess
 import sys
 
+py2 = sys.version_info[0] == 2
+win = sys.platform == 'win32'
+
 from .connection import Connection
 
-if sys.platform == 'win32':
+if py2:
+    from .file_monitor import File
+
+if win:
     from .windows import Handle
 else:
     from .posix import Handle
@@ -22,6 +28,17 @@ __all__ = [
     'spawn_subprocess',
     'prepare_subprocess_ipc',
 ]
+
+
+if py2:
+    def _get_open_file_handles():
+        """Return open file handles as list of ints."""
+        return [int(Handle.from_fd(f.fileno(), own=False))
+                for f in File._instances if not f.closed]
+
+else:
+    def _get_open_file_handles():
+        return []
 
 
 def close_all_but(keep):
@@ -52,6 +69,8 @@ def create_ipc_connection():
     return conn, remote_recv, remote_send
 
 
+
+
 def spawn_subprocess(argv, **Popen_args):
     """
     Spawn a subprocess and pass to it two IPC handles.
@@ -65,6 +84,10 @@ def spawn_subprocess(argv, **Popen_args):
     conn, remote_recv, remote_send = create_ipc_connection()
     args = argv + [str(int(remote_recv)), str(int(remote_send))]
     proc = subprocess.Popen(args, close_fds=False, **Popen_args)
+    conn.send(_get_open_file_handles())
+    # wait for subprocess to confirm that all handles are closed:
+    if conn.recv() != 'ready':
+        raise RuntimeError
     return conn, proc
 
 
@@ -74,12 +97,19 @@ def prepare_subprocess_ipc(args):
     except for the STDIN/STDOUT/STDERR and the IPC handles. Return a
     :class:`Connection` to the parent process.
     """
-    handles = [int(arg) for arg in args]
-    recv_fd = Handle(handles[0]).detach_fd()
-    send_fd = Handle(handles[1]).detach_fd()
+    handles = [Handle(int(arg)) for arg in args]
+    recv_fd = handles[0].detach_fd()
+    send_fd = handles[1].detach_fd()
     conn = Connection.from_fd(recv_fd, send_fd)
     close_all_but([sys.stdin.fileno(),
                    sys.stdout.fileno(),
                    sys.stderr.fileno(),
                    recv_fd, send_fd])
+    # On python2/windows open() creates a non-inheritable file descriptor with
+    # an underlying inheritable file HANDLE. Since HANDLEs can't be closed
+    # with os.closerange, the following snippet is needed to prevent them from
+    # staying open in the remote process:
+    for handle in conn.recv():
+        Handle(handle).close()
+    conn.send('ready')
     return conn
