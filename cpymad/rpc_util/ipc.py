@@ -13,9 +13,6 @@ win = sys.platform == 'win32'
 
 from .connection import Connection
 
-if py2:
-    from .file_monitor import File
-
 if win:
     from .windows import Handle
 else:
@@ -30,11 +27,18 @@ __all__ = [
 ]
 
 
-if py2:
+# On python2/windows, open() creates a non-inheritable file descriptor with an
+# underlying inheritable file HANDLE. Therefore, we need to keep track of all
+# open files to close their handles in the remote process:
+if win and py2:
+    from . import file_monitor
+
+    file_monitor.monkey_patch()
+
     def _get_open_file_handles():
         """Return open file handles as list of ints."""
         return [int(Handle.from_fd(f.fileno(), own=False))
-                for f in File._instances if not f.closed]
+                for f in file_monitor.File._instances if not f.closed]
 
 else:
     def _get_open_file_handles():

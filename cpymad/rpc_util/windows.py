@@ -9,7 +9,6 @@ import msvcrt
 
 py2 = sys.version_info[0] == 2
 if py2:
-    from . import file_monitor
     import _subprocess as _winapi
     import _multiprocessing
     _CloseHandle = _multiprocessing.win32.CloseHandle
@@ -24,8 +23,6 @@ __all__ = [
 
 
 if py2:
-    file_monitor.monkey_patch()
-
     # _subprocess.DuplicateHandle and _subprocess.CreatePipe return a
     # handle object similar to the type defined below.
     def _unwrap(handle):

@@ -1,5 +1,7 @@
 """
 Monitor file objects.
+
+Python2 module only.
 """
 
 from __future__ import absolute_import
