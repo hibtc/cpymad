@@ -727,6 +727,13 @@
             <span class="n">name</span> <span class="o">=</span> <span class="n">element</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">element</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Empty element list.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s">&#39;#s&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s">&#39;#e&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">add_element_suffix</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_element_index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="ElementList.at"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.ElementList.at">[docs]</a>    <span class="k">def</span> <span class="nf">at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>

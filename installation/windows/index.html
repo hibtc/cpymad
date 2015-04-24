@@ -65,11 +65,15 @@ run</p>
 </div>
 <p>from your terminal and that&#8217;s it. If you want to install to a target
 machine without internet access (or with firewall), you can manually
-download the <tt class="docutils literal"><span class="pre">.whl</span></tt> file for your platform and then use pip to install
+download the <tt class="docutils literal"><span class="pre">.whl</span></tt> file for your platform and then use <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a> to install
 that particular file. For example:</p>
 <div class="highlight-bat"><div class="highlight"><pre>pip install dist\cpymad<span class="m">-0</span>.<span class="m">10</span>.<span class="m">1</span>-cp<span class="m">27</span>-none-win<span class="m">32</span>.whl
 </pre></div>
 </div>
+<p>In this case you will also need to grab and install <em>numpy</em>, <em>PyYAML</em> and
+<em>setuptools</em> (and possibly their dependencies if any). Installable <a class="reference external" href="https://wheel.readthedocs.org/en/latest/">wheel</a>
+archives for these packages can be conveniently downloaded from here:
+<a class="reference external" href="http://www.lfd.uci.edu/~gohlke/pythonlibs/">Unofficial Windows Binaries for Python Extension Packages</a>.</p>
 <p>If there is no binary available for your platform you can ask me via email
 or the github issue pages to create one for your python version / platform.</p>
 <p>If you want to build from source, have a look at the following guides:</p>

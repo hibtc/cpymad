@@ -12,12 +12,17 @@ run
 
 from your terminal and that's it. If you want to install to a target
 machine without internet access (or with firewall), you can manually
-download the ``.whl`` file for your platform and then use pip to install
+download the ``.whl`` file for your platform and then use pip_ to install
 that particular file. For example:
 
 .. code-block:: bat
 
     pip install dist\cpymad-0.10.1-cp27-none-win32.whl
+
+In this case you will also need to grab and install *numpy*, *PyYAML* and
+*setuptools* (and possibly their dependencies if any). Installable wheel_
+archives for these packages can be conveniently downloaded from here:
+`Unofficial Windows Binaries for Python Extension Packages`_.
 
 If there is no binary available for your platform you can ask me via email
 or the github issue pages to create one for your python version / platform.
@@ -38,4 +43,6 @@ installation (a.k.a. extraction).
 
 
 .. _built versions: https://pypi.python.org/pypi/cpymad/#downloads
+.. _pip: https://pypi.python.org/pypi/pip
 .. _wheel: https://wheel.readthedocs.org/en/latest/
+.. _Unofficial Windows Binaries for Python Extension Packages: http://www.lfd.uci.edu/~gohlke/pythonlibs/
