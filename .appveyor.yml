@@ -1,0 +1,76 @@
+platform:
+  - x86
+  - x64
+
+environment:
+  # For Python versions available on Appveyor, see
+  # https://www.appveyor.com/docs/windows-images-software/#python
+  matrix:
+  # - PYVER: '2.7'
+  #   CONDAPATH: 'C:\Miniconda'
+
+    - PYVER: '3.4'
+      CONDAPATH: 'C:\Miniconda34'
+
+  # - PYVER: '3.5'
+  #   CONDAPATH: 'C:\Miniconda35'
+
+  # - PYVER: '3.6'
+  #   CONDAPATH: 'C:\Miniconda36'
+
+  # - PYVER: '3.7'
+  #   CONDAPATH: 'C:\Miniconda37'
+
+  global:
+    MADXVER: 5.04.02
+    MADXDIR: C:\madx
+    COVERALLS_REPO_TOKEN:
+      secure: PomPESKrst4rtCnkZOCyfyBEb03xcHzg6O0bGrYw7lf3oGWcA/ufdhu+7+shaJRF
+
+
+install:
+  # Log environment for informational purposes:
+  - set
+
+  # Add python and installed scripts to PATH
+  - if "%PLATFORM%" == "x64" set "CONDAPATH=%CONDAPATH%-x64"
+  - set "PATH=%CONDAPATH%\bin;%CONDAPATH%\Scripts;%PATH%"
+
+  # Update and activate conda
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda create -q -n madx python=%PYVER%
+  - activate           madx
+
+  # Install build/test deps:
+  - conda install -q setuptools wheel cython
+  - conda install -q coverage
+  - conda install -q -c conda-forge mingwpy
+
+  # build MAD-X
+  - call "utils\build_madx.py" %MADXVER% "%MADXDIR%"
+
+  # build and install cpymad
+  - python setup.py build_ext -c mingw32
+  - python setup.py build
+  - python setup.py bdist_wheel
+
+  # wildcard expansion is a pain in CMD.exe and just a little less in
+  # powershell:
+  - ps: "pip install (ls dist\\* | % {\"$_\"})"
+
+build: off
+
+test_script:
+  - coverage run --source=cpymad -a test/test_util.py -v
+  - coverage run --source=cpymad -a test/test_madx.py -v
+
+after_test:
+ - coverage combine
+ - coveralls
+
+artifacts:
+  - path: dist\*
+
+cache:
+  - '%LOCALAPPDATA%\pip\Cache'
