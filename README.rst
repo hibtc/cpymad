@@ -2,16 +2,11 @@ CPyMAD
 ------
 |Version| |Downloads| |License| |Python|
 
-CPyMAD_ is a Cython_ binding to MAD-X_.
+CPyMAD is a Cython_ binding to MAD-X_.
 
 MAD-X is a software package to simulate particle accelerators and is used
 at CERN and all around the world. It has its own proprietary scripting
 language and is usually launched from the command line.
-
-.. _CPyMAD: https://github.com/hibtc/cpymad
-.. _Cython: http://cython.org/
-.. _MAD-X: http://cern.ch/mad
-.. |VERSION| replace:: 5.02.05
 
 This version of CPyMAD is tested with MAD-X |VERSION|. Other MAD-X
 versions (and immediate revisions) might work too, but are more likely to
@@ -20,6 +15,10 @@ cause problems.
 The installable wheel archives that are provided for some versions of
 python to simplify the installation on windows contain a precompiled
 version of CPyMAD that is statically linked against MAD-X |VERSION|.
+
+.. _Cython: http://cython.org/
+.. _MAD-X: http://cern.ch/mad
+.. |VERSION| replace:: 5.02.05
 
 
 Disclaimer
@@ -34,10 +33,20 @@ CERN, i.e. in case of problems you will not get help there.
 .. _cern-cpymad: https://github.com/pymad/cpymad
 
 
-Installation
-~~~~~~~~~~~~
+Project pages
+~~~~~~~~~~~~~
 
-See http://hibtc.github.io/cpymad/installation.
+- `Installation`_
+- `Source code`_
+- `Documentation`_
+- `Issue tracker`_
+- `Releases`_
+
+.. _Installation: http://hibtc.github.io/cpymad/installation
+.. _Source code: https://github.com/hibtc/cpymad
+.. _Documentation: http://hibtc.github.io/cpymad
+.. _Issue tracker: https://github.com/hibtc/cpymad/issues
+.. _Releases: https://pypi.python.org/pypi/cpymad
 
 
 Usage

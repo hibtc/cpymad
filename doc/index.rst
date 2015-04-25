@@ -24,8 +24,8 @@ CERN, i.e. in case of problems you will not get help there.
 .. _cern-cpymad: https://github.com/pymad/cpymad
 
 
-Contents:
-=========
+Contents
+========
 
 .. toctree::
    :maxdepth: 2
@@ -34,13 +34,22 @@ Contents:
    cpymad/index
 
 
-Contact
-=======
+Project pages
+=============
 
-Feel free to report bugs, request features and ask questions on the
-`issue pages`_.
+- `Installation`_
+- `Source code`_
+- `Documentation`_
+- `Issue tracker`_
+- `Releases`_
 
-.. _issue pages: https://github.com/hibtc/cpymad/issues
+Feel free to report bugs, request features and ask questions.
+
+.. _Installation: http://hibtc.github.io/cpymad/installation
+.. _Source code: https://github.com/hibtc/cpymad
+.. _Documentation: http://hibtc.github.io/cpymad
+.. _Issue tracker: https://github.com/hibtc/cpymad/issues
+.. _Releases: https://pypi.python.org/pypi/cpymad
 
 
 Indices and tables
