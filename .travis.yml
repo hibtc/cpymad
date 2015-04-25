@@ -31,10 +31,11 @@ install:
 # Actual tests:
 script:
   - coverage run --source=cpymad    test/test_resource.py -v
-  - coverage run --source=cpymad -a test/test_madx.py     -v
-  - coverage run --source=cpymad -a test/test_model.py    -v
-  - coverage run --source=cpymad -a test/test_locator.py  -v
+  - coverage run --source=cpymad -a test/test_rpc.py      -v
   - coverage run --source=cpymad -a test/test_util.py     -v
+  - coverage run --source=cpymad -a test/test_madx.py     -v
+  - coverage run --source=cpymad -a test/test_locator.py  -v
+  - coverage run --source=cpymad -a test/test_model.py    -v
 
 after_success:
   - coveralls
