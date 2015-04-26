@@ -4,6 +4,11 @@ python:
   - "2.7"
   - "3.3"
 
+env:
+  global:
+    - PIP_FIND_LINKS=file://$HOME/.pip-cache
+    - PIP_WHEEL_DIR=$HOME/.pip-cache
+
 before_install:
   # Install MAD-X from PPA (see https://github.com/hibtc/madx-debian):
   # if this breaks, please revert 140d5ee59abd7763464019be0bdd116dc351d7fc:
@@ -13,6 +18,9 @@ before_install:
 
 # Setup (performed within virtualenv)
 install:
+  # prepare dependency cache:
+  - pip wheel cython numpy pyyaml setuptools
+
   # We need to install cython here, since Travis uses the checkout from the
   # repository which doesn't contain ".c" source files (unlike the source
   # distribution from PyPI):
@@ -39,3 +47,8 @@ script:
 
 after_success:
   - coveralls
+
+cache:
+  apt: true
+  directories:
+    - $PIP_WHEEL_DIR
