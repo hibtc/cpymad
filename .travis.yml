@@ -19,7 +19,7 @@ before_install:
 # Setup (performed within virtualenv)
 install:
   # prepare dependency cache:
-  - pip wheel cython numpy pyyaml setuptools
+  - pip wheel -v cython numpy pyyaml setuptools
 
   # We need to install cython here, since Travis uses the checkout from the
   # repository which doesn't contain ".c" source files (unlike the source
