@@ -4,20 +4,26 @@ python:
   - "2.7"
   - "3.3"
 
+# Build inside docker containers instead of virtual machines. These are
+# faster, start quicker and support caching. Only downside: sudo is not
+# supported. To work around this, the debian package must be extracted
+# manually and a few environment variables need to be set up (see below).
+sudo: false
+
 env:
   global:
+    # Enable caching of python wheels
     - PIP_FIND_LINKS=file://$HOME/.pip-cache
     - PIP_WHEEL_DIR=$HOME/.pip-cache
+
+    # Current MAD-X debian package and install location
     - MADX_ARCHIVE=libmadx-dev_5.02.05-2_amd64.deb
     - PREFIX=$HOME/install
+
+    # Activate fake MAD-X 'installation'
     - CPATH=$PREFIX/usr/include
     - LIBRARY_PATH=$PREFIX/usr/lib
     - LD_LIBRARY_PATH=$PREFIX/usr/lib
-
-# Build inside docker containers instead of virtual machines. These are
-# faster, start quicker and support caching. Only downside: sudo is not
-# supported
-sudo: false
 
 before_install:
   # Install MAD-X from PPA (see https://github.com/hibtc/madx-debian):
