@@ -12,8 +12,21 @@ __author_email__ = 'pymad@cern.ch'
 __maintainer__ = 'Thomas Gläßle'
 __maintainer_email__ = 't_glaessle@gmx.de'
 
+__support__ = __maintainer_email__
+
 __license__ = 'CC0, Apache, Non-Free'
-__copyright__ = 'See file COPYING.rst'
+__copyright__ = 'See file COPYING.rst or cpymad.get_copyright_notice()'
+
+__credits__ = """
+Current cpymad maintainer:
+
+    Thomas Gläßle <t_glaessle@gmx.de>
+
+Initial pymad creators:
+
+    Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen@cern.ch>
+    Kajetan Fuchsberger <Kajetan.Fuchsberger@cern.ch>
+"""
 
 # Trove classifiers: https://pypi.python.org/pypi?:action=list_classifiers
 __classifiers__ = [
@@ -28,3 +41,8 @@ __classifiers__ = [
     'Programming Language :: Python :: 3.4',
     'Topic :: Scientific/Engineering :: Physics',
 ]
+
+
+def get_copyright_notice():
+    from pkg_resources import resource_string
+    return resource_string('cpymad', 'COPYING/cpymad.rst')
