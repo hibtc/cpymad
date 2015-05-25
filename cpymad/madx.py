@@ -743,3 +743,48 @@ class TableProxy(collections.Mapping):
         table = Dict((column, self[column]) for column in columns)
         table.summary = self.summary
         return table
+
+
+class Metadata(object):
+
+    """MAD-X metadata (license info, etc)."""
+
+    __title__ = 'MAD-X'
+
+    @property
+    def __version__(self):
+        return self._get_libmadx().get_version_number()
+
+    __summary__ = (
+        'MAD is a project with a long history, aiming to be at the '
+        'forefront of computational physics in the field of particle '
+        'accelerator design and simulation. The MAD scripting language '
+        'is de facto the standard to describe particle accelerators, '
+        'simulate beam dynamics and optimize beam optics.'
+    )
+
+    __support__ = 'mad@cern.ch'
+
+    __uri__ = 'http://madx.web.cern.ch/madx/'
+
+    __credits__ = (
+        'MAD-X is developed at CERN and has many contributors. '
+        'For more information see:\n'
+        '\n'
+        'http://madx.web.cern.ch/madx/www/contributors.html'
+    )
+
+    def get_copyright_notice(self):
+        from pkg_resources import resource_string
+        return resource_string('cpymad', 'COPYING/madx.txt')
+
+    _libmadx = None
+
+    def _get_libmadx(self):
+        if not self._libmadx:
+            svc, proc = _rpc.LibMadxClient.spawn_subprocess()
+            self._libmadx = svc.libmadx
+        return self._libmadx
+
+
+metadata = Metadata()

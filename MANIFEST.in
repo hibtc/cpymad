@@ -1,5 +1,6 @@
-recursive-include cpymad *.pxd *.pyx *.c COPYING.rst
+recursive-include cpymad *.pxd *.pyx *.c
 recursive-include test *.py *.yml *.madx
+include cpymad/COPYING/*
 include LICENSE/*
 include README.rst CHANGES.rst COPYING.rst
 include setup.py ez_setup.py

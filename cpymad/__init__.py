@@ -45,4 +45,4 @@ __classifiers__ = [
 
 def get_copyright_notice():
     from pkg_resources import resource_string
-    return resource_string('cpymad', 'COPYING.rst')
+    return resource_string('cpymad', 'COPYING/cpymad.rst')
