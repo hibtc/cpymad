@@ -4,6 +4,14 @@ Changelog
 (dates are in the form dd.mm.yyyy)
 
 
+0.10.5
+======
+Date: 25.05.2015
+
+- add MAD-X specific metadata in cpymad.madx.metadata
+- speedup Travis testing (using caches and docker containers)
+
+
 0.10.4
 ======
 Date: 22.04.2015
