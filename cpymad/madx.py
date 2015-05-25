@@ -776,7 +776,8 @@ class Metadata(object):
 
     def get_copyright_notice(self):
         from pkg_resources import resource_string
-        return resource_string('cpymad', 'COPYING/madx.txt')
+        plaintext = resource_string('cpymad', 'COPYING/madx.txt')
+        return '::\n\n' + '\n'.join('    ' + l for l in plaintext.split('\n'))
 
     _libmadx = None
 
