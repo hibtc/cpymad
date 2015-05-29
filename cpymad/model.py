@@ -314,6 +314,17 @@ class Sequence(object):
         """Get default :class:`Range`."""
         return self.ranges[self._data['default-range']]
 
+    @property
+    def real_sequence(self):
+        """Get the corresponding :class:`cpymad.madx.Sequence`."""
+        self.init()
+        return self._model.madx.sequences[self.name]
+
+    @property
+    def elements(self):
+        """Get a proxy list for all the elements."""
+        return self.real_sequence.elements
+
     def range(self, start, stop):
         """Create a :class:`Range` within (start, stop) for this sequence."""
         # TODO
