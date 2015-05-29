@@ -95,7 +95,7 @@ class ResourceProvider(object):
         with self.open(name, encoding) as f:
             return f.read()
 
-    def yaml(self, name='', encoding='utf-8', **kwargs):
+    def yaml(self, name='', encoding='utf-8'):
         """
         Load the specified YAML/JSON resource.
 
@@ -109,9 +109,13 @@ class ResourceProvider(object):
         this function can also be used to load JSON resources. The input is
         not checked to be valid JSON!
         """
-        from yaml import safe_load
+        import yaml
+        try:
+            Loader = yaml.CSafeLoader
+        except AttributeError:
+            Loader = yaml.SafeLoader
         with self.open(name, encoding=encoding) as f:
-            return safe_load(f, **kwargs)
+            return yaml.load(f, Loader)
 
     # backward compatibility alias
     json = yaml
