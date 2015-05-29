@@ -3,7 +3,9 @@
 Contains base class for resource providers.
 """
 
+import csv
 import os
+import sys
 from contextlib import contextmanager
 from shutil import copyfileobj
 from tempfile import NamedTemporaryFile
@@ -113,6 +115,19 @@ class ResourceProvider(object):
 
     # backward compatibility alias
     json = yaml
+
+    if sys.version_info[0] == 2:
+        def csv(self, filename, encoding='utf-8', **kwargs):
+            """Load unicode CSV file, return iterable over rows."""
+            with self.open(filename) as f:
+                for row in csv.reader(f, **kwargs):
+                    yield [e.decode(encoding) for e in row]
+
+    else:
+        def csv(filename, encoding='utf-8', **kwargs):
+            """Load unicode CSV file, return iterable over rows."""
+            with self.open(filename, encoding=encoding) as f:
+                return csv.reader(list(f), **kwargs)
 
     @contextmanager
     def filename(self, name=''):
