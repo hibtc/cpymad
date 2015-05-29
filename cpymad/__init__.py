@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 __title__ = 'cpymad'
-__version__ = '0.10.5'
+__version__ = '0.10.6'
 
 __summary__ = 'Cython binding to MAD-X'
 __uri__ = 'https://github.com/hibtc/cpymad'
@@ -20,15 +20,14 @@ __copyright__ = 'See file COPYING.rst or cpymad.get_copyright_notice()'
 __credits__ = """
 Current cpymad maintainer:
 
-    Thomas Gläßle <t_glaessle@gmx.de>
+    - Thomas Gläßle <t_glaessle@gmx.de>
 
 Initial pymad creators:
 
-    Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen@cern.ch>
-    Kajetan Fuchsberger <Kajetan.Fuchsberger@cern.ch>
+    - Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen@cern.ch>
+    - Kajetan Fuchsberger <Kajetan.Fuchsberger@cern.ch>
 """
 
-# Trove classifiers: https://pypi.python.org/pypi?:action=list_classifiers
 __classifiers__ = [
     'Development Status :: 4 - Beta',
     'Intended Audience :: Science/Research',

@@ -1,6 +1,6 @@
 applies to the python source of the CPyMAD package::
 
-    Copyright (c) 2013-2014, HIT - Heidelberg Ion-Therapy Center
+    Copyright (c) 2013-2015, HIT - Heidelberg Ion-Therapy Center
 
     To the extent possible under law, the person who associated CC0 with
     CPyMAD has waived all copyright and related or neighboring rights to

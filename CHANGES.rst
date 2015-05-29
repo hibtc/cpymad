@@ -4,6 +4,16 @@ Changelog
 (dates are in the form dd.mm.yyyy)
 
 
+0.10.6
+======
+Date: 29.05.2015
+
+- add csv() method for ResourceProvider
+- use C loader from yaml for performance if available
+- convert madx.metadata.get_copyright_notice
+- add accessors to real sequence + elements for model.Sequence
+
+
 0.10.5
 ======
 Date: 25.05.2015
