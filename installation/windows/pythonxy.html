@@ -8,7 +8,7 @@
     
     <title>Python(x,y) &mdash; CPyMAD 0.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -28,8 +28,8 @@
     <link rel="next" title="WinPython" href="winpython.html" />
     <link rel="prev" title="Windows" href="index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -44,16 +44,16 @@
         <li class="right" >
           <a href="index.html" title="Windows"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Installation Instructions</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Windows</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Installation Instructions</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Windows</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="python-x-y">
 <h1>Python(x,y)<a class="headerlink" href="#python-x-y" title="Permalink to this headline">¶</a></h1>
@@ -86,11 +86,11 @@ stable or even buildable.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">You might need multiple extraction steps until you get a folder
-containing the file <tt class="file docutils literal"><span class="pre">CMakeLists.txt</span></tt> as well as several other
+containing the file <code class="file docutils literal"><span class="pre">CMakeLists.txt</span></code> as well as several other
 files and subdirectories.</p>
 </div>
 <p>I recommend to build MAD-X as a <em>static</em> library as described below. This
-way, you won&#8217;t need to carry any <tt class="docutils literal"><span class="pre">.dll</span></tt> files around and you won&#8217;t run
+way, you won&#8217;t need to carry any <code class="docutils literal"><span class="pre">.dll</span></code> files around and you won&#8217;t run
 into version problems when having a multiple MAD-X library builds around.</p>
 <p><a class="reference external" href="https://code.google.com/p/pythonxy/">Python(x,y)</a> provides an <em>Open enhanced console here</em> context menu item
 when right-clicking on a folder in the explorer. Open the madX folder with
@@ -103,10 +103,10 @@ make install
 </pre></div>
 </div>
 <p>This will install the headers, binaries and library files to the
-<tt class="file docutils literal"><span class="pre">madX\install</span></tt> subfolder.</p>
+<code class="file docutils literal"><span class="pre">madX\install</span></code> subfolder.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>You can also use the regular console <tt class="docutils literal"><span class="pre">cmd.exe</span></tt>. In this case extend
+<p>You can also use the regular console <code class="docutils literal"><span class="pre">cmd.exe</span></code>. In this case extend
 the PATH environment variable with your python and MinGW installation:</p>
 <div class="last highlight-bat"><div class="highlight"><pre><span class="k">set</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">%PATH%</span>;C:\MinGW<span class="m">32</span>-xy\bin
 <span class="k">set</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">%PATH%</span>;C:\Python<span class="m">27</span>
@@ -117,7 +117,7 @@ the PATH environment variable with your python and MinGW installation:</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">If executing CMake from the GUI, you have to disable the
-<tt class="docutils literal"><span class="pre">BUILD_SHARED_LIBS</span></tt> option, if present. Afterwards reconfigure and
+<code class="docutils literal"><span class="pre">BUILD_SHARED_LIBS</span></code> option, if present. Afterwards reconfigure and
 regenerate.</p>
 </div>
 </div>
@@ -129,8 +129,8 @@ follows:</p>
 <span class="n">python</span> setup.py install
 </pre></div>
 </div>
-<p>Substitute <tt class="docutils literal"><span class="pre">&lt;madx-install-path&gt;</span></tt> with the <tt class="file docutils literal"><span class="pre">madX\install</span></tt> subfolder
-as specified by <tt class="docutils literal"><span class="pre">CMAKE_INSTALL_PREFIX</span></tt> before.</p>
+<p>Substitute <code class="docutils literal"><span class="pre">&lt;madx-install-path&gt;</span></code> with the <code class="file docutils literal"><span class="pre">madX\install</span></code> subfolder
+as specified by <code class="docutils literal"><span class="pre">CMAKE_INSTALL_PREFIX</span></code> before.</p>
 </div>
 </div>
 
@@ -138,7 +138,7 @@ as specified by <tt class="docutils literal"><span class="pre">CMAKE_INSTALL_PRE
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
@@ -156,12 +156,14 @@ as specified by <tt class="docutils literal"><span class="pre">CMAKE_INSTALL_PRE
   <h4>Next topic</h4>
   <p class="topless"><a href="winpython.html"
                         title="next chapter">WinPython</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/installation/windows/pythonxy.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/installation/windows/pythonxy.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -178,7 +180,7 @@ as specified by <tt class="docutils literal"><span class="pre">CMAKE_INSTALL_PRE
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -193,14 +195,14 @@ as specified by <tt class="docutils literal"><span class="pre">CMAKE_INSTALL_PRE
         <li class="right" >
           <a href="index.html" title="Windows"
              >previous</a> |</li>
-        <li><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Installation Instructions</a> &raquo;</li>
-          <li><a href="index.html" >Windows</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Installation Instructions</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Windows</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, T. Gläßle (HIT), 2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

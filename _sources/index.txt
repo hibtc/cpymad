@@ -19,9 +19,12 @@ This is a heavily modified fork of the cern-cpymad_ package. The fork is
 not authored or maintained by CERN members.
 
 CPyMAD links against an unofficial build of MAD-X that is not supported by
-CERN, i.e. in case of problems you will not get help there.
+CERN, i.e. in case of problems you will not get help there. However, this
+does NOT mean you should post every problem you encounter while using
+cpymad here. See `Reporting issues`_.
 
 .. _cern-cpymad: https://github.com/pymad/cpymad
+.. _Reporting issues: https://github.com/hibtc/cpymad#reporting-issues
 
 
 Contents

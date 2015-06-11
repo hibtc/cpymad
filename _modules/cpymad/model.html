@@ -8,7 +8,7 @@
     
     <title>cpymad.model &mdash; CPyMAD 0.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,8 +26,8 @@
     <link rel="top" title="CPyMAD 0.10.0 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -36,15 +36,15 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for cpymad.model</h1><div class="highlight"><pre>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -212,32 +212,32 @@
         <span class="k">return</span> <span class="s">&quot;{0}({1!r})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Model.name"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Model.name">[docs]</a>    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Model name.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
-</div>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Model.data"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Model.data">[docs]</a>    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get a serializable representation of this model.&quot;&quot;&quot;</span>
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">data</span><span class="p">[</span><span class="s">&#39;beams&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_serialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">beams</span><span class="p">)</span>
         <span class="n">data</span><span class="p">[</span><span class="s">&#39;optics&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_serialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">optics</span><span class="p">)</span>
         <span class="n">data</span><span class="p">[</span><span class="s">&#39;sequences&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_serialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sequences</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">data</span>
-</div>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Model.default_optic"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Model.default_optic">[docs]</a>    <span class="k">def</span> <span class="nf">default_optic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">default_optic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get default Optic.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">optics</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s">&#39;default-optic&#39;</span><span class="p">]]</span>
-</div>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Model.default_sequence"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Model.default_sequence">[docs]</a>    <span class="k">def</span> <span class="nf">default_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">default_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get default Sequence.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sequences</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s">&#39;default-sequence&#39;</span><span class="p">]]</span>
 
     <span class="c"># TODO: add setters for default_optic / default_sequence</span>
     <span class="c"># TODO: remove default_sequence?</span>
-</div>
+
     <span class="k">def</span> <span class="nf">_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">files</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load MAD-X files in interpreter.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
@@ -347,22 +347,33 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">beam</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
 </div>
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Sequence.data"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Sequence.data">[docs]</a>    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get a serializable representation of this sequence.&quot;&quot;&quot;</span>
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">data</span><span class="p">[</span><span class="s">&#39;ranges&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_serialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ranges</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">data</span>
-</div>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Sequence.beam"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Sequence.beam">[docs]</a>    <span class="k">def</span> <span class="nf">beam</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">beam</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get :class:`Beam` instance for this sequence.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">beams</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s">&#39;beam&#39;</span><span class="p">]]</span>
-</div>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Sequence.default_range"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Sequence.default_range">[docs]</a>    <span class="k">def</span> <span class="nf">default_range</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">default_range</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get default :class:`Range`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranges</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s">&#39;default-range&#39;</span><span class="p">]]</span>
-</div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">real_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the corresponding :class:`cpymad.madx.Sequence`.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">madx</span><span class="o">.</span><span class="n">sequences</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">elements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a proxy list for all the elements.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">real_sequence</span><span class="o">.</span><span class="n">elements</span>
+
 <div class="viewcode-block" id="Sequence.range"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Sequence.range">[docs]</a>    <span class="k">def</span> <span class="nf">range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a :class:`Range` within (start, stop) for this sequence.&quot;&quot;&quot;</span>
         <span class="c"># TODO</span>
@@ -412,19 +423,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
 </div>
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Range.bounds"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Range.bounds">[docs]</a>    <span class="k">def</span> <span class="nf">bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get a tuple (first, last).&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&quot;madx-range&quot;</span><span class="p">][</span><span class="s">&quot;first&quot;</span><span class="p">],</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&quot;madx-range&quot;</span><span class="p">][</span><span class="s">&quot;last&quot;</span><span class="p">])</span>
-</div>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Range.offsets_file"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Range.offsets_file">[docs]</a>    <span class="k">def</span> <span class="nf">offsets_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">offsets_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get a :class:`ResourceProvider` for the offsets file.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s">&#39;aper-offset&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
         <span class="n">repo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">_repo</span>
         <span class="k">return</span> <span class="n">_repo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;aper-offset&#39;</span><span class="p">])</span>
-</div>
+
 <div class="viewcode-block" id="Range.twiss"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Range.twiss">[docs]</a>    <span class="k">def</span> <span class="nf">twiss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run TWISS on this range.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
@@ -448,19 +459,19 @@
                           <span class="nb">range</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 </div>
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Range.initial_conditions"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Range.initial_conditions">[docs]</a>    <span class="k">def</span> <span class="nf">initial_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">initial_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a dict of all defined initial conditions.</span>
 
 <span class="sd">        Each item is a dict of TWISS parameters.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;twiss-initial-conditions&#39;</span><span class="p">]</span>
-</div>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Range.default_initial_conditions"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Range.default_initial_conditions">[docs]</a>    <span class="k">def</span> <span class="nf">default_initial_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">default_initial_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the default twiss initial conditions.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_conditions</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;default-twiss&#39;</span><span class="p">]]</span>
-</div>
+
     <span class="k">def</span> <span class="nf">_set_twiss_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
         <span class="n">kw</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">twiss_init</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;twiss_init&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -528,9 +539,9 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -547,7 +558,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -556,13 +567,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, T. Gläßle (HIT), 2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

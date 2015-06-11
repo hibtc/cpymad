@@ -8,7 +8,7 @@
     
     <title>WinPython &mdash; CPyMAD 0.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -28,8 +28,8 @@
     <link rel="next" title="Other distributions" href="other.html" />
     <link rel="prev" title="Python(x,y)" href="pythonxy.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -44,16 +44,16 @@
         <li class="right" >
           <a href="pythonxy.html" title="Python(x,y)"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Installation Instructions</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Windows</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Installation Instructions</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Windows</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="winpython">
 <h1>WinPython<a class="headerlink" href="#winpython" title="Permalink to this headline">¶</a></h1>
@@ -67,15 +67,15 @@ other machines, this is the distribution of choice.</p>
 <div class="section" id="build-libmadx">
 <h2>Build libmadx<a class="headerlink" href="#build-libmadx" title="Permalink to this headline">¶</a></h2>
 <p>Download and extract the <a class="reference external" href="http://svnweb.cern.ch/world/wsvn/madx/tags/">MAD-X source</a> from SVN. Open a terminal by
-executing the <tt class="file docutils literal"><span class="pre">%WinPython%\WinPython</span> <span class="pre">Command</span> <span class="pre">Prompt.exe</span></tt>. Change the directory to
-the extracted MAD-X folder with the <tt class="docutils literal"><span class="pre">cd</span></tt> command and prepare the build:</p>
+executing the <code class="file docutils literal"><span class="pre">%WinPython%\WinPython</span> <span class="pre">Command</span> <span class="pre">Prompt.exe</span></code>. Change the directory to
+the extracted MAD-X folder with the <code class="docutils literal"><span class="pre">cd</span></code> command and prepare the build:</p>
 <div class="highlight-bat"><div class="highlight"><pre>mkdir build
 <span class="k">cd</span> build
 cmake -G <span class="s2">&quot;MinGW Makefiles&quot;</span> -DBUILD_SHARED_LIBS:BOOL<span class="o">=</span><span class="k">OFF</span> -DCMAKE_INSTALL_PREFIX<span class="o">=</span>..\install ..
 </pre></div>
 </div>
-<p>In the file <tt class="file docutils literal"><span class="pre">%MADX%\build\src\CMakeFiles\madxbin.dir\link.txt</span></tt>
-search for <tt class="docutils literal"><span class="pre">-lgcc_eh</span></tt> and remove it, otherwise you may get linker errors at
+<p>In the file <code class="file docutils literal"><span class="pre">%MADX%\build\src\CMakeFiles\madxbin.dir\link.txt</span></code>
+search for <code class="docutils literal"><span class="pre">-lgcc_eh</span></code> and remove it, otherwise you may get linker errors at
 the end of the next command. The following step will build the library. This
 may take a few minutes, so go and grep a coffee meanwhile:</p>
 <div class="highlight-bat"><div class="highlight"><pre>mingw<span class="m">32</span>-make
@@ -83,7 +83,7 @@ mingw<span class="m">32</span>-make install
 </pre></div>
 </div>
 <p>If all went well the last command will have installed binaries and library
-files to the <tt class="file docutils literal"><span class="pre">madX\install</span></tt> subfolder.</p>
+files to the <code class="file docutils literal"><span class="pre">madX\install</span></code> subfolder.</p>
 </div>
 <div class="section" id="build-cpymad">
 <h2>Build CPyMAD<a class="headerlink" href="#build-cpymad" title="Permalink to this headline">¶</a></h2>
@@ -107,7 +107,7 @@ essentially a zip archive containing all the files ready for installation:</p>
 <div class="highlight-bat"><div class="highlight"><pre>python setup.py bdist_wheel
 </pre></div>
 </div>
-<p>This will create a <tt class="docutils literal"><span class="pre">.whl</span></tt> file named after the package and its target
+<p>This will create a <code class="docutils literal"><span class="pre">.whl</span></code> file named after the package and its target
 platform. This file can now be used for installation in your favorite
 python distribution, like so:</p>
 <div class="highlight-bat"><div class="highlight"><pre>pip install dist\cpymad<span class="m">-0</span>.<span class="m">10</span>.<span class="m">1</span>-cp<span class="m">27</span>-none-win<span class="m">32</span>.whl
@@ -120,7 +120,7 @@ python distribution, like so:</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
@@ -138,12 +138,14 @@ python distribution, like so:</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="other.html"
                         title="next chapter">Other distributions</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/installation/windows/winpython.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/installation/windows/winpython.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -160,7 +162,7 @@ python distribution, like so:</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -175,14 +177,14 @@ python distribution, like so:</p>
         <li class="right" >
           <a href="pythonxy.html" title="Python(x,y)"
              >previous</a> |</li>
-        <li><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Installation Instructions</a> &raquo;</li>
-          <li><a href="index.html" >Windows</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Installation Instructions</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Windows</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, T. Gläßle (HIT), 2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

@@ -8,7 +8,7 @@
     
     <title>cpymad.madx &mdash; CPyMAD 0.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,8 +26,8 @@
     <link rel="top" title="CPyMAD 0.10.0 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -36,15 +36,15 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for cpymad.madx</h1><div class="highlight"><pre>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -245,13 +245,13 @@
     <span class="n">__nonzero__</span> <span class="o">=</span> <span class="n">__bool__</span>      <span class="c"># alias for python2 compatibility</span>
 
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Madx.version"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.version">[docs]</a>    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the MAD-X version.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_version_number</span><span class="p">(),</span>
                        <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_version_date</span><span class="p">())</span>
-</div>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Madx.command"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.command">[docs]</a>    <span class="k">def</span> <span class="nf">command</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">command</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Perform a single MAD-X command.</span>
 
@@ -259,7 +259,7 @@
 <span class="sd">        :param kwargs: command parameters</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">MadxCommands</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="p">)</span>
-</div>
+
 <div class="viewcode-block" id="Madx.input"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.input">[docs]</a>    <span class="k">def</span> <span class="nf">input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Run any textual MAD-X input.</span>
@@ -519,7 +519,7 @@
             <span class="k">return</span> <span class="bp">None</span>
 
     <span class="nd">@active_sequence.setter</span>
-<div class="viewcode-block" id="Madx.active_sequence"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.active_sequence">[docs]</a>    <span class="k">def</span> <span class="nf">active_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">active_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">name</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
@@ -531,7 +531,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">active_sequence</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">name</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-</div>
+
 <div class="viewcode-block" id="Madx.evaluate"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Evaluates an expression and returns the result as double.</span>
@@ -543,16 +543,16 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
 </div>
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Madx.sequences"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.sequences">[docs]</a>    <span class="k">def</span> <span class="nf">sequences</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">sequences</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;A dict like view of all sequences in memory.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">SequenceMap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">)</span>
-</div>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Madx.tables"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.tables">[docs]</a>    <span class="k">def</span> <span class="nf">tables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">tables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;A dict like view of all tables in memory.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">TableMap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">)</span>
 
-</div></div>
+</div>
 <span class="k">def</span> <span class="nf">_map_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;String representation of a custom mapping object.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
@@ -634,36 +634,36 @@
     <span class="n">__repr__</span> <span class="o">=</span> <span class="n">__str__</span>
 
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Sequence.name"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Sequence.name">[docs]</a>    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the name of the sequence.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
-</div>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Sequence.beam"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Sequence.beam">[docs]</a>    <span class="k">def</span> <span class="nf">beam</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">beam</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the beam dictionary associated to the sequence.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_sequence_beam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
-</div>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Sequence.twiss_table"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Sequence.twiss_table">[docs]</a>    <span class="k">def</span> <span class="nf">twiss_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">twiss_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the TWISS results from the last calculation.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">TableProxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">twiss_table_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">)</span>
-</div>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Sequence.twiss_table_name"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Sequence.twiss_table_name">[docs]</a>    <span class="k">def</span> <span class="nf">twiss_table_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">twiss_table_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the name of the table with the TWISS results.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_sequence_twiss_table_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
-</div>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Sequence.elements"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Sequence.elements">[docs]</a>    <span class="k">def</span> <span class="nf">elements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">elements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get list of elements.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ElementList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">,</span> <span class="n">expanded</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-</div>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Sequence.expanded_elements"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Sequence.expanded_elements">[docs]</a>    <span class="k">def</span> <span class="nf">expanded_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">expanded_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get list of elements in expanded sequence.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ElementList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">,</span> <span class="n">expanded</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-</div></div>
+</div>
 <div class="viewcode-block" id="ElementList"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.ElementList">[docs]</a><span class="k">class</span> <span class="nc">ElementList</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
@@ -774,10 +774,10 @@
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_table_column_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">))</span>
 
     <span class="nd">@property</span>
-<div class="viewcode-block" id="TableProxy.summary"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.TableProxy.summary">[docs]</a>    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the table summary.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_table_summary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
-</div>
+
 <div class="viewcode-block" id="TableProxy.copy"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.TableProxy.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a frozen table with the desired columns.</span>
@@ -791,15 +791,60 @@
             <span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span>
         <span class="n">table</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">((</span><span class="n">column</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">column</span><span class="p">])</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">)</span>
         <span class="n">table</span><span class="o">.</span><span class="n">summary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">summary</span>
-        <span class="k">return</span> <span class="n">table</span></div></div>
+        <span class="k">return</span> <span class="n">table</span>
+
+</div></div>
+<div class="viewcode-block" id="Metadata"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Metadata">[docs]</a><span class="k">class</span> <span class="nc">Metadata</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;MAD-X metadata (license info, etc).&quot;&quot;&quot;</span>
+
+    <span class="n">__title__</span> <span class="o">=</span> <span class="s">&#39;MAD-X&#39;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">__version__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_libmadx</span><span class="p">()</span><span class="o">.</span><span class="n">get_version_number</span><span class="p">()</span>
+
+    <span class="n">__summary__</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s">&#39;MAD is a project with a long history, aiming to be at the &#39;</span>
+        <span class="s">&#39;forefront of computational physics in the field of particle &#39;</span>
+        <span class="s">&#39;accelerator design and simulation. The MAD scripting language &#39;</span>
+        <span class="s">&#39;is de facto the standard to describe particle accelerators, &#39;</span>
+        <span class="s">&#39;simulate beam dynamics and optimize beam optics.&#39;</span>
+    <span class="p">)</span>
+
+    <span class="n">__support__</span> <span class="o">=</span> <span class="s">&#39;mad@cern.ch&#39;</span>
+
+    <span class="n">__uri__</span> <span class="o">=</span> <span class="s">&#39;http://madx.web.cern.ch/madx/&#39;</span>
+
+    <span class="n">__credits__</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s">&#39;MAD-X is developed at CERN and has many contributors. &#39;</span>
+        <span class="s">&#39;For more information see:</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="s">&#39;http://madx.web.cern.ch/madx/www/contributors.html&#39;</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_copyright_notice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pkg_resources</span> <span class="kn">import</span> <span class="n">resource_string</span>
+        <span class="k">return</span> <span class="n">resource_string</span><span class="p">(</span><span class="s">&#39;cpymad&#39;</span><span class="p">,</span> <span class="s">&#39;COPYING/madx.rst&#39;</span><span class="p">)</span>
+
+    <span class="n">_libmadx</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">_get_libmadx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">:</span>
+            <span class="n">svc</span><span class="p">,</span> <span class="n">proc</span> <span class="o">=</span> <span class="n">_rpc</span><span class="o">.</span><span class="n">LibMadxClient</span><span class="o">.</span><span class="n">spawn_subprocess</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">libmadx</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span>
+
+</div>
+<span class="n">metadata</span> <span class="o">=</span> <span class="n">Metadata</span><span class="p">()</span>
 </pre></div>
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -816,7 +861,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -825,13 +870,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, T. Gläßle (HIT), 2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

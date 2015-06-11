@@ -8,7 +8,7 @@
     
     <title>Troubleshooting &mdash; CPyMAD 0.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -28,8 +28,8 @@
     <link rel="next" title="API Reference" href="../cpymad/index.html" />
     <link rel="prev" title="Other distributions" href="windows/other.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -44,15 +44,15 @@
         <li class="right" >
           <a href="windows/other.html" title="Other distributions"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Installation Instructions</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Installation Instructions</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="troubleshooting">
 <span id="id1"></span><h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h1>
@@ -72,8 +72,8 @@ python setup.py build_ext --rpath<span class="o">=</span>&lt;rpath&gt;
 python setup.py install
 </pre></div>
 </div>
-<p>Where <tt class="docutils literal"><span class="pre">&lt;prefix&gt;</span></tt> is the base folder containing the subfolders <tt class="docutils literal"><span class="pre">bin</span></tt>,
-<tt class="docutils literal"><span class="pre">include</span></tt>, <tt class="docutils literal"><span class="pre">lib</span></tt> of the MAD-X build and <tt class="docutils literal"><span class="pre">&lt;rpath&gt;</span></tt> contains the
+<p>Where <code class="docutils literal"><span class="pre">&lt;prefix&gt;</span></code> is the base folder containing the subfolders <code class="docutils literal"><span class="pre">bin</span></code>,
+<code class="docutils literal"><span class="pre">include</span></code>, <code class="docutils literal"><span class="pre">lib</span></code> of the MAD-X build and <code class="docutils literal"><span class="pre">&lt;rpath&gt;</span></code> contains the
 dynamic library files.</p>
 <p>If this does not work, you can set the LD_LIBRARY_PATH (or
 DYLD_LIBRARY_PATH on OSX) environment variable before running pymad, for
@@ -103,14 +103,14 @@ which includes all source files.</p>
 </pre></div>
 </div>
 <p>Solution:
-Open or create the file <tt class="file docutils literal"><span class="pre">C:\Python27\Lib\distutils\distutils.cfg</span></tt>
+Open or create the file <code class="file docutils literal"><span class="pre">C:\Python27\Lib\distutils\distutils.cfg</span></code>
 and add the following lines:</p>
 <div class="highlight-cfg"><div class="highlight"><pre><span class="k">[build]</span>
 <span class="na">compiler</span><span class="o">=</span><span class="s">mingw32</span>
 </pre></div>
 </div>
 <p>If you do not want to modify your python system configuration you can place
-this as <tt class="file docutils literal"><span class="pre">setup.cfg</span></tt> in the current directory.</p>
+this as <code class="file docutils literal"><span class="pre">setup.cfg</span></code> in the current directory.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference external" href="http://stackoverflow.com/q/2817869/650222">http://stackoverflow.com/q/2817869/650222</a></p>
@@ -124,9 +124,9 @@ error: command &#39;gcc&#39; failed with exit status 1
 </pre></div>
 </div>
 <p>Solution:
-In the file <tt class="file docutils literal"><span class="pre">C:\Python27\Lib\distutils\cygwinccompiler.py</span></tt> delete
-every occurence of the string <tt class="docutils literal"><span class="pre">-mno-cygwin</span></tt> in the <tt class="docutils literal"><span class="pre">class</span>
-<span class="pre">Mingw32CCompiler</span></tt> (about line 320). Depending on your version of
+In the file <code class="file docutils literal"><span class="pre">C:\Python27\Lib\distutils\cygwinccompiler.py</span></code> delete
+every occurence of the string <code class="docutils literal"><span class="pre">-mno-cygwin</span></code> in the <code class="docutils literal"><span class="pre">class</span>
+<span class="pre">Mingw32CCompiler</span></code> (about line 320). Depending on your version of
 distutils, for example:</p>
 <div class="highlight-diff"><div class="highlight"><pre><span class="gu">@@ -319,11 +319,11 @@ class Mingw32CCompiler (CygwinCCompiler):</span>
         else:
@@ -158,7 +158,7 @@ distutils, for example:</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
@@ -177,12 +177,14 @@ distutils, for example:</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../cpymad/index.html"
                         title="next chapter">API Reference</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/installation/troubleshooting.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/installation/troubleshooting.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -199,7 +201,7 @@ distutils, for example:</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -214,13 +216,13 @@ distutils, for example:</p>
         <li class="right" >
           <a href="windows/other.html" title="Other distributions"
              >previous</a> |</li>
-        <li><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Installation Instructions</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Installation Instructions</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, T. Gläßle (HIT), 2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>
