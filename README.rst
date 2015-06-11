@@ -28,7 +28,9 @@ This is a heavily modified fork of the cern-cpymad_ package. The fork is
 not authored or maintained by CERN members.
 
 CPyMAD links against an unofficial build of MAD-X that is not supported by
-CERN, i.e. in case of problems you will not get help there.
+CERN, i.e. in case of problems you will not get help there. However, this
+does NOT mean you should post every problem you encounter while using
+cpymad here. See `Reporting issues`_.
 
 .. _cern-cpymad: https://github.com/pymad/cpymad
 
@@ -101,8 +103,8 @@ filesystem, models can be instanciated and used as follows:
 See http://hibtc.github.io/cpymad for further documentation.
 
 
-Contributing
-~~~~~~~~~~~~
+Hacking
+~~~~~~~
 
 Try to be consistent with the PEP8_ guidelines. Add `unit tests`_ for all
 non-trivial functionality. `Dependency injection`_ is a great pattern to
@@ -116,6 +118,24 @@ trivial. See also: `A Note About Git Commit Messages`_.
 .. _`unit tests`: http://docs.python.org/2/library/unittest.html
 .. _`Dependency injection`: http://www.youtube.com/watch?v=RlfLCWKxHJ0
 .. _`A Note About Git Commit Messages`: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
+
+
+Reporting issues
+~~~~~~~~~~~~~~~~
+
+If you have a problem with a sequence file, first try to check if that
+problem remains when using the MAD-X command line client distributed by
+CERN. In that case report the issue to the CERN support!
+
+For issues regarding the cpymad code itself or usage information, I'm happy
+to answer. Just keep in mind to be **precise**, **specific**, **concise**
+and provide all the necessary information.
+
+If you haven't read it so far I recommend to have a look at `How to Report
+Bugs Effectively`_ and `How To Ask Questions The Smart Way`_.
+
+.. _How to Report Bugs Effectively: http://www.chiark.greenend.org.uk/~sgtatham/bugs.html
+.. _How To Ask Questions The Smart Way: http://www.catb.org/esr/faqs/smart-questions.html
 
 
 Tests
