@@ -73,8 +73,6 @@ def create_ipc_connection():
     return conn, remote_recv, remote_send
 
 
-
-
 def spawn_subprocess(argv, **Popen_args):
     """
     Spawn a subprocess and pass to it two IPC handles.
@@ -87,7 +85,12 @@ def spawn_subprocess(argv, **Popen_args):
     """
     conn, remote_recv, remote_send = create_ipc_connection()
     args = argv + [str(int(remote_recv)), str(int(remote_send))]
-    proc = subprocess.Popen(args, close_fds=False, **Popen_args)
+    with open(os.devnull, 'w+') as devnull:
+        for stream in ('stdout', 'stderr', 'stdin'):
+            # compare to `False` as opposed to `None`:
+            if Popen_args.get(stream) == False:
+                Popen_args[stream] = devnull
+        proc = subprocess.Popen(args, close_fds=False, **Popen_args)
     conn.send(_get_open_file_handles())
     # wait for subprocess to confirm that all handles are closed:
     if conn.recv() != 'ready':

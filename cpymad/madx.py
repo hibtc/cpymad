@@ -159,13 +159,15 @@ class Madx(object):
     :mod:`libmadx`.
     """
 
-    def __init__(self, libmadx=None, command_log=None, error_log=None):
+    def __init__(self, libmadx=None, command_log=None, error_log=None,
+                 **Popen_args):
         """
         Initialize instance variables.
 
         :param libmadx: :mod:`libmadx` compatible object
         :param command_log: logs MAD-X history either filename or CommandLog
         :param error_log: logger instance ``logging.Logger``
+        :param Popen_args: parameters to ``subprocess.Popen``
         """
         # get logger
         if error_log is None:
@@ -177,8 +179,9 @@ class Madx(object):
             command_log = NOP
         # start libmadx subprocess
         if libmadx is None:
-            svc, proc = _rpc.LibMadxClient.spawn_subprocess()
-            libmadx = svc.libmadx
+            self._service, self._process = \
+                _rpc.LibMadxClient.spawn_subprocess(**Popen_args)
+            libmadx = self._service.libmadx
         if not libmadx.is_started():
             libmadx.start()
         # init instance variables:
