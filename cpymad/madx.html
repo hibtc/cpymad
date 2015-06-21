@@ -107,8 +107,8 @@
 
 <dl class="class">
 <dt id="cpymad.madx.Madx">
-<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">Madx</code><span class="sig-paren">(</span><em>libmadx=None</em>, <em>command_log=None</em>, <em>error_log=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Each instance controls one MAD-X process.</p>
+<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">Madx</code><span class="sig-paren">(</span><em>libmadx=None</em>, <em>command_log=None</em>, <em>error_log=None</em>, <em>**Popen_args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Each instance controls one MAD-X interpretor.</p>
 <p>This class aims to expose a pythonic interface to the full functionality
 of the MAD-X library. For example, when you call the <code class="docutils literal"><span class="pre">twiss</span></code> method, you
 get numpy arrays containing the information from the table generated.
@@ -116,23 +116,39 @@ Furthermore, we try to reduce the amount of commands needed by combining
 e.g. USE, SELECT, and TWISS into the <code class="docutils literal"><span class="pre">twiss</span></code> method itself, and define
 reasonable default patterns/columns.</p>
 <p>The following very simple example demonstrates basic usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cpymad.madx</span> <span class="kn">import</span> <span class="n">Madx</span>
-
-<span class="n">m</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">()</span>
-
-<span class="n">m</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s">&#39;my-sequences.seq&#39;</span><span class="p">)</span>
-<span class="n">m</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s">&#39;my-strengths.str&#39;</span><span class="p">)</span>
-
-<span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">beam</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="s">&#39;myseq1&#39;</span><span class="p">,</span> <span class="n">particle</span><span class="o">=</span><span class="s">&#39;PROTON&#39;</span><span class="p">)</span>
-<span class="c"># you can also just put an arbitrary MAD-X command string here:</span>
-<span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s">&#39;beam, sequence=myseq1, particle=PROTON&#39;</span><span class="p">)</span>
-
+<div class="highlight-python"><div class="highlight"><pre><span class="n">m</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">()</span>
+<span class="n">m</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s">&#39;my_stuff.madx&#39;</span><span class="p">)</span>
 <span class="n">twiss</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">twiss</span><span class="p">(</span><span class="s">&#39;myseq1&#39;</span><span class="p">)</span>
 
-<span class="c"># now do your own analysis:</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">twiss</span><span class="p">[</span><span class="s">&#39;s&#39;</span><span class="p">],</span> <span class="n">twiss</span><span class="p">[</span><span class="s">&#39;betx&#39;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plt</span><span class="p">(</span><span class="n">twiss</span><span class="p">[</span><span class="s">&#39;s&#39;</span><span class="p">],</span> <span class="n">twiss</span><span class="p">[</span><span class="s">&#39;betx&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Note that only few MAD-X commands are exposed as <a class="reference internal" href="#cpymad.madx.Madx" title="cpymad.madx.Madx"><code class="xref py py-class docutils literal"><span class="pre">Madx</span></code></a> methods.
+For the rest, there is <a class="reference internal" href="#cpymad.madx.Madx.command" title="cpymad.madx.Madx.command"><code class="xref py py-meth docutils literal"><span class="pre">Madx.command()</span></code></a> which can be used to execute
+arbitrary MAD-X commands:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">beam</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="s">&#39;myseq1&#39;</span><span class="p">,</span> <span class="n">particle</span><span class="o">=</span><span class="s">&#39;PROTON&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will work for the majority of cases. However, in some instances it
+may be necessary to forgo some of the syntactic sugar that
+<a class="reference internal" href="#cpymad.madx.Madx.command" title="cpymad.madx.Madx.command"><code class="xref py py-meth docutils literal"><span class="pre">Madx.command()</span></code></a> provides. For example, the <code class="docutils literal"><span class="pre">global</span></code> command (part
+of matching) can not be accessed as attribute since it is a python
+keyword. This can be handled as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s">&#39;global&#39;</span><span class="p">,</span> <span class="n">sequence</span><span class="o">=</span><span class="n">cassps</span><span class="p">,</span> <span class="n">Q1</span><span class="o">=</span><span class="mf">26.58</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Composing MAD-X commands can be a bit tricky at times — partly because of
+some inconsistencies in the MAD-X language. For those cases where
+<code class="docutils literal"><span class="pre">command</span></code> fails to do the right thing or where you simply need more fine
+grained control over command composition there are more powerful syntaxes
+available:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Multiple positional arguments are just concatenated with commas in</span>
+<span class="c"># between:</span>
+<span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s">&#39;global&#39;</span><span class="p">,</span> <span class="s">&#39;sequence=cassps&#39;</span><span class="p">,</span> <span class="n">Q1</span><span class="o">=</span><span class="mf">26.58</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s">&#39;global, sequence=cassps&#39;</span><span class="p">,</span>  <span class="s">&#39;Q1=26.58&#39;</span><span class="p">)</span>
+
+<span class="c"># Issue a plain text command, don&#39;t forget the semicolon!</span>
+<span class="n">m</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s">&#39;FOO, BAR=[baz], QUX=&lt;NORF&gt;;&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>By default <a class="reference internal" href="#cpymad.madx.Madx" title="cpymad.madx.Madx"><code class="xref py py-class docutils literal"><span class="pre">Madx</span></code></a> uses a subprocess to execute MAD-X library calls

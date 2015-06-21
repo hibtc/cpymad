@@ -47,6 +47,7 @@
           <div class="body" role="main">
             
   <h1>Source code for cpymad.madx</h1><div class="highlight"><pre>
+<span class="c"># encoding: utf-8</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This module defines a convenience layer to access the MAD-X interpreter.</span>
 
@@ -170,7 +171,7 @@
 <div class="viewcode-block" id="Madx"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx">[docs]</a><span class="k">class</span> <span class="nc">Madx</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Each instance controls one MAD-X process.</span>
+<span class="sd">    Each instance controls one MAD-X interpretor.</span>
 
 <span class="sd">    This class aims to expose a pythonic interface to the full functionality</span>
 <span class="sd">    of the MAD-X library. For example, when you call the ``twiss`` method, you</span>
@@ -179,27 +180,41 @@
 <span class="sd">    e.g. USE, SELECT, and TWISS into the ``twiss`` method itself, and define</span>
 <span class="sd">    reasonable default patterns/columns.</span>
 
-<span class="sd">    The following very simple example demonstrates basic usage:</span>
-
-<span class="sd">    .. code-block:: python</span>
-
-<span class="sd">        from cpymad.madx import Madx</span>
+<span class="sd">    The following very simple example demonstrates basic usage::</span>
 
 <span class="sd">        m = Madx()</span>
-
-<span class="sd">        m.call(&#39;my-sequences.seq&#39;)</span>
-<span class="sd">        m.call(&#39;my-strengths.str&#39;)</span>
-
-<span class="sd">        m.command.beam(sequence=&#39;myseq1&#39;, particle=&#39;PROTON&#39;)</span>
-<span class="sd">        # you can also just put an arbitrary MAD-X command string here:</span>
-<span class="sd">        m.command(&#39;beam, sequence=myseq1, particle=PROTON&#39;)</span>
-
+<span class="sd">        m.call(&#39;my_stuff.madx&#39;)</span>
 <span class="sd">        twiss = m.twiss(&#39;myseq1&#39;)</span>
 
-<span class="sd">        # now do your own analysis:</span>
-<span class="sd">        from matplotlib import pyplot as plt</span>
-<span class="sd">        plt.plot(twiss[&#39;s&#39;], twiss[&#39;betx&#39;])</span>
-<span class="sd">        plt.show()</span>
+<span class="sd">        matplotlib.pyplot.plt(twiss[&#39;s&#39;], twiss[&#39;betx&#39;])</span>
+
+<span class="sd">    Note that only few MAD-X commands are exposed as :class:`Madx` methods.</span>
+<span class="sd">    For the rest, there is :meth:`Madx.command` which can be used to execute</span>
+<span class="sd">    arbitrary MAD-X commands::</span>
+
+<span class="sd">        m.command.beam(sequence=&#39;myseq1&#39;, particle=&#39;PROTON&#39;)</span>
+
+<span class="sd">    This will work for the majority of cases. However, in some instances it</span>
+<span class="sd">    may be necessary to forgo some of the syntactic sugar that</span>
+<span class="sd">    :meth:`Madx.command` provides. For example, the ``global`` command (part</span>
+<span class="sd">    of matching) can not be accessed as attribute since it is a python</span>
+<span class="sd">    keyword. This can be handled as follows::</span>
+
+<span class="sd">        m.command(&#39;global&#39;, sequence=cassps, Q1=26.58)</span>
+
+<span class="sd">    Composing MAD-X commands can be a bit tricky at times — partly because of</span>
+<span class="sd">    some inconsistencies in the MAD-X language. For those cases where</span>
+<span class="sd">    ``command`` fails to do the right thing or where you simply need more fine</span>
+<span class="sd">    grained control over command composition there are more powerful syntaxes</span>
+<span class="sd">    available::</span>
+
+<span class="sd">        # Multiple positional arguments are just concatenated with commas in</span>
+<span class="sd">        # between:</span>
+<span class="sd">        m.command(&#39;global&#39;, &#39;sequence=cassps&#39;, Q1=26.58)</span>
+<span class="sd">        m.command(&#39;global, sequence=cassps&#39;,  &#39;Q1=26.58&#39;)</span>
+
+<span class="sd">        # Issue a plain text command, don&#39;t forget the semicolon!</span>
+<span class="sd">        m.input(&#39;FOO, BAR=[baz], QUX=&lt;NORF&gt;;&#39;)</span>
 
 <span class="sd">    By default :class:`Madx` uses a subprocess to execute MAD-X library calls</span>
 <span class="sd">    remotely via a simple RPC protocol which is defined in :mod:`_rpc`. If</span>
@@ -208,13 +223,39 @@
 <span class="sd">    :mod:`libmadx`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">libmadx</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">command_log</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">error_log</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">libmadx</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">command_log</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">error_log</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">Popen_args</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize instance variables.</span>
 
 <span class="sd">        :param libmadx: :mod:`libmadx` compatible object</span>
-<span class="sd">        :param command_log: logs MAD-X history either filename or CommandLog</span>
+<span class="sd">        :param command_log: Log all MAD-X commands issued via cpymad.</span>
 <span class="sd">        :param error_log: logger instance ``logging.Logger``</span>
+<span class="sd">        :param Popen_args: Additional parameters to ``subprocess.Popen``</span>
+
+<span class="sd">        Note that ``command_log`` can be either a filename or a callable. For</span>
+<span class="sd">        example:</span>
+
+<span class="sd">            m1 = Madx(command_log=print)</span>
+
+<span class="sd">            m2 = Madx(command_log=CommandLog(sys.stderr))</span>
+
+<span class="sd">        Of course, in python2 the first example requires ``from __future__</span>
+<span class="sd">        import print_function`` to be in effect.</span>
+
+<span class="sd">        If ``libmadx`` is NOT specified, a new MAD-X interpretor will</span>
+<span class="sd">        automatically be spawned. This is what you will mostly want to do. In</span>
+<span class="sd">        this case any additional keyword arguments are forwarded to</span>
+<span class="sd">        ``subprocess.Popen``. The most prominent use case for this is to</span>
+<span class="sd">        redirect or suppress the MAD-X standard I/O::</span>
+
+<span class="sd">            m = Madx(stdout=False)</span>
+
+<span class="sd">            with open(&#39;madx_output.log&#39;, &#39;w&#39;) as f:</span>
+<span class="sd">                m = Madx(stdout=f)</span>
+
+<span class="sd">            m = Madx(stdout=subprocess.PIPE)</span>
+<span class="sd">            f = m._process.stdout</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># get logger</span>
         <span class="k">if</span> <span class="n">error_log</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -226,8 +267,9 @@
             <span class="n">command_log</span> <span class="o">=</span> <span class="n">NOP</span>
         <span class="c"># start libmadx subprocess</span>
         <span class="k">if</span> <span class="n">libmadx</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">svc</span><span class="p">,</span> <span class="n">proc</span> <span class="o">=</span> <span class="n">_rpc</span><span class="o">.</span><span class="n">LibMadxClient</span><span class="o">.</span><span class="n">spawn_subprocess</span><span class="p">()</span>
-            <span class="n">libmadx</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">libmadx</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_service</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span> <span class="o">=</span> \
+                <span class="n">_rpc</span><span class="o">.</span><span class="n">LibMadxClient</span><span class="o">.</span><span class="n">spawn_subprocess</span><span class="p">(</span><span class="o">**</span><span class="n">Popen_args</span><span class="p">)</span>
+            <span class="n">libmadx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_service</span><span class="o">.</span><span class="n">libmadx</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">libmadx</span><span class="o">.</span><span class="n">is_started</span><span class="p">():</span>
             <span class="n">libmadx</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
         <span class="c"># init instance variables:</span>
