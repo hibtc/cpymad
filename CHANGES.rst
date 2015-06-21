@@ -4,6 +4,13 @@ Changelog
 (dates are in the form dd.mm.yyyy)
 
 
+0.10.7
+======
+Date: 21.06.2015
+
+- allow redirection of MAD-X standard I/O via Madx constructor
+
+
 0.10.6
 ======
 Date: 29.05.2015
