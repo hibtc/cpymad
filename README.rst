@@ -60,22 +60,19 @@ The ``Madx`` class provides a basic binding to the MAD-X interpreter:
 
     from cpymad.madx import Madx
 
-    # create a new interpreter instance:
-    # the optional 'command_log' parameter can be used to store MAD-X
-    # command history.
+    # Start a MAD-X interpretor. All MAD-X commands issued via cpymad will
+    # be logged to `command_log`:
     madx = Madx(command_log="log.madx")
 
-    # determine the version of MAD-X that is actually loaded:
+    # Show the version of MAD-X that is actually loaded:
     print(madx.version)
 
-    # you execute arbitrary textual MAD-X commands:
-    madx.input('call, file="input_file.madx";')
-
-    # there is a more convenient syntax available which does the same:
-    madx.command.call(file="input_file.madx")
-
-    # And for some commands there exist direct shortcuts:
+    # Execute one of your predefined MAD-X files:
     madx.call('/path/to/some/input_file.madx')
+
+    # Only a handful of MAD-X methods are exposed as methods. For others,
+    # you can use the `command` attribute. For example, to set a beam:
+    m.command.beam(sequence='myseq1', particle='PROTON')
 
     # Calculate TWISS parameters:
     twiss = madx.twiss(sequence='LEBT',
@@ -86,6 +83,19 @@ The ``Madx`` class provides a basic binding to the MAD-X interpreter:
     from matplotlib import pyplot as plt
     plt.plot(twiss['s'], twiss['betx'])
     plt.show()
+
+There are alternative syntaxes for the extreme cases where you need more
+fine grained control over the command string composition or where
+``command`` fails to do the right thing:
+
+.. code-block:: python
+
+    # can't use `global` as attribute, since it's a python keyword:
+    m.command('global', sequence='cassps', Q1=26.58)
+
+    # issue a plain text command, don't forget the semicolon!
+    m.input('FOO, BAR=[baz], QUX=<NORF>;')
+
 
 There is also a ``Model`` class which encapsulates more metadata for complex
 accelerator machines. If you have ready-to-use model definitions on your
