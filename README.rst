@@ -139,7 +139,23 @@ CERN. In that case report the issue to the CERN support!
 
 For issues regarding the cpymad code itself or usage information, I'm happy
 to answer. Just keep in mind to be **precise**, **specific**, **concise**
-and provide all the necessary information.
+and provide all the necessary information. In particular, go through the
+following checklist.
+
+Did I…
+
+- …formulate my question/goal precise enough that no further inquiries will
+  be necessary?
+
+- …add every piece of information that is required to understand and answer
+  my question? That includes all code (starting with the import statements)
+  and all relevant files.
+
+- …remove every piece of information that is not part of my question? Are
+  there code sections that are not essential to reproduce the issue?
+
+- …check that my problem is with cpymad itself and not with MAD-X,
+  matplotlib or any other python package?
 
 If you haven't read it so far I recommend to have a look at `How to Report
 Bugs Effectively`_ and `How To Ask Questions The Smart Way`_.
