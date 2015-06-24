@@ -425,7 +425,7 @@ class Madx(object):
             active_sequence = None
         else:
             if not sequence:
-                sequence = active_sequence
+                sequence = active_sequence.name
         if (sequence != active_sequence
                 or not self._libmadx.is_sequence_expanded(sequence)):
             self.use(sequence)
