@@ -186,17 +186,16 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
 
     def _get_elems(self, seq_name):
         elems = self.mad.sequences[seq_name].elements
-        elem_dict = dict((el['name'], el) for el in elems)
         elem_idx = dict((el['name'], i) for i, el in enumerate(elems))
-        return elem_dict, elem_idx
+        return elems, elem_idx
 
     def test_sequence_get_elements_s1(self):
         s1, idx = self._get_elems('s1')
-        qp1 = s1['qp:1']
-        qp2 = s1['qp:2']
-        sb1 = s1['sb:1']
-        self.assertLess(idx['qp:1'], idx['qp:2'])
-        self.assertLess(idx['qp:2'], idx['sb:1'])
+        qp1 = s1['qp[1]']
+        qp2 = s1['qp[2]']
+        sb1 = s1['sb[1]']
+        self.assertLess(idx['qp'], idx['qp[2]'])
+        self.assertLess(idx['qp[2]'], idx['sb'])
         self.assertAlmostEqual(qp1['at'], 1)
         self.assertAlmostEqual(qp2['at'], 3)
         self.assertAlmostEqual(sb1['at'], 5)
@@ -210,9 +209,9 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
 
     def test_sequence_get_elements_s2(self):
         s2, idx = self._get_elems('s2')
-        qp1 = s2['qp1:1']
-        qp2 = s2['qp2:1']
-        self.assertLess(idx['qp1:1'], idx['qp2:1'])
+        qp1 = s2['qp1[1]']
+        qp2 = s2['qp2[1]']
+        self.assertLess(idx['qp1'], idx['qp2'])
         self.assertAlmostEqual(qp1['at'], 0)
         self.assertAlmostEqual(qp2['at'], 1)
         self.assertAlmostEqual(qp1['l'], 1)
@@ -230,8 +229,8 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
 
     def test_sequence_elements(self):
         elements = self.mad.sequences['s1'].elements
-        iqp2 = elements.index('qp:2')
-        qp1 = elements['qp:1']
+        iqp2 = elements.index('qp[2]')
+        qp1 = elements['qp[1]']
         qp2 = elements[iqp2]
         self.assertAlmostEqual(qp1['at'], 1)
         self.assertAlmostEqual(qp2['at'], 3)
@@ -242,8 +241,8 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         self.mad.command(beam)
         self.mad.use('s1')
         elements = self.mad.sequences['s1'].expanded_elements
-        iqp2 = elements.index('qp:2')
-        qp1 = elements['qp:1']
+        iqp2 = elements.index('qp[2]')
+        qp1 = elements['qp[1]']
         qp2 = elements[iqp2]
         self.assertAlmostEqual(qp1['at'], 1)
         self.assertAlmostEqual(qp2['at'], 3)

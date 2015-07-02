@@ -726,7 +726,6 @@ class ElementList(collections.Sequence):
             return 0
         elif name == '#e':
             return len(self) - 1
-        name = util.add_element_suffix(name)
         return self._get_element_index(self._sequence_name, name)
 
     def at(self, pos):

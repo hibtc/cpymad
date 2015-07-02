@@ -19,20 +19,20 @@ class TestUtil(unittest.TestCase, _compat.TestCase):
         self.assertFalse(util.is_identifier('hdr oei'))
         self.assertFalse(util.is_identifier('hdr@oei'))
 
-    def test_strip_element_suffix(self):
-        self.assertEqual(util.strip_element_suffix('foo.23'), 'foo.23')
-        self.assertEqual(util.strip_element_suffix('foo.23:43'), 'foo.23')
-        # TODO: this should raise:
-        self.assertEqual(util.strip_element_suffix('foo:23o'), 'foo:23o')
+    def test_name_from_internal(self):
+        self.assertEqual(util.name_from_internal('foo.23:1'), 'foo.23')
+        self.assertEqual(util.name_from_internal('foo.23:43'), 'foo.23[43]')
+        with self.assertRaises(ValueError):
+            util.name_from_internal('foo:23o')
 
-    def test_add_element_suffix(self):
-        self.assertEqual(util.add_element_suffix('foo.23'), 'foo.23:1')
-        self.assertEqual(util.add_element_suffix('foo.23:43'), 'foo.23:43')
-        # TODO: this should raise:
-        self.assertEqual(util.add_element_suffix('foo:23o'), 'foo:23o:1')
+    def test_name_to_internal(self):
+        self.assertEqual(util.name_to_internal('foo.23'), 'foo.23:1')
+        self.assertEqual(util.name_to_internal('foo.23[43]'), 'foo.23:43')
+        with self.assertRaises(ValueError):
+            util.name_to_internal('foo:23o')
 
     def test_normalize_range_name(self):
-        self.assertEqual(util.normalize_range_name('dr:1'), 'dr')
+        self.assertEqual(util.normalize_range_name('dr[1]'), 'dr[1]')
         self.assertEqual(util.normalize_range_name('lebt$end'), '#e')
         self.assertEqual(util.normalize_range_name('dr'), 'dr')
 

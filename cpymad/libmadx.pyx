@@ -22,6 +22,7 @@ cdef extern from "pyport.h":
     ctypedef int Py_intptr_t
 
 from cpymad.types import Constraint, Expression
+from cpymad.util import name_to_internal, name_from_internal
 cimport cpymad.clibmadx as clib
 
 
@@ -415,7 +416,7 @@ def get_element_index(sequence_name, element_name):
     :raises ValueError: if the sequence or element name is invalid
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
-    cdef bytes _element_name = _cstr(element_name)
+    cdef bytes _element_name = _cstr(name_to_internal(element_name))
     cdef int index = clib.name_list_pos(_element_name, seq.nodes.list)
     if index == -1:
         raise ValueError("Element name not found: {0}".format(element_name))
@@ -494,7 +495,7 @@ def get_expanded_element_index(sequence_name, element_name):
     # Unfortunately, there is no name_list for the expanded list. Therefore,
     # Therefore, we can only provide a linear-time lookup.
     cdef clib.sequence* seq = _find_sequence(sequence_name)
-    cdef bytes _element_name = _cstr(element_name)
+    cdef bytes _element_name = _cstr(name_to_internal(element_name))
     for i in xrange(seq.n_nodes):
         if seq.all_nodes[i].name == _element_name:
             return i
@@ -725,7 +726,7 @@ cdef _get_node(clib.node* node, int ref_flag):
         # Maybe this is a valid case, but better detect it with boom!
         raise RuntimeError("Empty node or subsequence! Please report this incident!")
     data = _get_element(node.p_elem)
-    data.update({'name': _str(node.name),
+    data.update({'name': name_from_internal(_str(node.name)),
                  'type': _str(node.base_name),
                  'at': _get_node_entry_pos(node, ref_flag)})
     return data

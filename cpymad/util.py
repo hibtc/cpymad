@@ -10,8 +10,8 @@ from .types import Range, Constraint
 __all__ = [
     'mad_quote',
     'is_identifier',
-    'strip_element_suffix',
-    'add_element_suffix',
+    'name_from_internal',
+    'name_to_internal',
     'mad_parameter',
     'mad_command',
 ]
@@ -31,7 +31,8 @@ def mad_quote(value):
 
 # precompile regexes for performance:
 _re_is_identifier = re.compile(r'^[a-z_]\w*$', re.IGNORECASE)
-_re_element_suffix = re.compile(':\d+$')
+_re_element_internal = re.compile('^([a-z_][\w.$]*)(:\d+)?$', re.IGNORECASE)
+_re_element_external = re.compile('^([a-z_][\w.$]*)(\[\d+\])?$', re.IGNORECASE)
 
 
 def is_identifier(name):
@@ -39,36 +40,55 @@ def is_identifier(name):
     return bool(_re_is_identifier.match(name))
 
 
-def strip_element_suffix(element_name):
+def name_from_internal(element_name):
     """
-    Strip the :d suffix from an element name.
+    Convert element name from internal representation to user API. Example:
 
-    The :d suffix is needed for some parts of the MAD-X API, but must not be
-    used in other parts.
+    >>> name_from_internal("foo:1")
+    foo
+    >>> name_from_internal("foo:2")
+    foo:2
+
+    Element names are stored with a ":d" suffix by MAD-X internally (data in
+    node/sequence structs), but users must use the syntax "elem[d]" to access
+    the corresponding elements. This function is used to transform any string
+    coming from the user before passing it to MAD-X.
     """
-    return _re_element_suffix.sub('', element_name)
+    try:
+        name, count = _re_element_internal.match(element_name).groups()
+    except AttributeError:
+        raise ValueError("Not a valid MAD-X element name: {!r}"
+                         .format(element_name))
+    if count is None or count == ':1':
+        return name
+    return name + '[' + count[1:] + ']'
 
 
-def add_element_suffix(element_name):
+def name_to_internal(element_name):
     """
-    Add a :1 suffix to an element name if missing.
+    Convert element name from user API to internal representation. Example:
 
-    The :d suffix is needed for some parts of the MAD-X API, but must not be
-    used in other parts.
+    >>> name_to_external("foo")
+    foo:1
+    >>> name_to_external("foo[2]")
+    foo:2
+
+    See :func:`name_from_internal' for further information.
     """
-    if _re_element_suffix.search(element_name):
-        return element_name
-    return element_name + ':1'
+    try:
+        name, count = _re_element_external.match(element_name).groups()
+    except AttributeError:
+        raise ValueError("Not a valid MAD-X element name: {!r}"
+                         .format(element_name))
+    if count is None:
+        return name + ':1'
+    return name + ':' + count[1:-1]
 
 
 def normalize_range_name(name):
     """Make element name usable as argument to the RANGE attribute."""
     if isinstance(name, tuple):
         return tuple(map(normalize_range_name, name))
-    # MAD-X does not allow the ":d" suffix in the 'range' parameter string.
-    # This means that name becomes less unique, but that's the only way right
-    # now:
-    name = strip_element_suffix(name)
     name = name.lower()
     if name.endswith('$end'):
         return '#e'
