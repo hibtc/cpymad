@@ -704,7 +704,7 @@ cdef _name_list(clib.name_list* names):
     return [names.names[i] for i in xrange(names.curr)]
 
 
-cdef _str(char* s):
+cdef _str(const char* s):
     """Decode C string to python string."""
     if s is NULL:
         # Returning an empty string will make the type of the parameter
