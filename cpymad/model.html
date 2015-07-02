@@ -68,29 +68,17 @@ when needed. Models are conceptually derived from the JMad models, but
 have evolved to a more pythonic and simple API.</p>
 <p>To create a model instance from a model definition file, use the
 <code class="docutils literal"><span class="pre">Model.load</span></code> constructor.</p>
-<p>Only GET access is allowed to all instance variables at the moment.</p>
-<p>Public attributes:</p>
+<p>All instance variables are READ-ONLY at the moment.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference internal" href="#cpymad.model.Model.name" title="cpymad.model.Model.name"><strong>name</strong></a> (<em>str</em>) &#8211; model name</li>
+<li><a class="reference internal" href="#cpymad.model.Model.name" title="cpymad.model.Model.name"><strong>Model.name</strong></a> (<em>str</em>) &#8211; model name</li>
 <li><strong>beams</strong> (<em>dict</em>) &#8211; known <a class="reference internal" href="#cpymad.model.Beam" title="cpymad.model.Beam"><code class="xref py py-class docutils literal"><span class="pre">Beam</span></code></a> objects</li>
 <li><strong>optics</strong> (<em>dict</em>) &#8211; known <a class="reference internal" href="#cpymad.model.Optic" title="cpymad.model.Optic"><code class="xref py py-class docutils literal"><span class="pre">Optic</span></code></a> objects</li>
 <li><a class="reference internal" href="madx.html#cpymad.madx.Madx.sequences" title="cpymad.madx.Madx.sequences"><strong>sequences</strong></a> (<em>dict</em>) &#8211; known <a class="reference internal" href="#cpymad.model.Sequence" title="cpymad.model.Sequence"><code class="xref py py-class docutils literal"><span class="pre">Sequence</span></code></a> objects</li>
 <li><a class="reference internal" href="madx.html#module-cpymad.madx" title="cpymad.madx"><strong>madx</strong></a> (<a class="reference internal" href="madx.html#cpymad.madx.Madx" title="cpymad.madx.Madx"><em>Madx</em></a>) &#8211; handle to the MAD-X library</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>Private variables:</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
 <li><strong>_data</strong> (<em>dict</em>) &#8211; model definition data</li>
 <li><strong>_repo</strong> (<em>ResourceProvider</em>) &#8211; resource access</li>
 </ul>
@@ -185,28 +173,15 @@ system.</p>
 <dl class="class">
 <dt id="cpymad.model.Beam">
 <em class="property">class </em><code class="descclassname">cpymad.model.</code><code class="descname">Beam</code><span class="sig-paren">(</span><em>name</em>, <em>data</em>, <em>model</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/model.html#Beam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Beam" title="Permalink to this definition">¶</a></dt>
-<dd><p>Beam for <a class="reference internal" href="#cpymad.model.Model" title="cpymad.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a>.</p>
-<p>A beam defines the mass, charge, energy, etc. of the particles moved
+<dd><p>A beam defines the mass, charge, energy, etc. of the particles moved
 through the accelerator.</p>
-<p>Public attributes:</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference internal" href="#cpymad.model.Model.name" title="cpymad.model.Model.name"><strong>name</strong></a> (<em>str</em>) &#8211; beam name</li>
-<li><a class="reference internal" href="#cpymad.model.Sequence.data" title="cpymad.model.Sequence.data"><strong>data</strong></a> (<em>dict</em>) &#8211; beam parameters (keywords to BEAM command in MAD-X)</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>Private variables:</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>Beam.name</strong> (<em>str</em>) &#8211; beam name</li>
+<li><strong>Beam.data</strong> (<em>dict</em>) &#8211; beam parameters (keywords to BEAM command in MAD-X)</li>
 <li><strong>_model</strong> (<a class="reference internal" href="#cpymad.model.Model" title="cpymad.model.Model"><em>Model</em></a>) &#8211; owning model</li>
 <li><strong>_loaded</strong> (<em>bool</em>) &#8211; beam has been initialized in MAD-X</li>
 </ul>
@@ -225,24 +200,14 @@ through the accelerator.</p>
 <dl class="class">
 <dt id="cpymad.model.Optic">
 <em class="property">class </em><code class="descclassname">cpymad.model.</code><code class="descname">Optic</code><span class="sig-paren">(</span><em>name</em>, <em>data</em>, <em>model</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/model.html#Optic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Optic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Optic for <a class="reference internal" href="#cpymad.model.Model" title="cpymad.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a>.</p>
-<p>An optic (as far as I understand) defines a variant of the accelerator
-setup, e.g. different injection mechanisms.</p>
-<p>Public attributes:</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><a class="reference internal" href="#cpymad.model.Model.name" title="cpymad.model.Model.name"><strong>name</strong></a> (<em>str</em>) &#8211; optic name</td>
-</tr>
-</tbody>
-</table>
-<p>Private variables:</p>
+<dd><p>An optic (as far as I understand) defines a variant of the accelerator
+setup, e.g. different field strengths.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>Optic.name</strong> (<em>str</em>) &#8211; optic name</li>
 <li><strong>_data</strong> (<em>dict</em>) &#8211; optic definition</li>
 <li><strong>_model</strong> (<a class="reference internal" href="#cpymad.model.Model" title="cpymad.model.Model"><em>Model</em></a>) &#8211; owning model</li>
 <li><strong>_loaded</strong> (<em>bool</em>) &#8211; beam has been initialized in MAD-X</li>
@@ -262,28 +227,14 @@ setup, e.g. different injection mechanisms.</p>
 <dl class="class">
 <dt id="cpymad.model.Sequence">
 <em class="property">class </em><code class="descclassname">cpymad.model.</code><code class="descname">Sequence</code><span class="sig-paren">(</span><em>name</em>, <em>data</em>, <em>model</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/model.html#Sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Sequence" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sequence for <a class="reference internal" href="#cpymad.model.Model" title="cpymad.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a>.</p>
-<p>A sequence defines an arrangement of beam line elements. It can be
-subdivided into multiple ranges.</p>
-<p>Public attributes:</p>
+<dd><p>A MAD-X beam line. It can be subdivided into arbitrary ranges.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference internal" href="#cpymad.model.Model.name" title="cpymad.model.Model.name"><strong>name</strong></a> (<em>str</em>) &#8211; sequence name</li>
+<li><a class="reference internal" href="madx.html#cpymad.madx.Sequence.name" title="cpymad.madx.Sequence.name"><strong>Sequence.name</strong></a> (<em>str</em>) &#8211; sequence name</li>
 <li><strong>ranges</strong> (<em>dict</em>) &#8211; known <a class="reference internal" href="#cpymad.model.Range" title="cpymad.model.Range"><code class="xref py py-class docutils literal"><span class="pre">Range</span></code></a> objects</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>Private variables:</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
 <li><strong>_data</strong> (<em>dict</em>) &#8211; </li>
 <li><strong>_model</strong> (<a class="reference internal" href="#cpymad.model.Model" title="cpymad.model.Model"><em>Model</em></a>) &#8211; </li>
 </ul>
@@ -356,25 +307,15 @@ subdivided into multiple ranges.</p>
 <dl class="class">
 <dt id="cpymad.model.Range">
 <em class="property">class </em><code class="descclassname">cpymad.model.</code><code class="descname">Range</code><span class="sig-paren">(</span><em>name</em>, <em>data</em>, <em>sequence</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/model.html#Range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.model.Range" title="Permalink to this definition">¶</a></dt>
-<dd><p>Range for <a class="reference internal" href="#cpymad.model.Model" title="cpymad.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a>.</p>
-<p>A range is a subsequence of elements within a <a class="reference internal" href="#cpymad.model.Sequence" title="cpymad.model.Sequence"><code class="xref py py-class docutils literal"><span class="pre">Sequence</span></code></a>.</p>
-<p>Public attributes:</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><a class="reference internal" href="#cpymad.model.Model.name" title="cpymad.model.Model.name"><strong>name</strong></a> (<em>str</em>) &#8211; sequence name</td>
-</tr>
-</tbody>
-</table>
-<p>Private variables:</p>
+<dd><p>Subsequence of elements within a <a class="reference internal" href="#cpymad.model.Sequence" title="cpymad.model.Sequence"><code class="xref py py-class docutils literal"><span class="pre">Sequence</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; sequence name</li>
 <li><strong>_data</strong> (<em>dict</em>) &#8211; </li>
-<li><strong>_sequence</strong> (<a class="reference internal" href="madx.html#cpymad.madx.Sequence" title="cpymad.madx.Sequence"><em>Sequence</em></a>) &#8211; </li>
+<li><strong>_sequence</strong> (<a class="reference internal" href="#cpymad.model.Sequence" title="cpymad.model.Sequence"><em>Sequence</em></a>) &#8211; </li>
 </ul>
 </td>
 </tr>

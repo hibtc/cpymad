@@ -100,24 +100,17 @@
 <span class="sd">    To create a model instance from a model definition file, use the</span>
 <span class="sd">    ``Model.load`` constructor.</span>
 
-<span class="sd">    Only GET access is allowed to all instance variables at the moment.</span>
+<span class="sd">    All instance variables are READ-ONLY at the moment.</span>
 
-<span class="sd">    Public attributes:</span>
-
-<span class="sd">    :ivar str name: model name</span>
-<span class="sd">    :ivar dict beams: known :class:`Beam` objects</span>
-<span class="sd">    :ivar dict optics: known :class:`Optic` objects</span>
-<span class="sd">    :ivar dict sequences: known :class:`Sequence` objects</span>
+<span class="sd">    :ivar str Model.name: model name</span>
+<span class="sd">    :ivar dict beams: known :class:`~cpymad.model.Beam` objects</span>
+<span class="sd">    :ivar dict optics: known :class:`~cpymad.model.Optic` objects</span>
+<span class="sd">    :ivar dict sequences: known :class:`~cpymad.model.Sequence` objects</span>
 <span class="sd">    :ivar Madx madx: handle to the MAD-X library</span>
-
-<span class="sd">    Private variables:</span>
-
 <span class="sd">    :ivar dict _data: model definition data</span>
 <span class="sd">    :ivar ResourceProvider _repo: resource access</span>
 
-<span class="sd">    The following example demonstrates the basic usage:</span>
-
-<span class="sd">    .. code-block:: python</span>
+<span class="sd">    The following example demonstrates the basic usage::</span>
 
 <span class="sd">        from cpymad.model import Model</span>
 
@@ -252,18 +245,11 @@
 <div class="viewcode-block" id="Beam"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Beam">[docs]</a><span class="k">class</span> <span class="nc">Beam</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Beam for :class:`Model`.</span>
-
 <span class="sd">    A beam defines the mass, charge, energy, etc. of the particles moved</span>
 <span class="sd">    through the accelerator.</span>
 
-<span class="sd">    Public attributes:</span>
-
-<span class="sd">    :ivar str name: beam name</span>
-<span class="sd">    :ivar dict data: beam parameters (keywords to BEAM command in MAD-X)</span>
-
-<span class="sd">    Private variables:</span>
-
+<span class="sd">    :ivar str Beam.name: beam name</span>
+<span class="sd">    :ivar dict Beam.data: beam parameters (keywords to BEAM command in MAD-X)</span>
 <span class="sd">    :ivar Model _model: owning model</span>
 <span class="sd">    :ivar bool _loaded: beam has been initialized in MAD-X</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -287,17 +273,10 @@
 <div class="viewcode-block" id="Optic"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Optic">[docs]</a><span class="k">class</span> <span class="nc">Optic</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Optic for :class:`Model`.</span>
-
 <span class="sd">    An optic (as far as I understand) defines a variant of the accelerator</span>
-<span class="sd">    setup, e.g. different injection mechanisms.</span>
+<span class="sd">    setup, e.g. different field strengths.</span>
 
-<span class="sd">    Public attributes:</span>
-
-<span class="sd">    :ivar str name: optic name</span>
-
-<span class="sd">    Private variables:</span>
-
+<span class="sd">    :ivar str Optic.name: optic name</span>
 <span class="sd">    :ivar dict _data: optic definition</span>
 <span class="sd">    :ivar Model _model: owning model</span>
 <span class="sd">    :ivar bool _loaded: beam has been initialized in MAD-X</span>
@@ -322,18 +301,10 @@
 <div class="viewcode-block" id="Sequence"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Sequence">[docs]</a><span class="k">class</span> <span class="nc">Sequence</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Sequence for :class:`Model`.</span>
+<span class="sd">    A MAD-X beam line. It can be subdivided into arbitrary ranges.</span>
 
-<span class="sd">    A sequence defines an arrangement of beam line elements. It can be</span>
-<span class="sd">    subdivided into multiple ranges.</span>
-
-<span class="sd">    Public attributes:</span>
-
-<span class="sd">    :ivar str name: sequence name</span>
+<span class="sd">    :ivar str Sequence.name: sequence name</span>
 <span class="sd">    :ivar dict ranges: known :class:`Range` objects</span>
-
-<span class="sd">    Private variables:</span>
-
 <span class="sd">    :ivar dict _data:</span>
 <span class="sd">    :ivar Model _model:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -402,18 +373,11 @@
 <div class="viewcode-block" id="Range"><a class="viewcode-back" href="../../cpymad/model.html#cpymad.model.Range">[docs]</a><span class="k">class</span> <span class="nc">Range</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Range for :class:`Model`.</span>
+<span class="sd">    Subsequence of elements within a :class:`~cpymad.model.Sequence`.</span>
 
-<span class="sd">    A range is a subsequence of elements within a :class:`Sequence`.</span>
-
-<span class="sd">    Public attributes:</span>
-
-<span class="sd">    :ivar str name: sequence name</span>
-
-<span class="sd">    Private variables:</span>
-
+<span class="sd">    :ivar str ~Range.name: sequence name</span>
 <span class="sd">    :ivar dict _data:</span>
-<span class="sd">    :ivar Sequence _sequence:</span>
+<span class="sd">    :ivar ~cpymad.model.Sequence _sequence:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sequence</span><span class="p">):</span>

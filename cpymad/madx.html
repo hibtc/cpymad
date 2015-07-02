@@ -64,8 +64,21 @@
 <p>The most interesting class for users is <a class="reference internal" href="#cpymad.madx.Madx" title="cpymad.madx.Madx"><code class="xref py py-class docutils literal"><span class="pre">Madx</span></code></a>.</p>
 <dl class="class">
 <dt id="cpymad.madx.ChangeDirectory">
-<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">ChangeDirectory</code><span class="sig-paren">(</span><em>path</em>, <em>_os=&lt;module 'os' from '/usr/lib/python3.4/os.py'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#ChangeDirectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.ChangeDirectory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Context manager for temporarily changing current working directory.</p>
+<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">ChangeDirectory</code><span class="sig-paren">(</span><em>path</em>, <em>_os</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#ChangeDirectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.ChangeDirectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context manager for temporarily changing current working directory in the
+context of the given <code class="docutils literal"><span class="pre">os</span></code> module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>path</strong> (<em>str</em>) &#8211; new path name</li>
+<li><strong>_os</strong> &#8211; module with <code class="docutils literal"><span class="pre">getcwd</span></code> and <code class="docutils literal"><span class="pre">chdir</span></code> functions</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">

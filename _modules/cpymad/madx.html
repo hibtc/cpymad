@@ -90,15 +90,15 @@
 </div>
 <div class="viewcode-block" id="ChangeDirectory"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.ChangeDirectory">[docs]</a><span class="k">class</span> <span class="nc">ChangeDirectory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot;Context manager for temporarily changing current working directory.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Context manager for temporarily changing current working directory in the</span>
+<span class="sd">    context of the given ``os`` module.</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">_os</span><span class="o">=</span><span class="n">os</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Change the path using the given os module.</span>
+<span class="sd">    :param str path: new path name</span>
+<span class="sd">    :param _os: module with ``getcwd`` and ``chdir`` functions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-<span class="sd">        :param str path: new path name</span>
-<span class="sd">        :param module _os: module with &#39;getcwd&#39; and &#39;chdir&#39; functions</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">_os</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_os</span> <span class="o">=</span> <span class="n">_os</span>
         <span class="c"># Contrary to common implementations of a similar context manager,</span>
         <span class="c"># we change the path immediately in the constructor. That enables</span>
