@@ -4,6 +4,16 @@ Changelog
 (dates are in the form dd.mm.yyyy)
 
 
+0.10.8
+======
+Date: 02.07.2015
+
+- Public element names are now of the form "foo[3]" or simply "foo". The
+  syntax "foo:d" can not be used anymore (this form is used by MAD-X only
+  internally and converted at the lowest wrapper level).
+- Fix exception when not specifying sequence name on Madx methods
+
+
 0.10.7
 ======
 Date: 21.06.2015
