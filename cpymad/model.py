@@ -47,24 +47,17 @@ class Model(object):
     To create a model instance from a model definition file, use the
     ``Model.load`` constructor.
 
-    Only GET access is allowed to all instance variables at the moment.
+    All instance variables are READ-ONLY at the moment.
 
-    Public attributes:
-
-    :ivar str name: model name
-    :ivar dict beams: known :class:`Beam` objects
-    :ivar dict optics: known :class:`Optic` objects
-    :ivar dict sequences: known :class:`Sequence` objects
+    :ivar str Model.name: model name
+    :ivar dict beams: known :class:`~cpymad.model.Beam` objects
+    :ivar dict optics: known :class:`~cpymad.model.Optic` objects
+    :ivar dict sequences: known :class:`~cpymad.model.Sequence` objects
     :ivar Madx madx: handle to the MAD-X library
-
-    Private variables:
-
     :ivar dict _data: model definition data
     :ivar ResourceProvider _repo: resource access
 
-    The following example demonstrates the basic usage:
-
-    .. code-block:: python
+    The following example demonstrates the basic usage::
 
         from cpymad.model import Model
 
@@ -199,18 +192,11 @@ class Model(object):
 class Beam(object):
 
     """
-    Beam for :class:`Model`.
-
     A beam defines the mass, charge, energy, etc. of the particles moved
     through the accelerator.
 
-    Public attributes:
-
-    :ivar str name: beam name
-    :ivar dict data: beam parameters (keywords to BEAM command in MAD-X)
-
-    Private variables:
-
+    :ivar str Beam.name: beam name
+    :ivar dict Beam.data: beam parameters (keywords to BEAM command in MAD-X)
     :ivar Model _model: owning model
     :ivar bool _loaded: beam has been initialized in MAD-X
     """
@@ -234,17 +220,10 @@ class Beam(object):
 class Optic(object):
 
     """
-    Optic for :class:`Model`.
-
     An optic (as far as I understand) defines a variant of the accelerator
-    setup, e.g. different injection mechanisms.
+    setup, e.g. different field strengths.
 
-    Public attributes:
-
-    :ivar str name: optic name
-
-    Private variables:
-
+    :ivar str Optic.name: optic name
     :ivar dict _data: optic definition
     :ivar Model _model: owning model
     :ivar bool _loaded: beam has been initialized in MAD-X
@@ -269,18 +248,10 @@ class Optic(object):
 class Sequence(object):
 
     """
-    Sequence for :class:`Model`.
+    A MAD-X beam line. It can be subdivided into arbitrary ranges.
 
-    A sequence defines an arrangement of beam line elements. It can be
-    subdivided into multiple ranges.
-
-    Public attributes:
-
-    :ivar str name: sequence name
+    :ivar str Sequence.name: sequence name
     :ivar dict ranges: known :class:`Range` objects
-
-    Private variables:
-
     :ivar dict _data:
     :ivar Model _model:
     """
@@ -349,18 +320,11 @@ class Sequence(object):
 class Range(object):
 
     """
-    Range for :class:`Model`.
+    Subsequence of elements within a :class:`~cpymad.model.Sequence`.
 
-    A range is a subsequence of elements within a :class:`Sequence`.
-
-    Public attributes:
-
-    :ivar str name: sequence name
-
-    Private variables:
-
+    :ivar str ~Range.name: sequence name
     :ivar dict _data:
-    :ivar Sequence _sequence:
+    :ivar ~cpymad.model.Sequence _sequence:
     """
 
     def __init__(self, name, data, sequence):
