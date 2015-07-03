@@ -4,6 +4,15 @@ Changelog
 (dates are in the form dd.mm.yyyy)
 
 
+0.11.0
+======
+Date: 03.07.2015
+
+- Remove models + resource handling from cpymad. If you need these, check
+  them out from the previous version and maintain them in your own code
+  base. This way you are much more flexible to adapt models to your needs.
+
+
 0.10.8
 ======
 Date: 02.07.2015
