@@ -148,7 +148,6 @@ def get_setup_args(argv):
         ]),
         packages = [
             "cpymad",
-            "cpymad.resource",
             "cpymad.rpc_util",
         ],
         include_package_data=True, # include files matched by MANIFEST.in
