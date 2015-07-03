@@ -72,7 +72,7 @@ The ``Madx`` class provides a basic binding to the MAD-X interpreter:
 
     # Only a handful of MAD-X methods are exposed as methods. For others,
     # you can use the `command` attribute. For example, to set a beam:
-    m.command.beam(sequence='myseq1', particle='PROTON')
+    madx.command.beam(sequence='myseq1', particle='PROTON')
 
     # Calculate TWISS parameters:
     twiss = madx.twiss(sequence='LEBT',
@@ -91,10 +91,10 @@ fine grained control over the command string composition or where
 .. code-block:: python
 
     # can't use `global` as attribute, since it's a python keyword:
-    m.command('global', sequence='cassps', Q1=26.58)
+    madx.command('global', sequence='cassps', Q1=26.58)
 
     # issue a plain text command, don't forget the semicolon!
-    m.input('FOO, BAR=[baz], QUX=<NORF>;')
+    madx.input('FOO, BAR=[baz], QUX=<NORF>;')
 
 
 There is also a ``Model`` class which encapsulates more metadata for complex
