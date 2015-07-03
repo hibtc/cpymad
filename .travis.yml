@@ -34,7 +34,11 @@ before_install:
 # Setup (performed within virtualenv)
 install:
   # prepare dependency cache:
-  - pip wheel -v cython numpy pyyaml setuptools
+  - pip wheel -v cython pyyaml
+  # NOTE: not creating a numpy wheel, since numpy is already installed on
+  # Travis. Therefore, creating a wheel would require compiling numpy which
+  # increases the build time. See:
+  # http://docs.travis-ci.com/user/ci-environment/#Preinstalled-pip-packages
 
   # We need to install cython here, since Travis uses the checkout from the
   # repository which doesn't contain ".c" source files (unlike the source
