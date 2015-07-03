@@ -97,19 +97,6 @@ fine grained control over the command string composition or where
     madx.input('FOO, BAR=[baz], QUX=<NORF>;')
 
 
-There is also a ``Model`` class which encapsulates more metadata for complex
-accelerator machines. If you have ready-to-use model definitions on your
-filesystem, models can be instanciated and used as follows:
-
-.. code-block:: python
-
-    from cpymad.model import Model
-
-    model = Model.load('/path/to/model/definition.cpymad.yml')
-
-    for sequence in model.sequences.values():
-        twiss = sequence.twiss()
-
 See http://hibtc.github.io/cpymad for further documentation.
 
 
