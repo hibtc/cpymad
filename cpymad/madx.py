@@ -449,19 +449,31 @@ class Madx(object):
         :param list constraints: constraints to pose during matching
         :param list vary: knob names to be varied
         :param dict weight: weights for matching parameters
+        :param str knobfile: file to write the knob values to
+        :param dict twiss_init: initial twiss parameters
+        :param dict kwargs: further keyword arguments for the MAD-X command
         :returns: final knob values
         :rtype: dict
 
         Example:
 
-        >>> mad.match(
+        >>> from cpymad.madx import Madx
+        >>> from cpymad.types import Constraint
+        >>> m = Madx()
+        >>> m.call('sequence.madx')
+        >>> twiss_init = {'betx': 1, 'bety': 2, 'alfx': 3, 'alfy': 4}
+        >>> m.match(
+        ...     sequence='mysequence',
         ...     constraints=[
-        ...         dict(range='marker1->betx',
+        ...         dict(range='marker1',
         ...              betx=Constraint(min=1, max=3),
         ...              bety=2)
         ...     ],
         ...     vary=['qp1->k1',
-        ...           'qp2->k1'])
+        ...           'qp2->k1'],
+        ...     twiss_init=twiss_init,
+        ... )
+        >>> tw = m.twiss('mysequence', twiss_init=twiss_init)
         """
         sequence = self._use(sequence)
         twiss_init = dict((k, v) for k,v in twiss_init.items()
