@@ -30,20 +30,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
   </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">  
 
     <div class="document">
       <div class="documentwrapper">
@@ -502,19 +489,31 @@
 <span class="sd">        :param list constraints: constraints to pose during matching</span>
 <span class="sd">        :param list vary: knob names to be varied</span>
 <span class="sd">        :param dict weight: weights for matching parameters</span>
+<span class="sd">        :param str knobfile: file to write the knob values to</span>
+<span class="sd">        :param dict twiss_init: initial twiss parameters</span>
+<span class="sd">        :param dict kwargs: further keyword arguments for the MAD-X command</span>
 <span class="sd">        :returns: final knob values</span>
 <span class="sd">        :rtype: dict</span>
 
 <span class="sd">        Example:</span>
 
-<span class="sd">        &gt;&gt;&gt; mad.match(</span>
+<span class="sd">        &gt;&gt;&gt; from cpymad.madx import Madx</span>
+<span class="sd">        &gt;&gt;&gt; from cpymad.types import Constraint</span>
+<span class="sd">        &gt;&gt;&gt; m = Madx()</span>
+<span class="sd">        &gt;&gt;&gt; m.call(&#39;sequence.madx&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; twiss_init = {&#39;betx&#39;: 1, &#39;bety&#39;: 2, &#39;alfx&#39;: 3, &#39;alfy&#39;: 4}</span>
+<span class="sd">        &gt;&gt;&gt; m.match(</span>
+<span class="sd">        ...     sequence=&#39;mysequence&#39;,</span>
 <span class="sd">        ...     constraints=[</span>
-<span class="sd">        ...         dict(range=&#39;marker1-&gt;betx&#39;,</span>
+<span class="sd">        ...         dict(range=&#39;marker1&#39;,</span>
 <span class="sd">        ...              betx=Constraint(min=1, max=3),</span>
 <span class="sd">        ...              bety=2)</span>
 <span class="sd">        ...     ],</span>
 <span class="sd">        ...     vary=[&#39;qp1-&gt;k1&#39;,</span>
-<span class="sd">        ...           &#39;qp2-&gt;k1&#39;])</span>
+<span class="sd">        ...           &#39;qp2-&gt;k1&#39;],</span>
+<span class="sd">        ...     twiss_init=twiss_init,</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; tw = m.twiss(&#39;mysequence&#39;, twiss_init=twiss_init)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sequence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
         <span class="n">twiss_init</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">twiss_init</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
@@ -888,7 +887,15 @@
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -911,7 +918,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
       
     </div>
 

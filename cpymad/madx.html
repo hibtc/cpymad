@@ -31,23 +31,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
   </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="API Reference"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CPyMAD 0.10.0 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">  
 
     <div class="document">
       <div class="documentwrapper">
@@ -307,6 +291,9 @@ object to the constructor. This object must expose an interface similar to
 <li><strong>constraints</strong> (<em>list</em>) &#8211; constraints to pose during matching</li>
 <li><strong>vary</strong> (<em>list</em>) &#8211; knob names to be varied</li>
 <li><strong>weight</strong> (<em>dict</em>) &#8211; weights for matching parameters</li>
+<li><strong>knobfile</strong> (<em>str</em>) &#8211; file to write the knob values to</li>
+<li><strong>twiss_init</strong> (<em>dict</em>) &#8211; initial twiss parameters</li>
+<li><strong>kwargs</strong> (<em>dict</em>) &#8211; further keyword arguments for the MAD-X command</li>
 </ul>
 </td>
 </tr>
@@ -319,14 +306,23 @@ object to the constructor. This object must expose an interface similar to
 </tbody>
 </table>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mad</span><span class="o">.</span><span class="n">match</span><span class="p">(</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cpymad.madx</span> <span class="kn">import</span> <span class="n">Madx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cpymad.types</span> <span class="kn">import</span> <span class="n">Constraint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s">&#39;sequence.madx&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">twiss_init</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;betx&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;bety&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;alfx&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s">&#39;alfy&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">match</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">sequence</span><span class="o">=</span><span class="s">&#39;mysequence&#39;</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">constraints</span><span class="o">=</span><span class="p">[</span>
-<span class="gp">... </span>        <span class="nb">dict</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="s">&#39;marker1-&gt;betx&#39;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="nb">dict</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="s">&#39;marker1&#39;</span><span class="p">,</span>
 <span class="gp">... </span>             <span class="n">betx</span><span class="o">=</span><span class="n">Constraint</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
 <span class="gp">... </span>             <span class="n">bety</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="p">],</span>
 <span class="gp">... </span>    <span class="n">vary</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;qp1-&gt;k1&#39;</span><span class="p">,</span>
-<span class="gp">... </span>          <span class="s">&#39;qp2-&gt;k1&#39;</span><span class="p">])</span>
+<span class="gp">... </span>          <span class="s">&#39;qp2-&gt;k1&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">twiss_init</span><span class="o">=</span><span class="n">twiss_init</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tw</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">twiss</span><span class="p">(</span><span class="s">&#39;mysequence&#39;</span><span class="p">,</span> <span class="n">twiss_init</span><span class="o">=</span><span class="n">twiss_init</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -595,10 +591,16 @@ object to the constructor. This object must expose an interface similar to
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">API Reference</a></p>
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API Reference</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">API Reference</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -628,11 +630,11 @@ object to the constructor. This object must expose an interface similar to
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
       
       |
       <a href="../_sources/cpymad/madx.txt"
-          rel="nofollow">Page source</a></li>
+          rel="nofollow">Page source</a>
     </div>
 
     
