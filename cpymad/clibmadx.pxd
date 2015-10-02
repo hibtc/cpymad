@@ -154,6 +154,18 @@ cdef extern from "madX/mad_seq.h":
         name_list* list
         sequence** sequs
 
+cdef extern from "madX/mad_var.h":
+    struct variable:
+        char[NAME_L] name
+        int type                    # 0 constant, 1 direct, 2 deferred, 3 string
+        int val_type                # 0 int 1 double (0..2)
+        char* string                # pointer to string if 3
+
+    struct var_list:
+        int curr                    # current occupation
+        name_list* list             # index list of names
+        variable** vars             # variable pointer list
+
 cdef enum:
     REF_EXIT = -1
     REF_CENTER = 0
@@ -166,6 +178,7 @@ cdef extern from "madX/mad_gvar.h":
     table_list* table_register  # list of all tables
     char_p_array* tmp_p_array   # temporary buffer for splits
     char_array* c_dum           # another temporary buffer
+    var_list* variable_list     # globals
 
 
 # Function declarations:
@@ -197,6 +210,13 @@ cdef extern from "madX/mad_parse.h":
 cdef extern from "madX/mad_table.h":
     char_p_array* table_get_header(char* table_name)
     int table_exists(char* table_name)
+
+cdef extern from "madX/mad_var.h":
+    # NOTE: C API uses "const char* name"
+    void set_variable(char* name, double* value)
+    void set_stringvar(char* name, char* string)
+    variable* find_variable(char* name, var_list*)
+    double variable_value(variable*)
 
 
 # I have no clue why, but for some reason, it is necessary to include

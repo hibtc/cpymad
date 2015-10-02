@@ -43,6 +43,12 @@ __all__ = [
     'input',
     'evaluate',
 
+    # Globals
+    'get_var',
+    'set_var',
+    'num_globals',
+    'get_globals',
+
     # iterate sequences
     'sequence_exists',
     'get_sequence_names',
@@ -145,6 +151,49 @@ def input(cmd):
     cdef bytes _cmd = _cstr(cmd)
     clib.stolower_nq(_cmd)
     clib.pro_input(_cmd)
+
+
+def get_var(name):
+    """
+    Get the value of a global variable.
+    """
+    cdef bytes _name = _cstr(name.lower())
+    cdef clib.variable* var = clib.find_variable(_name, clib.variable_list)
+    if var is NULL:
+        raise KeyError("Variable not defined: {!r}".format(name))
+    if var.type == 3:
+        return _str(var.string)
+    cdef double value = clib.variable_value(var)
+    if var.val_type == 0:
+        return int(value)
+    return value
+
+
+def set_var(name, value):
+    """
+    Set one global variable.
+    """
+    cdef bytes _name = _cstr(name.lower())
+    cdef double _value
+    if isinstance(value, basestring):
+        clib.set_stringvar(_name, _cstr(value))
+    else:
+        _value = value
+        clib.set_variable(_name, &_value)
+
+
+def num_globals():
+    """
+    Return the number of global variables.
+    """
+    return clib.variable_list.curr
+
+
+def get_globals():
+    """
+    Get a list of names of all global variables.
+    """
+    return _name_list(clib.variable_list.list)
 
 
 def sequence_exists(sequence_name):

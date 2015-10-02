@@ -268,6 +268,13 @@ class Madx(object):
             # catch + reraise in order to shorten stack trace (~3-5 levels):
             raise RuntimeError("MAD-X has stopped working!")
 
+    @property
+    def globals(self):
+        """
+        Get a dict-like interface to global MAD-X variables.
+        """
+        return VarListProxy(self._libmadx)
+
     def set_value(self, name, value):
         """
         Set a variable value ("=" operator in MAD-X).
@@ -796,6 +803,31 @@ class TableProxy(collections.Mapping):
         table = Dict((column, self[column]) for column in columns)
         table.summary = self.summary
         return table
+
+
+class VarListProxy(collections.MutableMapping):
+
+    """
+    Provides dict-like access to MAD-X global variables.
+    """
+
+    def __init__(self, libmadx):
+        self._libmadx = libmadx
+
+    def __getitem__(self, name):
+        return self._libmadx.get_var(name)
+
+    def __setitem__(self, name, value):
+        self._libmadx.set_var(name, value)
+
+    def __delitem__(self, name):
+        raise NotImplementedError("Currently, can't erase a MAD-X global.")
+
+    def __iter__(self):
+        return iter(self._libmadx.get_globals())
+
+    def __len__(self):
+        return self._libmadx.num_globals()
 
 
 class Metadata(object):
