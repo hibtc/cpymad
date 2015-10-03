@@ -43,6 +43,12 @@ __all__ = [
     'input',
     'evaluate',
 
+    # Globals
+    'get_var',
+    'set_var',
+    'num_globals',
+    'get_globals',
+
     # iterate sequences
     'sequence_exists',
     'get_sequence_names',
@@ -75,6 +81,11 @@ __all__ = [
     'get_expanded_element_index',
     'get_expanded_element_index_by_position',
     'get_expanded_element_count',
+
+    # global elements
+    'get_global_element',
+    'get_global_element_index',
+    'get_global_element_count',
 
     # these are imported from 'os' for convenience in madx.Madx and should
     # not really be considered part of the public interface:
@@ -145,6 +156,49 @@ def input(cmd):
     cdef bytes _cmd = _cstr(cmd)
     clib.stolower_nq(_cmd)
     clib.pro_input(_cmd)
+
+
+def get_var(name):
+    """
+    Get the value of a global variable.
+    """
+    cdef bytes _name = _cstr(name.lower())
+    cdef clib.variable* var = clib.find_variable(_name, clib.variable_list)
+    if var is NULL:
+        raise KeyError("Variable not defined: {!r}".format(name))
+    if var.type == 3:
+        return _str(var.string)
+    cdef double value = clib.variable_value(var)
+    if var.val_type == 0:
+        return int(value)
+    return value
+
+
+def set_var(name, value):
+    """
+    Set one global variable.
+    """
+    cdef bytes _name = _cstr(name.lower())
+    cdef double _value
+    if isinstance(value, basestring):
+        clib.set_stringvar(_name, _cstr(value))
+    else:
+        _value = value
+        clib.set_variable(_name, &_value)
+
+
+def num_globals():
+    """
+    Return the number of global variables.
+    """
+    return clib.variable_list.curr
+
+
+def get_globals():
+    """
+    Get a list of names of all global variables.
+    """
+    return _name_list(clib.variable_list.list)
 
 
 def sequence_exists(sequence_name):
@@ -538,6 +592,57 @@ def get_expanded_element_count(sequence_name):
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
     return seq.n_nodes
+
+
+def get_global_element(element_index):
+    """
+    Return requested element in the expanded sequence.
+
+    :param int element_index: element index
+    :returns: the element with the specified index
+    :rtype: dict
+    :raises IndexError: if the index is out of range
+    """
+    cdef clib.el_list* elems = clib.element_list
+    if element_index < 0 or element_index >= elems.curr:
+        raise IndexError("Index out of range: {0} (element count is {1})"
+                         .format(element_index, elems.curr))
+    return _get_element(elems.elem[element_index])
+
+
+def get_global_element_name(element_index):
+    """
+    Return name of element.
+
+    :param int element_index: element index
+    :returns: element name
+    :rtype: str
+    :raises IndexError: if the index is out of range
+    """
+    cdef clib.el_list* elems = clib.element_list
+    if element_index < 0 or element_index >= elems.curr:
+        raise IndexError("Index out of range: {0} (element count is {1})"
+                         .format(element_index, elems.curr))
+    return _str(elems.list.names[element_index])
+
+
+def get_global_element_index(element_name):
+    """
+    Return index of element with specified name in the global element list.
+
+    :param str element_name: element index
+    :returns: the index of the specified element, -1 if not found
+    :rtype: int
+    """
+    cdef bytes _element_name = _cstr(element_name)
+    return clib.name_list_pos(_element_name, clib.element_list.list)
+
+
+def get_global_element_count():
+    """
+    Return number of globally visible elements.
+    """
+    return clib.element_list.curr
 
 
 def is_sequence_expanded(sequence_name):

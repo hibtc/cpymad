@@ -268,6 +268,20 @@ class Madx(object):
             # catch + reraise in order to shorten stack trace (~3-5 levels):
             raise RuntimeError("MAD-X has stopped working!")
 
+    @property
+    def globals(self):
+        """
+        Get a dict-like interface to global MAD-X variables.
+        """
+        return VarListProxy(self._libmadx)
+
+    @property
+    def elements(self):
+        """
+        Get a dict-like interface to globally visible elements.
+        """
+        return GlobalElementList(self._libmadx)
+
     def set_value(self, name, value):
         """
         Set a variable value ("=" operator in MAD-X).
@@ -661,37 +675,21 @@ class Sequence(object):
     @property
     def elements(self):
         """Get list of elements."""
-        return ElementList(self._name, self._libmadx, expanded=False)
+        return ElementList(self._libmadx, self._name)
 
     @property
     def expanded_elements(self):
         """Get list of elements in expanded sequence."""
-        return ElementList(self._name, self._libmadx, expanded=True)
+        return ExpandedElementList(self._libmadx, self._name)
 
 
-class ElementList(collections.Sequence):
+class BaseElementList(object):
 
     """
     Immutable list of beam line elements.
 
     Each element is a dictionary containing its properties.
     """
-
-    def __init__(self, sequence_name, libmadx, expanded):
-        """
-        Initialize instance.
-        """
-        self._sequence_name = sequence_name
-        if expanded:
-            self._get_element = libmadx.get_expanded_element
-            self._get_element_count = libmadx.get_expanded_element_count
-            self._get_element_index = libmadx.get_expanded_element_index
-            self._get_element_at = libmadx.get_expanded_element_index_by_position
-        else:
-            self._get_element = libmadx.get_element
-            self._get_element_count = libmadx.get_element_count
-            self._get_element_index = libmadx.get_element_index
-            self._get_element_at = libmadx.get_element_index_by_position
 
     def __contains__(self, element):
         """
@@ -714,11 +712,11 @@ class ElementList(collections.Sequence):
         # extends the accepted range to [-len, len+1], just like for lists:
         if index < 0:
             index += len(self)
-        return self._get_element(self._sequence_name, index)
+        return self._get_element(index)
 
     def __len__(self):
         """Get number of elements."""
-        return self._get_element_count(self._sequence_name)
+        return self._get_element_count()
 
     def index(self, element):
         """
@@ -726,7 +724,7 @@ class ElementList(collections.Sequence):
 
         Can be invoked with either the element dict or the element name.
 
-        :raises ValueError:
+        :raises ValueError: if the element is not found
         """
         if isinstance(element, dict):
             name = element['name']
@@ -738,11 +736,68 @@ class ElementList(collections.Sequence):
             return 0
         elif name == '#e':
             return len(self) - 1
-        return self._get_element_index(self._sequence_name, name)
+        index = self._get_element_index(name)
+        if index == -1:
+            raise ValueError("Element not in list: {!r}".format(name))
+        return index
+
+
+class ElementList(BaseElementList, collections.Sequence):
+
+    def __init__(self, libmadx, sequence_name):
+        """
+        Initialize instance.
+        """
+        self._libmadx = libmadx
+        self._sequence_name = sequence_name
 
     def at(self, pos):
         """Find the element at specified S position."""
-        return self._get_element_at(self._sequence_name, pos)
+        return self._get_element_at(pos)
+
+    def _get_element(self, element_index):
+        return self._libmadx.get_element(self._sequence_name, element_index)
+
+    def _get_element_count(self):
+        return self._libmadx.get_element_count(self._sequence_name)
+
+    def _get_element_index(self, element_name):
+        return self._libmadx.get_element_index(self._sequence_name, element_name)
+
+    def _get_element_at(self, pos):
+        return self._libmadx.get_element_index_by_position(self._sequence_name, pos)
+
+
+class ExpandedElementList(ElementList):
+
+    def _get_element(self, element_index):
+        return self._libmadx.get_expanded_element(self._sequence_name, element_index)
+
+    def _get_element_count(self):
+        return self._libmadx.get_expanded_element_count(self._sequence_name)
+
+    def _get_element_index(self, element_name):
+        return self._libmadx.get_expanded_element_index(self._sequence_name, element_name)
+
+    def _get_element_at(self, pos):
+        return self._libmadx.get_expanded_element_index_by_position(self._sequence_name, pos)
+
+
+class GlobalElementList(BaseElementList, collections.Mapping):
+
+    """
+    Provides dict-like access to MAD-X global elements.
+    """
+
+    def __init__(self, libmadx):
+        self._libmadx = libmadx
+        self._get_element = libmadx.get_global_element
+        self._get_element_count = libmadx.get_global_element_count
+        self._get_element_index = libmadx.get_global_element_index
+
+    def __iter__(self):
+        for i in range(len(self)):
+            yield self._libmadx.get_global_element_name(i)
 
 
 class Dict(dict):
@@ -796,6 +851,31 @@ class TableProxy(collections.Mapping):
         table = Dict((column, self[column]) for column in columns)
         table.summary = self.summary
         return table
+
+
+class VarListProxy(collections.MutableMapping):
+
+    """
+    Provides dict-like access to MAD-X global variables.
+    """
+
+    def __init__(self, libmadx):
+        self._libmadx = libmadx
+
+    def __getitem__(self, name):
+        return self._libmadx.get_var(name)
+
+    def __setitem__(self, name, value):
+        self._libmadx.set_var(name, value)
+
+    def __delitem__(self, name):
+        raise NotImplementedError("Currently, can't erase a MAD-X global.")
+
+    def __iter__(self):
+        return iter(self._libmadx.get_globals())
+
+    def __len__(self):
+        return self._libmadx.num_globals()
 
 
 class Metadata(object):

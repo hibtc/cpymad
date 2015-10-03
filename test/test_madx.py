@@ -180,6 +180,24 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         self.mad.set_value('BAR', 43)
         self.assertEqual(self.mad.evaluate('FOO'), 43)
 
+    def test_globals(self):
+        self.assertNotIn('FOO', self.mad.globals)
+        self.mad.globals['FOO'] = 2
+        self.assertIn('FOO', self.mad.globals)
+        self.assertEqual(self.mad.globals['FOO'], 2)
+        self.assertEqual(self.mad.evaluate('FOO'), 2)
+        self.mad.globals['FOO'] = 3
+        self.assertEqual(self.mad.evaluate('FOO'), 3)
+
+    def test_elements(self):
+        self.assertIn('sb', self.mad.elements)
+        self.assertIn('sb', list(self.mad.elements))
+        self.assertNotIn('foobar', self.mad.elements)
+        self.assertAlmostEqual(self.mad.elements['sb']['angle'], 3.14/4)
+        idx = self.mad.elements.index('qp1')
+        elem = self.mad.elements[idx]
+        self.assertEqual(elem['k1'], 3)
+
     # def test_sequence_beam(self):
     # def test_sequence_twiss(self):
     # def test_sequence_twissname(self):
