@@ -733,7 +733,7 @@ class ElementList(collections.Sequence):
 
         Can be invoked with either the element dict or the element name.
 
-        :raises ValueError:
+        :raises ValueError: if the element is not found
         """
         if isinstance(element, dict):
             name = element['name']
@@ -745,7 +745,10 @@ class ElementList(collections.Sequence):
             return 0
         elif name == '#e':
             return len(self) - 1
-        return self._get_element_index(self._sequence_name, name)
+        index = self._get_element_index(self._sequence_name, name)
+        if index == -1:
+            raise ValueError("Element not in list: {!r}".format(name))
+        return index
 
     def at(self, pos):
         """Find the element at specified S position."""
