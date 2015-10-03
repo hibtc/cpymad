@@ -82,6 +82,11 @@ __all__ = [
     'get_expanded_element_index_by_position',
     'get_expanded_element_count',
 
+    # global elements
+    'get_global_element',
+    'get_global_element_index',
+    'get_global_element_count',
+
     # these are imported from 'os' for convenience in madx.Madx and should
     # not really be considered part of the public interface:
     'chdir',
@@ -587,6 +592,57 @@ def get_expanded_element_count(sequence_name):
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
     return seq.n_nodes
+
+
+def get_global_element(element_index):
+    """
+    Return requested element in the expanded sequence.
+
+    :param int element_index: element index
+    :returns: the element with the specified index
+    :rtype: dict
+    :raises IndexError: if the index is out of range
+    """
+    cdef clib.el_list* elems = clib.element_list
+    if element_index < 0 or element_index >= elems.curr:
+        raise IndexError("Index out of range: {0} (element count is {1})"
+                         .format(element_index, elems.curr))
+    return _get_element(elems.elem[element_index])
+
+
+def get_global_element_name(element_index):
+    """
+    Return name of element.
+
+    :param int element_index: element index
+    :returns: element name
+    :rtype: str
+    :raises IndexError: if the index is out of range
+    """
+    cdef clib.el_list* elems = clib.element_list
+    if element_index < 0 or element_index >= elems.curr:
+        raise IndexError("Index out of range: {0} (element count is {1})"
+                         .format(element_index, elems.curr))
+    return _str(elems.list.names[element_index])
+
+
+def get_global_element_index(element_name):
+    """
+    Return index of element with specified name in the global element list.
+
+    :param str element_name: element index
+    :returns: the index of the specified element, -1 if not found
+    :rtype: int
+    """
+    cdef bytes _element_name = _cstr(element_name)
+    return clib.name_list_pos(_element_name, clib.element_list.list)
+
+
+def get_global_element_count():
+    """
+    Return number of globally visible elements.
+    """
+    return clib.element_list.curr
 
 
 def is_sequence_expanded(sequence_name):

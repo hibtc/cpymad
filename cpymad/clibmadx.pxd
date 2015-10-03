@@ -123,6 +123,11 @@ cdef extern from "madX/mad_elem.h":
         char[NAME_L] name
         command* def_ "def"
 
+    struct el_list:
+        int curr                # current occupation
+        name_list* list         # index list of names
+        element** elem          # element pointer list
+
 cdef extern from "madX/mad_node.h":
     struct node:
         char[NAME_L] name
@@ -179,6 +184,7 @@ cdef extern from "madX/mad_gvar.h":
     char_p_array* tmp_p_array   # temporary buffer for splits
     char_array* c_dum           # another temporary buffer
     var_list* variable_list     # globals
+    el_list* element_list       # list of global elements
 
 
 # Function declarations:
