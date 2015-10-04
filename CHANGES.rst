@@ -4,6 +4,15 @@ Changelog
 (dates are in the form dd.mm.yyyy)
 
 
+0.12.0
+======
+Date: (unreleased)
+
+- expose directory of global MAD-X variables as ``Madx.globals``
+- expose directory of global MAD-X elements as ``Madx.elements``
+- fix a bug with Elements.__contains__ reporting yes incorrectly
+
+
 0.11.0
 ======
 Date: 03.07.2015
