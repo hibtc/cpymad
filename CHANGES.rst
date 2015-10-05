@@ -6,7 +6,7 @@ Changelog
 
 0.12.0
 ======
-Date: (unreleased)
+Date: 05.10.2015
 
 - expose directory of global MAD-X variables as ``Madx.globals``
 - expose directory of global MAD-X elements as ``Madx.elements``
