@@ -72,6 +72,8 @@ __all__ = [
     'get_table_column',
     'get_table_row_count',
     'get_table_row_names',
+    'get_table_valid_range',
+    'get_table_valid_rows',
 
     # sequence element list access
     'get_element',
@@ -469,6 +471,33 @@ def get_table_row_names(table_name, indices):
     if isinstance(indices, int):
         return _get_table_row_name(table, indices)
     return [_get_table_row_name(table, i) for i in indices]
+
+
+def get_table_valid_range(table_name):
+    """
+    Search the indices of the first and last valid row and return them as a
+    tuple (first, last).
+    """
+    cdef clib.table* table = _find_table(table_name)
+    cdef int first, last
+    for first in xrange(table.row_out.curr):
+        if table.row_out.i[first]:
+            break
+    else:
+        raise RuntimeError("No valid row in table!")
+    for last in xrange(table.row_out.curr-1, first-1, -1):
+        if table.row_out.i[last]:
+            break
+    return (first, last)
+
+
+def get_table_valid_rows(table_name):
+    """
+    Search the indices of all valid rows and return them as a list.
+    """
+    cdef clib.table* table = _find_table(table_name)
+    return [i for i in xrange(table.row_out.curr)
+            if table.row_out.i[i]]
 
 
 def get_element(sequence_name, element_index):
