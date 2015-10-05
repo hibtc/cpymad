@@ -837,6 +837,13 @@ class TableProxy(collections.Mapping):
         """Get the table summary."""
         return self._libmadx.get_table_summary(self._name)
 
+    @property
+    def range(self):
+        """Get the element names (first, last) of the valid range."""
+        row_count = self._libmadx.get_table_row_count(self._name)
+        range = (0, row_count-1)
+        return tuple(self._libmadx.get_table_row_names(self._name, range))
+
     def copy(self, columns=None):
         """
         Return a frozen table with the desired columns.
