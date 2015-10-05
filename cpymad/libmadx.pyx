@@ -344,11 +344,7 @@ def get_table_column_names(table_name):
     :rtype: list
     :raises ValueError: if the table name is invalid
     """
-    cdef bytes _table_name = _cstr(table_name)
-    cdef int index = clib.name_list_pos(_table_name, clib.table_register.names)
-    if index == -1:
-        raise ValueError("Invalid table: {!r}".format(table_name))
-    cdef clib.table* table = clib.table_register.tables[index]
+    cdef clib.table* table = _find_table(table_name)
     indices = [table.col_out.i[i] for i in xrange(table.col_out.curr)]
     # NOTE: we can't enforce lower-case on the column names here, since this
     # breaks their usage with get_table_column():
@@ -364,13 +360,10 @@ def get_table_column_names_all(table_name):
     :rtype: list
     :raises ValueError: if the table name is invalid
     """
-    cdef bytes _table_name = _cstr(table_name)
-    cdef int index = clib.name_list_pos(_table_name, clib.table_register.names)
-    if index == -1:
-        raise ValueError("Invalid table: {!r}".format(table_name))
+    cdef clib.table* table = _find_table(table_name)
     # NOTE: we can't enforce lower-case on the column names here, since this
     # breaks their usage with get_table_column():
-    return _name_list(clib.table_register.tables[index].columns)
+    return _name_list(table.columns)
 
 
 def get_table_column_count(table_name):
@@ -382,11 +375,8 @@ def get_table_column_count(table_name):
     :rtype: int
     :raises ValueError: if the table name is invalid
     """
-    cdef bytes _table_name = _cstr(table_name)
-    cdef int index = clib.name_list_pos(_table_name, clib.table_register.names)
-    if index == -1:
-        raise ValueError("Invalid table: {!r}".format(table_name))
-    return clib.table_register.tables[index].columns.curr
+    cdef clib.table* table = _find_table(table_name)
+    return table.columns.curr
 
 
 def get_table_column(table_name, column_name):
@@ -810,6 +800,14 @@ cdef clib.sequence* _find_sequence(sequence_name) except NULL:
     if index == -1:
         raise ValueError("Invalid sequence: {}".format(sequence_name))
     return seqs.sequs[index]
+
+
+cdef clib.table* _find_table(table_name) except NULL:
+    cdef bytes _table_name = _cstr(table_name)
+    cdef int index = clib.name_list_pos(_table_name, clib.table_register.names)
+    if index == -1:
+        raise ValueError("Invalid table: {!r}".format(table_name))
+    return clib.table_register.tables[index]
 
 
 cdef _split_header_line(header_line):
