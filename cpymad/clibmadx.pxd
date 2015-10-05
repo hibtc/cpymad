@@ -51,6 +51,7 @@ cdef extern from "madX/mad_table.h":
         char[NAME_L] name
         int curr
         char_p_array* header
+        int_array* col_out      # column no.s to be written (in this order)
         char*** s_cols
         double** d_cols
         name_list* columns

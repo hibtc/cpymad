@@ -68,6 +68,7 @@ __all__ = [
     # table access
     'get_table_summary',
     'get_table_column_names',
+    'get_table_column_names_all',
     'get_table_column',
 
     # sequence element list access
@@ -335,6 +336,26 @@ def get_table_summary(table_name):
 
 
 def get_table_column_names(table_name):
+    """
+    Get a list of all column names in the table.
+
+    :param str table_name: table name
+    :returns: column names
+    :rtype: list
+    :raises ValueError: if the table name is invalid
+    """
+    cdef bytes _table_name = _cstr(table_name)
+    cdef int index = clib.name_list_pos(_table_name, clib.table_register.names)
+    if index == -1:
+        raise ValueError("Invalid table: {!r}".format(table_name))
+    cdef clib.table* table = clib.table_register.tables[index]
+    indices = [table.col_out.i[i] for i in xrange(table.col_out.curr)]
+    # NOTE: we can't enforce lower-case on the column names here, since this
+    # breaks their usage with get_table_column():
+    return [table.columns.names[i] for i in indices]
+
+
+def get_table_column_names_all(table_name):
     """
     Get a list of all column names in the table.
 
