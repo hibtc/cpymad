@@ -22,7 +22,7 @@ cdef extern from "pyport.h":
     ctypedef int Py_intptr_t
 
 from cpymad.types import Constraint, Expression
-from cpymad.util import name_to_internal, name_from_internal
+from cpymad.util import name_to_internal, name_from_internal, normalize_range_name
 cimport cpymad.clibmadx as clib
 
 
@@ -70,6 +70,8 @@ __all__ = [
     'get_table_column_names',
     'get_table_column_names_all',
     'get_table_column',
+    'get_table_row_count',
+    'get_table_row_names',
 
     # sequence element list access
     'get_element',
@@ -450,6 +452,23 @@ def get_table_column(table_name, column_name):
     else:
         raise RuntimeError("Unknown datatype {!r} in column {!r}."
                            .format(_str(dtype), column_name))
+
+
+def get_table_row_count(table_name):
+    """
+    Return total number of rows in the table.
+    """
+    return _find_table(table_name).curr
+
+
+def get_table_row_names(table_name, indices):
+    """
+    Return row names for every index (row number) in the list.
+    """
+    cdef clib.table* table = _find_table(table_name)
+    if isinstance(indices, int):
+        return _get_table_row_name(table, indices)
+    return [_get_table_row_name(table, i) for i in indices]
 
 
 def get_element(sequence_name, element_index):
@@ -869,3 +888,11 @@ cdef double _get_node_entry_pos(clib.node* node, int ref_flag):
 cdef _get_element(clib.element* elem):
     """Return dictionary with element attributes."""
     return _parse_command(elem.def_)
+
+
+cdef _get_table_row_name(clib.table* table, int index):
+    if index < 0 or index >= table.curr:
+        raise ValueError("Invalid row index: {}".format(index))
+    return normalize_range_name(name_from_internal(_str(
+        table.node_nm.p[index]
+    )))
