@@ -140,6 +140,16 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         self.assertAlmostEqual(betx_range[2], betx_full1[3]) # dr:3, dr:2
         self.assertNotAlmostEqual(betx_range[3], betx_full1[4]) # sb, qp:2
 
+    def test_range_row_api(self):
+        beam = 'beam, ex=1, ey=2, particle=electron, sequence=s1;'
+        self.mad.command(beam)
+        params = dict(alfx=0.5, alfy=1.5,
+                      betx=2.5, bety=3.5,
+                      sequence='s1')
+        tab = self.mad.twiss(range=('dr[2]', 'sb'), **params)
+        self.assertEqual(tab.range, ('dr[2]', 'sb'))
+        self.assertIn('betx', tab)
+
     # def test_survey(self):
     # def test_aperture(self):
     # def test_use(self):
