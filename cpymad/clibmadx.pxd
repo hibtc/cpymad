@@ -52,7 +52,6 @@ cdef extern from "madX/mad_table.h":
         int curr
         char_p_array* header
         int_array* col_out      # column no.s to be written (in this order)
-        int_array* row_out      # flag for row: 1 write, 0 don't
         char_p_array* node_nm   # names of nodes at each row
         char*** s_cols
         double** d_cols
