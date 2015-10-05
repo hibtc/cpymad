@@ -11,6 +11,8 @@ Date: (unreleased)
 - expose directory of global MAD-X variables as ``Madx.globals``
 - expose directory of global MAD-X elements as ``Madx.elements``
 - fix a bug with Elements.__contains__ reporting yes incorrectly
+- list only those column of a table that are marked for output
+- add function to get row names of a table
 
 
 0.11.0
