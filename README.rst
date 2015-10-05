@@ -28,9 +28,15 @@ This is a heavily modified fork of the cern-cpymad_ package. The fork is
 not authored or maintained by CERN members.
 
 CPyMAD links against an unofficial build of MAD-X that is not supported by
-CERN, i.e. in case of problems you will not get help there. However, this
-does NOT mean you should post every problem you encounter while using
-cpymad here. See `Reporting issues`_.
+CERN, i.e. this binary may have problems that the official binary does not
+have and vice versa. This means:
+
+- Only report issues to CERN that can be reproduced with their official
+  command line client.
+- Only report issues here if they cannot be reproduced with their official
+  command line client.
+
+See `Reporting issues`_.
 
 .. _cern-cpymad: https://github.com/pymad/cpymad
 
@@ -122,31 +128,24 @@ Reporting issues
 
 If you have a problem with a sequence file, first try to check if that
 problem remains when using the MAD-X command line client distributed by
-CERN. In that case report the issue to the CERN support!
+CERN, then:
 
-For issues regarding the cpymad code itself or usage information, I'm happy
-to answer. Just keep in mind to be **precise**, **specific**, **concise**
-and provide all the necessary information. In particular, go through the
-following checklist.
+- Report the issue to CERN only if it be reproduced with their official
+  command line client.
+- Report the issue here only if it cannot be reproduced with their official
+  command line client.
 
-Did I…
+For issues regarding the cpymad code itself or usage information, I'm happy to
+answer. Just keep in mind to be **precise**, **specific**, **concise** and
+provide all the necessary information.
 
-- …formulate my question/goal precise enough that no further inquiries will
-  be necessary?
+See also:
 
-- …add every piece of information that is required to understand and answer
-  my question? That includes all code (starting with the import statements)
-  and all relevant files.
+- `Short, Self Contained, Correct (Compilable), Example`_
+- `How to Report Bugs Effectively`_
+- `How To Ask Questions The Smart Way`_.
 
-- …remove every piece of information that is not part of my question? Are
-  there code sections that are not essential to reproduce the issue?
-
-- …check that my problem is with cpymad itself and not with MAD-X,
-  matplotlib or any other python package?
-
-If you haven't read it so far I recommend to have a look at `How to Report
-Bugs Effectively`_ and `How To Ask Questions The Smart Way`_.
-
+.. _Short, Self Contained, Correct (Compilable), Example: http://sscce.org/
 .. _How to Report Bugs Effectively: http://www.chiark.greenend.org.uk/~sgtatham/bugs.html
 .. _How To Ask Questions The Smart Way: http://www.catb.org/esr/faqs/smart-questions.html
 
