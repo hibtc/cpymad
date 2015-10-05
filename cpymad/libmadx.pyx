@@ -22,7 +22,7 @@ cdef extern from "pyport.h":
     ctypedef int Py_intptr_t
 
 from cpymad.types import Constraint, Expression
-from cpymad.util import name_to_internal, name_from_internal
+from cpymad.util import name_to_internal, name_from_internal, normalize_range_name
 cimport cpymad.clibmadx as clib
 
 
@@ -68,7 +68,10 @@ __all__ = [
     # table access
     'get_table_summary',
     'get_table_column_names',
+    'get_table_column_names_all',
     'get_table_column',
+    'get_table_row_count',
+    'get_table_row_names',
 
     # sequence element list access
     'get_element',
@@ -343,13 +346,26 @@ def get_table_column_names(table_name):
     :rtype: list
     :raises ValueError: if the table name is invalid
     """
-    cdef bytes _table_name = _cstr(table_name)
-    cdef int index = clib.name_list_pos(_table_name, clib.table_register.names)
-    if index == -1:
-        raise ValueError("Invalid table: {!r}".format(table_name))
+    cdef clib.table* table = _find_table(table_name)
+    indices = [table.col_out.i[i] for i in xrange(table.col_out.curr)]
     # NOTE: we can't enforce lower-case on the column names here, since this
     # breaks their usage with get_table_column():
-    return _name_list(clib.table_register.tables[index].columns)
+    return [table.columns.names[i] for i in indices]
+
+
+def get_table_column_names_all(table_name):
+    """
+    Get a list of all column names in the table.
+
+    :param str table_name: table name
+    :returns: column names
+    :rtype: list
+    :raises ValueError: if the table name is invalid
+    """
+    cdef clib.table* table = _find_table(table_name)
+    # NOTE: we can't enforce lower-case on the column names here, since this
+    # breaks their usage with get_table_column():
+    return _name_list(table.columns)
 
 
 def get_table_column_count(table_name):
@@ -361,11 +377,8 @@ def get_table_column_count(table_name):
     :rtype: int
     :raises ValueError: if the table name is invalid
     """
-    cdef bytes _table_name = _cstr(table_name)
-    cdef int index = clib.name_list_pos(_table_name, clib.table_register.names)
-    if index == -1:
-        raise ValueError("Invalid table: {!r}".format(table_name))
-    return clib.table_register.tables[index].columns.curr
+    cdef clib.table* table = _find_table(table_name)
+    return table.columns.curr
 
 
 def get_table_column(table_name, column_name):
@@ -439,6 +452,23 @@ def get_table_column(table_name, column_name):
     else:
         raise RuntimeError("Unknown datatype {!r} in column {!r}."
                            .format(_str(dtype), column_name))
+
+
+def get_table_row_count(table_name):
+    """
+    Return total number of rows in the table.
+    """
+    return _find_table(table_name).curr
+
+
+def get_table_row_names(table_name, indices):
+    """
+    Return row names for every index (row number) in the list.
+    """
+    cdef clib.table* table = _find_table(table_name)
+    if isinstance(indices, int):
+        return _get_table_row_name(table, indices)
+    return [_get_table_row_name(table, i) for i in indices]
 
 
 def get_element(sequence_name, element_index):
@@ -791,6 +821,14 @@ cdef clib.sequence* _find_sequence(sequence_name) except NULL:
     return seqs.sequs[index]
 
 
+cdef clib.table* _find_table(table_name) except NULL:
+    cdef bytes _table_name = _cstr(table_name)
+    cdef int index = clib.name_list_pos(_table_name, clib.table_register.names)
+    if index == -1:
+        raise ValueError("Invalid table: {!r}".format(table_name))
+    return clib.table_register.tables[index]
+
+
 cdef _split_header_line(header_line):
     """Parse a table header value."""
     _, key, kind, value = _str(header_line).split(None, 3)
@@ -850,3 +888,11 @@ cdef double _get_node_entry_pos(clib.node* node, int ref_flag):
 cdef _get_element(clib.element* elem):
     """Return dictionary with element attributes."""
     return _parse_command(elem.def_)
+
+
+cdef _get_table_row_name(clib.table* table, int index):
+    if index < 0 or index >= table.curr:
+        raise ValueError("Invalid row index: {}".format(index))
+    return normalize_range_name(name_from_internal(_str(
+        table.node_nm.p[index]
+    )))
