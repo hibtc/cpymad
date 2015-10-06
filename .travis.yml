@@ -62,6 +62,9 @@ script:
   - coverage run --source=cpymad -a test/test_madx.py     -v
 
 after_success:
+  - base=`python -c 'import os,cpymad; print(os.path.dirname(cpymad.__file__))'`/..
+  - mv .git .coverage $base
+  - cd $base
   - coveralls
 
 cache:
