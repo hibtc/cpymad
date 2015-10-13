@@ -4,6 +4,15 @@ Changelog
 (dates are in the form dd.mm.yyyy)
 
 
+0.12.1
+======
+Date: 13.10.2015
+
+- fix crash due to incorrect parameter name for ``logging.basicConfig``
+- fix crash due to missing ``subprocess.MAXFD`` on python3.5
+- fix coverage report submitted to coveralls.io
+
+
 0.12.0
 ======
 Date: 05.10.2015
