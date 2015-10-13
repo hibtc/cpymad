@@ -41,7 +41,7 @@ class Service(object):
 
     def configure_logging(self):
         """Configure logging module."""
-        logging.basicConfig(logLevel=logging.INFO)
+        logging.basicConfig(level=logging.INFO)
 
     def run(self):
         """
