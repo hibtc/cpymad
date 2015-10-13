@@ -90,6 +90,15 @@ class MadxCommands(object):
 
     def __getattr__(self, name):
         """Return a dispatcher for a specific command."""
+        if name.startswith('_'):
+            raise AttributeError("Invalid command name: {!r}! Did you mean {!r}?"
+                                 .format(name, name.strip('_') + '_'))
+        if name.endswith('_'):
+            name = name[:-1]
+        return self[name]
+
+    def __getitem__(self, name):
+        """Return a dispatcher for a specific command."""
         return partial(self.__call__, name)
 
 

@@ -4,6 +4,14 @@ Changelog
 (dates are in the form dd.mm.yyyy)
 
 
+next
+====
+Date: (unknown)
+
+- Strip trailing underscore from ``MadxCommands`` attribute names. This allows
+  the syntax to be used even for python keywords, e.g. ``m.command.global_()``
+
+
 0.12.1
 ======
 Date: 13.10.2015

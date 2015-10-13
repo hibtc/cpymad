@@ -97,7 +97,10 @@ fine grained control over the command string composition or where
 .. code-block:: python
 
     # can't use `global` as attribute, since it's a python keyword:
-    madx.command('global', sequence='cassps', Q1=26.58)
+    madx.command.global_(sequence='cassps', Q1=26.58)
+
+    # can't use `: ` as attribute:
+    madx.command('QP: QUADRUPOLE', AT=2, L=1)
 
     # issue a plain text command, don't forget the semicolon!
     madx.input('FOO, BAR=[baz], QUX=<NORF>;')
