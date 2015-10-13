@@ -45,6 +45,19 @@ else:
         return []
 
 
+def get_max_fd():
+    """Return the maximum possible file descriptor or a wild guess."""
+    if not win:
+        import resource
+        _soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
+        if hard != resource.RLIM_INFINITY:
+            return hard
+    try:
+        return subprocess.MAXFD
+    except AttributeError:          # on py3.5
+        return 4096
+
+
 def close_all_but(keep):
     """Close all but the given file descriptors."""
     # first, let the garbage collector run, it may find some unreachable
@@ -52,7 +65,7 @@ def close_all_but(keep):
     import gc
     gc.collect()
     # close all ranges in between the file descriptors to be kept:
-    keep = sorted(set([-1] + keep + [subprocess.MAXFD]))
+    keep = sorted(set([-1] + keep + [get_max_fd()]))
     for s, e in zip(keep[:-1], keep[1:]):
         if s+1 < e:
             os.closerange(s+1, e)
