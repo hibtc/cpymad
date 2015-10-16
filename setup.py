@@ -106,7 +106,7 @@ def get_extension_args(argv):
             argv.remove(arg)
             prefix = path.expanduser(arg.split('=', 1)[1])
             lib_path_candidates = [path.join(prefix, 'lib'),
-                                path.join(prefix, 'lib64')]
+                                   path.join(prefix, 'lib64')]
             include_dirs += [path.join(prefix, 'include')]
             library_dirs += list(filter(path.isdir, lib_path_candidates))
     # required libraries
@@ -143,8 +143,8 @@ def get_setup_args(argv):
         classifiers=metadata['__classifiers__'],
         ext_modules = cythonize([
             Extension('cpymad.libmadx',
-                    sources=["cpymad/libmadx.pyx"],
-                    **extension_args),
+                      sources=["cpymad/libmadx.pyx"],
+                      **extension_args),
         ]),
         packages = [
             "cpymad",
