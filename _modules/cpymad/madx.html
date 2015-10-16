@@ -130,6 +130,15 @@
 
     <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a dispatcher for a specific command.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&quot;Invalid command name: {!r}! Did you mean {!r}?&quot;</span>
+                                 <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a dispatcher for a specific command.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__call__</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 
 </div>
@@ -308,6 +317,20 @@
             <span class="c"># catch + reraise in order to shorten stack trace (~3-5 levels):</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;MAD-X has stopped working!&quot;</span><span class="p">)</span>
 </div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">globals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a dict-like interface to global MAD-X variables.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">VarListProxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">elements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a dict-like interface to globally visible elements.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GlobalElementList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">)</span>
+
 <div class="viewcode-block" id="Madx.set_value"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.set_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set a variable value (&quot;=&quot; operator in MAD-X).</span>
@@ -701,37 +724,21 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">elements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get list of elements.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">ElementList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">,</span> <span class="n">expanded</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ElementList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">expanded_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get list of elements in expanded sequence.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">ElementList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">,</span> <span class="n">expanded</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ExpandedElementList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="ElementList"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.ElementList">[docs]</a><span class="k">class</span> <span class="nc">ElementList</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseElementList"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.BaseElementList">[docs]</a><span class="k">class</span> <span class="nc">BaseElementList</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Immutable list of beam line elements.</span>
 
 <span class="sd">    Each element is a dictionary containing its properties.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence_name</span><span class="p">,</span> <span class="n">libmadx</span><span class="p">,</span> <span class="n">expanded</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize instance.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span> <span class="o">=</span> <span class="n">sequence_name</span>
-        <span class="k">if</span> <span class="n">expanded</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_get_element</span> <span class="o">=</span> <span class="n">libmadx</span><span class="o">.</span><span class="n">get_expanded_element</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_get_element_count</span> <span class="o">=</span> <span class="n">libmadx</span><span class="o">.</span><span class="n">get_expanded_element_count</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_get_element_index</span> <span class="o">=</span> <span class="n">libmadx</span><span class="o">.</span><span class="n">get_expanded_element_index</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_get_element_at</span> <span class="o">=</span> <span class="n">libmadx</span><span class="o">.</span><span class="n">get_expanded_element_index_by_position</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_get_element</span> <span class="o">=</span> <span class="n">libmadx</span><span class="o">.</span><span class="n">get_element</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_get_element_count</span> <span class="o">=</span> <span class="n">libmadx</span><span class="o">.</span><span class="n">get_element_count</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_get_element_index</span> <span class="o">=</span> <span class="n">libmadx</span><span class="o">.</span><span class="n">get_element_index</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_get_element_at</span> <span class="o">=</span> <span class="n">libmadx</span><span class="o">.</span><span class="n">get_element_index_by_position</span>
 
     <span class="k">def</span> <span class="nf">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -754,19 +761,19 @@
         <span class="c"># extends the accepted range to [-len, len+1], just like for lists:</span>
         <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">index</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_element</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_element</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get number of elements.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_element_count</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_element_count</span><span class="p">()</span>
 
-<div class="viewcode-block" id="ElementList.index"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.ElementList.index">[docs]</a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseElementList.index"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.BaseElementList.index">[docs]</a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Find index of element with specified name.</span>
 
 <span class="sd">        Can be invoked with either the element dict or the element name.</span>
 
-<span class="sd">        :raises ValueError:</span>
+<span class="sd">        :raises ValueError: if the element is not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">element</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
@@ -778,13 +785,70 @@
             <span class="k">return</span> <span class="mi">0</span>
         <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s">&#39;#e&#39;</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_element_index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="ElementList.at"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.ElementList.at">[docs]</a>    <span class="k">def</span> <span class="nf">at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Find the element at specified S position.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_element_at</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_element_index</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Element not in list: {!r}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">index</span>
 
 </div></div>
+<span class="k">class</span> <span class="nc">ElementList</span><span class="p">(</span><span class="n">BaseElementList</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">libmadx</span><span class="p">,</span> <span class="n">sequence_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span> <span class="o">=</span> <span class="n">libmadx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span> <span class="o">=</span> <span class="n">sequence_name</span>
+
+    <span class="k">def</span> <span class="nf">at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Find the element at specified S position.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_element_at</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_index</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_element</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span><span class="p">,</span> <span class="n">element_index</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_element_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_element_count</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_element_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_element_index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span><span class="p">,</span> <span class="n">element_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_element_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_element_index_by_position</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">ExpandedElementList</span><span class="p">(</span><span class="n">ElementList</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">_get_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_index</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_expanded_element</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span><span class="p">,</span> <span class="n">element_index</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_element_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_expanded_element_count</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_element_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_expanded_element_index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span><span class="p">,</span> <span class="n">element_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_element_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_expanded_element_index_by_position</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="GlobalElementList"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.GlobalElementList">[docs]</a><span class="k">class</span> <span class="nc">GlobalElementList</span><span class="p">(</span><span class="n">BaseElementList</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides dict-like access to MAD-X global elements.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">libmadx</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span> <span class="o">=</span> <span class="n">libmadx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_element</span> <span class="o">=</span> <span class="n">libmadx</span><span class="o">.</span><span class="n">get_global_element</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_element_count</span> <span class="o">=</span> <span class="n">libmadx</span><span class="o">.</span><span class="n">get_global_element_count</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_element_index</span> <span class="o">=</span> <span class="n">libmadx</span><span class="o">.</span><span class="n">get_global_element_index</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_global_element_name</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+</div>
 <span class="k">class</span> <span class="nc">Dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="k">pass</span>
 
@@ -822,6 +886,13 @@
         <span class="sd">&quot;&quot;&quot;Get the table summary.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_table_summary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">range</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the element names (first, last) of the valid range.&quot;&quot;&quot;</span>
+        <span class="n">row_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_table_row_count</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="nb">range</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_count</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_table_row_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="nb">range</span><span class="p">))</span>
+
 <div class="viewcode-block" id="TableProxy.copy"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.TableProxy.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a frozen table with the desired columns.</span>
@@ -838,6 +909,31 @@
         <span class="k">return</span> <span class="n">table</span>
 
 </div></div>
+<div class="viewcode-block" id="VarListProxy"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.VarListProxy">[docs]</a><span class="k">class</span> <span class="nc">VarListProxy</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">MutableMapping</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides dict-like access to MAD-X global variables.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">libmadx</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span> <span class="o">=</span> <span class="n">libmadx</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">set_var</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Currently, can&#39;t erase a MAD-X global.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_globals</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">num_globals</span><span class="p">()</span>
+
+</div>
 <div class="viewcode-block" id="Metadata"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Metadata">[docs]</a><span class="k">class</span> <span class="nc">Metadata</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;MAD-X metadata (license info, etc).&quot;&quot;&quot;</span>

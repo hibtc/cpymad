@@ -43,6 +43,29 @@
 <p>This module defines a convenience layer to access the MAD-X interpreter.</p>
 <p>The most interesting class for users is <a class="reference internal" href="#cpymad.madx.Madx" title="cpymad.madx.Madx"><code class="xref py py-class docutils literal"><span class="pre">Madx</span></code></a>.</p>
 <dl class="class">
+<dt id="cpymad.madx.BaseElementList">
+<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">BaseElementList</code><a class="reference internal" href="../_modules/cpymad/madx.html#BaseElementList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.BaseElementList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Immutable list of beam line elements.</p>
+<p>Each element is a dictionary containing its properties.</p>
+<dl class="method">
+<dt id="cpymad.madx.BaseElementList.index">
+<code class="descname">index</code><span class="sig-paren">(</span><em>element</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#BaseElementList.index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.BaseElementList.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find index of element with specified name.</p>
+<p>Can be invoked with either the element dict or the element name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Raises ValueError:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">if the element is not found</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="cpymad.madx.ChangeDirectory">
 <em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">ChangeDirectory</code><span class="sig-paren">(</span><em>path</em>, <em>_os</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#ChangeDirectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.ChangeDirectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Context manager for temporarily changing current working directory in the
@@ -74,32 +97,9 @@ context of the given <code class="docutils literal"><span class="pre">os</span><
 </dd></dl>
 
 <dl class="class">
-<dt id="cpymad.madx.ElementList">
-<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">ElementList</code><span class="sig-paren">(</span><em>sequence_name</em>, <em>libmadx</em>, <em>expanded</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#ElementList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.ElementList" title="Permalink to this definition">¶</a></dt>
-<dd><p>Immutable list of beam line elements.</p>
-<p>Each element is a dictionary containing its properties.</p>
-<dl class="method">
-<dt id="cpymad.madx.ElementList.at">
-<code class="descname">at</code><span class="sig-paren">(</span><em>pos</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#ElementList.at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.ElementList.at" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the element at specified S position.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cpymad.madx.ElementList.index">
-<code class="descname">index</code><span class="sig-paren">(</span><em>element</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#ElementList.index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.ElementList.index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find index of element with specified name.</p>
-<p>Can be invoked with either the element dict or the element name.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">Raises ValueError:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
+<dt id="cpymad.madx.GlobalElementList">
+<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">GlobalElementList</code><span class="sig-paren">(</span><em>libmadx</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#GlobalElementList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.GlobalElementList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides dict-like access to MAD-X global elements.</p>
 </dd></dl>
 
 <dl class="class">
@@ -213,6 +213,12 @@ object to the constructor. This object must expose an interface similar to
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="cpymad.madx.Madx.elements">
+<code class="descname">elements</code><a class="headerlink" href="#cpymad.madx.Madx.elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a dict-like interface to globally visible elements.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="cpymad.madx.Madx.evaluate">
 <code class="descname">evaluate</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.evaluate" title="Permalink to this definition">¶</a></dt>
@@ -247,6 +253,12 @@ object to the constructor. This object must expose an interface similar to
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cpymad.madx.Madx.globals">
+<code class="descname">globals</code><a class="headerlink" href="#cpymad.madx.Madx.globals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a dict-like interface to global MAD-X variables.</p>
 </dd></dl>
 
 <dl class="method">
@@ -571,11 +583,23 @@ object to the constructor. This object must expose an interface similar to
 </dd></dl>
 
 <dl class="attribute">
+<dt id="cpymad.madx.TableProxy.range">
+<code class="descname">range</code><a class="headerlink" href="#cpymad.madx.TableProxy.range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the element names (first, last) of the valid range.</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="cpymad.madx.TableProxy.summary">
 <code class="descname">summary</code><a class="headerlink" href="#cpymad.madx.TableProxy.summary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the table summary.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="class">
+<dt id="cpymad.madx.VarListProxy">
+<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">VarListProxy</code><span class="sig-paren">(</span><em>libmadx</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#VarListProxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.VarListProxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides dict-like access to MAD-X global variables.</p>
 </dd></dl>
 
 <dl class="class">
