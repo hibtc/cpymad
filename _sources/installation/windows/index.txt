@@ -17,7 +17,7 @@ that particular file. For example:
 
 .. code-block:: bat
 
-    pip install dist\cpymad-0.10.1-cp27-none-win32.whl
+    pip install cpymad-0.10.1-cp27-none-win32.whl
 
 In this case you will also need to grab and install *numpy*, *PyYAML* and
 *setuptools* (and possibly their dependencies if any). Installable wheel_
