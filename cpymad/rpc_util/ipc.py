@@ -21,7 +21,7 @@ else:
 
 __all__ = [
     'close_all_but',
-    'create_ipc_connectin',
+    'create_ipc_connection',
     'spawn_subprocess',
     'prepare_subprocess_ipc',
 ]
