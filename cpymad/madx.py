@@ -888,7 +888,11 @@ class VarListProxy(collections.MutableMapping):
         raise NotImplementedError("Currently, can't erase a MAD-X global.")
 
     def __iter__(self):
-        return iter(self._libmadx.get_globals())
+        """Iterate names of all non-constant globals."""
+        for name in self._libmadx.get_globals():
+            # var_type=0 is for (predefined) constants like PI:
+            if self._libmadx.get_var_type(name) > 0:
+                yield name
 
     def __len__(self):
         return self._libmadx.num_globals()
