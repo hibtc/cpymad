@@ -48,6 +48,7 @@ __all__ = [
     'set_var',
     'num_globals',
     'get_globals',
+    'get_var_type',
 
     # iterate sequences
     'sequence_exists',
@@ -165,29 +166,56 @@ def get_var(name):
     """
     Get the value of a global variable.
     """
-    cdef bytes _name = _cstr(name.lower())
-    cdef clib.variable* var = clib.find_variable(_name, clib.variable_list)
-    if var is NULL:
-        raise KeyError("Variable not defined: {!r}".format(name))
+    cdef clib.variable* var = _get_var(name)
     if var.type == 3:
         return _str(var.string)
     cdef double value = clib.variable_value(var)
+    cdef int typeid
     if var.val_type == 0:
-        return int(value)
-    return value
+        typeid = clib.PARAM_TYPE_INTEGER
+    else:
+        typeid = clib.PARAM_TYPE_DOUBLE
+    return _expr(var.expr, value, typeid)
+
+
+def get_var_type(name):
+    """
+    Get the type of the variable:
+
+        0   constant
+        1   direct
+        2   deferred
+        3   string
+    """
+    return _get_var(name).type
 
 
 def set_var(name, value):
     """
-    Set one global variable.
+    Set the value of a global variable.
+
+    If the value is a string or :class:`Expression` set the variable as a
+    deferred expression.
     """
     cdef bytes _name = _cstr(name.lower())
-    cdef double _value
+    cdef double _value = 0
+    cdef int var_type = 1       # 0: const, 1: direct, 2: deferred
+    cdef int val_type = 1       # 0: int, 1: double, 3: string
+    cdef clib.expression* expr = NULL
+    cdef clib.variable* var
+    try:
+        value = value.expr
+    except AttributeError:
+        pass
     if isinstance(value, basestring):
-        clib.set_stringvar(_name, _cstr(value))
+        var_type = 2            # deferred
+        expr = _make_expr(value)
     else:
         _value = value
-        clib.set_variable(_name, &_value)
+        if isinstance(value, int):
+            val_type = 0        # int
+    var = clib.new_variable(_name, _value, val_type, var_type, expr, NULL)
+    clib.add_to_var_list(var, clib.variable_list, 1)
 
 
 def num_globals():
@@ -696,6 +724,13 @@ def evaluate(expression):
     :returns: numeric value of the expression
     :rtype: float
     """
+    cdef clib.expression* expr = _make_expr(expression)
+    value = clib.expression_value(expr, 2)
+    clib.delete_expression(expr)
+    return value
+
+
+cdef clib.expression* _make_expr(expression):
     # TODO: This function uses global variables as temporaries - which is in
     # general an *extremely* bad design choice. Even though MAD-X uses global
     # variables internally anyway, this is no excuse for cpymad to copy that
@@ -709,10 +744,7 @@ def evaluate(expression):
     cdef bytes _expr = _cstr(expression.lower())
     clib.pre_split(_expr, clib.c_dum, 0)
     clib.mysplit(clib.c_dum.c, clib.tmp_p_array)
-    expr = clib.make_expression(clib.tmp_p_array.curr, clib.tmp_p_array.p)
-    value = clib.expression_value(expr, 2)
-    clib.delete_expression(expr)
-    return value
+    return clib.make_expression(clib.tmp_p_array.curr, clib.tmp_p_array.p)
 
 
 # Helper functions:
@@ -738,7 +770,8 @@ cdef _expr(clib.expression* expr,
         return _type(float(_expr))
     except ValueError:
         pass
-    return Expression(_expr, _type(evaluate(_expr)), _type)
+    value = clib.expression_value(expr, 2)
+    return Expression(_expr, _type(value), _type)
 
 
 cdef _get_param_value(clib.command_parameter* par):
@@ -896,3 +929,11 @@ cdef _get_table_row_name(clib.table* table, int index):
     return normalize_range_name(name_from_internal(_str(
         table.node_nm.p[index]
     )))
+
+
+cdef clib.variable* _get_var(name) except NULL:
+    cdef bytes _name = _cstr(name.lower())
+    cdef clib.variable* var = clib.find_variable(_name, clib.variable_list)
+    if var is NULL:
+        raise KeyError("Variable not defined: {!r}".format(name))
+    return var

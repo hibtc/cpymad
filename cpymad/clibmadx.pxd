@@ -167,6 +167,7 @@ cdef extern from "madX/mad_var.h":
         int type                    # 0 constant, 1 direct, 2 deferred, 3 string
         int val_type                # 0 int 1 double (0..2)
         char* string                # pointer to string if 3
+        expression* expr            # pointer to defining expression (0..2)
 
     struct var_list:
         int curr                    # current occupation
@@ -221,6 +222,8 @@ cdef extern from "madX/mad_table.h":
 
 cdef extern from "madX/mad_var.h":
     # NOTE: C API uses "const char* name"
+    variable* new_variable(char* name, double val, int val_type, int type, expression*, char* string)
+    void add_to_var_list(variable*, var_list*, int flag)
     void set_variable(char* name, double* value)
     void set_stringvar(char* name, char* string)
     variable* find_variable(char* name, var_list*)

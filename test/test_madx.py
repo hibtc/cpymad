@@ -191,13 +191,22 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         self.assertEqual(self.mad.evaluate('FOO'), 43)
 
     def test_globals(self):
-        self.assertNotIn('FOO', self.mad.globals)
-        self.mad.globals['FOO'] = 2
-        self.assertIn('FOO', self.mad.globals)
-        self.assertEqual(self.mad.globals['FOO'], 2)
+        g = self.mad.globals
+        # Membership:
+        self.assertNotIn('FOO', g)
+        # Setting values:
+        g['FOO'] = 2
+        self.assertIn('FOO', g)
+        self.assertEqual(g['FOO'], 2)
         self.assertEqual(self.mad.evaluate('FOO'), 2)
-        self.mad.globals['FOO'] = 3
+        # Re-setting values:
+        g['FOO'] = 3
         self.assertEqual(self.mad.evaluate('FOO'), 3)
+        # Setting expressions:
+        g['BAR'] = '3*foo'
+        self.assertEqual(self.mad.evaluate('BAR'), 9)
+        g['FOO'] = 4
+        self.assertEqual(self.mad.evaluate('BAR'), 12)
 
     def test_elements(self):
         self.assertIn('sb', self.mad.elements)
