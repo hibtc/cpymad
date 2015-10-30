@@ -48,6 +48,7 @@ __all__ = [
     'set_var',
     'num_globals',
     'get_globals',
+    'get_var_type',
 
     # iterate sequences
     'sequence_exists',
@@ -165,16 +166,25 @@ def get_var(name):
     """
     Get the value of a global variable.
     """
-    cdef bytes _name = _cstr(name.lower())
-    cdef clib.variable* var = clib.find_variable(_name, clib.variable_list)
-    if var is NULL:
-        raise KeyError("Variable not defined: {!r}".format(name))
+    cdef clib.variable* var = _get_var(name)
     if var.type == 3:
         return _str(var.string)
     cdef double value = clib.variable_value(var)
     if var.val_type == 0:
         return int(value)
     return value
+
+
+def get_var_type(name):
+    """
+    Get the type of the variable:
+
+        0   constant
+        1   direct
+        2   deferred
+        3   string
+    """
+    return _get_var(name).type
 
 
 def set_var(name, value):
@@ -896,3 +906,11 @@ cdef _get_table_row_name(clib.table* table, int index):
     return normalize_range_name(name_from_internal(_str(
         table.node_nm.p[index]
     )))
+
+
+cdef clib.variable* _get_var(name) except NULL:
+    cdef bytes _name = _cstr(name.lower())
+    cdef clib.variable* var = clib.find_variable(_name, clib.variable_list)
+    if var is NULL:
+        raise KeyError("Variable not defined: {!r}".format(name))
+    return var
