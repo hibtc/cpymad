@@ -4,12 +4,16 @@ Changelog
 (dates are in the form dd.mm.yyyy)
 
 
-next
-====
-Date: (unknown)
+0.12.2
+======
+Date: 30.10.2015
 
 - Strip trailing underscore from ``MadxCommands`` attribute names. This allows
   the syntax to be used even for python keywords, e.g. ``m.command.global_()``
+- Change the behaviour of ``Madx.globals``:
+    - when setting string values, set the variable as deferred expression
+    - when getting deferred variables, return instances of type ``Expression``
+    - when iterating, only show non-constant globals
 
 
 0.12.1
