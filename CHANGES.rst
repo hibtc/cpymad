@@ -4,6 +4,16 @@ Changelog
 (dates are in the form dd.mm.yyyy)
 
 
+0.13.0
+======
+Date: 24.01.2016
+
+- Update to ``MAD-X 5.02.08``:
+    - official support
+    - automatic tests
+    - prebuilt binaries on PyPI (for windows)
+
+
 0.12.2
 ======
 Date: 30.10.2015
