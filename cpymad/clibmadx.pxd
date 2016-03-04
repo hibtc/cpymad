@@ -152,6 +152,8 @@ cdef extern from "madX/mad_seq.h":
         command* beam
         # expanded sequence
         int n_nodes
+        node* ex_start          # first node in expanded sequence
+        node* ex_end            # last node in expanded sequence
         node** all_nodes
         table* tw_table
         int tw_valid

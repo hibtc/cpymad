@@ -583,8 +583,12 @@ def get_expanded_element(sequence_name, element_index):
     :rtype: dict
     :raises ValueError: if the sequence is invalid
     :raises IndexError: if the index is out of range
+
+    NOTE: this function may currently return elements beyond the end of the
+    expanded sequence if requested to do so.
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
+    # TODO: should check for get_expanded_element_count() instead of n_nodes?
     if element_index < 0 or element_index >= seq.n_nodes:
         raise IndexError("Index out of range: {0} (element count is {1})"
                          .format(element_index, seq.n_nodes))
@@ -608,9 +612,12 @@ def get_expanded_element_index(sequence_name, element_name):
     # Therefore, we can only provide a linear-time lookup.
     cdef clib.sequence* seq = _find_sequence(sequence_name)
     cdef bytes _element_name = _cstr(name_to_internal(element_name))
+    # TODO: should use get_expanded_element_count() directly?
     for i in xrange(seq.n_nodes):
         if seq.all_nodes[i].name == _element_name:
             return i
+        if seq.all_nodes[i] == seq.ex_end:
+            break
     raise ValueError("Element name not found: {0}".format(element_name))
 
 
@@ -631,11 +638,14 @@ def get_expanded_element_index_by_position(sequence_name, position):
     cdef double _position = position
     cdef clib.node* elem
     cdef double at
+    # TODO: should use get_expanded_element_count() directly?
     for i in xrange(seq.n_nodes):
         elem = seq.all_nodes[i]
         at = _get_node_entry_pos(elem, seq.ref_flag)
         if _position >= at and _position <= at+elem.length:
             return i
+        if seq.all_nodes[i] == seq.ex_end:
+            break
     raise ValueError("No element found at position: {0}".format(position))
 
 
@@ -649,7 +659,12 @@ def get_expanded_element_count(sequence_name):
     :raises ValueError: if the sequence is invalid.
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
-    return seq.n_nodes
+    # NOTE: seq.n_nodes is not necessarily the number of elements in the
+    # expanded list. According to tests, some of the leading elements may be
+    # appended after the final element of the expanded list. Reason unclear!
+    i_beg = _get_node_index(seq.all_nodes, seq.n_nodes, seq.ex_start)
+    i_end = _get_node_index(seq.all_nodes, seq.n_nodes, seq.ex_end)
+    return i_end - i_beg + 1
 
 
 def get_global_element(element_index):
@@ -860,6 +875,14 @@ cdef clib.table* _find_table(table_name) except NULL:
     if index == -1:
         raise ValueError("Invalid table: {!r}".format(table_name))
     return clib.table_register.tables[index]
+
+
+cdef int _get_node_index(clib.node** all_nodes, int n_nodes, clib.node* find):
+    cdef int i = 0
+    for i in range(n_nodes):
+        if all_nodes[i] == find:
+            return i
+    raise ValueError("Invalid node!")
 
 
 cdef _split_header_line(header_line):

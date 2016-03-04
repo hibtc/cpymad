@@ -719,8 +719,12 @@ class BaseElementList(object):
             index = self.index(index)
         # _get_element accepts indices in the range [0, len-1]. The following
         # extends the accepted range to [-len, len+1], just like for lists:
+        _len = len(self)
+        if index < -_len or index >= _len:
+            raise IndexError("Index out of bounds: {}, length is: {}"
+                             .format(index, _len))
         if index < 0:
-            index += len(self)
+            index += _len
         return self._get_element(index)
 
     def __len__(self):
