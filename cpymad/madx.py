@@ -12,6 +12,8 @@ import logging
 import os
 import collections
 
+import numpy as np
+
 from . import _rpc
 from . import util
 
@@ -454,6 +456,31 @@ class Madx(object):
             self.use(sequence)
         return sequence
 
+    def get_transfer_map_7d(self, sequence=None, range_=None, tw_range=None,
+                            twiss_init={}, **kwargs):
+        """
+        Get the 7D transfer map (the 7'th column accounting for KICKs).
+        """
+        sequence = self._use(sequence)
+        seq_prox = self.sequences[sequence]
+        beg, end = seq_prox._parse_range(range_)
+        self.command.select(flag='sectormap', clear=True)
+        self.command.select(flag='sectormap', range=beg)
+        self.command.select(flag='sectormap', range=end)
+        with util.temp_filename() as sectorfile:
+            self.twiss(sequence, range=tw_range, twiss_init=twiss_init,
+                       sectormap=True, sectorfile=sectorfile, **kwargs)
+        tab = self.get_table('sectortable')
+        rmatrix = np.array([[tab['r{}{}'.format(i, j)][-1]
+                             for j in range(1, 7)]
+                            for i in range(1, 7)])
+        kicks = np.array([[tab['k{}'.format(i)][-1]]
+                          for i in range(1, 7)])
+        return np.vstack((
+            np.hstack((rmatrix, kicks)),
+            np.eye(1, 7, 6),
+        ))
+
     def match(self,
               sequence=None,
               constraints=[],
@@ -690,6 +717,18 @@ class Sequence(object):
     def expanded_elements(self):
         """Get list of elements in expanded sequence."""
         return ExpandedElementList(self._libmadx, self._name)
+
+    def _parse_range(self, range):
+        """
+        Return a tuple (start, stop) for the given range.
+        """
+        if range is None:
+            beg, end = ('#s', '#e')
+        elif isinstance(range, basestring):
+            beg, end = range.split('/')
+        else:
+            beg, end = range
+        return beg, end
 
 
 class BaseElementList(object):

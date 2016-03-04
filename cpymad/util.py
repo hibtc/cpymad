@@ -3,6 +3,9 @@ Utility functions used in other parts of the pymad package.
 """
 import collections
 import re
+import os
+import tempfile
+from contextlib import contextmanager
 
 from .types import Range, Constraint
 
@@ -14,6 +17,7 @@ __all__ = [
     'name_to_internal',
     'mad_parameter',
     'mad_command',
+    'temp_filename',
 ]
 
 
@@ -240,3 +244,15 @@ def is_match_param(v):
     return v.lower() in ['rmatrix', 'chrom', 'beta0', 'deltap',
             'betx','alfx','mux','x','px','dx','dpx',
             'bety','alfy','muy','y','py','dy','dpy' ]
+
+
+@contextmanager
+def temp_filename():
+    """Get filename for use within 'with' block and delete file afterwards."""
+    fd, filename = tempfile.mkstemp()
+    os.close(fd)
+    yield filename
+    try:
+        os.remove(filename)
+    except OSError:
+        pass

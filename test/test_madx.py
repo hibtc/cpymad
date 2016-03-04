@@ -3,6 +3,9 @@ import os
 import sys
 import unittest
 
+import numpy as np
+from numpy.testing import assert_allclose
+
 # utilities
 import _compat
 
@@ -284,6 +287,102 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         self.assertAlmostEqual(qp1['at'], 1)
         self.assertAlmostEqual(qp2['at'], 3)
         self.assertEqual(iqp2, elements.at(3.1))
+
+
+class TestTransferMap(unittest.TestCase, _compat.TestCase):
+
+    def _mad(self, doc):
+        mad = Madx(command_log=CommandLog(sys.stdout, 'X:> '))
+        for line in doc.splitlines():
+            mad._libmadx.input(line)
+        return mad
+
+    def _test_transfer_map(self, seq, range, doc, rtol=1e-7, atol=0):
+        mad = self._mad(doc)
+        par = ['x', 'px', 'y', 'py', 't', 'pt']
+        val = [+0.0010, -0.0015, -0.0020, +0.0025, +0.0000, +0.0000]
+        twiss = {'betx': 0.0012, 'alfx': 0.0018,
+                 'bety': 0.0023, 'alfy': 0.0027}
+        twiss.update(zip(par, val))
+        smap = mad.get_transfer_map_7d(seq, range, twiss_init=twiss)
+        tw = mad.twiss(seq, range, twiss_init=twiss)
+        x_init = np.array(val)
+        x_final_tw = np.array([tw[p][-1] for p in par])
+        x_final_sm = np.dot(smap, np.hstack((x_init, 1)))
+        assert_allclose(x_final_tw[:4], x_final_sm[:4],
+                        rtol=rtol, atol=atol)
+
+    def test_drift(self):
+        self._test_transfer_map('s', '#s/#e', """
+            s: sequence, l=1, refer=entry;
+            d: drift, l=1, at=0;
+            endsequence;
+            beam;
+        """)
+
+    def test_kicker(self):
+        # hkicker
+        self._test_transfer_map('s', '#s/#e', """
+            s: sequence, l=3, refer=entry;
+            k: hkicker, kick=0.01, at=1;
+            endsequence;
+            beam;
+        """)
+        # vkicker
+        self._test_transfer_map('s', '#s/#e', """
+            s: sequence, l=3, refer=entry;
+            k: vkicker, kick=0.01, at=1;
+            endsequence;
+            beam;
+        """)
+        # three identical drifts in between
+        self._test_transfer_map('s', '#s/#e', """
+            s: sequence, l=3, refer=entry;
+            k: hkicker, kick=0.01, at=1;
+            m: monitor, at=2;
+            endsequence;
+            beam;
+        """)
+
+    def test_quadrupole(self):
+        self._test_transfer_map('s', '#s/#e', """
+            qq: quadrupole, k1=0.01, l=1;
+            s: sequence, l=4, refer=entry;
+            qq, at=1;
+            qq, at=2;
+            endsequence;
+            beam;
+        """)
+
+    def test_sbend(self):
+        self._test_transfer_map('s', '#s/#e', """
+            s: sequence, l=3, refer=entry;
+            b: sbend, angle=0.1, l=1, at=1;
+            endsequence;
+            beam;
+        """, rtol=3e-4)
+
+    def test_solenoid(self):
+        self._test_transfer_map('s', '#s/#e', """
+            s: sequence, l=3, refer=entry;
+            n: solenoid, ks=1, l=1, at=1;
+            endsequence;
+            beam;
+        """)
+
+    def test_subrange(self):
+        self._test_transfer_map('s', 'm1/m2', """
+            qq: quadrupole, k1=0.01, l=1;
+            s: sequence, l=6, refer=entry;
+            q0: quadrupole, k1=-0.01, l=0.5, at=0.25;
+            m1: marker, at=1;
+            qq, at=1;
+            qq, at=3;
+            m2: marker, at=5;
+            qq, at=5;
+            endsequence;
+            beam;
+        """)
 
 
 if __name__ == '__main__':
