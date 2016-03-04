@@ -47,7 +47,7 @@ def name_from_internal(element_name):
     >>> name_from_internal("foo:1")
     foo
     >>> name_from_internal("foo:2")
-    foo:2
+    foo[2]
 
     Element names are stored with a ":d" suffix by MAD-X internally (data in
     node/sequence structs), but users must use the syntax "elem[d]" to access
@@ -64,6 +64,27 @@ def name_from_internal(element_name):
     return name + '[' + count[1:] + ']'
 
 
+def _parse_element_name(element_name):
+    """
+    Parse element name from user API. Example:
+
+    >>> _parse_element_name("foo")
+    (foo, None)
+    >>> _parse_element_name("foo[2]")
+    (foo, 2)
+
+    See :func:`name_from_internal' for further information.
+    """
+    try:
+        name, count = _re_element_external.match(element_name).groups()
+    except AttributeError:
+        raise ValueError("Not a valid MAD-X element name: {!r}"
+                         .format(element_name))
+    if count is None:
+        return name, None
+    return name, int(count[1:-1])
+
+
 def name_to_internal(element_name):
     """
     Convert element name from user API to internal representation. Example:
@@ -75,14 +96,8 @@ def name_to_internal(element_name):
 
     See :func:`name_from_internal' for further information.
     """
-    try:
-        name, count = _re_element_external.match(element_name).groups()
-    except AttributeError:
-        raise ValueError("Not a valid MAD-X element name: {!r}"
-                         .format(element_name))
-    if count is None:
-        return name + ':1'
-    return name + ':' + count[1:-1]
+    name, count = _parse_element_name(element_name)
+    return name + ':' + str(1 if count is None else count)
 
 
 def normalize_range_name(name):
