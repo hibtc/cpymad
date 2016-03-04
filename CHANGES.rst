@@ -4,6 +4,15 @@ Changelog
 (dates are in the form dd.mm.yyyy)
 
 
+0.14.0
+======
+Date: 04.03.2016
+
+- Add function to obtain transfer map
+- Fix bug with expanded_elements listing too many elements (leading elements
+  were re-listed at the end)
+
+
 0.13.0
 ======
 Date: 24.01.2016
