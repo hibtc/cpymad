@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Python(x,y) &mdash; CPyMAD 0.12.1 documentation</title>
+  <title>Python(x,y) &mdash; CPyMAD 0.14.0 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="CPyMAD 0.12.1 documentation" href="../../index.html"/>
+    <link rel="top" title="CPyMAD 0.14.0 documentation" href="../../index.html"/>
         <link rel="up" title="Windows" href="index.html"/>
         <link rel="next" title="WinPython" href="winpython.html"/>
         <link rel="prev" title="Windows" href="index.html"/> 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.12.1
+                0.14.0
               </div>
             
           
@@ -161,7 +161,7 @@ to the system PATH for all/current user</em> according to your liking.</p>
 <p class="first admonition-title">Note</p>
 <p>You can also select <em>Do not add CMake to the system PATH</em>. In this case
 you will need to manually extend your PATH later on in the terminal:</p>
-<div class="last highlight-bat"><div class="highlight"><pre><span class="k">set</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">%PATH%</span>;C:\Program Files (x<span class="m">86</span>)\CMake\bin
+<div class="last highlight-bat"><div class="highlight"><pre><span></span><span class="k">set</span> <span class="nv">PATH</span><span class="p">=</span><span class="nv">%PATH%</span>;C:\Program Files (x86)\CMake\bin
 </pre></div>
 </div>
 </div>
@@ -188,9 +188,9 @@ into version problems when having a multiple MAD-X library builds around.</p>
 <p><a class="reference external" href="https://code.google.com/p/pythonxy/">Python(x,y)</a> provides an <em>Open enhanced console here</em> context menu item
 when right-clicking on a folder in the explorer. Open the madX folder with
 it and run the commands:</p>
-<div class="highlight-bat"><div class="highlight"><pre>mkdir build
+<div class="highlight-bat"><div class="highlight"><pre><span></span><span class="k">mkdir</span> build
 <span class="k">cd</span> build
-cmake -G <span class="s2">&quot;MinGW Makefiles&quot;</span> -DBUILD_SHARED_LIBS:BOOL<span class="o">=</span><span class="k">OFF</span> -DCMAKE_INSTALL_PREFIX<span class="o">=</span>..\install ..
+cmake -G <span class="s2">&quot;MinGW Makefiles&quot;</span> -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_INSTALL_PREFIX=..\install ..
 make
 make install
 </pre></div>
@@ -201,9 +201,9 @@ make install
 <p class="first admonition-title">Note</p>
 <p>You can also use the regular console <code class="docutils literal"><span class="pre">cmd.exe</span></code>. In this case extend
 the PATH environment variable with your python and MinGW installation:</p>
-<div class="last highlight-bat"><div class="highlight"><pre><span class="k">set</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">%PATH%</span>;C:\MinGW<span class="m">32</span>-xy\bin
-<span class="k">set</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">%PATH%</span>;C:\Python<span class="m">27</span>
-<span class="k">set</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">%PATH%</span>;C:\Python<span class="m">27</span>\Scripts
+<div class="last highlight-bat"><div class="highlight"><pre><span></span><span class="k">set</span> <span class="nv">PATH</span><span class="p">=</span><span class="nv">%PATH%</span>;C:\MinGW32-xy\bin
+<span class="k">set</span> <span class="nv">PATH</span><span class="p">=</span><span class="nv">%PATH%</span>;C:\Python27
+<span class="k">set</span> <span class="nv">PATH</span><span class="p">=</span><span class="nv">%PATH%</span>;C:\Python27\Scripts
 </pre></div>
 </div>
 </div>
@@ -218,8 +218,8 @@ regenerate.</p>
 <h2>Build CPyMAD<a class="headerlink" href="#build-cpymad" title="Permalink to this headline">¶</a></h2>
 <p>Download the <a class="reference external" href="https://github.com/pymad/cpymad/zipball/master">CPyMad source</a>. Then go to the pymad folder and build as
 follows:</p>
-<div class="highlight-bat"><div class="highlight"><pre>python setup.py build --compiler<span class="o">=</span>mingw<span class="m">32</span> --madxdir<span class="o">=</span><span class="p">&lt;</span><span class="n">madx</span>-install-path<span class="p">&gt;</span>
-<span class="n">python</span> setup.py install
+<div class="highlight-bat"><div class="highlight"><pre><span></span>python setup.py build --compiler=mingw32 --madxdir=<span class="p">&lt;</span>madx-install-path&gt;
+python setup.py install
 </pre></div>
 </div>
 <p>Substitute <code class="docutils literal"><span class="pre">&lt;madx-install-path&gt;</span></code> with the <code class="file docutils literal"><span class="pre">madX\install</span></code> subfolder
@@ -268,7 +268,7 @@ as specified by <code class="docutils literal"><span class="pre">CMAKE_INSTALL_P
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.12.1',
+            VERSION:'0.14.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

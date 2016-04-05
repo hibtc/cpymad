@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WinPython &mdash; CPyMAD 0.12.1 documentation</title>
+  <title>WinPython &mdash; CPyMAD 0.14.0 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="CPyMAD 0.12.1 documentation" href="../../index.html"/>
+    <link rel="top" title="CPyMAD 0.14.0 documentation" href="../../index.html"/>
         <link rel="up" title="Windows" href="index.html"/>
         <link rel="next" title="Other distributions" href="other.html"/>
         <link rel="prev" title="Python(x,y)" href="pythonxy.html"/> 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.12.1
+                0.14.0
               </div>
             
           
@@ -162,17 +162,17 @@ other machines, this is the distribution of choice.</p>
 <p>Download and extract the <a class="reference external" href="http://svnweb.cern.ch/world/wsvn/madx/tags/">MAD-X source</a> from SVN. Open a terminal by
 executing the <code class="file docutils literal"><span class="pre">%WinPython%\WinPython</span> <span class="pre">Command</span> <span class="pre">Prompt.exe</span></code>. Change the directory to
 the extracted MAD-X folder with the <code class="docutils literal"><span class="pre">cd</span></code> command and prepare the build:</p>
-<div class="highlight-bat"><div class="highlight"><pre>mkdir build
+<div class="highlight-bat"><div class="highlight"><pre><span></span><span class="k">mkdir</span> build
 <span class="k">cd</span> build
-cmake -G <span class="s2">&quot;MinGW Makefiles&quot;</span> -DBUILD_SHARED_LIBS:BOOL<span class="o">=</span><span class="k">OFF</span> -DCMAKE_INSTALL_PREFIX<span class="o">=</span>..\install ..
+cmake -G <span class="s2">&quot;MinGW Makefiles&quot;</span> -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_INSTALL_PREFIX=..\install ..
 </pre></div>
 </div>
 <p>In the file <code class="file docutils literal"><span class="pre">%MADX%\build\src\CMakeFiles\madxbin.dir\link.txt</span></code>
 search for <code class="docutils literal"><span class="pre">-lgcc_eh</span></code> and remove it, otherwise you may get linker errors at
 the end of the next command. The following step will build the library. This
 may take a few minutes, so go and grep a coffee meanwhile:</p>
-<div class="highlight-bat"><div class="highlight"><pre>mingw<span class="m">32</span>-make
-mingw<span class="m">32</span>-make install
+<div class="highlight-bat"><div class="highlight"><pre><span></span>mingw32-make
+mingw32-make install
 </pre></div>
 </div>
 <p>If all went well the last command will have installed binaries and library
@@ -182,28 +182,28 @@ files to the <code class="file docutils literal"><span class="pre">madX\install<
 <h2>Build CPyMAD<a class="headerlink" href="#build-cpymad" title="Permalink to this headline">¶</a></h2>
 <p>Download the <a class="reference external" href="https://github.com/pymad/cpymad/zipball/master">CPyMad source</a>. Then go to the pymad folder and build as
 follows:</p>
-<div class="highlight-bat"><div class="highlight"><pre>python setup.py build --madxdir<span class="o">=</span><span class="p">&lt;</span><span class="n">madx</span>-install-path&gt;
+<div class="highlight-bat"><div class="highlight"><pre><span></span>python setup.py build --madxdir=<span class="p">&lt;</span>madx-install-path&gt;
 </pre></div>
 </div>
 <p>You may encounter linker errors like the following:</p>
-<div class="highlight-python"><div class="highlight"><pre>.../libgfortran.a(write.o):(.text$write_float+0xbb): undefined reference to `signbitq&#39;
+<div class="highlight-python"><div class="highlight"><pre><span></span>.../libgfortran.a(write.o):(.text$write_float+0xbb): undefined reference to `signbitq&#39;
 .../lib/gcc/i686-w64-mingw32/4.9.2/libgfortran.a(write.o):(.text$write_float+0xe7): undefined reference to `finiteq&#39;
 </pre></div>
 </div>
 <p>If so, try the following instead:</p>
-<div class="highlight-bat"><div class="highlight"><pre>python setup.py build_ext --madxdir<span class="o">=</span>&lt;...&gt; -lquadmath
+<div class="highlight-bat"><div class="highlight"><pre><span></span>python setup.py build_ext --madxdir=<span class="p">&lt;</span>...<span class="p">&gt;</span> -lquadmath
 python setup.py build
 </pre></div>
 </div>
 <p>From the built package you can create a so called <a class="reference external" href="https://wheel.readthedocs.org/en/latest/">wheel</a>, which is
 essentially a zip archive containing all the files ready for installation:</p>
-<div class="highlight-bat"><div class="highlight"><pre>python setup.py bdist_wheel
+<div class="highlight-bat"><div class="highlight"><pre><span></span>python setup.py bdist_wheel
 </pre></div>
 </div>
 <p>This will create a <code class="docutils literal"><span class="pre">.whl</span></code> file named after the package and its target
 platform. This file can now be used for installation in your favorite
 python distribution, like so:</p>
-<div class="highlight-bat"><div class="highlight"><pre>pip install dist\cpymad<span class="m">-0</span>.<span class="m">10</span>.<span class="m">1</span>-cp<span class="m">27</span>-none-win<span class="m">32</span>.whl
+<div class="highlight-bat"><div class="highlight"><pre><span></span>pip install dist\cpymad-0.10.1-cp27-none-win32.whl
 </pre></div>
 </div>
 </div>
@@ -250,7 +250,7 @@ python distribution, like so:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.12.1',
+            VERSION:'0.14.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

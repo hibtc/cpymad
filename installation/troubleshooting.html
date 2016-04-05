@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Troubleshooting &mdash; CPyMAD 0.12.1 documentation</title>
+  <title>Troubleshooting &mdash; CPyMAD 0.14.0 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="CPyMAD 0.12.1 documentation" href="../index.html"/>
+    <link rel="top" title="CPyMAD 0.14.0 documentation" href="../index.html"/>
         <link rel="up" title="Installation Instructions" href="index.html"/>
         <link rel="next" title="API Reference" href="../cpymad/index.html"/>
         <link rel="prev" title="Other distributions" href="windows/other.html"/> 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.12.1
+                0.14.0
               </div>
             
           
@@ -149,13 +149,13 @@ that might occur during installation.</p>
 <div class="section" id="importerror-libmadx-so">
 <h2>ImportError: libmadx.so<a class="headerlink" href="#importerror-libmadx-so" title="Permalink to this headline">¶</a></h2>
 <p>Message:</p>
-<div class="highlight-python"><div class="highlight"><pre>ImportError: libmadx.so: cannot open shared object file: No such file or directory
+<div class="highlight-python"><div class="highlight"><pre><span></span>ImportError: libmadx.so: cannot open shared object file: No such file or directory
 </pre></div>
 </div>
 <p>Solution:
 You can pass the correct path to the setup script when building:</p>
-<div class="highlight-bash"><div class="highlight"><pre>python setup.py install --madxdir<span class="o">=</span>&lt;prefix&gt;
-<span class="c"># or alternatively:</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>python setup.py install --madxdir<span class="o">=</span>&lt;prefix&gt;
+<span class="c1"># or alternatively:</span>
 python setup.py build_ext --rpath<span class="o">=</span>&lt;rpath&gt;
 python setup.py install
 </pre></div>
@@ -166,19 +166,19 @@ dynamic library files.</p>
 <p>If this does not work, you can set the LD_LIBRARY_PATH (or
 DYLD_LIBRARY_PATH on OSX) environment variable before running pymad, for
 example:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nb">export </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:<span class="nv">$HOME</span>/.local/lib/
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:<span class="nv">$HOME</span>/.local/lib/
 </pre></div>
 </div>
 </div>
 <div class="section" id="oserror-missing-source-file">
 <h2>OSError: Missing source file<a class="headerlink" href="#oserror-missing-source-file" title="Permalink to this headline">¶</a></h2>
 <p>Message:</p>
-<div class="highlight-python"><div class="highlight"><pre>OSError: Missing source file: &#39;cpymad/libmadx.c&#39;. Install Cython to resolve this problem.
+<div class="highlight-python"><div class="highlight"><pre><span></span>OSError: Missing source file: &#39;cpymad/libmadx.c&#39;. Install Cython to resolve this problem.
 </pre></div>
 </div>
 <p>Solution:
 The easiest way to install Cython is:</p>
-<div class="highlight-bash"><div class="highlight"><pre>pip install cython
+<div class="highlight-bash"><div class="highlight"><pre><span></span>pip install cython
 </pre></div>
 </div>
 <p>Alternatively, you can install pymad from the PyPI source distribution
@@ -187,13 +187,13 @@ which includes all source files.</p>
 <div class="section" id="unable-to-find-vcvarsall-bat">
 <h2>Unable to find vcvarsall.bat<a class="headerlink" href="#unable-to-find-vcvarsall-bat" title="Permalink to this headline">¶</a></h2>
 <p>Message:</p>
-<div class="highlight-python"><div class="highlight"><pre>error: Unable to find vcvarsall.bat
+<div class="highlight-python"><div class="highlight"><pre><span></span>error: Unable to find vcvarsall.bat
 </pre></div>
 </div>
 <p>Solution:
 Open or create the file <code class="file docutils literal"><span class="pre">C:\Python27\Lib\distutils\distutils.cfg</span></code>
 and add the following lines:</p>
-<div class="highlight-cfg"><div class="highlight"><pre><span class="k">[build]</span>
+<div class="highlight-cfg"><div class="highlight"><pre><span></span><span class="k">[build]</span>
 <span class="na">compiler</span><span class="o">=</span><span class="s">mingw32</span>
 </pre></div>
 </div>
@@ -207,7 +207,7 @@ this as <code class="file docutils literal"><span class="pre">setup.cfg</span></
 <div class="section" id="unrecognized-command-line-option-mno-cygwin">
 <h2>unrecognized command line option &#8216;-mno-cygwin&#8217;<a class="headerlink" href="#unrecognized-command-line-option-mno-cygwin" title="Permalink to this headline">¶</a></h2>
 <p>Message:</p>
-<div class="highlight-python"><div class="highlight"><pre>gcc: error: unrecognized command line option &#39;-mno-cygwin&#39;
+<div class="highlight-python"><div class="highlight"><pre><span></span>gcc: error: unrecognized command line option &#39;-mno-cygwin&#39;
 error: command &#39;gcc&#39; failed with exit status 1
 </pre></div>
 </div>
@@ -216,7 +216,7 @@ In the file <code class="file docutils literal"><span class="pre">C:\Python27\Li
 every occurence of the string <code class="docutils literal"><span class="pre">-mno-cygwin</span></code> in the <code class="docutils literal"><span class="pre">class</span>
 <span class="pre">Mingw32CCompiler</span></code> (about line 320). Depending on your version of
 distutils, for example:</p>
-<div class="highlight-diff"><div class="highlight"><pre><span class="gu">@@ -319,11 +319,11 @@ class Mingw32CCompiler (CygwinCCompiler):</span>
+<div class="highlight-diff"><div class="highlight"><pre><span></span><span class="gu">@@ -319,11 +319,11 @@ class Mingw32CCompiler (CygwinCCompiler):</span>
         else:
             entry_point = &#39;&#39;
 
@@ -283,7 +283,7 @@ distutils, for example:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.12.1',
+            VERSION:'0.14.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

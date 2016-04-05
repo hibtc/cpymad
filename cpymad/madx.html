@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>cpymad.madx &mdash; CPyMAD 0.12.1 documentation</title>
+  <title>cpymad.madx &mdash; CPyMAD 0.14.0 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="CPyMAD 0.12.1 documentation" href="../index.html"/>
+    <link rel="top" title="CPyMAD 0.14.0 documentation" href="../index.html"/>
         <link rel="up" title="API Reference" href="index.html"/>
         <link rel="prev" title="API Reference" href="index.html"/> 
 
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.12.1
+                0.14.0
               </div>
             
           
@@ -208,17 +208,17 @@ Furthermore, we try to reduce the amount of commands needed by combining
 e.g. USE, SELECT, and TWISS into the <code class="docutils literal"><span class="pre">twiss</span></code> method itself, and define
 reasonable default patterns/columns.</p>
 <p>The following very simple example demonstrates basic usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">m</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">()</span>
-<span class="n">m</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s">&#39;my_stuff.madx&#39;</span><span class="p">)</span>
-<span class="n">twiss</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">twiss</span><span class="p">(</span><span class="s">&#39;myseq1&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">()</span>
+<span class="n">m</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;my_stuff.madx&#39;</span><span class="p">)</span>
+<span class="n">twiss</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">twiss</span><span class="p">(</span><span class="s1">&#39;myseq1&#39;</span><span class="p">)</span>
 
-<span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plt</span><span class="p">(</span><span class="n">twiss</span><span class="p">[</span><span class="s">&#39;s&#39;</span><span class="p">],</span> <span class="n">twiss</span><span class="p">[</span><span class="s">&#39;betx&#39;</span><span class="p">])</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plt</span><span class="p">(</span><span class="n">twiss</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">],</span> <span class="n">twiss</span><span class="p">[</span><span class="s1">&#39;betx&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>Note that only few MAD-X commands are exposed as <a class="reference internal" href="#cpymad.madx.Madx" title="cpymad.madx.Madx"><code class="xref py py-class docutils literal"><span class="pre">Madx</span></code></a> methods.
 For the rest, there is <a class="reference internal" href="#cpymad.madx.Madx.command" title="cpymad.madx.Madx.command"><code class="xref py py-meth docutils literal"><span class="pre">Madx.command()</span></code></a> which can be used to execute
 arbitrary MAD-X commands:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">beam</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="s">&#39;myseq1&#39;</span><span class="p">,</span> <span class="n">particle</span><span class="o">=</span><span class="s">&#39;PROTON&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">beam</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="s1">&#39;myseq1&#39;</span><span class="p">,</span> <span class="n">particle</span><span class="o">=</span><span class="s1">&#39;PROTON&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This will work for the majority of cases. However, in some instances it
@@ -226,7 +226,7 @@ may be necessary to forgo some of the syntactic sugar that
 <a class="reference internal" href="#cpymad.madx.Madx.command" title="cpymad.madx.Madx.command"><code class="xref py py-meth docutils literal"><span class="pre">Madx.command()</span></code></a> provides. For example, the <code class="docutils literal"><span class="pre">global</span></code> command (part
 of matching) can not be accessed as attribute since it is a python
 keyword. This can be handled as follows:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s">&#39;global&#39;</span><span class="p">,</span> <span class="n">sequence</span><span class="o">=</span><span class="n">cassps</span><span class="p">,</span> <span class="n">Q1</span><span class="o">=</span><span class="mf">26.58</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s1">&#39;global&#39;</span><span class="p">,</span> <span class="n">sequence</span><span class="o">=</span><span class="n">cassps</span><span class="p">,</span> <span class="n">Q1</span><span class="o">=</span><span class="mf">26.58</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Composing MAD-X commands can be a bit tricky at times — partly because of
@@ -234,13 +234,13 @@ some inconsistencies in the MAD-X language. For those cases where
 <code class="docutils literal"><span class="pre">command</span></code> fails to do the right thing or where you simply need more fine
 grained control over command composition there are more powerful syntaxes
 available:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># Multiple positional arguments are just concatenated with commas in</span>
-<span class="c"># between:</span>
-<span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s">&#39;global&#39;</span><span class="p">,</span> <span class="s">&#39;sequence=cassps&#39;</span><span class="p">,</span> <span class="n">Q1</span><span class="o">=</span><span class="mf">26.58</span><span class="p">)</span>
-<span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s">&#39;global, sequence=cassps&#39;</span><span class="p">,</span>  <span class="s">&#39;Q1=26.58&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Multiple positional arguments are just concatenated with commas in</span>
+<span class="c1"># between:</span>
+<span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s1">&#39;global&#39;</span><span class="p">,</span> <span class="s1">&#39;sequence=cassps&#39;</span><span class="p">,</span> <span class="n">Q1</span><span class="o">=</span><span class="mf">26.58</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s1">&#39;global, sequence=cassps&#39;</span><span class="p">,</span>  <span class="s1">&#39;Q1=26.58&#39;</span><span class="p">)</span>
 
-<span class="c"># Issue a plain text command, don&#39;t forget the semicolon!</span>
-<span class="n">m</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s">&#39;FOO, BAR=[baz], QUX=&lt;NORF&gt;;&#39;</span><span class="p">)</span>
+<span class="c1"># Issue a plain text command, don&#39;t forget the semicolon!</span>
+<span class="n">m</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s1">&#39;FOO, BAR=[baz], QUX=&lt;NORF&gt;;&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>By default <a class="reference internal" href="#cpymad.madx.Madx" title="cpymad.madx.Madx"><code class="xref py py-class docutils literal"><span class="pre">Madx</span></code></a> uses a subprocess to execute MAD-X library calls
@@ -350,6 +350,12 @@ object to the constructor. This object must expose an interface similar to
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="cpymad.madx.Madx.get_transfer_map_7d">
+<code class="descname">get_transfer_map_7d</code><span class="sig-paren">(</span><em>sequence=None</em>, <em>range_=None</em>, <em>tw_range=None</em>, <em>twiss_init={}</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.get_transfer_map_7d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.get_transfer_map_7d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the 7D transfer map (the 7&#8217;th column accounting for KICKs).</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="cpymad.madx.Madx.globals">
 <code class="descname">globals</code><a class="headerlink" href="#cpymad.madx.Madx.globals" title="Permalink to this definition">¶</a></dt>
@@ -413,23 +419,23 @@ object to the constructor. This object must expose an interface similar to
 </tbody>
 </table>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cpymad.madx</span> <span class="kn">import</span> <span class="n">Madx</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cpymad.madx</span> <span class="kn">import</span> <span class="n">Madx</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cpymad.types</span> <span class="kn">import</span> <span class="n">Constraint</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s">&#39;sequence.madx&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">twiss_init</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;betx&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;bety&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;alfx&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s">&#39;alfy&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;sequence.madx&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">twiss_init</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;betx&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;bety&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;alfx&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;alfy&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">match</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">sequence</span><span class="o">=</span><span class="s">&#39;mysequence&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">sequence</span><span class="o">=</span><span class="s1">&#39;mysequence&#39;</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">constraints</span><span class="o">=</span><span class="p">[</span>
-<span class="gp">... </span>        <span class="nb">dict</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="s">&#39;marker1&#39;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="nb">dict</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="s1">&#39;marker1&#39;</span><span class="p">,</span>
 <span class="gp">... </span>             <span class="n">betx</span><span class="o">=</span><span class="n">Constraint</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
 <span class="gp">... </span>             <span class="n">bety</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="p">],</span>
-<span class="gp">... </span>    <span class="n">vary</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;qp1-&gt;k1&#39;</span><span class="p">,</span>
-<span class="gp">... </span>          <span class="s">&#39;qp2-&gt;k1&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">vary</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;qp1-&gt;k1&#39;</span><span class="p">,</span>
+<span class="gp">... </span>          <span class="s1">&#39;qp2-&gt;k1&#39;</span><span class="p">],</span>
 <span class="gp">... </span>    <span class="n">twiss_init</span><span class="o">=</span><span class="n">twiss_init</span><span class="p">,</span>
 <span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tw</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">twiss</span><span class="p">(</span><span class="s">&#39;mysequence&#39;</span><span class="p">,</span> <span class="n">twiss_init</span><span class="o">=</span><span class="n">twiss_init</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tw</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">twiss</span><span class="p">(</span><span class="s1">&#39;mysequence&#39;</span><span class="p">,</span> <span class="n">twiss_init</span><span class="o">=</span><span class="n">twiss_init</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -464,12 +470,12 @@ object to the constructor. This object must expose an interface similar to
 <code class="descname">set_expression</code><span class="sig-paren">(</span><em>name</em>, <em>expr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.set_expression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.set_expression" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set a variable expression (&#8221;:=&#8221; operator in MAD-X).</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">set_expression</span><span class="p">(</span><span class="s">&#39;FOO&#39;</span><span class="p">,</span> <span class="s">&#39;BAR&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="s">&#39;BAR&#39;</span><span class="p">,</span> <span class="mi">42</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="s">&#39;FOO&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">set_expression</span><span class="p">(</span><span class="s1">&#39;FOO&#39;</span><span class="p">,</span> <span class="s1">&#39;BAR&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="s1">&#39;BAR&#39;</span><span class="p">,</span> <span class="mi">42</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="s1">&#39;FOO&#39;</span><span class="p">)</span>
 <span class="go">42</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="s">&#39;BAR&#39;</span><span class="p">,</span> <span class="mi">43</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="s">&#39;FOO&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="s1">&#39;BAR&#39;</span><span class="p">,</span> <span class="mi">43</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="s1">&#39;FOO&#39;</span><span class="p">)</span>
 <span class="go">43</span>
 </pre></div>
 </div>
@@ -480,8 +486,8 @@ object to the constructor. This object must expose an interface similar to
 <code class="descname">set_value</code><span class="sig-paren">(</span><em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.set_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.set_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set a variable value (&#8220;=&#8221; operator in MAD-X).</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="s">&#39;R1QS1-&gt;K1&#39;</span><span class="p">,</span> <span class="s">&#39;42&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="s">&#39;R1QS1-&gt;K1&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="s1">&#39;R1QS1-&gt;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;42&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="s1">&#39;R1QS1-&gt;K1&#39;</span><span class="p">)</span>
 <span class="go">42</span>
 </pre></div>
 </div>
@@ -571,9 +577,9 @@ object to the constructor. This object must expose an interface similar to
 <em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">MadxCommands</code><span class="sig-paren">(</span><em>dispatch</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#MadxCommands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.MadxCommands" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generic MAD-X command wrapper.</p>
 <p>Raw python interface to issue MAD-X commands. Usage example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">command</span> <span class="o">=</span> <span class="n">MadxCommands</span><span class="p">(</span><span class="n">libmadx</span><span class="o">.</span><span class="n">input</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">command</span><span class="p">(</span><span class="s">&#39;twiss&#39;</span><span class="p">,</span> <span class="n">sequence</span><span class="o">=</span><span class="s">&#39;LEBT&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">command</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;A meaningful phrase&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">command</span> <span class="o">=</span> <span class="n">MadxCommands</span><span class="p">(</span><span class="n">libmadx</span><span class="o">.</span><span class="n">input</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">command</span><span class="p">(</span><span class="s1">&#39;twiss&#39;</span><span class="p">,</span> <span class="n">sequence</span><span class="o">=</span><span class="s1">&#39;LEBT&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">command</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;A meaningful phrase&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -744,7 +750,7 @@ object to the constructor. This object must expose an interface similar to
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.12.1',
+            VERSION:'0.14.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

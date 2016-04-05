@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Unix &mdash; CPyMAD 0.12.1 documentation</title>
+  <title>Unix &mdash; CPyMAD 0.14.0 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="CPyMAD 0.12.1 documentation" href="../index.html"/>
+    <link rel="top" title="CPyMAD 0.14.0 documentation" href="../index.html"/>
         <link rel="up" title="Installation Instructions" href="index.html"/>
         <link rel="next" title="Windows" href="windows/index.html"/>
         <link rel="prev" title="Installation Instructions" href="index.html"/> 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.12.1
+                0.14.0
               </div>
             
           
@@ -168,11 +168,11 @@ install method.</p>
 <div class="section" id="install-libmadx">
 <h2>Install libmadx<a class="headerlink" href="#install-libmadx" title="Permalink to this headline">¶</a></h2>
 <p>Download the <a class="reference external" href="http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&amp;rev=0&amp;isdir=1">MAD-X source</a> from SVN</p>
-<div class="highlight-bash"><div class="highlight"><pre>svn co http://svn.cern.ch/guest/madx/trunk/madX
+<div class="highlight-bash"><div class="highlight"><pre><span></span>svn co http://svn.cern.ch/guest/madx/trunk/madX
 </pre></div>
 </div>
 <p>Build and install the library</p>
-<div class="highlight-bash"><div class="highlight"><pre>mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd </span>build
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
 cmake -DMADX_STATIC<span class="o">=</span>OFF -DBUILD_SHARED_LIBS<span class="o">=</span>ON ../madX
 make <span class="o">&amp;&amp;</span> make install
 </pre></div>
@@ -183,13 +183,13 @@ installation prefix.</p>
 <div class="section" id="install-cpymad">
 <h2>Install CPyMAD<a class="headerlink" href="#install-cpymad" title="Permalink to this headline">¶</a></h2>
 <p>The latest <a class="reference external" href="https://pypi.python.org/pypi/cpymad">CPyMAD release</a> can conveniently be installed using <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a>:</p>
-<div class="highlight-bash"><div class="highlight"><pre>pip install cpymad
+<div class="highlight-bash"><div class="highlight"><pre><span></span>pip install cpymad
 </pre></div>
 </div>
 <p>If you run into problems with this, you should manually download and
 install the <a class="reference external" href="https://github.com/hibtc/cpymad/zipball/master">CPyMad source</a> to see in which step the problem occurs:</p>
-<div class="highlight-bash"><div class="highlight"><pre>git clone git://github.com/hibtc/cpymad
-<span class="nb">cd </span>cpymad
+<div class="highlight-bash"><div class="highlight"><pre><span></span>git clone git://github.com/hibtc/cpymad
+<span class="nb">cd</span> cpymad
 python setup.py build
 python setup.py install
 </pre></div>
@@ -240,7 +240,7 @@ python setup.py install
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.12.1',
+            VERSION:'0.14.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
