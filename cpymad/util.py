@@ -150,12 +150,7 @@ def mad_param_order(key, value):
     elif isinstance(value, basestring):
         return SAFE
     elif isinstance(value, collections.Sequence):
-        if key == 'column':
-            return LAST
-        elif value and all(isinstance(v, basestring) for v in value):
-            return LAST
-        else:
-            return SAFE
+        return SAFE
     else:
         return LATE
 
@@ -204,12 +199,7 @@ def mad_parameter(key, value):
             # internally and the quotes prevent automatic case conversion)
             return key + '=' + mad_quote(value.lower())
     elif isinstance(value, collections.Sequence):
-        if key == 'column':
-            return key + '=' + ','.join(value)
-        elif value and all(isinstance(v, basestring) for v in value):
-            return key + '=' + ','.join(value)
-        else:
-            return key + '={' + ','.join(map(str, value)) + '}'
+        return key + '={' + ','.join(map(str, value)) + '}'
     else:
         return key + '=' + str(value)
 
