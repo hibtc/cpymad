@@ -17,7 +17,7 @@ env:
     - PIP_WHEEL_DIR=$HOME/.pip-cache
 
     # Current MAD-X debian package and install location
-    - MADX_ARCHIVE=libmadx-dev_5.02.08_amd64.deb
+    - MADX_ARCHIVE=libmadx-dev_5.02.10-1_amd64.deb
     - PREFIX=$HOME/install
 
     # Activate fake MAD-X 'installation'

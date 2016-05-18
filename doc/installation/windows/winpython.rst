@@ -25,10 +25,12 @@ the extracted MAD-X folder with the ``cd`` command and prepare the build:
     cd build
     cmake -G "MinGW Makefiles" -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_INSTALL_PREFIX=..\install ..
 
-In the file :file:`%MADX%\\build\\src\\CMakeFiles\\madxbin.dir\\link.txt`
-search for ``-lgcc_eh`` and remove it, otherwise you may get linker errors at
-the end of the next command. The following step will build the library. This
-may take a few minutes, so go and grep a coffee meanwhile:
+In the file :file:`%MADX%\\build\\src\\CMakeFiles\\madxbin.dir\\link.txt` and
+:file:`linklibs.rsp` search for ``-lgcc_eh`` and remove it (if present) -
+otherwise you may get linker errors at the end of the next command.
+
+The following step will build the library. This may take a few minutes, so go
+and grep a coffee meanwhile:
 
 .. code-block:: bat
 
