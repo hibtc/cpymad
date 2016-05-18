@@ -3,6 +3,13 @@ Changelog
 
 (dates are in the form dd.mm.yyyy)
 
+0.14.1
+======
+Date: 18.05.2016
+
+- improve MAD-X command composition
+- Update official support to ``MAD-X 5.02.10``
+
 
 0.14.0
 ======
