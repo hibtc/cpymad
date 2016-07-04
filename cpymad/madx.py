@@ -568,8 +568,7 @@ class Madx(object):
         """The active :class:`Sequence` (may be None)."""
         try:
             return Sequence(self._libmadx.get_active_sequence_name(),
-                            self._libmadx,
-                            _check=False)
+                            self, _check=False)
         except RuntimeError:
             return None
 
@@ -600,7 +599,7 @@ class Madx(object):
     @property
     def sequences(self):
         """A dict like view of all sequences in memory."""
-        return SequenceMap(self._libmadx)
+        return SequenceMap(self)
 
     @property
     def tables(self):
@@ -619,8 +618,9 @@ class SequenceMap(collections.Mapping):
     A dict like view of all sequences (:class:`Sequence`) in memory.
     """
 
-    def __init__(self, libmadx):
-        self._libmadx = libmadx
+    def __init__(self, madx):
+        self._madx = madx
+        self._libmadx = madx._libmadx
 
     __repr__ = _map_repr
     __str__ = _map_repr
@@ -630,7 +630,7 @@ class SequenceMap(collections.Mapping):
 
     def __getitem__(self, name):
         try:
-            return Sequence(name, self._libmadx)
+            return Sequence(name, self._madx)
         except ValueError:
             raise KeyError
 
@@ -675,11 +675,12 @@ class Sequence(object):
     MAD-X sequence representation.
     """
 
-    def __init__(self, name, libmadx, _check=True):
+    def __init__(self, name, madx, _check=True):
         """Store sequence name."""
         self._name = name
-        self._libmadx = libmadx
-        if _check and not libmadx.sequence_exists(name):
+        self._madx = madx
+        self._libmadx = madx._libmadx
+        if _check and not self._libmadx.sequence_exists(name):
             raise ValueError("Invalid sequence: {!r}".format(name))
 
     def __str__(self):
@@ -697,6 +698,10 @@ class Sequence(object):
     def beam(self):
         """Get the beam dictionary associated to the sequence."""
         return self._libmadx.get_sequence_beam(self._name)
+
+    @beam.setter
+    def beam(self, beam):
+        self._madx.command.beam(sequence=self._name, **beam)
 
     @property
     def twiss_table(self):
@@ -729,6 +734,32 @@ class Sequence(object):
         else:
             beg, end = range
         return beg, end
+
+    @property
+    def is_expanded(self):
+        """Check if sequence is already expanded."""
+        return self._libmadx.is_sequence_expanded(self._name)
+
+    @property
+    def has_beam(self):
+        """Check if the sequence has an associated beam."""
+        try:
+            self.beam
+            return True
+        except RuntimeError:
+            return False
+
+    def expand(self):
+        """Expand sequence (needed for expanded_elements)."""
+        if self.is_expanded:
+            return
+        if not self.has_beam:
+            self.beam = {}
+        self.use()
+
+    def use(self):
+        """Set this sequence as active."""
+        self._madx.use(self._name)
 
 
 class BaseElementList(object):
