@@ -934,11 +934,11 @@ cdef _get_node(clib.node* node, int ref_flag):
 cdef double _get_node_entry_pos(clib.node* node, int ref_flag):
     """Normalize 'at' value to node entry."""
     if ref_flag == clib.REF_CENTER:
-        return node.at_value - node.length / 2
+        return node.position - node.length / 2
     elif ref_flag == clib.REF_EXIT:
-        return node.at_value - node.length
+        return node.position - node.length
     else:
-        return node.at_value
+        return node.position
 
 
 cdef _get_element(clib.element* elem):
