@@ -70,6 +70,8 @@ __all__ = [
     'get_table_summary',
     'get_table_column_names',
     'get_table_column_names_all',
+    'get_table_column_count',
+    'get_table_column_count_all',
     'get_table_column',
     'get_table_row_count',
     'get_table_row_names',
@@ -88,6 +90,7 @@ __all__ = [
 
     # global elements
     'get_global_element',
+    'get_global_element_name',
     'get_global_element_index',
     'get_global_element_count',
 
@@ -397,6 +400,19 @@ def get_table_column_names_all(table_name):
 
 
 def get_table_column_count(table_name):
+    """
+    Get a number of columns selected for display in the table.
+
+    :param str table_name: table name
+    :returns: number of columns
+    :rtype: int
+    :raises ValueError: if the table name is invalid
+    """
+    cdef clib.table* table = _find_table(table_name)
+    return table.col_out.curr
+
+
+def get_table_column_count_all(table_name):
     """
     Get a number of columns in the table.
 
