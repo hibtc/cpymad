@@ -877,7 +877,7 @@ cdef clib.table* _find_table(table_name) except NULL:
     return clib.table_register.tables[index]
 
 
-cdef int _get_node_index(clib.node** all_nodes, int n_nodes, clib.node* find):
+cdef _get_node_index(clib.node** all_nodes, int n_nodes, clib.node* find):
     cdef int i = 0
     for i in range(n_nodes):
         if all_nodes[i] == find:
