@@ -53,8 +53,6 @@ cdef extern from "madX/mad_table.h":
         char_p_array* header
         int_array* col_out      # column no.s to be written (in this order)
         char_p_array* node_nm   # names of nodes at each row
-        char*** s_cols
-        double** d_cols
         name_list* columns
 
     struct table_list:
@@ -220,6 +218,7 @@ cdef extern from "madX/mad_parse.h":
     void pre_split(char*, char_array*, int)
 
 cdef extern from "madX/mad_table.h":
+    column_info table_get_column(char* table_name, char* column_name)
     char_p_array* table_get_header(char* table_name)
     int table_exists(char* table_name)
 
