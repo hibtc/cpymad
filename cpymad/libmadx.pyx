@@ -367,7 +367,7 @@ def get_table_summary(table_name):
 
 def get_table_column_names(table_name):
     """
-    Get a list of all column names in the table.
+    Get a list of all column names in the table that were selected for output.
 
     :param str table_name: table name
     :returns: column names
