@@ -135,6 +135,7 @@ cdef extern from "madX/mad_node.h":
         char[NAME_L] name
         char* base_name
         double position
+        double at_value
         double length
         element* p_elem
 

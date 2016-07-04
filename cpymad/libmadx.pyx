@@ -514,7 +514,7 @@ def get_element(sequence_name, element_index):
     if element_index < 0 or element_index >= seq.nodes.curr:
         raise IndexError("Index out of range: {0} (element count is {1})"
                          .format(element_index, seq.nodes.curr))
-    return _get_node(seq.nodes.nodes[element_index], seq.ref_flag)
+    return _get_node(seq.nodes.nodes[element_index], seq.ref_flag, seq.n_nodes > 0)
 
 
 def get_element_index(sequence_name, element_name):
@@ -554,7 +554,7 @@ def get_element_index_by_position(sequence_name, position):
     cdef double at
     for i in xrange(seq.nodes.curr):
         elem = seq.nodes.nodes[i]
-        at = _get_node_entry_pos(elem, seq.ref_flag)
+        at = _get_node_entry_pos(elem, seq.ref_flag, seq.n_nodes > 0)
         if _position >= at and _position <= at+elem.length:
             return i
     raise ValueError("No element found at position: {0}".format(position))
@@ -592,7 +592,7 @@ def get_expanded_element(sequence_name, element_index):
     if element_index < 0 or element_index >= seq.n_nodes:
         raise IndexError("Index out of range: {0} (element count is {1})"
                          .format(element_index, seq.n_nodes))
-    return _get_node(seq.all_nodes[element_index], seq.ref_flag)
+    return _get_node(seq.all_nodes[element_index], seq.ref_flag, seq.n_nodes > 0)
 
 
 def get_expanded_element_index(sequence_name, element_name):
@@ -641,7 +641,7 @@ def get_expanded_element_index_by_position(sequence_name, position):
     # TODO: should use get_expanded_element_count() directly?
     for i in xrange(seq.n_nodes):
         elem = seq.all_nodes[i]
-        at = _get_node_entry_pos(elem, seq.ref_flag)
+        at = _get_node_entry_pos(elem, seq.ref_flag, seq.n_nodes > 0)
         if _position >= at and _position <= at+elem.length:
             return i
         if seq.all_nodes[i] == seq.ex_end:
@@ -919,7 +919,7 @@ cdef bytes _cstr(s):
     return <bytes> s.encode('utf-8')
 
 
-cdef _get_node(clib.node* node, int ref_flag):
+cdef _get_node(clib.node* node, int ref_flag, int is_expanded):
     """Return dictionary with node + element attributes."""
     if node.p_elem is NULL:
         # Maybe this is a valid case, but better detect it with boom!
@@ -927,18 +927,23 @@ cdef _get_node(clib.node* node, int ref_flag):
     data = _get_element(node.p_elem)
     data.update({'name': name_from_internal(_str(node.name)),
                  'type': _str(node.base_name),
-                 'at': _get_node_entry_pos(node, ref_flag)})
+                 'at': _get_node_entry_pos(node, ref_flag, is_expanded)})
     return data
 
 
-cdef double _get_node_entry_pos(clib.node* node, int ref_flag):
+cdef double _get_node_entry_pos(clib.node* node, int ref_flag, int is_expanded):
     """Normalize 'at' value to node entry."""
-    if ref_flag == clib.REF_CENTER:
-        return node.position - node.length / 2
-    elif ref_flag == clib.REF_EXIT:
-        return node.position - node.length
+    cdef double position
+    if is_expanded:
+        position = node.position
     else:
-        return node.position
+        position = node.at_value
+    if ref_flag == clib.REF_CENTER:
+        return position - node.length / 2
+    elif ref_flag == clib.REF_EXIT:
+        return position - node.length
+    else:
+        return position
 
 
 cdef _get_element(clib.element* elem):
