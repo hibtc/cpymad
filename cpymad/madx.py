@@ -687,6 +687,17 @@ class Sequence(object):
         """String representation."""
         return "<{}: {}>".format(self.__class__.__name__, self._name)
 
+    def __eq__(self, other):
+        """Comparison by sequence name."""
+        if isinstance(other, Sequence):
+            other = other.name
+        return self.name == other
+
+    # in py3 __ne__ delegates to __eq__, but we still need this for py2:
+    def __ne__(self, other):
+        """Comparison by sequence name."""
+        return not (self == other)
+
     __repr__ = __str__
 
     @property
