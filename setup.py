@@ -112,8 +112,18 @@ def get_extension_args(argv):
     # required libraries
     if get_platform() == "win32" or get_platform() == "win-amd64":
         libraries = ['madx', 'stdc++', 'ptc', 'gfortran']
+        force_lib = []
     else:
         libraries = ['madx', 'stdc++', 'c']
+        # DT_RUNPATH is intransitive, i.e. not used for indirect dependencies
+        # like 'cpymad -> libmadx -> libptc'. Therefore, on platforms where
+        # DT_RUNPATH is used (py35) rather than DT_RPATH (py27) and MAD-X is
+        # installed in a non-system location, we need to link against libptc
+        # directly to make it discoverable:
+        force_lib = ['ptc']
+    link_args = (['-Wl,--no-as-needed'] +
+                 ['-l'+lib for lib in force_lib] +
+                 ['-Wl,--as-needed'])
     # Common arguments for the Cython extensions:
     return dict(
         libraries=libraries,
@@ -121,6 +131,7 @@ def get_extension_args(argv):
         library_dirs=library_dirs,
         runtime_library_dirs=library_dirs,
         extra_compile_args=['-std=gnu99'],
+        extra_link_args=link_args,
     )
 
 
