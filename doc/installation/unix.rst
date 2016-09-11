@@ -51,7 +51,10 @@ Build and install the library
 .. code-block:: bash
 
     mkdir build && cd build
-    cmake -DMADX_STATIC=OFF -DBUILD_SHARED_LIBS=ON ../madX
+    cmake ../madX \
+        -DMADX_STATIC=OFF \
+        -DBUILD_SHARED_LIBS=ON \
+        -DCMAKE_INSTALL_RPATH='$ORIGIN'
     make && make install
 
 The install step might require root privileges if not changing the
