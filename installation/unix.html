@@ -173,7 +173,10 @@ install method.</p>
 </div>
 <p>Build and install the library</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
-cmake -DMADX_STATIC<span class="o">=</span>OFF -DBUILD_SHARED_LIBS<span class="o">=</span>ON ../madX
+cmake ../madX <span class="se">\</span>
+    -DMADX_STATIC<span class="o">=</span>OFF <span class="se">\</span>
+    -DBUILD_SHARED_LIBS<span class="o">=</span>ON <span class="se">\</span>
+    -DCMAKE_INSTALL_RPATH<span class="o">=</span><span class="s1">&#39;$ORIGIN&#39;</span>
 make <span class="o">&amp;&amp;</span> make install
 </pre></div>
 </div>
