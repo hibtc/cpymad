@@ -3,6 +3,23 @@ Changelog
 
 (dates are in the form dd.mm.yyyy)
 
+0.14.2
+======
+Date: 12.09.2016
+
+- don't ignore exceptions from ``clibmadx._get_node_index``
+- fix node positions for auto-inserted DRIFTs
+- fix node positions for unexpanded sequences
+- add some methods for sequence expansion
+- change ``libmadx.get_table_column_count()`` to return number of *selected*
+  columns for consistency
+- fix bug in ``Madx._use()`` that caused ``Madx.twiss()`` and other functions
+  to reUSE the sequence and thus clear previously selected flags
+- force linking against libptc (required on py35 if MAD-X is installed in
+  non-system location, since ``DT_RUNPATH`` is non-transitive and does not
+  resolve libptc as indirect dependency via the chain cpymad->libmadx->libptc)
+
+
 0.14.1
 ======
 Date: 18.05.2016
