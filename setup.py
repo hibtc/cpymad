@@ -109,21 +109,31 @@ def get_extension_args(argv):
                                    path.join(prefix, 'lib64')]
             include_dirs += [path.join(prefix, 'include')]
             library_dirs += list(filter(path.isdir, lib_path_candidates))
-    # required libraries
-    if get_platform() == "win32" or get_platform() == "win-amd64":
+    # Determine shared libraries:
+    # NOTE: using ``distutils.util.get_platform()`` rather than
+    # ``sys.platform`` or ``platform.system()`` or even ``os.name`` and
+    # ``os.uname()`` to handle cross-builds:
+    platform = get_platform()
+    if platform.startswith('win'):      # win32/win-amd64:
         libraries = ['madx', 'stdc++', 'ptc', 'gfortran']
         force_lib = []
     else:
         libraries = ['madx', 'stdc++', 'c']
+    # NOTE: we don't want the following on Mac (platform=darwin*), since ld
+    # doesn't support ``--as-needed`` there.
+    if platform.startswith('linux'):    # e.g. linux-x86_64
         # DT_RUNPATH is intransitive, i.e. not used for indirect dependencies
         # like 'cpymad -> libmadx -> libptc'. Therefore, on platforms where
         # DT_RUNPATH is used (py35) rather than DT_RPATH (py27) and MAD-X is
         # installed in a non-system location, we need to link against libptc
         # directly to make it discoverable:
         force_lib = ['ptc']
-    link_args = (['-Wl,--no-as-needed'] +
-                 ['-l'+lib for lib in force_lib] +
-                 ['-Wl,--as-needed'])
+    if force_lib:
+        link_args = (['-Wl,--no-as-needed'] +
+                     ['-l'+lib for lib in force_lib] +
+                     ['-Wl,--as-needed'])
+    else:
+        link_args = []
     # Common arguments for the Cython extensions:
     return dict(
         libraries=libraries,
