@@ -92,6 +92,26 @@ def get_long_description():
     return long_description
 
 
+def remove_arg(args, opt):
+    """
+    Remove all occurences of ``--PARAM=VALUE`` or ``--PARAM VALUE`` from
+    ``args`` and return the corresponding values.
+    """
+    iterargs = iter(args)
+    result = []
+    remain = []
+    for arg in iterargs:
+        if arg == opt:
+            result.append(next(iterargs))
+            continue
+        elif arg.startswith(opt + '='):
+            result.append(arg.split('=', 1)[1])
+            continue
+        remain.append(arg)
+    args[:] = remain
+    return result
+
+
 def get_extension_args(argv):
     """Get arguments for C-extension (include pathes, libraries, etc)."""
     # Let's just use the default system headers:
@@ -101,14 +121,12 @@ def get_extension_args(argv):
     # use build_ext.user_options instead, but then the --madxdir argument can
     # be passed only to the 'build_ext' command, not to 'build' or 'install',
     # which is a minor nuisance.
-    for arg in argv:
-        if arg.startswith('--madxdir='):
-            argv.remove(arg)
-            prefix = path.expanduser(arg.split('=', 1)[1])
-            lib_path_candidates = [path.join(prefix, 'lib'),
-                                   path.join(prefix, 'lib64')]
-            include_dirs += [path.join(prefix, 'include')]
-            library_dirs += list(filter(path.isdir, lib_path_candidates))
+    for dir_ in remove_arg(argv, '--madxdir'):
+        prefix = path.expanduser(dir_)
+        lib_path_candidates = [path.join(prefix, 'lib'),
+                               path.join(prefix, 'lib64')]
+        include_dirs += [path.join(prefix, 'include')]
+        library_dirs += list(filter(path.isdir, lib_path_candidates))
     # Determine shared libraries:
     # NOTE: using ``distutils.util.get_platform()`` rather than
     # ``sys.platform`` or ``platform.system()`` or even ``os.name`` and
