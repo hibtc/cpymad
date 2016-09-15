@@ -130,13 +130,13 @@ def mad_parameter(key, value):
     elif isinstance(value, Constraint):
         constr = []
         if value.min is not None:
-            constr.append(key + '>' + value.min)
+            constr.append(key + '>' + str(value.min))
         if value.max is not None:
-            constr.append(key + '<' + value.max)
+            constr.append(key + '<' + str(value.max))
         if constr:
             return ', '.join(constr)
         else:
-            return key + '=' + value.value
+            return key + '=' + str(value.value)
     elif isinstance(value, Expression):
         return key + ':=' + value.expr
     elif isinstance(value, bool):
