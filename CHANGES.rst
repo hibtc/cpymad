@@ -3,6 +3,16 @@ Changelog
 
 (dates are in the form dd.mm.yyyy)
 
+0.14.3
+======
+Date: 15.09.2016
+
+- in setup: disable unsupported ``--no-as-needed`` on Mac
+- in setup: allow value of ``--madxdir`` to be specified as separate argument
+- format ``types.Expression`` in commands
+- fix formatting of ``types.Constraint``
+
+
 0.14.2
 ======
 Date: 12.09.2016
