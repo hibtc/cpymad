@@ -7,7 +7,7 @@ import os
 import tempfile
 from contextlib import contextmanager
 
-from .types import Range, Constraint
+from .types import Range, Constraint, Expression
 
 
 __all__ = [
@@ -137,6 +137,8 @@ def mad_parameter(key, value):
             return ', '.join(constr)
         else:
             return key + '=' + value.value
+    elif isinstance(value, Expression):
+        return key + ':=' + value.expr
     elif isinstance(value, bool):
         return ('' if value else '-') + key
     elif key == 'range':
