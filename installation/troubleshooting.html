@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Troubleshooting &mdash; CPyMAD 0.14.1 documentation</title>
+  <title>Troubleshooting &mdash; CPyMAD 0.14.3 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="CPyMAD 0.14.1 documentation" href="../index.html"/>
+    <link rel="top" title="CPyMAD 0.14.3 documentation" href="../index.html"/>
         <link rel="up" title="Installation Instructions" href="index.html"/>
         <link rel="next" title="API Reference" href="../cpymad/index.html"/>
         <link rel="prev" title="Other distributions" href="windows/other.html"/> 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.14.1
+                0.14.3
               </div>
             
           
@@ -86,7 +86,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation Instructions</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="unix.html">Unix</a></li>
 <li class="toctree-l2"><a class="reference internal" href="windows/index.html">Windows</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">Troubleshooting</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Troubleshooting</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#importerror-libmadx-so">ImportError: libmadx.so</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#oserror-missing-source-file">OSError: Missing source file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#unable-to-find-vcvarsall-bat">Unable to find vcvarsall.bat</a></li>
@@ -118,7 +118,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -149,7 +149,7 @@ that might occur during installation.</p>
 <div class="section" id="importerror-libmadx-so">
 <h2>ImportError: libmadx.so<a class="headerlink" href="#importerror-libmadx-so" title="Permalink to this headline">¶</a></h2>
 <p>Message:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>ImportError: libmadx.so: cannot open shared object file: No such file or directory
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ne">ImportError</span><span class="p">:</span> <span class="n">libmadx</span><span class="o">.</span><span class="n">so</span><span class="p">:</span> <span class="n">cannot</span> <span class="nb">open</span> <span class="n">shared</span> <span class="nb">object</span> <span class="n">file</span><span class="p">:</span> <span class="n">No</span> <span class="n">such</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">directory</span>
 </pre></div>
 </div>
 <p>Solution:
@@ -163,8 +163,8 @@ python setup.py install
 <p>Where <code class="docutils literal"><span class="pre">&lt;prefix&gt;</span></code> is the base folder containing the subfolders <code class="docutils literal"><span class="pre">bin</span></code>,
 <code class="docutils literal"><span class="pre">include</span></code>, <code class="docutils literal"><span class="pre">lib</span></code> of the MAD-X build and <code class="docutils literal"><span class="pre">&lt;rpath&gt;</span></code> contains the
 dynamic library files.</p>
-<p>If this does not work, you can set the LD_LIBRARY_PATH (or
-DYLD_LIBRARY_PATH on OSX) environment variable before running pymad, for
+<p>If this does not work, you can set the <code class="docutils literal"><span class="pre">LD_LIBRARY_PATH</span></code> (or
+<code class="docutils literal"><span class="pre">DYLD_LIBRARY_PATH</span></code> on OSX) environment variable before running pymad, for
 example:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:<span class="nv">$HOME</span>/.local/lib/
 </pre></div>
@@ -173,7 +173,7 @@ example:</p>
 <div class="section" id="oserror-missing-source-file">
 <h2>OSError: Missing source file<a class="headerlink" href="#oserror-missing-source-file" title="Permalink to this headline">¶</a></h2>
 <p>Message:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>OSError: Missing source file: &#39;cpymad/libmadx.c&#39;. Install Cython to resolve this problem.
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ne">OSError</span><span class="p">:</span> <span class="n">Missing</span> <span class="n">source</span> <span class="n">file</span><span class="p">:</span> <span class="s1">&#39;cpymad/libmadx.c&#39;</span><span class="o">.</span> <span class="n">Install</span> <span class="n">Cython</span> <span class="n">to</span> <span class="n">resolve</span> <span class="n">this</span> <span class="n">problem</span><span class="o">.</span>
 </pre></div>
 </div>
 <p>Solution:
@@ -187,7 +187,7 @@ which includes all source files.</p>
 <div class="section" id="unable-to-find-vcvarsall-bat">
 <h2>Unable to find vcvarsall.bat<a class="headerlink" href="#unable-to-find-vcvarsall-bat" title="Permalink to this headline">¶</a></h2>
 <p>Message:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>error: Unable to find vcvarsall.bat
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">error</span><span class="p">:</span> <span class="n">Unable</span> <span class="n">to</span> <span class="n">find</span> <span class="n">vcvarsall</span><span class="o">.</span><span class="n">bat</span>
 </pre></div>
 </div>
 <p>Solution:
@@ -207,8 +207,8 @@ this as <code class="file docutils literal"><span class="pre">setup.cfg</span></
 <div class="section" id="unrecognized-command-line-option-mno-cygwin">
 <h2>unrecognized command line option &#8216;-mno-cygwin&#8217;<a class="headerlink" href="#unrecognized-command-line-option-mno-cygwin" title="Permalink to this headline">¶</a></h2>
 <p>Message:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>gcc: error: unrecognized command line option &#39;-mno-cygwin&#39;
-error: command &#39;gcc&#39; failed with exit status 1
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gcc</span><span class="p">:</span> <span class="n">error</span><span class="p">:</span> <span class="n">unrecognized</span> <span class="n">command</span> <span class="n">line</span> <span class="n">option</span> <span class="s1">&#39;-mno-cygwin&#39;</span>
+<span class="n">error</span><span class="p">:</span> <span class="n">command</span> <span class="s1">&#39;gcc&#39;</span> <span class="n">failed</span> <span class="k">with</span> <span class="n">exit</span> <span class="n">status</span> <span class="mi">1</span>
 </pre></div>
 </div>
 <p>Solution:
@@ -283,7 +283,7 @@ distutils, for example:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.14.1',
+            VERSION:'0.14.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
