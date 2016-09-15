@@ -28,8 +28,8 @@ Where ``<prefix>`` is the base folder containing the subfolders ``bin``,
 ``include``, ``lib`` of the MAD-X build and ``<rpath>`` contains the
 dynamic library files.
 
-If this does not work, you can set the LD_LIBRARY_PATH (or
-DYLD_LIBRARY_PATH on OSX) environment variable before running pymad, for
+If this does not work, you can set the ``LD_LIBRARY_PATH`` (or
+``DYLD_LIBRARY_PATH`` on OSX) environment variable before running pymad, for
 example:
 
 .. code-block:: bash
