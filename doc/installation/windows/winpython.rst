@@ -11,6 +11,10 @@ Install dependencies
 
 Except for WinPython_ itself, you just need CMake_.
 
+Furthermore, cpymad now depends on minrpc_::
+
+    pip install minrpc
+
 
 Build libmadx
 ~~~~~~~~~~~~~
@@ -81,6 +85,7 @@ python distribution, like so:
 
 .. _WinPython: http://winpython.sourceforge.net/
 .. _CMake: http://www.cmake.org/
+.. _minrpc: https://pypi.python.org/pypi/minrpc
 .. _MAD-X source: http://svnweb.cern.ch/world/wsvn/madx/tags/
 .. _CPyMAD source: https://github.com/pymad/cpymad/zipball/master
 .. _wheel: https://wheel.readthedocs.org/en/latest/

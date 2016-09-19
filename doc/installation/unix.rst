@@ -26,6 +26,7 @@ Furthermore, CPyMAD depends on the following python packages:
 - Cython_
 - NumPy_
 - PyYAML_
+- minrpc_
 
 The python packages can be installed using pip_.
 
@@ -35,6 +36,7 @@ The python packages can be installed using pip_.
 .. _NumPy: http://www.numpy.org/
 .. _PyYAML: https://pypi.python.org/pypi/PyYAML
 .. _pip: https://pypi.python.org/pypi/pip
+.. _minrpc: https://pypi.python.org/pypi/minrpc
 
 
 Install libmadx

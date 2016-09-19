@@ -22,6 +22,10 @@ to the system PATH for all/current user* according to your liking.
         set PATH=%PATH%;C:\Program Files (x86)\CMake\bin
 
 
+Now, install minrpc_::
+
+    pip install minrpc
+
 
 Build libmadx
 ~~~~~~~~~~~~~
@@ -95,6 +99,7 @@ as specified by ``CMAKE_INSTALL_PREFIX`` before.
 
 .. _Python(x,y): https://code.google.com/p/pythonxy/
 .. _CMake: http://www.cmake.org/
+.. _minrpc: https://pypi.python.org/pypi/minrpc
 .. _MAD-X source: http://svnweb.cern.ch/world/wsvn/madx/tags/
 .. _latest revision: http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&rev=0&isdir=1
 .. _CPyMAD source: https://github.com/pymad/cpymad/zipball/master
