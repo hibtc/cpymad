@@ -28,11 +28,7 @@ process can not be used to safely execute unsafe python code.
 
 from __future__ import absolute_import
 
-import sys
-
-from cpymad.rpc_util import service
-from cpymad.rpc_util import client
-from cpymad.rpc_util.client import RemoteProcessCrashed, RemoteProcessClosed
+from minrpc.client import Client, RemoteProcessCrashed, RemoteProcessClosed
 
 
 __all__ = [
@@ -42,7 +38,7 @@ __all__ = [
 ]
 
 
-class LibMadxClient(client.Client):
+class LibMadxClient(Client):
 
     """
     Specialized client for boxing :mod:`cpymad.libmadx` function calls.
@@ -63,53 +59,3 @@ class LibMadxClient(client.Client):
     @property
     def libmadx(self):
         return self.modules['cpymad.libmadx']
-
-    @property
-    class modules(object):
-
-        """Provides access to all modules in the remote process."""
-
-        def __init__(self, client):
-            self.__client = client
-
-        def __getitem__(self, key):
-            """Get a RemoteModule object by module name."""
-            return RemoteModule(self.__client, key)
-
-
-class RemoteModule(object):
-
-    """Wrapper for :mod:`cpymad.libmadx` in a remote process."""
-
-    def __init__(self, client, module):
-        """Store the client connection."""
-        self.__client = client
-        self.__module = module
-
-    def __getattr__(self, funcname):
-        """Resolve all attribute accesses as remote function calls."""
-        def DeferredMethod(*args, **kwargs):
-            return self.__client._request('function_call', self.__module,
-                                          funcname, args, kwargs)
-        return DeferredMethod
-
-
-class LibMadxService(service.Service):
-
-    """
-    Specialized service to dispatch :mod:`cpymad.libmadx` function calls.
-
-    Counterpart for :class:`LibMadxClient`.
-    """
-
-    def _dispatch_function_call(self, modname, funcname, args, kwargs):
-        """Execute any static function call in the remote process."""
-        # As soon as we drop support for python2.6, we should replace this
-        # with importlib.import_module:
-        module = __import__(modname, None, None, '*')
-        function = getattr(module, funcname)
-        return function(*args, **kwargs)
-
-
-if __name__ == '__main__':
-    LibMadxService.stdio_main(sys.argv[1:])

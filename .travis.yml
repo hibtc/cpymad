@@ -57,7 +57,6 @@ install:
   - pip install nose coverage coveralls
 # Actual tests:
 script:
-  - coverage run --source=cpymad    test/test_rpc.py      -v
   - coverage run --source=cpymad -a test/test_util.py     -v
   - coverage run --source=cpymad -a test/test_madx.py     -v
 
