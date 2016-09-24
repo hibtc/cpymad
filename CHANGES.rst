@@ -3,6 +3,14 @@ Changelog
 
 (dates are in the form dd.mm.yyyy)
 
+0.15.0
+======
+Date: 24.09.2016
+
+- depend on *minrpc* for RPC
+- in setup: fix ``NameError: force_lib`` on Mac
+
+
 0.14.3
 ======
 Date: 15.09.2016
