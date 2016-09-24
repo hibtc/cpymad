@@ -134,11 +134,11 @@ def get_extension_args(argv):
     platform = get_platform()
     if platform.startswith('win'):      # win32/win-amd64:
         libraries = ['madx', 'stdc++', 'ptc', 'gfortran']
-        force_lib = []
     else:
         libraries = ['madx', 'stdc++', 'c']
     # NOTE: we don't want the following on Mac (platform=darwin*), since ld
     # doesn't support ``--as-needed`` there.
+    force_lib = []
     if platform.startswith('linux'):    # e.g. linux-x86_64
         # DT_RUNPATH is intransitive, i.e. not used for indirect dependencies
         # like 'cpymad -> libmadx -> libptc'. Therefore, on platforms where
