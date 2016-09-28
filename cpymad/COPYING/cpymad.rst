@@ -1,13 +1,19 @@
 applies to the python source of the CPyMAD package::
 
-    Copyright (c) 2013-2015, HIT - Heidelberg Ion-Therapy Center
+    Copyright 2016 HIT Betriebs GmbH
 
-    To the extent possible under law, the person who associated CC0 with
-    CPyMAD has waived all copyright and related or neighboring rights to
-    CPyMAD.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-    You should have received a copy of the CC0 legalcode along with this
-    work. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Note that this package is a heavily modified fork of the original
 cern-cpymad package developed at CERN::

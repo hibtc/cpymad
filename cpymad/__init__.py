@@ -14,8 +14,8 @@ __maintainer_email__ = 't_glaessle@gmx.de'
 
 __support__ = __maintainer_email__
 
-__license__ = 'CC0, Apache, Non-Free'
-__copyright__ = 'See file COPYING.rst or cpymad.get_copyright_notice()'
+__license__ = 'GPLv3+'
+__copyright__ = 'See cpymad/COPYING folder or cpymad.get_copyright_notice()'
 
 __credits__ = """
 Current cpymad maintainer:
@@ -31,7 +31,7 @@ Initial pymad creators:
 __classifiers__ = [
     'Development Status :: 4 - Beta',
     'Intended Audience :: Science/Research',
-    'License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication',
+    'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
     'License :: OSI Approved :: Apache Software License',
     'License :: Other/Proprietary License',
     'Operating System :: Microsoft :: Windows',
