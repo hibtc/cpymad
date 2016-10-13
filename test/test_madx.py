@@ -6,21 +6,36 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-# utilities
-import _compat
-
 # tested class
 from cpymad.madx import Madx, CommandLog
 
 
-class TestMadx(unittest.TestCase, _compat.TestCase):
+class _TestCaseCompat(object):
+
+    """
+    Compatibility layer for unittest.TestCase
+    """
+
+    try:
+        assertItemsEqual = unittest.TestCase.assertCountEqual
+    except AttributeError:
+        def assertItemsEqual(self, first, second):
+            """Method missing in python2.6 and renamed in python3."""
+            self.assertEqual(sorted(first), sorted(second))
+
+    def assertLess(self, first, second):
+        """Method missing in python2.6."""
+        self.assertTrue(first < second)
+
+
+class TestMadx(unittest.TestCase, TestCaseCompat):
 
     """
     Test methods for the Madx class.
 
     The tests are directly based on the specifics of the sequence in
 
-        test/data/lebt/init.madx
+        test/testseq.madx
 
     Please compare this file for reference.
     """
@@ -28,7 +43,7 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
     def setUp(self):
         self.mad = Madx(command_log=CommandLog(sys.stdout, 'X:> '))
         here = os.path.dirname(__file__)
-        there = os.path.join(here, 'data', 'lebt', 'init.madx')
+        there = os.path.join(here, 'testseq.madx')
         self.doc = open(there).read()
         for line in self.doc.splitlines():
             self.mad._libmadx.input(line)
@@ -289,7 +304,7 @@ class TestMadx(unittest.TestCase, _compat.TestCase):
         self.assertEqual(iqp2, elements.at(3.1))
 
 
-class TestTransferMap(unittest.TestCase, _compat.TestCase):
+class TestTransferMap(unittest.TestCase):
 
     def _mad(self, doc):
         mad = Madx(command_log=CommandLog(sys.stdout, 'X:> '))

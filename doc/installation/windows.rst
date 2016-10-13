@@ -1,0 +1,154 @@
+Windows
+-------
+
+Prebuilt binaries
+=================
+
+On a windows platform, you are likely to run into more problems than on
+linux when building from source. Therefore, I will try to provide `built
+versions`_ for some platforms. If your platform is supported, you can just
+run
+
+.. code-block:: bat
+
+    pip install cpymad
+
+from your terminal and that's it. If you want to install to a target
+machine without internet access (or with firewall), you can manually
+download_ the ``.whl`` file for your platform and then use pip_ to install
+that particular file. For example:
+
+.. code-block:: bat
+
+    pip install cpymad-0.10.1-cp27-none-win32.whl
+
+In this case you will also need to grab and install *numpy*, *PyYAML* and
+*setuptools* (and possibly their dependencies if any). Installable wheel_
+archives for these packages can be conveniently downloaded from here:
+`Unofficial Windows Binaries for Python Extension Packages`_.
+
+If there is no binary available for your platform you can ask me via email
+or the github issue pages to create one for your python version / platform.
+
+If you want to build from source, have a look at following guide.
+
+.. _built versions: https://pypi.python.org/pypi/cpymad/#downloads
+.. _download: https://pypi.python.org/pypi/cpymad/#downloads
+.. _pip: https://pypi.python.org/pypi/pip
+.. _wheel: https://wheel.readthedocs.org/en/latest/
+.. _Unofficial Windows Binaries for Python Extension Packages: http://www.lfd.uci.edu/~gohlke/pythonlibs/
+
+
+Manual build
+============
+
+In order to build cpymad manually on python≤3.4, I recommend WinPython_. This
+portable python distribution includes a MinGW compiler suite that allows to
+create self-contained binaries which can later be used on other python
+distributions as well. Python≥3.5 is currently unsupported due to a change in
+python's windows build process.
+
+.. _WinPython: http://winpython.sourceforge.net/
+
+
+Install dependencies
+~~~~~~~~~~~~~~~~~~~~
+
+Except for WinPython_ itself, you just need CMake_ and minrpc_.
+
+First install CMake_. In the *Install options* dialog choose to *Add CMake
+to the system PATH for all/current user* according to your liking.
+Alternatively, manually extend your PATH later in the terminal:
+
+.. code-block:: bat
+
+    set PATH=%PATH%;C:\Program Files (x86)\CMake\bin
+
+Next, install minrpc_::
+
+    pip install minrpc
+
+.. _CMake: http://www.cmake.org/
+.. _minrpc: https://pypi.python.org/pypi/minrpc
+
+
+Build libmadx
+~~~~~~~~~~~~~
+
+Download and extract the latest `MAD-X source`_ archive.
+
+.. note::
+
+    You might need multiple extraction steps until you get a folder
+    containing the file :file:`CMakeLists.txt` as well as several other
+    files and subdirectories.
+
+.. _MAD-X source: http://svnweb.cern.ch/world/wsvn/madx/tags/
+
+I recommend to build MAD-X as a *static* library as described below. This
+way, you won't need to carry any ``.dll`` files around and you won't run
+into version problems when having a multiple MAD-X library builds around.
+
+Open a terminal by executing the :file:`%WinPython%\\WinPython Command
+Prompt.exe`. Change the directory to the extracted MAD-X folder with the
+``cd`` command and prepare the build:
+
+.. code-block:: bat
+
+    mkdir build
+    cd build
+    cmake -G "MinGW Makefiles" -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=..\install -DMADX_NTPSA=OFF ..
+
+In the file :file:`%MADX%\\build\\src\\CMakeFiles\\madxbin.dir\\link.txt` and
+:file:`linklibs.rsp` search for ``-lgcc_eh`` and remove it (if present) -
+otherwise you may get linker errors at the end of the next command.
+
+The following step will build the library. This may take a few minutes, so go
+and grab a coffee meanwhile:
+
+.. code-block:: bat
+
+    mingw32-make
+    mingw32-make install
+
+If all went well the last command will have installed binaries and library
+files to the :file:`%MADX%\\install` subfolder.
+
+.. _MAD-X source: http://svnweb.cern.ch/world/wsvn/madx/tags/
+
+
+Build cpymad
+~~~~~~~~~~~~
+
+Download the `cpymad source`_. Then go to the pymad folder and build as
+follows:
+
+.. code-block:: bat
+
+    python setup.py build_ext --madxdir=<madx-install-path> -lquadmath
+    python setup.py build
+
+.. note::
+
+    The ``-lquadmath`` argument is required to avoid errors like the following::
+
+        .../libgfortran.a(write.o):(.text$write_float+0xbb): undefined reference to `signbitq'
+        .../lib/gcc/i686-w64-mingw32/4.9.2/libgfortran.a(write.o):(.text$write_float+0xe7): undefined reference to `finiteq'
+
+From the built package you can create a so called wheel_, which is
+essentially a zip archive containing all the files ready for installation:
+
+.. code-block:: bat
+
+    python setup.py bdist_wheel
+
+This will create a ``.whl`` file named after the package and its target
+platform. This file can now be used for installation in your favorite
+python distribution, like so:
+
+.. code-block:: bat
+
+    pip install dist\cpymad-0.10.1-cp27-none-win32.whl
+
+.. _cpymad source: https://github.com/pymad/cpymad/zipball/master
+.. _wheel: https://wheel.readthedocs.org/en/latest/

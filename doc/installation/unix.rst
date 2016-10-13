@@ -1,7 +1,7 @@
 Unix
 ----
 
-On Unix-like system building CPyMAD from source is most convenient and
+On Unix-like system building cpymad from source is most convenient and
 should be unproblematic.
 
 
@@ -14,13 +14,13 @@ On many linux distributions most or all of the following dependencies will
 be available in the official repositories. Use these as the preferred
 install method.
 
-To build MAD-X and CPyMAD from source you will need
+To build MAD-X and cpymad from source you will need
 
 - CMake_
 - Python>=2.7
-- C / Fortran compilers
+- C / Fortran compilers (gcc >= 4.8)
 
-Furthermore, CPyMAD depends on the following python packages:
+Furthermore, cpymad depends on the following python packages:
 
 - setuptools_
 - Cython_
@@ -63,17 +63,17 @@ The install step might require root privileges if not changing the
 installation prefix.
 
 
-Install CPyMAD
+Install cpymad
 ~~~~~~~~~~~~~~
 
-The latest `CPyMAD release`_ can conveniently be installed using pip_:
+The latest `cpymad release`_ can conveniently be installed using pip_:
 
 .. code-block:: bash
 
     pip install cpymad
 
 If you run into problems with this, you should manually download and
-install the `CPyMad source`_ to see in which step the problem occurs:
+install the `cpymad source`_ to see in which step the problem occurs:
 
 .. code-block:: bash
 
@@ -87,7 +87,7 @@ virtualenv_.
 
 
 .. _MAD-X source: http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&rev=0&isdir=1
-.. _CPyMAD release: https://pypi.python.org/pypi/cpymad
+.. _cpymad release: https://pypi.python.org/pypi/cpymad
 .. _pip: https://pypi.python.org/pypi/pip
-.. _CPyMAD source: https://github.com/hibtc/cpymad/zipball/master
+.. _cpymad source: https://github.com/hibtc/cpymad/zipball/master
 .. _virtualenv: http://virtualenv.readthedocs.org/en/latest/virtualenv.html

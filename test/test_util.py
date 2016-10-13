@@ -1,15 +1,12 @@
 # standard library
 import unittest
 
-# utilities
-import _compat
-
 # tested objects
 from cpymad import util
 from cpymad.types import Range, Constraint, Expression
 
 
-class TestUtil(unittest.TestCase, _compat.TestCase):
+class TestUtil(unittest.TestCase):
 
     """Tests for the objects in :mod:`cpymad.util`."""
 

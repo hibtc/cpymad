@@ -1,24 +1,24 @@
-CPyMAD
+cpymad
 ------
 |Version| |Downloads| |License| |Python|
 
-CPyMAD is a Cython_ binding to MAD-X_.
+cpymad is a Cython_ binding to MAD-X_.
 
 MAD-X is a software package to simulate particle accelerators and is used
 at CERN and all around the world. It has its own proprietary scripting
 language and is usually launched from the command line.
 
-This version of CPyMAD is tested with MAD-X |VERSION|. Other MAD-X
+This version of cpymad is tested with MAD-X |VERSION|. Other MAD-X
 versions (and immediate revisions) might work too, but are more likely to
 cause problems.
 
 The installable wheel archives that are provided for some versions of
 python to simplify the installation on windows contain a precompiled
-version of CPyMAD that is statically linked against MAD-X |VERSION|.
+version of cpymad that is statically linked against MAD-X |VERSION|.
 
 .. _Cython: http://cython.org/
 .. _MAD-X: http://cern.ch/mad
-.. |VERSION| replace:: 5.02.10
+.. |VERSION| replace:: 5.02.11
 
 
 Disclaimer
@@ -27,7 +27,7 @@ Disclaimer
 This is a heavily modified fork of the cern-cpymad_ package. The fork is
 not authored or maintained by CERN members.
 
-CPyMAD links against an unofficial build of MAD-X that is not supported by
+cpymad links against an unofficial build of MAD-X that is not supported by
 CERN, i.e. this binary may have problems that the official binary does not
 have and vice versa. This means:
 

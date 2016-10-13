@@ -1,14 +1,14 @@
 Copying
 ~~~~~~~
 
-CPyMAD must be used in compliance with the licenses as described in the
+cpymad must be used in compliance with the licenses as described in the
 following sections:
 
 
-License for CPyMAD source
+License for cpymad source
 =========================
 
-applies to the python source of the CPyMAD package::
+applies to the python source of the cpymad package::
 
     Copyright 2016 HIT Betriebs GmbH
 
