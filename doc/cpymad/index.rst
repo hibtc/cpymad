@@ -5,3 +5,6 @@ API Reference
    :maxdepth: 2
 
    madx
+   libmadx
+   util
+   types
