@@ -1,4 +1,4 @@
-applies to the python source of the CPyMAD package::
+applies to the python source of the cpymad package::
 
     Copyright 2016 HIT Betriebs GmbH
 

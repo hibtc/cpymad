@@ -2,7 +2,7 @@ WinPython
 =========
 
 WinPython_ is a portable Python distribution which allows to build
-self-contained C extensions. If you want to deploy your your CPyMAD build to
+self-contained C extensions. If you want to deploy your your cpymad build to
 other machines, this is the distribution of choice.
 
 
@@ -45,10 +45,10 @@ If all went well the last command will have installed binaries and library
 files to the :file:`madX\\install` subfolder.
 
 
-Build CPyMAD
+Build cpymad
 ~~~~~~~~~~~~
 
-Download the `CPyMad source`_. Then go to the pymad folder and build as
+Download the `cpymad source`_. Then go to the pymad folder and build as
 follows:
 
 .. code-block:: bat
@@ -87,5 +87,5 @@ python distribution, like so:
 .. _CMake: http://www.cmake.org/
 .. _minrpc: https://pypi.python.org/pypi/minrpc
 .. _MAD-X source: http://svnweb.cern.ch/world/wsvn/madx/tags/
-.. _CPyMAD source: https://github.com/pymad/cpymad/zipball/master
+.. _cpymad source: https://github.com/pymad/cpymad/zipball/master
 .. _wheel: https://wheel.readthedocs.org/en/latest/

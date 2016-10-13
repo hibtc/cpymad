@@ -1,5 +1,5 @@
 """
-Installation script for CPyMAD.
+Installation script for cpymad.
 
 Usage:
     python setup.py install --madxdir=/path/to/madx/installation
