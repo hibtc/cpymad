@@ -28,7 +28,7 @@ class _TestCaseCompat(object):
         self.assertTrue(first < second)
 
 
-class TestMadx(unittest.TestCase, TestCaseCompat):
+class TestMadx(unittest.TestCase, _TestCaseCompat):
 
     """
     Test methods for the Madx class.
