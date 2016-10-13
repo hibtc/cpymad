@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>cpymad.madx &mdash; CPyMAD 0.14.3 documentation</title>
+  <title>cpymad.madx &mdash; cpymad 0.15.0 documentation</title>
   
 
   
@@ -30,8 +30,12 @@
   
 
   
-    <link rel="top" title="CPyMAD 0.14.3 documentation" href="../index.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="cpymad 0.15.0 documentation" href="../index.html"/>
         <link rel="up" title="API Reference" href="index.html"/>
+        <link rel="next" title="cpymad.libmadx" href="libmadx.html"/>
         <link rel="prev" title="API Reference" href="index.html"/> 
 
   
@@ -41,6 +45,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -50,7 +55,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> CPyMAD
+            <a href="../index.html" class="icon icon-home"> cpymad
           
 
           
@@ -60,7 +65,7 @@
             
             
               <div class="version">
-                0.14.3
+                0.15.0
               </div>
             
           
@@ -85,6 +90,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation Instructions</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">cpymad.madx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="libmadx.html">cpymad.libmadx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html">cpymad.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">cpymad.types</a></li>
 </ul>
 </li>
 </ul>
@@ -99,8 +107,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">CPyMAD</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cpymad</a>
+        
       </nav>
 
 
@@ -109,24 +119,36 @@
         <div class="rst-content">
           
 
- 
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="index.html">API Reference</a> &raquo;</li>
-      
-    <li>cpymad.madx</li>
+        
+      <li>cpymad.madx</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/cpymad/madx.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
   <hr/>
 </div>
@@ -157,25 +179,6 @@
 </table>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="class">
-<dt id="cpymad.madx.ChangeDirectory">
-<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">ChangeDirectory</code><span class="sig-paren">(</span><em>path</em>, <em>_os</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#ChangeDirectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.ChangeDirectory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Context manager for temporarily changing current working directory in the
-context of the given <code class="docutils literal"><span class="pre">os</span></code> module.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> (<em>str</em>) &#8211; new path name</li>
-<li><strong>_os</strong> &#8211; module with <code class="docutils literal"><span class="pre">getcwd</span></code> and <code class="docutils literal"><span class="pre">chdir</span></code> functions</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="class">
@@ -283,7 +286,7 @@ object to the constructor. This object must expose an interface similar to
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a context manager that can change the directory back</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#cpymad.madx.ChangeDirectory" title="cpymad.madx.ChangeDirectory">ChangeDirectory</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">ChangeDirectory</td>
 </tr>
 </tbody>
 </table>
@@ -740,6 +743,8 @@ object to the constructor. This object must expose an interface similar to
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="libmadx.html" class="btn btn-neutral float-right" title="cpymad.libmadx" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
       
         <a href="index.html" class="btn btn-neutral" title="API Reference" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
@@ -772,7 +777,7 @@ object to the constructor. This object must expose an interface similar to
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.14.3',
+            VERSION:'0.15.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

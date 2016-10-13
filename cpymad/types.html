@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation Instructions &mdash; cpymad 0.15.0 documentation</title>
+  <title>cpymad.types &mdash; cpymad 0.15.0 documentation</title>
   
 
   
@@ -34,8 +34,8 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="cpymad 0.15.0 documentation" href="../index.html"/>
-        <link rel="next" title="Unix" href="unix.html"/>
-        <link rel="prev" title="cpymad" href="../index.html"/> 
+        <link rel="up" title="API Reference" href="index.html"/>
+        <link rel="prev" title="cpymad.util" href="util.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -86,13 +86,14 @@
             
             
                 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation Instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="unix.html">Unix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="windows.html">Windows</a></li>
-<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation Instructions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="madx.html">cpymad.madx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="libmadx.html">cpymad.libmadx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html">cpymad.util</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">cpymad.types</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../cpymad/index.html">API Reference</a></li>
 </ul>
 
             
@@ -134,13 +135,15 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Installation Instructions</li>
+          <li><a href="index.html">API Reference</a> &raquo;</li>
+        
+      <li>cpymad.types</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/installation/index.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/cpymad/types.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -151,22 +154,45 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="installation-instructions">
-<h1>Installation Instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this headline">¶</a></h1>
-<p>There are three basic steps when installing cpymad:</p>
-<ul class="simple">
-<li>install dependencies</li>
-<li>build MAD-X as a library</li>
-<li>build the cpymad binding</li>
-</ul>
-<p>Depending on your platform, this can be more or less complicated.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="unix.html">Unix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="windows.html">Windows</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
-</ul>
-</div>
+  <div class="section" id="module-cpymad.types">
+<span id="cpymad-types"></span><h1>cpymad.types<a class="headerlink" href="#module-cpymad.types" title="Permalink to this headline">¶</a></h1>
+<p>Python type analogues for MAD-X data structures.</p>
+<dl class="class">
+<dt id="cpymad.types.Range">
+<em class="property">class </em><code class="descclassname">cpymad.types.</code><code class="descname">Range</code><span class="sig-paren">(</span><em>first</em>, <em>last</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.types.Range" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="cpymad.types.Range.first">
+<code class="descname">first</code><a class="headerlink" href="#cpymad.types.Range.first" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cpymad.types.Range.last">
+<code class="descname">last</code><a class="headerlink" href="#cpymad.types.Range.last" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cpymad.types.Constraint">
+<em class="property">class </em><code class="descclassname">cpymad.types.</code><code class="descname">Constraint</code><span class="sig-paren">(</span><em>val=None</em>, <em>min=None</em>, <em>max=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/types.html#Constraint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.types.Constraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a MAD-X constraint, which has either min/max/both/value.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cpymad.types.Expression">
+<em class="property">class </em><code class="descclassname">cpymad.types.</code><code class="descname">Expression</code><span class="sig-paren">(</span><em>expr</em>, <em>value</em>, <em>type=&lt;type 'float'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/types.html#Expression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.types.Expression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data structure representing input values from madx statements.</p>
+<p>These both an expression (str) and a value (bool/int/float).</p>
+<dl class="attribute">
+<dt id="cpymad.types.Expression.value">
+<code class="descname">value</code><a class="headerlink" href="#cpymad.types.Expression.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value with the most accurate type.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -176,10 +202,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="unix.html" class="btn btn-neutral float-right" title="Unix" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="../index.html" class="btn btn-neutral" title="cpymad" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="util.html" class="btn btn-neutral" title="cpymad.util" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

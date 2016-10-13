@@ -1,0 +1,992 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cpymad.libmadx &mdash; cpymad 0.15.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="cpymad 0.15.0 documentation" href="../index.html"/>
+        <link rel="up" title="API Reference" href="index.html"/>
+        <link rel="next" title="cpymad.util" href="util.html"/>
+        <link rel="prev" title="cpymad.madx" href="madx.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> cpymad
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.15.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation Instructions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="madx.html">cpymad.madx</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">cpymad.libmadx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html">cpymad.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">cpymad.types</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cpymad</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">API Reference</a> &raquo;</li>
+        
+      <li>cpymad.libmadx</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/cpymad/libmadx.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-cpymad.libmadx">
+<span id="cpymad-libmadx"></span><h1>cpymad.libmadx<a class="headerlink" href="#module-cpymad.libmadx" title="Permalink to this headline">¶</a></h1>
+<p>Low level cython binding to MAD-X.</p>
+<p>CAUTION: Do not import this module directly! Use <code class="xref py py-class docutils literal"><span class="pre">Madx</span></code> instead.</p>
+<ul class="simple">
+<li>Importing this module means loading MAD-X directly into the process space.
+This means that any crash in the (extremely fragile) MAD-X interpreter will
+crash the importing process with it.</li>
+<li>All functions in this module operate on a shared global state.</li>
+<li>this module exposes a very C-ish API that is not convenient to work with.</li>
+</ul>
+<dl class="function">
+<dt id="cpymad.libmadx.get_version_number">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_version_number</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_version_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the version number of loaded MAD-X interpreter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">full version number</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_version_date">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_version_date</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_version_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the release date of loaded MAD-X interpreter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">release date in YYYY.MM.DD format</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.is_started">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">is_started</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.is_started" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether MAD-X has been initialized.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">whether <a class="reference internal" href="#cpymad.libmadx.start" title="cpymad.libmadx.start"><code class="xref py py-func docutils literal"><span class="pre">start()</span></code></a> was called without matching <a class="reference internal" href="#cpymad.libmadx.finish" title="cpymad.libmadx.finish"><code class="xref py py-func docutils literal"><span class="pre">finish()</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.start">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize MAD-X.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.finish">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">finish</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.finish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cleanup MAD-X.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.input">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">input</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass one input command to MAD-X.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<em>str</em>) &#8211; command to be executed by the MAD-X interpreter</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.evaluate">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">evaluate</code><span class="sig-paren">(</span><em>expression</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates an expression and returns the result as double.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expression</strong> (<em>str</em>) &#8211; symbolic expression to evaluate</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">numeric value of the expression</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_var">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_var</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_var" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value of a global variable.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.set_var">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">set_var</code><span class="sig-paren">(</span><em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.set_var" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value of a global variable.</p>
+<p>If the value is a string or <code class="xref py py-class docutils literal"><span class="pre">Expression</span></code> set the variable as a
+deferred expression.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.num_globals">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">num_globals</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.num_globals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of global variables.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_globals">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_globals</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_globals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of names of all global variables.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_var_type">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_var_type</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_var_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the type of the variable:</p>
+<blockquote>
+<div>0   constant
+1   direct
+2   deferred
+3   string</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.sequence_exists">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">sequence_exists</code><span class="sig-paren">(</span><em>sequence_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.sequence_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the sequence exists.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence</strong> (<em>str</em>) &#8211; sequence name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the sequence exists</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_sequence_names">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_sequence_names</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_sequence_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of all sequences currently in memory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">sequence names</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_sequence_count">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_sequence_count</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_sequence_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of all sequences currently in memory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">number of sequences</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_active_sequence_name">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_active_sequence_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_active_sequence_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of the active sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">name of active sequence</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> &#8211; if no sequence is activated</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_sequence_twiss_table_name">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_sequence_twiss_table_name</code><span class="sig-paren">(</span><em>sequence_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_sequence_twiss_table_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the last calculated twiss table for the given sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">twiss table name</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">str</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> &#8211; if the sequence name is invalid</li>
+<li><strong>RuntimeError</strong> &#8211; if the twiss table is invalid</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_sequence_beam">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_sequence_beam</code><span class="sig-paren">(</span><em>sequence_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_sequence_beam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the beam associated to the sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">beam properties as set with the BEAM command (and some more)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">dict</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> &#8211; if the sequence name is invalid</li>
+<li><strong>RuntimeError</strong> &#8211; if the sequence has no associated beam</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.is_sequence_expanded">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">is_sequence_expanded</code><span class="sig-paren">(</span><em>sequence_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.is_sequence_expanded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether a sequence has already been expanded.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">expanded state of the sequence</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> &#8211; if the sequence is invalid</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.table_exists">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">table_exists</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.table_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the table exists.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table</strong> (<em>str</em>) &#8211; table name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the table exists</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_table_names">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_table_names</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_table_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of all table names.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">table names</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_table_count">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_table_count</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_table_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of existing tables.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">number of tables in memory</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_table_summary">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_table_summary</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_table_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get table summary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) &#8211; table name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">mapping of {column: value}</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_table_column_names">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_table_column_names</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_table_column_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of all column names in the table that were selected for output.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) &#8211; table name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">column names</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> &#8211; if the table name is invalid</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_table_column_names_all">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_table_column_names_all</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_table_column_names_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of all column names in the table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) &#8211; table name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">column names</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> &#8211; if the table name is invalid</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_table_column_count">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_table_column_count</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_table_column_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a number of columns selected for display in the table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) &#8211; table name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">number of columns</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> &#8211; if the table name is invalid</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_table_column_count_all">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_table_column_count_all</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_table_column_count_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a number of columns in the table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) &#8211; table name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">number of columns</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> &#8211; if the table name is invalid</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_table_column">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_table_column</code><span class="sig-paren">(</span><em>table_name</em>, <em>column_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_table_column" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data from the specified table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>table_name</strong> (<em>str</em>) &#8211; table name</li>
+<li><strong>column_name</strong> (<em>str</em>) &#8211; column name</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the data in the requested column</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">numpy.array</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> &#8211; if the column cannot be found in the table</li>
+<li><strong>RuntimeError</strong> &#8211; if the column has unknown type</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>CAUTION: Numeric data is wrapped in numpy arrays but not copied. Make
+sure to copy all data before invoking any further MAD-X commands! This
+is done automatically for you if using libmadx in a remote service
+(pickle serialization effectively copies the data).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_table_row_count">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_table_row_count</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_table_row_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return total number of rows in the table.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_table_row_names">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_table_row_names</code><span class="sig-paren">(</span><em>table_name</em>, <em>indices</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_table_row_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return row names for every index (row number) in the list.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_element">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_element</code><span class="sig-paren">(</span><em>sequence_name</em>, <em>element_index</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_element" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return requested element in the original sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</li>
+<li><strong>element_index</strong> (<em>int</em>) &#8211; element index</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the element with the specified index</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">dict</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> &#8211; if the sequence is invalid</li>
+<li><strong>IndexError</strong> &#8211; if the index is out of range</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_element_index">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_element_index</code><span class="sig-paren">(</span><em>sequence_name</em>, <em>element_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_element_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return index of element with specified name in the original sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</li>
+<li><strong>element_name</strong> (<em>str</em>) &#8211; element index</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the index of the specified element</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">int</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>ValueError</strong> &#8211; if the sequence or element name is invalid</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_element_index_by_position">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_element_index_by_position</code><span class="sig-paren">(</span><em>sequence_name</em>, <em>position</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_element_index_by_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return index of element at specified position in the original sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</li>
+<li><strong>position</strong> (<em>double</em>) &#8211; position (S coordinate)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the index of an element at that position, -1 if not found</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">int</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>ValueError</strong> &#8211; if the sequence or element name is invalid</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_element_count">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_element_count</code><span class="sig-paren">(</span><em>sequence_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_element_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of elements in the original sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">number of elements in the original sequence</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> &#8211; if the sequence is invalid.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_expanded_element">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_expanded_element</code><span class="sig-paren">(</span><em>sequence_name</em>, <em>element_index</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_expanded_element" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return requested element in the expanded sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</li>
+<li><strong>element_index</strong> (<em>int</em>) &#8211; element index</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the element with the specified index</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">dict</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> &#8211; if the sequence is invalid</li>
+<li><strong>IndexError</strong> &#8211; if the index is out of range</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>NOTE: this function may currently return elements beyond the end of the
+expanded sequence if requested to do so.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_expanded_element_index">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_expanded_element_index</code><span class="sig-paren">(</span><em>sequence_name</em>, <em>element_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_expanded_element_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return index of element with specified name in the expanded sequence.</p>
+<p>NOTE: this is the brute-force linear-time algorithm and therefore not
+recommended for frequent execution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</li>
+<li><strong>element_name</strong> (<em>str</em>) &#8211; element index</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the index of the specified element, -1 if not found</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">int</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>ValueError</strong> &#8211; if the sequence is invalid</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_expanded_element_index_by_position">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_expanded_element_index_by_position</code><span class="sig-paren">(</span><em>sequence_name</em>, <em>position</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_expanded_element_index_by_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return index of element at specified position in the expanded sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</li>
+<li><strong>position</strong> (<em>double</em>) &#8211; position (S coordinate)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the index of an element at that position</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">int</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>ValueError</strong> &#8211; if the sequence or element name is invalid</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_expanded_element_count">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_expanded_element_count</code><span class="sig-paren">(</span><em>sequence_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_expanded_element_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of elements in the expanded sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">number of elements in the expanded sequence</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> &#8211; if the sequence is invalid.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_global_element">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_global_element</code><span class="sig-paren">(</span><em>element_index</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_global_element" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return requested element in the expanded sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>element_index</strong> (<em>int</em>) &#8211; element index</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the element with the specified index</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>IndexError</strong> &#8211; if the index is out of range</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_global_element_name">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_global_element_name</code><span class="sig-paren">(</span><em>element_index</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_global_element_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return name of element.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>element_index</strong> (<em>int</em>) &#8211; element index</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">element name</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>IndexError</strong> &#8211; if the index is out of range</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_global_element_index">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_global_element_index</code><span class="sig-paren">(</span><em>element_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_global_element_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return index of element with specified name in the global element list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>element_name</strong> (<em>str</em>) &#8211; element index</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the index of the specified element, -1 if not found</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_global_element_count">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_global_element_count</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_global_element_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of globally visible elements.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.chdir">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">chdir</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.chdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the current working directory to the specified path.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.getcwd">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">getcwd</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &rarr; path<a class="headerlink" href="#cpymad.libmadx.getcwd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a string representing the current working directory.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="util.html" class="btn btn-neutral float-right" title="cpymad.util" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="madx.html" class="btn btn-neutral" title="cpymad.madx" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, T. Gläßle (HIT), 2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.15.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

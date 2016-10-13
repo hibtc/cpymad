@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Unix &mdash; CPyMAD 0.14.3 documentation</title>
+  <title>Unix &mdash; cpymad 0.15.0 documentation</title>
   
 
   
@@ -30,9 +30,12 @@
   
 
   
-    <link rel="top" title="CPyMAD 0.14.3 documentation" href="../index.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="cpymad 0.15.0 documentation" href="../index.html"/>
         <link rel="up" title="Installation Instructions" href="index.html"/>
-        <link rel="next" title="Windows" href="windows/index.html"/>
+        <link rel="next" title="Windows" href="windows.html"/>
         <link rel="prev" title="Installation Instructions" href="index.html"/> 
 
   
@@ -42,6 +45,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -51,7 +55,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> CPyMAD
+            <a href="../index.html" class="icon icon-home"> cpymad
           
 
           
@@ -61,7 +65,7 @@
             
             
               <div class="version">
-                0.14.3
+                0.15.0
               </div>
             
           
@@ -87,10 +91,10 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Unix</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#install-dependencies">Install dependencies</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#install-libmadx">Install libmadx</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#install-cpymad">Install CPyMAD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-cpymad">Install cpymad</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="windows/index.html">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="windows.html">Windows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
 </ul>
 </li>
@@ -107,8 +111,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">CPyMAD</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cpymad</a>
+        
       </nav>
 
 
@@ -117,24 +123,36 @@
         <div class="rst-content">
           
 
- 
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="index.html">Installation Instructions</a> &raquo;</li>
-      
-    <li>Unix</li>
+        
+      <li>Unix</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/installation/unix.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
   <hr/>
 </div>
@@ -143,25 +161,26 @@
             
   <div class="section" id="unix">
 <h1>Unix<a class="headerlink" href="#unix" title="Permalink to this headline">¶</a></h1>
-<p>On Unix-like system building CPyMAD from source is most convenient and
+<p>On Unix-like system building cpymad from source is most convenient and
 should be unproblematic.</p>
 <div class="section" id="install-dependencies">
 <span id="dependencies"></span><h2>Install dependencies<a class="headerlink" href="#install-dependencies" title="Permalink to this headline">¶</a></h2>
 <p>On many linux distributions most or all of the following dependencies will
 be available in the official repositories. Use these as the preferred
 install method.</p>
-<p>To build MAD-X and CPyMAD from source you will need</p>
+<p>To build MAD-X and cpymad from source you will need</p>
 <ul class="simple">
 <li><a class="reference external" href="http://www.cmake.org/">CMake</a></li>
 <li>Python&gt;=2.7</li>
-<li>C / Fortran compilers</li>
+<li>C / Fortran compilers (gcc &gt;= 4.8)</li>
 </ul>
-<p>Furthermore, CPyMAD depends on the following python packages:</p>
+<p>Furthermore, cpymad depends on the following python packages:</p>
 <ul class="simple">
 <li><a class="reference external" href="https://pypi.python.org/pypi/setuptools">setuptools</a></li>
 <li><a class="reference external" href="http://cython.org/">Cython</a></li>
 <li><a class="reference external" href="http://www.numpy.org/">NumPy</a></li>
 <li><a class="reference external" href="https://pypi.python.org/pypi/PyYAML">PyYAML</a></li>
+<li><a class="reference external" href="https://pypi.python.org/pypi/minrpc">minrpc</a></li>
 </ul>
 <p>The python packages can be installed using <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a>.</p>
 </div>
@@ -184,13 +203,13 @@ make <span class="o">&amp;&amp;</span> make install
 installation prefix.</p>
 </div>
 <div class="section" id="install-cpymad">
-<h2>Install CPyMAD<a class="headerlink" href="#install-cpymad" title="Permalink to this headline">¶</a></h2>
-<p>The latest <a class="reference external" href="https://pypi.python.org/pypi/cpymad">CPyMAD release</a> can conveniently be installed using <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a>:</p>
+<h2>Install cpymad<a class="headerlink" href="#install-cpymad" title="Permalink to this headline">¶</a></h2>
+<p>The latest <a class="reference external" href="https://pypi.python.org/pypi/cpymad">cpymad release</a> can conveniently be installed using <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a>:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>pip install cpymad
 </pre></div>
 </div>
 <p>If you run into problems with this, you should manually download and
-install the <a class="reference external" href="https://github.com/hibtc/cpymad/zipball/master">CPyMad source</a> to see in which step the problem occurs:</p>
+install the <a class="reference external" href="https://github.com/hibtc/cpymad/zipball/master">cpymad source</a> to see in which step the problem occurs:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>git clone git://github.com/hibtc/cpymad
 <span class="nb">cd</span> cpymad
 python setup.py build
@@ -209,7 +228,7 @@ python setup.py install
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="windows/index.html" class="btn btn-neutral float-right" title="Windows" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="windows.html" class="btn btn-neutral float-right" title="Windows" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral" title="Installation Instructions" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -243,7 +262,7 @@ python setup.py install
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.14.3',
+            VERSION:'0.15.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
