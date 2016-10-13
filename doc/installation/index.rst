@@ -14,5 +14,5 @@ Depending on your platform, this can be more or less complicated.
    :maxdepth: 1
 
    unix
-   windows/index
+   windows
    troubleshooting

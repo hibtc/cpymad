@@ -18,7 +18,7 @@ To build MAD-X and cpymad from source you will need
 
 - CMake_
 - Python>=2.7
-- C / Fortran compilers
+- C / Fortran compilers (gcc >= 4.8)
 
 Furthermore, cpymad depends on the following python packages:
 
