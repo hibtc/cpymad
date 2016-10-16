@@ -18,7 +18,7 @@ version of cpymad that is statically linked against MAD-X |VERSION|.
 
 .. _Cython: http://cython.org/
 .. _MAD-X: http://cern.ch/mad
-.. |VERSION| replace:: 5.02.11
+.. |VERSION| replace:: 5.02.12
 
 
 Disclaimer

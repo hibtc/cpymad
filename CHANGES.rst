@@ -3,6 +3,13 @@ Changelog
 
 (dates are in the form dd.mm.yyyy)
 
+0.15.2
+======
+Date: 16.10.2016
+
+- Update official support to ``MAD-X 5.02.12``
+
+
 0.15.1
 ======
 Date: 13.10.2016
