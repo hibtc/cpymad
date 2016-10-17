@@ -98,7 +98,7 @@ def name_to_internal(element_name):
     >>> name_to_external("foo[2]")
     foo:2
 
-    See :func:`name_from_internal' for further information.
+    See :func:`name_from_internal` for further information.
     """
     name, count = _parse_element_name(element_name)
     return name + ':' + str(1 if count is None else count)
