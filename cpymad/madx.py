@@ -705,6 +705,12 @@ class Sequence(object):
         """Get list of elements in expanded sequence."""
         return ExpandedElementList(self._libmadx, self._name)
 
+    def element_names(self):
+        return self._libmadx.get_element_names(self._name)
+
+    def expanded_element_names(self):
+        return self._libmadx.get_expanded_element_names(self._name)
+
     def _parse_range(self, range):
         """
         Return a tuple (start, stop) for the given range.

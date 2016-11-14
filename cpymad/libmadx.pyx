@@ -78,12 +78,16 @@ __all__ = [
 
     # sequence element list access
     'get_element',
+    'get_element_name',
+    'get_element_names',
     'get_element_index',
     'get_element_index_by_position',
     'get_element_count',
 
     # expanded sequence element access
     'get_expanded_element',
+    'get_expanded_element_name',
+    'get_expanded_element_names',
     'get_expanded_element_index',
     'get_expanded_element_index_by_position',
     'get_expanded_element_count',
@@ -503,6 +507,39 @@ def get_element(sequence_name, element_index):
     return _get_node(seq.nodes.nodes[element_index], seq.ref_flag, seq.n_nodes > 0)
 
 
+def get_element_names(sequence_name):
+    """
+    Get list with the names of all elements of a specific sequence.
+
+    :param str sequence_name: sequence name
+    :returns: names of all elements in the sequence
+    :rtype: list
+    :raises ValueError: if the sequence is invalid
+    """
+    cdef clib.sequence* seq = _find_sequence(sequence_name)
+    cdef int i
+    return [_node_name(seq.nodes.nodes[i])
+            for i in xrange(seq.nodes.curr)]
+
+
+def get_element_name(sequence_name, element_index):
+    """
+    Get list with the names of all elements of a specific sequence.
+
+    :param str sequence_name: sequence name
+    :param int element_index: element index
+    :returns: the name of the element with the specified index
+    :rtype: str
+    :raises ValueError: if the sequence is invalid
+    :raises IndexError: if the index is out of range
+    """
+    cdef clib.sequence* seq = _find_sequence(sequence_name)
+    if element_index < 0 or element_index >= seq.nodes.curr:
+        raise IndexError("Index out of range: {0} (element count is {1})"
+                         .format(element_index, seq.nodes.curr))
+    return _node_name(seq.nodes.nodes[element_index])
+
+
 def get_element_index(sequence_name, element_name):
     """
     Return index of element with specified name in the original sequence.
@@ -574,11 +611,45 @@ def get_expanded_element(sequence_name, element_index):
     expanded sequence if requested to do so.
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
-    # TODO: should check for get_expanded_element_count() instead of n_nodes?
-    if element_index < 0 or element_index >= seq.n_nodes:
-        raise IndexError("Index out of range: {0} (element count is {1})"
-                         .format(element_index, seq.n_nodes))
+    if not _valid_expanded_index(seq, element_index):
+        raise IndexError(
+            "Index out of range: {0} (element count is {1})"
+            .format(element_index, get_expanded_element_count(sequence_name)))
     return _get_node(seq.all_nodes[element_index], seq.ref_flag, seq.n_nodes > 0)
+
+
+def get_expanded_element_names(sequence_name):
+    """
+    Get list with the names of all elements of a specific sequence.
+
+    :param str sequence_name: sequence name
+    :returns: names of all elements in the sequence
+    :rtype: list
+    :raises ValueError: if the sequence is invalid
+    """
+    cdef clib.sequence* seq = _find_sequence(sequence_name)
+    cdef int i
+    return [_node_name(seq.all_nodes[i])
+            for i in xrange(get_expanded_element_count(sequence_name))]
+
+
+def get_expanded_element_name(sequence_name, element_index):
+    """
+    Get list with the names of all elements of a specific sequence.
+
+    :param str sequence_name: sequence name
+    :param int element_index: element index
+    :returns: the name of the element with the specified index
+    :rtype: str
+    :raises ValueError: if the sequence is invalid
+    :raises IndexError: if the index is out of range
+    """
+    cdef clib.sequence* seq = _find_sequence(sequence_name)
+    if not _valid_expanded_index(seq, element_index):
+        raise IndexError(
+            "Index out of range: {0} (element count is {1})"
+            .format(element_index, get_expanded_element_count(sequence_name)))
+    return _node_name(seq.all_nodes[element_index])
 
 
 def get_expanded_element_index(sequence_name, element_name):
@@ -905,13 +976,17 @@ cdef bytes _cstr(s):
     return <bytes> s.encode('utf-8')
 
 
+cdef _node_name(clib.node* node):
+    return name_from_internal(_str(node.name))
+
+
 cdef _get_node(clib.node* node, int ref_flag, int is_expanded):
     """Return dictionary with node + element attributes."""
     if node.p_elem is NULL:
         # Maybe this is a valid case, but better detect it with boom!
         raise RuntimeError("Empty node or subsequence! Please report this incident!")
     data = _get_element(node.p_elem)
-    data.update({'name': name_from_internal(_str(node.name)),
+    data.update({'name': _node_name(node),
                  'type': _str(node.base_name),
                  'at': _get_node_entry_pos(node, ref_flag, is_expanded)})
     return data
@@ -951,3 +1026,13 @@ cdef clib.variable* _get_var(name) except NULL:
     if var is NULL:
         raise KeyError("Variable not defined: {!r}".format(name))
     return var
+
+
+cdef bint _valid_expanded_index(clib.sequence* seq, int index):
+    if index < 0:
+        return 0
+    # TODO: should use get_expanded_element_count() directly?
+    for i in xrange(index):
+        if seq.all_nodes[i] == seq.ex_end:
+            return 0
+    return 1
