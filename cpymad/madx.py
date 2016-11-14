@@ -783,7 +783,9 @@ class BaseElementList(object):
                              .format(index, _len))
         if index < 0:
             index += _len
-        return self._get_element(index)
+        data = self._get_element(index)
+        data['index'] = index
+        return data
 
     def __len__(self):
         """Get number of elements."""
