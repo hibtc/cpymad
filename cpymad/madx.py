@@ -565,6 +565,9 @@ class Madx(object):
         :returns: numeric value of the expression
         :rtype: float
         """
+        # Try to prevent process crashes:
+        # NOTE: this limits to a sane subset of accepted MAD-X expressions.
+        util.check_expression(cmd)
         return self._libmadx.evaluate(cmd)
 
     @property

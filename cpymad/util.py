@@ -17,6 +17,7 @@ __all__ = [
     'name_to_internal',
     'mad_parameter',
     'mad_command',
+    'check_expression'
     'temp_filename',
 ]
 
@@ -198,6 +199,113 @@ def is_match_param(v):
             'betx','alfx','mux','x','px','dx','dpx',
             'bety','alfy','muy','y','py','dy','dpy' ]
 
+
+# validation of MAD-X expressions
+
+def _regex(expr):
+    regex = re.compile(expr)
+    def match(text, i):
+        m = regex.match(text[i:])
+        return m.end() if m else 0
+    return match
+
+
+def _choice(choices):
+    def match(text, i):
+        return 1 if text[i] in choices else 0
+    return match
+
+
+_expr_tokens = [
+    ('WHITESPACE',  _choice(' \t')),
+    ('LPAREN',      _choice('(')),
+    ('RPAREN',      _choice(')')),
+    ('OPERATOR',    _choice('+-/*^')),
+    ('SYMBOL',      _regex(r'[a-zA-Z_][\w.]*(->[a-zA-Z_]+)?')),
+    ('NUMBER',      _regex(r'(\d+(\.\d*)?|\.\d+)([eE][+\-]?\d+)?')),
+]
+
+
+def _tokenize(tokens, expr):
+    i = 0
+    stop = len(expr)
+    while i < stop:
+        for tokname, tokmatch in tokens:
+            l = tokmatch(expr, i)
+            if l > 0:
+                yield tokname, i, l
+                i += l
+                break
+        else:
+            raise ValueError("Unknown token {!r} at {!r}"
+                             .format(expr[i], expr[:i+1]))
+
+
+def check_expression(expr):
+
+    try:
+        # handle instance of type Expression:
+        expr = expr.expr
+    except AttributeError:
+        pass
+    expr = expr.strip()
+
+    def unexpected(tok, i, l):
+        return "Unexpected {} {!r} after {!r} in expression: {!r}".format(
+            tok, expr[i:i+l], expr[:i], expr)
+
+    _EXPRESSION = 'expression'
+    _OPERATOR = 'operator'
+    _SYMBOL = 'symbol'
+    expect = _EXPRESSION
+    paren_level = 0
+
+    # expr =
+    #       symbol | number
+    #   |   '(' expr ')'
+    #   |   expr op expr
+
+    for tok, i, l in _tokenize(_expr_tokens, expr):
+        # ignore whitespace
+        if tok == 'WS':
+            pass
+        # expr = symbol | number
+        elif tok in ('SYMBOL', 'NUMBER'):
+            if expect not in (_EXPRESSION, _SYMBOL):
+                raise ValueError(unexpected(tok, i, l))
+            expect = _OPERATOR
+        # expr = '(' expr ')'
+        elif tok == 'LPAREN':
+            if expect != (_EXPRESSION, _SYMBOL):
+                raise ValueError(unexpected(tok, i, l))
+            paren_level += 1
+            expect = _EXPRESSION
+        elif tok == 'RPAREN':
+            if expect != _OPERATOR:
+                raise ValueError(unexpected(tok, i, l))
+            paren_level -= 1
+            expect = _OPERATOR
+        # expr = expr op expr
+        elif tok == 'OP':
+            if expect == _OPERATOR:
+                expect = _EXPRESSION
+            elif expect == _EXPRESSION and expr[i] in '+-':
+                expect = _SYMBOL
+            else:
+                raise ValueError(unexpected(tok, i, l))
+            continue
+
+    if expect != _OPERATOR:
+        raise ValueError("Unexpected end-of-string in expression: {!r}"
+                         .format(expr))
+    if paren_level != 0:
+        raise ValueError("{} unclosed left-parens in expression: {!r}"
+                         .format(paren_level, expr))
+
+    return True
+
+
+# misc
 
 @contextmanager
 def temp_filename():
