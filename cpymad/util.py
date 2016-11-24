@@ -243,6 +243,19 @@ def _tokenize(tokens, expr):
 
 def check_expression(expr):
 
+    """
+    Check if the given expression is a valid MAD-X expression that is safe to
+    pass to :meth:`cpymad.madx.Madx.evaluate`.
+
+    :param str expr:
+    :returns: True
+    :raises ValueError: if the expression is ill-formed
+
+    Note that this function only recognizes a sane subset of the expressions
+    accepted by MAD-X and rejects valid but strange ones such as a number
+    formatting '.' representing zero.
+    """
+
     try:
         # handle instance of type Expression:
         expr = expr.expr

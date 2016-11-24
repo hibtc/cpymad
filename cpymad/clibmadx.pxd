@@ -213,6 +213,7 @@ cdef extern from "madX/mad_expr.h":
     expression* make_expression(int, char**)
     double expression_value(expression*, int)
     expression* delete_expression(expression*)
+    int loc_expr(char** items, int nit, int start, int* end)
 
 cdef extern from "madX/mad_parse.h":
     void pre_split(char*, char_array*, int)

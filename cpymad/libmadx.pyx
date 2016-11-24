@@ -795,8 +795,15 @@ def evaluate(expression):
     :param str expression: symbolic expression to evaluate
     :returns: numeric value of the expression
     :rtype: float
+
+    NOTE: This function does not perform rigorous input validation! It uses
+    nothing but the MAD-X builtin rather incompetent error checks. This means
+    invalid input such as '+' can lead to program crashes! If you're looking
+    for more secure validation, see :func:`cpymad.util.check_expression`.
     """
     cdef clib.expression* expr = _make_expr(expression)
+    if expr == NULL:
+        raise ValueError("Invalid expression: {!r}".format(expression))
     value = clib.expression_value(expr, 2)
     clib.delete_expression(expr)
     return value
@@ -816,6 +823,16 @@ cdef clib.expression* _make_expr(expression):
     cdef bytes _expr = _cstr(expression.lower())
     clib.pre_split(_expr, clib.c_dum, 0)
     clib.mysplit(clib.c_dum.c, clib.tmp_p_array)
+    # NOTE: `loc_expr` is mostly useless for input validation. It even accepts
+    # stuff such as '+' that will lead to program crashes on evaluation. We
+    # use it nevertheless to get a minimal amount of error-checking. Not using
+    # cpymad.util.check_expression for simplicity and performance.
+    cdef int start=0, stop
+    etype = clib.loc_expr(clib.tmp_p_array.p,
+                          clib.tmp_p_array.curr,
+                          start, &stop)
+    if etype == 0 or stop+1 < clib.tmp_p_array.curr:
+        return NULL
     return clib.make_expression(clib.tmp_p_array.curr, clib.tmp_p_array.p)
 
 
