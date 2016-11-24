@@ -221,7 +221,7 @@ _expr_tokens = [
     ('LPAREN',      _choice('(')),
     ('RPAREN',      _choice(')')),
     ('OPERATOR',    _choice('+-/*^')),
-    ('SYMBOL',      _regex(r'[a-zA-Z_][\w.]*(->[a-zA-Z_]+)?')),
+    ('SYMBOL',      _regex(r'[a-zA-Z_][\w.]*(->[a-zA-Z_]\w*)?')),
     ('NUMBER',      _regex(r'(\d+(\.\d*)?|\.\d+)([eE][+\-]?\d+)?')),
 ]
 
@@ -256,7 +256,7 @@ def check_expression(expr):
 
     _EXPRESSION = 'expression'
     _OPERATOR = 'operator'
-    _SYMBOL = 'symbol'
+    _ATOM = 'atom'
     expect = _EXPRESSION
     paren_level = 0
 
@@ -267,16 +267,16 @@ def check_expression(expr):
 
     for tok, i, l in _tokenize(_expr_tokens, expr):
         # ignore whitespace
-        if tok == 'WS':
+        if tok == 'WHITESPACE':
             pass
         # expr = symbol | number
         elif tok in ('SYMBOL', 'NUMBER'):
-            if expect not in (_EXPRESSION, _SYMBOL):
+            if expect not in (_EXPRESSION, _ATOM):
                 raise ValueError(unexpected(tok, i, l))
             expect = _OPERATOR
         # expr = '(' expr ')'
         elif tok == 'LPAREN':
-            if expect != (_EXPRESSION, _SYMBOL):
+            if expect not in (_EXPRESSION, _ATOM):
                 raise ValueError(unexpected(tok, i, l))
             paren_level += 1
             expect = _EXPRESSION
@@ -286,11 +286,11 @@ def check_expression(expr):
             paren_level -= 1
             expect = _OPERATOR
         # expr = expr op expr
-        elif tok == 'OP':
+        elif tok == 'OPERATOR':
             if expect == _OPERATOR:
                 expect = _EXPRESSION
             elif expect == _EXPRESSION and expr[i] in '+-':
-                expect = _SYMBOL
+                expect = _ATOM
             else:
                 raise ValueError(unexpected(tok, i, l))
             continue
