@@ -6,6 +6,13 @@ from cpymad import util
 from cpymad.types import Range, Constraint, Expression
 
 
+def is_valid_expression(expr):
+    try:
+        return util.check_expression(expr)
+    except ValueError:
+        return False
+
+
 class TestUtil(unittest.TestCase):
 
     """Tests for the objects in :mod:`cpymad.util`."""
@@ -62,6 +69,22 @@ class TestUtil(unittest.TestCase):
             util.mad_command(
                 'twiss', range=Range('#s', '#e')),
                 'twiss, range=#s/#e;')
+
+    def test_check_expression(self):
+        self.assertTrue(is_valid_expression('a*b'))
+        self.assertTrue(is_valid_expression('a * (qp->k1+7.) ^ .5e-3'))
+        self.assertTrue(is_valid_expression('-a*-3'))
+        self.assertTrue(is_valid_expression('E-m*c^2'))
+
+        self.assertFalse(is_valid_expression('E=m*c^2'))
+        self.assertFalse(is_valid_expression('(@)'))
+        self.assertFalse(is_valid_expression('(()'))
+        self.assertFalse(is_valid_expression('(+3'))
+        self.assertFalse(is_valid_expression('1*'))     # NOTE: valid in MAD-X
+        self.assertFalse(is_valid_expression('3+'))     # NOTE: valid in MAD-X
+        self.assertFalse(is_valid_expression('()'))
+        self.assertFalse(is_valid_expression('(1 | 2)'))
+
 
     # TODO: test other functions
 
