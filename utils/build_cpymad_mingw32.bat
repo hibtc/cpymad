@@ -9,7 +9,7 @@
 
 :: Get command parameters
 set HERE=%~dp0
-set MADX=%~dp1
+set MADX=%~f1
 set CPYMAD=%HERE%\..
 
 :: Cleanup remains from previous builds

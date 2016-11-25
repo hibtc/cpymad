@@ -11,9 +11,9 @@
 
 :: Get command parameters
 set HERE=%~dp0
-set SRC=%~dp1
-set BUILD=%~dp2
-set PREFIX=%~dp3
+set SRC=%~f1
+set BUILD=%~f2
+set PREFIX=%~f3
 set UTILS=%HERE%
 
 :: Remove files starting with "._" (in corrupt MAD-X tarballs)
