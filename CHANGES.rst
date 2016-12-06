@@ -3,6 +3,18 @@ Changelog
 
 (dates are in the form dd.mm.yyyy)
 
+
+0.16.0
+======
+Date: 06.12.2016
+
+- add efficient functions to get list of all element namems
+- provide element index within the sequence
+- add function to check MAD-X expressions
+- make ``evaluate()`` slightly safer
+- add windows build scripts (``.bat``)
+
+
 0.15.2
 ======
 Date: 16.10.2016
