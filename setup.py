@@ -132,33 +132,38 @@ def get_extension_args(argv):
     # ``sys.platform`` or ``platform.system()`` or even ``os.name`` and
     # ``os.uname()`` to handle cross-builds:
     platform = get_platform()
-    if platform.startswith('win'):      # win32/win-amd64:
+    # win32/win-amd64:
+    if platform.startswith('win'):
         libraries = ['madx', 'stdc++', 'ptc', 'gfortran']
-    else:
+        force_lib = []
+        compile_args = []
+    # e.g. linux-x86_64
+    elif platform.startswith('linux'):
         libraries = ['madx', 'stdc++', 'c']
-    # NOTE: we don't want the following on Mac (platform=darwin*), since ld
-    # doesn't support ``--as-needed`` there.
-    force_lib = []
-    if platform.startswith('linux'):    # e.g. linux-x86_64
         # DT_RUNPATH is intransitive, i.e. not used for indirect dependencies
         # like 'cpymad -> libmadx -> libptc'. Therefore, on platforms where
         # DT_RUNPATH is used (py35) rather than DT_RPATH (py27) and MAD-X is
         # installed in a non-system location, we need to link against libptc
         # directly to make it discoverable:
+        # (an even better solution is to build MAD-X with RPATH=.)
         force_lib = ['ptc']
-    if force_lib:
-        link_args = (['-Wl,--no-as-needed'] +
-                     ['-l'+lib for lib in force_lib] +
-                     ['-Wl,--as-needed'])
+        compile_args = ['-std=gnu99']
+    # Mac/others(?) (e.g. darwin*)
     else:
-        link_args = []
+        libraries = ['madx', 'stdc++', 'c']
+        # NOTE: no `force_lib` since Mac's ld doesn't support `--as-needed`:
+        force_lib = []
+        compile_args = ['-std=gnu99']
+    link_args = (['-Wl,--no-as-needed'] +
+                 ['-l'+lib for lib in force_lib] +
+                 ['-Wl,--as-needed']) if force_lib else []
     # Common arguments for the Cython extensions:
     return dict(
         libraries=libraries,
         include_dirs=include_dirs,
         library_dirs=library_dirs,
         runtime_library_dirs=library_dirs,
-        extra_compile_args=['-std=gnu99'],
+        extra_compile_args=compile_args,
         extra_link_args=link_args,
     )
 
