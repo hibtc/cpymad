@@ -16,6 +16,8 @@ set BUILD=%~f2
 set PREFIX=%~f3
 set UTILS=%HERE%
 
+if not exist %SRC% goto usage
+
 :: Remove files starting with "._" (in corrupt MAD-X tarballs)
 cd %SRC%
 for /F %%f in ('dir /A:-D /b /s ._*') do del %%f
@@ -50,9 +52,14 @@ if exist %1 (
   goto end
  )
  rd /s /q %1
+ mkdir %1
 )
 exit /b 0
 
+:usage
+echo Usage: .\build_madx_mingw32.bat MADX_PATH BUILD_PATH INSTALL_PATH
+pause
+goto end
 
 :end
 endlocal
