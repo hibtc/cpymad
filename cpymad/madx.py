@@ -375,7 +375,7 @@ class Madx(object):
         self.command.twiss(sequence=sequence,
                            range=range,
                            **twiss_init)
-        return self.get_table('twiss', columns)
+        return self.get_table('twiss')
 
     def survey(self,
                sequence=None,
@@ -393,7 +393,7 @@ class Madx(object):
         self.select('survey', pattern=pattern, columns=columns)
         self._use(sequence)
         self.command.survey(**kwargs)
-        return self.get_table('survey', columns)
+        return self.get_table('survey')
 
     def use(self, sequence):
         """
@@ -520,7 +520,7 @@ class Madx(object):
         """Turn verbose output on/off."""
         self.command.option(echo=switch, warn=switch, info=switch)
 
-    def get_table(self, table, columns=None):
+    def get_table(self, table):
         """
         Get the specified table from MAD-X.
 
@@ -528,11 +528,7 @@ class Madx(object):
         :returns: a proxy for the table data
         :rtype: TableProxy
         """
-        proxy = TableProxy(table, self._libmadx)
-        if columns is None:
-            return proxy
-        else:
-            return proxy.copy(columns)
+        return TableProxy(table, self._libmadx)
 
     @property
     def active_sequence(self):
@@ -876,10 +872,6 @@ class GlobalElementList(BaseElementList, collections.Mapping):
             yield self._libmadx.get_global_element_name(i)
 
 
-class Dict(dict):
-    pass
-
-
 class TableProxy(collections.Mapping):
 
     """
@@ -890,11 +882,19 @@ class TableProxy(collections.Mapping):
         """Just store the table name for now."""
         self._name = name
         self._libmadx = libmadx
+        self._cache = {}
         if _check and not libmadx.table_exists(name):
             raise ValueError("Invalid table: {!r}".format(name))
 
     def __getitem__(self, column):
         """Get the column data."""
+        try:
+            return self._cache[column]
+        except KeyError:
+            return self.reload(column)
+
+    def _query(self, column):
+        """Retrieve the column data."""
         try:
             return self._libmadx.get_table_column(self._name, column.lower())
         except ValueError:
@@ -920,6 +920,18 @@ class TableProxy(collections.Mapping):
         range = (0, row_count-1)
         return tuple(self._libmadx.get_table_row_names(self._name, range))
 
+    def reload(self, column):
+        """Reload (recache) one column from MAD-X."""
+        self._cache[column] = data = self._query(column)
+        return data
+
+    def cache(self, columns=None):
+        """Make sure given columns are cached locally."""
+        if columns is None:
+            columns = self
+        for column in columns:
+            _tmp = self[column]
+
     def copy(self, columns=None):
         """
         Return a frozen table with the desired columns.
@@ -931,9 +943,7 @@ class TableProxy(collections.Mapping):
         """
         if columns is None:
             columns = self
-        table = Dict((column, self[column]) for column in columns)
-        table.summary = self.summary
-        return table
+        return {column: self[column] for column in columns}
 
 
 class VarListProxy(collections.MutableMapping):
