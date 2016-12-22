@@ -707,8 +707,14 @@ class Sequence(object):
     def element_names(self):
         return self._libmadx.get_element_names(self._name)
 
+    def element_positions(self):
+        return self._libmadx.get_element_positions(self._name)
+
     def expanded_element_names(self):
         return self._libmadx.get_expanded_element_names(self._name)
+
+    def expanded_element_positions(self):
+        return self._libmadx.get_expanded_element_positions(self._name)
 
     def _parse_range(self, range):
         """

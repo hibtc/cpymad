@@ -79,6 +79,7 @@ __all__ = [
     # sequence element list access
     'get_element',
     'get_element_name',
+    'get_element_positions',
     'get_element_names',
     'get_element_index',
     'get_element_index_by_position',
@@ -87,6 +88,7 @@ __all__ = [
     # expanded sequence element access
     'get_expanded_element',
     'get_expanded_element_name',
+    'get_expanded_element_positions',
     'get_expanded_element_names',
     'get_expanded_element_index',
     'get_expanded_element_index_by_position',
@@ -507,6 +509,21 @@ def get_element(sequence_name, element_index):
     return _get_node(seq.nodes.nodes[element_index], seq.ref_flag, seq.n_nodes > 0)
 
 
+def get_element_positions(sequence_name):
+    """
+    Get list with positions of all elements of a specific sequence.
+
+    :param str sequence_name: sequence name
+    :returns: positions of all elements in the sequence
+    :rtype: list
+    :raises ValueError: if the sequence is invalid
+    """
+    cdef clib.sequence* seq = _find_sequence(sequence_name)
+    cdef int i
+    cdef clib.node** nodes = seq.nodes.nodes
+    return [_get_node_entry_pos(nodes[i], seq.ref_flag, seq.n_nodes > 0)
+            for i in xrange(seq.nodes.curr)]
+
 def get_element_names(sequence_name):
     """
     Get list with the names of all elements of a specific sequence.
@@ -616,6 +633,22 @@ def get_expanded_element(sequence_name, element_index):
             "Index out of range: {0} (element count is {1})"
             .format(element_index, get_expanded_element_count(sequence_name)))
     return _get_node(seq.all_nodes[element_index], seq.ref_flag, seq.n_nodes > 0)
+
+
+def get_expanded_element_positions(sequence_name):
+    """
+    Get list with positions of all elements of a specific sequence.
+
+    :param str sequence_name: sequence name
+    :returns: positions of all elements in the sequence
+    :rtype: list
+    :raises ValueError: if the sequence is invalid
+    """
+    cdef clib.sequence* seq = _find_sequence(sequence_name)
+    cdef int i
+    cdef clib.node** nodes = seq.all_nodes
+    return [_get_node_entry_pos(nodes[i], seq.ref_flag, seq.n_nodes > 0)
+            for i in xrange(get_expanded_element_count(sequence_name))]
 
 
 def get_expanded_element_names(sequence_name):
