@@ -4,6 +4,13 @@ Changelog
 (dates are in the form dd.mm.yyyy)
 
 
+next
+====
+Date: unknown
+
+- update official support to ``MAD-X 5.02.13``
+
+
 0.16.0
 ======
 Date: 06.12.2016
