@@ -4,11 +4,13 @@ Changelog
 (dates are in the form dd.mm.yyyy)
 
 
-next
-====
-Date: unknown
+0.17.0
+======
+Date: 16.02.2017
 
 - update official support to ``MAD-X 5.02.13``
+- cache columns in TableProxy
+- add fast functions to obtain element positions
 
 
 0.16.0

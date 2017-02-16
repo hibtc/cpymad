@@ -136,7 +136,7 @@ def get_extension_args(argv):
     if platform.startswith('win'):
         libraries = ['madx', 'stdc++', 'ptc', 'gfortran']
         force_lib = []
-        compile_args = []
+        compile_args = ['-std=gnu99']
     # e.g. linux-x86_64
     elif platform.startswith('linux'):
         libraries = ['madx', 'stdc++', 'c']
