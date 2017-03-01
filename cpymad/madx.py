@@ -300,7 +300,7 @@ class Madx(object):
         """
         # The case 'cmd == None' will be handled by mad_command
         # appropriately.
-        self.command.help(cmd=cmd)
+        self.command.help(cmd)
 
     def chdir(self, path):
         """
