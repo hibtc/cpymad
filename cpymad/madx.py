@@ -961,6 +961,9 @@ class VarListProxy(collections.MutableMapping):
     def __init__(self, libmadx):
         self._libmadx = libmadx
 
+    __repr__ = _map_repr
+    __str__ = _map_repr
+
     def __getitem__(self, name):
         return self._libmadx.get_var(name)
 
