@@ -579,7 +579,7 @@ class Madx(object):
 
 def _map_repr(self):
     """String representation of a custom mapping object."""
-    return str(dict(self))
+    return "{}({})".format(self.__class__.__name__, str(dict(self)))
 
 
 class SequenceMap(collections.Mapping):
