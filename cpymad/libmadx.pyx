@@ -1007,7 +1007,7 @@ cdef _split_header_line(header_line):
 cdef _name_list(clib.name_list* names):
     """Return a python list of names for the name_list."""
     cdef int i
-    return [names.names[i] for i in xrange(names.curr)]
+    return [_str(names.names[i]) for i in xrange(names.curr)]
 
 
 cdef _str(const char* s):
