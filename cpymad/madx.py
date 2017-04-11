@@ -200,6 +200,10 @@ class Madx(object):
             command_log = NOP
         # start libmadx subprocess
         if libmadx is None:
+            # stdin=None leads to an error on windows when STDIN is broken.
+            # Therefore, we need set stdin=os.devnull by passing stdin=False:
+            Popen_args.setdefault('stdin', False)
+            Popen_args.setdefault('bufsize', 0)
             self._service, self._process = \
                 _rpc.LibMadxClient.spawn_subprocess(**Popen_args)
             libmadx = self._service.libmadx
