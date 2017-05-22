@@ -4,6 +4,16 @@ Changelog
 (dates are in the form dd.mm.yyyy)
 
 
+0.17.1
+======
+Date: 22.05.2017
+
+- fix ``Madx.help(topic)``
+- fix string decoding for namelists on python3
+- improve interactive display of proxy objects
+- improve default flags for starting the libmadx subprocess
+
+
 0.17.0
 ======
 Date: 16.02.2017
