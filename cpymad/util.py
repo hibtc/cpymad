@@ -4,6 +4,7 @@ Utility functions used in other parts of the pymad package.
 import collections
 import re
 import os
+import sys
 import tempfile
 from contextlib import contextmanager
 
@@ -20,6 +21,12 @@ __all__ = [
     'check_expression'
     'temp_filename',
 ]
+
+
+# In CPython 3.6 dicts preserve insertion order (until deleting an element)
+# Although, this is considered an implementation detail that should not be
+# relied upon, we do so anyway:
+ordered_keys = dict.keys if sys.version_info >= (3,6) else sorted
 
 
 try:
@@ -189,7 +196,7 @@ def mad_command(*args, **kwargs):
     'constraint, betx<3.13;'
     """
     _args = list(args)
-    _keys = sorted(kwargs)
+    _keys = ordered_keys(kwargs)
     _args += [mad_parameter(k, kwargs[k]) for k in _keys]
     return ', '.join(filter(None, _args)) + ';'
 
