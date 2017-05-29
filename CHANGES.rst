@@ -4,6 +4,15 @@ Changelog
 (dates are in the form dd.mm.yyyy)
 
 
+0.17.2
+======
+Date: 29.05.2017
+
+- keep user specified argument order (only py>=3.6)
+- update official support to ``MAD-X 5.03.05``
+- build the windows version with GC
+
+
 0.17.1
 ======
 Date: 22.05.2017
