@@ -1,5 +1,4 @@
-applies to binary distributions that do not require a separate
-installation of MAD-X, i.e. binaries that are statically linked to MAD-X::
+::
 
     CERN
 
