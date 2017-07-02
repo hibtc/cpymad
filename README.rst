@@ -56,17 +56,6 @@ For issues regarding the cpymad code itself or usage information, I'm happy to
 answer. Just keep in mind to be **precise**, **specific**, **concise** and
 provide all the necessary information.
 
-See also:
-
-- `Short, Self Contained, Correct (Compilable), Example`_
-- `How to Report Bugs Effectively`_
-- `How To Ask Questions The Smart Way`_.
-
-.. _Short, Self Contained, Correct (Compilable), Example: http://sscce.org/
-.. _How to Report Bugs Effectively: http://www.chiark.greenend.org.uk/~sgtatham/bugs.html
-.. _How To Ask Questions The Smart Way: http://www.catb.org/esr/faqs/smart-questions.html
-
-
 .. Badges:
 
 .. |Tests| image::      https://api.travis-ci.org/hibtc/cpymad.svg?branch=master
