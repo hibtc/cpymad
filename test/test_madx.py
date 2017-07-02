@@ -312,7 +312,7 @@ class TestTransferMap(unittest.TestCase):
             mad._libmadx.input(line)
         return mad
 
-    def _test_transfer_map(self, seq, range_, doc, rtol=1e-7, atol=0):
+    def _test_transfer_map(self, seq, range_, doc, rtol=1e-7, atol=1e-15):
         mad = self._mad(doc)
         par = ['x', 'px', 'y', 'py', 't', 'pt']
         val = [+0.0010, -0.0015, -0.0020, +0.0025, +0.0000, +0.0000]
