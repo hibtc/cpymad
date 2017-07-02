@@ -1,8 +1,8 @@
 cpymad
 ------
-|Version| |Downloads| |License| |Python|
+|Version| |License| |Python| |Tests| |Coverage|
 
-cpymad is a Cython_ binding to MAD-X_.
+cpymad is a Cython_ binding to MAD-X_ (`MAD-X source`_).
 
 MAD-X is a software package to simulate particle accelerators and is used
 at CERN and all around the world. It has its own proprietary scripting
@@ -18,6 +18,7 @@ version of cpymad that is statically linked against MAD-X |VERSION|.
 
 .. _Cython: http://cython.org/
 .. _MAD-X: http://cern.ch/mad
+.. _MAD-X source: https://github.com/MethodicalAcceleratorDesign/MAD-X
 .. |VERSION| replace:: 5.03.05
 
 
@@ -165,40 +166,34 @@ See also:
 Tests
 ~~~~~
 
-Currently, tests run on:
-
-- The `Travis CI`_ service is mainly used to check that the unit tests for
-  pymad itself execute on several python versions. Python{2.7,3.3} are
-  supported. The tests are executed on any update of an upstream branch.
-  The Travis builds use a unofficial precompiled libmadx-dev_ package to
-  avoid having to rebuild the entire MAD-X library on each invocation.
-
-  |Build| |Coverage|
+The `Travis CI`_ service is mainly used to check that the unit tests for
+pymad itself execute on several python versions. Python{2.7,3.3} are
+supported. The tests are executed on any update of an upstream branch.
+The Travis builds use a unofficial precompiled libmadx-dev_ package to
+avoid having to rebuild the entire MAD-X library on each invocation.
 
 .. _`Travis CI`: https://travis-ci.org/hibtc/cpymad
 .. _libmadx-dev: https://github.com/hibtc/madx-debian
 
 
-.. |Build| image:: https://api.travis-ci.org/hibtc/cpymad.svg?branch=master
-   :target: https://travis-ci.org/hibtc/cpymad
-   :alt: Build Status
+.. Badges:
 
-.. |Coverage| image:: https://coveralls.io/repos/hibtc/cpymad/badge.svg?branch=master
-   :target: https://coveralls.io/r/hibtc/cpymad
-   :alt: Coverage
+.. |Tests| image::      https://api.travis-ci.org/hibtc/cpymad.svg?branch=master
+   :target:             https://travis-ci.org/hibtc/cpymad
+   :alt:                Test Status
 
-.. |Version| image:: http://coldfix.de:8080/v/cpymad/badge.svg
-   :target: https://pypi.python.org/pypi/cpymad/
-   :alt: Latest Version
+.. |Coverage| image::   https://coveralls.io/repos/hibtc/cpymad/badge.svg?branch=master
+   :target:             https://coveralls.io/r/hibtc/cpymad
+   :alt:                Coverage
 
-.. |Downloads| image:: http://coldfix.de:8080/d/cpymad/badge.svg
-   :target: https://pypi.python.org/pypi/cpymad#downloads
-   :alt: Downloads
+.. |Version| image::    https://img.shields.io/pypi/v/cpymad.svg
+   :target:             https://pypi.python.org/pypi/cpymad/
+   :alt:                Latest Version
 
-.. |License| image:: http://img.shields.io/badge/license-CC0,_Apache,_Non--Free-red.svg
-   :target: https://github.com/hibtc/cpymad/blob/master/COPYING.rst
-   :alt: License
+.. |License| image::    https://img.shields.io/badge/license-CC0,_Apache,_Non--Free-red.svg
+   :target:             https://github.com/hibtc/cpymad/blob/master/COPYING.rst
+   :alt:                License: CC0, Apache, Non-Free
 
-.. |Python| image:: http://coldfix.de:8080/py_versions/cpymad/badge.svg
-   :target: https://pypi.python.org/pypi/cpymad#downloads
-   :alt: Supported Python versions
+.. |Python| image::     https://img.shields.io/pypi/pyversions/cpymad.svg
+   :target:             https://pypi.python.org/pypi/cpymad#downloads
+   :alt:                Python versions

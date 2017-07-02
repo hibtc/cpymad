@@ -42,11 +42,12 @@ The python packages can be installed using pip_.
 Install libmadx
 ~~~~~~~~~~~~~~~
 
-Download the `MAD-X source`_ from SVN
+Download the `latest MAD-X release`_ from github or use directly the source
+code from master (unstable):
 
 .. code-block:: bash
 
-    svn co http://svn.cern.ch/guest/madx/trunk/madX
+    git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
 
 Build and install the library
 
@@ -56,6 +57,7 @@ Build and install the library
     cmake ../madX \
         -DMADX_STATIC=OFF \
         -DBUILD_SHARED_LIBS=ON \
+        -DUSE_GC=ON \
         -DCMAKE_INSTALL_RPATH='$ORIGIN'
     make && make install
 
@@ -86,7 +88,7 @@ You might need root privileges for the last step if not installing to a
 virtualenv_.
 
 
-.. _MAD-X source: http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&rev=0&isdir=1
+.. _latest MAD-X release: https://github.com/MethodicalAcceleratorDesign/MAD-X/releases
 .. _cpymad release: https://pypi.python.org/pypi/cpymad
 .. _pip: https://pypi.python.org/pypi/pip
 .. _cpymad source: https://github.com/hibtc/cpymad/zipball/master

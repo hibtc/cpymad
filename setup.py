@@ -134,7 +134,8 @@ def get_extension_args(argv):
     platform = get_platform()
     # win32/win-amd64:
     if platform.startswith('win'):
-        libraries = ['madx', 'stdc++', 'ptc', 'gfortran']
+        libraries = ['madx', 'ptc', 'gc-lib',
+                     'stdc++', 'gfortran', 'quadmath']
         force_lib = []
         compile_args = ['-std=gnu99']
     # e.g. linux-x86_64
