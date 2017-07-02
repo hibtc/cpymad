@@ -97,7 +97,12 @@ Prompt.exe`. Change the directory to the extracted MAD-X folder with the
 
     mkdir build
     cd build
-    cmake -G "MinGW Makefiles" -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=..\install -DMADX_NTPSA=OFF ..
+    cmake .. \
+        -G "MinGW Makefiles" \
+        -DBUILD_SHARED_LIBS=OFF \
+        -DCMAKE_INSTALL_PREFIX=..\install \
+        -DMADX_NTPSA=OFF \
+        -DUSE_GC=ON
 
 In the file :file:`%MADX%\\build\\src\\CMakeFiles\\madxbin.dir\\link.txt` and
 :file:`linklibs.rsp` search for ``-lgcc_eh`` and remove it (if present) -

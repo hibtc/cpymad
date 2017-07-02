@@ -56,6 +56,7 @@ Build and install the library
     cmake ../madX \
         -DMADX_STATIC=OFF \
         -DBUILD_SHARED_LIBS=ON \
+        -DUSE_GC=ON \
         -DCMAKE_INSTALL_RPATH='$ORIGIN'
     make && make install
 
