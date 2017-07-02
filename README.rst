@@ -188,14 +188,14 @@ Currently, tests run on:
    :target: https://coveralls.io/r/hibtc/cpymad
    :alt: Coverage
 
-.. |Version| image:: http://coldfix.de:8080/v/cpymad/badge.svg
+.. |Version| image:: https://img.shields.io/pypi/v/cpymad.svg
    :target: https://pypi.python.org/pypi/cpymad/
    :alt: Latest Version
 
-.. |License| image:: http://img.shields.io/badge/license-CC0,_Apache,_Non--Free-red.svg
+.. |License| image:: https://img.shields.io/badge/license-CC0,_Apache,_Non--Free-red.svg
    :target: https://github.com/hibtc/cpymad/blob/master/COPYING.rst
    :alt: License
 
-.. |Python| image:: http://coldfix.de:8080/py_versions/cpymad/badge.svg
+.. |Python| image:: https://img.shields.io/pypi/pyversions/cpymad.svg
    :target: https://pypi.python.org/pypi/cpymad#downloads
    :alt: Supported Python versions
