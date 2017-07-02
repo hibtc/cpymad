@@ -3,28 +3,16 @@ cpymad
 
 cpymad_ is a Cython_ binding to MAD-X_ (`MAD-X source`_).
 
-MAD-X is a software package to simulate particle accelerators and is used
-at CERN and all around the world. It has its own proprietary scripting
-language and is usually launched from the command line.
-
 .. _cpymad: https://github.com/hibtc/cpymad
 .. _Cython: http://cython.org/
 .. _MAD-X: http://cern.ch/mad
 .. _MAD-X source: https://github.com/MethodicalAcceleratorDesign/MAD-X
 
+cpymad is NOT maintained by CERN members and links against an unofficial build
+of MAD-X that is not supported by CERN, i.e. this binary may have problems
+that the official binary does not have and vice versa. See also: `Reporting
+issues`_.
 
-Disclaimer
-==========
-
-This is a heavily modified fork of the cern-cpymad_ package. The fork is
-not authored or maintained by CERN members.
-
-cpymad links against an unofficial build of MAD-X that is not supported by
-CERN, i.e. in case of problems you will not get help there. However, this
-does NOT mean you should post every problem you encounter while using
-cpymad here. See `Reporting issues`_.
-
-.. _cern-cpymad: https://github.com/pymad/cpymad
 .. _Reporting issues: https://github.com/hibtc/cpymad#reporting-issues
 
 
@@ -34,8 +22,10 @@ Contents
 .. toctree::
    :maxdepth: 2
 
+   usage
    installation/index
    cpymad/index
+   known-issues
 
 
 Project pages
@@ -53,7 +43,7 @@ Feel free to report bugs, request features and ask questions.
 .. _Source code: https://github.com/hibtc/cpymad
 .. _Documentation: http://hibtc.github.io/cpymad
 .. _Issue tracker: https://github.com/hibtc/cpymad/issues
-.. _Releases: https://pypi.python.org/pypi/cpymad
+.. _Releases: https://pypi.python.org/pypi/cpymad#downloads
 
 
 Indices and tables
