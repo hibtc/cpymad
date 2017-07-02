@@ -31,6 +31,15 @@ that the official binary does not have and vice versa. See also: `Reporting
 issues`_.
 
 
+License
+~~~~~~~
+
+White the cpymad source code itself is under free license, the MAD-X software
+package is **NOT FREE**. For more details, see COPYING.rst_.
+
+.. _COPYING.rst: https://github.com/hibtc/cpymad/blob/master/COPYING.rst
+
+
 Reporting issues
 ~~~~~~~~~~~~~~~~
 

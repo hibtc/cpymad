@@ -21,6 +21,7 @@ from setuptools import setup, Extension
 from distutils.util import get_platform, convert_path
 from distutils import sysconfig
 
+import itertools
 import sys
 from os import path
 
@@ -80,13 +81,34 @@ def exec_file(path):
     return namespace
 
 
+def first_sections(document, heading_type, num_sections):
+    cur_section = 0
+    prev_line = None
+    for line in document.splitlines():
+        if line.startswith(heading_type*3) and set(line) == {heading_type}:
+            cur_section += 1
+            if cur_section == num_sections:
+                break
+        if prev_line is not None:
+            yield prev_line
+        prev_line = line
+
+
 def get_long_description():
     """Compose a long description for PyPI."""
     long_description = None
     try:
         long_description = read_file('README.rst').decode('utf-8')
-        long_description += '\n' + read_file('COPYING.rst').decode('utf-8')
-        long_description += '\n' + read_file('CHANGES.rst').decode('utf-8')
+        changelog = read_file('CHANGES.rst').decode('utf-8')
+        changelog = "\n".join(first_sections(changelog, '=', 4)) + """
+Older versions
+==============
+
+The full changelog is available online in CHANGES.rst_.
+
+.. _CHANGES.rst: https://github.com/hibtc/cpymad/blob/master/CHANGES.rst
+"""
+        long_description += '\n' + changelog
     except (IOError, UnicodeDecodeError):
         pass
     return long_description
