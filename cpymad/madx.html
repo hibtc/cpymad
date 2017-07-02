@@ -8,9 +8,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>cpymad.madx &mdash; cpymad 0.15.2 documentation</title>
+  <title>cpymad.madx &mdash; cpymad 0.17.3 documentation</title>
   
 
+  
+  
   
   
 
@@ -33,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="cpymad 0.15.2 documentation" href="../index.html"/>
+    <link rel="top" title="cpymad 0.17.3 documentation" href="../index.html"/>
         <link rel="up" title="API Reference" href="index.html"/>
         <link rel="next" title="cpymad.libmadx" href="libmadx.html"/>
         <link rel="prev" title="API Reference" href="index.html"/> 
@@ -65,7 +67,7 @@
             
             
               <div class="version">
-                0.15.2
+                0.17.3
               </div>
             
           
@@ -86,7 +88,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation Instructions</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">cpymad.madx</a></li>
@@ -131,7 +136,10 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
@@ -144,12 +152,14 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/cpymad/madx.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/cpymad/madx.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
     
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -173,7 +183,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> &#8211; if the element is not found</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if the element is not found</td>
 </tr>
 </tbody>
 </table>
@@ -184,10 +194,10 @@
 <dl class="class">
 <dt id="cpymad.madx.CommandLog">
 <em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">CommandLog</code><span class="sig-paren">(</span><em>file</em>, <em>prefix=''</em>, <em>suffix='n'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#CommandLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.CommandLog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Log MAD-X command history to a file text.</p>
+<dd><p>Log MAD-X command history to a text file.</p>
 <dl class="classmethod">
 <dt id="cpymad.madx.CommandLog.create">
-<em class="property">classmethod </em><code class="descname">create</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#CommandLog.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.CommandLog.create" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">create</code><span class="sig-paren">(</span><em>filename</em>, <em>prefix=''</em>, <em>suffix='\n'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#CommandLog.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.CommandLog.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create CommandLog from filename (overwrite/create).</p>
 </dd></dl>
 
@@ -265,8 +275,8 @@ object to the constructor. This object must expose an interface similar to
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filename</strong> (<em>str</em>) &#8211; file name with path</li>
-<li><strong>chdir</strong> (<em>bool</em>) &#8211; temporarily change directory in MAD-X process</li>
+<li><strong>filename</strong> (<em>str</em>) – file name with path</li>
+<li><strong>chdir</strong> (<em>bool</em>) – temporarily change directory in MAD-X process</li>
 </ul>
 </td>
 </tr>
@@ -282,7 +292,7 @@ object to the constructor. This object must expose an interface similar to
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) &#8211; new path name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – new path name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a context manager that can change the directory back</td>
 </tr>
@@ -301,8 +311,8 @@ object to the constructor. This object must expose an interface similar to
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>cmd</strong> (<em>str</em>) &#8211; command name</li>
-<li><strong>kwargs</strong> &#8211; command parameters</li>
+<li><strong>cmd</strong> (<em>str</em>) – command name</li>
+<li><strong>kwargs</strong> – command parameters</li>
 </ul>
 </td>
 </tr>
@@ -324,7 +334,7 @@ object to the constructor. This object must expose an interface similar to
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<em>str</em>) &#8211; expression to evaluate.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<em>str</em>) – expression to evaluate.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">numeric value of the expression</td>
 </tr>
@@ -336,13 +346,13 @@ object to the constructor. This object must expose an interface similar to
 
 <dl class="method">
 <dt id="cpymad.madx.Madx.get_table">
-<code class="descname">get_table</code><span class="sig-paren">(</span><em>table</em>, <em>columns=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.get_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.get_table" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_table</code><span class="sig-paren">(</span><em>table</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.get_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.get_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the specified table from MAD-X.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table</strong> (<em>str</em>) &#8211; table name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table</strong> (<em>str</em>) – table name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a proxy for the table data</td>
 </tr>
@@ -355,7 +365,7 @@ object to the constructor. This object must expose an interface similar to
 <dl class="method">
 <dt id="cpymad.madx.Madx.get_transfer_map_7d">
 <code class="descname">get_transfer_map_7d</code><span class="sig-paren">(</span><em>sequence=None</em>, <em>range_=None</em>, <em>tw_range=None</em>, <em>twiss_init={}</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.get_transfer_map_7d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.get_transfer_map_7d" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the 7D transfer map (the 7&#8217;th column accounting for KICKs).</p>
+<dd><p>Get the 7D transfer map (the 7’th column accounting for KICKs).</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -372,7 +382,7 @@ object to the constructor. This object must expose an interface similar to
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<em>str</em>) &#8211; command name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<em>str</em>) – command name</td>
 </tr>
 </tbody>
 </table>
@@ -386,7 +396,7 @@ object to the constructor. This object must expose an interface similar to
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text</strong> (<em>str</em>) &#8211; command text</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text</strong> (<em>str</em>) – command text</td>
 </tr>
 </tbody>
 </table>
@@ -402,13 +412,13 @@ object to the constructor. This object must expose an interface similar to
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>sequence</strong> (<em>str</em>) &#8211; name of sequence</li>
-<li><strong>constraints</strong> (<em>list</em>) &#8211; constraints to pose during matching</li>
-<li><strong>vary</strong> (<em>list</em>) &#8211; knob names to be varied</li>
-<li><strong>weight</strong> (<em>dict</em>) &#8211; weights for matching parameters</li>
-<li><strong>knobfile</strong> (<em>str</em>) &#8211; file to write the knob values to</li>
-<li><strong>twiss_init</strong> (<em>dict</em>) &#8211; initial twiss parameters</li>
-<li><strong>kwargs</strong> (<em>dict</em>) &#8211; further keyword arguments for the MAD-X command</li>
+<li><strong>sequence</strong> (<em>str</em>) – name of sequence</li>
+<li><strong>constraints</strong> (<em>list</em>) – constraints to pose during matching</li>
+<li><strong>vary</strong> (<em>list</em>) – knob names to be varied</li>
+<li><strong>weight</strong> (<em>dict</em>) – weights for matching parameters</li>
+<li><strong>knobfile</strong> (<em>str</em>) – file to write the knob values to</li>
+<li><strong>twiss_init</strong> (<em>dict</em>) – initial twiss parameters</li>
+<li><strong>kwargs</strong> (<em>dict</em>) – further keyword arguments for the MAD-X command</li>
 </ul>
 </td>
 </tr>
@@ -451,9 +461,9 @@ object to the constructor. This object must expose an interface similar to
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>flag</strong> (<em>str</em>) &#8211; one of: twiss, makethin, error, seqedit</li>
-<li><strong>columns</strong> (<em>list</em>) &#8211; column names</li>
-<li><strong>pattern</strong> (<em>list</em>) &#8211; selected patterns</li>
+<li><strong>flag</strong> (<em>str</em>) – one of: twiss, makethin, error, seqedit</li>
+<li><strong>columns</strong> (<em>list</em>) – column names</li>
+<li><strong>pattern</strong> (<em>list</em>) – selected patterns</li>
 </ul>
 </td>
 </tr>
@@ -470,7 +480,7 @@ object to the constructor. This object must expose an interface similar to
 <dl class="method">
 <dt id="cpymad.madx.Madx.set_expression">
 <code class="descname">set_expression</code><span class="sig-paren">(</span><em>name</em>, <em>expr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.set_expression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.set_expression" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set a variable expression (&#8221;:=&#8221; operator in MAD-X).</p>
+<dd><p>Set a variable expression (“:=” operator in MAD-X).</p>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">set_expression</span><span class="p">(</span><span class="s1">&#39;FOO&#39;</span><span class="p">,</span> <span class="s1">&#39;BAR&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="s1">&#39;BAR&#39;</span><span class="p">,</span> <span class="mi">42</span><span class="p">)</span>
@@ -486,7 +496,7 @@ object to the constructor. This object must expose an interface similar to
 <dl class="method">
 <dt id="cpymad.madx.Madx.set_value">
 <code class="descname">set_value</code><span class="sig-paren">(</span><em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.set_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.set_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set a variable value (&#8220;=&#8221; operator in MAD-X).</p>
+<dd><p>Set a variable value (“=” operator in MAD-X).</p>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="s1">&#39;R1QS1-&gt;K1&#39;</span><span class="p">,</span> <span class="s1">&#39;42&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">madx</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="s1">&#39;R1QS1-&gt;K1&#39;</span><span class="p">)</span>
@@ -504,10 +514,10 @@ object to the constructor. This object must expose an interface similar to
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sequence</strong> (<em>str</em>) &#8211; name of sequence</li>
-<li><strong>pattern</strong> (<em>list</em>) &#8211; pattern to include in table</li>
-<li><strong>columns</strong> (<em>list</em>) &#8211; Columns to include in table</li>
-<li><strong>kwargs</strong> &#8211; further keyword arguments for the MAD-X command</li>
+<li><strong>sequence</strong> (<em>str</em>) – name of sequence</li>
+<li><strong>pattern</strong> (<em>list</em>) – pattern to include in table</li>
+<li><strong>columns</strong> (<em>list</em>) – Columns to include in table</li>
+<li><strong>kwargs</strong> – further keyword arguments for the MAD-X command</li>
 </ul>
 </td>
 </tr>
@@ -530,12 +540,12 @@ object to the constructor. This object must expose an interface similar to
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sequence</strong> (<em>str</em>) &#8211; name of sequence</li>
-<li><strong>pattern</strong> (<em>list</em>) &#8211; pattern to include in table</li>
-<li><strong>columns</strong> (<em>list</em>) &#8211; columns to include in table, (may be a str)</li>
-<li><strong>twiss_init</strong> (<em>dict</em>) &#8211; dictionary of twiss initialization variables</li>
-<li><strong>chrom</strong> (<em>bool</em>) &#8211; Also calculate chromatic functions (slower)</li>
-<li><strong>kwargs</strong> &#8211; further keyword arguments for the MAD-X command</li>
+<li><strong>sequence</strong> (<em>str</em>) – name of sequence</li>
+<li><strong>pattern</strong> (<em>list</em>) – pattern to include in table</li>
+<li><strong>columns</strong> (<em>list</em>) – columns to include in table, (may be a str)</li>
+<li><strong>twiss_init</strong> (<em>dict</em>) – dictionary of twiss initialization variables</li>
+<li><strong>chrom</strong> (<em>bool</em>) – Also calculate chromatic functions (slower)</li>
+<li><strong>kwargs</strong> – further keyword arguments for the MAD-X command</li>
 </ul>
 </td>
 </tr>
@@ -552,7 +562,7 @@ object to the constructor. This object must expose an interface similar to
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence</strong> (<em>str</em>) &#8211; sequence name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence</strong> (<em>str</em>) – sequence name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">name of active sequence</td>
 </tr>
@@ -588,7 +598,7 @@ object to the constructor. This object must expose an interface similar to
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><strong>__dispatch</strong> &#8211; callable that takes a MAD-X command string.</td>
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><strong>__dispatch</strong> – callable that takes a MAD-X command string.</td>
 </tr>
 </tbody>
 </table>
@@ -689,6 +699,12 @@ object to the constructor. This object must expose an interface similar to
 <em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">TableProxy</code><span class="sig-paren">(</span><em>name</em>, <em>libmadx</em>, <em>_check=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#TableProxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.TableProxy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Proxy object for lazy-loading table column data.</p>
 <dl class="method">
+<dt id="cpymad.madx.TableProxy.cache">
+<code class="descname">cache</code><span class="sig-paren">(</span><em>columns=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#TableProxy.cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.TableProxy.cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make sure given columns are cached locally.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="cpymad.madx.TableProxy.copy">
 <code class="descname">copy</code><span class="sig-paren">(</span><em>columns=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#TableProxy.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.TableProxy.copy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a frozen table with the desired columns.</p>
@@ -696,22 +712,46 @@ object to the constructor. This object must expose an interface similar to
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>columns</strong> (<em>list</em>) &#8211; column names or <code class="docutils literal"><span class="pre">None</span></code> for all columns.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>columns</strong> (<em>list</em>) – column names or <code class="docutils literal"><span class="pre">None</span></code> for all columns.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">column data</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> &#8211; if the table name is invalid</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if the table name is invalid</td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.TableProxy.kvec">
+<code class="descname">kvec</code><span class="sig-paren">(</span><em>idx</em>, <em>dim=6</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#TableProxy.kvec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.TableProxy.kvec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kicks.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="cpymad.madx.TableProxy.range">
 <code class="descname">range</code><a class="headerlink" href="#cpymad.madx.TableProxy.range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the element names (first, last) of the valid range.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.TableProxy.reload">
+<code class="descname">reload</code><span class="sig-paren">(</span><em>column</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#TableProxy.reload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.TableProxy.reload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reload (recache) one column from MAD-X.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.TableProxy.rmat">
+<code class="descname">rmat</code><span class="sig-paren">(</span><em>idx</em>, <em>dim=6</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#TableProxy.rmat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.TableProxy.rmat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sectormap.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cpymad.madx.TableProxy.sigmat">
+<code class="descname">sigmat</code><span class="sig-paren">(</span><em>idx</em>, <em>dim=6</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#TableProxy.sigmat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.TableProxy.sigmat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Beam matrix.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -738,15 +778,18 @@ object to the constructor. This object must expose an interface similar to
 
 
            </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="libmadx.html" class="btn btn-neutral float-right" title="cpymad.libmadx" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="libmadx.html" class="btn btn-neutral float-right" title="cpymad.libmadx" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="API Reference" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -777,10 +820,11 @@ object to the constructor. This object must expose an interface similar to
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.15.2',
+            VERSION:'0.17.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>

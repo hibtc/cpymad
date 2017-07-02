@@ -1,7 +1,7 @@
 cpymad
 ******
 
-cpymad_ is a Cython_ binding to MAD-X_.
+cpymad_ is a Cython_ binding to MAD-X_ (`MAD-X source`_).
 
 MAD-X is a software package to simulate particle accelerators and is used
 at CERN and all around the world. It has its own proprietary scripting
@@ -10,6 +10,7 @@ language and is usually launched from the command line.
 .. _cpymad: https://github.com/hibtc/cpymad
 .. _Cython: http://cython.org/
 .. _MAD-X: http://cern.ch/mad
+.. _MAD-X source: https://github.com/MethodicalAcceleratorDesign/MAD-X
 
 
 Disclaimer

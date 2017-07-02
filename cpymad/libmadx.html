@@ -8,9 +8,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>cpymad.libmadx &mdash; cpymad 0.15.2 documentation</title>
+  <title>cpymad.libmadx &mdash; cpymad 0.17.3 documentation</title>
   
 
+  
+  
   
   
 
@@ -33,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="cpymad 0.15.2 documentation" href="../index.html"/>
+    <link rel="top" title="cpymad 0.17.3 documentation" href="../index.html"/>
         <link rel="up" title="API Reference" href="index.html"/>
         <link rel="next" title="cpymad.util" href="util.html"/>
         <link rel="prev" title="cpymad.madx" href="madx.html"/> 
@@ -65,7 +67,7 @@
             
             
               <div class="version">
-                0.15.2
+                0.17.3
               </div>
             
           
@@ -86,7 +88,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation Instructions</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="madx.html">cpymad.madx</a></li>
@@ -131,7 +136,10 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
@@ -144,12 +152,14 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/cpymad/libmadx.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/cpymad/libmadx.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
     
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -234,7 +244,7 @@ crash the importing process with it.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<em>str</em>) &#8211; command to be executed by the MAD-X interpreter</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<em>str</em>) – command to be executed by the MAD-X interpreter</td>
 </tr>
 </tbody>
 </table>
@@ -248,7 +258,7 @@ crash the importing process with it.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expression</strong> (<em>str</em>) &#8211; symbolic expression to evaluate</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expression</strong> (<em>str</em>) – symbolic expression to evaluate</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">numeric value of the expression</td>
 </tr>
@@ -256,6 +266,10 @@ crash the importing process with it.</li>
 </tr>
 </tbody>
 </table>
+<p>NOTE: This function does not perform rigorous input validation! It uses
+nothing but the MAD-X builtin rather incompetent error checks. This means
+invalid input such as ‘+’ can lead to program crashes! If you’re looking
+for more secure validation, see <code class="xref py py-func docutils literal"><span class="pre">cpymad.util.check_expression()</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
@@ -303,7 +317,7 @@ deferred expression.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence</strong> (<em>str</em>) &#8211; sequence name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence</strong> (<em>str</em>) – sequence name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the sequence exists</td>
 </tr>
@@ -357,7 +371,7 @@ deferred expression.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> &#8211; if no sequence is activated</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> – if no sequence is activated</td>
 </tr>
 </tbody>
 </table>
@@ -371,7 +385,7 @@ deferred expression.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sequence_name</strong> (<em>str</em>) – sequence name</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">twiss table name</p>
@@ -381,8 +395,8 @@ deferred expression.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ValueError</strong> &#8211; if the sequence name is invalid</li>
-<li><strong>RuntimeError</strong> &#8211; if the twiss table is invalid</li>
+<li><strong>ValueError</strong> – if the sequence name is invalid</li>
+<li><strong>RuntimeError</strong> – if the twiss table is invalid</li>
 </ul>
 </td>
 </tr>
@@ -398,7 +412,7 @@ deferred expression.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sequence_name</strong> (<em>str</em>) – sequence name</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">beam properties as set with the BEAM command (and some more)</p>
@@ -408,8 +422,8 @@ deferred expression.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ValueError</strong> &#8211; if the sequence name is invalid</li>
-<li><strong>RuntimeError</strong> &#8211; if the sequence has no associated beam</li>
+<li><strong>ValueError</strong> – if the sequence name is invalid</li>
+<li><strong>RuntimeError</strong> – if the sequence has no associated beam</li>
 </ul>
 </td>
 </tr>
@@ -425,13 +439,13 @@ deferred expression.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence_name</strong> (<em>str</em>) – sequence name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">expanded state of the sequence</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> &#8211; if the sequence is invalid</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if the sequence is invalid</td>
 </tr>
 </tbody>
 </table>
@@ -445,7 +459,7 @@ deferred expression.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table</strong> (<em>str</em>) &#8211; table name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table</strong> (<em>str</em>) – table name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the table exists</td>
 </tr>
@@ -495,7 +509,7 @@ deferred expression.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) &#8211; table name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) – table name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">mapping of {column: value}</td>
 </tr>
@@ -513,13 +527,13 @@ deferred expression.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) &#8211; table name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) – table name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">column names</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> &#8211; if the table name is invalid</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if the table name is invalid</td>
 </tr>
 </tbody>
 </table>
@@ -533,13 +547,13 @@ deferred expression.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) &#8211; table name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) – table name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">column names</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> &#8211; if the table name is invalid</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if the table name is invalid</td>
 </tr>
 </tbody>
 </table>
@@ -553,13 +567,13 @@ deferred expression.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) &#8211; table name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) – table name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">number of columns</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> &#8211; if the table name is invalid</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if the table name is invalid</td>
 </tr>
 </tbody>
 </table>
@@ -573,13 +587,13 @@ deferred expression.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) &#8211; table name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) – table name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">number of columns</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> &#8211; if the table name is invalid</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if the table name is invalid</td>
 </tr>
 </tbody>
 </table>
@@ -594,8 +608,8 @@ deferred expression.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>table_name</strong> (<em>str</em>) &#8211; table name</li>
-<li><strong>column_name</strong> (<em>str</em>) &#8211; column name</li>
+<li><strong>table_name</strong> (<em>str</em>) – table name</li>
+<li><strong>column_name</strong> (<em>str</em>) – column name</li>
 </ul>
 </td>
 </tr>
@@ -606,8 +620,8 @@ deferred expression.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ValueError</strong> &#8211; if the column cannot be found in the table</li>
-<li><strong>RuntimeError</strong> &#8211; if the column has unknown type</li>
+<li><strong>ValueError</strong> – if the column cannot be found in the table</li>
+<li><strong>RuntimeError</strong> – if the column has unknown type</li>
 </ul>
 </td>
 </tr>
@@ -640,8 +654,8 @@ is done automatically for you if using libmadx in a remote service
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</li>
-<li><strong>element_index</strong> (<em>int</em>) &#8211; element index</li>
+<li><strong>sequence_name</strong> (<em>str</em>) – sequence name</li>
+<li><strong>element_index</strong> (<em>int</em>) – element index</li>
 </ul>
 </td>
 </tr>
@@ -652,10 +666,80 @@ is done automatically for you if using libmadx in a remote service
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ValueError</strong> &#8211; if the sequence is invalid</li>
-<li><strong>IndexError</strong> &#8211; if the index is out of range</li>
+<li><strong>ValueError</strong> – if the sequence is invalid</li>
+<li><strong>IndexError</strong> – if the index is out of range</li>
 </ul>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_element_name">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_element_name</code><span class="sig-paren">(</span><em>sequence_name</em>, <em>element_index</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_element_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list with the names of all elements of a specific sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sequence_name</strong> (<em>str</em>) – sequence name</li>
+<li><strong>element_index</strong> (<em>int</em>) – element index</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the name of the element with the specified index</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">str</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if the sequence is invalid</li>
+<li><strong>IndexError</strong> – if the index is out of range</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_element_positions">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_element_positions</code><span class="sig-paren">(</span><em>sequence_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_element_positions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list with positions of all elements of a specific sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence_name</strong> (<em>str</em>) – sequence name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">positions of all elements in the sequence</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if the sequence is invalid</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_element_names">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_element_names</code><span class="sig-paren">(</span><em>sequence_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_element_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list with the names of all elements of a specific sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence_name</strong> (<em>str</em>) – sequence name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">names of all elements in the sequence</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if the sequence is invalid</td>
 </tr>
 </tbody>
 </table>
@@ -670,8 +754,8 @@ is done automatically for you if using libmadx in a remote service
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</li>
-<li><strong>element_name</strong> (<em>str</em>) &#8211; element index</li>
+<li><strong>sequence_name</strong> (<em>str</em>) – sequence name</li>
+<li><strong>element_name</strong> (<em>str</em>) – element index</li>
 </ul>
 </td>
 </tr>
@@ -681,7 +765,7 @@ is done automatically for you if using libmadx in a remote service
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">int</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>ValueError</strong> &#8211; if the sequence or element name is invalid</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>ValueError</strong> – if the sequence or element name is invalid</p>
 </td>
 </tr>
 </tbody>
@@ -697,8 +781,8 @@ is done automatically for you if using libmadx in a remote service
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</li>
-<li><strong>position</strong> (<em>double</em>) &#8211; position (S coordinate)</li>
+<li><strong>sequence_name</strong> (<em>str</em>) – sequence name</li>
+<li><strong>position</strong> (<em>double</em>) – position (S coordinate)</li>
 </ul>
 </td>
 </tr>
@@ -708,7 +792,7 @@ is done automatically for you if using libmadx in a remote service
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">int</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>ValueError</strong> &#8211; if the sequence or element name is invalid</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>ValueError</strong> – if the sequence or element name is invalid</p>
 </td>
 </tr>
 </tbody>
@@ -723,13 +807,13 @@ is done automatically for you if using libmadx in a remote service
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence_name</strong> (<em>str</em>) – sequence name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">number of elements in the original sequence</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> &#8211; if the sequence is invalid.</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if the sequence is invalid.</td>
 </tr>
 </tbody>
 </table>
@@ -744,8 +828,8 @@ is done automatically for you if using libmadx in a remote service
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</li>
-<li><strong>element_index</strong> (<em>int</em>) &#8211; element index</li>
+<li><strong>sequence_name</strong> (<em>str</em>) – sequence name</li>
+<li><strong>element_index</strong> (<em>int</em>) – element index</li>
 </ul>
 </td>
 </tr>
@@ -756,8 +840,8 @@ is done automatically for you if using libmadx in a remote service
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ValueError</strong> &#8211; if the sequence is invalid</li>
-<li><strong>IndexError</strong> &#8211; if the index is out of range</li>
+<li><strong>ValueError</strong> – if the sequence is invalid</li>
+<li><strong>IndexError</strong> – if the index is out of range</li>
 </ul>
 </td>
 </tr>
@@ -765,6 +849,76 @@ is done automatically for you if using libmadx in a remote service
 </table>
 <p>NOTE: this function may currently return elements beyond the end of the
 expanded sequence if requested to do so.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_expanded_element_name">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_expanded_element_name</code><span class="sig-paren">(</span><em>sequence_name</em>, <em>element_index</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_expanded_element_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list with the names of all elements of a specific sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sequence_name</strong> (<em>str</em>) – sequence name</li>
+<li><strong>element_index</strong> (<em>int</em>) – element index</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the name of the element with the specified index</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">str</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if the sequence is invalid</li>
+<li><strong>IndexError</strong> – if the index is out of range</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_expanded_element_positions">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_expanded_element_positions</code><span class="sig-paren">(</span><em>sequence_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_expanded_element_positions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list with positions of all elements of a specific sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence_name</strong> (<em>str</em>) – sequence name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">positions of all elements in the sequence</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if the sequence is invalid</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_expanded_element_names">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_expanded_element_names</code><span class="sig-paren">(</span><em>sequence_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_expanded_element_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list with the names of all elements of a specific sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence_name</strong> (<em>str</em>) – sequence name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">names of all elements in the sequence</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if the sequence is invalid</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -778,8 +932,8 @@ recommended for frequent execution.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</li>
-<li><strong>element_name</strong> (<em>str</em>) &#8211; element index</li>
+<li><strong>sequence_name</strong> (<em>str</em>) – sequence name</li>
+<li><strong>element_name</strong> (<em>str</em>) – element index</li>
 </ul>
 </td>
 </tr>
@@ -789,7 +943,7 @@ recommended for frequent execution.</p>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">int</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>ValueError</strong> &#8211; if the sequence is invalid</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>ValueError</strong> – if the sequence is invalid</p>
 </td>
 </tr>
 </tbody>
@@ -805,8 +959,8 @@ recommended for frequent execution.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</li>
-<li><strong>position</strong> (<em>double</em>) &#8211; position (S coordinate)</li>
+<li><strong>sequence_name</strong> (<em>str</em>) – sequence name</li>
+<li><strong>position</strong> (<em>double</em>) – position (S coordinate)</li>
 </ul>
 </td>
 </tr>
@@ -816,7 +970,7 @@ recommended for frequent execution.</p>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">int</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>ValueError</strong> &#8211; if the sequence or element name is invalid</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>ValueError</strong> – if the sequence or element name is invalid</p>
 </td>
 </tr>
 </tbody>
@@ -831,13 +985,13 @@ recommended for frequent execution.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence_name</strong> (<em>str</em>) &#8211; sequence name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence_name</strong> (<em>str</em>) – sequence name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">number of elements in the expanded sequence</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> &#8211; if the sequence is invalid.</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if the sequence is invalid.</td>
 </tr>
 </tbody>
 </table>
@@ -851,13 +1005,13 @@ recommended for frequent execution.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>element_index</strong> (<em>int</em>) &#8211; element index</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>element_index</strong> (<em>int</em>) – element index</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the element with the specified index</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>IndexError</strong> &#8211; if the index is out of range</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>IndexError</strong> – if the index is out of range</td>
 </tr>
 </tbody>
 </table>
@@ -871,13 +1025,13 @@ recommended for frequent execution.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>element_index</strong> (<em>int</em>) &#8211; element index</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>element_index</strong> (<em>int</em>) – element index</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">element name</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>IndexError</strong> &#8211; if the index is out of range</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>IndexError</strong> – if the index is out of range</td>
 </tr>
 </tbody>
 </table>
@@ -891,7 +1045,7 @@ recommended for frequent execution.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>element_name</strong> (<em>str</em>) &#8211; element index</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>element_name</strong> (<em>str</em>) – element index</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the index of the specified element, -1 if not found</td>
 </tr>
@@ -915,7 +1069,7 @@ recommended for frequent execution.</p>
 
 <dl class="function">
 <dt id="cpymad.libmadx.getcwd">
-<code class="descclassname">cpymad.libmadx.</code><code class="descname">getcwd</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &rarr; path<a class="headerlink" href="#cpymad.libmadx.getcwd" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">getcwd</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; path<a class="headerlink" href="#cpymad.libmadx.getcwd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a string representing the current working directory.</p>
 </dd></dl>
 
@@ -923,15 +1077,18 @@ recommended for frequent execution.</p>
 
 
            </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="util.html" class="btn btn-neutral float-right" title="cpymad.util" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="util.html" class="btn btn-neutral float-right" title="cpymad.util" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="madx.html" class="btn btn-neutral" title="cpymad.madx" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="madx.html" class="btn btn-neutral" title="cpymad.madx" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -962,10 +1119,11 @@ recommended for frequent execution.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.15.2',
+            VERSION:'0.17.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>

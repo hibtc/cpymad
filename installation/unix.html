@@ -8,9 +8,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Unix &mdash; cpymad 0.15.2 documentation</title>
+  <title>Unix &mdash; cpymad 0.17.3 documentation</title>
   
 
+  
+  
   
   
 
@@ -33,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="cpymad 0.15.2 documentation" href="../index.html"/>
+    <link rel="top" title="cpymad 0.17.3 documentation" href="../index.html"/>
         <link rel="up" title="Installation Instructions" href="index.html"/>
         <link rel="next" title="Windows" href="windows.html"/>
         <link rel="prev" title="Installation Instructions" href="index.html"/> 
@@ -65,7 +67,7 @@
             
             
               <div class="version">
-                0.15.2
+                0.17.3
               </div>
             
           
@@ -86,7 +88,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation Instructions</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Unix</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#install-dependencies">Install dependencies</a></li>
@@ -135,7 +140,10 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
@@ -148,12 +156,14 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/installation/unix.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/installation/unix.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
     
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -186,8 +196,9 @@ install method.</p>
 </div>
 <div class="section" id="install-libmadx">
 <h2>Install libmadx<a class="headerlink" href="#install-libmadx" title="Permalink to this headline">¶</a></h2>
-<p>Download the <a class="reference external" href="http://svnweb.cern.ch/world/wsvn/madx/trunk/madX/?op=dl&amp;rev=0&amp;isdir=1">MAD-X source</a> from SVN</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>svn co http://svn.cern.ch/guest/madx/trunk/madX
+<p>Download the <a class="reference external" href="https://github.com/MethodicalAcceleratorDesign/MAD-X/releases">latest MAD-X release</a> from github or use directly the source
+code from master (unstable):</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
 </pre></div>
 </div>
 <p>Build and install the library</p>
@@ -195,6 +206,7 @@ install method.</p>
 cmake ../madX <span class="se">\</span>
     -DMADX_STATIC<span class="o">=</span>OFF <span class="se">\</span>
     -DBUILD_SHARED_LIBS<span class="o">=</span>ON <span class="se">\</span>
+    -DUSE_GC<span class="o">=</span>ON <span class="se">\</span>
     -DCMAKE_INSTALL_RPATH<span class="o">=</span><span class="s1">&#39;$ORIGIN&#39;</span>
 make <span class="o">&amp;&amp;</span> make install
 </pre></div>
@@ -223,15 +235,18 @@ python setup.py install
 
 
            </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="windows.html" class="btn btn-neutral float-right" title="Windows" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="windows.html" class="btn btn-neutral float-right" title="Windows" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="Installation Instructions" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral" title="Installation Instructions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -262,10 +277,11 @@ python setup.py install
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.15.2',
+            VERSION:'0.17.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>

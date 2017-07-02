@@ -8,9 +8,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>cpymad.madx &mdash; cpymad 0.15.2 documentation</title>
+  <title>cpymad.madx &mdash; cpymad 0.17.3 documentation</title>
   
 
+  
+  
   
   
 
@@ -33,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="cpymad 0.15.2 documentation" href="../../index.html"/>
+    <link rel="top" title="cpymad 0.17.3 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -63,7 +65,7 @@
             
             
               <div class="version">
-                0.15.2
+                0.17.3
               </div>
             
           
@@ -84,7 +86,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installation Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../cpymad/index.html">API Reference</a></li>
 </ul>
@@ -123,7 +128,10 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
     
       <li><a href="../../index.html">Docs</a> &raquo;</li>
@@ -140,6 +148,8 @@
       </li>
     
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -220,7 +230,7 @@
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a dispatcher for a specific command.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__call__</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="NOP"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.NOP">[docs]</a><span class="k">def</span> <span class="nf">NOP</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
@@ -230,12 +240,12 @@
 
 <div class="viewcode-block" id="CommandLog"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.CommandLog">[docs]</a><span class="k">class</span> <span class="nc">CommandLog</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot;Log MAD-X command history to a file text.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Log MAD-X command history to a text file.&quot;&quot;&quot;</span>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="CommandLog.create"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.CommandLog.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="CommandLog.create"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.CommandLog.create">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create CommandLog from filename (overwrite/create).&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;wt&#39;</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;wt&#39;</span><span class="p">),</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="n">suffix</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create CommandLog from file instance.&quot;&quot;&quot;</span>
@@ -340,7 +350,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># get logger</span>
         <span class="k">if</span> <span class="n">error_log</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">error_log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+            <span class="n">error_log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="c1"># open history file</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">command_log</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
             <span class="n">command_log</span> <span class="o">=</span> <span class="n">CommandLog</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">command_log</span><span class="p">)</span>
@@ -348,6 +358,10 @@
             <span class="n">command_log</span> <span class="o">=</span> <span class="n">NOP</span>
         <span class="c1"># start libmadx subprocess</span>
         <span class="k">if</span> <span class="n">libmadx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># stdin=None leads to an error on windows when STDIN is broken.</span>
+            <span class="c1"># Therefore, we need set stdin=os.devnull by passing stdin=False:</span>
+            <span class="n">Popen_args</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;stdin&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="n">Popen_args</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;bufsize&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_service</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span> <span class="o">=</span> \
                 <span class="n">_rpc</span><span class="o">.</span><span class="n">LibMadxClient</span><span class="o">.</span><span class="n">spawn_subprocess</span><span class="p">(</span><span class="o">**</span><span class="n">Popen_args</span><span class="p">)</span>
             <span class="n">libmadx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_service</span><span class="o">.</span><span class="n">libmadx</span>
@@ -365,7 +379,7 @@
         <span class="k">except</span> <span class="p">(</span><span class="n">_rpc</span><span class="o">.</span><span class="n">RemoteProcessClosed</span><span class="p">,</span> <span class="n">_rpc</span><span class="o">.</span><span class="n">RemoteProcessCrashed</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">False</span>
 
-    <span class="n">__nonzero__</span> <span class="o">=</span> <span class="n">__bool__</span>      <span class="c1"># alias for python2 compatibility</span>
+    <span class="n">__nonzero__</span> <span class="o">=</span> <span class="fm">__bool__</span>      <span class="c1"># alias for python2 compatibility</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -448,7 +462,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># The case &#39;cmd == None&#39; will be handled by mad_command</span>
         <span class="c1"># appropriately.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">help</span><span class="p">(</span><span class="n">cmd</span><span class="o">=</span><span class="n">cmd</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">help</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Madx.chdir"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.chdir">[docs]</a>    <span class="k">def</span> <span class="nf">chdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -523,7 +537,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">twiss</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="n">sequence</span><span class="p">,</span>
                            <span class="nb">range</span><span class="o">=</span><span class="nb">range</span><span class="p">,</span>
                            <span class="o">**</span><span class="n">twiss_init</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="s1">&#39;twiss&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="s1">&#39;twiss&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Madx.survey"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.survey">[docs]</a>    <span class="k">def</span> <span class="nf">survey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                <span class="n">sequence</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -541,7 +555,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;survey&#39;</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="n">pattern</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_use</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">survey</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="s1">&#39;survey&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="s1">&#39;survey&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Madx.use"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -590,11 +604,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">twiss</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="n">tw_range</span><span class="p">,</span> <span class="n">twiss_init</span><span class="o">=</span><span class="n">twiss_init</span><span class="p">,</span>
                        <span class="n">sectormap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sectorfile</span><span class="o">=</span><span class="n">sectorfile</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="s1">&#39;sectortable&#39;</span><span class="p">)</span>
-        <span class="n">rmatrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">tab</span><span class="p">[</span><span class="s1">&#39;r</span><span class="si">{}{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">)]</span>
-                            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">)])</span>
-        <span class="n">kicks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">tab</span><span class="p">[</span><span class="s1">&#39;k</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)][</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
-                          <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">)])</span>
+        <span class="n">rmatrix</span> <span class="o">=</span> <span class="n">tab</span><span class="o">.</span><span class="n">rmat</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">kicks</span> <span class="o">=</span> <span class="n">tab</span><span class="o">.</span><span class="n">kvec</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span>
             <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">rmatrix</span><span class="p">,</span> <span class="n">kicks</span><span class="p">)),</span>
             <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
@@ -668,7 +679,7 @@
         <span class="sd">&quot;&quot;&quot;Turn verbose output on/off.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="n">echo</span><span class="o">=</span><span class="n">switch</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="n">switch</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">switch</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Madx.get_table"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.get_table">[docs]</a>    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Madx.get_table"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.get_table">[docs]</a>    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the specified table from MAD-X.</span>
 
@@ -676,11 +687,7 @@
 <span class="sd">        :returns: a proxy for the table data</span>
 <span class="sd">        :rtype: TableProxy</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">proxy</span> <span class="o">=</span> <span class="n">TableProxy</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">proxy</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">proxy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">TableProxy</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">active_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -713,6 +720,9 @@
 <span class="sd">        :returns: numeric value of the expression</span>
 <span class="sd">        :rtype: float</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Try to prevent process crashes:</span>
+        <span class="c1"># NOTE: this limits to a sane subset of accepted MAD-X expressions.</span>
+        <span class="n">util</span><span class="o">.</span><span class="n">check_expression</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
@@ -728,7 +738,7 @@
 
 <span class="k">def</span> <span class="nf">_map_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;String representation of a custom mapping object.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>
 
 
 <div class="viewcode-block" id="SequenceMap"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.SequenceMap">[docs]</a><span class="k">class</span> <span class="nc">SequenceMap</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
@@ -741,8 +751,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_madx</span> <span class="o">=</span> <span class="n">madx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span> <span class="o">=</span> <span class="n">madx</span><span class="o">.</span><span class="n">_libmadx</span>
 
-    <span class="n">__repr__</span> <span class="o">=</span> <span class="n">_map_repr</span>
-    <span class="n">__str__</span> <span class="o">=</span> <span class="n">_map_repr</span>
+    <span class="fm">__repr__</span> <span class="o">=</span> <span class="n">_map_repr</span>
+    <span class="fm">__str__</span> <span class="o">=</span> <span class="n">_map_repr</span>
 
     <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_sequence_names</span><span class="p">())</span>
@@ -769,8 +779,8 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">libmadx</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span> <span class="o">=</span> <span class="n">libmadx</span>
 
-    <span class="n">__repr__</span> <span class="o">=</span> <span class="n">_map_repr</span>
-    <span class="n">__str__</span> <span class="o">=</span> <span class="n">_map_repr</span>
+    <span class="fm">__repr__</span> <span class="o">=</span> <span class="n">_map_repr</span>
+    <span class="fm">__str__</span> <span class="o">=</span> <span class="n">_map_repr</span>
 
     <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_table_names</span><span class="p">())</span>
@@ -804,7 +814,7 @@
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;String representation.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Comparison by sequence name.&quot;&quot;&quot;</span>
@@ -817,7 +827,7 @@
         <span class="sd">&quot;&quot;&quot;Comparison by sequence name.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span> <span class="o">==</span> <span class="n">other</span><span class="p">)</span>
 
-    <span class="n">__repr__</span> <span class="o">=</span> <span class="n">__str__</span>
+    <span class="fm">__repr__</span> <span class="o">=</span> <span class="fm">__str__</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -852,6 +862,18 @@
     <span class="k">def</span> <span class="nf">expanded_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get list of elements in expanded sequence.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ExpandedElementList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">element_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_element_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">element_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_element_positions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">expanded_element_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_expanded_element_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">expanded_element_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_expanded_element_positions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_parse_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">range</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -925,7 +947,9 @@
                              <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">_len</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">index</span> <span class="o">+=</span> <span class="n">_len</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_element</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_element</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
+        <span class="k">return</span> <span class="n">data</span>
 
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get number of elements.&quot;&quot;&quot;</span>
@@ -1013,10 +1037,6 @@
             <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_global_element_name</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></div>
 
 
-<span class="k">class</span> <span class="nc">Dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-    <span class="k">pass</span>
-
-
 <div class="viewcode-block" id="TableProxy"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.TableProxy">[docs]</a><span class="k">class</span> <span class="nc">TableProxy</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
@@ -1027,11 +1047,19 @@
         <span class="sd">&quot;&quot;&quot;Just store the table name for now.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span> <span class="o">=</span> <span class="n">libmadx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">_check</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">libmadx</span><span class="o">.</span><span class="n">table_exists</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid table: </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the column data.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">column</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">column</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve the column data.&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_table_column</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">column</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
@@ -1057,6 +1085,18 @@
         <span class="nb">range</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_count</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_table_row_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="nb">range</span><span class="p">))</span>
 
+<div class="viewcode-block" id="TableProxy.reload"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.TableProxy.reload">[docs]</a>    <span class="k">def</span> <span class="nf">reload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reload (recache) one column from MAD-X.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query</span><span class="p">(</span><span class="n">column</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="TableProxy.cache"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.TableProxy.cache">[docs]</a>    <span class="k">def</span> <span class="nf">cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Make sure given columns are cached locally.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+            <span class="n">_tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">column</span><span class="p">]</span></div>
+
 <div class="viewcode-block" id="TableProxy.copy"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.TableProxy.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a frozen table with the desired columns.</span>
@@ -1068,10 +1108,30 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span>
-        <span class="n">table</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">((</span><span class="n">column</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">column</span><span class="p">])</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">)</span>
-        <span class="n">table</span><span class="o">.</span><span class="n">summary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">summary</span>
-        <span class="k">return</span> <span class="n">table</span></div></div>
+        <span class="k">return</span> <span class="p">{</span><span class="n">column</span><span class="p">:</span> <span class="bp">self</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">}</span></div>
 
+    <span class="k">def</span> <span class="nf">getvec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">{}{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)][</span><span class="n">idx</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">)])</span>
+
+    <span class="k">def</span> <span class="nf">getmat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="p">[</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">{}{}{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)][</span><span class="n">idx</span><span class="p">]</span>
+             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">)]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">)])</span>
+
+<div class="viewcode-block" id="TableProxy.kvec"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.TableProxy.kvec">[docs]</a>    <span class="k">def</span> <span class="nf">kvec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Kicks.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getvec</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TableProxy.rmat"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.TableProxy.rmat">[docs]</a>    <span class="k">def</span> <span class="nf">rmat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sectormap.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getmat</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TableProxy.sigmat"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.TableProxy.sigmat">[docs]</a>    <span class="k">def</span> <span class="nf">sigmat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Beam matrix.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getmat</span><span class="p">(</span><span class="s1">&#39;sig&#39;</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span></div></div>
 
 <div class="viewcode-block" id="VarListProxy"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.VarListProxy">[docs]</a><span class="k">class</span> <span class="nc">VarListProxy</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">MutableMapping</span><span class="p">):</span>
 
@@ -1081,6 +1141,9 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">libmadx</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span> <span class="o">=</span> <span class="n">libmadx</span>
+
+    <span class="fm">__repr__</span> <span class="o">=</span> <span class="n">_map_repr</span>
+    <span class="fm">__str__</span> <span class="o">=</span> <span class="n">_map_repr</span>
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
@@ -1148,6 +1211,9 @@
 </pre></div>
 
            </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
@@ -1178,10 +1244,11 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.15.2',
+            VERSION:'0.17.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>

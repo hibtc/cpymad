@@ -8,9 +8,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Windows &mdash; cpymad 0.15.2 documentation</title>
+  <title>Windows &mdash; cpymad 0.17.3 documentation</title>
   
 
+  
+  
   
   
 
@@ -33,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="cpymad 0.15.2 documentation" href="../index.html"/>
+    <link rel="top" title="cpymad 0.17.3 documentation" href="../index.html"/>
         <link rel="up" title="Installation Instructions" href="index.html"/>
         <link rel="next" title="Troubleshooting" href="troubleshooting.html"/>
         <link rel="prev" title="Unix" href="unix.html"/> 
@@ -65,7 +67,7 @@
             
             
               <div class="version">
-                0.15.2
+                0.17.3
               </div>
             
           
@@ -86,7 +88,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation Instructions</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="unix.html">Unix</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Windows</a><ul>
@@ -139,7 +144,10 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
@@ -152,12 +160,14 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/installation/windows.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/installation/windows.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
     
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -174,7 +184,7 @@ run</p>
 <div class="highlight-bat"><div class="highlight"><pre><span></span>pip install cpymad
 </pre></div>
 </div>
-<p>from your terminal and that&#8217;s it. If you want to install to a target
+<p>from your terminal and that’s it. If you want to install to a target
 machine without internet access (or with firewall), you can manually
 <a class="reference external" href="https://pypi.python.org/pypi/cpymad/#downloads">download</a> the <code class="docutils literal"><span class="pre">.whl</span></code> file for your platform and then use <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a> to install
 that particular file. For example:</p>
@@ -195,7 +205,7 @@ or the github issue pages to create one for your python version / platform.</p>
 portable python distribution includes a MinGW compiler suite that allows to
 create self-contained binaries which can later be used on other python
 distributions as well. Python≥3.5 is currently unsupported due to a change in
-python&#8217;s windows build process.</p>
+python’s windows build process.</p>
 <div class="section" id="install-dependencies">
 <h3>Install dependencies<a class="headerlink" href="#install-dependencies" title="Permalink to this headline">¶</a></h3>
 <p>Except for <a class="reference external" href="http://winpython.sourceforge.net/">WinPython</a> itself, you just need <a class="reference external" href="http://www.cmake.org/">CMake</a> and <a class="reference external" href="https://pypi.python.org/pypi/minrpc">minrpc</a>.</p>
@@ -212,7 +222,7 @@ Alternatively, manually extend your PATH later in the terminal:</p>
 </div>
 <div class="section" id="build-libmadx">
 <h3>Build libmadx<a class="headerlink" href="#build-libmadx" title="Permalink to this headline">¶</a></h3>
-<p>Download and extract the latest <a class="reference external" href="http://svnweb.cern.ch/world/wsvn/madx/tags/">MAD-X source</a> archive.</p>
+<p>Download and extract the <a class="reference external" href="https://github.com/MethodicalAcceleratorDesign/MAD-X/releases">latest MAD-X release</a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">You might need multiple extraction steps until you get a folder
@@ -220,14 +230,19 @@ containing the file <code class="file docutils literal"><span class="pre">CMakeL
 files and subdirectories.</p>
 </div>
 <p>I recommend to build MAD-X as a <em>static</em> library as described below. This
-way, you won&#8217;t need to carry any <code class="docutils literal"><span class="pre">.dll</span></code> files around and you won&#8217;t run
+way, you won’t need to carry any <code class="docutils literal"><span class="pre">.dll</span></code> files around and you won’t run
 into version problems when having a multiple MAD-X library builds around.</p>
 <p>Open a terminal by executing the <code class="file docutils literal"><span class="pre">%WinPython%\WinPython</span> <span class="pre">Command</span>
 <span class="pre">Prompt.exe</span></code>. Change the directory to the extracted MAD-X folder with the
 <code class="docutils literal"><span class="pre">cd</span></code> command and prepare the build:</p>
 <div class="highlight-bat"><div class="highlight"><pre><span></span><span class="k">mkdir</span> build
 <span class="k">cd</span> build
-cmake -G <span class="s2">&quot;MinGW Makefiles&quot;</span> -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=..\install -DMADX_NTPSA=OFF ..
+cmake .. \
+    -G <span class="s2">&quot;MinGW Makefiles&quot;</span> \
+    -DBUILD_SHARED_LIBS=OFF \
+    -DCMAKE_INSTALL_PREFIX=..\install \
+    -DMADX_NTPSA=OFF \
+    -DUSE_GC=ON
 </pre></div>
 </div>
 <p>In the file <code class="file docutils literal"><span class="pre">%MADX%\build\src\CMakeFiles\madxbin.dir\link.txt</span></code> and
@@ -275,15 +290,18 @@ python distribution, like so:</p>
 
 
            </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="troubleshooting.html" class="btn btn-neutral float-right" title="Troubleshooting" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="troubleshooting.html" class="btn btn-neutral float-right" title="Troubleshooting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="unix.html" class="btn btn-neutral" title="Unix" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="unix.html" class="btn btn-neutral" title="Unix" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -314,10 +332,11 @@ python distribution, like so:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.15.2',
+            VERSION:'0.17.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>

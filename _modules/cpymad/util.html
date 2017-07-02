@@ -8,9 +8,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>cpymad.util &mdash; cpymad 0.15.2 documentation</title>
+  <title>cpymad.util &mdash; cpymad 0.17.3 documentation</title>
   
 
+  
+  
   
   
 
@@ -33,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="cpymad 0.15.2 documentation" href="../../index.html"/>
+    <link rel="top" title="cpymad 0.17.3 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -63,7 +65,7 @@
             
             
               <div class="version">
-                0.15.2
+                0.17.3
               </div>
             
           
@@ -84,7 +86,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installation Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../cpymad/index.html">API Reference</a></li>
 </ul>
@@ -123,7 +128,10 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
     
       <li><a href="../../index.html">Docs</a> &raquo;</li>
@@ -140,6 +148,8 @@
       </li>
     
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -152,6 +162,7 @@
 <span class="kn">import</span> <span class="nn">collections</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
 
@@ -165,8 +176,15 @@
     <span class="s1">&#39;name_to_internal&#39;</span><span class="p">,</span>
     <span class="s1">&#39;mad_parameter&#39;</span><span class="p">,</span>
     <span class="s1">&#39;mad_command&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;check_expression&#39;</span>
     <span class="s1">&#39;temp_filename&#39;</span><span class="p">,</span>
 <span class="p">]</span>
+
+
+<span class="c1"># In CPython 3.6 dicts preserve insertion order (until deleting an element)</span>
+<span class="c1"># Although, this is considered an implementation detail that should not be</span>
+<span class="c1"># relied upon, we do so anyway:</span>
+<span class="n">ordered_keys</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">keys</span> <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span> <span class="k">else</span> <span class="nb">sorted</span>
 
 
 <span class="k">try</span><span class="p">:</span>
@@ -182,7 +200,7 @@
 
 
 <span class="c1"># precompile regexes for performance:</span>
-<span class="n">_re_is_identifier</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">r&#39;^[a-z_]\w*$&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+<span class="n">_re_is_identifier</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[a-z_]\w*$&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
 <span class="n">_re_element_internal</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^([a-z_][\w.$]*)(:\d+)?$&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
 <span class="n">_re_element_external</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^([a-z_][\w.$]*)(\[\d+\])?$&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
 
@@ -336,7 +354,7 @@
 <span class="sd">    &#39;constraint, betx&lt;3.13;&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_args</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
-    <span class="n">_keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">_keys</span> <span class="o">=</span> <span class="n">ordered_keys</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">_args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">mad_parameter</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">_keys</span><span class="p">]</span>
     <span class="k">return</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">_args</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span></div>
 
@@ -347,8 +365,128 @@
             <span class="s1">&#39;bety&#39;</span><span class="p">,</span><span class="s1">&#39;alfy&#39;</span><span class="p">,</span><span class="s1">&#39;muy&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="s1">&#39;py&#39;</span><span class="p">,</span><span class="s1">&#39;dy&#39;</span><span class="p">,</span><span class="s1">&#39;dpy&#39;</span> <span class="p">]</span>
 
 
+<span class="c1"># validation of MAD-X expressions</span>
+
+<span class="k">def</span> <span class="nf">_regex</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
+    <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">:])</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">end</span><span class="p">()</span> <span class="k">if</span> <span class="n">m</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">match</span>
+
+
+<span class="k">def</span> <span class="nf">_choice</span><span class="p">(</span><span class="n">choices</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">choices</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">match</span>
+
+
+<span class="n">_expr_tokens</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;WHITESPACE&#39;</span><span class="p">,</span>  <span class="n">_choice</span><span class="p">(</span><span class="s1">&#39; </span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;LPAREN&#39;</span><span class="p">,</span>      <span class="n">_choice</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;RPAREN&#39;</span><span class="p">,</span>      <span class="n">_choice</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;OPERATOR&#39;</span><span class="p">,</span>    <span class="n">_choice</span><span class="p">(</span><span class="s1">&#39;+-/*^&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;SYMBOL&#39;</span><span class="p">,</span>      <span class="n">_regex</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[a-zA-Z_][\w.]*(-&gt;[a-zA-Z_]\w*)?&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;NUMBER&#39;</span><span class="p">,</span>      <span class="n">_regex</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(\d+(\.\d*)?|\.\d+)([eE][+\-]?\d+)?&#39;</span><span class="p">)),</span>
+<span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_tokenize</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">expr</span><span class="p">):</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">stop</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">stop</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">tokname</span><span class="p">,</span> <span class="n">tokmatch</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">:</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="n">tokmatch</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">tokname</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">l</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="n">l</span>
+                <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown token </span><span class="si">{!r}</span><span class="s2"> at </span><span class="si">{!r}</span><span class="s2">&quot;</span>
+                             <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">expr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">expr</span><span class="p">[:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span>
+
+
+<span class="k">def</span> <span class="nf">check_expression</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the given expression is a valid MAD-X expression that is safe to</span>
+<span class="sd">    pass to :meth:`cpymad.madx.Madx.evaluate`.</span>
+
+<span class="sd">    :param str expr:</span>
+<span class="sd">    :returns: True</span>
+<span class="sd">    :raises ValueError: if the expression is ill-formed</span>
+
+<span class="sd">    Note that this function only recognizes a sane subset of the expressions</span>
+<span class="sd">    accepted by MAD-X and rejects valid but strange ones such as a number</span>
+<span class="sd">    formatting &#39;.&#39; representing zero.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># handle instance of type Expression:</span>
+        <span class="n">expr</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">expr</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="n">expr</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">unexpected</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">l</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Unexpected </span><span class="si">{}</span><span class="s2"> </span><span class="si">{!r}</span><span class="s2"> after </span><span class="si">{!r}</span><span class="s2"> in expression: </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">tok</span><span class="p">,</span> <span class="n">expr</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">l</span><span class="p">],</span> <span class="n">expr</span><span class="p">[:</span><span class="n">i</span><span class="p">],</span> <span class="n">expr</span><span class="p">)</span>
+
+    <span class="n">_EXPRESSION</span> <span class="o">=</span> <span class="s1">&#39;expression&#39;</span>
+    <span class="n">_OPERATOR</span> <span class="o">=</span> <span class="s1">&#39;operator&#39;</span>
+    <span class="n">_ATOM</span> <span class="o">=</span> <span class="s1">&#39;atom&#39;</span>
+    <span class="n">expect</span> <span class="o">=</span> <span class="n">_EXPRESSION</span>
+    <span class="n">paren_level</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># expr =</span>
+    <span class="c1">#       symbol | number</span>
+    <span class="c1">#   |   &#39;(&#39; expr &#39;)&#39;</span>
+    <span class="c1">#   |   expr op expr</span>
+
+    <span class="k">for</span> <span class="n">tok</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">_tokenize</span><span class="p">(</span><span class="n">_expr_tokens</span><span class="p">,</span> <span class="n">expr</span><span class="p">):</span>
+        <span class="c1"># ignore whitespace</span>
+        <span class="k">if</span> <span class="n">tok</span> <span class="o">==</span> <span class="s1">&#39;WHITESPACE&#39;</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="c1"># expr = symbol | number</span>
+        <span class="k">elif</span> <span class="n">tok</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;SYMBOL&#39;</span><span class="p">,</span> <span class="s1">&#39;NUMBER&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">expect</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">_EXPRESSION</span><span class="p">,</span> <span class="n">_ATOM</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">unexpected</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">l</span><span class="p">))</span>
+            <span class="n">expect</span> <span class="o">=</span> <span class="n">_OPERATOR</span>
+        <span class="c1"># expr = &#39;(&#39; expr &#39;)&#39;</span>
+        <span class="k">elif</span> <span class="n">tok</span> <span class="o">==</span> <span class="s1">&#39;LPAREN&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">expect</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">_EXPRESSION</span><span class="p">,</span> <span class="n">_ATOM</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">unexpected</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">l</span><span class="p">))</span>
+            <span class="n">paren_level</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">expect</span> <span class="o">=</span> <span class="n">_EXPRESSION</span>
+        <span class="k">elif</span> <span class="n">tok</span> <span class="o">==</span> <span class="s1">&#39;RPAREN&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">expect</span> <span class="o">!=</span> <span class="n">_OPERATOR</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">unexpected</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">l</span><span class="p">))</span>
+            <span class="n">paren_level</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">expect</span> <span class="o">=</span> <span class="n">_OPERATOR</span>
+        <span class="c1"># expr = expr op expr</span>
+        <span class="k">elif</span> <span class="n">tok</span> <span class="o">==</span> <span class="s1">&#39;OPERATOR&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">expect</span> <span class="o">==</span> <span class="n">_OPERATOR</span><span class="p">:</span>
+                <span class="n">expect</span> <span class="o">=</span> <span class="n">_EXPRESSION</span>
+            <span class="k">elif</span> <span class="n">expect</span> <span class="o">==</span> <span class="n">_EXPRESSION</span> <span class="ow">and</span> <span class="n">expr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="s1">&#39;+-&#39;</span><span class="p">:</span>
+                <span class="n">expect</span> <span class="o">=</span> <span class="n">_ATOM</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">unexpected</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">l</span><span class="p">))</span>
+            <span class="k">continue</span>
+
+    <span class="k">if</span> <span class="n">expect</span> <span class="o">!=</span> <span class="n">_OPERATOR</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected end-of-string in expression: </span><span class="si">{!r}</span><span class="s2">&quot;</span>
+                         <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">expr</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">paren_level</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> unclosed left-parens in expression: </span><span class="si">{!r}</span><span class="s2">&quot;</span>
+                         <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paren_level</span><span class="p">,</span> <span class="n">expr</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="c1"># misc</span>
+
 <span class="nd">@contextmanager</span>
-<div class="viewcode-block" id="temp_filename"><a class="viewcode-back" href="../../cpymad/util.html#cpymad.util.temp_filename">[docs]</a><span class="k">def</span> <span class="nf">temp_filename</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">temp_filename</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get filename for use within &#39;with&#39; block and delete file afterwards.&quot;&quot;&quot;</span>
     <span class="n">fd</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">()</span>
     <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
@@ -356,9 +494,12 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-        <span class="k">pass</span></div>
+        <span class="k">pass</span>
 </pre></div>
 
+           </div>
+           <div class="articleComments">
+            
            </div>
           </div>
           <footer>
@@ -390,10 +531,11 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.15.2',
+            VERSION:'0.17.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>

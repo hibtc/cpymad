@@ -8,9 +8,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>cpymad.util &mdash; cpymad 0.15.2 documentation</title>
+  <title>cpymad.util &mdash; cpymad 0.17.3 documentation</title>
   
 
+  
+  
   
   
 
@@ -33,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="cpymad 0.15.2 documentation" href="../index.html"/>
+    <link rel="top" title="cpymad 0.17.3 documentation" href="../index.html"/>
         <link rel="up" title="API Reference" href="index.html"/>
         <link rel="next" title="cpymad.types" href="types.html"/>
         <link rel="prev" title="cpymad.libmadx" href="libmadx.html"/> 
@@ -65,7 +67,7 @@
             
             
               <div class="version">
-                0.15.2
+                0.17.3
               </div>
             
           
@@ -86,7 +88,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation Instructions</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="madx.html">cpymad.madx</a></li>
@@ -131,7 +136,10 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
@@ -144,20 +152,22 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/cpymad/util.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/cpymad/util.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
     
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-cpymad.util">
-<span id="cpymad-util"></span><h1>cpymad.util<a class="headerlink" href="#module-cpymad.util" title="Permalink to this headline">¶</a></h1>
-<p>Utility functions used in other parts of the pymad package.</p>
+  <div class="section" id="cpymad-util">
+<h1>cpymad.util<a class="headerlink" href="#cpymad-util" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-cpymad.util"></span><p>Utility functions used in other parts of the pymad package.</p>
 <dl class="function">
 <dt id="cpymad.util.mad_quote">
 <code class="descclassname">cpymad.util.</code><code class="descname">mad_quote</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/util.html#mad_quote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.util.mad_quote" title="Permalink to this definition">¶</a></dt>
@@ -180,8 +190,8 @@
 <span class="go">foo[2]</span>
 </pre></div>
 </div>
-<p>Element names are stored with a &#8221;:d&#8221; suffix by MAD-X internally (data in
-node/sequence structs), but users must use the syntax &#8220;elem[d]&#8221; to access
+<p>Element names are stored with a “:d” suffix by MAD-X internally (data in
+node/sequence structs), but users must use the syntax “elem[d]” to access
 the corresponding elements. This function is used to transform any string
 coming from the user before passing it to MAD-X.</p>
 </dd></dl>
@@ -214,8 +224,8 @@ coming from the user before passing it to MAD-X.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>args</strong> &#8211; initial bareword command arguments (including command name!)</li>
-<li><strong>kwargs</strong> &#8211; following named command arguments</li>
+<li><strong>args</strong> – initial bareword command arguments (including command name!)</li>
+<li><strong>kwargs</strong> – following named command arguments</li>
 </ul>
 </td>
 </tr>
@@ -242,25 +252,22 @@ coming from the user before passing it to MAD-X.</p>
 </div>
 </dd></dl>
 
-<dl class="function">
-<dt id="cpymad.util.temp_filename">
-<code class="descclassname">cpymad.util.</code><code class="descname">temp_filename</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/util.html#temp_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.util.temp_filename" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get filename for use within &#8216;with&#8217; block and delete file afterwards.</p>
-</dd></dl>
-
 </div>
 
 
+           </div>
+           <div class="articleComments">
+            
            </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="types.html" class="btn btn-neutral float-right" title="cpymad.types" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="types.html" class="btn btn-neutral float-right" title="cpymad.types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="libmadx.html" class="btn btn-neutral" title="cpymad.libmadx" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="libmadx.html" class="btn btn-neutral" title="cpymad.libmadx" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -291,10 +298,11 @@ coming from the user before passing it to MAD-X.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.15.2',
+            VERSION:'0.17.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
