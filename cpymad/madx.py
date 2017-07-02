@@ -446,11 +446,8 @@ class Madx(object):
             self.twiss(sequence, range=tw_range, twiss_init=twiss_init,
                        sectormap=True, sectorfile=sectorfile, **kwargs)
         tab = self.get_table('sectortable')
-        rmatrix = np.array([[tab['r{}{}'.format(i, j)][-1]
-                             for j in range(1, 7)]
-                            for i in range(1, 7)])
-        kicks = np.array([[tab['k{}'.format(i)][-1]]
-                          for i in range(1, 7)])
+        rmatrix = tab.rmat(-1)
+        kicks = tab.kvec(-1).reshape((-1,1))
         return np.vstack((
             np.hstack((rmatrix, kicks)),
             np.eye(1, 7, 6),
@@ -955,6 +952,28 @@ class TableProxy(collections.Mapping):
             columns = self
         return {column: self[column] for column in columns}
 
+    def getvec(self, name, idx, dim):
+        return np.array([
+            self['{}{}'.format(name, i+1)][idx]
+            for i in range(dim)])
+
+    def getmat(self, name, idx, dim):
+        return np.array([
+            [self['{}{}{}'.format(name, i+1, j+1)][idx]
+             for j in range(dim)]
+            for i in range(dim)])
+
+    def kvec(self, idx, dim=6):
+        """Kicks."""
+        return self.getvec('k', idx, dim)
+
+    def rmat(self, idx, dim=6):
+        """Sectormap."""
+        return self.getmat('r', idx, dim)
+
+    def sigmat(self, idx, dim=6):
+        """Beam matrix."""
+        return self.getmat('sig', idx, dim)
 
 class VarListProxy(collections.MutableMapping):
 

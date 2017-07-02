@@ -10,13 +10,6 @@ from numpy.testing import assert_allclose
 from cpymad.madx import Madx, CommandLog
 
 
-def sig_at(tw, idx):
-    return np.array([
-        [tw['sig{}{}'.format(i+1, j+1)][idx]
-         for j in range(6)]
-        for i in range(6)])
-
-
 class _TestCaseCompat(object):
 
     """
@@ -339,8 +332,8 @@ class TestTransferMap(unittest.TestCase):
         # transport of beam matrix:
         tm = smap[0:6,0:6]
         tab_len = len(tw['sig11'])
-        sig_init = sig_at(tw, 0)
-        sig_final_tw = sig_at(tw, tab_len-1)
+        sig_init = tw.sigmat(0)
+        sig_final_tw = tw.sigmat(tab_len-1)
         sig_final_sm = np.dot(tm, np.dot(sig_init, tm.T))
         assert_allclose(sig_final_tw[0:4,0:4], sig_final_sm[0:4,0:4],
                         rtol=rtol, atol=atol)
