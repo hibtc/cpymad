@@ -4,6 +4,14 @@ Changelog
 (dates are in the form dd.mm.yyyy)
 
 
+0.17.3
+======
+Date: 02.07.2017
+
+- TableProxy gets getmat method for retrieving (sigma/r) matrices
+- update official support to ``MAD-X 5.03.06``
+
+
 0.17.2
 ======
 Date: 29.05.2017
