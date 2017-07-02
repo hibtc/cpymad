@@ -10,6 +10,13 @@ from numpy.testing import assert_allclose
 from cpymad.madx import Madx, CommandLog
 
 
+def sig_at(tw, idx):
+    return np.array([
+        [tw['sig{}{}'.format(i+1, j+1)][idx]
+         for j in range(6)]
+        for i in range(6)])
+
+
 class _TestCaseCompat(object):
 
     """
@@ -312,19 +319,30 @@ class TestTransferMap(unittest.TestCase):
             mad._libmadx.input(line)
         return mad
 
-    def _test_transfer_map(self, seq, range, doc, rtol=1e-7, atol=0):
+    def _test_transfer_map(self, seq, range_, doc, rtol=1e-7, atol=0):
         mad = self._mad(doc)
         par = ['x', 'px', 'y', 'py', 't', 'pt']
         val = [+0.0010, -0.0015, -0.0020, +0.0025, +0.0000, +0.0000]
         twiss = {'betx': 0.0012, 'alfx': 0.0018,
                  'bety': 0.0023, 'alfy': 0.0027}
         twiss.update(zip(par, val))
-        smap = mad.get_transfer_map_7d(seq, range, twiss_init=twiss)
-        tw = mad.twiss(seq, range, twiss_init=twiss)
+        smap = mad.get_transfer_map_7d(seq, range_, twiss_init=twiss)
+        tw = mad.twiss(seq, range_, twiss_init=twiss)
+
+        # transport of coordinate vector:
         x_init = np.array(val)
         x_final_tw = np.array([tw[p][-1] for p in par])
         x_final_sm = np.dot(smap, np.hstack((x_init, 1)))
         assert_allclose(x_final_tw[:4], x_final_sm[:4],
+                        rtol=rtol, atol=atol)
+
+        # transport of beam matrix:
+        tm = smap[0:6,0:6]
+        tab_len = len(tw['sig11'])
+        sig_init = sig_at(tw, 0)
+        sig_final_tw = sig_at(tw, tab_len-1)
+        sig_final_sm = np.dot(tm, np.dot(sig_init, tm.T))
+        assert_allclose(sig_final_tw[0:4,0:4], sig_final_sm[0:4,0:4],
                         rtol=rtol, atol=atol)
 
     def test_drift(self):
