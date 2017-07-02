@@ -75,11 +75,11 @@ The latest `cpymad release`_ can conveniently be installed using pip_:
     pip install cpymad
 
 If you run into problems with this, you should manually download and
-install the `cpymad source`_ to see in which step the problem occurs:
+install the cpymad_ source_ to see in which step the problem occurs:
 
 .. code-block:: bash
 
-    git clone git://github.com/hibtc/cpymad
+    git clone https://github.com/hibtc/cpymad
     cd cpymad
     python setup.py build
     python setup.py install
@@ -89,7 +89,8 @@ virtualenv_.
 
 
 .. _latest MAD-X release: https://github.com/MethodicalAcceleratorDesign/MAD-X/releases
-.. _cpymad release: https://pypi.python.org/pypi/cpymad
+.. _cpymad release: https://pypi.python.org/pypi/cpymad#downloads
 .. _pip: https://pypi.python.org/pypi/pip
-.. _cpymad source: https://github.com/hibtc/cpymad/zipball/master
+.. _cpymad: https://github.com/hibtc/cpymad
+.. _source: https://github.com/hibtc/cpymad/zipball/master
 .. _virtualenv: http://virtualenv.readthedocs.org/en/latest/virtualenv.html

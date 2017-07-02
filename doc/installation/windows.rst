@@ -13,24 +13,40 @@ run
 
     pip install cpymad
 
-from your terminal and that's it. If you want to install to a target
-machine without internet access (or with firewall), you can manually
-download_ the ``.whl`` file for your platform and then use pip_ to install
-that particular file. For example:
+from your terminal and that's it.
+
+
+Offline installation
+====================
+
+If you want to install to a target machine without internet access (or with
+firewall), you can manually download_ the ``.whl`` file for your platform and
+then use pip_ to install that particular file. For example:
 
 .. code-block:: bat
 
-    pip install cpymad-0.10.1-cp27-none-win32.whl
+    pip install cpymad-0.17.3-cp27-none-win32.whl
 
 In this case you will also need to grab and install *numpy*, *PyYAML* and
 *setuptools* (and possibly their dependencies if any). Installable wheel_
 archives for these packages can be conveniently downloaded from here:
 `Unofficial Windows Binaries for Python Extension Packages`_.
 
-If there is no binary available for your platform you can ask me via email
-or the github issue pages to create one for your python version / platform.
+To simplify this process, ``pip`` can automatically download all required
+files:
 
-If you want to build from source, have a look at following guide.
+.. code-block:: bat
+
+    mkdir packages
+    pip download -d packages cpymad
+
+and then later install them in the offline environment like this:
+
+.. code-block:: bat
+
+    pip install -f packages cpymad
+
+If you want/have to build from source, have a look at following guide.
 
 .. _built versions: https://pypi.python.org/pypi/cpymad/#downloads
 .. _download: https://pypi.python.org/pypi/cpymad/#downloads
@@ -77,12 +93,6 @@ Build libmadx
 
 Download and extract the `latest MAD-X release`_.
 
-.. note::
-
-    You might need multiple extraction steps until you get a folder
-    containing the file :file:`CMakeLists.txt` as well as several other
-    files and subdirectories.
-
 .. _latest MAD-X release: https://github.com/MethodicalAcceleratorDesign/MAD-X/releases
 
 I recommend to build MAD-X as a *static* library as described below. This
@@ -123,8 +133,14 @@ files to the :file:`%MADX%\\install` subfolder.
 Build cpymad
 ~~~~~~~~~~~~
 
-Download and extract the latest `cpymad release`_. Then go to the cpymad
-folder and build as follows:
+Download and extract the latest `cpymad release`_. Alternatively, use git to
+retrieve the current development version (unstable):
+
+.. code-block:: bat
+
+    git clone https://github.com/hibtc/cpmyad
+
+Then go to the cpymad folder and build as follows:
 
 .. code-block:: bat
 
@@ -137,6 +153,8 @@ folder and build as follows:
 
         .../libgfortran.a(write.o):(.text$write_float+0xbb): undefined reference to `signbitq'
         .../lib/gcc/i686-w64-mingw32/4.9.2/libgfortran.a(write.o):(.text$write_float+0xe7): undefined reference to `finiteq'
+
+    If the build fails, try to leave it out.
 
 From the built package you can create a so called wheel_, which is
 essentially a zip archive containing all the files ready for installation:
@@ -151,7 +169,7 @@ python distribution, like so:
 
 .. code-block:: bat
 
-    pip install dist\cpymad-0.10.1-cp27-none-win32.whl
+    pip install dist\cpymad-0.17.3-cp27-none-win32.whl
 
 .. _cpymad release: https://github.com/hibtc/cpymad/releases
 .. _wheel: https://wheel.readthedocs.org/en/latest/
