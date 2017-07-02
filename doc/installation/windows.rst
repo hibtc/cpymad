@@ -123,8 +123,8 @@ files to the :file:`%MADX%\\install` subfolder.
 Build cpymad
 ~~~~~~~~~~~~
 
-Download the `cpymad source`_. Then go to the pymad folder and build as
-follows:
+Download and extract the latest `cpymad release`_. Then go to the cpymad
+folder and build as follows:
 
 .. code-block:: bat
 
@@ -153,5 +153,5 @@ python distribution, like so:
 
     pip install dist\cpymad-0.10.1-cp27-none-win32.whl
 
-.. _cpymad source: https://github.com/pymad/cpymad/zipball/master
+.. _cpymad release: https://github.com/hibtc/cpymad/releases
 .. _wheel: https://wheel.readthedocs.org/en/latest/
