@@ -25,6 +25,16 @@ except NameError:
     basestring = str
 
 
+__all__ = [
+    'Madx',
+    'Sequence',
+    'BaseElementList',
+    'TableProxy',
+    'CommandLog',
+    'metadata',
+]
+
+
 class Version(object):
 
     """Version information struct. """
@@ -105,56 +115,20 @@ class CommandLog(object):
 class Madx(object):
 
     """
-    Each instance controls one MAD-X interpretor.
+    Python interface for a MAD-X process.
 
-    This class aims to expose a pythonic interface to the full functionality
-    of the MAD-X library. For example, when you call the ``twiss`` method, you
-    get numpy arrays containing the information from the table generated.
-    Furthermore, we try to reduce the amount of commands needed by combining
-    e.g. USE, SELECT, and TWISS into the ``twiss`` method itself, and define
-    reasonable default patterns/columns.
+    For usage instructions, please refer to:
 
-    The following very simple example demonstrates basic usage::
+        https://hibtc.github.io/cpymad/usage
 
-        m = Madx()
-        m.call('my_stuff.madx')
-        twiss = m.twiss('myseq1')
+    Communicates with a MAD-X interpretor in a background process.
 
-        matplotlib.pyplot.plt(twiss['s'], twiss['betx'])
+    The state of the MAD-X interpretor is controlled by feeding textual MAD-X
+    commands to the interpretor.
 
-    Note that only few MAD-X commands are exposed as :class:`Madx` methods.
-    For the rest, there is :meth:`Madx.command` which can be used to execute
-    arbitrary MAD-X commands::
-
-        m.command.beam(sequence='myseq1', particle='PROTON')
-
-    This will work for the majority of cases. However, in some instances it
-    may be necessary to forgo some of the syntactic sugar that
-    :meth:`Madx.command` provides. For example, the ``global`` command (part
-    of matching) can not be accessed as attribute since it is a python
-    keyword. This can be handled as follows::
-
-        m.command('global', sequence=cassps, Q1=26.58)
-
-    Composing MAD-X commands can be a bit tricky at times — partly because of
-    some inconsistencies in the MAD-X language. For those cases where
-    ``command`` fails to do the right thing or where you simply need more fine
-    grained control over command composition there are more powerful syntaxes
-    available::
-
-        # Multiple positional arguments are just concatenated with commas in
-        # between:
-        m.command('global', 'sequence=cassps', Q1=26.58)
-        m.command('global, sequence=cassps',  'Q1=26.58')
-
-        # Issue a plain text command, don't forget the semicolon!
-        m.input('FOO, BAR=[baz], QUX=<NORF>;')
-
-    By default :class:`Madx` uses a subprocess to execute MAD-X library calls
-    remotely via a simple RPC protocol which is defined in :mod:`_rpc`. If
-    required this behaviour can be customized by passing a custom ``libmadx``
-    object to the constructor. This object must expose an interface similar to
-    :mod:`libmadx`.
+    The state of the MAD-X interpretor is accessed by directly reading the
+    values from the C variables in-memory and sending the results pickled back
+    over the pipe.
     """
 
     def __init__(self, libmadx=None, command_log=None, error_log=None,
@@ -166,16 +140,6 @@ class Madx(object):
         :param command_log: Log all MAD-X commands issued via cpymad.
         :param error_log: logger instance ``logging.Logger``
         :param Popen_args: Additional parameters to ``subprocess.Popen``
-
-        Note that ``command_log`` can be either a filename or a callable. For
-        example:
-
-            m1 = Madx(command_log=print)
-
-            m2 = Madx(command_log=CommandLog(sys.stderr))
-
-        Of course, in python2 the first example requires ``from __future__
-        import print_function`` to be in effect.
 
         If ``libmadx`` is NOT specified, a new MAD-X interpretor will
         automatically be spawned. This is what you will mostly want to do. In
@@ -309,11 +273,22 @@ class Madx(object):
 
     def chdir(self, path):
         """
-        Change the directory. Can be used as context manager.
+        Change the directory of the MAD-X process (not the current python process).
 
         :param str path: new path name
         :returns: a context manager that can change the directory back
         :rtype: ChangeDirectory
+
+        It can be used as context manager for temporary directory changes::
+
+            with madx.chdir('/x/y/z'):
+                madx.call('file.x')
+                madx.call('file.y')
+
+        This method is special in that it is currently the only modification
+        of the MAD-X interpretor state that doesn't go through the
+        :meth:`Madx.input` method (because there is no MAD-X command to change
+        the directory).
         """
         # Note, that the libmadx module includes the functions 'getcwd' and
         # 'chdir' so it can be used as a valid 'os' module for the purposes
@@ -703,7 +678,7 @@ class Sequence(object):
 
     @property
     def expanded_elements(self):
-        """Get list of elements in expanded sequence."""
+        """List of elements including implicit drifts."""
         return ExpandedElementList(self._libmadx, self._name)
 
     def element_names(self):

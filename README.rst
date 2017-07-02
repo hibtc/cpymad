@@ -20,12 +20,14 @@ issues`_.
 Links
 ~~~~~
 
+- `Usage`_
 - `Installation`_
 - `Source code`_
 - `Documentation`_
 - `Issue tracker`_
 - `Latest Release`_
 
+.. _Usage: http://hibtc.github.io/cpymad/usage
 .. _Installation: http://hibtc.github.io/cpymad/installation
 .. _Source code: https://github.com/hibtc/cpymad
 .. _Documentation: http://hibtc.github.io/cpymad
