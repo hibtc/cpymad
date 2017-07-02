@@ -92,6 +92,16 @@
             
             
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html#input">input()</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html#command">command()</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html#chdir">chdir()</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html#others">Others</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html#version">version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html#elements">elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html#tables">tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html#variables">variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html#sequences">sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation Instructions</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">cpymad.madx</a></li>
@@ -100,6 +110,7 @@
 <li class="toctree-l2"><a class="reference internal" href="types.html">cpymad.types</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../known-issues.html">Known issues</a></li>
 </ul>
 
             
@@ -170,96 +181,18 @@
 <p>This module defines a convenience layer to access the MAD-X interpreter.</p>
 <p>The most interesting class for users is <a class="reference internal" href="#cpymad.madx.Madx" title="cpymad.madx.Madx"><code class="xref py py-class docutils literal"><span class="pre">Madx</span></code></a>.</p>
 <dl class="class">
-<dt id="cpymad.madx.BaseElementList">
-<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">BaseElementList</code><a class="reference internal" href="../_modules/cpymad/madx.html#BaseElementList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.BaseElementList" title="Permalink to this definition">¶</a></dt>
-<dd><p>Immutable list of beam line elements.</p>
-<p>Each element is a dictionary containing its properties.</p>
-<dl class="method">
-<dt id="cpymad.madx.BaseElementList.index">
-<code class="descname">index</code><span class="sig-paren">(</span><em>element</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#BaseElementList.index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.BaseElementList.index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find index of element with specified name.</p>
-<p>Can be invoked with either the element dict or the element name.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if the element is not found</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="cpymad.madx.CommandLog">
-<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">CommandLog</code><span class="sig-paren">(</span><em>file</em>, <em>prefix=''</em>, <em>suffix='n'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#CommandLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.CommandLog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Log MAD-X command history to a text file.</p>
-<dl class="classmethod">
-<dt id="cpymad.madx.CommandLog.create">
-<em class="property">classmethod </em><code class="descname">create</code><span class="sig-paren">(</span><em>filename</em>, <em>prefix=''</em>, <em>suffix='\n'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#CommandLog.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.CommandLog.create" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create CommandLog from filename (overwrite/create).</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="cpymad.madx.GlobalElementList">
-<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">GlobalElementList</code><span class="sig-paren">(</span><em>libmadx</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#GlobalElementList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.GlobalElementList" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provides dict-like access to MAD-X global elements.</p>
-</dd></dl>
-
-<dl class="class">
 <dt id="cpymad.madx.Madx">
 <em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">Madx</code><span class="sig-paren">(</span><em>libmadx=None</em>, <em>command_log=None</em>, <em>error_log=None</em>, <em>**Popen_args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Each instance controls one MAD-X interpretor.</p>
-<p>This class aims to expose a pythonic interface to the full functionality
-of the MAD-X library. For example, when you call the <code class="docutils literal"><span class="pre">twiss</span></code> method, you
-get numpy arrays containing the information from the table generated.
-Furthermore, we try to reduce the amount of commands needed by combining
-e.g. USE, SELECT, and TWISS into the <code class="docutils literal"><span class="pre">twiss</span></code> method itself, and define
-reasonable default patterns/columns.</p>
-<p>The following very simple example demonstrates basic usage:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">()</span>
-<span class="n">m</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;my_stuff.madx&#39;</span><span class="p">)</span>
-<span class="n">twiss</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">twiss</span><span class="p">(</span><span class="s1">&#39;myseq1&#39;</span><span class="p">)</span>
-
-<span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plt</span><span class="p">(</span><span class="n">twiss</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">],</span> <span class="n">twiss</span><span class="p">[</span><span class="s1">&#39;betx&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-<p>Note that only few MAD-X commands are exposed as <a class="reference internal" href="#cpymad.madx.Madx" title="cpymad.madx.Madx"><code class="xref py py-class docutils literal"><span class="pre">Madx</span></code></a> methods.
-For the rest, there is <a class="reference internal" href="#cpymad.madx.Madx.command" title="cpymad.madx.Madx.command"><code class="xref py py-meth docutils literal"><span class="pre">Madx.command()</span></code></a> which can be used to execute
-arbitrary MAD-X commands:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">beam</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="s1">&#39;myseq1&#39;</span><span class="p">,</span> <span class="n">particle</span><span class="o">=</span><span class="s1">&#39;PROTON&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This will work for the majority of cases. However, in some instances it
-may be necessary to forgo some of the syntactic sugar that
-<a class="reference internal" href="#cpymad.madx.Madx.command" title="cpymad.madx.Madx.command"><code class="xref py py-meth docutils literal"><span class="pre">Madx.command()</span></code></a> provides. For example, the <code class="docutils literal"><span class="pre">global</span></code> command (part
-of matching) can not be accessed as attribute since it is a python
-keyword. This can be handled as follows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s1">&#39;global&#39;</span><span class="p">,</span> <span class="n">sequence</span><span class="o">=</span><span class="n">cassps</span><span class="p">,</span> <span class="n">Q1</span><span class="o">=</span><span class="mf">26.58</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Composing MAD-X commands can be a bit tricky at times — partly because of
-some inconsistencies in the MAD-X language. For those cases where
-<code class="docutils literal"><span class="pre">command</span></code> fails to do the right thing or where you simply need more fine
-grained control over command composition there are more powerful syntaxes
-available:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Multiple positional arguments are just concatenated with commas in</span>
-<span class="c1"># between:</span>
-<span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s1">&#39;global&#39;</span><span class="p">,</span> <span class="s1">&#39;sequence=cassps&#39;</span><span class="p">,</span> <span class="n">Q1</span><span class="o">=</span><span class="mf">26.58</span><span class="p">)</span>
-<span class="n">m</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s1">&#39;global, sequence=cassps&#39;</span><span class="p">,</span>  <span class="s1">&#39;Q1=26.58&#39;</span><span class="p">)</span>
-
-<span class="c1"># Issue a plain text command, don&#39;t forget the semicolon!</span>
-<span class="n">m</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s1">&#39;FOO, BAR=[baz], QUX=&lt;NORF&gt;;&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>By default <a class="reference internal" href="#cpymad.madx.Madx" title="cpymad.madx.Madx"><code class="xref py py-class docutils literal"><span class="pre">Madx</span></code></a> uses a subprocess to execute MAD-X library calls
-remotely via a simple RPC protocol which is defined in <code class="xref py py-mod docutils literal"><span class="pre">_rpc</span></code>. If
-required this behaviour can be customized by passing a custom <code class="docutils literal"><span class="pre">libmadx</span></code>
-object to the constructor. This object must expose an interface similar to
-<code class="xref py py-mod docutils literal"><span class="pre">libmadx</span></code>.</p>
+<dd><p>Python interface for a MAD-X process.</p>
+<p>For usage instructions, please refer to:</p>
+<blockquote>
+<div><a class="reference external" href="https://hibtc.github.io/cpymad/usage">https://hibtc.github.io/cpymad/usage</a></div></blockquote>
+<p>Communicates with a MAD-X interpretor in a background process.</p>
+<p>The state of the MAD-X interpretor is controlled by feeding textual MAD-X
+commands to the interpretor.</p>
+<p>The state of the MAD-X interpretor is accessed by directly reading the
+values from the C variables in-memory and sending the results pickled back
+over the pipe.</p>
 <dl class="attribute">
 <dt id="cpymad.madx.Madx.active_sequence">
 <code class="descname">active_sequence</code><a class="headerlink" href="#cpymad.madx.Madx.active_sequence" title="Permalink to this definition">¶</a></dt>
@@ -287,7 +220,7 @@ object to the constructor. This object must expose an interface similar to
 <dl class="method">
 <dt id="cpymad.madx.Madx.chdir">
 <code class="descname">chdir</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.chdir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.chdir" title="Permalink to this definition">¶</a></dt>
-<dd><p>Change the directory. Can be used as context manager.</p>
+<dd><p>Change the directory of the MAD-X process (not the current python process).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -300,6 +233,16 @@ object to the constructor. This object must expose an interface similar to
 </tr>
 </tbody>
 </table>
+<p>It can be used as context manager for temporary directory changes:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">madx</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s1">&#39;/x/y/z&#39;</span><span class="p">):</span>
+    <span class="n">madx</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;file.x&#39;</span><span class="p">)</span>
+    <span class="n">madx</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;file.y&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This method is special in that it is currently the only modification
+of the MAD-X interpretor state that doesn’t go through the
+<a class="reference internal" href="#cpymad.madx.Madx.input" title="cpymad.madx.Madx.input"><code class="xref py py-meth docutils literal"><span class="pre">Madx.input()</span></code></a> method (because there is no MAD-X command to change
+the directory).</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -585,38 +528,6 @@ object to the constructor. This object must expose an interface similar to
 </dd></dl>
 
 <dl class="class">
-<dt id="cpymad.madx.MadxCommands">
-<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">MadxCommands</code><span class="sig-paren">(</span><em>dispatch</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#MadxCommands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.MadxCommands" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generic MAD-X command wrapper.</p>
-<p>Raw python interface to issue MAD-X commands. Usage example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">command</span> <span class="o">=</span> <span class="n">MadxCommands</span><span class="p">(</span><span class="n">libmadx</span><span class="o">.</span><span class="n">input</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">command</span><span class="p">(</span><span class="s1">&#39;twiss&#39;</span><span class="p">,</span> <span class="n">sequence</span><span class="o">=</span><span class="s1">&#39;LEBT&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">command</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;A meaningful phrase&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><strong>__dispatch</strong> – callable that takes a MAD-X command string.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="cpymad.madx.Metadata">
-<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">Metadata</code><a class="reference internal" href="../_modules/cpymad/madx.html#Metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>MAD-X metadata (license info, etc).</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="cpymad.madx.NOP">
-<code class="descclassname">cpymad.madx.</code><code class="descname">NOP</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#NOP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.NOP" title="Permalink to this definition">¶</a></dt>
-<dd><p>Do nothing.</p>
-</dd></dl>
-
-<dl class="class">
 <dt id="cpymad.madx.Sequence">
 <em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">Sequence</code><span class="sig-paren">(</span><em>name</em>, <em>madx</em>, <em>_check=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Sequence" title="Permalink to this definition">¶</a></dt>
 <dd><p>MAD-X sequence representation.</p>
@@ -641,7 +552,7 @@ object to the constructor. This object must expose an interface similar to
 <dl class="attribute">
 <dt id="cpymad.madx.Sequence.expanded_elements">
 <code class="descname">expanded_elements</code><a class="headerlink" href="#cpymad.madx.Sequence.expanded_elements" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get list of elements in expanded sequence.</p>
+<dd><p>List of elements including implicit drifts.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -683,15 +594,25 @@ object to the constructor. This object must expose an interface similar to
 </dd></dl>
 
 <dl class="class">
-<dt id="cpymad.madx.SequenceMap">
-<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">SequenceMap</code><span class="sig-paren">(</span><em>madx</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#SequenceMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.SequenceMap" title="Permalink to this definition">¶</a></dt>
-<dd><p>A dict like view of all sequences (<a class="reference internal" href="#cpymad.madx.Sequence" title="cpymad.madx.Sequence"><code class="xref py py-class docutils literal"><span class="pre">Sequence</span></code></a>) in memory.</p>
+<dt id="cpymad.madx.BaseElementList">
+<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">BaseElementList</code><a class="reference internal" href="../_modules/cpymad/madx.html#BaseElementList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.BaseElementList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Immutable list of beam line elements.</p>
+<p>Each element is a dictionary containing its properties.</p>
+<dl class="method">
+<dt id="cpymad.madx.BaseElementList.index">
+<code class="descname">index</code><span class="sig-paren">(</span><em>element</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#BaseElementList.index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.BaseElementList.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find index of element with specified name.</p>
+<p>Can be invoked with either the element dict or the element name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if the element is not found</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="class">
-<dt id="cpymad.madx.TableMap">
-<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">TableMap</code><span class="sig-paren">(</span><em>libmadx</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#TableMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.TableMap" title="Permalink to this definition">¶</a></dt>
-<dd><p>A dict like view of all tables (<a class="reference internal" href="#cpymad.madx.TableProxy" title="cpymad.madx.TableProxy"><code class="xref py py-class docutils literal"><span class="pre">TableProxy</span></code></a>) in memory.</p>
 </dd></dl>
 
 <dl class="class">
@@ -763,15 +684,15 @@ object to the constructor. This object must expose an interface similar to
 </dd></dl>
 
 <dl class="class">
-<dt id="cpymad.madx.VarListProxy">
-<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">VarListProxy</code><span class="sig-paren">(</span><em>libmadx</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#VarListProxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.VarListProxy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provides dict-like access to MAD-X global variables.</p>
+<dt id="cpymad.madx.CommandLog">
+<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">CommandLog</code><span class="sig-paren">(</span><em>file</em>, <em>prefix=''</em>, <em>suffix='n'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#CommandLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.CommandLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log MAD-X command history to a text file.</p>
+<dl class="classmethod">
+<dt id="cpymad.madx.CommandLog.create">
+<em class="property">classmethod </em><code class="descname">create</code><span class="sig-paren">(</span><em>filename</em>, <em>prefix=''</em>, <em>suffix='\n'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#CommandLog.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.CommandLog.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create CommandLog from filename (overwrite/create).</p>
 </dd></dl>
 
-<dl class="class">
-<dt id="cpymad.madx.Version">
-<em class="property">class </em><code class="descclassname">cpymad.madx.</code><code class="descname">Version</code><span class="sig-paren">(</span><em>release</em>, <em>date</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Version" title="Permalink to this definition">¶</a></dt>
-<dd><p>Version information struct.</p>
 </dd></dl>
 
 </div>

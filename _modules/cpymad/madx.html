@@ -185,7 +185,17 @@
     <span class="n">basestring</span> <span class="o">=</span> <span class="nb">str</span>
 
 
-<div class="viewcode-block" id="Version"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Version">[docs]</a><span class="k">class</span> <span class="nc">Version</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;Madx&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Sequence&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;BaseElementList&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;TableProxy&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;CommandLog&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;metadata&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">Version</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;Version information struct. &quot;&quot;&quot;</span>
 
@@ -193,13 +203,14 @@
         <span class="sd">&quot;&quot;&quot;Store version information.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">release</span> <span class="o">=</span> <span class="n">release</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">date</span> <span class="o">=</span> <span class="n">date</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">release</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)))</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Show nice version string to user.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s2">&quot;MAD-X </span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">date</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="s2">&quot;MAD-X </span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="MadxCommands"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.MadxCommands">[docs]</a><span class="k">class</span> <span class="nc">MadxCommands</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">MadxCommands</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generic MAD-X command wrapper.</span>
@@ -232,12 +243,12 @@
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a dispatcher for a specific command.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="NOP"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.NOP">[docs]</a><span class="k">def</span> <span class="nf">NOP</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">NOP</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Do nothing.&quot;&quot;&quot;</span>
-    <span class="k">pass</span></div>
+    <span class="k">pass</span>
 
 
 <div class="viewcode-block" id="CommandLog"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.CommandLog">[docs]</a><span class="k">class</span> <span class="nc">CommandLog</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -264,56 +275,20 @@
 <div class="viewcode-block" id="Madx"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx">[docs]</a><span class="k">class</span> <span class="nc">Madx</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Each instance controls one MAD-X interpretor.</span>
+<span class="sd">    Python interface for a MAD-X process.</span>
 
-<span class="sd">    This class aims to expose a pythonic interface to the full functionality</span>
-<span class="sd">    of the MAD-X library. For example, when you call the ``twiss`` method, you</span>
-<span class="sd">    get numpy arrays containing the information from the table generated.</span>
-<span class="sd">    Furthermore, we try to reduce the amount of commands needed by combining</span>
-<span class="sd">    e.g. USE, SELECT, and TWISS into the ``twiss`` method itself, and define</span>
-<span class="sd">    reasonable default patterns/columns.</span>
+<span class="sd">    For usage instructions, please refer to:</span>
 
-<span class="sd">    The following very simple example demonstrates basic usage::</span>
+<span class="sd">        https://hibtc.github.io/cpymad/usage</span>
 
-<span class="sd">        m = Madx()</span>
-<span class="sd">        m.call(&#39;my_stuff.madx&#39;)</span>
-<span class="sd">        twiss = m.twiss(&#39;myseq1&#39;)</span>
+<span class="sd">    Communicates with a MAD-X interpretor in a background process.</span>
 
-<span class="sd">        matplotlib.pyplot.plt(twiss[&#39;s&#39;], twiss[&#39;betx&#39;])</span>
+<span class="sd">    The state of the MAD-X interpretor is controlled by feeding textual MAD-X</span>
+<span class="sd">    commands to the interpretor.</span>
 
-<span class="sd">    Note that only few MAD-X commands are exposed as :class:`Madx` methods.</span>
-<span class="sd">    For the rest, there is :meth:`Madx.command` which can be used to execute</span>
-<span class="sd">    arbitrary MAD-X commands::</span>
-
-<span class="sd">        m.command.beam(sequence=&#39;myseq1&#39;, particle=&#39;PROTON&#39;)</span>
-
-<span class="sd">    This will work for the majority of cases. However, in some instances it</span>
-<span class="sd">    may be necessary to forgo some of the syntactic sugar that</span>
-<span class="sd">    :meth:`Madx.command` provides. For example, the ``global`` command (part</span>
-<span class="sd">    of matching) can not be accessed as attribute since it is a python</span>
-<span class="sd">    keyword. This can be handled as follows::</span>
-
-<span class="sd">        m.command(&#39;global&#39;, sequence=cassps, Q1=26.58)</span>
-
-<span class="sd">    Composing MAD-X commands can be a bit tricky at times — partly because of</span>
-<span class="sd">    some inconsistencies in the MAD-X language. For those cases where</span>
-<span class="sd">    ``command`` fails to do the right thing or where you simply need more fine</span>
-<span class="sd">    grained control over command composition there are more powerful syntaxes</span>
-<span class="sd">    available::</span>
-
-<span class="sd">        # Multiple positional arguments are just concatenated with commas in</span>
-<span class="sd">        # between:</span>
-<span class="sd">        m.command(&#39;global&#39;, &#39;sequence=cassps&#39;, Q1=26.58)</span>
-<span class="sd">        m.command(&#39;global, sequence=cassps&#39;,  &#39;Q1=26.58&#39;)</span>
-
-<span class="sd">        # Issue a plain text command, don&#39;t forget the semicolon!</span>
-<span class="sd">        m.input(&#39;FOO, BAR=[baz], QUX=&lt;NORF&gt;;&#39;)</span>
-
-<span class="sd">    By default :class:`Madx` uses a subprocess to execute MAD-X library calls</span>
-<span class="sd">    remotely via a simple RPC protocol which is defined in :mod:`_rpc`. If</span>
-<span class="sd">    required this behaviour can be customized by passing a custom ``libmadx``</span>
-<span class="sd">    object to the constructor. This object must expose an interface similar to</span>
-<span class="sd">    :mod:`libmadx`.</span>
+<span class="sd">    The state of the MAD-X interpretor is accessed by directly reading the</span>
+<span class="sd">    values from the C variables in-memory and sending the results pickled back</span>
+<span class="sd">    over the pipe.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">libmadx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">command_log</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">error_log</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -325,16 +300,6 @@
 <span class="sd">        :param command_log: Log all MAD-X commands issued via cpymad.</span>
 <span class="sd">        :param error_log: logger instance ``logging.Logger``</span>
 <span class="sd">        :param Popen_args: Additional parameters to ``subprocess.Popen``</span>
-
-<span class="sd">        Note that ``command_log`` can be either a filename or a callable. For</span>
-<span class="sd">        example:</span>
-
-<span class="sd">            m1 = Madx(command_log=print)</span>
-
-<span class="sd">            m2 = Madx(command_log=CommandLog(sys.stderr))</span>
-
-<span class="sd">        Of course, in python2 the first example requires ``from __future__</span>
-<span class="sd">        import print_function`` to be in effect.</span>
 
 <span class="sd">        If ``libmadx`` is NOT specified, a new MAD-X interpretor will</span>
 <span class="sd">        automatically be spawned. This is what you will mostly want to do. In</span>
@@ -468,11 +433,22 @@
 
 <div class="viewcode-block" id="Madx.chdir"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.chdir">[docs]</a>    <span class="k">def</span> <span class="nf">chdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Change the directory. Can be used as context manager.</span>
+<span class="sd">        Change the directory of the MAD-X process (not the current python process).</span>
 
 <span class="sd">        :param str path: new path name</span>
 <span class="sd">        :returns: a context manager that can change the directory back</span>
 <span class="sd">        :rtype: ChangeDirectory</span>
+
+<span class="sd">        It can be used as context manager for temporary directory changes::</span>
+
+<span class="sd">            with madx.chdir(&#39;/x/y/z&#39;):</span>
+<span class="sd">                madx.call(&#39;file.x&#39;)</span>
+<span class="sd">                madx.call(&#39;file.y&#39;)</span>
+
+<span class="sd">        This method is special in that it is currently the only modification</span>
+<span class="sd">        of the MAD-X interpretor state that doesn&#39;t go through the</span>
+<span class="sd">        :meth:`Madx.input` method (because there is no MAD-X command to change</span>
+<span class="sd">        the directory).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Note, that the libmadx module includes the functions &#39;getcwd&#39; and</span>
         <span class="c1"># &#39;chdir&#39; so it can be used as a valid &#39;os&#39; module for the purposes</span>
@@ -743,7 +719,7 @@
     <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>
 
 
-<div class="viewcode-block" id="SequenceMap"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.SequenceMap">[docs]</a><span class="k">class</span> <span class="nc">SequenceMap</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">SequenceMap</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A dict like view of all sequences (:class:`Sequence`) in memory.</span>
@@ -769,10 +745,10 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">sequence_exists</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_sequence_count</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_sequence_count</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="TableMap"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.TableMap">[docs]</a><span class="k">class</span> <span class="nc">TableMap</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">TableMap</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A dict like view of all tables (:class:`TableProxy`) in memory.</span>
@@ -797,7 +773,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">table_exists</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_table_count</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_table_count</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="Sequence"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Sequence">[docs]</a><span class="k">class</span> <span class="nc">Sequence</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -862,7 +838,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">expanded_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get list of elements in expanded sequence.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;List of elements including implicit drifts.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ExpandedElementList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">element_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1022,7 +998,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_expanded_element_index_by_position</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sequence_name</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="GlobalElementList"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.GlobalElementList">[docs]</a><span class="k">class</span> <span class="nc">GlobalElementList</span><span class="p">(</span><span class="n">BaseElementList</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">GlobalElementList</span><span class="p">(</span><span class="n">BaseElementList</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Provides dict-like access to MAD-X global elements.</span>
@@ -1036,7 +1012,7 @@
 
     <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
-            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_global_element_name</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></div>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">get_global_element_name</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="TableProxy"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.TableProxy">[docs]</a><span class="k">class</span> <span class="nc">TableProxy</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
@@ -1135,7 +1111,7 @@
         <span class="sd">&quot;&quot;&quot;Beam matrix.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getmat</span><span class="p">(</span><span class="s1">&#39;sig&#39;</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span></div></div>
 
-<div class="viewcode-block" id="VarListProxy"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.VarListProxy">[docs]</a><span class="k">class</span> <span class="nc">VarListProxy</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">MutableMapping</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">VarListProxy</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">MutableMapping</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Provides dict-like access to MAD-X global variables.</span>
@@ -1164,10 +1140,10 @@
                 <span class="k">yield</span> <span class="n">name</span>
 
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">num_globals</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="o">.</span><span class="n">num_globals</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="Metadata"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Metadata">[docs]</a><span class="k">class</span> <span class="nc">Metadata</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Metadata</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;MAD-X metadata (license info, etc).&quot;&quot;&quot;</span>
 
@@ -1206,7 +1182,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span><span class="p">:</span>
             <span class="n">svc</span><span class="p">,</span> <span class="n">proc</span> <span class="o">=</span> <span class="n">_rpc</span><span class="o">.</span><span class="n">LibMadxClient</span><span class="o">.</span><span class="n">spawn_subprocess</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">libmadx</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_libmadx</span>
 
 
 <span class="n">metadata</span> <span class="o">=</span> <span class="n">Metadata</span><span class="p">()</span>
