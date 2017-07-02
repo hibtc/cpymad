@@ -28,8 +28,8 @@ Contents
    known-issues
 
 
-Project pages
-=============
+Links
+=====
 
 - `Installation`_
 - `Source code`_

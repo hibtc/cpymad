@@ -11,7 +11,14 @@ This version of cpymad should be built against MAD-X |VERSION|.
 .. _MAD-X source: https://github.com/MethodicalAcceleratorDesign/MAD-X
 .. |VERSION| replace:: 5.03.06
 
-Links:
+cpymad is NOT maintained by CERN members and links against an unofficial build
+of MAD-X that is not supported by CERN, i.e. this binary may have problems
+that the official binary does not have and vice versa. See also: `Reporting
+issues`_.
+
+
+Links
+~~~~~
 
 - `Installation`_
 - `Source code`_
@@ -24,11 +31,6 @@ Links:
 .. _Documentation: http://hibtc.github.io/cpymad
 .. _Issue tracker: https://github.com/hibtc/cpymad/issues
 .. _Latest Release: https://pypi.python.org/pypi/cpymad#downloads
-
-cpymad is NOT maintained by CERN members and links against an unofficial build
-of MAD-X that is not supported by CERN, i.e. this binary may have problems
-that the official binary does not have and vice versa. See also: `Reporting
-issues`_.
 
 
 License
