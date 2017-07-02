@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview: module code &mdash; cpymad 0.17.3 documentation</title>
+  <title>Known issues &mdash; cpymad 0.17.3 documentation</title>
   
 
   
@@ -26,19 +26,20 @@
 
   
   
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
 
   
 
   
         <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="cpymad 0.17.3 documentation" href="../index.html"/> 
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="cpymad 0.17.3 documentation" href="index.html"/>
+        <link rel="prev" title="cpymad.types" href="cpymad/types.html"/> 
 
   
-  <script src="../_static/js/modernizr.min.js"></script>
+  <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -54,7 +55,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> cpymad
+            <a href="index.html" class="icon icon-home"> cpymad
           
 
           
@@ -71,7 +72,7 @@
 
           
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -88,11 +89,11 @@
               
             
             
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation Instructions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cpymad/index.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../known-issues.html">Known issues</a></li>
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation/index.html">Installation Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpymad/index.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Known issues</a></li>
 </ul>
 
             
@@ -107,7 +108,7 @@
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">cpymad</a>
+          <a href="index.html">cpymad</a>
         
       </nav>
 
@@ -135,14 +136,16 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Overview: module code</li>
+      <li>Known issues</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
+            <a href="_sources/known-issues.rst.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
     
@@ -154,13 +157,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>All modules for which code is available</h1>
-<ul><li><a href="cpymad/libmadx.html">cpymad.libmadx</a></li>
-<li><a href="cpymad/madx.html">cpymad.madx</a></li>
-<li><a href="cpymad/types.html">cpymad.types</a></li>
-<li><a href="cpymad/util.html">cpymad.util</a></li>
-<li><a href="posix.html">posix</a></li>
-</ul>
+  <div class="section" id="known-issues">
+<h1>Known issues<a class="headerlink" href="#known-issues" title="Permalink to this headline">¶</a></h1>
+<p>On windows with python3.3, there is currently no satisfying way to close file
+handles in the MAD-X process or prevent them from being inherited by default.
+You have to make sure on your own that you close all file handles before
+creating a new <code class="docutils literal"><span class="pre">cpymad.madx.Madx</span></code> instance!</p>
+</div>
+
 
            </div>
            <div class="articleComments">
@@ -168,6 +172,13 @@
            </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="cpymad/types.html" class="btn btn-neutral" title="cpymad.types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -195,7 +206,7 @@
 
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
+            URL_ROOT:'./',
             VERSION:'0.17.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
@@ -203,15 +214,15 @@
             SOURCELINK_SUFFIX: '.txt'
         };
     </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
 
   
 
   
   
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
+    <script type="text/javascript" src="_static/js/theme.js"></script>
   
 
   
