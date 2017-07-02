@@ -82,12 +82,12 @@ def NOP(s):
 
 class CommandLog(object):
 
-    """Log MAD-X command history to a file text."""
+    """Log MAD-X command history to a text file."""
 
     @classmethod
-    def create(cls, filename):
+    def create(cls, filename, prefix='', suffix='\n'):
         """Create CommandLog from filename (overwrite/create)."""
-        return cls(open(filename, 'wt'))
+        return cls(open(filename, 'wt'), prefix=prefix, suffix=suffix)
 
     def __init__(self, file, prefix='', suffix='\n'):
         """Create CommandLog from file instance."""
