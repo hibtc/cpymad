@@ -75,7 +75,7 @@ Next, install minrpc_::
 Build libmadx
 ~~~~~~~~~~~~~
 
-Download and extract the latest `MAD-X source`_ archive.
+Download and extract the `latest MAD-X release`_.
 
 .. note::
 
@@ -83,7 +83,7 @@ Download and extract the latest `MAD-X source`_ archive.
     containing the file :file:`CMakeLists.txt` as well as several other
     files and subdirectories.
 
-.. _MAD-X source: http://svnweb.cern.ch/world/wsvn/madx/tags/
+.. _latest MAD-X release: https://github.com/MethodicalAcceleratorDesign/MAD-X/releases
 
 I recommend to build MAD-X as a *static* library as described below. This
 way, you won't need to carry any ``.dll`` files around and you won't run
@@ -118,8 +118,6 @@ and grab a coffee meanwhile:
 
 If all went well the last command will have installed binaries and library
 files to the :file:`%MADX%\\install` subfolder.
-
-.. _MAD-X source: http://svnweb.cern.ch/world/wsvn/madx/tags/
 
 
 Build cpymad
