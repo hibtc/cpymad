@@ -1,6 +1,6 @@
 cpymad
 ------
-|Version| |Downloads| |License| |Python|
+|Version| |License| |Python|
 
 cpymad is a Cython_ binding to MAD-X_ (`MAD-X source`_).
 
@@ -191,10 +191,6 @@ Currently, tests run on:
 .. |Version| image:: http://coldfix.de:8080/v/cpymad/badge.svg
    :target: https://pypi.python.org/pypi/cpymad/
    :alt: Latest Version
-
-.. |Downloads| image:: http://coldfix.de:8080/d/cpymad/badge.svg
-   :target: https://pypi.python.org/pypi/cpymad#downloads
-   :alt: Downloads
 
 .. |License| image:: http://img.shields.io/badge/license-CC0,_Apache,_Non--Free-red.svg
    :target: https://github.com/hibtc/cpymad/blob/master/COPYING.rst
