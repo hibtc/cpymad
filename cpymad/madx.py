@@ -33,6 +33,7 @@ class Version(object):
         """Store version information."""
         self.release = release
         self.date = date
+        self.info = tuple(map(int, release.split('.')))
 
     def __repr__(self):
         """Show nice version string to user."""
