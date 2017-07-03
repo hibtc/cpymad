@@ -319,7 +319,8 @@ class TestTransferMap(unittest.TestCase):
         twiss = {'betx': 0.0012, 'alfx': 0.0018,
                  'bety': 0.0023, 'alfy': 0.0027}
         twiss.update(zip(par, val))
-        smap = mad.get_transfer_map_7d(seq, range_, twiss_init=twiss)
+        elems = range_.split('/')
+        smap = mad.sectormap(seq, elems, twiss_init=twiss)[-1]
         tw = mad.twiss(seq, range_, twiss_init=twiss)
 
         # transport of coordinate vector:

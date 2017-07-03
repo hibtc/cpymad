@@ -407,27 +407,28 @@ class Madx(object):
             self.use(sequence)
         return sequence
 
-    def get_transfer_map_7d(self, sequence=None, range_=None, tw_range=None,
-                            twiss_init={}, **kwargs):
+    def sectormap(self, sequence, elems, **kwargs):
         """
         Get the 7D transfer map (the 7'th column accounting for KICKs).
         """
         sequence = self._use(sequence)
-        seq_prox = self.sequences[sequence]
-        beg, end = seq_prox._parse_range(range_)
         self.command.select(flag='sectormap', clear=True)
-        self.command.select(flag='sectormap', range=beg)
-        self.command.select(flag='sectormap', range=end)
+        for elem in elems:
+            self.command.select(flag='sectormap', range=elem)
         with util.temp_filename() as sectorfile:
-            self.twiss(sequence, range=tw_range, twiss_init=twiss_init,
-                       sectormap=True, sectorfile=sectorfile, **kwargs)
-        tab = self.get_table('sectortable')
-        rmatrix = tab.rmat(-1)
-        kicks = tab.kvec(-1).reshape((-1,1))
+            self.twiss(sequence, sectormap=True, sectorfile=sectorfile, **kwargs)
+        return self.sectortable()
+
+    def sectortable(self, name='sectortable'):
+        """Read sectormap + kicks from memory and return as Nx7x7 array."""
+        tab = self.get_table(name)
+        cnt = len(tab['r11'])
         return np.vstack((
-            np.hstack((rmatrix, kicks)),
-            np.eye(1, 7, 6),
-        ))
+            np.hstack((tab.rmat(slice(None)),
+                       tab.kvec(slice(None)).reshape((6,1,-1)))),
+            np.hstack((np.zeros((1, 6, cnt)),
+                       np.ones((1, 1, cnt)))),
+        )).transpose((2,0,1))
 
     def match(self,
               sequence=None,
