@@ -121,12 +121,12 @@ class Madx(object):
 
         https://hibtc.github.io/cpymad/usage
 
-    Communicates with a MAD-X interpretor in a background process.
+    Communicates with a MAD-X interpreter in a background process.
 
-    The state of the MAD-X interpretor is controlled by feeding textual MAD-X
-    commands to the interpretor.
+    The state of the MAD-X interpreter is controlled by feeding textual MAD-X
+    commands to the interpreter.
 
-    The state of the MAD-X interpretor is accessed by directly reading the
+    The state of the MAD-X interpreter is accessed by directly reading the
     values from the C variables in-memory and sending the results pickled back
     over the pipe.
     """
@@ -141,7 +141,7 @@ class Madx(object):
         :param error_log: logger instance ``logging.Logger``
         :param Popen_args: Additional parameters to ``subprocess.Popen``
 
-        If ``libmadx`` is NOT specified, a new MAD-X interpretor will
+        If ``libmadx`` is NOT specified, a new MAD-X interpreter will
         automatically be spawned. This is what you will mostly want to do. In
         this case any additional keyword arguments are forwarded to
         ``subprocess.Popen``. The most prominent use case for this is to
@@ -286,7 +286,7 @@ class Madx(object):
                 madx.call('file.y')
 
         This method is special in that it is currently the only modification
-        of the MAD-X interpretor state that doesn't go through the
+        of the MAD-X interpreter state that doesn't go through the
         :meth:`Madx.input` method (because there is no MAD-X command to change
         the directory).
         """
