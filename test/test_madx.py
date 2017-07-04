@@ -320,7 +320,7 @@ class TestTransferMap(unittest.TestCase):
                  'bety': 0.0023, 'alfy': 0.0027}
         twiss.update(zip(par, val))
         elems = range_.split('/')
-        smap = mad.sectormap(seq, elems, twiss_init=twiss)[-1]
+        smap = mad.sectormap(elems, sequence=seq, twiss_init=twiss)[-1]
         tw = mad.twiss(seq, range_, twiss_init=twiss)
 
         # transport of coordinate vector:

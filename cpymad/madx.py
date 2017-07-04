@@ -407,16 +407,15 @@ class Madx(object):
             self.use(sequence)
         return sequence
 
-    def sectormap(self, sequence, elems, **kwargs):
+    def sectormap(self, elems, **kwargs):
         """
         Get the 7D transfer map (the 7'th column accounting for KICKs).
         """
-        sequence = self._use(sequence)
         self.command.select(flag='sectormap', clear=True)
         for elem in elems:
             self.command.select(flag='sectormap', range=elem)
         with util.temp_filename() as sectorfile:
-            self.twiss(sequence, sectormap=True, sectorfile=sectorfile, **kwargs)
+            self.twiss(sectormap=True, sectorfile=sectorfile, **kwargs)
         return self.sectortable()
 
     def sectortable(self, name='sectortable'):
