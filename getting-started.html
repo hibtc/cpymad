@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Usage &mdash; cpymad 0.17.3 documentation</title>
+  <title>Getting Started &mdash; cpymad 0.17.3 documentation</title>
   
 
   
@@ -91,7 +91,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#starting-mad-x">Starting MAD-X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#basic-mad-x-commands">Basic MAD-X commands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#controlling-mad-x">Controlling MAD-X</a><ul>
@@ -159,13 +159,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Usage</li>
+      <li>Getting Started</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/getting-started.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -178,8 +178,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="usage">
-<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
 <p>The preferred way of using cpymad is via the <a class="reference internal" href="cpymad/madx.html#cpymad.madx.Madx" title="cpymad.madx.Madx"><code class="xref py py-class docutils literal"><span class="pre">Madx</span></code></a> class.
 It is responsible for controlling and accessing a MAD-X process from python.</p>
 <div class="section" id="starting-mad-x">
@@ -248,7 +248,7 @@ commands, even if they are not explicitly defined on the python class level.</p>
 <h3>input()<a class="headerlink" href="#input" title="Permalink to this headline">¶</a></h3>
 <p>The method responsible for feeding textual input to MAD-X is
 <a class="reference internal" href="cpymad/madx.html#cpymad.madx.Madx.input" title="cpymad.madx.Madx.input"><code class="xref py py-meth docutils literal"><span class="pre">input()</span></code></a> method. It is called with a single string
-argument that will be forwarded as input to the MAD-X interpretor. For
+argument that will be forwarded as input to the MAD-X interpreter. For
 example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">madx</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s1">&#39;CALL, FILE=&quot;fodo.madx&quot;;&#39;</span><span class="p">)</span>
 </pre></div>
@@ -299,7 +299,7 @@ useful for MAD-X commands that are python keywords:</p>
 <p><a class="reference internal" href="cpymad/madx.html#cpymad.madx.Madx.chdir" title="cpymad.madx.Madx.chdir"><code class="xref py py-meth docutils literal"><span class="pre">chdir()</span></code></a> changes the directory of the MAD-X process
 (not the current python process).</p>
 <p>This method is special in that it is currently the only modification of the
-state of the MAD-X interpretor state go through the
+MAD-X interpreter state that does not go through the
 <a class="reference internal" href="cpymad/madx.html#cpymad.madx.Madx.input" title="cpymad.madx.Madx.input"><code class="xref py py-meth docutils literal"><span class="pre">input()</span></code></a> method (because there is no MAD-X command to
 change the directory).</p>
 </div>
@@ -335,10 +335,10 @@ from the C variables in the MAD-X process memory!</p>
 <p>This means that data retrieval is relatively fast because it does <strong>not</strong>
 require:</p>
 <ul class="simple">
-<li>a command to be parsed by the MAD-X interpretor</li>
+<li>a command to be parsed by the MAD-X interpreter</li>
 <li>to use a file on disk or the network</li>
 <li>output data to be parsed on the python side</li>
-<li>to potentially modify the MAD-X interpretor state by executing a command</li>
+<li>to potentially modify the MAD-X interpreter state by executing a command</li>
 </ul>
 <p>Apart from this major advantage, another important implication is that the
 <code class="docutils literal"><span class="pre">command_log</span></code> file will not be cluttered by data-retrieval commands but only
@@ -396,7 +396,7 @@ show <em>actions</em>.</p>
 <span class="k">print</span><span class="p">(</span><span class="n">madx</span><span class="o">.</span><span class="n">globals</span><span class="p">[</span><span class="s1">&#39;PI&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>Evaluate an expression in the MAD-X interpretor:</p>
+<p>Evaluate an expression in the MAD-X interpreter:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">madx</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="s1">&#39;sb-&gt;angle / pi * 180&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -424,7 +424,7 @@ show <em>actions</em>.</p>
 </div>
 <div class="section" id="redirecting-output">
 <h2>Redirecting output<a class="headerlink" href="#redirecting-output" title="Permalink to this headline">¶</a></h2>
-<p>The output of the MAD-X interpretor can be controlled using the <code class="docutils literal"><span class="pre">redirect</span></code>
+<p>The output of the MAD-X interpreter can be controlled using the <code class="docutils literal"><span class="pre">redirect</span></code>
 parameter of the <a class="reference internal" href="cpymad/madx.html#cpymad.madx.Madx" title="cpymad.madx.Madx"><code class="xref py py-class docutils literal"><span class="pre">Madx</span></code></a> constructor. It allows to disable
 the output completely:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">madx</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">(</span><span class="n">stdout</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>

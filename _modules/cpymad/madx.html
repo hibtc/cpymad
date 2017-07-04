@@ -90,7 +90,7 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installation Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../cpymad/index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../known-issues.html">Known issues</a></li>
@@ -279,14 +279,14 @@
 
 <span class="sd">    For usage instructions, please refer to:</span>
 
-<span class="sd">        https://hibtc.github.io/cpymad/usage</span>
+<span class="sd">        https://hibtc.github.io/cpymad/getting-started</span>
 
-<span class="sd">    Communicates with a MAD-X interpretor in a background process.</span>
+<span class="sd">    Communicates with a MAD-X interpreter in a background process.</span>
 
-<span class="sd">    The state of the MAD-X interpretor is controlled by feeding textual MAD-X</span>
-<span class="sd">    commands to the interpretor.</span>
+<span class="sd">    The state of the MAD-X interpreter is controlled by feeding textual MAD-X</span>
+<span class="sd">    commands to the interpreter.</span>
 
-<span class="sd">    The state of the MAD-X interpretor is accessed by directly reading the</span>
+<span class="sd">    The state of the MAD-X interpreter is accessed by directly reading the</span>
 <span class="sd">    values from the C variables in-memory and sending the results pickled back</span>
 <span class="sd">    over the pipe.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -301,7 +301,7 @@
 <span class="sd">        :param error_log: logger instance ``logging.Logger``</span>
 <span class="sd">        :param Popen_args: Additional parameters to ``subprocess.Popen``</span>
 
-<span class="sd">        If ``libmadx`` is NOT specified, a new MAD-X interpretor will</span>
+<span class="sd">        If ``libmadx`` is NOT specified, a new MAD-X interpreter will</span>
 <span class="sd">        automatically be spawned. This is what you will mostly want to do. In</span>
 <span class="sd">        this case any additional keyword arguments are forwarded to</span>
 <span class="sd">        ``subprocess.Popen``. The most prominent use case for this is to</span>
@@ -446,7 +446,7 @@
 <span class="sd">                madx.call(&#39;file.y&#39;)</span>
 
 <span class="sd">        This method is special in that it is currently the only modification</span>
-<span class="sd">        of the MAD-X interpretor state that doesn&#39;t go through the</span>
+<span class="sd">        of the MAD-X interpreter state that doesn&#39;t go through the</span>
 <span class="sd">        :meth:`Madx.input` method (because there is no MAD-X command to change</span>
 <span class="sd">        the directory).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -567,27 +567,28 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">sequence</span>
 
-<div class="viewcode-block" id="Madx.get_transfer_map_7d"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.get_transfer_map_7d">[docs]</a>    <span class="k">def</span> <span class="nf">get_transfer_map_7d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">range_</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tw_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                            <span class="n">twiss_init</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Madx.sectormap"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.sectormap">[docs]</a>    <span class="k">def</span> <span class="nf">sectormap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">elems</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the 7D transfer map (the 7&#39;th column accounting for KICKs).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sequence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
-        <span class="n">seq_prox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sequences</span><span class="p">[</span><span class="n">sequence</span><span class="p">]</span>
-        <span class="n">beg</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">seq_prox</span><span class="o">.</span><span class="n">_parse_range</span><span class="p">(</span><span class="n">range_</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">flag</span><span class="o">=</span><span class="s1">&#39;sectormap&#39;</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">flag</span><span class="o">=</span><span class="s1">&#39;sectormap&#39;</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="n">beg</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">flag</span><span class="o">=</span><span class="s1">&#39;sectormap&#39;</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="n">end</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">elems</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">flag</span><span class="o">=</span><span class="s1">&#39;sectormap&#39;</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="n">elem</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">util</span><span class="o">.</span><span class="n">temp_filename</span><span class="p">()</span> <span class="k">as</span> <span class="n">sectorfile</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">twiss</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="n">tw_range</span><span class="p">,</span> <span class="n">twiss_init</span><span class="o">=</span><span class="n">twiss_init</span><span class="p">,</span>
-                       <span class="n">sectormap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sectorfile</span><span class="o">=</span><span class="n">sectorfile</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="s1">&#39;sectortable&#39;</span><span class="p">)</span>
-        <span class="n">rmatrix</span> <span class="o">=</span> <span class="n">tab</span><span class="o">.</span><span class="n">rmat</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">kicks</span> <span class="o">=</span> <span class="n">tab</span><span class="o">.</span><span class="n">kvec</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">twiss</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="n">sectormap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sectorfile</span><span class="o">=</span><span class="n">sectorfile</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sectortable</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Madx.sectortable"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.sectortable">[docs]</a>    <span class="k">def</span> <span class="nf">sectortable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;sectortable&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read sectormap + kicks from memory and return as Nx7x7 array.&quot;&quot;&quot;</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">cnt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tab</span><span class="p">[</span><span class="s1">&#39;r11&#39;</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">rmatrix</span><span class="p">,</span> <span class="n">kicks</span><span class="p">)),</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
-        <span class="p">))</span></div>
+            <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">tab</span><span class="o">.</span><span class="n">rmat</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)),</span>
+                       <span class="n">tab</span><span class="o">.</span><span class="n">kvec</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)))),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">cnt</span><span class="p">)),</span>
+                       <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">cnt</span><span class="p">)))),</span>
+        <span class="p">))</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Madx.match"><a class="viewcode-back" href="../../cpymad/madx.html#cpymad.madx.Madx.match">[docs]</a>    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
               <span class="n">sequence</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
