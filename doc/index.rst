@@ -22,7 +22,7 @@ Contents
 .. toctree::
    :maxdepth: 2
 
-   usage
+   getting-started
    installation/index
    cpymad/index
    known-issues
@@ -31,7 +31,7 @@ Contents
 Links
 =====
 
-- `Usage`_
+- `Getting Started`_
 - `Installation`_
 - `Source code`_
 - `Documentation`_
@@ -40,7 +40,7 @@ Links
 
 Feel free to report bugs, request features and ask questions.
 
-.. _Usage: http://hibtc.github.io/cpymad/usage
+.. _Getting Started: http://hibtc.github.io/cpymad/getting-started
 .. _Installation: http://hibtc.github.io/cpymad/installation
 .. _Source code: https://github.com/hibtc/cpymad
 .. _Documentation: http://hibtc.github.io/cpymad

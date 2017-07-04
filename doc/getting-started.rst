@@ -1,5 +1,5 @@
-Usage
-~~~~~
+Getting Started
+~~~~~~~~~~~~~~~
 
 The preferred way of using cpymad is via the :class:`~cpymad.madx.Madx` class.
 It is responsible for controlling and accessing a MAD-X process from python.

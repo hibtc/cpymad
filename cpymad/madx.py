@@ -119,7 +119,7 @@ class Madx(object):
 
     For usage instructions, please refer to:
 
-        https://hibtc.github.io/cpymad/usage
+        https://hibtc.github.io/cpymad/getting-started
 
     Communicates with a MAD-X interpreter in a background process.
 
