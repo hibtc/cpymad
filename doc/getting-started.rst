@@ -154,7 +154,7 @@ chdir()
 (not the current python process).
 
 This method is special in that it is currently the only modification of the
-state of the MAD-X interpreter state go through the
+MAD-X interpreter state that does not go through the
 :meth:`~cpymad.madx.Madx.input` method (because there is no MAD-X command to
 change the directory).
 
