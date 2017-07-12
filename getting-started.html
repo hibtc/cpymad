@@ -109,6 +109,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#sequences">sequences</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#logging-commands">Logging commands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#redirecting-output">Redirecting output</a></li>
 </ul>
 </li>
@@ -189,17 +190,6 @@ It is responsible for controlling and accessing a MAD-X process from python.</p>
 <span class="n">madx</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>For the purpose of debugging, reproducibility and transparency in general, it
-is extremely important to be able to get a listing of the user input sent to
-MAD-X. This can be controlled using the <code class="docutils literal"><span class="pre">command_log</span></code> parameter. It accepts
-file names, arbitrary callables and file-like objects as follows:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">madx</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">(</span><span class="n">command_log</span><span class="o">=</span><span class="s2">&quot;log.madx&quot;</span><span class="p">)</span>
-<span class="n">madx</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">(</span><span class="n">command_log</span><span class="o">=</span><span class="k">print</span><span class="p">)</span>
-<span class="n">madx</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">(</span><span class="n">command_log</span><span class="o">=</span><span class="n">CommandLog</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Of course, in python2 the <code class="docutils literal"><span class="pre">print</span></code> example requires <code class="docutils literal"><span class="pre">from</span> <span class="pre">__future__</span> <span class="pre">import</span>
-<span class="pre">print_function</span></code> to be in effect.</p>
 </div>
 <div class="section" id="basic-mad-x-commands">
 <h2>Basic MAD-X commands<a class="headerlink" href="#basic-mad-x-commands" title="Permalink to this headline">¶</a></h2>
@@ -421,6 +411,20 @@ show <em>actions</em>.</p>
 </pre></div>
 </div>
 </div>
+</div>
+<div class="section" id="logging-commands">
+<h2>Logging commands<a class="headerlink" href="#logging-commands" title="Permalink to this headline">¶</a></h2>
+<p>For the purpose of debugging, reproducibility and transparency in general, it
+is important to be able to get a listing of the user input sent to
+MAD-X. This can be controlled using the <code class="docutils literal"><span class="pre">command_log</span></code> parameter. It accepts
+file names, arbitrary callables and file-like objects as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">madx</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">(</span><span class="n">command_log</span><span class="o">=</span><span class="s2">&quot;log.madx&quot;</span><span class="p">)</span>
+<span class="n">madx</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">(</span><span class="n">command_log</span><span class="o">=</span><span class="k">print</span><span class="p">)</span>
+<span class="n">madx</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">(</span><span class="n">command_log</span><span class="o">=</span><span class="n">CommandLog</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Of course, in python2 the <code class="docutils literal"><span class="pre">print</span></code> example requires <code class="docutils literal"><span class="pre">from</span> <span class="pre">__future__</span> <span class="pre">import</span>
+<span class="pre">print_function</span></code> to be in effect.</p>
 </div>
 <div class="section" id="redirecting-output">
 <h2>Redirecting output<a class="headerlink" href="#redirecting-output" title="Permalink to this headline">¶</a></h2>

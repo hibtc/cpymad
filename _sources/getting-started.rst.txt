@@ -14,20 +14,6 @@ A new MAD-X process can be spawned as follows:
     from cpymad.madx import Madx
     madx = Madx()
 
-For the purpose of debugging, reproducibility and transparency in general, it
-is extremely important to be able to get a listing of the user input sent to
-MAD-X. This can be controlled using the ``command_log`` parameter. It accepts
-file names, arbitrary callables and file-like objects as follows:
-
-.. code-block:: python
-
-    madx = Madx(command_log="log.madx")
-    madx = Madx(command_log=print)
-    madx = Madx(command_log=CommandLog(sys.stderr))
-
-Of course, in python2 the ``print`` example requires ``from __future__ import
-print_function`` to be in effect.
-
 
 Basic MAD-X commands
 ====================
@@ -295,6 +281,24 @@ Dictionary like view of all defined sequences:
 
     # OR: including implicit drifts:
     expanded = fodo.expanded_elements
+
+
+Logging commands
+================
+
+For the purpose of debugging, reproducibility and transparency in general, it
+is important to be able to get a listing of the user input sent to
+MAD-X. This can be controlled using the ``command_log`` parameter. It accepts
+file names, arbitrary callables and file-like objects as follows:
+
+.. code-block:: python
+
+    madx = Madx(command_log="log.madx")
+    madx = Madx(command_log=print)
+    madx = Madx(command_log=CommandLog(sys.stderr))
+
+Of course, in python2 the ``print`` example requires ``from __future__ import
+print_function`` to be in effect.
 
 
 Redirecting output
