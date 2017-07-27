@@ -628,10 +628,10 @@ def get_expanded_element(sequence_name, element_index):
     expanded sequence if requested to do so.
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
-    if not _valid_expanded_index(seq, element_index):
+    if element_index < 0 or element_index > seq.n_nodes:
         raise IndexError(
             "Index out of range: {0} (element count is {1})"
-            .format(element_index, get_expanded_element_count(sequence_name)))
+            .format(element_index, seq.n_nodes))
     return _get_node(seq.all_nodes[element_index], seq.ref_flag, seq.n_nodes > 0)
 
 
@@ -648,7 +648,7 @@ def get_expanded_element_positions(sequence_name):
     cdef int i
     cdef clib.node** nodes = seq.all_nodes
     return [_get_node_entry_pos(nodes[i], seq.ref_flag, seq.n_nodes > 0)
-            for i in xrange(get_expanded_element_count(sequence_name))]
+            for i in xrange(seq.n_nodes)]
 
 
 def get_expanded_element_names(sequence_name):
@@ -663,7 +663,7 @@ def get_expanded_element_names(sequence_name):
     cdef clib.sequence* seq = _find_sequence(sequence_name)
     cdef int i
     return [_node_name(seq.all_nodes[i])
-            for i in xrange(get_expanded_element_count(sequence_name))]
+            for i in xrange(seq.n_nodes)]
 
 
 def get_expanded_element_name(sequence_name, element_index):
@@ -678,10 +678,10 @@ def get_expanded_element_name(sequence_name, element_index):
     :raises IndexError: if the index is out of range
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
-    if not _valid_expanded_index(seq, element_index):
+    if element_index < 0 or element_index > seq.n_nodes:
         raise IndexError(
             "Index out of range: {0} (element count is {1})"
-            .format(element_index, get_expanded_element_count(sequence_name)))
+            .format(element_index, seq.n_nodes))
     return _node_name(seq.all_nodes[element_index])
 
 
@@ -702,12 +702,9 @@ def get_expanded_element_index(sequence_name, element_name):
     # Therefore, we can only provide a linear-time lookup.
     cdef clib.sequence* seq = _find_sequence(sequence_name)
     cdef bytes _element_name = _cstr(name_to_internal(element_name))
-    # TODO: should use get_expanded_element_count() directly?
     for i in xrange(seq.n_nodes):
         if seq.all_nodes[i].name == _element_name:
             return i
-        if seq.all_nodes[i] == seq.ex_end:
-            break
     raise ValueError("Element name not found: {0}".format(element_name))
 
 
@@ -728,14 +725,11 @@ def get_expanded_element_index_by_position(sequence_name, position):
     cdef double _position = position
     cdef clib.node* elem
     cdef double at
-    # TODO: should use get_expanded_element_count() directly?
     for i in xrange(seq.n_nodes):
         elem = seq.all_nodes[i]
         at = _get_node_entry_pos(elem, seq.ref_flag, seq.n_nodes > 0)
         if _position >= at and _position <= at+elem.length:
             return i
-        if seq.all_nodes[i] == seq.ex_end:
-            break
     raise ValueError("No element found at position: {0}".format(position))
 
 
@@ -749,12 +743,7 @@ def get_expanded_element_count(sequence_name):
     :raises ValueError: if the sequence is invalid.
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
-    # NOTE: seq.n_nodes is not necessarily the number of elements in the
-    # expanded list. According to tests, some of the leading elements may be
-    # appended after the final element of the expanded list. Reason unclear!
-    i_beg = _get_node_index(seq.all_nodes, seq.n_nodes, seq.ex_start)
-    i_end = _get_node_index(seq.all_nodes, seq.n_nodes, seq.ex_end)
-    return i_end - i_beg + 1
+    return seq.n_nodes
 
 
 def get_global_element(element_index):
@@ -1076,13 +1065,3 @@ cdef clib.variable* _get_var(name) except NULL:
     if var is NULL:
         raise KeyError("Variable not defined: {!r}".format(name))
     return var
-
-
-cdef bint _valid_expanded_index(clib.sequence* seq, int index):
-    if index < 0:
-        return 0
-    # TODO: should use get_expanded_element_count() directly?
-    for i in xrange(index):
-        if seq.all_nodes[i] == seq.ex_end:
-            return 0
-    return 1
