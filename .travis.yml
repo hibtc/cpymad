@@ -9,6 +9,10 @@ python:
   - "3.6"
   - "nightly"
 
+matrix:
+  allow_failures:
+    - python: nightly
+
 # Build on Ubuntu 14.04 LTS Server Edition 64 bit (Trusty Tahr) to avoid
 # problems building MAD-X with the older fortran compiler on Precise Pangolin:
 sudo: required
