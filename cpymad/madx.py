@@ -409,7 +409,8 @@ class Madx(object):
 
     def sectormap(self, elems, **kwargs):
         """
-        Get the 7D transfer map (the 7'th column accounting for KICKs).
+        Compute the 7D transfer maps (the 7'th column accounting for KICKs)
+        for the given elements and return as Nx7x7 array.
         """
         self.command.select(flag='sectormap', clear=True)
         for elem in elems:
