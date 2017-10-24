@@ -1,7 +1,13 @@
 Changelog
 ~~~~~~~~~
 
-(dates are in the form dd.mm.yyyy)
+0.17.4
+======
+Date: 24.10.2017
+
+- replace Madx.get_transfer_map_7d method
+- require ``MAD-X 5.03.07`` (bugfix n_nodes)
+- documentation improvements
 
 
 0.17.3
