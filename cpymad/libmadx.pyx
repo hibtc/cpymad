@@ -167,8 +167,10 @@ def input(cmd):
     :param str cmd: command to be executed by the MAD-X interpreter
     """
     cdef bytes _cmd = _cstr(cmd)
-    clib.stolower_nq(_cmd)
-    clib.pro_input(_cmd)
+    cdef char* _pch = _cmd
+    with nogil:
+        clib.stolower_nq(_pch)
+        clib.pro_input(_pch)
 
 
 def get_var(name):
