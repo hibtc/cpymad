@@ -14,6 +14,10 @@ of the C-API of MAD-X.
 # actually used in the Cython code and add further fields when needed
 # later:
 
+# Need fortran declarations (i.e. ``#define pro_input pro_input_``):
+cdef extern from "madX/mad_types_f.h": pass
+cdef extern from "madX/mad_extrn_f.h": pass
+
 cdef extern from "madX/mad_def.h" nogil:
     enum:
         NAME_L
@@ -231,10 +235,3 @@ cdef extern from "madX/mad_var.h" nogil:
     void set_stringvar(char* name, char* string)
     variable* find_variable(char* name, var_list*)
     double variable_value(variable*)
-
-
-# I have no clue why, but for some reason, it is necessary to include
-# 'madx.h' (or one of the file it includes). Otherwise, importing the Cython
-# module will result in an ImportError: undefined symbol: pro_input
-cdef extern from "madX/madx.h" nogil:
-    pass
