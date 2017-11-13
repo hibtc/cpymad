@@ -221,7 +221,7 @@ def get_setup_args(argv):
             'setuptools',
             'numpy',
             'PyYAML',
-            'minrpc>=0.0.3',
+            'minrpc>=0.0.5',
         ],
     )
 
