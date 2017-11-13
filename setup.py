@@ -8,15 +8,6 @@ For more information, see
     http://hibtc.github.io/cpymad/installation
 """
 
-# Make sure setuptools is available. NOTE: the try/except hack is required to
-# make installation work with pip: If an older version of setuptools is
-# already imported, `use_setuptools()` will just exit the current process.
-try:
-    import setuptools
-except ImportError:
-    from ez_setup import use_setuptools
-    use_setuptools()
-
 from setuptools import setup, Extension
 from distutils.util import get_platform, convert_path
 from distutils import sysconfig
