@@ -17,35 +17,13 @@ import sys
 from os import path
 
 
-# setuptools.Extension automatically converts all '.pyx' extensions to '.c'
-# extensions if detecting that neither Cython nor Pyrex is available. Early
-# versions of setuptools don't know about Cython. Since we don't use Pyrex
-# in this module, this leads to problems in the two cases where Cython is
-# available and Pyrex is not or vice versa. Therefore, setuptools.Extension
-# needs to be patched to match our needs:
 try:
     # Use Cython if available:
     from Cython.Build import cythonize
 except ImportError:
-    # Otherwise, always use the distributed .c instead of the .pyx file:
+    # Otherwise, use the shipped .c file:
     def cythonize(extensions):
-        def pyx_to_c(source):
-            return source[:-4]+'.c' if source.endswith('.pyx') else source
-        for ext in extensions:
-            ext.sources = list(map(pyx_to_c, ext.sources))
-            missing_sources = [s for s in ext.sources if not path.exists(s)]
-            if missing_sources:
-                raise OSError(('Missing source file: {0[0]!r}. '
-                               'Install Cython to resolve this problem.')
-                              .format(missing_sources))
         return extensions
-else:
-    orig_Extension = Extension
-    class Extension(orig_Extension):
-        """Extension that *never* replaces '.pyx' by '.c' (using Cython)."""
-        def __init__(self, name, sources, *args, **kwargs):
-            orig_Extension.__init__(self, name, sources, *args, **kwargs)
-            self.sources = sources
 
 
 def fix_distutils_sysconfig_mingw():
@@ -209,7 +187,7 @@ def get_setup_args(argv):
         ],
         include_package_data=True, # include files matched by MANIFEST.in
         install_requires=[
-            'setuptools',
+            'setuptools>=18.0',
             'numpy',
             'PyYAML',
             'minrpc>=0.0.5',
