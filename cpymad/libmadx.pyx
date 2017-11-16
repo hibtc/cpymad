@@ -975,14 +975,6 @@ cdef clib.table* _find_table(table_name) except NULL:
     return clib.table_register.tables[index]
 
 
-cdef _get_node_index(clib.node** all_nodes, int n_nodes, clib.node* find):
-    cdef int i = 0
-    for i in range(n_nodes):
-        if all_nodes[i] == find:
-            return i
-    raise ValueError("Invalid node!")
-
-
 cdef _split_header_line(header_line):
     """Parse a table header value."""
     _, key, kind, value = _str(header_line).split(None, 3)
