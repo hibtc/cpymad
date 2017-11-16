@@ -886,11 +886,13 @@ class TableProxy(collections.Mapping):
 
     def __iter__(self):
         """Iterate over all column names."""
-        return iter(self._libmadx.get_table_column_names(self._name))
+        return iter(self._libmadx.get_table_column_names(self._name) or
+                    self._libmadx.get_table_column_names_all(self._name))
 
     def __len__(self):
         """Return number of columns."""
-        return len(self._libmadx.get_table_column_names(self._name))
+        return (self._libmadx.get_table_column_count(self._name) or
+                self._libmadx.get_table_column_count_all(self._name))
 
     @property
     def summary(self):
