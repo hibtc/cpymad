@@ -1,6 +1,17 @@
 Changelog
 ~~~~~~~~~
 
+0.18.0
+======
+Date: 16.11.2017
+
+- if no table columns are selected, show all by default
+- need setuptools>=18.0
+- thread-support:
+    - release GIL during ``input()``
+    - can specify a lock for minrpc
+
+
 0.17.4
 ======
 Date: 24.10.2017
