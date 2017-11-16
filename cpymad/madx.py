@@ -221,16 +221,12 @@ class Madx(object):
 
     @property
     def globals(self):
-        """
-        Get a dict-like interface to global MAD-X variables.
-        """
+        """Get a dict-like interface to global MAD-X variables."""
         return VarListProxy(self._libmadx)
 
     @property
     def elements(self):
-        """
-        Get a dict-like interface to globally visible elements.
-        """
+        """Get a dict-like interface to globally visible elements."""
         return GlobalElementList(self._libmadx)
 
     def set_value(self, name, value):
