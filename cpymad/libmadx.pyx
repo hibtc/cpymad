@@ -993,12 +993,10 @@ cdef _name_list(clib.name_list* names):
     return [_str(names.names[i]) for i in xrange(names.curr)]
 
 
-cdef _str(const char* s):
+cdef unicode _str(const char* s):
     """Decode C string to python string."""
     if s is NULL:
-        # Returning an empty string will make the type of the parameter
-        # transparent to the inspecting code:
-        return ""
+        return u""
     return s.decode('utf-8')
 
 
