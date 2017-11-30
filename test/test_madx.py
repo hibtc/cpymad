@@ -28,6 +28,14 @@ class _TestCaseCompat(object):
         self.assertTrue(first < second)
 
 
+def _close(m):
+    try:
+        m._service.close()
+    except (RuntimeError, IOError, EOFError, OSError):
+        pass
+    m._process.wait()
+
+
 class TestMadx(unittest.TestCase, _TestCaseCompat):
 
     """
@@ -44,11 +52,13 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.mad = Madx(command_log=CommandLog(sys.stdout, 'X:> '))
         here = os.path.dirname(__file__)
         there = os.path.join(here, 'testseq.madx')
-        self.doc = open(there).read()
+        with open(there) as f:
+            self.doc = f.read()
         for line in self.doc.splitlines():
             self.mad._libmadx.input(line)
 
     def tearDown(self):
+        _close(self.mad)
         del self.mad
 
     def test_version(self):
@@ -77,6 +87,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         madxness.input('ANSWER=43;')
         self.assertEqual(self.mad.evaluate('ANSWER'), 42);
         self.assertEqual(madxness.evaluate('ANSWER'), 43);
+        _close(madxness)
 
     def test_command_log(self):
         """Check that the command log contains all input commands."""
@@ -90,6 +101,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
             history = history_file.read()
         self.assertEqual(history.strip(), self.doc.strip())
         # remove history file
+        _close(mad)
         del mad
         os.remove(history_filename)
 
@@ -338,6 +350,7 @@ class TestTransferMap(unittest.TestCase):
         sig_final_sm = np.dot(tm, np.dot(sig_init, tm.T))
         assert_allclose(sig_final_tw[0:4,0:4], sig_final_sm[0:4,0:4],
                         rtol=rtol, atol=atol)
+        _close(mad)
 
     def test_drift(self):
         self._test_transfer_map('s', '#s/#e', """
