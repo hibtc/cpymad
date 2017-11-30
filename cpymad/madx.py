@@ -986,29 +986,29 @@ class Metadata(object):
 
     """MAD-X metadata (license info, etc)."""
 
-    __title__ = 'MAD-X'
+    __title__ = u'MAD-X'
 
     @property
     def __version__(self):
         return self._get_libmadx().get_version_number()
 
     __summary__ = (
-        'MAD is a project with a long history, aiming to be at the '
-        'forefront of computational physics in the field of particle '
-        'accelerator design and simulation. The MAD scripting language '
-        'is de facto the standard to describe particle accelerators, '
-        'simulate beam dynamics and optimize beam optics.'
+        u'MAD is a project with a long history, aiming to be at the '
+        u'forefront of computational physics in the field of particle '
+        u'accelerator design and simulation. The MAD scripting language '
+        u'is de facto the standard to describe particle accelerators, '
+        u'simulate beam dynamics and optimize beam optics.'
     )
 
-    __support__ = 'mad@cern.ch'
+    __support__ = u'mad@cern.ch'
 
-    __uri__ = 'http://madx.web.cern.ch/madx/'
+    __uri__ = u'http://madx.web.cern.ch/madx/'
 
     __credits__ = (
-        'MAD-X is developed at CERN and has many contributors. '
-        'For more information see:\n'
-        '\n'
-        'http://madx.web.cern.ch/madx/www/contributors.html'
+        u'MAD-X is developed at CERN and has many contributors. '
+        u'For more information see:\n'
+        u'\n'
+        u'http://madx.web.cern.ch/madx/www/contributors.html'
     )
 
     def get_copyright_notice(self):
