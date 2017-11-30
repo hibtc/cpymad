@@ -42,9 +42,10 @@ def mad_quote(value):
 
 
 # precompile regexes for performance:
-_re_is_identifier = re.compile(r'^[a-z_][a-z0-9_]*$', re.IGNORECASE)
-_re_element_internal = re.compile(r'^([a-z_][a-z0-9_.$]*)(:\d+)?$', re.IGNORECASE)
-_re_element_external = re.compile(r'^([a-z_][a-z0-9_.$]*)(\[\d+\])?$', re.IGNORECASE)
+re_compile = lambda s: re.compile(unicode(s), re.IGNORECASE)
+_re_is_identifier = re_compile(r'^[a-z_][a-z0-9_]*$')
+_re_element_internal = re_compile(r'^([a-z_][a-z0-9_.$]*)(:\d+)?$')
+_re_element_external = re_compile(r'^([a-z_][a-z0-9_.$]*)(\[\d+\])?$')
 
 
 def is_identifier(name):
@@ -118,9 +119,9 @@ def normalize_range_name(name):
         return tuple(map(normalize_range_name, name))
     name = name.lower()
     if name.endswith('$end'):
-        return '#e'
+        return u'#e'
     if name.endswith('$start'):
-        return '#s'
+        return u'#s'
     return name
 
 
@@ -131,7 +132,7 @@ def mad_parameter(key, value):
     key = str(key).lower()
     # the empty string was used in earlier versions in place of None:
     if value is None or value == '':
-        return ''
+        return u''
     if isinstance(value, Range):
         begin, end = normalize_range_name((value.first, value.last))
         return key + '=' + begin + '/' + end
@@ -142,7 +143,7 @@ def mad_parameter(key, value):
         if value.max is not None:
             constr.append(key + '<' + str(value.max))
         if constr:
-            return ', '.join(constr)
+            return u', '.join(constr)
         else:
             return key + '=' + str(value.value)
     elif isinstance(value, Expression):
@@ -198,7 +199,7 @@ def mad_command(*args, **kwargs):
     _args = list(args)
     _keys = ordered_keys(kwargs)
     _args += [mad_parameter(k, kwargs[k]) for k in _keys]
-    return ', '.join(filter(None, _args)) + ';'
+    return u', '.join(filter(None, _args)) + ';'
 
 
 def is_match_param(v):
@@ -210,7 +211,7 @@ def is_match_param(v):
 # validation of MAD-X expressions
 
 def _regex(expr):
-    regex = re.compile(expr)
+    regex = re.compile(unicode(expr))
     def match(text, i):
         m = regex.match(text[i:])
         return m.end() if m else 0
