@@ -480,12 +480,12 @@ class Madx(object):
         command = self.command
         # MATCH (=start)
         command.match(sequence=sequence, **twiss_init)
+        if weight:
+            command.weight(**weight)
         for c in constraints:
             command.constraint(**c)
         for v in vary:
             command.vary(name=v)
-        if weight:
-            command.weight(**weight)
         command(method[0], **method[1])
         command.endmatch(knobfile=knobfile)
         return dict((knob, self.evaluate(knob)) for knob in vary)

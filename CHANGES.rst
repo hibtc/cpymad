@@ -1,6 +1,13 @@
 Changelog
 ~~~~~~~~~
 
+0.18.2
+======
+Date: (unknown)
+
+- fix order of ``weight`` command in ``Madx.match``
+
+
 0.18.1
 ======
 Date: 30.11.2017
