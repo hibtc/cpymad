@@ -43,8 +43,8 @@ def mad_quote(value):
 
 # precompile regexes for performance:
 _re_is_identifier = re.compile(r'^[a-z_]\w*$', re.IGNORECASE)
-_re_element_internal = re.compile('^([a-z_][\w.$]*)(:\d+)?$', re.IGNORECASE)
-_re_element_external = re.compile('^([a-z_][\w.$]*)(\[\d+\])?$', re.IGNORECASE)
+_re_element_internal = re.compile(r'^([a-z_][\w.$]*)(:\d+)?$', re.IGNORECASE)
+_re_element_external = re.compile(r'^([a-z_][\w.$]*)(\[\d+\])?$', re.IGNORECASE)
 
 
 def is_identifier(name):
