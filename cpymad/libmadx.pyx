@@ -270,7 +270,7 @@ def get_sequence_twiss_table_name(sequence_name):
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
     if not seq.tw_valid:
-        raise RuntimeError("TWISS table invalid.")
+        raise RuntimeError("TWISS table invalid for {!r}".format(sequence_name))
     return _str(seq.tw_table.name)
 
 
@@ -286,7 +286,7 @@ def get_sequence_beam(sequence_name):
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
     if seq.beam is NULL or not seq.beam.beam_def:
-        raise RuntimeError("No beam attached to {}".format(sequence_name))
+        raise RuntimeError("No beam attached to {!r}".format(sequence_name))
     return _parse_command(seq.beam)
 
 
@@ -573,7 +573,7 @@ def get_element_index(sequence_name, element_name):
     cdef bytes _element_name = _cstr(name_to_internal(element_name))
     cdef int index = clib.name_list_pos(_element_name, seq.nodes.list)
     if index == -1:
-        raise ValueError("Element name not found: {0}".format(element_name))
+        raise ValueError("Element name not found: {0!r}".format(element_name))
     return index
 
 
@@ -707,7 +707,7 @@ def get_expanded_element_index(sequence_name, element_name):
     for i in xrange(seq.n_nodes):
         if seq.all_nodes[i].name == _element_name:
             return i
-    raise ValueError("Element name not found: {0}".format(element_name))
+    raise ValueError("Element name not found: {0!r}".format(element_name))
 
 
 def get_expanded_element_index_by_position(sequence_name, position):
@@ -963,7 +963,7 @@ cdef clib.sequence* _find_sequence(sequence_name) except NULL:
     cdef clib.sequence_list* seqs = clib.madextern_get_sequence_list()
     cdef int index = clib.name_list_pos(_sequence_name, seqs.list)
     if index == -1:
-        raise ValueError("Invalid sequence: {}".format(sequence_name))
+        raise ValueError("Invalid sequence: {!r}".format(sequence_name))
     return seqs.sequs[index]
 
 
