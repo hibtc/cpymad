@@ -993,7 +993,8 @@ cdef _name_list(clib.name_list* names):
     return [_str(names.names[i]) for i in xrange(names.curr)]
 
 
-cdef unicode _str(const char* s):
+# Leave return type unspecified to avoid cython error with unicode.split(None):
+cdef _str(const char* s):
     """Decode C string to python string."""
     if s is NULL:
         return u""
