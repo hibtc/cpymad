@@ -1005,6 +1005,8 @@ cdef bytes _cstr(s):
     """Encode python string to C string."""
     if s is None:
         return b""
+    if isinstance(s, bytes):
+        return <bytes> s
     return <bytes> s.encode('utf-8')
 
 
