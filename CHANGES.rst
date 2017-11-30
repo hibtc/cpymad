@@ -1,6 +1,15 @@
 Changelog
 ~~~~~~~~~
 
+0.18.1
+======
+Date: 30.11.2017
+
+- fix some inconsistencies regarding the mixture of unicode and byte strings
+  on python2 (NOTE: still expected to be broken!)
+- provide copyright notice as unicode
+
+
 0.18.0
 ======
 Date: 16.11.2017
