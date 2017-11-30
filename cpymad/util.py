@@ -42,9 +42,9 @@ def mad_quote(value):
 
 
 # precompile regexes for performance:
-_re_is_identifier = re.compile(r'^[a-z_]\w*$', re.IGNORECASE)
-_re_element_internal = re.compile(r'^([a-z_][\w.$]*)(:\d+)?$', re.IGNORECASE)
-_re_element_external = re.compile(r'^([a-z_][\w.$]*)(\[\d+\])?$', re.IGNORECASE)
+_re_is_identifier = re.compile(r'^[a-z_][a-z0-9_]*$', re.IGNORECASE)
+_re_element_internal = re.compile(r'^([a-z_][a-z0-9_.$]*)(:\d+)?$', re.IGNORECASE)
+_re_element_external = re.compile(r'^([a-z_][a-z0-9_.$]*)(\[\d+\])?$', re.IGNORECASE)
 
 
 def is_identifier(name):
@@ -228,7 +228,7 @@ _expr_tokens = [
     ('LPAREN',      _choice('(')),
     ('RPAREN',      _choice(')')),
     ('OPERATOR',    _choice('+-/*^')),
-    ('SYMBOL',      _regex(r'[a-zA-Z_][\w.]*(->[a-zA-Z_]\w*)?')),
+    ('SYMBOL',      _regex(r'[a-zA-Z_][a-zA-Z0-9_.]*(->[a-zA-Z_][a-zA-Z0-9_]*)?')),
     ('NUMBER',      _regex(r'(\d+(\.\d*)?|\.\d+)([eE][+\-]?\d+)?')),
 ]
 
