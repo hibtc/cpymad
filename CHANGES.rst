@@ -3,7 +3,7 @@ Changelog
 
 0.18.2
 ======
-Date: (unknown)
+Date: 05.12.2017
 
 - fix order of ``weight`` command in ``Madx.match``
 
