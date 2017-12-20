@@ -227,7 +227,10 @@ class Madx(object):
     @property
     def elements(self):
         """Get a dict-like interface to globally visible elements."""
-        return GlobalElementList(self._libmadx)
+        return GlobalElementList(self)
+
+    def update_value(self, name, attr, value):
+        self.command[name](**{attr: value})
 
     def set_value(self, name, value):
         """
@@ -561,7 +564,8 @@ class _Mapping(collections.Mapping):
         """String representation of a custom mapping object."""
         return "{}({})".format(self.__class__.__name__, str(dict(self)))
 
-    __str__ = __repr__
+    def __str__(self):
+        return repr(self)
 
     def __getattr__(self, key):
         try:
@@ -579,6 +583,12 @@ class _MutableMapping(_Mapping, collections.MutableMapping):
             object.__setattr__(self, key, val)
         else:
             self[key] = val
+
+    def __delattr__(self, key):
+        if key in self.__slots__:
+            object.__delattr__(self, key)
+        else:
+            del self[key]
 
 
 class AttrDict(_Mapping):
@@ -708,12 +718,12 @@ class Sequence(object):
     @property
     def elements(self):
         """Get list of elements."""
-        return ElementList(self._libmadx, self._name)
+        return ElementList(self._madx, self._name)
 
     @property
     def expanded_elements(self):
         """List of elements including implicit drifts."""
-        return ExpandedElementList(self._libmadx, self._name)
+        return ExpandedElementList(self._madx, self._name)
 
     def element_names(self):
         return self._libmadx.get_element_names(self._name)
@@ -766,6 +776,69 @@ class Sequence(object):
         self._madx.use(self._name)
 
 
+class Element(_MutableMapping):
+
+    __slots__ = ('_madx', '_data', '_name')
+
+    def __init__(self, madx, data, name):
+        self._madx = madx
+        self._data = data
+        self._name = name
+
+    def __iter__(self):
+        return iter(self._data)
+
+    def __getitem__(self, name):
+        value = self._data[name]
+        if isinstance(value, list):
+            return ArrayAttribute(self, value, name)
+        return value
+
+    def __delitem__(self, name):
+        raise NotImplementedError()
+
+    def __setitem__(self, name, value):
+        self._madx.update_value(self._name, name, value)
+
+    def __contains__(self, name):
+        return name in self._data
+
+    def __len__(self):
+        return len(self._data)
+
+    def __repr__(self):
+        return '<{}: {}>'.format(self.__class__.__name__, self._name)
+
+
+class ArrayAttribute(collections.Sequence):
+
+    def __init__(self, element, values, name):
+        self._element = element
+        self._values = values
+        self._name = name
+
+    def __getitem__(self, index):
+        return self._values[index]
+
+    def __setitem__(self, index, value):
+        if index >= len(self._values):
+            self._values.extend([0] * (index - len(self._values) + 1))
+        self._values[index] = value
+        self._element[self._name] = self._values
+
+    def __iter__(self):
+        return iter(self._values)
+
+    def __len__(self):
+        return len(self._values)
+
+    def __repr__(self):
+        return "<{}: {}>".format(self.__class__.__name__, self._values)
+
+    def __str__(self):
+        return str(self._values)
+
+
 class BaseElementList(object):
 
     """
@@ -801,7 +874,7 @@ class BaseElementList(object):
             index += _len
         data = self._get_element(index)
         data['index'] = index
-        return data
+        return Element(self._madx, data, data['name'])
 
     def __len__(self):
         """Get number of elements."""
@@ -833,11 +906,12 @@ class BaseElementList(object):
 
 class ElementList(BaseElementList, collections.Sequence):
 
-    def __init__(self, libmadx, sequence_name):
+    def __init__(self, madx, sequence_name):
         """
         Initialize instance.
         """
-        self._libmadx = libmadx
+        self._madx = madx
+        self._libmadx = madx._libmadx
         self._sequence_name = sequence_name
 
     def at(self, pos):
@@ -878,8 +952,9 @@ class GlobalElementList(BaseElementList, _Mapping):
     Provides dict-like access to MAD-X global elements.
     """
 
-    def __init__(self, libmadx):
-        self._libmadx = libmadx
+    def __init__(self, madx):
+        self._madx = madx
+        self._libmadx = libmadx = madx._libmadx
         self._get_element = libmadx.get_global_element
         self._get_element_count = libmadx.get_global_element_count
         self._get_element_index = libmadx.get_global_element_index
