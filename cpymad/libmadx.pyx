@@ -1,4 +1,5 @@
 # cython: embedsignature=True
+# cython: language_level=3
 """
 Low level cython binding to MAD-X.
 
@@ -313,7 +314,7 @@ def get_sequence_names():
     cdef clib.sequence_list* seqs = clib.madextern_get_sequence_list()
     cdef int i
     return [_str(seqs.sequs[i].name)
-            for i in xrange(seqs.curr)]
+            for i in range(seqs.curr)]
 
 
 def get_sequence_count():
@@ -346,7 +347,7 @@ def get_table_names():
     :rtype: list
     """
     return [_str(clib.table_register.names.names[i])
-            for i in xrange(clib.table_register.names.curr)]
+            for i in range(clib.table_register.names.curr)]
 
 
 def get_table_count():
@@ -373,7 +374,7 @@ def get_table_summary(table_name):
     if header is NULL:
         raise ValueError("No summary for table: {!r}".format(table_name))
     return dict([_split_header_line(header.p[i])
-                 for i in xrange(header.curr)])
+                 for i in range(header.curr)])
 
 
 def get_table_column_names(table_name):
@@ -386,7 +387,7 @@ def get_table_column_names(table_name):
     :raises ValueError: if the table name is invalid
     """
     cdef clib.table* table = _find_table(table_name)
-    indices = [table.col_out.i[i] for i in xrange(table.col_out.curr)]
+    indices = [table.col_out.i[i] for i in range(table.col_out.curr)]
     # NOTE: we can't enforce lower-case on the column names here, since this
     # breaks their usage with get_table_column():
     return [table.columns.names[i] for i in indices]
@@ -465,7 +466,7 @@ def get_table_column(table_name, column_name):
     # string:
     elif dtype == b'S':
         char_tmp = <char**> info.data
-        return np.array([char_tmp[i] for i in xrange(info.length)])
+        return np.array([char_tmp[i] for i in range(info.length)])
     # invalid:
     elif dtype == b'V':
         raise ValueError("Column {!r} is not in table {!r}."
@@ -524,7 +525,7 @@ def get_element_positions(sequence_name):
     cdef int i
     cdef clib.node** nodes = seq.nodes.nodes
     return [_get_node_entry_pos(nodes[i], seq.ref_flag, seq.n_nodes > 0)
-            for i in xrange(seq.nodes.curr)]
+            for i in range(seq.nodes.curr)]
 
 def get_element_names(sequence_name):
     """
@@ -538,7 +539,7 @@ def get_element_names(sequence_name):
     cdef clib.sequence* seq = _find_sequence(sequence_name)
     cdef int i
     return [_node_name(seq.nodes.nodes[i])
-            for i in xrange(seq.nodes.curr)]
+            for i in range(seq.nodes.curr)]
 
 
 def get_element_name(sequence_name, element_index):
@@ -594,7 +595,7 @@ def get_element_index_by_position(sequence_name, position):
     cdef double _position = position
     cdef clib.node* elem
     cdef double at
-    for i in xrange(seq.nodes.curr):
+    for i in range(seq.nodes.curr):
         elem = seq.nodes.nodes[i]
         at = _get_node_entry_pos(elem, seq.ref_flag, seq.n_nodes > 0)
         if _position >= at and _position <= at+elem.length:
@@ -650,7 +651,7 @@ def get_expanded_element_positions(sequence_name):
     cdef int i
     cdef clib.node** nodes = seq.all_nodes
     return [_get_node_entry_pos(nodes[i], seq.ref_flag, seq.n_nodes > 0)
-            for i in xrange(seq.n_nodes)]
+            for i in range(seq.n_nodes)]
 
 
 def get_expanded_element_names(sequence_name):
@@ -665,7 +666,7 @@ def get_expanded_element_names(sequence_name):
     cdef clib.sequence* seq = _find_sequence(sequence_name)
     cdef int i
     return [_node_name(seq.all_nodes[i])
-            for i in xrange(seq.n_nodes)]
+            for i in range(seq.n_nodes)]
 
 
 def get_expanded_element_name(sequence_name, element_index):
@@ -704,7 +705,7 @@ def get_expanded_element_index(sequence_name, element_name):
     # Therefore, we can only provide a linear-time lookup.
     cdef clib.sequence* seq = _find_sequence(sequence_name)
     cdef bytes _element_name = _cstr(name_to_internal(element_name))
-    for i in xrange(seq.n_nodes):
+    for i in range(seq.n_nodes):
         if seq.all_nodes[i].name == _element_name:
             return i
     raise ValueError("Element name not found: {0!r}".format(element_name))
@@ -727,7 +728,7 @@ def get_expanded_element_index_by_position(sequence_name, position):
     cdef double _position = position
     cdef clib.node* elem
     cdef double at
-    for i in xrange(seq.n_nodes):
+    for i in range(seq.n_nodes):
         elem = seq.all_nodes[i]
         at = _get_node_entry_pos(elem, seq.ref_flag, seq.n_nodes > 0)
         if _position >= at and _position <= at+elem.length:
@@ -921,12 +922,12 @@ cdef _get_param_value(clib.command_parameter* par):
             _expr(NULL if par.expr_list is NULL else par.expr_list.list[i],
                   par.double_array.a[i],
                   par.type - clib.PARAM_TYPE_LOGICAL_ARRAY)
-            for i in xrange(par.double_array.curr)
+            for i in range(par.double_array.curr)
         ]
 
     if par.type == clib.PARAM_TYPE_STRING_ARRAY:
         return [_str(par.m_string.p[i])
-                for i in xrange(par.m_string.curr)]
+                for i in range(par.m_string.curr)]
 
     raise ValueError("Unknown parameter type: {}".format(par.type))
 
@@ -942,7 +943,7 @@ cdef _parse_command(clib.command* cmd):
     # let's do it the hard way:
     res = {}
     cdef int i
-    for i in xrange(cmd.par.curr):
+    for i in range(cmd.par.curr):
         # enforce lower-case keys:
         name = _str(cmd.par.parameters[i].name).lower()
         res[name] = _get_param_value(cmd.par.parameters[i])
@@ -990,14 +991,15 @@ cdef _split_header_line(header_line):
 cdef _name_list(clib.name_list* names):
     """Return a python list of names for the name_list."""
     cdef int i
-    return [_str(names.names[i]) for i in xrange(names.curr)]
+    return [_str(names.names[i]) for i in range(names.curr)]
 
 
 # Leave return type unspecified to avoid cython error with unicode.split(None):
+# ("TypeError: coercing to Unicode: need string or buffer, NoneType found")
 cdef _str(const char* s):
     """Decode C string to python string."""
     if s is NULL:
-        return u""
+        return ""
     return s.decode('utf-8')
 
 
