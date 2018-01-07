@@ -235,3 +235,13 @@ cdef extern from "madX/mad_var.h" nogil:
     void set_stringvar(char* name, char* string)
     variable* find_variable(char* name, var_list*)
     double variable_value(variable*)
+
+cdef extern from "madX/mad_gvar_access.h" nogil:
+    char_p_array*   gvar_get_tmp_p_array();
+    sequence*       gvar_get_current_sequ();
+    var_list*       gvar_get_variable_list();
+    const char*     gvar_get_version_date();
+    char_array*     gvar_get_c_dum();
+    el_list*        gvar_get_element_list();
+    const char*     gvar_get_version_name();
+    table_list*     gvar_get_table_register();

@@ -119,7 +119,7 @@ def get_version_number():
     :returns: full version number
     :rtype: str
     """
-    return _get_rightmost_word(_str(clib.version_name))
+    return _get_rightmost_word(_str(clib.gvar_get_version_name()))
 
 
 def get_version_date():
@@ -129,7 +129,7 @@ def get_version_date():
     :returns: release date in YYYY.MM.DD format
     :rtype: str
     """
-    return _get_rightmost_word(_str(clib.version_date))
+    return _get_rightmost_word(_str(clib.gvar_get_version_date()))
 
 
 def is_started():
@@ -226,21 +226,21 @@ def set_var(name, value):
         if isinstance(value, int):
             val_type = 0        # int
     var = clib.new_variable(_name, _value, val_type, var_type, expr, NULL)
-    clib.add_to_var_list(var, clib.variable_list, 1)
+    clib.add_to_var_list(var, clib.gvar_get_variable_list(), 1)
 
 
 def num_globals():
     """
     Return the number of global variables.
     """
-    return clib.variable_list.curr
+    return clib.gvar_get_variable_list().curr
 
 
 def get_globals():
     """
     Get a list of names of all global variables.
     """
-    return _name_list(clib.variable_list.list)
+    return _name_list(clib.gvar_get_variable_list().list)
 
 
 def sequence_exists(sequence_name):
@@ -298,9 +298,9 @@ def get_active_sequence_name():
     :rtype: str
     :raises RuntimeError: if no sequence is activated
     """
-    if clib.current_sequ is NULL:
+    if clib.gvar_get_current_sequ() is NULL:
         raise RuntimeError("No active sequence!")
-    return _str(clib.current_sequ.name)
+    return _str(clib.gvar_get_current_sequ().name)
 
 
 def get_sequence_names():
@@ -345,8 +345,8 @@ def get_table_names():
     :returns: table names
     :rtype: list
     """
-    return [_str(clib.table_register.names.names[i])
-            for i in xrange(clib.table_register.names.curr)]
+    return [_str(clib.gvar_get_table_register().names.names[i])
+            for i in xrange(clib.gvar_get_table_register().names.curr)]
 
 
 def get_table_count():
@@ -356,7 +356,7 @@ def get_table_count():
     :returns: number of tables in memory
     :rtype: int
     """
-    return clib.table_register.names.curr
+    return clib.gvar_get_table_register().names.curr
 
 
 def get_table_summary(table_name):
@@ -757,7 +757,7 @@ def get_global_element(element_index):
     :rtype: dict
     :raises IndexError: if the index is out of range
     """
-    cdef clib.el_list* elems = clib.element_list
+    cdef clib.el_list* elems = clib.gvar_get_element_list()
     if element_index < 0 or element_index >= elems.curr:
         raise IndexError("Index out of range: {0} (element count is {1})"
                          .format(element_index, elems.curr))
@@ -773,7 +773,7 @@ def get_global_element_name(element_index):
     :rtype: str
     :raises IndexError: if the index is out of range
     """
-    cdef clib.el_list* elems = clib.element_list
+    cdef clib.el_list* elems = clib.gvar_get_element_list()
     if element_index < 0 or element_index >= elems.curr:
         raise IndexError("Index out of range: {0} (element count is {1})"
                          .format(element_index, elems.curr))
@@ -789,14 +789,14 @@ def get_global_element_index(element_name):
     :rtype: int
     """
     cdef bytes _element_name = _cstr(element_name)
-    return clib.name_list_pos(_element_name, clib.element_list.list)
+    return clib.name_list_pos(_element_name, clib.gvar_get_element_list().list)
 
 
 def get_global_element_count():
     """
     Return number of globally visible elements.
     """
-    return clib.element_list.curr
+    return clib.gvar_get_element_list().curr
 
 
 def is_sequence_expanded(sequence_name):
@@ -845,19 +845,19 @@ cdef clib.expression* _make_expr(expression):
         pass
     # TODO: not sure about the flags (the magic constants 0, 2)
     cdef bytes _expr = _cstr(expression.lower())
-    clib.pre_split(_expr, clib.c_dum, 0)
-    clib.mysplit(clib.c_dum.c, clib.tmp_p_array)
+    clib.pre_split(_expr, clib.gvar_get_c_dum(), 0)
+    clib.mysplit(clib.gvar_get_c_dum().c, clib.gvar_get_tmp_p_array())
     # NOTE: `loc_expr` is mostly useless for input validation. It even accepts
     # stuff such as '+' that will lead to program crashes on evaluation. We
     # use it nevertheless to get a minimal amount of error-checking. Not using
     # cpymad.util.check_expression for simplicity and performance.
     cdef int start=0, stop
-    etype = clib.loc_expr(clib.tmp_p_array.p,
-                          clib.tmp_p_array.curr,
+    etype = clib.loc_expr(clib.gvar_get_tmp_p_array().p,
+                          clib.gvar_get_tmp_p_array().curr,
                           start, &stop)
-    if etype == 0 or stop+1 < clib.tmp_p_array.curr:
+    if etype == 0 or stop+1 < clib.gvar_get_tmp_p_array().curr:
         return NULL
-    return clib.make_expression(clib.tmp_p_array.curr, clib.tmp_p_array.p)
+    return clib.make_expression(clib.gvar_get_tmp_p_array().curr, clib.gvar_get_tmp_p_array().p)
 
 
 # Helper functions:
@@ -969,10 +969,10 @@ cdef clib.sequence* _find_sequence(sequence_name) except NULL:
 
 cdef clib.table* _find_table(table_name) except NULL:
     cdef bytes _table_name = _cstr(table_name)
-    cdef int index = clib.name_list_pos(_table_name, clib.table_register.names)
+    cdef int index = clib.name_list_pos(_table_name, clib.gvar_get_table_register().names)
     if index == -1:
         raise ValueError("Invalid table: {!r}".format(table_name))
-    return clib.table_register.tables[index]
+    return clib.gvar_get_table_register().tables[index]
 
 
 cdef _split_header_line(header_line):
@@ -1056,7 +1056,7 @@ cdef _get_table_row_name(clib.table* table, int index):
 
 cdef clib.variable* _get_var(name) except NULL:
     cdef bytes _name = _cstr(name.lower())
-    cdef clib.variable* var = clib.find_variable(_name, clib.variable_list)
+    cdef clib.variable* var = clib.find_variable(_name, clib.gvar_get_variable_list())
     if var is NULL:
         raise KeyError("Variable not defined: {!r}".format(name))
     return var
