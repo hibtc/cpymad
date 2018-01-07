@@ -125,10 +125,9 @@ def get_extension_args(argv):
     platform = get_platform()
     # win32/win-amd64:
     if platform.startswith('win'):
-        libraries = ['madx', 'ptc', 'gc-lib',
-                     'stdc++', 'gfortran', 'quadmath']
+        libraries = ['libmadx']
         force_lib = []
-        compile_args = ['-std=gnu99']
+        compile_args = []
     # e.g. linux-x86_64
     elif platform.startswith('linux'):
         libraries = ['madx', 'stdc++', 'c']
@@ -149,12 +148,13 @@ def get_extension_args(argv):
     link_args = (['-Wl,--no-as-needed'] +
                  ['-l'+lib for lib in force_lib] +
                  ['-Wl,--as-needed']) if force_lib else []
+    #link_args += ['/IMPLIB:madx.lib']
     # Common arguments for the Cython extensions:
     return dict(
         libraries=libraries,
         include_dirs=include_dirs,
         library_dirs=library_dirs,
-        runtime_library_dirs=library_dirs,
+        #runtime_library_dirs=library_dirs,
         extra_compile_args=compile_args,
         extra_link_args=link_args,
     )
