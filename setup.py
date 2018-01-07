@@ -33,8 +33,8 @@ def fix_distutils_sysconfig_mingw():
     following manual fix for this problem may cause other issues, but it's a
     good shot.
     """
-    if sysconfig.get_config_var('CC') is None:
-        sysconfig._config_vars['CC'] = 'gcc'
+    #if sysconfig.get_config_var('CC') is None:
+    #    sysconfig._config_vars['CC'] = 'gcc'
 
 
 def read_file(path):
@@ -125,10 +125,9 @@ def get_extension_args(argv):
     platform = get_platform()
     # win32/win-amd64:
     if platform.startswith('win'):
-        libraries = ['madx', 'ptc', 'gc-lib',
-                     'stdc++', 'gfortran', 'quadmath']
+        libraries = ['libmadx']
         force_lib = []
-        compile_args = ['-std=gnu99']
+        compile_args = []
     # e.g. linux-x86_64
     elif platform.startswith('linux'):
         libraries = ['madx', 'stdc++', 'c']
@@ -154,7 +153,7 @@ def get_extension_args(argv):
         libraries=libraries,
         include_dirs=include_dirs,
         library_dirs=library_dirs,
-        runtime_library_dirs=library_dirs,
+        #runtime_library_dirs=library_dirs,
         extra_compile_args=compile_args,
         extra_link_args=link_args,
     )
