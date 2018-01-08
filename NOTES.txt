@@ -1,0 +1,159 @@
+
+Download official VS compiler for cpython, see:
+
+    https://wiki.python.org/moin/WindowsCompilers
+
+
+==========================
+Attempt #1: Static linking
+==========================
+
+Build MAD-X as usual using gcc from winpython 3.4
+with `-DBUILD_SHARED_LIBS=OFF -MADX_STATIC=ON`
+
+Rename static libraries .a -> .lib
+
+Execute setup.py in py36 environment
+
+-> fails with:
+    "libmadx.lib(mad_mkthin.cpp.obj) : fatal error LNK1143: invalid or corrupt file: no symbol for COMDAT section 0x5"
+
+Mitigation
+~~~~~~~~~~
+
+- could try unpack .o files from .a and repack as .lib?
+   ...complex
+
+Essential remaining problems
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- link quadmath gfortran?
+- different compiler -> ABI incompatibilities (different data types) !!
+
+===========================
+Attempt #2: Dynamic Linking
+===========================
+
+Build MAD-X as DLL
+~~~~~~~~~~~~~~~~~~
+
+    mkdir build
+    cd build
+    cmake -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX=..\install%arch% -DBUILD_SHARED_LIBS=OFF -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON -DMADX_NTPSA=OFF -DUSE_GC=ON -DMADX_STATIC=ON ..
+    mingw32-make
+    mingw32-make install
+
+Copy MAD-X/bin/libmadx.DLL to cpymad/cpymad/madx.dll
+ (also needs to be included in MANIFEST.in -> installation)
+ (make sure to set zip_safe=False)
+ 
+ 
+Create .lib file for MS VC
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+a) using cmake:
+
+    call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
+    cmake -DCMAKE_GNUtoMS=ON [...]
+
+    doesn't export symbols for globals...
+    -> Later when trying to link cpymad:
+
+        libmadx.obj : error LNK2001: unresolved external symbol tmp_p_array
+        libmadx.obj : error LNK2001: unresolved external symbol current_sequ
+        libmadx.obj : error LNK2001: unresolved external symbol variable_list
+        libmadx.obj : error LNK2001: unresolved external symbol version_date
+        libmadx.obj : error LNK2001: unresolved external symbol c_dum
+        libmadx.obj : error LNK2001: unresolved external symbol element_list
+        libmadx.obj : error LNK2001: unresolved external symbol version_name
+        libmadx.obj : error LNK2001: unresolved external symbol table_register
+
+b) manually in two steps:
+     
+    Create .def file for .dll
+    -------------------------
+    Try running setup.py with libraries=[] and see the list of unresolved symbols
+    Write them to file madx.def:
+
+        LIBRARY madx.dll
+        EXPORTS
+            madextern_get_sequence_list
+            loc_expr
+            variable_value
+            ....
+
+    Further reads:
+        https://wiki.videolan.org/GenerateLibFromDll    (this method)
+        http://www.mingw.org/wiki/msvc_and_mingw_dlls   (this + more)
+        http://www.mingw.org/wiki/createimportlibraries
+
+    Can create .def files from .dll automatically with (but will contain too much!)
+
+    a)  dlltool -z madx.def --export-all-symbol madx.dll
+
+    b)  pexports testdll.dll | sed "s/^_//" > testdll.def
+        
+    c)  echo EXPORTS > libvlc.def
+        for /f "usebackq tokens=4,* delims=_ " %i in (`dumpbin /exports "c:\Program Files\VideoLan\VLC\libvlc.dll"`) do if %i==libvlc echo %i_%j >> libvlc.def
+
+    Simply list all exported symbols:
+
+        dumpbin /exports madx.dll
+
+    Create .lib file from .def file
+    -------------------------------
+        call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
+        lib /machine:x64 /def:madx.def /out:madx64.lib
+        
+Build cpymad..
+~~~~~~~~~~~~~~
+
+    python setup.py build_ext --madxdir=C:\Users\thomas\hit\MAD-X-5.03.07\install64 --inplace
+
+
+    
+==========
+More ideas
+==========
+
+Link with mingw from different winpy version manually
+
+ -> crashes sometimes
+
+
+Integrate functions accessing globals into MAD-X. Link against DLL. 
+    
+    
+    
+===========
+The future?
+===========
+
+clang + flang as mid-term solution for building madx + cpython?
+
+
+
+
+
+
+
+
+
+=========================
+CPYMAD BUILD COMMAND LINE
+=========================
+
+VS, py36
+~~~~~~~~
+
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\BIN\x86_amd64\cl.exe /c /nologo /Ox /W3 /GL /DNDEBUG /MD -IC:\Users\thomas\hit\MAD-X-5.03.07\install64\include -IC:\Users\thomas\hit\3rdparty-programs\WinPython-64bit-3.6.3.0\python-3.6.3.amd64\include -IC:\Users\thomas\hit\3rdparty-programs\WinPython-64bit-3.6.3.0\python-3.6.3.amd64\include "-IC:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\INCLUDE" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\ucrt" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\shared" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\um" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\winrt" /Tccpymad/libmadx.c /Fobuild\temp.win-amd64-3.6\Release\cpymad/libmadx.obj -std=gnu99
+cl : Command line warning D9002 : ignoring unknown option '-std=gnu99'
+libmadx.c
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\BIN\x86_amd64\link.exe /nologo /INCREMENTAL:NO /LTCG /DLL /MANIFEST:EMBED,ID=2 /MANIFESTUAC:NO /LIBPATH:C:\Users\thomas\hit\MAD-X-5.03.07\install64\lib /LIBPATH:C:\Users\thomas\hit\3rdparty-programs\WinPython-64bit-3.6.3.0\python-3.6.3.amd64\libs /LIBPATH:C:\Users\thomas\hit\3rdparty-programs\WinPython-64bit-3.6.3.0\python-3.6.3.amd64\PCbuild\amd64 "/LIBPATH:C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\LIB\amd64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\10\lib\10.0.16299.0\ucrt\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\10\lib\10.0.16299.0\um\x64" libmadx.lib /EXPORT:PyInit_libmadx build\temp.win-amd64-3.6\Release\cpymad/libmadx.obj /OUT:build\lib.win-amd64-3.6\cpymad\libmadx.cp36-win_amd64.pyd /IMPLIB:build\temp.win-amd64-3.6\Release\cpymad\libmadx.cp36-win_amd64.lib
+
+
+mingwpy, py34
+~~~~~~~~~~~~~
+
+C:\Users\thomas\hit\3rdparty-programs\WinPython-64bit-3.4.4.4\scripts\..\python-3.4.4.amd64\Scripts\gcc.exe -mdll -O -Wall -IC:\Users\thomas\hit\MAD-X-5.03.07\install64\include -IC:\Users\thomas\hit\3rdparty-programs\WinPython-64bit-3.4.4.4\python-3.4.4.amd64\include -IC:\Users\thomas\hit\3rdparty-programs\WinPython-64bit-3.4.4.4\python-3.4.4.amd64\include -c cpymad/libmadx.c -o build\temp.win-amd64-3.4\Release\cpymad\libmadx.o -std=gnu99
+C:\Users\thomas\hit\3rdparty-programs\WinPython-64bit-3.4.4.4\scripts\..\python-3.4.4.amd64\Scripts\gcc.exe -shared -s build\temp.win-amd64-3.4\Release\cpymad\libmadx.o build\temp.win-amd64-3.4\Release\cpymad\libmadx.def -LC:\Users\thomas\hit\MAD-X-5.03.07\install64\lib -LC:\Users\thomas\hit\3rdparty-programs\WinPython-64bit-3.4.4.4\scripts\..\python-3.4.4.amd64\libs -LC:\Users\thomas\hit\3rdparty-programs\WinPython-64bit-3.4.4.4\scripts\..\python-3.4.4.amd64\PCbuild\amd64 -Wl,-RC:\Users\thomas\hit\MAD-X-5.03.07\install64\lib -lmadx -lpython34 -lmsvcr100 -o build\lib.win-amd64-3.4\cpymad\libmadx.pyd
