@@ -162,7 +162,7 @@ def mad_parameter(key, value):
     # check for basestrings before collections.Sequence, because every
     # basestring is also a Sequence:
     elif isinstance(value, basestring):
-        if key == 'file':
+        if key in ('file', 'sectorfile'):
             return key + '=' + mad_quote(value)
         else:
             # MAD-X parses strings incorrectly, if followed by a boolean.
