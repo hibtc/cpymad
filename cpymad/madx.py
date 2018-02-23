@@ -907,12 +907,9 @@ class TableProxy(collections.Mapping):
         self._cache[column] = data = self._query(column)
         return data
 
-    def cache(self, columns=None):
-        """Make sure given columns are cached locally."""
-        if columns is None:
-            columns = self
-        for column in columns:
-            _tmp = self[column]
+    def row(self, index, columns='selected'):
+        """Retrieve one row from the table."""
+        return self._libmadx.get_table_row(self._name, index, columns)
 
     def copy(self, columns=None):
         """

@@ -57,6 +57,8 @@ cdef extern from "madX/mad_table.h" nogil:
         char_p_array* header
         int_array* col_out      # column no.s to be written (in this order)
         char_p_array* node_nm   # names of nodes at each row
+        char*** s_cols
+        double** d_cols
         name_list* columns
 
     struct table_list:
