@@ -555,12 +555,51 @@ class Madx(object):
         return TableMap(self._libmadx)
 
 
-def _map_repr(self):
-    """String representation of a custom mapping object."""
-    return "{}({})".format(self.__class__.__name__, str(dict(self)))
+class _Mapping(collections.Mapping):
+
+    def __repr__(self):
+        """String representation of a custom mapping object."""
+        return "{}({})".format(self.__class__.__name__, str(dict(self)))
+
+    __str__ = __repr__
+
+    def __getattr__(self, key):
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(key)
 
 
-class SequenceMap(collections.Mapping):
+class _MutableMapping(_Mapping, collections.MutableMapping):
+
+    __slots__ = ()
+
+    def __setattr__(self, key, val):
+        if key in self.__slots__:
+            object.__setattr__(self, key, val)
+        else:
+            self[key] = val
+
+
+class AttrDict(_Mapping):
+
+    def __init__(self, data):
+        self._data = data
+
+    def __iter__(self):
+        return iter(self._data)
+
+    def __getitem__(self, name):
+        return self._data[name.lower()]
+
+    def __contains__(self, name):
+        return name.lower() in self._data
+
+    def __len__(self):
+        return len(self._data)
+
+
+class SequenceMap(_Mapping):
 
     """
     A dict like view of all sequences (:class:`Sequence`) in memory.
@@ -569,9 +608,6 @@ class SequenceMap(collections.Mapping):
     def __init__(self, madx):
         self._madx = madx
         self._libmadx = madx._libmadx
-
-    __repr__ = _map_repr
-    __str__ = _map_repr
 
     def __iter__(self):
         return iter(self._libmadx.get_sequence_names())
@@ -589,7 +625,7 @@ class SequenceMap(collections.Mapping):
         return self._libmadx.get_sequence_count()
 
 
-class TableMap(collections.Mapping):
+class TableMap(_Mapping):
 
     """
     A dict like view of all tables (:class:`TableProxy`) in memory.
@@ -597,9 +633,6 @@ class TableMap(collections.Mapping):
 
     def __init__(self, libmadx):
         self._libmadx = libmadx
-
-    __repr__ = _map_repr
-    __str__ = _map_repr
 
     def __iter__(self):
         return iter(self._libmadx.get_table_names())
@@ -839,7 +872,7 @@ class ExpandedElementList(ElementList):
         return self._libmadx.get_expanded_element_index_by_position(self._sequence_name, pos)
 
 
-class GlobalElementList(BaseElementList, collections.Mapping):
+class GlobalElementList(BaseElementList, _Mapping):
 
     """
     Provides dict-like access to MAD-X global elements.
@@ -856,7 +889,7 @@ class GlobalElementList(BaseElementList, collections.Mapping):
             yield self._libmadx.get_global_element_name(i)
 
 
-class TableProxy(collections.Mapping):
+class TableProxy(_Mapping):
 
     """
     Proxy object for lazy-loading table column data.
@@ -899,7 +932,7 @@ class TableProxy(collections.Mapping):
     @property
     def summary(self):
         """Get the table summary."""
-        return self._libmadx.get_table_summary(self._name)
+        return AttrDict(self._libmadx.get_table_summary(self._name))
 
     @property
     def range(self):
@@ -915,7 +948,7 @@ class TableProxy(collections.Mapping):
 
     def row(self, index, columns='selected'):
         """Retrieve one row from the table."""
-        return self._libmadx.get_table_row(self._name, index, columns)
+        return AttrDict(self._libmadx.get_table_row(self._name, index, columns))
 
     def copy(self, columns=None):
         """
@@ -953,17 +986,16 @@ class TableProxy(collections.Mapping):
         """Beam matrix."""
         return self.getmat('sig', idx, dim)
 
-class VarListProxy(collections.MutableMapping):
+class VarListProxy(_MutableMapping):
 
     """
     Provides dict-like access to MAD-X global variables.
     """
 
+    __slots__ = ('_libmadx',)
+
     def __init__(self, libmadx):
         self._libmadx = libmadx
-
-    __repr__ = _map_repr
-    __str__ = _map_repr
 
     def __getitem__(self, name):
         return self._libmadx.get_var(name)
