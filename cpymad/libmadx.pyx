@@ -74,8 +74,11 @@ __all__ = [
     'get_table_column_count',
     'get_table_column_count_all',
     'get_table_column',
+    'get_table_row',
     'get_table_row_count',
     'get_table_row_names',
+
+    'apply_table_selections',
 
     # sequence element list access
     'get_element',
@@ -477,6 +480,54 @@ def get_table_column(table_name, column_name):
                            .format(_str(dtype), column_name))
 
 
+def get_table_row(table_name, row_index, columns='selected'):
+    """
+    Return row as tuple of values.
+    """
+    cdef clib.table* table = _find_table(table_name)
+
+    if row_index < 0 or row_index >= table.curr:
+        raise IndexError("Index out of range: {0} (element count is {1})"
+                         .format(row_index, table.curr))
+
+    def fetch_value(col_index):
+        inform = table.columns.inform[col_index]
+        if inform == clib.PARAM_TYPE_INTEGER:
+            return int(table.d_cols[col_index][row_index])
+        elif inform == clib.PARAM_TYPE_DOUBLE:
+            return table.d_cols[col_index][row_index]
+        elif inform == clib.PARAM_TYPE_STRING:
+            return _str(table.s_cols[col_index][row_index])
+        raise RuntimeError("Unknown datatype {!r} in column {!r}."
+                           .format(inform, table.columns.names[col_index]))
+
+    if columns == 'all':
+        indices = range(table.columns.curr)
+    elif columns == 'selected':
+        indices = [table.col_out.i[i] for i in range(table.col_out.curr)]
+        # fallback if selection missing:
+        indices = indices or range(table.columns.curr)
+    else:
+        indices = []
+        for col in columns:
+            if isinstance(col, int):
+                if col < 0 or col > table.columns.curr:
+                    raise IndexError(
+                        "Column index out of range: {0} (column count is {1})"
+                        .format(col, table.columns.curr))
+                indices.append(col)
+            else:
+                idx = clib.name_list_pos(_cstr(col), table.columns)
+                if idx < 0:
+                    raise ValueError("Column not found: {0!r}".format(col))
+                indices.append(idx)
+
+    return {
+        _str(table.columns.names[i]): fetch_value(i)
+        for i in indices
+    }
+
+
 def get_table_row_count(table_name):
     """
     Return total number of rows in the table.
@@ -492,6 +543,20 @@ def get_table_row_names(table_name, indices):
     if isinstance(indices, int):
         return _get_table_row_name(table, indices)
     return [_get_table_row_name(table, i) for i in indices]
+
+
+def apply_table_selections(table_name):
+    """
+    Apply the SELECT/DESELECT commands for table columns/rows.
+
+    Needed as replacement for the missing ``out_table`` call for initializing
+    ``t.row_out``, ``t.col_out`` if the twiss command was performed without a
+    filename.
+    """
+    cdef clib.table* t = _find_table(table_name)
+    version_info = tuple(map(int, get_version_number().split('.')))
+    if version_info > (5,3,7):       # will crash before
+        clib.out_table(_cstr(table_name), t, NULL)
 
 
 def get_element(sequence_name, element_index):
