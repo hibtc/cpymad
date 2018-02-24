@@ -144,7 +144,7 @@ Then go to the cpymad folder and build as follows:
 
 .. code-block:: bat
 
-    python setup.py build_ext --madxdir=<madx-install-path> -lquadmath
+    python setup.py build_ext --static --madxdir=<madx-install-path> -lquadmath
     python setup.py build
 
 .. note::

@@ -118,31 +118,32 @@ def get_extension_args(argv):
                                path.join(prefix, 'lib64')]
         include_dirs += [path.join(prefix, 'include')]
         library_dirs += list(filter(path.isdir, lib_path_candidates))
-    # Determine shared libraries:
-    # NOTE: using ``distutils.util.get_platform()`` rather than
-    # ``sys.platform`` or ``platform.system()`` or even ``os.name`` and
-    # ``os.uname()`` to handle cross-builds:
+
+    # Windows:  win32/win-amd64
+    # Linux:    linux-x86_64/...
+    # Mac:      darwin*
     platform = get_platform()
-    # win32/win-amd64:
-    if platform.startswith('win'):
+
+    static = '--static' in argv
+    if static:
+        argv.remove('--static')
         libraries = ['madx', 'ptc', 'gc-lib',
                      'stdc++', 'gfortran', 'quadmath']
-        compile_args = ['-std=gnu99']
-    # e.g. linux-x86_64
-    elif platform.startswith('linux'):
-        libraries = ['madx', 'stdc++', 'c']
-        compile_args = ['-std=gnu99']
-    # Mac/others(?) (e.g. darwin*)
+        # NOTE: If MAD-X was built with BLAS/LAPACK, you must manually provide
+        # arguments `python setup.py build_ext -lblas -llapack`!
     else:
-        libraries = ['madx', 'stdc++', 'c']
-        compile_args = ['-std=gnu99']
+        libraries = ['madx']
+
+    if static and platform.startswith('linux'):
+        libraries += ['X11']
+
     # Common arguments for the Cython extensions:
     return dict(
         libraries=libraries,
         include_dirs=include_dirs,
         library_dirs=library_dirs,
         runtime_library_dirs=library_dirs,
-        extra_compile_args=compile_args,
+        extra_compile_args=['-std=gnu99'],
     )
 
 
