@@ -29,7 +29,7 @@ __all__ = [
     'Madx',
     'Sequence',
     'BaseElementList',
-    'TableProxy',
+    'Table',
     'CommandLog',
     'metadata',
 ]
@@ -222,12 +222,15 @@ class Madx(object):
     @property
     def globals(self):
         """Get a dict-like interface to global MAD-X variables."""
-        return VarListProxy(self._libmadx)
+        return VarList(self._libmadx)
 
     @property
     def elements(self):
         """Get a dict-like interface to globally visible elements."""
-        return GlobalElementList(self._libmadx)
+        return GlobalElementList(self)
+
+    def update_value(self, name, attr, value):
+        self.command[name](**{attr: value})
 
     def set_value(self, name, value):
         """
@@ -504,9 +507,9 @@ class Madx(object):
 
         :param str table: table name
         :returns: a proxy for the table data
-        :rtype: TableProxy
+        :rtype: Table
         """
-        return TableProxy(table, self._libmadx)
+        return Table(table, self._libmadx)
 
     @property
     def active_sequence(self):
@@ -555,12 +558,58 @@ class Madx(object):
         return TableMap(self._libmadx)
 
 
-def _map_repr(self):
-    """String representation of a custom mapping object."""
-    return "{}({})".format(self.__class__.__name__, str(dict(self)))
+class _Mapping(collections.Mapping):
+
+    def __repr__(self):
+        """String representation of a custom mapping object."""
+        return str(dict(self))
+
+    def __str__(self):
+        return repr(self)
+
+    def __getattr__(self, key):
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(key)
 
 
-class SequenceMap(collections.Mapping):
+class _MutableMapping(_Mapping, collections.MutableMapping):
+
+    __slots__ = ()
+
+    def __setattr__(self, key, val):
+        if key in self.__slots__:
+            object.__setattr__(self, key, val)
+        else:
+            self[key] = val
+
+    def __delattr__(self, key):
+        if key in self.__slots__:
+            object.__delattr__(self, key)
+        else:
+            del self[key]
+
+
+class AttrDict(_Mapping):
+
+    def __init__(self, data):
+        self._data = data
+
+    def __iter__(self):
+        return iter(self._data)
+
+    def __getitem__(self, name):
+        return self._data[name.lower()]
+
+    def __contains__(self, name):
+        return name.lower() in self._data
+
+    def __len__(self):
+        return len(self._data)
+
+
+class SequenceMap(_Mapping):
 
     """
     A dict like view of all sequences (:class:`Sequence`) in memory.
@@ -569,9 +618,6 @@ class SequenceMap(collections.Mapping):
     def __init__(self, madx):
         self._madx = madx
         self._libmadx = madx._libmadx
-
-    __repr__ = _map_repr
-    __str__ = _map_repr
 
     def __iter__(self):
         return iter(self._libmadx.get_sequence_names())
@@ -583,35 +629,32 @@ class SequenceMap(collections.Mapping):
             raise KeyError
 
     def __contains__(self, name):
-        return self._libmadx.sequence_exists(name)
+        return self._libmadx.sequence_exists(name.lower())
 
     def __len__(self):
         return self._libmadx.get_sequence_count()
 
 
-class TableMap(collections.Mapping):
+class TableMap(_Mapping):
 
     """
-    A dict like view of all tables (:class:`TableProxy`) in memory.
+    A dict like view of all tables (:class:`Table`) in memory.
     """
 
     def __init__(self, libmadx):
         self._libmadx = libmadx
-
-    __repr__ = _map_repr
-    __str__ = _map_repr
 
     def __iter__(self):
         return iter(self._libmadx.get_table_names())
 
     def __getitem__(self, name):
         try:
-            return TableProxy(name, self._libmadx)
+            return Table(name, self._libmadx)
         except ValueError:
             raise KeyError
 
     def __contains__(self, name):
-        return self._libmadx.table_exists(name)
+        return self._libmadx.table_exists(name.lower())
 
     def __len__(self):
         return self._libmadx.get_table_count()
@@ -625,7 +668,7 @@ class Sequence(object):
 
     def __init__(self, name, madx, _check=True):
         """Store sequence name."""
-        self._name = name
+        self._name = name = name.lower()
         self._madx = madx
         self._libmadx = madx._libmadx
         if _check and not self._libmadx.sequence_exists(name):
@@ -665,7 +708,7 @@ class Sequence(object):
     @property
     def twiss_table(self):
         """Get the TWISS results from the last calculation."""
-        return TableProxy(self.twiss_table_name, self._libmadx)
+        return Table(self.twiss_table_name, self._libmadx)
 
     @property
     def twiss_table_name(self):
@@ -675,12 +718,12 @@ class Sequence(object):
     @property
     def elements(self):
         """Get list of elements."""
-        return ElementList(self._libmadx, self._name)
+        return ElementList(self._madx, self._name)
 
     @property
     def expanded_elements(self):
         """List of elements including implicit drifts."""
-        return ExpandedElementList(self._libmadx, self._name)
+        return ExpandedElementList(self._madx, self._name)
 
     def element_names(self):
         return self._libmadx.get_element_names(self._name)
@@ -733,6 +776,66 @@ class Sequence(object):
         self._madx.use(self._name)
 
 
+class Element(_MutableMapping):
+
+    __slots__ = ('_madx', '_data', '_name')
+
+    def __init__(self, madx, data, name):
+        self._madx = madx
+        self._data = data
+        self._name = name
+
+    def __iter__(self):
+        return iter(self._data)
+
+    def __getitem__(self, name):
+        value = self._data[name.lower()]
+        if isinstance(value, list):
+            return ArrayAttribute(self, value, name)
+        return value
+
+    def __delitem__(self, name):
+        raise NotImplementedError()
+
+    def __setitem__(self, name, value):
+        self._madx.update_value(self._name, name, value)
+
+    def __contains__(self, name):
+        return name.lower() in self._data
+
+    def __len__(self):
+        return len(self._data)
+
+
+class ArrayAttribute(collections.Sequence):
+
+    def __init__(self, element, values, name):
+        self._element = element
+        self._values = values
+        self._name = name
+
+    def __getitem__(self, index):
+        return self._values[index]
+
+    def __setitem__(self, index, value):
+        if index >= len(self._values):
+            self._values.extend([0] * (index - len(self._values) + 1))
+        self._values[index] = value
+        self._element[self._name] = self._values
+
+    def __iter__(self):
+        return iter(self._values)
+
+    def __len__(self):
+        return len(self._values)
+
+    def __repr__(self):
+        return str(self._values)
+
+    def __str__(self):
+        return str(self._values)
+
+
 class BaseElementList(object):
 
     """
@@ -768,7 +871,7 @@ class BaseElementList(object):
             index += _len
         data = self._get_element(index)
         data['index'] = index
-        return data
+        return Element(self._madx, data, data['name'])
 
     def __len__(self):
         """Get number of elements."""
@@ -792,7 +895,7 @@ class BaseElementList(object):
             return 0
         elif name == '#e':
             return len(self) - 1
-        index = self._get_element_index(name)
+        index = self._get_element_index(name.lower())
         if index == -1:
             raise ValueError("Element not in list: {!r}".format(name))
         return index
@@ -800,11 +903,12 @@ class BaseElementList(object):
 
 class ElementList(BaseElementList, collections.Sequence):
 
-    def __init__(self, libmadx, sequence_name):
+    def __init__(self, madx, sequence_name):
         """
         Initialize instance.
         """
-        self._libmadx = libmadx
+        self._madx = madx
+        self._libmadx = madx._libmadx
         self._sequence_name = sequence_name
 
     def at(self, pos):
@@ -823,6 +927,10 @@ class ElementList(BaseElementList, collections.Sequence):
     def _get_element_at(self, pos):
         return self._libmadx.get_element_index_by_position(self._sequence_name, pos)
 
+    def __repr__(self):
+        return '[{}]'.format(', '.join(
+            self._libmadx.get_element_names(self._sequence_name)))
+
 
 class ExpandedElementList(ElementList):
 
@@ -838,33 +946,42 @@ class ExpandedElementList(ElementList):
     def _get_element_at(self, pos):
         return self._libmadx.get_expanded_element_index_by_position(self._sequence_name, pos)
 
+    def __repr__(self):
+        return '[{}]'.format(', '.join(
+            self._libmadx.get_expanded_element_names(self._sequence_name)))
 
-class GlobalElementList(BaseElementList, collections.Mapping):
+
+class GlobalElementList(BaseElementList, _Mapping):
 
     """
     Provides dict-like access to MAD-X global elements.
     """
 
-    def __init__(self, libmadx):
-        self._libmadx = libmadx
+    def __init__(self, madx):
+        self._madx = madx
+        self._libmadx = libmadx = madx._libmadx
         self._get_element = libmadx.get_global_element
         self._get_element_count = libmadx.get_global_element_count
         self._get_element_index = libmadx.get_global_element_index
 
     def __iter__(self):
-        for i in range(len(self)):
-            yield self._libmadx.get_global_element_name(i)
+        return iter(map(self._libmadx.get_global_element_name, range(len(self))))
+
+    def __repr__(self):
+        return '{{{}}}'.format(', '.join(self))
 
 
-class TableProxy(collections.Mapping):
+class Table(_Mapping):
 
     """
-    Proxy object for lazy-loading table column data.
+    MAD-X twiss table.
+
+    Loads individual columns from the MAD-X process lazily only on demand.
     """
 
     def __init__(self, name, libmadx, _check=True):
         """Just store the table name for now."""
-        self._name = name
+        self._name = name = name.lower()
         self._libmadx = libmadx
         self._cache = {}
         if _check and not libmadx.table_exists(name):
@@ -875,7 +992,7 @@ class TableProxy(collections.Mapping):
         if isinstance(column, int):
             return self.row(column)
         try:
-            return self._cache[column]
+            return self._cache[column.lower()]
         except KeyError:
             return self.reload(column)
 
@@ -896,10 +1013,13 @@ class TableProxy(collections.Mapping):
         return (self._libmadx.get_table_column_count(self._name) or
                 self._libmadx.get_table_column_count_all(self._name))
 
+    def __repr__(self):
+        return "<{}: {}>".format(self.__class__.__name__, self._name)
+
     @property
     def summary(self):
         """Get the table summary."""
-        return self._libmadx.get_table_summary(self._name)
+        return AttrDict(self._libmadx.get_table_summary(self._name))
 
     @property
     def range(self):
@@ -910,12 +1030,12 @@ class TableProxy(collections.Mapping):
 
     def reload(self, column):
         """Reload (recache) one column from MAD-X."""
-        self._cache[column] = data = self._query(column)
+        self._cache[column.lower()] = data = self._query(column)
         return data
 
     def row(self, index, columns='selected'):
         """Retrieve one row from the table."""
-        return self._libmadx.get_table_row(self._name, index, columns)
+        return AttrDict(self._libmadx.get_table_row(self._name, index, columns))
 
     def copy(self, columns=None):
         """
@@ -953,20 +1073,19 @@ class TableProxy(collections.Mapping):
         """Beam matrix."""
         return self.getmat('sig', idx, dim)
 
-class VarListProxy(collections.MutableMapping):
+class VarList(_MutableMapping):
 
     """
     Provides dict-like access to MAD-X global variables.
     """
 
+    __slots__ = ('_libmadx',)
+
     def __init__(self, libmadx):
         self._libmadx = libmadx
 
-    __repr__ = _map_repr
-    __str__ = _map_repr
-
     def __getitem__(self, name):
-        return self._libmadx.get_var(name)
+        return self._libmadx.get_var(name.lower())
 
     def __setitem__(self, name, value):
         self._libmadx.set_var(name, value)
