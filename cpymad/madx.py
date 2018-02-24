@@ -336,56 +336,27 @@ class Madx(object):
         for p in pattern:
             select(flag=flag, pattern=p)
 
-    def twiss(self,
-              sequence=None,
-              range=None,
-              # *,
-              # These should be passed as keyword-only parameters:
-              twiss_init={},
-              columns=None,
-              pattern=['full'],
-              **kwargs):
+    def twiss(self, **kwargs):
         """
-        Run SELECT+USE+TWISS.
+        Run TWISS.
 
         :param str sequence: name of sequence
-        :param list pattern: pattern to include in table
-        :param list columns: columns to include in table, (may be a str)
-        :param dict twiss_init: dictionary of twiss initialization variables
-        :param bool chrom: Also calculate chromatic functions (slower)
-        :param kwargs: further keyword arguments for the MAD-X command
+        :param kwargs: keyword arguments for the MAD-X command
 
         Note that the kwargs overwrite any arguments in twiss_init.
         """
-        self.select('twiss', columns=columns, pattern=pattern)
-        sequence = self._use(sequence)
-        twiss_init = dict((k, v) for k,v in twiss_init.items()
-                          if k not in ['name','closed-orbit'])
-        # explicitly specified keyword arguments overwrite values in
-        # twiss_init:
-        twiss_init.update(kwargs)
-        self.command.twiss(sequence=sequence,
-                           range=range,
-                           **twiss_init)
-        if 'file' not in twiss_init:
-            self._libmadx.apply_table_selections(twiss_init.get('table', 'twiss'))
+        self.command.twiss(**kwargs)
+        if 'file' not in kwargs:
+            self._libmadx.apply_table_selections(kwargs.get('table', 'twiss'))
         return self.get_table('twiss')
 
-    def survey(self,
-               sequence=None,
-               columns=None,
-               pattern=['full'],
-               **kwargs):
+    def survey(self, **kwargs):
         """
-        Run SELECT+USE+SURVEY.
+        Run SURVEY.
 
         :param str sequence: name of sequence
-        :param list pattern: pattern to include in table
-        :param list columns: Columns to include in table
-        :param kwargs: further keyword arguments for the MAD-X command
+        :param kwargs: keyword arguments for the MAD-X command
         """
-        self.select('survey', pattern=pattern, columns=columns)
-        self._use(sequence)
         self.command.survey(**kwargs)
         if 'file' not in kwargs:
             self._libmadx.apply_table_selections(kwargs.get('table', 'survey'))
@@ -399,29 +370,6 @@ class Madx(object):
         :returns: name of active sequence
         """
         self.command.use(sequence=sequence)
-
-    def _use(self, sequence):
-        """
-        USE sequence if it is not active.
-
-        :param str sequence: sequence name, may be None
-        :returns: new active sequence name
-        :rtype: str
-        :raises RuntimeError: if there is no active sequence
-        """
-        try:
-            active_sequence = self.active_sequence
-        except RuntimeError:
-            if not sequence:
-                raise
-            active_sequence = None
-        else:
-            if not sequence:
-                sequence = active_sequence.name
-        if (sequence != active_sequence
-                or not self._libmadx.is_sequence_expanded(sequence)):
-            self.use(sequence)
-        return sequence
 
     def sectormap(self, elems, **kwargs):
         """
@@ -447,7 +395,6 @@ class Madx(object):
         )).transpose((2,0,1))
 
     def match(self,
-              sequence=None,
               constraints=[],
               vary=[],
               weight=None,
@@ -460,13 +407,11 @@ class Madx(object):
 
         For more advanced cases, you should issue the commands manually.
 
-        :param str sequence: name of sequence
         :param list constraints: constraints to pose during matching
         :param list vary: knob names to be varied
         :param dict weight: weights for matching parameters
         :param str knobfile: file to write the knob values to
-        :param dict twiss_init: initial twiss parameters
-        :param dict kwargs: further keyword arguments for the MAD-X command
+        :param dict kwargs: keyword arguments for the MAD-X command
         :returns: final knob values
         :rtype: dict
 
@@ -486,20 +431,13 @@ class Madx(object):
         ...     ],
         ...     vary=['qp1->k1',
         ...           'qp2->k1'],
-        ...     twiss_init=twiss_init,
+        ...     **twiss_init,
         ... )
         >>> tw = m.twiss('mysequence', twiss_init=twiss_init)
         """
-        sequence = self._use(sequence)
-        twiss_init = dict((k, v) for k,v in twiss_init.items()
-                          if k not in ['name','closed-orbit'])
-        # explicitly specified keyword arguments overwrite values in
-        # twiss_init:
-        twiss_init.update(kwargs)
-
         command = self.command
         # MATCH (=start)
-        command.match(sequence=sequence, **twiss_init)
+        command.match(**kwargs)
         if weight:
             command.weight(**weight)
         for c in constraints:
