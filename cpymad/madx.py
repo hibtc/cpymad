@@ -868,6 +868,8 @@ class TableProxy(collections.Mapping):
 
     def __getitem__(self, column):
         """Get the column data."""
+        if isinstance(column, int):
+            return self.row(column)
         try:
             return self._cache[column]
         except KeyError:
