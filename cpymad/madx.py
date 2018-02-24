@@ -629,7 +629,7 @@ class SequenceMap(_Mapping):
             raise KeyError
 
     def __contains__(self, name):
-        return self._libmadx.sequence_exists(name)
+        return self._libmadx.sequence_exists(name.lower())
 
     def __len__(self):
         return self._libmadx.get_sequence_count()
@@ -654,7 +654,7 @@ class TableMap(_Mapping):
             raise KeyError
 
     def __contains__(self, name):
-        return self._libmadx.table_exists(name)
+        return self._libmadx.table_exists(name.lower())
 
     def __len__(self):
         return self._libmadx.get_table_count()
@@ -668,7 +668,7 @@ class Sequence(object):
 
     def __init__(self, name, madx, _check=True):
         """Store sequence name."""
-        self._name = name
+        self._name = name = name.lower()
         self._madx = madx
         self._libmadx = madx._libmadx
         if _check and not self._libmadx.sequence_exists(name):
@@ -789,7 +789,7 @@ class Element(_MutableMapping):
         return iter(self._data)
 
     def __getitem__(self, name):
-        value = self._data[name]
+        value = self._data[name.lower()]
         if isinstance(value, list):
             return ArrayAttribute(self, value, name)
         return value
@@ -801,7 +801,7 @@ class Element(_MutableMapping):
         self._madx.update_value(self._name, name, value)
 
     def __contains__(self, name):
-        return name in self._data
+        return name.lower() in self._data
 
     def __len__(self):
         return len(self._data)
@@ -898,7 +898,7 @@ class BaseElementList(object):
             return 0
         elif name == '#e':
             return len(self) - 1
-        index = self._get_element_index(name)
+        index = self._get_element_index(name.lower())
         if index == -1:
             raise ValueError("Element not in list: {!r}".format(name))
         return index
@@ -974,7 +974,7 @@ class Table(_Mapping):
 
     def __init__(self, name, libmadx, _check=True):
         """Just store the table name for now."""
-        self._name = name
+        self._name = name = name.lower()
         self._libmadx = libmadx
         self._cache = {}
         if _check and not libmadx.table_exists(name):
@@ -985,7 +985,7 @@ class Table(_Mapping):
         if isinstance(column, int):
             return self.row(column)
         try:
-            return self._cache[column]
+            return self._cache[column.lower()]
         except KeyError:
             return self.reload(column)
 
@@ -1020,7 +1020,7 @@ class Table(_Mapping):
 
     def reload(self, column):
         """Reload (recache) one column from MAD-X."""
-        self._cache[column] = data = self._query(column)
+        self._cache[column.lower()] = data = self._query(column)
         return data
 
     def row(self, index, columns='selected'):
@@ -1075,7 +1075,7 @@ class VarList(_MutableMapping):
         self._libmadx = libmadx
 
     def __getitem__(self, name):
-        return self._libmadx.get_var(name)
+        return self._libmadx.get_var(name.lower())
 
     def __setitem__(self, name, value):
         self._libmadx.set_var(name, value)
