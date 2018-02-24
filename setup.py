@@ -114,10 +114,9 @@ def get_extension_args(argv):
     # which is a minor nuisance.
     for dir_ in remove_arg(argv, '--madxdir'):
         prefix = path.expanduser(dir_)
-        lib_path_candidates = [path.join(prefix, 'lib'),
-                               path.join(prefix, 'lib64')]
         include_dirs += [path.join(prefix, 'include')]
-        library_dirs += list(filter(path.isdir, lib_path_candidates))
+        library_dirs += [path.join(prefix, 'lib'),
+                         path.join(prefix, 'lib64')]
 
     # Windows:  win32/win-amd64
     # Linux:    linux-x86_64/...
@@ -137,7 +136,6 @@ def get_extension_args(argv):
     if static and platform.startswith('linux'):
         libraries += ['X11']
 
-    # Common arguments for the Cython extensions:
     return dict(
         libraries=libraries,
         include_dirs=include_dirs,
