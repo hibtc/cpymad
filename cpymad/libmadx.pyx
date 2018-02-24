@@ -827,7 +827,9 @@ def get_global_element(element_index):
     if element_index < 0 or element_index >= elems.curr:
         raise IndexError("Index out of range: {0} (element count is {1})"
                          .format(element_index, elems.curr))
-    return _get_element(elems.elem[element_index])
+    data = _get_element(elems.elem[element_index])
+    data['name'] = _str(elems.elem[element_index].name)
+    return data
 
 
 def get_global_element_name(element_index):
