@@ -18,7 +18,7 @@ __all__ = [
     'name_to_internal',
     'mad_parameter',
     'mad_command',
-    'check_expression'
+    'check_expression',
     'temp_filename',
 ]
 
