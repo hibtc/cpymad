@@ -562,7 +562,7 @@ class _Mapping(collections.Mapping):
 
     def __repr__(self):
         """String representation of a custom mapping object."""
-        return "{}({})".format(self.__class__.__name__, str(dict(self)))
+        return str(dict(self))
 
     def __str__(self):
         return repr(self)
@@ -806,9 +806,6 @@ class Element(_MutableMapping):
     def __len__(self):
         return len(self._data)
 
-    def __repr__(self):
-        return '<{}: {}>'.format(self.__class__.__name__, self._name)
-
 
 class ArrayAttribute(collections.Sequence):
 
@@ -833,7 +830,7 @@ class ArrayAttribute(collections.Sequence):
         return len(self._values)
 
     def __repr__(self):
-        return "<{}: {}>".format(self.__class__.__name__, self._values)
+        return str(self._values)
 
     def __str__(self):
         return str(self._values)
@@ -930,6 +927,10 @@ class ElementList(BaseElementList, collections.Sequence):
     def _get_element_at(self, pos):
         return self._libmadx.get_element_index_by_position(self._sequence_name, pos)
 
+    def __repr__(self):
+        return '[{}]'.format(', '.join(
+            self._libmadx.get_element_names(self._sequence_name)))
+
 
 class ExpandedElementList(ElementList):
 
@@ -944,6 +945,10 @@ class ExpandedElementList(ElementList):
 
     def _get_element_at(self, pos):
         return self._libmadx.get_expanded_element_index_by_position(self._sequence_name, pos)
+
+    def __repr__(self):
+        return '[{}]'.format(', '.join(
+            self._libmadx.get_expanded_element_names(self._sequence_name)))
 
 
 class GlobalElementList(BaseElementList, _Mapping):
@@ -960,8 +965,10 @@ class GlobalElementList(BaseElementList, _Mapping):
         self._get_element_index = libmadx.get_global_element_index
 
     def __iter__(self):
-        for i in range(len(self)):
-            yield self._libmadx.get_global_element_name(i)
+        return iter(map(self._libmadx.get_global_element_name, range(len(self))))
+
+    def __repr__(self):
+        return '{{{}}}'.format(', '.join(self))
 
 
 class Table(_Mapping):
@@ -1005,6 +1012,9 @@ class Table(_Mapping):
         """Return number of columns."""
         return (self._libmadx.get_table_column_count(self._name) or
                 self._libmadx.get_table_column_count_all(self._name))
+
+    def __repr__(self):
+        return "<{}: {}>".format(self.__class__.__name__, self._name)
 
     @property
     def summary(self):
