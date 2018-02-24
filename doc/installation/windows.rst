@@ -144,17 +144,8 @@ Then go to the cpymad folder and build as follows:
 
 .. code-block:: bat
 
-    python setup.py build_ext --madxdir=<madx-install-path> -lquadmath
+    python setup.py build_ext --static --madxdir=<madx-install-path>
     python setup.py build
-
-.. note::
-
-    The ``-lquadmath`` argument is required to avoid errors like the following::
-
-        .../libgfortran.a(write.o):(.text$write_float+0xbb): undefined reference to `signbitq'
-        .../lib/gcc/i686-w64-mingw32/4.9.2/libgfortran.a(write.o):(.text$write_float+0xe7): undefined reference to `finiteq'
-
-    If the build fails, try to leave it out.
 
 From the built package you can create a so called wheel_, which is
 essentially a zip archive containing all the files ready for installation:
