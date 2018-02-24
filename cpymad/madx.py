@@ -499,12 +499,12 @@ class Madx(object):
         return self._libmadx.evaluate(cmd)
 
     @property
-    def sequences(self):
+    def sequence(self):
         """A dict like view of all sequences in memory."""
         return SequenceMap(self)
 
     @property
-    def tables(self):
+    def table(self):
         """A dict like view of all tables in memory."""
         return TableMap(self._libmadx)
 

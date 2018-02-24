@@ -193,12 +193,12 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
 
     def test_get_sequence(self):
         with self.assertRaises(KeyError):
-            self.mad.sequences['sN']
-        s1 = self.mad.sequences['s1']
+            self.mad.sequence['sN']
+        s1 = self.mad.sequence['s1']
         self.assertEqual(s1.name, 's1')
 
-    def test_get_sequences(self):
-        seqs = self.mad.sequences
+    def test_get_sequence(self):
+        seqs = self.mad.sequence
         self.assertItemsEqual(seqs, ['s1', 's2'])
 
     def test_evaluate(self):
@@ -252,7 +252,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
     # def test_sequence_twissname(self):
 
     def _get_elems(self, seq_name):
-        elems = self.mad.sequences[seq_name].elements
+        elems = self.mad.sequence[seq_name].elements
         elem_idx = dict((el['name'], i) for i, el in enumerate(elems))
         return elems, elem_idx
 
@@ -295,7 +295,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertRaises(RuntimeError, self.mad.input, 'XXX: sequence;')
 
     def test_sequence_elements(self):
-        elements = self.mad.sequences['s1'].elements
+        elements = self.mad.sequence['s1'].elements
         iqp2 = elements.index('qp[2]')
         qp1 = elements['qp[1]']
         qp2 = elements[iqp2]
@@ -307,7 +307,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         beam = 'beam, ex=1, ey=2, particle=electron, sequence=s1;'
         self.mad.command(beam)
         self.mad.use('s1')
-        elements = self.mad.sequences['s1'].expanded_elements
+        elements = self.mad.sequence['s1'].expanded_elements
         iqp2 = elements.index('qp[2]')
         qp1 = elements['qp[1]']
         qp2 = elements[iqp2]
