@@ -78,6 +78,8 @@ __all__ = [
     'get_table_row_count',
     'get_table_row_names',
 
+    'apply_table_selections',
+
     # sequence element list access
     'get_element',
     'get_element_name',
@@ -541,6 +543,20 @@ def get_table_row_names(table_name, indices):
     if isinstance(indices, int):
         return _get_table_row_name(table, indices)
     return [_get_table_row_name(table, i) for i in indices]
+
+
+def apply_table_selections(table_name):
+    """
+    Apply the SELECT/DESELECT commands for table columns/rows.
+
+    Needed as replacement for the missing ``out_table`` call for initializing
+    ``t.row_out``, ``t.col_out`` if the twiss command was performed without a
+    filename.
+    """
+    cdef clib.table* t = _find_table(table_name)
+    version_info = tuple(map(int, get_version_number().split('.')))
+    if version_info > (5,3,7):       # will crash before
+        clib.out_table(_cstr(table_name), t, NULL)
 
 
 def get_element(sequence_name, element_index):

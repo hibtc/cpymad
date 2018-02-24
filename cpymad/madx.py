@@ -351,6 +351,8 @@ class Madx(object):
         self.command.twiss(sequence=sequence,
                            range=range,
                            **twiss_init)
+        if 'file' not in twiss_init:
+            self._libmadx.apply_table_selections(twiss_init.get('table', 'twiss'))
         return self.get_table('twiss')
 
     def survey(self,
@@ -369,6 +371,8 @@ class Madx(object):
         self.select('survey', pattern=pattern, columns=columns)
         self._use(sequence)
         self.command.survey(**kwargs)
+        if 'file' not in kwargs:
+            self._libmadx.apply_table_selections(kwargs.get('table', 'survey'))
         return self.get_table('survey')
 
     def use(self, sequence):
