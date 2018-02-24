@@ -29,7 +29,7 @@ __all__ = [
     'Madx',
     'Sequence',
     'BaseElementList',
-    'TableProxy',
+    'Table',
     'CommandLog',
     'metadata',
 ]
@@ -222,7 +222,7 @@ class Madx(object):
     @property
     def globals(self):
         """Get a dict-like interface to global MAD-X variables."""
-        return VarListProxy(self._libmadx)
+        return VarList(self._libmadx)
 
     @property
     def elements(self):
@@ -504,9 +504,9 @@ class Madx(object):
 
         :param str table: table name
         :returns: a proxy for the table data
-        :rtype: TableProxy
+        :rtype: Table
         """
-        return TableProxy(table, self._libmadx)
+        return Table(table, self._libmadx)
 
     @property
     def active_sequence(self):
@@ -628,7 +628,7 @@ class SequenceMap(_Mapping):
 class TableMap(_Mapping):
 
     """
-    A dict like view of all tables (:class:`TableProxy`) in memory.
+    A dict like view of all tables (:class:`Table`) in memory.
     """
 
     def __init__(self, libmadx):
@@ -639,7 +639,7 @@ class TableMap(_Mapping):
 
     def __getitem__(self, name):
         try:
-            return TableProxy(name, self._libmadx)
+            return Table(name, self._libmadx)
         except ValueError:
             raise KeyError
 
@@ -698,7 +698,7 @@ class Sequence(object):
     @property
     def twiss_table(self):
         """Get the TWISS results from the last calculation."""
-        return TableProxy(self.twiss_table_name, self._libmadx)
+        return Table(self.twiss_table_name, self._libmadx)
 
     @property
     def twiss_table_name(self):
@@ -889,10 +889,12 @@ class GlobalElementList(BaseElementList, _Mapping):
             yield self._libmadx.get_global_element_name(i)
 
 
-class TableProxy(_Mapping):
+class Table(_Mapping):
 
     """
-    Proxy object for lazy-loading table column data.
+    MAD-X twiss table.
+
+    Loads individual columns from the MAD-X process lazily only on demand.
     """
 
     def __init__(self, name, libmadx, _check=True):
@@ -986,7 +988,7 @@ class TableProxy(_Mapping):
         """Beam matrix."""
         return self.getmat('sig', idx, dim)
 
-class VarListProxy(_MutableMapping):
+class VarList(_MutableMapping):
 
     """
     Provides dict-like access to MAD-X global variables.
