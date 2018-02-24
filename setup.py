@@ -127,28 +127,15 @@ def get_extension_args(argv):
     if platform.startswith('win'):
         libraries = ['madx', 'ptc', 'gc-lib',
                      'stdc++', 'gfortran', 'quadmath']
-        force_lib = []
         compile_args = ['-std=gnu99']
     # e.g. linux-x86_64
     elif platform.startswith('linux'):
         libraries = ['madx', 'stdc++', 'c']
-        # DT_RUNPATH is intransitive, i.e. not used for indirect dependencies
-        # like 'cpymad -> libmadx -> libptc'. Therefore, on platforms where
-        # DT_RUNPATH is used (py35) rather than DT_RPATH (py27) and MAD-X is
-        # installed in a non-system location, we need to link against libptc
-        # directly to make it discoverable:
-        # (an even better solution is to build MAD-X with RPATH=.)
-        force_lib = ['ptc']
         compile_args = ['-std=gnu99']
     # Mac/others(?) (e.g. darwin*)
     else:
         libraries = ['madx', 'stdc++', 'c']
-        # NOTE: no `force_lib` since Mac's ld doesn't support `--as-needed`:
-        force_lib = []
         compile_args = ['-std=gnu99']
-    link_args = (['-Wl,--no-as-needed'] +
-                 ['-l'+lib for lib in force_lib] +
-                 ['-Wl,--as-needed']) if force_lib else []
     # Common arguments for the Cython extensions:
     return dict(
         libraries=libraries,
@@ -156,7 +143,6 @@ def get_extension_args(argv):
         library_dirs=library_dirs,
         runtime_library_dirs=library_dirs,
         extra_compile_args=compile_args,
-        extra_link_args=link_args,
     )
 
 
