@@ -197,6 +197,7 @@ cdef extern from "madX/mad_gvar.h" nogil:
     char_array* c_dum           # another temporary buffer
     var_list* variable_list     # globals
     el_list* element_list       # list of global elements
+    el_list* base_type_list     # list of base types
 
 
 # Function declarations:

@@ -104,6 +104,9 @@ __all__ = [
     'get_global_element_index',
     'get_global_element_count',
 
+    # element base types
+    'get_base_type_names',
+
     # these are imported from 'os' for convenience in madx.Madx and should
     # not really be considered part of the public interface:
     'chdir',
@@ -865,6 +868,13 @@ def get_global_element_count():
     Return number of globally visible elements.
     """
     return clib.element_list.curr
+
+
+def get_base_type_names():
+    """
+    Return list of element names for base types.
+    """
+    return _name_list(clib.base_type_list.list)
 
 
 def is_sequence_expanded(sequence_name):

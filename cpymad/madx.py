@@ -229,6 +229,11 @@ class Madx(object):
         """Get a dict-like interface to globally visible elements."""
         return GlobalElementList(self)
 
+    @property
+    def base_types(self):
+        """Get a dict-like interface to base types."""
+        return BaseTypeList(self)
+
     def update_value(self, name, attr, value):
         self.command[name](**{attr: value})
 
@@ -981,6 +986,19 @@ class GlobalElementList(BaseElementList, _Mapping):
 
     def __repr__(self):
         return '{{{}}}'.format(', '.join(self))
+
+
+class BaseTypeList(GlobalElementList):
+
+    def __init__(self, madx):
+        super().__init__(madx)
+        self._names = self._libmadx.get_base_type_names()
+
+    def __iter__(self):
+        return iter(self._names)
+
+    def __len__(self):
+        return len(self._names)
 
 
 class Table(_Mapping):
