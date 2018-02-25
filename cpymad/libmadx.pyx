@@ -107,6 +107,10 @@ __all__ = [
     # element base types
     'get_base_type_names',
 
+    # defined commands
+    'get_defined_command',
+    'get_defined_command_names',
+
     # these are imported from 'os' for convenience in madx.Madx and should
     # not really be considered part of the public interface:
     'chdir',
@@ -877,6 +881,18 @@ def get_base_type_names():
     return _name_list(clib.base_type_list.list)
 
 
+def get_defined_command(command_name):
+    cdef bytes _command_name = _cstr(command_name)
+    cdef int index = clib.name_list_pos(_command_name, clib.defined_commands.list)
+    if index == -1:
+        raise ValueError("Invalid command: {!r}".format(command_name))
+    return _parse_command(clib.defined_commands.commands[index])
+
+
+def get_defined_command_names():
+    return _name_list(clib.defined_commands.list)
+
+
 def is_sequence_expanded(sequence_name):
     """
     Check whether a sequence has already been expanded.
@@ -984,6 +1000,8 @@ cdef _get_param_value(clib.command_parameter* par):
         return _str(par.string)
 
     if par.type == clib.PARAM_TYPE_CONSTRAINT:
+        if par.c_type == clib.CONSTR_TYPE_NONE: # occurs in defined_commands
+            return Constraint()
         if par.c_type == clib.CONSTR_TYPE_MIN:
             return Constraint(min=_expr(par.min_expr, par.c_min))
         if par.c_type == clib.CONSTR_TYPE_MAX:

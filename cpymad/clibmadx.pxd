@@ -114,6 +114,7 @@ cdef enum:
     PARAM_TYPE_STRING_ARRAY = 13
 
 cdef enum:
+    CONSTR_TYPE_NONE = 0            # occurs in defined_commands
     CONSTR_TYPE_MIN = 1
     CONSTR_TYPE_MAX = 2
     CONSTR_TYPE_BOTH = 3
@@ -123,6 +124,11 @@ cdef extern from "madX/mad_cmd.h" nogil:
     struct command:
         int beam_def
         command_parameter_list* par
+
+    struct command_list:
+        int curr                # current occupation
+        name_list* list         # index list of names
+        command** commands      # command pointer list
 
 cdef extern from "madX/mad_elem.h" nogil:
     struct element:
@@ -198,6 +204,7 @@ cdef extern from "madX/mad_gvar.h" nogil:
     var_list* variable_list     # globals
     el_list* element_list       # list of global elements
     el_list* base_type_list     # list of base types
+    command_list* defined_commands  # with base types, but no user elements
 
 
 # Function declarations:

@@ -232,7 +232,11 @@ class Madx(object):
     @property
     def base_types(self):
         """Get a dict-like interface to base types."""
-        return BaseTypeList(self)
+        return BaseTypeMap(self)
+
+    @property
+    def commands(self):
+        return CommandMap(self)
 
     def update_value(self, name, attr, value):
         self.command[name](**{attr: value})
@@ -781,7 +785,7 @@ class Sequence(object):
         self._madx.use(self._name)
 
 
-class Element(_MutableMapping):
+class Command(_Mapping):
 
     __slots__ = ('_madx', '_data', '_name')
 
@@ -794,6 +798,21 @@ class Element(_MutableMapping):
         return iter(self._data)
 
     def __getitem__(self, name):
+        return self._data[name.lower()]
+
+    def __contains__(self, name):
+        return name.lower() in self._data
+
+    def __len__(self):
+        return len(self._data)
+
+    def __call__(self, *args, **kwargs):
+        self._madx.command[self._name](*args, **kwargs)
+
+
+class Element(Command, _MutableMapping):
+
+    def __getitem__(self, name):
         value = self._data[name.lower()]
         if isinstance(value, list):
             return ArrayAttribute(self, value, name)
@@ -803,13 +822,7 @@ class Element(_MutableMapping):
         raise NotImplementedError()
 
     def __setitem__(self, name, value):
-        self._madx.update_value(self._name, name, value)
-
-    def __contains__(self, name):
-        return name.lower() in self._data
-
-    def __len__(self):
-        return len(self._data)
+        self(**{name: value})
 
     @property
     def parent(self):
@@ -988,17 +1001,38 @@ class GlobalElementList(BaseElementList, _Mapping):
         return '{{{}}}'.format(', '.join(self))
 
 
-class BaseTypeList(GlobalElementList):
+class CommandMap(_Mapping):
 
     def __init__(self, madx):
-        super().__init__(madx)
-        self._names = self._libmadx.get_base_type_names()
+        self._madx = madx
+        self._names = madx._libmadx.get_defined_command_names()
 
     def __iter__(self):
         return iter(self._names)
 
+    def __getitem__(self, name):
+        madx = self._madx
+        data = madx._libmadx.get_defined_command(name)
+        return Command(madx, data, name)
+
+    def __contains__(self, name):
+        return name.lower() in self._names
+
     def __len__(self):
         return len(self._names)
+
+    def __repr__(self):
+        return '{{{}}}'.format(', '.join(self))
+
+
+class BaseTypeMap(CommandMap):
+
+    def __init__(self, madx):
+        self._madx = madx
+        self._names = madx._libmadx.get_base_type_names()
+
+    def __getitem__(self, name):
+        return self._madx.elements[name]
 
 
 class Table(_Mapping):
