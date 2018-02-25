@@ -74,16 +74,20 @@ class MadxCommands(object):
 
     def __getattr__(self, name):
         """Return a dispatcher for a specific command."""
-        if name.startswith('_'):
-            raise AttributeError("Invalid command name: {!r}! Did you mean {!r}?"
-                                 .format(name, name.strip('_') + '_'))
-        if name.endswith('_'):
-            name = name[:-1]
-        return self[name]
+        return self[_fix_name(name)]
 
     def __getitem__(self, name):
         """Return a dispatcher for a specific command."""
         return partial(self.__call__, name)
+
+
+def _fix_name(name):
+    if name.startswith('_'):
+        raise AttributeError("Invalid command name: {!r}! Did you mean {!r}?"
+                             .format(name, name.strip('_') + '_'))
+    if name.endswith('_'):
+        name = name[:-1]
+    return name
 
 
 def NOP(s):
@@ -577,6 +581,7 @@ class _Mapping(collections.Mapping):
         return repr(self)
 
     def __getattr__(self, key):
+        key = _fix_name(key)
         try:
             return self[key]
         except KeyError:
@@ -591,12 +596,14 @@ class _MutableMapping(_Mapping, collections.MutableMapping):
         if key in self.__slots__:
             object.__setattr__(self, key, val)
         else:
+            key = _fix_name(key)
             self[key] = val
 
     def __delattr__(self, key):
         if key in self.__slots__:
             object.__delattr__(self, key)
         else:
+            key = _fix_name(key)
             del self[key]
 
 
