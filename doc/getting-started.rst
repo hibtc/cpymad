@@ -110,22 +110,6 @@ correct behaviour (argument order/formatting). For example:
 
 Note that positional and keyword parameters can be mixed.
 
-So far, we have specified the name of the command as an *attribute* of the
-``command`` object. However, this is only syntactic sugar for setting a first
-positional argument on the final call. It is possible to avoid this
-indirection and specify the leading part manually:
-
-.. code-block:: python
-
-    madx.command('beam', 'sequence=fodo', particle='PROTON')
-
-An example where it is even necessary, because the colon ``:`` can not be used
-as part of the attribute name:
-
-.. code-block:: python
-
-    madx.command('QP: QUADRUPOLE', AT=2, L=1)
-
 A single trailing underscore will be stripped from the attribute name. This is
 useful for MAD-X commands that are python keywords:
 

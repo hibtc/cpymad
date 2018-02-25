@@ -50,37 +50,6 @@ class Version(object):
         return "MAD-X {} ({})".format(self.release, self.date)
 
 
-class MadxCommands(object):
-
-    """
-    Generic MAD-X command wrapper.
-
-    Raw python interface to issue MAD-X commands. Usage example:
-
-    >>> command = MadxCommands(libmadx.input)
-    >>> command('twiss', sequence='LEBT')
-    >>> command.title('A meaningful phrase')
-
-    :ivar __dispatch: callable that takes a MAD-X command string.
-    """
-
-    def __init__(self, dispatch):
-        """Set :ivar:`__dispatch` from :var:`dispatch`."""
-        self.__dispatch = dispatch
-
-    def __call__(self, *args, **kwargs):
-        """Create and dispatch a MAD-X command string."""
-        self.__dispatch(util.mad_command(*args, **kwargs))
-
-    def __getattr__(self, name):
-        """Return a dispatcher for a specific command."""
-        return self[_fix_name(name)]
-
-    def __getitem__(self, name):
-        """Return a dispatcher for a specific command."""
-        return partial(self.__call__, name)
-
-
 def _fix_name(name):
     if name.startswith('_'):
         raise AttributeError("Invalid command name: {!r}! Did you mean {!r}?"
@@ -175,6 +144,7 @@ class Madx(object):
         self._libmadx = libmadx
         self._command_log = command_log
         self._error_log = error_log
+        self._commands = CommandMap(self)
 
     def __bool__(self):
         """Check if MAD-X is up and running."""
@@ -193,13 +163,8 @@ class Madx(object):
 
     @property
     def command(self):
-        """
-        Perform a single MAD-X command.
-
-        :param str cmd: command name
-        :param kwargs: command parameters
-        """
-        return MadxCommands(self.input)
+        """Namespace of all MAD-X commands."""
+        return self._commands
 
     def input(self, text):
         """
@@ -231,10 +196,6 @@ class Madx(object):
     def base_types(self):
         """Get a dict-like interface to base types."""
         return BaseTypeMap(self)
-
-    @property
-    def commands(self):
-        return CommandMap(self)
 
     def update_value(self, name, attr, value):
         self.command[name](**{attr: value})
@@ -500,7 +461,7 @@ class Madx(object):
             command.constraint(**c)
         for v in vary:
             command.vary(name=v)
-        command(method[0], **method[1])
+        command[method[0]](**method[1])
         command.endmatch(knobfile=knobfile)
         return dict((knob, self.evaluate(knob)) for knob in vary)
 
@@ -788,6 +749,15 @@ class Sequence(object):
 
 class Command(_Mapping):
 
+    """
+    Raw python interface to issue and view MAD-X commands. Usage example:
+
+    >>> madx.command.twiss(sequence='LEBT')
+    >>> madx.command.title('A meaningful phrase')
+    >>> madx.command.twiss.betx
+    0.0
+    """
+
     __slots__ = ('_madx', '_data', '_name')
 
     def __init__(self, madx, data, name):
@@ -808,7 +778,8 @@ class Command(_Mapping):
         return len(self._data)
 
     def __call__(self, *args, **kwargs):
-        self._madx.command[self._name](*args, **kwargs)
+        """Perform a single MAD-X command."""
+        self._madx.input(util.mad_command(self._name, *args, **kwargs))
 
 
 class Element(Command, _MutableMapping):
