@@ -715,7 +715,7 @@ class Sequence(object):
     @property
     def beam(self):
         """Get the beam dictionary associated to the sequence."""
-        return self._libmadx.get_sequence_beam(self._name)
+        return AttrDict(self._libmadx.get_sequence_beam(self._name))
 
     @beam.setter
     def beam(self, beam):
