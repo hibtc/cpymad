@@ -117,6 +117,17 @@ useful for MAD-X commands that are python keywords:
 
     madx.command.global_(sequence='cassps', Q1=26.58)
 
+In order to clone a command or element (colon syntax in MAD-X), use the
+:meth:`~cpymad.madx.Command.clone` method:
+
+.. code-block:: python
+
+    madx.command.quadrupole.clone('QP', AT=2, L=1)
+
+which translates to the MAD-X command::
+
+    QP: QUADRUPOLE, AT=2, L=1;
+
 chdir()
 -------
 

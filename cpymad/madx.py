@@ -781,6 +781,20 @@ class Command(_Mapping):
         """Perform a single MAD-X command."""
         self._madx.input(util.mad_command(self._name, *args, **kwargs))
 
+    def clone(self, name, *args, **kwargs):
+        """
+        Clone this command, assign the given name. This corresponds to the
+        colon syntax in MAD-X, e.g.::
+
+            madx.command.quadrupole.clone('qp', at=2, l=1)
+
+        translates to the MAD-X command::
+
+            qp: quadrupole, at=2, l=1;
+        """
+        self._madx.input(
+            name + ': ' + util.mad_command(self._name, *args, **kwargs))
+
 
 class Element(Command, _MutableMapping):
 
