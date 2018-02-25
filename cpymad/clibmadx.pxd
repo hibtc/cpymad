@@ -128,6 +128,8 @@ cdef extern from "madX/mad_elem.h" nogil:
     struct element:
         char[NAME_L] name
         command* def_ "def"
+        element* parent
+        element* base_type
 
     struct el_list:
         int curr                # current occupation

@@ -1112,7 +1112,10 @@ cdef double _get_node_entry_pos(clib.node* node, int ref_flag, int is_expanded):
 
 cdef _get_element(clib.element* elem):
     """Return dictionary with element attributes."""
-    return _parse_command(elem.def_)
+    data = _parse_command(elem.def_)
+    data['parent'] = _str(elem.parent.name)
+    data['base_type'] = _str(elem.base_type.name)
+    return data
 
 
 cdef _get_table_row_name(clib.table* table, int index):

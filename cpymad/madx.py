@@ -806,6 +806,18 @@ class Element(_MutableMapping):
     def __len__(self):
         return len(self._data)
 
+    @property
+    def parent(self):
+        data = self._data
+        return (self if data['name'] == data['parent']
+                else self._madx.elements[data['parent']])
+
+    @property
+    def base_type(self):
+        data = self._data
+        return (self if data['name'] == data['base_type']
+                else self._madx.elements[data['base_type']])
+
 
 class ArrayAttribute(collections.Sequence):
 
