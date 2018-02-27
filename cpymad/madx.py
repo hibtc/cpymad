@@ -90,11 +90,6 @@ def _fix_name(name):
     return name
 
 
-def NOP(s):
-    """Do nothing."""
-    pass
-
-
 class CommandLog(object):
 
     """Log MAD-X command history to a text file."""
@@ -165,8 +160,6 @@ class Madx(object):
         # open history file
         if isinstance(command_log, basestring):
             command_log = CommandLog.create(command_log)
-        elif command_log is None:
-            command_log = NOP
         # start libmadx subprocess
         if libmadx is None:
             # stdin=None leads to an error on windows when STDIN is broken.
@@ -216,7 +209,8 @@ class Madx(object):
         """
         # write to history before performing the input, so if MAD-X
         # crashes, it is easier to see, where it happened:
-        self._command_log(text)
+        if self._command_log:
+            self._command_log(text)
         try:
             self._libmadx.input(text)
         except _rpc.RemoteProcessCrashed:
