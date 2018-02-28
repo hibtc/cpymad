@@ -604,6 +604,8 @@ class _MutableMapping(_Mapping, collections.MutableMapping):
 class AttrDict(_Mapping):
 
     def __init__(self, data):
+        if not isinstance(data, collections.Mapping):
+            data = dict(data)
         self._data = data
 
     def __iter__(self):
