@@ -153,10 +153,8 @@ def mad_parameter(key, value):
     elif key == 'range':
         if isinstance(value, basestring):
             return key + '=' + normalize_range_name(value)
-        elif isinstance(value, collections.Mapping):
-            begin, end = value['first'], value['last']
         else:
-            begin, end = value[0], value[1]
+            begin, end = value
         begin, end = normalize_range_name((str(begin), str(end)))
         return key + '=' + begin + '/' + end
     # check for basestrings before collections.Sequence, because every
