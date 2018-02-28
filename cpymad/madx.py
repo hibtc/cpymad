@@ -7,7 +7,7 @@ The most interesting class for users is :class:`Madx`.
 
 from __future__ import absolute_import
 
-from functools import partial
+from functools import partial, wraps
 import logging
 import os
 import collections
@@ -987,15 +987,28 @@ class GlobalElementList(BaseElementList, _Mapping):
         return '{{{}}}'.format(', '.join(self))
 
 
+def cached(func):
+    @wraps(func)
+    def get(self, *args):
+        try:
+            val = self._cache[args]
+        except KeyError:
+            val = self._cache[args] = func(self, *args)
+        return val
+    return get
+
+
 class CommandMap(_Mapping):
 
     def __init__(self, madx):
         self._madx = madx
         self._names = madx._libmadx.get_defined_command_names()
+        self._cache = {}
 
     def __iter__(self):
         return iter(self._names)
 
+    @cached
     def __getitem__(self, name):
         madx = self._madx
         data = madx._libmadx.get_defined_command(name)
@@ -1016,7 +1029,9 @@ class BaseTypeMap(CommandMap):
     def __init__(self, madx):
         self._madx = madx
         self._names = madx._libmadx.get_base_type_names()
+        self._cache = {}
 
+    @cached
     def __getitem__(self, name):
         return self._madx.elements[name]
 
