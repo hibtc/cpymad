@@ -200,12 +200,6 @@ def mad_command(*args, **kwargs):
     return u', '.join(filter(None, _args)) + ';'
 
 
-def is_match_param(v):
-    return v.lower() in ['rmatrix', 'chrom', 'beta0', 'deltap',
-            'betx','alfx','mux','x','px','dx','dpx',
-            'bety','alfy','muy','y','py','dy','dpy' ]
-
-
 # validation of MAD-X expressions
 
 def _regex(expr):
