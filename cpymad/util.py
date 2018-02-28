@@ -125,6 +125,10 @@ def normalize_range_name(name):
     return name
 
 
+QUOTED_PARAMS = {'file', 'halofile', 'sectorfile', 'trueprofile'
+                 'pipefile', 'trackfile', 'summary_file', 'filename',
+                 'echo', 'title', 'text', 'format'}
+
 def mad_parameter(key, value):
     """
     Format a single MAD-X command parameter.
@@ -162,7 +166,7 @@ def mad_parameter(key, value):
     # check for basestrings before collections.Sequence, because every
     # basestring is also a Sequence:
     elif isinstance(value, basestring):
-        if key in ('file', 'sectorfile'):
+        if key in QUOTED_PARAMS:
             return key + '=' + mad_quote(value)
         else:
             # MAD-X parses strings incorrectly, if followed by a boolean.
