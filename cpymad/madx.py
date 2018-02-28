@@ -779,7 +779,7 @@ class Command(_Mapping):
 
     def __call__(self, *args, **kwargs):
         """Perform a single MAD-X command."""
-        self._madx.input(util.mad_command(self._name, *args, **kwargs))
+        self._madx.input(util.mad_command(self, *args, **kwargs))
 
     def clone(self, name, *args, **kwargs):
         """
@@ -793,7 +793,7 @@ class Command(_Mapping):
             qp: quadrupole, at=2, l=1;
         """
         self._madx.input(
-            name + ': ' + util.mad_command(self._name, *args, **kwargs))
+            name + ': ' + util.mad_command(self, *args, **kwargs))
 
 
 class Element(Command, _MutableMapping):
