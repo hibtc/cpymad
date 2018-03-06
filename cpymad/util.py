@@ -34,6 +34,8 @@ try:
 except NameError:   # python3
     basestring = unicode = str
 
+NoneType = type(None)
+
 
 def mad_quote(value):
     """Add quotes to a string value."""
@@ -129,10 +131,17 @@ QUOTED_PARAMS = {'file', 'halofile', 'sectorfile', 'trueprofile'
                  'pipefile', 'trackfile', 'summary_file', 'filename',
                  'echo', 'title', 'text', 'format'}
 
-def mad_parameter(key, value):
+def mad_parameter(key, value, cmd=None):
     """
     Format a single MAD-X command parameter.
     """
+    if cmd is None:
+        default = None
+    elif key in cmd:
+        default = cmd[key]
+    else:
+        raise ValueError('Unknown parameter for command {!r}: {!r}={!r}!'
+                         .format(cmd['name'], key, value))
     key = str(key).lower()
     # the empty string was used in earlier versions in place of None:
     if value is None or value == '':
@@ -165,7 +174,8 @@ def mad_parameter(key, value):
         return key + '=' + begin + '/' + end
     # check for basestrings before collections.Sequence, because every
     # basestring is also a Sequence:
-    elif isinstance(value, basestring):
+    elif (isinstance(value, basestring) and
+          isinstance(default, (basestring, NoneType))):
         if key in QUOTED_PARAMS:
             return key + '=' + mad_quote(value)
         else:
@@ -174,16 +184,20 @@ def mad_parameter(key, value):
             # these values need to be quoted. (NOTE: MAD-X uses lower-case
             # internally and the quotes prevent automatic case conversion)
             return key + '=' + mad_quote(value.lower())
+    # don't quote expressions:
+    elif isinstance(value, basestring):
+        return key + ':=' + value
     elif isinstance(value, collections.Sequence):
         return key + '={' + ','.join(map(str, value)) + '}'
     else:
         return key + '=' + str(value)
 
 
-def mad_command(*args, **kwargs):
+def mad_command(cmd, *args, **kwargs):
     """
     Create a MAD-X command from its name and parameter list.
 
+    :param cmd: base command (serves as template for parameter types)
     :param args: initial bareword command arguments (including command name!)
     :param kwargs: following named command arguments
     :returns: command string
@@ -200,9 +214,13 @@ def mad_command(*args, **kwargs):
     >>> mad_command('constraint', betx=Constraint(max=3.13))
     'constraint, betx<3.13;'
     """
-    _args = list(args)
+    if isinstance(cmd, basestring):
+        name, cmd = cmd, None
+    else:
+        name = cmd['name']
+    _args = [name] + list(args)
     _keys = ordered_keys(kwargs)
-    _args += [mad_parameter(k, kwargs[k]) for k in _keys]
+    _args += [mad_parameter(k, kwargs[k], cmd) for k in _keys]
     return u', '.join(filter(None, _args)) + ';'
 
 

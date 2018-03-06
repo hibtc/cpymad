@@ -111,8 +111,8 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
     # def test_call(self):
 
     def _check_twiss(self, seq_name):
-        beam = 'beam, ex=1, ey=2, particle=electron, sequence={0};'.format(seq_name)
-        self.mad.command(beam)
+        beam = 'ex=1, ey=2, particle=electron, sequence={0};'.format(seq_name)
+        self.mad.command.beam(beam)
         initial = dict(alfx=0.5, alfy=1.5,
                        betx=2.5, bety=3.5)
         # by explicitly specifying the 'columns' parameter a persistent copy
@@ -146,8 +146,8 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self._check_twiss('s1')     # s1 can be computed after s2
 
     def test_twiss_with_range(self):
-        beam = 'beam, ex=1, ey=2, particle=electron, sequence=s1;'
-        self.mad.command(beam)
+        beam = 'ex=1, ey=2, particle=electron, sequence=s1;'
+        self.mad.command.beam(beam)
         params = dict(alfx=0.5, alfy=1.5,
                       betx=2.5, bety=3.5,
                       columns=['betx', 'bety'],
@@ -171,8 +171,8 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertNotAlmostEqual(betx_range[3], betx_full1[4]) # sb, qp:2
 
     def test_range_row_api(self):
-        beam = 'beam, ex=1, ey=2, particle=electron, sequence=s1;'
-        self.mad.command(beam)
+        beam = 'ex=1, ey=2, particle=electron, sequence=s1;'
+        self.mad.command.beam(beam)
         params = dict(alfx=0.5, alfy=1.5,
                       betx=2.5, bety=3.5,
                       sequence='s1')
@@ -187,7 +187,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
     # def test_verbose(self):
 
     def test_active_sequence(self):
-        self.mad.command('beam, ex=1, ey=2, particle=electron, sequence=s1;')
+        self.mad.command.beam('ex=1, ey=2, particle=electron, sequence=s1;')
         self.mad.active_sequence = 's1'
         self.assertEqual(self.mad.active_sequence.name, 's1')
 
@@ -304,8 +304,8 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertEqual(iqp2, elements.at(3.1))
 
     def test_sequence_expanded_elements(self):
-        beam = 'beam, ex=1, ey=2, particle=electron, sequence=s1;'
-        self.mad.command(beam)
+        beam = 'ex=1, ey=2, particle=electron, sequence=s1;'
+        self.mad.command.beam(beam)
         self.mad.use('s1')
         elements = self.mad.sequences['s1'].expanded_elements
         iqp2 = elements.index('qp[2]')
