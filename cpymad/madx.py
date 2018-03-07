@@ -814,6 +814,12 @@ class Element(Command):
             return ArrayAttribute(self, value, name)
         return value
 
+    def __delitem__(self, name):
+        if self.parent is self:
+            raise ValueError("Can't delete attribute {!r} in base element {!r}"
+                             .format(self.name, name))
+        self[name] = self.parent[name]
+
     @property
     def parent(self):
         data = self._data
