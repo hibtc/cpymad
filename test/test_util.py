@@ -69,9 +69,14 @@ class TestUtil(unittest.TestCase):
             util.mad_command(
                 'twiss', range=Range('#s', '#e')),
                 'twiss, range=#s/#e;')
+
+        class Element(dict):
+            pass
+        elem = Element({'k1': 0.0})
+        elem.name = 'quadrupole'
         self.assertEqual(
             util.mad_command(
-                {'name': 'quadrupole', 'k1': 0.0}, k1="hello + world"),
+                elem, k1="hello + world"),
                 'quadrupole, k1:=hello + world;')
 
     def test_check_expression(self):

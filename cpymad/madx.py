@@ -672,7 +672,7 @@ class Sequence(object):
     @property
     def beam(self):
         """Get the beam dictionary associated to the sequence."""
-        return Command(self._madx, self._libmadx.get_sequence_beam(self._name), 'beam')
+        return Command(self._madx, self._libmadx.get_sequence_beam(self._name))
 
     @beam.setter
     def beam(self, beam):
@@ -760,15 +760,21 @@ class Command(_MutableMapping):
     0.0
     """
 
-    __slots__ = ('_madx', '_data', '_name')
+    __slots__ = ('_madx', '_data', '_attr')
 
-    def __init__(self, madx, data, name):
+    def __init__(self, madx, data):
         self._madx = madx
-        self._data = data
-        self._name = name
+        self._data = data.pop('data')       # command parameters
+        self._attr = data                   # further attributes
 
     def __iter__(self):
         return iter(self._data)
+
+    def __getattr__(self, name):
+        try:
+            return self._attr[name]
+        except KeyError:
+            return _Mapping.__getattr__(self, name)
 
     def __getitem__(self, name):
         return self._data[name.lower()]
@@ -809,7 +815,7 @@ class Command(_MutableMapping):
 class Element(Command):
 
     def __getitem__(self, name):
-        value = self._data[name.lower()]
+        value = Command.__getitem__(self, name)
         if isinstance(value, list):
             return ArrayAttribute(self, value, name)
         return value
@@ -822,15 +828,13 @@ class Element(Command):
 
     @property
     def parent(self):
-        data = self._data
-        return (self if data['name'] == data['parent']
-                else self._madx.elements[data['parent']])
+        name = self._attr['parent']
+        return (self if self.name == name else self._madx.elements[name])
 
     @property
     def base_type(self):
-        data = self._data
-        return (self if data['name'] == data['base_type']
-                else self._madx.elements[data['base_type']])
+        name = self._attr['base_type']
+        return (self if self.name == name else self._madx.elements[name])
 
 
 class ArrayAttribute(collections.Sequence):
@@ -897,7 +901,7 @@ class BaseElementList(object):
             index += _len
         data = self._get_element(index)
         data['index'] = index
-        return Element(self._madx, data, data['name'])
+        return Element(self._madx, data)
 
     def __len__(self):
         """Get number of elements."""
@@ -1022,7 +1026,7 @@ class CommandMap(_Mapping):
     def __getitem__(self, name):
         madx = self._madx
         data = madx._libmadx.get_defined_command(name)
-        return Command(madx, data, name)
+        return Command(madx, data)
 
     def __contains__(self, name):
         return name.lower() in self._names

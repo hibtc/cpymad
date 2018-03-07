@@ -1047,8 +1047,7 @@ cdef _parse_command(clib.command* cmd):
         # enforce lower-case keys:
         name = _str(cmd.par.parameters[i].name).lower()
         res[name] = _get_param_value(cmd.par.parameters[i])
-    res['name'] = _str(cmd.name)
-    return res
+    return {'name': _str(cmd.name), 'data': res}
 
 
 # The 'except NULL' clause is needed to forward exceptions from cdef
@@ -1124,8 +1123,10 @@ cdef _get_node(clib.node* node, int ref_flag, int is_expanded):
         raise RuntimeError("Empty node or subsequence! Please report this incident!")
     data = _get_element(node.p_elem)
     data.update({'name': _node_name(node),
-                 'type': _str(node.base_name),
-                 'at': _get_node_entry_pos(node, ref_flag, is_expanded)})
+                 'type': _str(node.base_name)})
+    # update into the command parameters in order to avoid surprises when you
+    # get weird at/length values:
+    data['data']['at'] = _get_node_entry_pos(node, ref_flag, is_expanded)
     return data
 
 

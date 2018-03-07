@@ -140,8 +140,8 @@ def mad_parameter(key, value, cmd=None):
     elif key in cmd:
         default = cmd[key]
     else:
-        raise ValueError('Unknown parameter for command {!r}: {!r}={!r}!'
-                         .format(cmd['name'], key, value))
+        raise ValueError('Unknown parameter {!r}={!r} for command: {!r}!'
+                         .format(key, value, cmd))
     key = str(key).lower()
     # the empty string was used in earlier versions in place of None:
     if value is None or value == '':
@@ -217,7 +217,7 @@ def mad_command(cmd, *args, **kwargs):
     if isinstance(cmd, basestring):
         name, cmd = cmd, None
     else:
-        name = cmd['name']
+        name = cmd.name
     _args = [name] + list(args)
     _keys = ordered_keys(kwargs)
     _args += [mad_parameter(k, kwargs[k], cmd) for k in _keys]
