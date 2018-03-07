@@ -1039,16 +1039,14 @@ cdef _parse_command(clib.command* cmd):
     :returns: the command parameters
     :rtype: dict
     """
-    # generator expressions are not yet supported in cdef functions, so
-    # let's do it the hard way:
-    res = {}
     cdef int i
-    for i in range(cmd.par.curr):
+    return {'name': _str(cmd.name), 'data': {
         # enforce lower-case keys:
-        name = _str(cmd.par.parameters[i].name).lower()
-        res[name] = Parameter(_get_param_value(cmd.par.parameters[i]),
-                              cmd.par_names.inform[i])
-    return {'name': _str(cmd.name), 'data': res}
+        _str(cmd.par.parameters[i].name).lower(): Parameter(
+            _get_param_value(cmd.par.parameters[i]),
+            cmd.par_names.inform[i])
+        for i in range(cmd.par.curr)
+    }}
 
 
 # The 'except NULL' clause is needed to forward exceptions from cdef
