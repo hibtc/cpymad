@@ -672,7 +672,7 @@ class Sequence(object):
     @property
     def beam(self):
         """Get the beam dictionary associated to the sequence."""
-        return AttrDict(self._libmadx.get_sequence_beam(self._name))
+        return Command(self._madx, self._libmadx.get_sequence_beam(self._name), 'beam')
 
     @beam.setter
     def beam(self, beam):
@@ -749,7 +749,7 @@ class Sequence(object):
         self._madx.use(self._name)
 
 
-class Command(_Mapping):
+class Command(_MutableMapping):
 
     """
     Raw python interface to issue and view MAD-X commands. Usage example:
@@ -773,6 +773,12 @@ class Command(_Mapping):
     def __getitem__(self, name):
         return self._data[name.lower()]
 
+    def __delitem__(self, name):
+        raise NotImplementedError()
+
+    def __setitem__(self, name, value):
+        self(**{name: value})
+
     def __contains__(self, name):
         return name.lower() in self._data
 
@@ -781,6 +787,8 @@ class Command(_Mapping):
 
     def __call__(self, *args, **kwargs):
         """Perform a single MAD-X command."""
+        if self.name == 'beam':
+            kwargs.setdefault('sequence', self.sequence)
         self._madx.input(util.mad_command(self, *args, **kwargs))
 
     def clone(self, name, *args, **kwargs):
@@ -798,7 +806,7 @@ class Command(_Mapping):
             name + ': ' + util.mad_command(self, *args, **kwargs))
 
 
-class Element(Command, _MutableMapping):
+class Element(Command):
 
     def __getitem__(self, name):
         value = self._data[name.lower()]
@@ -807,10 +815,10 @@ class Element(Command, _MutableMapping):
         return value
 
     def __delitem__(self, name):
-        raise NotImplementedError()
-
-    def __setitem__(self, name, value):
-        self(**{name: value})
+        if self.parent is self:
+            raise ValueError("Can't delete attribute {!r} in base element {!r}"
+                             .format(self.name, name))
+        self[name] = self.parent[name]
 
     @property
     def parent(self):
