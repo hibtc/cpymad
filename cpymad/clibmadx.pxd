@@ -124,6 +124,7 @@ cdef extern from "madX/mad_cmd.h" nogil:
     struct command:
         char[NAME_L] name
         int beam_def
+        name_list* par_names
         command_parameter_list* par
 
     struct command_list:

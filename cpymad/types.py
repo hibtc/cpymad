@@ -6,12 +6,19 @@ from collections import namedtuple
 
 __all__ = [
     'Range',
+    'Parameter',
     'Constraint',
     'Expression',
 ]
 
 
 Range = namedtuple('Range', ['first', 'last'])
+
+class Parameter(object):
+
+    def __init__(self, value, inform):
+        self.value = value
+        self.inform = inform
 
 
 class Constraint(object):

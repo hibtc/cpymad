@@ -767,6 +767,13 @@ class Command(_MutableMapping):
         self._data = data.pop('data')       # command parameters
         self._attr = data                   # further attributes
 
+    def __repr__(self):
+        """String representation as MAD-X statement."""
+        overrides = {k: v.value for k, v in self._data.items() if v.inform}
+        if self._attr.get('parent', self.name) == self.name:
+            return util.mad_command(self, **overrides)
+        return self.name + ': ' + util.mad_command(self.parent, **overrides)
+
     def __iter__(self):
         return iter(self._data)
 
@@ -777,7 +784,7 @@ class Command(_MutableMapping):
             return _Mapping.__getattr__(self, name)
 
     def __getitem__(self, name):
-        return self._data[name.lower()]
+        return self._data[name.lower()].value
 
     def __delitem__(self, name):
         raise NotImplementedError()

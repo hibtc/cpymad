@@ -24,7 +24,7 @@ import numpy as np      # Import the Python-level symbols of numpy
 cdef extern from "pyport.h":
     ctypedef int Py_intptr_t
 
-from cpymad.types import Constraint, Expression
+from cpymad.types import Constraint, Expression, Parameter
 from cpymad.util import name_to_internal, name_from_internal, normalize_range_name
 cimport cpymad.clibmadx as clib
 
@@ -1046,7 +1046,8 @@ cdef _parse_command(clib.command* cmd):
     for i in range(cmd.par.curr):
         # enforce lower-case keys:
         name = _str(cmd.par.parameters[i].name).lower()
-        res[name] = _get_param_value(cmd.par.parameters[i])
+        res[name] = Parameter(_get_param_value(cmd.par.parameters[i]),
+                              cmd.par_names.inform[i])
     return {'name': _str(cmd.name), 'data': res}
 
 
@@ -1126,7 +1127,7 @@ cdef _get_node(clib.node* node, int ref_flag, int is_expanded):
                  'type': _str(node.base_name)})
     # update into the command parameters in order to avoid surprises when you
     # get weird at/length values:
-    data['data']['at'] = _get_node_entry_pos(node, ref_flag, is_expanded)
+    data['data']['at'].value = _get_node_entry_pos(node, ref_flag, is_expanded)
     return data
 
 
