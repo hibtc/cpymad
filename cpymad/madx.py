@@ -52,7 +52,7 @@ class Version(object):
 
 def _fix_name(name):
     if name.startswith('_'):
-        raise AttributeError("Invalid command name: {!r}! Did you mean {!r}?"
+        raise AttributeError("Unknown item: {!r}! Did you mean {!r}?"
                              .format(name, name.strip('_') + '_'))
     if name.endswith('_'):
         name = name[:-1]
