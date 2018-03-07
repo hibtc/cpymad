@@ -749,7 +749,7 @@ class Sequence(object):
         self._madx.use(self._name)
 
 
-class Command(_Mapping):
+class Command(_MutableMapping):
 
     """
     Raw python interface to issue and view MAD-X commands. Usage example:
@@ -773,6 +773,12 @@ class Command(_Mapping):
     def __getitem__(self, name):
         return self._data[name.lower()]
 
+    def __delitem__(self, name):
+        raise NotImplementedError()
+
+    def __setitem__(self, name, value):
+        self(**{name: value})
+
     def __contains__(self, name):
         return name.lower() in self._data
 
@@ -781,6 +787,8 @@ class Command(_Mapping):
 
     def __call__(self, *args, **kwargs):
         """Perform a single MAD-X command."""
+        if self.name == 'beam':
+            kwargs.setdefault('sequence', self.sequence)
         self._madx.input(util.mad_command(self, *args, **kwargs))
 
     def clone(self, name, *args, **kwargs):
@@ -798,19 +806,13 @@ class Command(_Mapping):
             name + ': ' + util.mad_command(self, *args, **kwargs))
 
 
-class Element(Command, _MutableMapping):
+class Element(Command):
 
     def __getitem__(self, name):
         value = self._data[name.lower()]
         if isinstance(value, list):
             return ArrayAttribute(self, value, name)
         return value
-
-    def __delitem__(self, name):
-        raise NotImplementedError()
-
-    def __setitem__(self, name, value):
-        self(**{name: value})
 
     @property
     def parent(self):
