@@ -5,6 +5,8 @@ Low level cython binding to MAD-X.
 
 CAUTION: Do not import this module directly! Use :class:`Madx` instead.
 
+- The API of this module is considered private, i.e. it may change between
+  versions without further notice.
 - Importing this module means loading MAD-X directly into the process space.
   This means that any crash in the (extremely fragile) MAD-X interpreter will
   crash the importing process with it.
@@ -882,6 +884,7 @@ def get_base_type_names():
 
 
 def get_defined_command(command_name):
+    """Return MAD-X command as dict of values."""
     cdef bytes _command_name = _cstr(command_name)
     cdef int index = clib.name_list_pos(_command_name, clib.defined_commands.list)
     if index == -1:
@@ -890,6 +893,7 @@ def get_defined_command(command_name):
 
 
 def get_defined_command_names():
+    """Return list of MAD-X command names."""
     return _name_list(clib.defined_commands.list)
 
 
@@ -927,6 +931,13 @@ def evaluate(expression):
     return value
 
 
+# Helper functions:
+
+# The following functions are `cdef functions`, i.e. they can only be
+# called from Cython code. It is necessary to use `cdef functions` whenever
+# we want to pass parameters or return values with a pure C type.
+
+
 cdef clib.expression* _make_expr(expression):
     # TODO: This function uses global variables as temporaries - which is in
     # general an *extremely* bad design choice. Even though MAD-X uses global
@@ -953,12 +964,6 @@ cdef clib.expression* _make_expr(expression):
         return NULL
     return clib.make_expression(clib.tmp_p_array.curr, clib.tmp_p_array.p)
 
-
-# Helper functions:
-
-# The following functions are `cdef functions`, i.e. they can only be
-# called from Cython code. It is necessary to use `cdef functions` whenever
-# we want to pass parameters or return values with a pure C type.
 
 _expr_types = [bool, int, float]
 
