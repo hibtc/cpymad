@@ -175,7 +175,7 @@ def mad_parameter(key, value, cmd=None):
     # check for basestrings before collections.Sequence, because every
     # basestring is also a Sequence:
     elif (isinstance(value, basestring) and
-          isinstance(default, (basestring, NoneType))):
+          isinstance(default, (basestring, NoneType, list))):
         if key in QUOTED_PARAMS:
             return key + '=' + mad_quote(value)
         else:

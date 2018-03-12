@@ -73,6 +73,11 @@ class TestUtil(unittest.TestCase):
             util.mad_command(
                 {'name': 'quadrupole', 'k1': 0.0}, k1="hello + world"),
                 'quadrupole, k1:=hello + world;')
+        self.assertEqual(
+            util.mad_command(
+                # match->sequence parameter is list in MAD-X!
+                {'name': 'match', 'sequence': []}, sequence="foo"),
+                "match, sequence='foo';")
 
     def test_check_expression(self):
         self.assertTrue(is_valid_expression('a*b'))
