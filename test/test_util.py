@@ -24,6 +24,13 @@ class TestUtil(unittest.TestCase):
         self.assertFalse(util.is_identifier('hdr oei'))
         self.assertFalse(util.is_identifier('hdr@oei'))
 
+    def test_expr_symbols(self):
+        self.assertEqual(util.expr_symbols('foobar'), {'foobar'})
+        self.assertEqual(util.expr_symbols('foo*bar'), {'foo', 'bar'})
+        self.assertEqual(util.expr_symbols('quad->k1'), {'quad->k1'})
+        self.assertEqual(util.expr_symbols('q->k-p->k'), {'q->k', 'p->k'})
+        self.assertEqual(util.expr_symbols('a * sin(x)'), {'a', 'sin', 'x'})
+
     def test_name_from_internal(self):
         self.assertEqual(util.name_from_internal('foo.23:1'), 'foo.23')
         self.assertEqual(util.name_from_internal('foo.23:43'), 'foo.23[43]')

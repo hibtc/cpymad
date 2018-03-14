@@ -46,6 +46,7 @@ def mad_quote(value):
 # precompile regexes for performance:
 re_compile = lambda s: re.compile(unicode(s), re.IGNORECASE)
 _re_is_identifier = re_compile(r'^[a-z_][a-z0-9_]*$')
+_re_symbol = re_compile(r'([a-z_][a-z0-9._]*(->[a-z_][a-z0-9._]*(\[[0-9]+\])?)?)')
 _re_element_internal = re_compile(r'^([a-z_][a-z0-9_.$]*)(:\d+)?$')
 _re_element_external = re_compile(r'^([a-z_][a-z0-9_.$]*)(\[\d+\])?$')
 
@@ -53,6 +54,16 @@ _re_element_external = re_compile(r'^([a-z_][a-z0-9_.$]*)(\[\d+\])?$')
 def is_identifier(name):
     """Check if ``name`` is a valid identifier in MAD-X."""
     return bool(_re_is_identifier.match(name))
+
+
+def expr_symbols(expr):
+    """
+    Return all symbols names used in an expression.
+
+    For now this includes not only variables but also element attributes (e.g.
+    ``quad->k1``) as well as function names (e.g. ``sin``).
+    """
+    return {m[0] for m in _re_symbol.findall(expr)}
 
 
 def name_from_internal(element_name):

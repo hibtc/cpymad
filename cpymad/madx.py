@@ -197,6 +197,14 @@ class Madx(object):
         """Get a dict-like interface to base types."""
         return BaseTypeMap(self)
 
+    def expr_vars(self, expr):
+        """Find all variable names used in an expression. This does *not*
+        include element attribute nor function names."""
+        return [v for v in util.expr_symbols(expr)
+                if util.is_identifier(v)
+                and v in self.globals
+                and self._libmadx.get_var_type(v) > 0]
+
     def update_value(self, name, attr, value):
         self.command[name](**{attr: value})
 
