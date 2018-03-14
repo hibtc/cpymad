@@ -931,6 +931,31 @@ def evaluate(expression):
     return value
 
 
+def expression_vars(expression):
+    """
+    Returns all the variables in an expression.
+
+    :param str expression: symbolic expression
+    :returns: set of variables
+    :rtype: set
+
+    NOTE: This function does not perform rigorous input validation! It uses
+    nothing but the MAD-X builtin rather incompetent error checks. This means
+    invalid input such as '+' can lead to program crashes! If you're looking
+    for more secure validation, see :func:`cpymad.util.check_expression`.
+    """
+    cdef clib.expression* expr = _make_expr(expression)
+    if expr == NULL:
+        raise ValueError("Invalid expression: {!r}".format(expression))
+    cdef int i
+    vars = {_str(clib.expr_chunks.names[k % 100000000])
+            for i in range(expr.polish.curr)
+            for k in [expr.polish.i[i]]
+            if k // 100000000 == 1}
+    clib.delete_expression(expr)
+    return vars
+
+
 # Helper functions:
 
 # The following functions are `cdef functions`, i.e. they can only be
