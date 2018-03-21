@@ -85,7 +85,7 @@ def name_from_internal(element_name):
     except AttributeError:
         raise ValueError("Not a valid MAD-X element name: {!r}"
                          .format(element_name))
-    if count is None or count == ':1':
+    if count is None or count == ':1' or count == ':0':
         return name
     return name + '[' + count[1:] + ']'
 
