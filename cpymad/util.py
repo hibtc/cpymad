@@ -173,7 +173,7 @@ def mad_parameter(key, value, cmd=None):
     elif isinstance(value, Expression):
         return key + ':=' + value.expr
     elif isinstance(value, bool):
-        return ('' if value else '-') + key
+        return key + '=' + str(value).lower()
     elif key == 'range':
         if isinstance(value, basestring):
             return key + '=' + normalize_range_name(value)

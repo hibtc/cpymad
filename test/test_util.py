@@ -59,7 +59,7 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(
             util.mad_command(
                 'option', echo=True),
-                'option, echo;')
+                'option, echo=true;')
         self.assertEqual(
             util.mad_command(
                 'constraint', betx=Constraint(max=3.13)),
