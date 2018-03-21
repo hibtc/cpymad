@@ -315,6 +315,16 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertAlmostEqual(qp2['at'], 3)
         self.assertEqual(iqp2, elements.at(3.1))
 
+    def test_element_inform(self):
+        beam = 'ex=1, ey=2, particle=electron, sequence=s1;'
+        self.mad.command.beam(beam)
+        self.mad.use('s1')
+        elem = self.mad.sequences.s1.expanded_elements['qp']
+        self.assertSetEqual({'k1', 'l'}, {
+            name for name in elem
+            if elem.inform(name)
+        })
+
 
 class TestTransferMap(unittest.TestCase):
 
