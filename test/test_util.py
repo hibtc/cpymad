@@ -3,6 +3,7 @@ import unittest
 
 # tested objects
 from cpymad import util
+from cpymad.madx import Madx
 from cpymad.types import Range, Constraint, Expression
 
 
@@ -85,10 +86,11 @@ class TestUtil(unittest.TestCase):
             util.mad_command(
                 elem, k1="hello + world"),
                 'quadrupole, k1:=hello + world;')
+        m = Madx()
         self.assertEqual(
             util.mad_command(
                 # match->sequence parameter is list in MAD-X!
-                {'name': 'match', 'sequence': []}, sequence="foo"),
+                m.command.match, sequence="foo"),
                 "match, sequence='foo';")
 
     def test_check_expression(self):
