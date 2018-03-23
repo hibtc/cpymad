@@ -826,6 +826,11 @@ class Command(_MutableMapping):
         self._madx.input(
             name + ': ' + util.mad_command(self, *args, **kwargs))
 
+    def cmdpar(self, name):
+        """Get the :class:`Parameter` for the given command parameter. This
+        contains information from the MAD-X struct ``command_parameter``."""
+        return self._data[name.lower()]
+
     def inform(self, name):
         """Get the ``inform`` value from the MAD-X name_list. This value
         indicates whether the attribute ``name`` was explicitly set by the
