@@ -46,6 +46,7 @@ def mad_quote(value):
 # precompile regexes for performance:
 re_compile = lambda s: re.compile(unicode(s), re.IGNORECASE)
 _re_is_identifier = re_compile(r'^[a-z_][a-z0-9_]*$')
+_re_symbol = re_compile(r'([a-z_][a-z0-9._]*(->[a-z_][a-z0-9._]*(\[[0-9]+\])?)?)')
 _re_element_internal = re_compile(r'^([a-z_][a-z0-9_.$]*)(:\d+)?$')
 _re_element_external = re_compile(r'^([a-z_][a-z0-9_.$]*)(\[\d+\])?$')
 
@@ -53,6 +54,16 @@ _re_element_external = re_compile(r'^([a-z_][a-z0-9_.$]*)(\[\d+\])?$')
 def is_identifier(name):
     """Check if ``name`` is a valid identifier in MAD-X."""
     return bool(_re_is_identifier.match(name))
+
+
+def expr_symbols(expr):
+    """
+    Return all symbols names used in an expression.
+
+    For now this includes not only variables but also element attributes (e.g.
+    ``quad->k1``) as well as function names (e.g. ``sin``).
+    """
+    return {m[0] for m in _re_symbol.findall(expr)}
 
 
 def name_from_internal(element_name):
@@ -74,7 +85,7 @@ def name_from_internal(element_name):
     except AttributeError:
         raise ValueError("Not a valid MAD-X element name: {!r}"
                          .format(element_name))
-    if count is None or count == ':1':
+    if count is None or count == ':1' or count == ':0':
         return name
     return name + '[' + count[1:] + ']'
 
@@ -162,7 +173,7 @@ def mad_parameter(key, value, cmd=None):
     elif isinstance(value, Expression):
         return key + ':=' + value.expr
     elif isinstance(value, bool):
-        return ('' if value else '-') + key
+        return key + '=' + str(value).lower()
     elif key == 'range':
         if isinstance(value, basestring):
             return key + '=' + normalize_range_name(value)
@@ -175,7 +186,7 @@ def mad_parameter(key, value, cmd=None):
     # check for basestrings before collections.Sequence, because every
     # basestring is also a Sequence:
     elif (isinstance(value, basestring) and
-          isinstance(default, (basestring, NoneType))):
+          isinstance(default, (basestring, NoneType, list))):
         if key in QUOTED_PARAMS:
             return key + '=' + mad_quote(value)
         else:

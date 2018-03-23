@@ -8,6 +8,7 @@ from numpy.testing import assert_allclose
 
 # tested class
 from cpymad.madx import Madx, CommandLog
+from cpymad.types import Constraint
 
 
 class _TestCaseCompat(object):
@@ -183,7 +184,23 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
     # def test_survey(self):
     # def test_aperture(self):
     # def test_use(self):
-    # def test_match(self):
+
+    def test_match(self):
+        beam = 'ex=1, ey=2, particle=electron, sequence=s2;'
+        self.mad.command.beam(beam)
+        self.mad.use('s2')
+
+        params = dict(alfx=0.5, alfy=1.5,
+                      betx=2.5, bety=3.5,
+                      sequence='s2')
+
+        self.mad.match(constraints=[dict(range='s1$end', betx=2.0)],
+                       vary=['qp2->k1'],
+                       **params)
+        twiss = self.mad.twiss(**params)
+        val = twiss.betx[-1]
+        self.assertAlmostEqual(val, 2.0, places=2)
+
     # def test_verbose(self):
 
     def test_active_sequence(self):

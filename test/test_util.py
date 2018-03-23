@@ -24,6 +24,13 @@ class TestUtil(unittest.TestCase):
         self.assertFalse(util.is_identifier('hdr oei'))
         self.assertFalse(util.is_identifier('hdr@oei'))
 
+    def test_expr_symbols(self):
+        self.assertEqual(util.expr_symbols('foobar'), {'foobar'})
+        self.assertEqual(util.expr_symbols('foo*bar'), {'foo', 'bar'})
+        self.assertEqual(util.expr_symbols('quad->k1'), {'quad->k1'})
+        self.assertEqual(util.expr_symbols('q->k-p->k'), {'q->k', 'p->k'})
+        self.assertEqual(util.expr_symbols('a * sin(x)'), {'a', 'sin', 'x'})
+
     def test_name_from_internal(self):
         self.assertEqual(util.name_from_internal('foo.23:1'), 'foo.23')
         self.assertEqual(util.name_from_internal('foo.23:43'), 'foo.23[43]')
@@ -52,7 +59,7 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(
             util.mad_command(
                 'option', echo=True),
-                'option, echo;')
+                'option, echo=true;')
         self.assertEqual(
             util.mad_command(
                 'constraint', betx=Constraint(max=3.13)),
@@ -78,6 +85,11 @@ class TestUtil(unittest.TestCase):
             util.mad_command(
                 elem, k1="hello + world"),
                 'quadrupole, k1:=hello + world;')
+        self.assertEqual(
+            util.mad_command(
+                # match->sequence parameter is list in MAD-X!
+                {'name': 'match', 'sequence': []}, sequence="foo"),
+                "match, sequence='foo';")
 
     def test_check_expression(self):
         self.assertTrue(is_valid_expression('a*b'))

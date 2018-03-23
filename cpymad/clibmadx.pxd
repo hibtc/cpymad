@@ -76,6 +76,7 @@ cdef extern from "madX/mad_expr.h" nogil:
     struct expression:
         char* string
         double value
+        int_array* polish
 
     struct expr_list:
         int curr
@@ -203,6 +204,7 @@ cdef extern from "madX/mad_gvar.h" nogil:
     table_list* table_register  # list of all tables
     char_p_array* tmp_p_array   # temporary buffer for splits
     char_array* c_dum           # another temporary buffer
+    name_list* expr_chunks      # names of identifiers in expressions
     var_list* variable_list     # globals
     el_list* element_list       # list of global elements
     el_list* base_type_list     # list of base types
