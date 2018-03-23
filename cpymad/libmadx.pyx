@@ -1069,6 +1069,7 @@ cdef _parse_command(clib.command* cmd):
         # enforce lower-case keys:
         _str(cmd.par.parameters[i].name).lower(): Parameter(
             _get_param_value(cmd.par.parameters[i]),
+            cmd.par.parameters[i].type,
             cmd.par_names.inform[i])
         for i in range(cmd.par.curr)
     }}

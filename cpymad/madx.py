@@ -837,6 +837,10 @@ class Command(_MutableMapping):
         user."""
         return self._data[name.lower()].inform
 
+    def dtype(self, name):
+        """Get the data type number of the given command parameter."""
+        return self._data[name.lower()].dtype
+
 
 class Element(Command):
 
