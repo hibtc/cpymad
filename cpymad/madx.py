@@ -378,7 +378,7 @@ class Madx(object):
             command.vary(name=v)
         command[method[0]](**method[1])
         command.endmatch(knobfile=knobfile)
-        return dict((knob, self.evaluate(knob)) for knob in vary)
+        return dict((knob, self.eval(knob)) for knob in vary)
 
     def verbose(self, switch=True):
         """Turn verbose output on/off."""
@@ -417,18 +417,18 @@ class Madx(object):
             if active_sequence.name != name:
                 self.use(name)
 
-    def evaluate(self, cmd):
+    def eval(self, expr):
         """
         Evaluates an expression and returns the result as double.
 
-        :param str cmd: expression to evaluate.
+        :param str expr: expression to evaluate.
         :returns: numeric value of the expression
         :rtype: float
         """
         # Try to prevent process crashes:
         # NOTE: this limits to a sane subset of accepted MAD-X expressions.
-        util.check_expression(cmd)
-        return self._libmadx.evaluate(cmd)
+        util.check_expression(expr)
+        return self._libmadx.eval(expr)
 
     @property
     def sequence(self):

@@ -86,8 +86,8 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         # instance:
         self.mad.input('ANSWER=42;')
         madxness.input('ANSWER=43;')
-        self.assertEqual(self.mad.evaluate('ANSWER'), 42);
-        self.assertEqual(madxness.evaluate('ANSWER'), 43);
+        self.assertEqual(self.mad.eval('ANSWER'), 42);
+        self.assertEqual(madxness.eval('ANSWER'), 43);
         _close(madxness)
 
     def test_command_log(self):
@@ -218,8 +218,8 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         seqs = self.mad.sequence
         self.assertItemsEqual(seqs, ['s1', 's2'])
 
-    def test_evaluate(self):
-        val = self.mad.evaluate("1/QP_K1")
+    def test_eval(self):
+        val = self.mad.eval("1/QP_K1")
         self.assertAlmostEqual(val, 0.5)
 
     def test_globals(self):
@@ -230,15 +230,15 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         g['FOO'] = 2
         self.assertIn('FOO', g)
         self.assertEqual(g['FOO'], 2)
-        self.assertEqual(self.mad.evaluate('FOO'), 2)
+        self.assertEqual(self.mad.eval('FOO'), 2)
         # Re-setting values:
         g['FOO'] = 3
-        self.assertEqual(self.mad.evaluate('FOO'), 3)
+        self.assertEqual(self.mad.eval('FOO'), 3)
         # Setting expressions:
         g['BAR'] = '3*foo'
-        self.assertEqual(self.mad.evaluate('BAR'), 9)
+        self.assertEqual(self.mad.eval('BAR'), 9)
         g['FOO'] = 4
-        self.assertEqual(self.mad.evaluate('BAR'), 12)
+        self.assertEqual(self.mad.eval('BAR'), 12)
         # attribute access:
         g.bar = 42
         self.assertEqual(g.BAR, 42)

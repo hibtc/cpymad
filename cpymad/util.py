@@ -278,7 +278,7 @@ def check_expression(expr):
 
     """
     Check if the given expression is a valid MAD-X expression that is safe to
-    pass to :meth:`cpymad.madx.Madx.evaluate`.
+    pass to :meth:`cpymad.madx.Madx.eval`.
 
     :param str expr:
     :returns: True

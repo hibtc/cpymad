@@ -245,7 +245,7 @@ Evaluate an expression in the MAD-X interpreter:
 
 .. code-block:: python
 
-    print(madx.evaluate('sb->angle / pi * 180'))
+    print(madx.eval('sb->angle / pi * 180'))
 
 sequences
 ---------

@@ -44,7 +44,7 @@ __all__ = [
     'start',
     'finish',
     'input',
-    'evaluate',
+    'eval',
 
     # Globals
     'get_var',
@@ -910,7 +910,7 @@ def is_sequence_expanded(sequence_name):
     return seq.n_nodes > 0
 
 
-def evaluate(expression):
+def eval(expression):
     """
     Evaluates an expression and returns the result as double.
 
