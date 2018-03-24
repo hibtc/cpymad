@@ -87,7 +87,7 @@ command()
 
 While it can be necessary to use :meth:`~cpymad.madx.Madx.input` for some
 constructs like macros or loops, most of the time your most favorable option
-is to use the :meth:`~cpymad.madx.Madx.command` method. It provides syntactic
+is to use the :attr:`~cpymad.madx.Madx.command` attribute. It provides syntactic
 sugar for composing regular MAD-X commands from python variables and feeding
 the generated command string to :meth:`~cpymad.madx.Madx.input`.
 
@@ -95,14 +95,9 @@ the generated command string to :meth:`~cpymad.madx.Madx.input`.
 
     madx.command.beam(sequence='fodo', particle='PROTON')
 
-Note that while this liberates you of manually inserting variables into a
-string and takes care of the trailing semicolon, it doesn't know anything
-about MAD-X commands or their parameter names. You have to use the correct
-parameter names as keywords!
-
-In fact, :meth:`~cpymad.madx.Madx.command` can sometimes produce erroneous
-command strings, in which case you can use non-keyword arguments to force the
-correct behaviour (argument order/formatting). For example:
+If you need to override how :attr:`~cpymad.madx.Madx.command` generates the
+command string (argument order/formatting), you can pass strings as positional
+arguments. For example:
 
 .. code-block:: python
 
