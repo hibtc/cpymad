@@ -34,6 +34,8 @@ try:
 except NameError:   # python3
     basestring = unicode = str
 
+NoneType = type(None)
+
 
 def mad_quote(value):
     """Add quotes to a string value."""
@@ -44,6 +46,7 @@ def mad_quote(value):
 # precompile regexes for performance:
 re_compile = lambda s: re.compile(unicode(s), re.IGNORECASE)
 _re_is_identifier = re_compile(r'^[a-z_][a-z0-9_]*$')
+_re_symbol = re_compile(r'([a-z_][a-z0-9._]*(->[a-z_][a-z0-9._]*(\[[0-9]+\])?)?)')
 _re_element_internal = re_compile(r'^([a-z_][a-z0-9_.$]*)(:\d+)?$')
 _re_element_external = re_compile(r'^([a-z_][a-z0-9_.$]*)(\[\d+\])?$')
 
@@ -51,6 +54,16 @@ _re_element_external = re_compile(r'^([a-z_][a-z0-9_.$]*)(\[\d+\])?$')
 def is_identifier(name):
     """Check if ``name`` is a valid identifier in MAD-X."""
     return bool(_re_is_identifier.match(name))
+
+
+def expr_symbols(expr):
+    """
+    Return all symbols names used in an expression.
+
+    For now this includes not only variables but also element attributes (e.g.
+    ``quad->k1``) as well as function names (e.g. ``sin``).
+    """
+    return {m[0] for m in _re_symbol.findall(expr)}
 
 
 def name_from_internal(element_name):
@@ -72,7 +85,7 @@ def name_from_internal(element_name):
     except AttributeError:
         raise ValueError("Not a valid MAD-X element name: {!r}"
                          .format(element_name))
-    if count is None or count == ':1':
+    if count is None or count == ':1' or count == ':0':
         return name
     return name + '[' + count[1:] + ']'
 
@@ -125,10 +138,21 @@ def normalize_range_name(name):
     return name
 
 
-def mad_parameter(key, value):
+QUOTED_PARAMS = {'file', 'halofile', 'sectorfile', 'trueprofile'
+                 'pipefile', 'trackfile', 'summary_file', 'filename',
+                 'echo', 'title', 'text', 'format'}
+
+def mad_parameter(key, value, cmd=None):
     """
     Format a single MAD-X command parameter.
     """
+    if cmd is None:
+        default = None
+    elif key in cmd:
+        default = cmd[key]
+    else:
+        raise ValueError('Unknown parameter for command {!r}: {!r}={!r}!'
+                         .format(cmd['name'], key, value))
     key = str(key).lower()
     # the empty string was used in earlier versions in place of None:
     if value is None or value == '':
@@ -149,7 +173,7 @@ def mad_parameter(key, value):
     elif isinstance(value, Expression):
         return key + ':=' + value.expr
     elif isinstance(value, bool):
-        return ('' if value else '-') + key
+        return key + '=' + str(value).lower()
     elif key == 'range':
         if isinstance(value, basestring):
             return key + '=' + normalize_range_name(value)
@@ -159,8 +183,9 @@ def mad_parameter(key, value):
         return key + '=' + begin + '/' + end
     # check for basestrings before collections.Sequence, because every
     # basestring is also a Sequence:
-    elif isinstance(value, basestring):
-        if key in ('file', 'sectorfile'):
+    elif (isinstance(value, basestring) and
+          isinstance(default, (basestring, NoneType, list))):
+        if key in QUOTED_PARAMS:
             return key + '=' + mad_quote(value)
         else:
             # MAD-X parses strings incorrectly, if followed by a boolean.
@@ -168,16 +193,20 @@ def mad_parameter(key, value):
             # these values need to be quoted. (NOTE: MAD-X uses lower-case
             # internally and the quotes prevent automatic case conversion)
             return key + '=' + mad_quote(value.lower())
+    # don't quote expressions:
+    elif isinstance(value, basestring):
+        return key + ':=' + value
     elif isinstance(value, collections.Sequence):
         return key + '={' + ','.join(map(str, value)) + '}'
     else:
         return key + '=' + str(value)
 
 
-def mad_command(*args, **kwargs):
+def mad_command(cmd, *args, **kwargs):
     """
     Create a MAD-X command from its name and parameter list.
 
+    :param cmd: base command (serves as template for parameter types)
     :param args: initial bareword command arguments (including command name!)
     :param kwargs: following named command arguments
     :returns: command string
@@ -194,9 +223,13 @@ def mad_command(*args, **kwargs):
     >>> mad_command('constraint', betx=Constraint(max=3.13))
     'constraint, betx<3.13;'
     """
-    _args = list(args)
+    if isinstance(cmd, basestring):
+        name, cmd = cmd, None
+    else:
+        name = cmd['name']
+    _args = [name] + list(args)
     _keys = ordered_keys(kwargs)
-    _args += [mad_parameter(k, kwargs[k]) for k in _keys]
+    _args += [mad_parameter(k, kwargs[k], cmd) for k in _keys]
     return u', '.join(filter(None, _args)) + ';'
 
 

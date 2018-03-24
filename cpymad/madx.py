@@ -7,7 +7,7 @@ The most interesting class for users is :class:`Madx`.
 
 from __future__ import absolute_import
 
-from functools import partial
+from functools import partial, wraps
 import logging
 import os
 import collections
@@ -50,37 +50,6 @@ class Version(object):
         return "MAD-X {} ({})".format(self.release, self.date)
 
 
-class MadxCommands(object):
-
-    """
-    Generic MAD-X command wrapper.
-
-    Raw python interface to issue MAD-X commands. Usage example:
-
-    >>> command = MadxCommands(libmadx.input)
-    >>> command('twiss', sequence='LEBT')
-    >>> command.title('A meaningful phrase')
-
-    :ivar __dispatch: callable that takes a MAD-X command string.
-    """
-
-    def __init__(self, dispatch):
-        """Set :ivar:`__dispatch` from :var:`dispatch`."""
-        self.__dispatch = dispatch
-
-    def __call__(self, *args, **kwargs):
-        """Create and dispatch a MAD-X command string."""
-        self.__dispatch(util.mad_command(*args, **kwargs))
-
-    def __getattr__(self, name):
-        """Return a dispatcher for a specific command."""
-        return self[_fix_name(name)]
-
-    def __getitem__(self, name):
-        """Return a dispatcher for a specific command."""
-        return partial(self.__call__, name)
-
-
 def _fix_name(name):
     if name.startswith('_'):
         raise AttributeError("Invalid command name: {!r}! Did you mean {!r}?"
@@ -88,11 +57,6 @@ def _fix_name(name):
     if name.endswith('_'):
         name = name[:-1]
     return name
-
-
-def NOP(s):
-    """Do nothing."""
-    pass
 
 
 class CommandLog(object):
@@ -165,8 +129,6 @@ class Madx(object):
         # open history file
         if isinstance(command_log, basestring):
             command_log = CommandLog.create(command_log)
-        elif command_log is None:
-            command_log = NOP
         # start libmadx subprocess
         if libmadx is None:
             # stdin=None leads to an error on windows when STDIN is broken.
@@ -182,6 +144,7 @@ class Madx(object):
         self._libmadx = libmadx
         self._command_log = command_log
         self._error_log = error_log
+        self._commands = CommandMap(self)
 
     def __bool__(self):
         """Check if MAD-X is up and running."""
@@ -200,13 +163,8 @@ class Madx(object):
 
     @property
     def command(self):
-        """
-        Perform a single MAD-X command.
-
-        :param str cmd: command name
-        :param kwargs: command parameters
-        """
-        return MadxCommands(self.input)
+        """Namespace of all MAD-X commands."""
+        return self._commands
 
     def input(self, text):
         """
@@ -216,7 +174,8 @@ class Madx(object):
         """
         # write to history before performing the input, so if MAD-X
         # crashes, it is easier to see, where it happened:
-        self._command_log(text)
+        if self._command_log:
+            self._command_log(text)
         try:
             self._libmadx.input(text)
         except _rpc.RemoteProcessCrashed:
@@ -238,9 +197,13 @@ class Madx(object):
         """Get a dict-like interface to base types."""
         return BaseTypeMap(self)
 
-    @property
-    def commands(self):
-        return CommandMap(self)
+    def expr_vars(self, expr):
+        """Find all variable names used in an expression. This does *not*
+        include element attribute nor function names."""
+        return [v for v in util.expr_symbols(expr)
+                if util.is_identifier(v)
+                and v in self.globals
+                and self._libmadx.get_var_type(v) > 0]
 
     def update_value(self, name, attr, value):
         self.command[name](**{attr: value})
@@ -444,7 +407,7 @@ class Madx(object):
             command.constraint(**c)
         for v in vary:
             command.vary(name=v)
-        command(method[0], **method[1])
+        command[method[0]](**method[1])
         command.endmatch(knobfile=knobfile)
         return dict((knob, self.evaluate(knob)) for knob in vary)
 
@@ -548,6 +511,8 @@ class _MutableMapping(_Mapping, collections.MutableMapping):
 class AttrDict(_Mapping):
 
     def __init__(self, data):
+        if not isinstance(data, collections.Mapping):
+            data = dict(data)
         self._data = data
 
     def __iter__(self):
@@ -653,7 +618,7 @@ class Sequence(object):
     @property
     def beam(self):
         """Get the beam dictionary associated to the sequence."""
-        return self._libmadx.get_sequence_beam(self._name)
+        return Command(self._madx, self._libmadx.get_sequence_beam(self._name), 'beam')
 
     @beam.setter
     def beam(self, beam):
@@ -730,7 +695,16 @@ class Sequence(object):
         self._madx.use(self._name)
 
 
-class Command(_Mapping):
+class Command(_MutableMapping):
+
+    """
+    Raw python interface to issue and view MAD-X commands. Usage example:
+
+    >>> madx.command.twiss(sequence='LEBT')
+    >>> madx.command.title('A meaningful phrase')
+    >>> madx.command.twiss.betx
+    0.0
+    """
 
     __slots__ = ('_madx', '_data', '_name')
 
@@ -745,6 +719,12 @@ class Command(_Mapping):
     def __getitem__(self, name):
         return self._data[name.lower()]
 
+    def __delitem__(self, name):
+        raise NotImplementedError()
+
+    def __setitem__(self, name, value):
+        self(**{name: value})
+
     def __contains__(self, name):
         return name.lower() in self._data
 
@@ -752,10 +732,27 @@ class Command(_Mapping):
         return len(self._data)
 
     def __call__(self, *args, **kwargs):
-        self._madx.command[self._name](*args, **kwargs)
+        """Perform a single MAD-X command."""
+        if self.name == 'beam':
+            kwargs.setdefault('sequence', self.sequence)
+        self._madx.input(util.mad_command(self, *args, **kwargs))
+
+    def clone(self, name, *args, **kwargs):
+        """
+        Clone this command, assign the given name. This corresponds to the
+        colon syntax in MAD-X, e.g.::
+
+            madx.command.quadrupole.clone('qp', at=2, l=1)
+
+        translates to the MAD-X command::
+
+            qp: quadrupole, at=2, l=1;
+        """
+        self._madx.input(
+            name + ': ' + util.mad_command(self, *args, **kwargs))
 
 
-class Element(Command, _MutableMapping):
+class Element(Command):
 
     def __getitem__(self, name):
         value = self._data[name.lower()]
@@ -764,10 +761,10 @@ class Element(Command, _MutableMapping):
         return value
 
     def __delitem__(self, name):
-        raise NotImplementedError()
-
-    def __setitem__(self, name, value):
-        self(**{name: value})
+        if self.parent is self:
+            raise ValueError("Can't delete attribute {!r} in base element {!r}"
+                             .format(self.name, name))
+        self[name] = self.parent[name]
 
     @property
     def parent(self):
@@ -946,15 +943,28 @@ class GlobalElementList(BaseElementList, _Mapping):
         return '{{{}}}'.format(', '.join(self))
 
 
+def cached(func):
+    @wraps(func)
+    def get(self, *args):
+        try:
+            val = self._cache[args]
+        except KeyError:
+            val = self._cache[args] = func(self, *args)
+        return val
+    return get
+
+
 class CommandMap(_Mapping):
 
     def __init__(self, madx):
         self._madx = madx
         self._names = madx._libmadx.get_defined_command_names()
+        self._cache = {}
 
     def __iter__(self):
         return iter(self._names)
 
+    @cached
     def __getitem__(self, name):
         madx = self._madx
         data = madx._libmadx.get_defined_command(name)
@@ -975,7 +985,9 @@ class BaseTypeMap(CommandMap):
     def __init__(self, madx):
         self._madx = madx
         self._names = madx._libmadx.get_base_type_names()
+        self._cache = {}
 
+    @cached
     def __getitem__(self, name):
         return self._madx.elements[name]
 

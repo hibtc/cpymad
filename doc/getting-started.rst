@@ -86,7 +86,7 @@ command()
 
 While it can be necessary to use :meth:`~cpymad.madx.Madx.input` for some
 constructs like macros or loops, most of the time your most favorable option
-is to use the :meth:`~cpymad.madx.Madx.command` method. It provides syntactic
+is to use the :attr:`~cpymad.madx.Madx.command` attribute. It provides syntactic
 sugar for composing regular MAD-X commands from python variables and feeding
 the generated command string to :meth:`~cpymad.madx.Madx.input`.
 
@@ -94,14 +94,9 @@ the generated command string to :meth:`~cpymad.madx.Madx.input`.
 
     madx.command.beam(sequence='fodo', particle='PROTON')
 
-Note that while this liberates you of manually inserting variables into a
-string and takes care of the trailing semicolon, it doesn't know anything
-about MAD-X commands or their parameter names. You have to use the correct
-parameter names as keywords!
-
-In fact, :meth:`~cpymad.madx.Madx.command` can sometimes produce erroneous
-command strings, in which case you can use non-keyword arguments to force the
-correct behaviour (argument order/formatting). For example:
+If you need to override how :attr:`~cpymad.madx.Madx.command` generates the
+command string (argument order/formatting), you can pass strings as positional
+arguments. For example:
 
 .. code-block:: python
 
@@ -109,28 +104,23 @@ correct behaviour (argument order/formatting). For example:
 
 Note that positional and keyword parameters can be mixed.
 
-So far, we have specified the name of the command as an *attribute* of the
-``command`` object. However, this is only syntactic sugar for setting a first
-positional argument on the final call. It is possible to avoid this
-indirection and specify the leading part manually:
-
-.. code-block:: python
-
-    madx.command('beam', 'sequence=fodo', particle='PROTON')
-
-An example where it is even necessary, because the colon ``:`` can not be used
-as part of the attribute name:
-
-.. code-block:: python
-
-    madx.command('QP: QUADRUPOLE', AT=2, L=1)
-
 A single trailing underscore will be stripped from the attribute name. This is
 useful for MAD-X commands that are python keywords:
 
 .. code-block:: python
 
     madx.command.global_(sequence='cassps', Q1=26.58)
+
+In order to clone a command or element (colon syntax in MAD-X), use the
+:meth:`~cpymad.madx.Command.clone` method:
+
+.. code-block:: python
+
+    madx.command.quadrupole.clone('QP', AT=2, L=1)
+
+which translates to the MAD-X command::
+
+    QP: QUADRUPOLE, AT=2, L=1;
 
 chdir()
 -------
