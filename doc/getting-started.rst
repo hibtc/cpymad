@@ -154,8 +154,6 @@ benefits:
 More methods for changing state:
 
 - :meth:`~cpymad.madx.Madx.verbose`: switch on or off verbose mode.
-- :meth:`~cpymad.madx.Madx.set_value`: change the value of a global variable.
-- :meth:`~cpymad.madx.Madx.set_expression`: set a deferred expression.
 
 
 Accessing MAD-X
