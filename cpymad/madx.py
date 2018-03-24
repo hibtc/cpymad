@@ -692,7 +692,7 @@ class Command(_MutableMapping):
 
     def __call__(self, *args, **kwargs):
         """Perform a single MAD-X command."""
-        if self.name == 'beam':
+        if self.name == 'beam' and self.sequence:
             kwargs.setdefault('sequence', self.sequence)
         self._madx.input(util.mad_command(self, *args, **kwargs))
 

@@ -153,10 +153,9 @@ def mad_parameter(key, value, cmd=None):
     else:
         raise ValueError('Unknown parameter for command {!r}: {!r}={!r}!'
                          .format(cmd['name'], key, value))
+    if value is None:
+        return None
     key = str(key).lower()
-    # the empty string was used in earlier versions in place of None:
-    if value is None or value == '':
-        return u''
     if isinstance(value, Range):
         begin, end = normalize_range_name((value.first, value.last))
         return key + '=' + begin + '/' + end
