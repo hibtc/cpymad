@@ -280,7 +280,7 @@ class Madx(object):
         self.command.twiss(**kwargs)
         if 'file' not in kwargs:
             self._libmadx.apply_table_selections(kwargs.get('table', 'twiss'))
-        return self.get_table('twiss')
+        return self.table.twiss
 
     def survey(self, **kwargs):
         """
@@ -292,7 +292,7 @@ class Madx(object):
         self.command.survey(**kwargs)
         if 'file' not in kwargs:
             self._libmadx.apply_table_selections(kwargs.get('table', 'survey'))
-        return self.get_table('survey')
+        return self.table.survey
 
     def use(self, sequence):
         """
@@ -317,7 +317,7 @@ class Madx(object):
 
     def sectortable(self, name='sectortable'):
         """Read sectormap + kicks from memory and return as Nx7x7 array."""
-        tab = self.get_table(name)
+        tab = self.table[name]
         cnt = len(tab['r11'])
         return np.vstack((
             np.hstack((tab.rmat(slice(None)),
@@ -383,16 +383,6 @@ class Madx(object):
     def verbose(self, switch=True):
         """Turn verbose output on/off."""
         self.command.option(echo=switch, warn=switch, info=switch)
-
-    def get_table(self, table):
-        """
-        Get the specified table from MAD-X.
-
-        :param str table: table name
-        :returns: a proxy for the table data
-        :rtype: Table
-        """
-        return Table(table, self._libmadx)
 
     @property
     def active_sequence(self):
