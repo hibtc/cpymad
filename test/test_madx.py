@@ -114,14 +114,10 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
     def _check_twiss(self, seq_name):
         beam = 'ex=1, ey=2, particle=electron, sequence={0};'.format(seq_name)
         self.mad.command.beam(beam)
+        self.mad.use(seq_name)
         initial = dict(alfx=0.5, alfy=1.5,
                        betx=2.5, bety=3.5)
-        # by explicitly specifying the 'columns' parameter a persistent copy
-        # is returned. We check that this copy contains the data we want and
-        # that it has a 'summary' attribute:
-        twiss = self.mad.twiss(sequence=seq_name,
-                               columns=['betx', 'bety', 'alfx', 'alfy'],
-                               **initial)
+        twiss = self.mad.twiss(sequence=seq_name, **initial)
         betx, bety = twiss['betx'], twiss['bety']
         alfx, alfy = twiss['alfx'], twiss['alfy']
         # Check initial values:
@@ -149,16 +145,17 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
     def test_twiss_with_range(self):
         beam = 'ex=1, ey=2, particle=electron, sequence=s1;'
         self.mad.command.beam(beam)
+        self.mad.use('s1')
         params = dict(alfx=0.5, alfy=1.5,
                       betx=2.5, bety=3.5,
-                      columns=['betx', 'bety'],
                       sequence='s1')
+        columns = ['betx', 'bety']
         # Compute TWISS on full sequence, then on a sub-range, then again on
         # the full sequence. This checks that none of the range selections
         # have side-effects on each other:
-        betx_full1 = self.mad.twiss(**params)['betx']
-        betx_range = self.mad.twiss(range=('dr[2]', 'sb'), **params)['betx']
-        betx_full2 = self.mad.twiss(**params)['betx']
+        betx_full1 = self.mad.twiss(**params)['betx'].copy(columns)
+        betx_range = self.mad.twiss(range=('dr[2]', 'sb'), **params)['betx'].copy(columns)
+        betx_full2 = self.mad.twiss(**params)['betx'].copy(columns)
         # Check that the results have the expected lengths:
         self.assertEqual(len(betx_full1), 9)
         self.assertEqual(len(betx_range), 4)
@@ -174,6 +171,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
     def test_range_row_api(self):
         beam = 'ex=1, ey=2, particle=electron, sequence=s1;'
         self.mad.command.beam(beam)
+        self.mad.use('s1')
         params = dict(alfx=0.5, alfy=1.5,
                       betx=2.5, bety=3.5,
                       sequence='s1')
@@ -331,14 +329,15 @@ class TestTransferMap(unittest.TestCase):
 
     def _test_transfer_map(self, seq, range_, doc, rtol=1e-7, atol=1e-15):
         mad = self._mad(doc)
+        mad.use(seq)
         par = ['x', 'px', 'y', 'py', 't', 'pt']
         val = [+0.0010, -0.0015, -0.0020, +0.0025, +0.0000, +0.0000]
         twiss = {'betx': 0.0012, 'alfx': 0.0018,
                  'bety': 0.0023, 'alfy': 0.0027}
         twiss.update(zip(par, val))
         elems = range_.split('/')
-        smap = mad.sectormap(elems, sequence=seq, twiss_init=twiss)[-1]
-        tw = mad.twiss(seq, range_, twiss_init=twiss)
+        smap = mad.sectormap(elems, sequence=seq, **twiss)[-1]
+        tw = mad.twiss(sequence=seq, range=range_, **twiss)
 
         # transport of coordinate vector:
         x_init = np.array(val)
