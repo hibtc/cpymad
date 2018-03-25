@@ -33,6 +33,7 @@ Date: 25.03.2018
     * finally provide some binary wheels for py 3.5 and 3.6 (#32)
 
 - raise cython language_level to 3
+- require MAD-X 5.04.00
 
 0.18.2
 ======

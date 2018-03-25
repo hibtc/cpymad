@@ -9,7 +9,7 @@ This version of cpymad should be built against MAD-X |VERSION|.
 .. _Cython: http://cython.org/
 .. _MAD-X: http://cern.ch/mad
 .. _MAD-X source: https://github.com/MethodicalAcceleratorDesign/MAD-X
-.. |VERSION| replace:: 5.03.07
+.. |VERSION| replace:: 5.04.00
 
 cpymad is NOT maintained by CERN members and links against an unofficial build
 of MAD-X that is not supported by CERN, i.e. this binary may have problems
