@@ -55,7 +55,7 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(
             util.mad_command(
                 'twiss', sequence='lhc'),
-                "twiss, sequence='lhc';")
+                'twiss, sequence="lhc";')
         self.assertEqual(
             util.mad_command(
                 'option', echo=True),
@@ -84,7 +84,7 @@ class TestUtil(unittest.TestCase):
             util.mad_command(
                 # match->sequence parameter is list in MAD-X!
                 {'name': 'match', 'sequence': []}, sequence="foo"),
-                "match, sequence='foo';")
+                'match, sequence="foo";')
 
     def test_check_expression(self):
         self.assertTrue(is_valid_expression('a*b'))

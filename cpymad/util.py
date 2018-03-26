@@ -39,8 +39,13 @@ NoneType = type(None)
 
 def mad_quote(value):
     """Add quotes to a string value."""
-    quoted = repr(value)
-    return quoted[1:] if quoted[0] == 'u' else quoted
+    if '"' not in value:
+        return '"' + value + '"'
+    if "'" not in value:
+        return "'" + value + "'"
+    # MAD-X doesn't do any unescaping (otherwise I'd simply use `json.dumps`):
+    raise ValueError("MAD-X unable to parse string with escaped quotes: {!r}"
+                     .format(value))
 
 
 # precompile regexes for performance:
