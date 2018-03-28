@@ -518,6 +518,10 @@ class Madx(object):
         :returns: numeric value of the expression
         :rtype: float
         """
+        if isinstance(cmd, (float, int, bool)):
+            return cmd
+        if isinstance(cmd, (list, ArrayAttribute)):
+            return [self.evaluate(x) for x in cmd]
         # Try to prevent process crashes:
         # NOTE: this limits to a sane subset of accepted MAD-X expressions.
         util.check_expression(cmd)
