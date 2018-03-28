@@ -339,7 +339,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         elem = self.mad.sequences.s1.expanded_elements['qp']
         self.assertSetEqual({'k1', 'l'}, {
             name for name in elem
-            if elem.inform(name)
+            if elem.cmdpar[name].inform
         })
 
 
