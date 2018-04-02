@@ -1,6 +1,18 @@
 Changelog
 ~~~~~~~~~
 
+0.19.1
+======
+Date: 02.04.2018
+
+- pass unescaped (raw) string arguments to MAD-X
+- use double-quotes by default
+- overload ``Madx.evaluate`` for floats and lists (making it applicable
+  for anything that may be returned in the property)
+- windows builds link against MAD-X 49b4e7fee "Fix incorrect field errors
+  in tmbend with INTERPOLATE". This is a few minor bugfixes after 5.04.00.
+
+
 0.19.0
 ======
 Date: 25.03.2018
