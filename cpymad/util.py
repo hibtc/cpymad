@@ -7,6 +7,7 @@ import os
 import sys
 import tempfile
 from contextlib import contextmanager
+from numbers import Number
 
 from .types import Range, Constraint, Expression
 
@@ -16,6 +17,7 @@ __all__ = [
     'is_identifier',
     'name_from_internal',
     'name_to_internal',
+    'format_param',
     'format_cmdpar',
     'format_command',
     'check_expression',
@@ -138,7 +140,6 @@ def normalize_range_name(name):
     return name
 
 
-PARAM_TYPE_UNKNOWN       = -1
 PARAM_TYPE_LOGICAL       = 0
 PARAM_TYPE_INTEGER       = 1
 PARAM_TYPE_DOUBLE        = 2
@@ -148,23 +149,20 @@ PARAM_TYPE_LOGICAL_ARRAY = 10
 PARAM_TYPE_INTEGER_ARRAY = 11
 PARAM_TYPE_DOUBLE_ARRAY  = 12
 PARAM_TYPE_STRING_ARRAY  = 13
-PARAM_TYPE_ARRAY         = (10, 11, 12, 13)
 
 QUOTED_PARAMS = {'file', 'halofile', 'sectorfile', 'trueprofile'
                  'pipefile', 'trackfile', 'summary_file', 'filename',
                  'echo', 'title', 'text', 'format'}
 
-def format_cmdpar(key, value, cmd=None):
+
+def format_param(key, value):
     """
     Format a single MAD-X command parameter.
+
+    This is the old version that does not use type information from MAD-X. It
+    is therefore not limited to existing MAD-X commands and attributes, but
+    also less reliable for producing valid MAD-X statements.
     """
-    if cmd is None:
-        dtype = PARAM_TYPE_UNKNOWN
-    elif key in cmd:
-        dtype = cmd.cmdpar[key].dtype
-    else:
-        raise ValueError('Unknown parameter {!r}={!r} for command: {!r}!'
-                         .format(key, value, cmd))
     key = str(key).lower()
     # the empty string was used in earlier versions in place of None:
     if value is None or value == '':
@@ -197,8 +195,7 @@ def format_cmdpar(key, value, cmd=None):
         return key + '=' + begin + '/' + end
     # check for basestrings before collections.Sequence, because every
     # basestring is also a Sequence:
-    elif (isinstance(value, basestring) and
-          dtype in (PARAM_TYPE_UNKNOWN, PARAM_TYPE_STRING)+PARAM_TYPE_ARRAY):
+    elif isinstance(value, basestring):
         if key in QUOTED_PARAMS:
             return key + '=' + mad_quote(value)
         else:
@@ -214,6 +211,100 @@ def format_cmdpar(key, value, cmd=None):
         return key + '={' + ','.join(map(str, value)) + '}'
     else:
         return key + '=' + str(value)
+
+
+def format_cmdpar(cmd, key, value):
+    """
+    Format a single MAD-X command parameter.
+    """
+    cmdpar = cmd.cmdpar[key]
+    dtype = cmdpar.dtype
+    # the empty string was used in earlier versions in place of None:
+    if value is None or value == '':
+        return u''
+
+    # NUMERIC
+    if dtype == PARAM_TYPE_LOGICAL:
+        if isinstance(value, bool):         return key + '=' + str(value).lower()
+    if dtype in (PARAM_TYPE_LOGICAL,
+                 PARAM_TYPE_INTEGER,
+                 PARAM_TYPE_DOUBLE,
+                 PARAM_TYPE_CONSTRAINT,
+                 # NOTE: allow passing scalar values to numeric arrays, mainly
+                 # useful because many of the `match` command parameters are
+                 # arrays, but we usually call it with a single sequence and
+                 # would like to treat it similar to the `twiss` command:
+                 PARAM_TYPE_LOGICAL_ARRAY,
+                 PARAM_TYPE_INTEGER_ARRAY,
+                 PARAM_TYPE_DOUBLE_ARRAY):
+        if isinstance(value, bool):         return key + '=' + str(int(value))
+        if isinstance(value, Number):       return key + '=' + str(value)
+        if isinstance(value, basestring):   return key + ':=' + value
+        if isinstance(value, Expression):   return key + ':=' + value.expr
+    if dtype == PARAM_TYPE_CONSTRAINT:
+        if isinstance(value, Constraint):
+            constr = []
+            if value.min is not None:
+                constr.append(key + '>' + str(value.min))
+            if value.max is not None:
+                constr.append(key + '<' + str(value.max))
+            if constr:
+                return u', '.join(constr)
+            else:
+                return key + '=' + str(value.value)
+    if dtype in (PARAM_TYPE_LOGICAL_ARRAY,
+                 PARAM_TYPE_INTEGER_ARRAY,
+                 PARAM_TYPE_DOUBLE_ARRAY):
+        if isinstance(value, collections.Sequence):
+            if all(isinstance(v, Number) for v in value):
+                return key + '={' + ','.join(map(str, value)) + '}'
+            else:
+                return key + ':={', + ','.join(map(str, value)) + '}'
+
+    # STRING
+    def format_str(value):
+        if key in QUOTED_PARAMS:
+            return mad_quote(value)
+        # NOTE: MAD-X stops parsing the current argument as soon as it
+        # encounters another parameter name of the current command:
+        elif is_identifier(value) and value not in cmd:
+            return value
+        else:
+            return mad_quote(value.lower())
+    if dtype == PARAM_TYPE_STRING:
+        if key == 'range':
+            if isinstance(value, basestring):
+                return key + '=' + normalize_range_name(value)
+            elif isinstance(value, collections.Mapping):
+                begin, end = value['first'], value['last']
+            else:
+                begin, end = value[0], value[1]
+            begin, end = normalize_range_name((str(begin), str(end)))
+            return key + '=' + begin + '/' + end
+        if isinstance(value, basestring):
+            return key + '=' + format_str(value)
+        if isinstance(value, Range):
+            begin, end = normalize_range_name((value.first, value.last))
+            return key + '=' + begin + '/' + end
+        if key == 'range':
+            if isinstance(value, basestring):
+                return key + '=' + normalize_range_name(value)
+            elif isinstance(value, collections.Mapping):
+                begin, end = value['first'], value['last']
+            else:
+                begin, end = value[0], value[1]
+            begin, end = normalize_range_name((str(begin), str(end)))
+            return key + '=' + begin + '/' + end
+    if dtype == PARAM_TYPE_STRING_ARRAY:
+        # NOTE: allowing single scalar value to STRING_ARRAY, mainly useful
+        # for `match`, see above.
+        if isinstance(value, basestring):
+            return key + '=' + format_str(value)
+        if isinstance(value, collections.Sequence):
+            return key + '={' + ','.join(map(format_str, value)) + '}'
+
+    raise TypeError('Unexpected command argument type: {}={!r} ({})'
+                    .format(key, value, type(value)))
 
 
 def format_command(cmd, *args, **kwargs):
@@ -238,12 +329,13 @@ def format_command(cmd, *args, **kwargs):
     'constraint, betx<3.13;'
     """
     if isinstance(cmd, basestring):
-        name, cmd = cmd, None
+        _args = [cmd] + list(args)
+        _keys = ordered_keys(kwargs)
+        _args += [format_param(k, kwargs[k]) for k in _keys]
     else:
-        name = cmd.name
-    _args = [name] + list(args)
-    _keys = ordered_keys(kwargs)
-    _args += [format_cmdpar(k, kwargs[k], cmd) for k in _keys]
+        _args = [cmd.name] + list(args)
+        _keys = ordered_keys(kwargs)
+        _args += [format_cmdpar(cmd, k, kwargs[k]) for k in _keys]
     return u', '.join(filter(None, _args)) + ';'
 
 

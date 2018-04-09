@@ -87,7 +87,7 @@ class TestUtil(unittest.TestCase):
             util.format_command(
                 # match->sequence parameter is list in MAD-X!
                 m.command.match, sequence="foo"),
-                "match, sequence='foo';")
+                "match, sequence=foo;")
 
     def test_check_expression(self):
         self.assertTrue(is_valid_expression('a*b'))
