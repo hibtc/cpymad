@@ -66,16 +66,12 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         """Check that the Madx.version attribute can be used as expected."""
         version = self.mad.version
         # check format:
-        major, minor, mini = map(int, version.release.split('.'))
-        # We need at least MAD-X 5.02.03:
-        self.assertGreaterEqual(major, 5)
-        self.assertGreaterEqual(minor, 2)
-        self.assertGreaterEqual(mini, 3)
+        major, minor, micro = map(int, version.release.split('.'))
+        # We need at least MAD-X 5.04.00:
+        self.assertGreaterEqual((major, minor, micro), (5, 4, 0))
         # check format:
         year, month, day = map(int, version.date.split('.'))
-        self.assertGreaterEqual(year, 2014)
-        self.assertGreaterEqual(month, 1)
-        self.assertGreaterEqual(day, 1)
+        self.assertGreaterEqual((year, month, day), (2018, 3, 2))
         self.assertLessEqual(month, 12)
         self.assertLessEqual(day, 31)
 
