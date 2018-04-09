@@ -16,7 +16,8 @@ Range = namedtuple('Range', ['first', 'last'])
 
 class Parameter(object):
 
-    def __init__(self, value, dtype, inform):
+    def __init__(self, name, value, dtype, inform):
+        self.name = name
         self.value = value
         self.dtype = dtype
         self.inform = inform

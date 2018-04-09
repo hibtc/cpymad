@@ -1067,11 +1067,13 @@ cdef _parse_command(clib.command* cmd):
     cdef int i
     return {'name': _str(cmd.name), 'data': {
         # enforce lower-case keys:
-        _str(cmd.par.parameters[i].name).lower(): Parameter(
+        name: Parameter(
+            name,
             _get_param_value(cmd.par.parameters[i]),
             cmd.par.parameters[i].type,
             cmd.par_names.inform[i])
         for i in range(cmd.par.curr)
+        for name in [_str(cmd.par.parameters[i].name).lower()]
     }}
 
 
