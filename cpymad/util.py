@@ -16,8 +16,8 @@ __all__ = [
     'is_identifier',
     'name_from_internal',
     'name_to_internal',
-    'mad_parameter',
-    'mad_command',
+    'format_cmdpar',
+    'format_command',
     'check_expression',
     'temp_filename',
 ]
@@ -154,7 +154,7 @@ QUOTED_PARAMS = {'file', 'halofile', 'sectorfile', 'trueprofile'
                  'pipefile', 'trackfile', 'summary_file', 'filename',
                  'echo', 'title', 'text', 'format'}
 
-def mad_parameter(key, value, cmd=None):
+def format_cmdpar(key, value, cmd=None):
     """
     Format a single MAD-X command parameter.
     """
@@ -216,7 +216,7 @@ def mad_parameter(key, value, cmd=None):
         return key + '=' + str(value)
 
 
-def mad_command(cmd, *args, **kwargs):
+def format_command(cmd, *args, **kwargs):
     """
     Create a MAD-X command from its name and parameter list.
 
@@ -228,13 +228,13 @@ def mad_command(cmd, *args, **kwargs):
 
     Examples:
 
-    >>> mad_command('twiss', sequence='lhc')
+    >>> format_command('twiss', sequence='lhc')
     'twiss, sequence=lhc;'
 
-    >>> mad_command('option', echo=True)
+    >>> format_command('option', echo=True)
     'option, echo;'
 
-    >>> mad_command('constraint', betx=Constraint(max=3.13))
+    >>> format_command('constraint', betx=Constraint(max=3.13))
     'constraint, betx<3.13;'
     """
     if isinstance(cmd, basestring):
@@ -243,7 +243,7 @@ def mad_command(cmd, *args, **kwargs):
         name = cmd.name
     _args = [name] + list(args)
     _keys = ordered_keys(kwargs)
-    _args += [mad_parameter(k, kwargs[k], cmd) for k in _keys]
+    _args += [format_cmdpar(k, kwargs[k], cmd) for k in _keys]
     return u', '.join(filter(None, _args)) + ';'
 
 

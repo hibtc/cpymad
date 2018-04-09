@@ -50,41 +50,41 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(util.normalize_range_name('dr'), 'dr')
 
     def _check_command(self, compare, *args, **kwargs):
-        self.assertEqual(compare, util.mad_command(*args, **kwargs))
+        self.assertEqual(compare, util.format_command(*args, **kwargs))
 
-    def test_mad_command(self):
+    def test_format_command(self):
         self.assertEqual(
-            util.mad_command(
+            util.format_command(
                 'twiss', sequence='lhc'),
                 "twiss, sequence='lhc';")
         self.assertEqual(
-            util.mad_command(
+            util.format_command(
                 'option', echo=True),
                 'option, echo=true;')
         self.assertEqual(
-            util.mad_command(
+            util.format_command(
                 'constraint', betx=Constraint(max=3.13)),
                 'constraint, betx<3.13;')
         self.assertEqual(
-            util.mad_command(
+            util.format_command(
                 'quadrupole', k1=Expression('pi/2', 3.14/2)),
                 'quadrupole, k1:=pi/2;')
         self.assertEqual(
-            util.mad_command(
+            util.format_command(
                 'multipole', knl=[0.0, 1.0, 2.0]),
                 'multipole, knl={0.0,1.0,2.0};')
         self.assertEqual(
-            util.mad_command(
+            util.format_command(
                 'twiss', range=Range('#s', '#e')),
                 'twiss, range=#s/#e;')
 
         m = Madx()
         self.assertEqual(
-            util.mad_command(
+            util.format_command(
                 m.elements.quadrupole, k1="hello + world"),
                 'quadrupole, k1:=hello + world;')
         self.assertEqual(
-            util.mad_command(
+            util.format_command(
                 # match->sequence parameter is list in MAD-X!
                 m.command.match, sequence="foo"),
                 "match, sequence='foo';")

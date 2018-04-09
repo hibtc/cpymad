@@ -242,7 +242,7 @@ class Madx(object):
 
         :param str cmd: command name
         """
-        # The case 'cmd == None' will be handled by mad_command
+        # The case 'cmd == None' will be handled by format_command
         # appropriately.
         self.command.help(cmd)
 
@@ -780,8 +780,8 @@ class Command(_MutableMapping):
         """String representation as MAD-X statement."""
         overrides = {k: v.value for k, v in self._data.items() if v.inform}
         if self._attr.get('parent', self.name) == self.name:
-            return util.mad_command(self, **overrides)
-        return self.name + ': ' + util.mad_command(self.parent, **overrides)
+            return util.format_command(self, **overrides)
+        return self.name + ': ' + util.format_command(self.parent, **overrides)
 
     def __iter__(self):
         return iter(self._data)
@@ -811,7 +811,7 @@ class Command(_MutableMapping):
         """Perform a single MAD-X command."""
         if self.name == 'beam':
             kwargs.setdefault('sequence', self.sequence)
-        self._madx.input(util.mad_command(self, *args, **kwargs))
+        self._madx.input(util.format_command(self, *args, **kwargs))
 
     def clone(self, name, *args, **kwargs):
         """
@@ -825,7 +825,7 @@ class Command(_MutableMapping):
             qp: quadrupole, at=2, l=1;
         """
         self._madx.input(
-            name + ': ' + util.mad_command(self, *args, **kwargs))
+            name + ': ' + util.format_command(self, *args, **kwargs))
 
 
 class Element(Command):
