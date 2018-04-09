@@ -1180,7 +1180,7 @@ class VarList(_MutableMapping):
         self._libmadx = libmadx
 
     def __getitem__(self, name):
-        return self._libmadx.get_var(name.lower())
+        return self._libmadx.get_var(name.lower())[0]
 
     def __setitem__(self, name, value):
         self._libmadx.set_var(name, value)
@@ -1197,6 +1197,9 @@ class VarList(_MutableMapping):
 
     def __len__(self):
         return self._libmadx.num_globals()
+
+    def expr(self, name):
+        return self._libmadx.get_var(name.lower())[1]
 
 
 class Metadata(object):

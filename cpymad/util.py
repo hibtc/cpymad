@@ -9,7 +9,7 @@ import tempfile
 from contextlib import contextmanager
 from numbers import Number
 
-from .types import Range, Constraint, Expression
+from .types import Range, Constraint
 
 
 __all__ = [
@@ -180,8 +180,6 @@ def format_param(key, value):
             return u', '.join(constr)
         else:
             return key + '=' + str(value.value)
-    elif isinstance(value, Expression):
-        return key + ':=' + value.expr
     elif isinstance(value, bool):
         return key + '=' + str(value).lower()
     elif key == 'range':
@@ -240,7 +238,6 @@ def format_cmdpar(cmd, key, value):
         if isinstance(value, bool):         return key + '=' + str(int(value))
         if isinstance(value, Number):       return key + '=' + str(value)
         if isinstance(value, basestring):   return key + ':=' + value
-        if isinstance(value, Expression):   return key + ':=' + value.expr
     if dtype == PARAM_TYPE_CONSTRAINT:
         if isinstance(value, Constraint):
             constr = []
@@ -401,11 +398,6 @@ def check_expression(expr):
     formatting '.' representing zero.
     """
 
-    try:
-        # handle instance of type Expression:
-        expr = expr.expr
-    except AttributeError:
-        pass
     expr = expr.strip()
 
     def unexpected(tok, i, l):

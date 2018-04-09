@@ -289,7 +289,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertAlmostEqual(float(qp1['k1']), 2)
         self.assertAlmostEqual(float(qp2['k1']), 2)
         self.assertAlmostEqual(float(sb1['angle']), 3.14/4)
-        self.assertEqual(str(qp1['k1']).lower(), "qp_k1")
+        self.assertEqual(qp1.cmdpar.k1.expr.lower(), "qp_k1")
 
     def test_sequence_get_elements_s2(self):
         s2, idx = self._get_elems('s2')

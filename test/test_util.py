@@ -4,7 +4,7 @@ import unittest
 # tested objects
 from cpymad import util
 from cpymad.madx import Madx
-from cpymad.types import Range, Constraint, Expression
+from cpymad.types import Range, Constraint
 
 
 def is_valid_expression(expr):
@@ -53,6 +53,8 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(compare, util.format_command(*args, **kwargs))
 
     def test_format_command(self):
+        m = Madx()
+
         self.assertEqual(
             util.format_command(
                 'twiss', sequence='lhc'),
@@ -67,7 +69,7 @@ class TestUtil(unittest.TestCase):
                 'constraint, betx<3.13;')
         self.assertEqual(
             util.format_command(
-                'quadrupole', k1=Expression('pi/2', 3.14/2)),
+                m.command.quadrupole, k1='pi/2'),
                 'quadrupole, k1:=pi/2;')
         self.assertEqual(
             util.format_command(
@@ -78,7 +80,6 @@ class TestUtil(unittest.TestCase):
                 'twiss', range=Range('#s', '#e')),
                 'twiss, range=#s/#e;')
 
-        m = Madx()
         self.assertEqual(
             util.format_command(
                 m.elements.quadrupole, k1="hello + world"),
