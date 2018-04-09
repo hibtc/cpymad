@@ -564,7 +564,10 @@ class _Mapping(collections.Mapping):
         try:
             return self[key]
         except KeyError:
-            raise AttributeError(key)
+            return self._missing(key)
+
+    def _missing(self, key):
+        raise AttributeError(key)
 
 
 class _MutableMapping(_Mapping, collections.MutableMapping):
@@ -830,6 +833,10 @@ class Command(_MutableMapping):
         self, name, args = args[0], args[1], args[2:]
         self._madx.input(
             name + ': ' + util.mad_command(self, *args, **kwargs))
+
+    def _missing(self, value):
+        raise ValueError('Unknown parameter {!r} for command: {!r}!'
+                         .format(key, cmd))
 
 
 class Element(Command):
