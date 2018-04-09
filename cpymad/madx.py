@@ -8,6 +8,7 @@ The most interesting class for users is :class:`Madx`.
 from __future__ import absolute_import
 
 from functools import partial, wraps
+from itertools import product
 import logging
 import os
 import collections
@@ -408,6 +409,17 @@ class Madx(object):
             np.hstack((np.zeros((1, 6, cnt)),
                        np.ones((1, 1, cnt)))),
         )).transpose((2,0,1))
+
+    def sectortable2(self, name='sectortable'):
+        tab = self.get_table(name)
+        cnt = len(tab['t111'])
+        return np.vstack((
+            np.hstack((tab.rmat(slice(None)),
+                       tab.kvec(slice(None)).reshape((6,1,-1)))),
+            np.hstack((np.zeros((1, 6, cnt)),
+                       np.ones((1, 1, cnt)))),
+        )).transpose((2,0,1))
+
 
     def match(self,
               sequence=None,
@@ -1137,28 +1149,28 @@ class Table(_Mapping):
             columns = self
         return {column: self[column] for column in columns}
 
-    def getvec(self, name, idx, dim):
+    def getmat(self, name, idx, *dim):
+        s = () if isinstance(idx, int) else (-1,)
         return np.array([
-            self['{}{}'.format(name, i+1)][idx]
-            for i in range(dim)])
-
-    def getmat(self, name, idx, dim):
-        return np.array([
-            [self['{}{}{}'.format(name, i+1, j+1)][idx]
-             for j in range(dim)]
-            for i in range(dim)])
+            self[name + ''.join(str(i+1) for i in ijk)][idx]
+            for ijk in product(*map(range, dim))
+        ]).reshape(dim+s)
 
     def kvec(self, idx, dim=6):
         """Kicks."""
-        return self.getvec('k', idx, dim)
+        return self.getmat('k', idx, dim)
 
     def rmat(self, idx, dim=6):
         """Sectormap."""
-        return self.getmat('r', idx, dim)
+        return self.getmat('r', idx, dim, dim)
+
+    def tmat(self, idx, dim=6):
+        """2nd order sectormap."""
+        return self.getmat('t', idx, dim, dim, dim)
 
     def sigmat(self, idx, dim=6):
         """Beam matrix."""
-        return self.getmat('sig', idx, dim)
+        return self.getmat('sig', idx, dim, dim)
 
 class VarList(_MutableMapping):
 
