@@ -209,7 +209,7 @@ def mad_parameter(key, value, cmd=None):
         return key + '=' + str(value)
 
 
-def mad_command(cmd, *args, **kwargs):
+def mad_command(*args, **kwargs):
     """
     Create a MAD-X command from its name and parameter list.
 
@@ -230,6 +230,7 @@ def mad_command(cmd, *args, **kwargs):
     >>> mad_command('constraint', betx=Constraint(max=3.13))
     'constraint, betx<3.13;'
     """
+    cmd, args = args[0], args[1:]
     if isinstance(cmd, basestring):
         name, cmd = cmd, None
     else:

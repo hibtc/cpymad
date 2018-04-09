@@ -809,13 +809,14 @@ class Command(_MutableMapping):
     def __len__(self):
         return len(self._data)
 
-    def __call__(self, *args, **kwargs):
+    def __call__(*args, **kwargs):
         """Perform a single MAD-X command."""
+        self, args = args[0], args[1:]
         if self.name == 'beam':
             kwargs.setdefault('sequence', self.sequence)
         self._madx.input(util.mad_command(self, *args, **kwargs))
 
-    def clone(self, name, *args, **kwargs):
+    def clone(*args, **kwargs):
         """
         Clone this command, assign the given name. This corresponds to the
         colon syntax in MAD-X, e.g.::
@@ -826,6 +827,7 @@ class Command(_MutableMapping):
 
             qp: quadrupole, at=2, l=1;
         """
+        self, name, args = args[0], args[1], args[2:]
         self._madx.input(
             name + ': ' + util.mad_command(self, *args, **kwargs))
 
