@@ -1,6 +1,52 @@
 Changelog
 ~~~~~~~~~
 
+0.19.1
+======
+Date: 02.04.2018
+
+- pass unescaped (raw) string arguments to MAD-X
+- use double-quotes by default
+- overload ``Madx.evaluate`` for floats and lists (making it applicable
+  for anything that may be returned in the property)
+- windows builds link against MAD-X 49b4e7fee "Fix incorrect field errors
+  in tmbend with INTERPOLATE". This is a few minor bugfixes after 5.04.00.
+
+
+0.19.0
+======
+Date: 25.03.2018
+
+- command/element etc:
+    * retrieve information about commands from MAD-X ``defined_commands`` and
+      store in ``Command`` instances.
+    * use ``Command`` to improve command string generation and type-checks in
+      ``util.mad_command`` (#9)
+    * quote filename parameters when composing command string
+    * use deferred expressions (``:=``) whenever passing strings to
+      non-string parameters (#11)
+    * subclass elements, beam from ``Command``
+    * support attribute access for table/mappings/commands/elements/beams etc
+    * allow case-insensitive access
+    * overload index-access in tables to retrieve rows
+    * implement ``Element.__delitem__`` by setting value to default
+    * return name for global elements too
+    * add ``Madx.base_types`` data variable that yields the base elements
+    * add ``Element.parent``/``base_type`` attributes
+    * more concise string representations
+    * strip -Proxy suffix from class names
+    * apply user defined row/column selections even when no output file is
+      specified
+
+- installation:
+    * automatically use ``-lquadmath``
+    * add ``--static`` flag for setup script, use ``--shared`` by default
+    * no more need to link against PTC shared object separately
+    * finally provide some binary wheels for py 3.5 and 3.6 (#32)
+
+- raise cython language_level to 3
+- require MAD-X 5.04.00
+
 0.18.2
 ======
 Date: 05.12.2017
