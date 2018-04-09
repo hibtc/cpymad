@@ -138,6 +138,18 @@ def normalize_range_name(name):
     return name
 
 
+PARAM_TYPE_UNKNOWN       = -1
+PARAM_TYPE_LOGICAL       = 0
+PARAM_TYPE_INTEGER       = 1
+PARAM_TYPE_DOUBLE        = 2
+PARAM_TYPE_STRING        = 3
+PARAM_TYPE_CONSTRAINT    = 4
+PARAM_TYPE_LOGICAL_ARRAY = 10
+PARAM_TYPE_INTEGER_ARRAY = 11
+PARAM_TYPE_DOUBLE_ARRAY  = 12
+PARAM_TYPE_STRING_ARRAY  = 13
+PARAM_TYPE_ARRAY         = (10, 11, 12, 13)
+
 QUOTED_PARAMS = {'file', 'halofile', 'sectorfile', 'trueprofile'
                  'pipefile', 'trackfile', 'summary_file', 'filename',
                  'echo', 'title', 'text', 'format'}
@@ -147,9 +159,9 @@ def mad_parameter(key, value, cmd=None):
     Format a single MAD-X command parameter.
     """
     if cmd is None:
-        default = None
+        dtype = PARAM_TYPE_UNKNOWN
     elif key in cmd:
-        default = cmd[key]
+        dtype = cmd.cmdpar[key].dtype
     else:
         raise ValueError('Unknown parameter {!r}={!r} for command: {!r}!'
                          .format(key, value, cmd))
@@ -186,7 +198,7 @@ def mad_parameter(key, value, cmd=None):
     # check for basestrings before collections.Sequence, because every
     # basestring is also a Sequence:
     elif (isinstance(value, basestring) and
-          isinstance(default, (basestring, NoneType, list))):
+          dtype in (PARAM_TYPE_UNKNOWN, PARAM_TYPE_STRING)+PARAM_TYPE_ARRAY):
         if key in QUOTED_PARAMS:
             return key + '=' + mad_quote(value)
         else:

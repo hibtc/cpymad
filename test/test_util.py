@@ -78,15 +78,11 @@ class TestUtil(unittest.TestCase):
                 'twiss', range=Range('#s', '#e')),
                 'twiss, range=#s/#e;')
 
-        class Element(dict):
-            pass
-        elem = Element({'k1': 0.0})
-        elem.name = 'quadrupole'
+        m = Madx()
         self.assertEqual(
             util.mad_command(
-                elem, k1="hello + world"),
+                m.elements.quadrupole, k1="hello + world"),
                 'quadrupole, k1:=hello + world;')
-        m = Madx()
         self.assertEqual(
             util.mad_command(
                 # match->sequence parameter is list in MAD-X!
