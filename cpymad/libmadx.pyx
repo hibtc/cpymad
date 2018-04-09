@@ -24,7 +24,7 @@ import numpy as np      # Import the Python-level symbols of numpy
 cdef extern from "pyport.h":
     ctypedef int Py_intptr_t
 
-from cpymad.types import Constraint, Expression
+from cpymad.types import Constraint, Parameter
 from cpymad.util import name_to_internal, name_from_internal, normalize_range_name
 cimport cpymad.clibmadx as clib
 
@@ -218,8 +218,7 @@ def set_var(name, value):
     """
     Set the value of a global variable.
 
-    If the value is a string or :class:`Expression` set the variable as a
-    deferred expression.
+    If the value is a string set the variable as a deferred expression.
     """
     cdef bytes _name = _cstr(name.lower())
     cdef double _value = 0
@@ -968,11 +967,6 @@ cdef clib.expression* _make_expr(expression):
     # general an *extremely* bad design choice. Even though MAD-X uses global
     # variables internally anyway, this is no excuse for cpymad to copy that
     # behaviour.
-    try:
-        # handle instance of type Expression:
-        expression = expression.expr
-    except AttributeError:
-        pass
     # TODO: not sure about the flags (the magic constants 0, 2)
     cdef bytes _expr = _cstr(expression.lower())
     clib.pre_split(_expr, clib.c_dum, 0)
@@ -999,16 +993,16 @@ cdef _expr(clib.expression* expr,
     _type = _expr_types[typeid]
     _value = _type(value)
     if expr is NULL or expr.string is NULL:
-        return _value
+        return _value, None
     _expr = _str(expr.string).strip()
     if not _expr:
-        return _value
+        return _value, None
     try:
-        return _type(float(_expr))
+        return _type(float(_expr)), None
     except ValueError:
         pass
     value = clib.expression_value(expr, 2)
-    return Expression(_expr, _type(value), _type)
+    return _type(value), _expr
 
 
 cdef _get_param_value(clib.command_parameter* par):
@@ -1027,32 +1021,37 @@ cdef _get_param_value(clib.command_parameter* par):
         return _expr(par.expr, par.double_value, par.type)
 
     if par.type == clib.PARAM_TYPE_STRING:
-        return _str(par.string)
+        return _str(par.string), None
 
     if par.type == clib.PARAM_TYPE_CONSTRAINT:
+        val = min = max = (None, None)
         if par.c_type == clib.CONSTR_TYPE_NONE: # occurs in defined_commands
-            return Constraint()
+            pass
         if par.c_type == clib.CONSTR_TYPE_MIN:
-            return Constraint(min=_expr(par.min_expr, par.c_min))
+            min = _expr(par.min_expr, par.c_min)
         if par.c_type == clib.CONSTR_TYPE_MAX:
-            return Constraint(max=_expr(par.max_expr, par.c_max))
+            max = _expr(par.max_expr, par.c_max)
         if par.c_type == clib.CONSTR_TYPE_BOTH:
-            return Constraint(min=_expr(par.min_expr, par.c_min),
-                              max=_expr(par.max_expr, par.c_max))
+            min = _expr(par.min_expr, par.c_min)
+            max = _expr(par.max_expr, par.c_max)
         if par.c_type == clib.CONSTR_TYPE_VALUE:
-            return Constraint(val=_expr(par.expr, par.double_value))
+            val = _expr(par.expr, par.double_value)
+        return (Constraint(val=val[0], min=min[0], max=max[0]),
+                Constraint(val=val[1], min=min[1], max=max[1]))
 
     if par.type in (clib.PARAM_TYPE_INTEGER_ARRAY, clib.PARAM_TYPE_DOUBLE_ARRAY):
-        return [
+        fields = [
             _expr(NULL if par.expr_list is NULL else par.expr_list.list[i],
                   par.double_array.a[i],
                   par.type - clib.PARAM_TYPE_LOGICAL_ARRAY)
             for i in range(par.double_array.curr)
         ]
+        return ([f[0] for f in fields],
+                [f[1] for f in fields])
 
     if par.type == clib.PARAM_TYPE_STRING_ARRAY:
         return [_str(par.m_string.p[i])
-                for i in range(par.m_string.curr)]
+                for i in range(par.m_string.curr)], None
 
     raise ValueError("Unknown parameter type: {}".format(par.type))
 
@@ -1064,16 +1063,17 @@ cdef _parse_command(clib.command* cmd):
     :returns: the command parameters
     :rtype: dict
     """
-    # generator expressions are not yet supported in cdef functions, so
-    # let's do it the hard way:
-    res = {}
     cdef int i
-    for i in range(cmd.par.curr):
+    return {'name': _str(cmd.name), 'data': {
         # enforce lower-case keys:
-        name = _str(cmd.par.parameters[i].name).lower()
-        res[name] = _get_param_value(cmd.par.parameters[i])
-    res['name'] = _str(cmd.name)
-    return res
+        name: Parameter(
+            name,
+            *_get_param_value(cmd.par.parameters[i]),
+            dtype=cmd.par.parameters[i].type,
+            inform=cmd.par_names.inform[i])
+        for i in range(cmd.par.curr)
+        for name in [_str(cmd.par.parameters[i].name).lower()]
+    }}
 
 
 # The 'except NULL' clause is needed to forward exceptions from cdef
@@ -1149,8 +1149,10 @@ cdef _get_node(clib.node* node, int ref_flag, int is_expanded):
         raise RuntimeError("Empty node or subsequence! Please report this incident!")
     data = _get_element(node.p_elem)
     data.update({'name': _node_name(node),
-                 'type': _str(node.base_name),
-                 'at': _get_node_entry_pos(node, ref_flag, is_expanded)})
+                 'type': _str(node.base_name)})
+    # update into the command parameters in order to avoid surprises when you
+    # get weird at/length values:
+    data['data']['at'].value = _get_node_entry_pos(node, ref_flag, is_expanded)
     return data
 
 

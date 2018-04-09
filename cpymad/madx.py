@@ -53,7 +53,7 @@ class Version(object):
 
 def _fix_name(name):
     if name.startswith('_'):
-        raise AttributeError("Invalid command name: {!r}! Did you mean {!r}?"
+        raise AttributeError("Unknown item: {!r}! Did you mean {!r}?"
                              .format(name, name.strip('_') + '_'))
     if name.endswith('_'):
         name = name[:-1]
@@ -243,7 +243,7 @@ class Madx(object):
 
         :param str cmd: command name
         """
-        # The case 'cmd == None' will be handled by mad_command
+        # The case 'cmd == None' will be handled by format_command
         # appropriately.
         self.command.help(cmd)
 
@@ -699,7 +699,7 @@ class Sequence(object):
     @property
     def beam(self):
         """Get the beam dictionary associated to the sequence."""
-        return Command(self._madx, self._libmadx.get_sequence_beam(self._name), 'beam')
+        return Command(self._madx, self._libmadx.get_sequence_beam(self._name))
 
     @beam.setter
     def beam(self, beam):
@@ -787,18 +787,32 @@ class Command(_MutableMapping):
     0.0
     """
 
-    __slots__ = ('_madx', '_data', '_name')
+    __slots__ = ('_madx', '_data', '_attr', 'cmdpar')
 
-    def __init__(self, madx, data, name):
+    def __init__(self, madx, data):
         self._madx = madx
-        self._data = data
-        self._name = name
+        self._data = data.pop('data')       # command parameters
+        self._attr = data                   # further attributes
+        self.cmdpar = AttrDict(self._data)
+
+    def __repr__(self):
+        """String representation as MAD-X statement."""
+        overrides = {k: v.value for k, v in self._data.items() if v.inform}
+        if self._attr.get('parent', self.name) == self.name:
+            return util.format_command(self, **overrides)
+        return self.name + ': ' + util.format_command(self.parent, **overrides)
 
     def __iter__(self):
         return iter(self._data)
 
+    def __getattr__(self, name):
+        try:
+            return self._attr[name]
+        except KeyError:
+            return _Mapping.__getattr__(self, name)
+
     def __getitem__(self, name):
-        return self._data[name.lower()]
+        return self._data[name.lower()].value
 
     def __delitem__(self, name):
         raise NotImplementedError()
@@ -817,7 +831,7 @@ class Command(_MutableMapping):
         self, args = args[0], args[1:]
         if self.name == 'beam':
             kwargs.setdefault('sequence', self.sequence)
-        self._madx.input(util.mad_command(self, *args, **kwargs))
+        self._madx.input(util.format_command(self, *args, **kwargs))
 
     def clone(*args, **kwargs):
         """
@@ -832,7 +846,7 @@ class Command(_MutableMapping):
         """
         self, name, args = args[0], args[1], args[2:]
         self._madx.input(
-            name + ': ' + util.mad_command(self, *args, **kwargs))
+            name + ': ' + util.format_command(self, *args, **kwargs))
 
     def _missing(self, value):
         raise ValueError('Unknown parameter {!r} for command: {!r}!'
@@ -842,7 +856,7 @@ class Command(_MutableMapping):
 class Element(Command):
 
     def __getitem__(self, name):
-        value = self._data[name.lower()]
+        value = Command.__getitem__(self, name)
         if isinstance(value, list):
             return ArrayAttribute(self, value, name)
         return value
@@ -855,15 +869,13 @@ class Element(Command):
 
     @property
     def parent(self):
-        data = self._data
-        return (self if data['name'] == data['parent']
-                else self._madx.elements[data['parent']])
+        name = self._attr['parent']
+        return (self if self.name == name else self._madx.elements[name])
 
     @property
     def base_type(self):
-        data = self._data
-        return (self if data['name'] == data['base_type']
-                else self._madx.elements[data['base_type']])
+        name = self._attr['base_type']
+        return (self if self.name == name else self._madx.elements[name])
 
 
 class ArrayAttribute(collections.Sequence):
@@ -930,7 +942,7 @@ class BaseElementList(object):
             index += _len
         data = self._get_element(index)
         data['index'] = index
-        return Element(self._madx, data, data['name'])
+        return Element(self._madx, data)
 
     def __len__(self):
         """Get number of elements."""
@@ -1055,7 +1067,7 @@ class CommandMap(_Mapping):
     def __getitem__(self, name):
         madx = self._madx
         data = madx._libmadx.get_defined_command(name)
-        return Command(madx, data, name)
+        return Command(madx, data)
 
     def __contains__(self, name):
         return name.lower() in self._names
@@ -1193,7 +1205,7 @@ class VarList(_MutableMapping):
         self._libmadx = libmadx
 
     def __getitem__(self, name):
-        return self._libmadx.get_var(name.lower())
+        return self._libmadx.get_var(name.lower())[0]
 
     def __setitem__(self, name, value):
         self._libmadx.set_var(name, value)
@@ -1210,6 +1222,9 @@ class VarList(_MutableMapping):
 
     def __len__(self):
         return self._libmadx.num_globals()
+
+    def expr(self, name):
+        return self._libmadx.get_var(name.lower())[1]
 
 
 class Metadata(object):

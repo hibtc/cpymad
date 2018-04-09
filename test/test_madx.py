@@ -266,7 +266,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
 
     def _get_elems(self, seq_name):
         elems = self.mad.sequences[seq_name].elements
-        elem_idx = dict((el['name'], i) for i, el in enumerate(elems))
+        elem_idx = dict((el.name, i) for i, el in enumerate(elems))
         return elems, elem_idx
 
     def test_sequence_get_elements_s1(self):
@@ -285,7 +285,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertAlmostEqual(float(qp1['k1']), 2)
         self.assertAlmostEqual(float(qp2['k1']), 2)
         self.assertAlmostEqual(float(sb1['angle']), 3.14/4)
-        self.assertEqual(str(qp1['k1']).lower(), "qp_k1")
+        self.assertEqual(qp1.cmdpar.k1.expr.lower(), "qp_k1")
 
     def test_sequence_get_elements_s2(self):
         s2, idx = self._get_elems('s2')
@@ -327,6 +327,16 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertAlmostEqual(qp1['at'], 1)
         self.assertAlmostEqual(qp2['at'], 3)
         self.assertEqual(iqp2, elements.at(3.1))
+
+    def test_element_inform(self):
+        beam = 'ex=1, ey=2, particle=electron, sequence=s1;'
+        self.mad.command.beam(beam)
+        self.mad.use('s1')
+        elem = self.mad.sequences.s1.expanded_elements['qp']
+        self.assertSetEqual({'k1', 'l'}, {
+            name for name in elem
+            if elem.cmdpar[name].inform
+        })
 
 
 class TestTransferMap(unittest.TestCase):

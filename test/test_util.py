@@ -3,7 +3,8 @@ import unittest
 
 # tested objects
 from cpymad import util
-from cpymad.types import Range, Constraint, Expression
+from cpymad.madx import Madx
+from cpymad.types import Range, Constraint
 
 
 def is_valid_expression(expr):
@@ -49,42 +50,45 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(util.normalize_range_name('dr'), 'dr')
 
     def _check_command(self, compare, *args, **kwargs):
-        self.assertEqual(compare, util.mad_command(*args, **kwargs))
+        self.assertEqual(compare, util.format_command(*args, **kwargs))
 
-    def test_mad_command(self):
+    def test_format_command(self):
+        m = Madx()
+
         self.assertEqual(
-            util.mad_command(
+            util.format_command(
                 'twiss', sequence='lhc'),
                 'twiss, sequence="lhc";')
         self.assertEqual(
-            util.mad_command(
+            util.format_command(
                 'option', echo=True),
                 'option, echo=true;')
         self.assertEqual(
-            util.mad_command(
+            util.format_command(
                 'constraint', betx=Constraint(max=3.13)),
                 'constraint, betx<3.13;')
         self.assertEqual(
-            util.mad_command(
-                'quadrupole', k1=Expression('pi/2', 3.14/2)),
+            util.format_command(
+                m.command.quadrupole, k1='pi/2'),
                 'quadrupole, k1:=pi/2;')
         self.assertEqual(
-            util.mad_command(
+            util.format_command(
                 'multipole', knl=[0.0, 1.0, 2.0]),
                 'multipole, knl={0.0,1.0,2.0};')
         self.assertEqual(
-            util.mad_command(
+            util.format_command(
                 'twiss', range=Range('#s', '#e')),
                 'twiss, range=#s/#e;')
+
         self.assertEqual(
-            util.mad_command(
-                {'name': 'quadrupole', 'k1': 0.0}, k1="hello + world"),
+            util.format_command(
+                m.elements.quadrupole, k1="hello + world"),
                 'quadrupole, k1:=hello + world;')
         self.assertEqual(
-            util.mad_command(
+            util.format_command(
                 # match->sequence parameter is list in MAD-X!
-                {'name': 'match', 'sequence': []}, sequence="foo"),
-                'match, sequence="foo";')
+                m.command.match, sequence="foo"),
+                "match, sequence=foo;")
 
     def test_check_expression(self):
         self.assertTrue(is_valid_expression('a*b'))
