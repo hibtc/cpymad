@@ -199,8 +199,8 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
 
     def test_active_sequence(self):
         self.mad.command.beam('ex=1, ey=2, particle=electron, sequence=s1;')
-        self.mad.active_sequence = 's1'
-        self.assertEqual(self.mad.active_sequence.name, 's1')
+        self.mad.use('s1')
+        self.assertEqual(self.mad.sequence(), 's1')
 
     def test_get_sequence(self):
         with self.assertRaises(KeyError):

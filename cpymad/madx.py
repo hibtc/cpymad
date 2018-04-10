@@ -396,29 +396,6 @@ class Madx(object):
         """Turn verbose output on/off."""
         self.command.option(echo=switch, warn=switch, info=switch)
 
-    @property
-    def active_sequence(self):
-        """The active :class:`Sequence` (may be None)."""
-        try:
-            return Sequence(self._libmadx.get_active_sequence_name(),
-                            self, _check=False)
-        except RuntimeError:
-            return None
-
-    @active_sequence.setter
-    def active_sequence(self, sequence):
-        if isinstance(sequence, Sequence):
-            name = sequence.name
-        elif isinstance(sequence, basestring):
-            name = sequence
-        try:
-            active_sequence = self.active_sequence
-        except RuntimeError:
-            self.use(name)
-        else:
-            if active_sequence.name != name:
-                self.use(name)
-
     def eval(self, expr):
         """
         Evaluates an expression and returns the result as double.
@@ -530,6 +507,14 @@ class SequenceMap(_Mapping):
 
     def __len__(self):
         return self._libmadx.get_sequence_count()
+
+    def __call__(self):
+        """The active :class:`Sequence` (may be None)."""
+        try:
+            return Sequence(self._libmadx.get_active_sequence_name(),
+                            self._madx, _check=False)
+        except RuntimeError:
+            return None
 
 
 class TableMap(_Mapping):
