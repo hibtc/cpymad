@@ -276,9 +276,12 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         sb1 = s1['sb[1]']
         self.assertLess(idx['qp'], idx['qp[2]'])
         self.assertLess(idx['qp[2]'], idx['sb'])
-        self.assertAlmostEqual(qp1['at'], 1)
-        self.assertAlmostEqual(qp2['at'], 3)
-        self.assertAlmostEqual(sb1['at'], 5)
+        self.assertAlmostEqual(qp1['at'], 1.5)
+        self.assertAlmostEqual(qp2['at'], 3.5)
+        self.assertAlmostEqual(sb1['at'], 6)
+        self.assertAlmostEqual(qp1.position, 1)
+        self.assertAlmostEqual(qp2.position, 3)
+        self.assertAlmostEqual(sb1.position, 5)
         self.assertAlmostEqual(qp1['l'], 1)
         self.assertAlmostEqual(qp2['l'], 1)
         self.assertAlmostEqual(sb1['l'], 2)
@@ -312,8 +315,10 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         iqp2 = elements.index('qp[2]')
         qp1 = elements['qp[1]']
         qp2 = elements[iqp2]
-        self.assertAlmostEqual(qp1['at'], 1)
-        self.assertAlmostEqual(qp2['at'], 3)
+        self.assertAlmostEqual(qp1['at'], 1.5)
+        self.assertAlmostEqual(qp2['at'], 3.5)
+        self.assertAlmostEqual(qp1.position, 1)
+        self.assertAlmostEqual(qp2.position, 3)
         self.assertEqual(iqp2, elements.at(3.1))
 
     def test_sequence_expanded_elements(self):
@@ -324,8 +329,10 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         iqp2 = elements.index('qp[2]')
         qp1 = elements['qp[1]']
         qp2 = elements[iqp2]
-        self.assertAlmostEqual(qp1['at'], 1)
-        self.assertAlmostEqual(qp2['at'], 3)
+        self.assertAlmostEqual(qp1['at'], 1.5)
+        self.assertAlmostEqual(qp2['at'], 3.5)
+        self.assertAlmostEqual(qp1.position, 1)
+        self.assertAlmostEqual(qp2.position, 3)
         self.assertEqual(iqp2, elements.at(3.1))
 
     def test_element_inform(self):
@@ -333,7 +340,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.mad.command.beam(beam)
         self.mad.use('s1')
         elem = self.mad.sequences.s1.expanded_elements['qp']
-        self.assertSetEqual({'k1', 'l'}, {
+        self.assertSetEqual({'k1', 'l', 'at'}, {
             name for name in elem
             if elem.cmdpar[name].inform
         })

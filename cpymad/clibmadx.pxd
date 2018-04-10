@@ -155,6 +155,8 @@ cdef extern from "madX/mad_node.h" nogil:
         double position
         double at_value
         double length
+        expression* at_expr
+        char* from_name
         element* p_elem
 
     struct node_list:
@@ -167,6 +169,7 @@ cdef extern from "madX/mad_seq.h" nogil:
         # original sequence
         char[NAME_L] name
         int ref_flag
+        int line
         node_list* nodes
         command* beam
         # expanded sequence
