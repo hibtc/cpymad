@@ -835,9 +835,7 @@ def get_global_element(element_index):
     if element_index < 0 or element_index >= elems.curr:
         raise IndexError("Index out of range: {0} (element count is {1})"
                          .format(element_index, elems.curr))
-    data = _get_element(elems.elem[element_index])
-    data['name'] = _str(elems.elem[element_index].name)
-    return data
+    return _get_element(elems.elem[element_index])
 
 
 def get_global_element_name(element_index):
@@ -1148,11 +1146,15 @@ cdef _get_node(clib.node* node, int ref_flag, int is_expanded):
         # Maybe this is a valid case, but better detect it with boom!
         raise RuntimeError("Empty node or subsequence! Please report this incident!")
     data = _get_element(node.p_elem)
-    data.update({'name': _node_name(node),
-                 'type': _str(node.base_name)})
     # update into the command parameters in order to avoid surprises when you
     # get weird at/length values:
     data['data']['at'].value = _get_node_entry_pos(node, ref_flag, is_expanded)
+    data['node_name'] = _node_name(node)
+    data['occ_cnt'] = node.occ_cnt
+    data['enable'] = node.enable
+    data['base_name'] = _str(node.base_name)
+    data['position'] = _get_node_entry_pos(node, ref_flag, is_expanded)
+    data['length'] = node.length
     return data
 
 
@@ -1174,6 +1176,8 @@ cdef double _get_node_entry_pos(clib.node* node, int ref_flag, int is_expanded):
 cdef _get_element(clib.element* elem):
     """Return dictionary with element attributes."""
     data = _parse_command(elem.def_)
+    data['name'] = _str(elem.name)
+    data['length'] = elem.length
     data['parent'] = _str(elem.parent.name)
     data['base_type'] = _str(elem.base_type.name)
     return data

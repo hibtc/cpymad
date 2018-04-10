@@ -266,7 +266,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
 
     def _get_elems(self, seq_name):
         elems = self.mad.sequences[seq_name].elements
-        elem_idx = dict((el.name, i) for i, el in enumerate(elems))
+        elem_idx = dict((el.node_name, i) for i, el in enumerate(elems))
         return elems, elem_idx
 
     def test_sequence_get_elements_s1(self):

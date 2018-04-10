@@ -957,7 +957,7 @@ class BaseElementList(object):
         :raises ValueError: if the element is not found
         """
         if isinstance(element, dict):
-            name = element['name']
+            name = element['node_name']
         else:
             name = element
         if len(self) == 0:
