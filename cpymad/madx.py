@@ -207,37 +207,6 @@ class Madx(object):
                 and v in self.globals
                 and self._libmadx.get_var_type(v) > 0]
 
-    def update_value(self, name, attr, value):
-        self.command[name](**{attr: value})
-
-    def set_value(self, name, value):
-        """
-        Set a variable value ("=" operator in MAD-X).
-
-        Example:
-
-            >>> madx.set_value('R1QS1->K1', '42')
-            >>> madx.evaluate('R1QS1->K1')
-            42
-        """
-        self.input(name + ' = ' + str(value) + ';')
-
-    def set_expression(self, name, expr):
-        """
-        Set a variable expression (":=" operator in MAD-X).
-
-        Example:
-
-            >>> madx.set_expression('FOO', 'BAR')
-            >>> madx.set_value('BAR', 42)
-            >>> madx.evaluate('FOO')
-            42
-            >>> madx.set_value('BAR', 43)
-            >>> madx.evaluate('FOO')
-            43
-        """
-        self.input(name + ' := ' + str(expr) + ';')
-
     def help(self, cmd=None):
         """
         Show help about a command or list all MAD-X commands.
@@ -301,60 +270,31 @@ class Madx(object):
         for p in pattern:
             select(flag=flag, pattern=p)
 
-    def twiss(self,
-              sequence=None,
-              range=None,
-              # *,
-              # These should be passed as keyword-only parameters:
-              twiss_init={},
-              columns=None,
-              pattern=['full'],
-              **kwargs):
+    def twiss(self, **kwargs):
         """
-        Run SELECT+USE+TWISS.
+        Run TWISS.
 
         :param str sequence: name of sequence
-        :param list pattern: pattern to include in table
-        :param list columns: columns to include in table, (may be a str)
-        :param dict twiss_init: dictionary of twiss initialization variables
-        :param bool chrom: Also calculate chromatic functions (slower)
-        :param kwargs: further keyword arguments for the MAD-X command
+        :param kwargs: keyword arguments for the MAD-X command
 
         Note that the kwargs overwrite any arguments in twiss_init.
         """
-        self.select('twiss', columns=columns, pattern=pattern)
-        sequence = self._use(sequence)
-        twiss_init = dict((k, v) for k,v in twiss_init.items()
-                          if k not in ['name','closed-orbit'])
-        # explicitly specified keyword arguments overwrite values in
-        # twiss_init:
-        twiss_init.update(kwargs)
-        self.command.twiss(sequence=sequence,
-                           range=range,
-                           **twiss_init)
-        if 'file' not in twiss_init:
-            self._libmadx.apply_table_selections(twiss_init.get('table', 'twiss'))
-        return self.get_table('twiss')
+        self.command.twiss(**kwargs)
+        if 'file' not in kwargs:
+            self._libmadx.apply_table_selections(kwargs.get('table', 'twiss'))
+        return self.table.twiss
 
-    def survey(self,
-               sequence=None,
-               columns=None,
-               pattern=['full'],
-               **kwargs):
+    def survey(self, **kwargs):
         """
-        Run SELECT+USE+SURVEY.
+        Run SURVEY.
 
         :param str sequence: name of sequence
-        :param list pattern: pattern to include in table
-        :param list columns: Columns to include in table
-        :param kwargs: further keyword arguments for the MAD-X command
+        :param kwargs: keyword arguments for the MAD-X command
         """
-        self.select('survey', pattern=pattern, columns=columns)
-        self._use(sequence)
         self.command.survey(**kwargs)
         if 'file' not in kwargs:
             self._libmadx.apply_table_selections(kwargs.get('table', 'survey'))
-        return self.get_table('survey')
+        return self.table.survey
 
     def use(self, sequence):
         """
@@ -364,29 +304,6 @@ class Madx(object):
         :returns: name of active sequence
         """
         self.command.use(sequence=sequence)
-
-    def _use(self, sequence):
-        """
-        USE sequence if it is not active.
-
-        :param str sequence: sequence name, may be None
-        :returns: new active sequence name
-        :rtype: str
-        :raises RuntimeError: if there is no active sequence
-        """
-        try:
-            active_sequence = self.active_sequence
-        except RuntimeError:
-            if not sequence:
-                raise
-            active_sequence = None
-        else:
-            if not sequence:
-                sequence = active_sequence.name
-        if (sequence != active_sequence
-                or not self._libmadx.is_sequence_expanded(sequence)):
-            self.use(sequence)
-        return sequence
 
     def sectormap(self, elems, **kwargs):
         """
@@ -402,7 +319,7 @@ class Madx(object):
 
     def sectortable(self, name='sectortable'):
         """Read sectormap + kicks from memory and return as Nx7x7 array."""
-        tab = self.get_table(name)
+        tab = self.table[name]
         cnt = len(tab['r11'])
         return np.vstack((
             np.hstack((tab.rmat(slice(None)),
@@ -423,7 +340,6 @@ class Madx(object):
 
 
     def match(self,
-              sequence=None,
               constraints=[],
               vary=[],
               weight=None,
@@ -436,13 +352,11 @@ class Madx(object):
 
         For more advanced cases, you should issue the commands manually.
 
-        :param str sequence: name of sequence
         :param list constraints: constraints to pose during matching
         :param list vary: knob names to be varied
         :param dict weight: weights for matching parameters
         :param str knobfile: file to write the knob values to
-        :param dict twiss_init: initial twiss parameters
-        :param dict kwargs: further keyword arguments for the MAD-X command
+        :param dict kwargs: keyword arguments for the MAD-X command
         :returns: final knob values
         :rtype: dict
 
@@ -462,20 +376,13 @@ class Madx(object):
         ...     ],
         ...     vary=['qp1->k1',
         ...           'qp2->k1'],
-        ...     twiss_init=twiss_init,
+        ...     **twiss_init,
         ... )
         >>> tw = m.twiss('mysequence', twiss_init=twiss_init)
         """
-        sequence = self._use(sequence)
-        twiss_init = dict((k, v) for k,v in twiss_init.items()
-                          if k not in ['name','closed-orbit'])
-        # explicitly specified keyword arguments overwrite values in
-        # twiss_init:
-        twiss_init.update(kwargs)
-
         command = self.command
         # MATCH (=start)
-        command.match(sequence=sequence, **twiss_init)
+        command.match(**kwargs)
         if weight:
             command.weight(**weight)
         for c in constraints:
@@ -484,69 +391,36 @@ class Madx(object):
             command.vary(name=v)
         command[method[0]](**method[1])
         command.endmatch(knobfile=knobfile)
-        return dict((knob, self.evaluate(knob)) for knob in vary)
+        return dict((knob, self.eval(knob)) for knob in vary)
 
     def verbose(self, switch=True):
         """Turn verbose output on/off."""
         self.command.option(echo=switch, warn=switch, info=switch)
 
-    def get_table(self, table):
-        """
-        Get the specified table from MAD-X.
-
-        :param str table: table name
-        :returns: a proxy for the table data
-        :rtype: Table
-        """
-        return Table(table, self._libmadx)
-
-    @property
-    def active_sequence(self):
-        """The active :class:`Sequence` (may be None)."""
-        try:
-            return Sequence(self._libmadx.get_active_sequence_name(),
-                            self, _check=False)
-        except RuntimeError:
-            return None
-
-    @active_sequence.setter
-    def active_sequence(self, sequence):
-        if isinstance(sequence, Sequence):
-            name = sequence.name
-        elif isinstance(sequence, basestring):
-            name = sequence
-        try:
-            active_sequence = self.active_sequence
-        except RuntimeError:
-            self.use(name)
-        else:
-            if active_sequence.name != name:
-                self.use(name)
-
-    def evaluate(self, cmd):
+    def eval(self, expr):
         """
         Evaluates an expression and returns the result as double.
 
-        :param str cmd: expression to evaluate.
+        :param str expr: expression to evaluate.
         :returns: numeric value of the expression
         :rtype: float
         """
-        if isinstance(cmd, (float, int, bool)):
-            return cmd
-        if isinstance(cmd, (list, ArrayAttribute)):
-            return [self.evaluate(x) for x in cmd]
+        if isinstance(expr, (float, int, bool)):
+            return expr
+        if isinstance(expr, (list, ArrayAttribute)):
+            return [self.eval(x) for x in expr]
         # Try to prevent process crashes:
         # NOTE: this limits to a sane subset of accepted MAD-X expressions.
-        util.check_expression(cmd)
-        return self._libmadx.evaluate(cmd)
+        util.check_expression(expr)
+        return self._libmadx.eval(expr)
 
     @property
-    def sequences(self):
+    def sequence(self):
         """A dict like view of all sequences in memory."""
         return SequenceMap(self)
 
     @property
-    def tables(self):
+    def table(self):
         """A dict like view of all tables in memory."""
         return TableMap(self._libmadx)
 
@@ -634,6 +508,14 @@ class SequenceMap(_Mapping):
 
     def __len__(self):
         return self._libmadx.get_sequence_count()
+
+    def __call__(self):
+        """The active :class:`Sequence` (may be None)."""
+        try:
+            return Sequence(self._libmadx.get_active_sequence_name(),
+                            self._madx, _check=False)
+        except RuntimeError:
+            return None
 
 
 class TableMap(_Mapping):
@@ -830,7 +712,7 @@ class Command(_MutableMapping):
     def __call__(*args, **kwargs):
         """Perform a single MAD-X command."""
         self, args = args[0], args[1:]
-        if self.name == 'beam':
+        if self.name == 'beam' and self.sequence:
             kwargs.setdefault('sequence', self.sequence)
         self._madx.input(util.format_command(self, *args, **kwargs))
 

@@ -82,8 +82,8 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         # instance:
         self.mad.input('ANSWER=42;')
         madxness.input('ANSWER=43;')
-        self.assertEqual(self.mad.evaluate('ANSWER'), 42);
-        self.assertEqual(madxness.evaluate('ANSWER'), 43);
+        self.assertEqual(self.mad.eval('ANSWER'), 42);
+        self.assertEqual(madxness.eval('ANSWER'), 43);
         _close(madxness)
 
     def test_command_log(self):
@@ -110,14 +110,10 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
     def _check_twiss(self, seq_name):
         beam = 'ex=1, ey=2, particle=electron, sequence={0};'.format(seq_name)
         self.mad.command.beam(beam)
+        self.mad.use(seq_name)
         initial = dict(alfx=0.5, alfy=1.5,
                        betx=2.5, bety=3.5)
-        # by explicitly specifying the 'columns' parameter a persistent copy
-        # is returned. We check that this copy contains the data we want and
-        # that it has a 'summary' attribute:
-        twiss = self.mad.twiss(sequence=seq_name,
-                               columns=['betx', 'bety', 'alfx', 'alfy'],
-                               **initial)
+        twiss = self.mad.twiss(sequence=seq_name, **initial)
         betx, bety = twiss['betx'], twiss['bety']
         alfx, alfy = twiss['alfx'], twiss['alfy']
         # Check initial values:
@@ -145,16 +141,17 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
     def test_twiss_with_range(self):
         beam = 'ex=1, ey=2, particle=electron, sequence=s1;'
         self.mad.command.beam(beam)
+        self.mad.use('s1')
         params = dict(alfx=0.5, alfy=1.5,
                       betx=2.5, bety=3.5,
-                      columns=['betx', 'bety'],
                       sequence='s1')
+        columns = ['betx', 'bety']
         # Compute TWISS on full sequence, then on a sub-range, then again on
         # the full sequence. This checks that none of the range selections
         # have side-effects on each other:
-        betx_full1 = self.mad.twiss(**params)['betx']
-        betx_range = self.mad.twiss(range=('dr[2]', 'sb'), **params)['betx']
-        betx_full2 = self.mad.twiss(**params)['betx']
+        betx_full1 = self.mad.twiss(**params)['betx'].copy(columns)
+        betx_range = self.mad.twiss(range=('dr[2]', 'sb'), **params)['betx'].copy(columns)
+        betx_full2 = self.mad.twiss(**params)['betx'].copy(columns)
         # Check that the results have the expected lengths:
         self.assertEqual(len(betx_full1), 9)
         self.assertEqual(len(betx_range), 4)
@@ -170,6 +167,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
     def test_range_row_api(self):
         beam = 'ex=1, ey=2, particle=electron, sequence=s1;'
         self.mad.command.beam(beam)
+        self.mad.use('s1')
         params = dict(alfx=0.5, alfy=1.5,
                       betx=2.5, bety=3.5,
                       sequence='s1')
@@ -201,37 +199,22 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
 
     def test_active_sequence(self):
         self.mad.command.beam('ex=1, ey=2, particle=electron, sequence=s1;')
-        self.mad.active_sequence = 's1'
-        self.assertEqual(self.mad.active_sequence.name, 's1')
+        self.mad.use('s1')
+        self.assertEqual(self.mad.sequence(), 's1')
 
     def test_get_sequence(self):
         with self.assertRaises(KeyError):
-            self.mad.sequences['sN']
-        s1 = self.mad.sequences['s1']
+            self.mad.sequence['sN']
+        s1 = self.mad.sequence['s1']
         self.assertEqual(s1.name, 's1')
 
-    def test_get_sequences(self):
-        seqs = self.mad.sequences
+    def test_get_sequence(self):
+        seqs = self.mad.sequence
         self.assertItemsEqual(seqs, ['s1', 's2'])
 
-    def test_evaluate(self):
-        val = self.mad.evaluate("1/QP_K1")
+    def test_eval(self):
+        val = self.mad.eval("1/QP_K1")
         self.assertAlmostEqual(val, 0.5)
-
-    def test_set_value(self):
-        self.mad.set_value('FOO', 1)
-        self.mad.set_value('BAR', 'FOO')
-        self.mad.set_value('FOO', 2)
-        self.assertEqual(self.mad.evaluate('FOO'), 2)
-        self.assertEqual(self.mad.evaluate('BAR'), 1)
-
-    def test_set_expression(self):
-        self.mad.set_expression('FOO', 'BAR')
-        self.mad.set_value('BAR', 42)
-        self.mad.evaluate('FOO')
-        self.assertEqual(self.mad.evaluate('FOO'), 42)
-        self.mad.set_value('BAR', 43)
-        self.assertEqual(self.mad.evaluate('FOO'), 43)
 
     def test_globals(self):
         g = self.mad.globals
@@ -241,15 +224,18 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         g['FOO'] = 2
         self.assertIn('FOO', g)
         self.assertEqual(g['FOO'], 2)
-        self.assertEqual(self.mad.evaluate('FOO'), 2)
+        self.assertEqual(self.mad.eval('FOO'), 2)
         # Re-setting values:
         g['FOO'] = 3
-        self.assertEqual(self.mad.evaluate('FOO'), 3)
+        self.assertEqual(self.mad.eval('FOO'), 3)
         # Setting expressions:
         g['BAR'] = '3*foo'
-        self.assertEqual(self.mad.evaluate('BAR'), 9)
+        self.assertEqual(self.mad.eval('BAR'), 9)
         g['FOO'] = 4
-        self.assertEqual(self.mad.evaluate('BAR'), 12)
+        self.assertEqual(self.mad.eval('BAR'), 12)
+        # attribute access:
+        g.bar = 42
+        self.assertEqual(g.BAR, 42)
 
     def test_elements(self):
         self.assertIn('sb', self.mad.elements)
@@ -265,7 +251,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
     # def test_sequence_twissname(self):
 
     def _get_elems(self, seq_name):
-        elems = self.mad.sequences[seq_name].elements
+        elems = self.mad.sequence[seq_name].elements
         elem_idx = dict((el.node_name, i) for i, el in enumerate(elems))
         return elems, elem_idx
 
@@ -311,7 +297,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertRaises(RuntimeError, self.mad.input, 'XXX: sequence;')
 
     def test_sequence_elements(self):
-        elements = self.mad.sequences['s1'].elements
+        elements = self.mad.sequence['s1'].elements
         iqp2 = elements.index('qp[2]')
         qp1 = elements['qp[1]']
         qp2 = elements[iqp2]
@@ -325,7 +311,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         beam = 'ex=1, ey=2, particle=electron, sequence=s1;'
         self.mad.command.beam(beam)
         self.mad.use('s1')
-        elements = self.mad.sequences['s1'].expanded_elements
+        elements = self.mad.sequence['s1'].expanded_elements
         iqp2 = elements.index('qp[2]')
         qp1 = elements['qp[1]']
         qp2 = elements[iqp2]
@@ -339,7 +325,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         beam = 'ex=1, ey=2, particle=electron, sequence=s1;'
         self.mad.command.beam(beam)
         self.mad.use('s1')
-        elem = self.mad.sequences.s1.expanded_elements['qp']
+        elem = self.mad.sequence.s1.expanded_elements['qp']
         self.assertSetEqual({'k1', 'l', 'at'}, {
             name for name in elem
             if elem.cmdpar[name].inform
@@ -356,14 +342,15 @@ class TestTransferMap(unittest.TestCase):
 
     def _test_transfer_map(self, seq, range_, doc, rtol=1e-7, atol=1e-15):
         mad = self._mad(doc)
+        mad.use(seq)
         par = ['x', 'px', 'y', 'py', 't', 'pt']
         val = [+0.0010, -0.0015, -0.0020, +0.0025, +0.0000, +0.0000]
         twiss = {'betx': 0.0012, 'alfx': 0.0018,
                  'bety': 0.0023, 'alfy': 0.0027}
         twiss.update(zip(par, val))
         elems = range_.split('/')
-        smap = mad.sectormap(elems, sequence=seq, twiss_init=twiss)[-1]
-        tw = mad.twiss(seq, range_, twiss_init=twiss)
+        smap = mad.sectormap(elems, sequence=seq, **twiss)[-1]
+        tw = mad.twiss(sequence=seq, range=range_, **twiss)
 
         # transport of coordinate vector:
         x_init = np.array(val)

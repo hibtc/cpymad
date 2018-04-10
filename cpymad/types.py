@@ -22,6 +22,15 @@ class Parameter(object):
         self.dtype = dtype
         self.inform = inform
 
+    def __call__(self):
+        if isinstance(self.value, list):
+            return [e or v for v, e in zip(self.value, self.expr)]
+        else:
+            return self.expr or self.value
+
+    def __str__(self):
+        return str(self())
+
 
 class Constraint(object):
 

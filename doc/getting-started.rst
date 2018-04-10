@@ -31,7 +31,7 @@ corresponding MAD-X commands. For example:
         betx=0.1, bety=0.1,
         alfx=0.1, alfy=0.1)
 
-These methods allow short-hand notation by leaving out the names of parameters
+These methods allow short-hand notation by leaving out some parameter names
 like ``file`` or ``sequence`` and sometimes do more than the MAD-X command
 itself.
 
@@ -39,10 +39,9 @@ For example, :meth:`~cpymad.madx.Madx.call` allows to temporarily change the
 directory to the one of the executed file by setting the optional ``chdir``
 parameter to ``True``.
 
-The :meth:`~cpymad.madx.Madx.twiss` method is special because it can
-automatically ``USE`` a sequence and returns the resulting twiss table as a
-``dict`` like object, that can be used conveniently for your own analysis,
-e.g.:
+The :meth:`~cpymad.madx.Madx.twiss` method is special because it returns the
+resulting twiss table as a ``dict`` like object, that can be used conveniently
+for your own analysis, e.g.:
 
 .. code-block:: python
 
@@ -155,8 +154,6 @@ benefits:
 More methods for changing state:
 
 - :meth:`~cpymad.madx.Madx.verbose`: switch on or off verbose mode.
-- :meth:`~cpymad.madx.Madx.set_value`: change the value of a global variable.
-- :meth:`~cpymad.madx.Madx.set_expression`: set a deferred expression.
 
 
 Accessing MAD-X
@@ -248,7 +245,7 @@ Evaluate an expression in the MAD-X interpreter:
 
 .. code-block:: python
 
-    print(madx.evaluate('sb->angle / pi * 180'))
+    print(madx.eval('sb->angle / pi * 180'))
 
 sequences
 ---------

@@ -168,10 +168,9 @@ def format_param(key, value):
     is therefore not limited to existing MAD-X commands and attributes, but
     also less reliable for producing valid MAD-X statements.
     """
+    if value is None:
+        return None
     key = str(key).lower()
-    # the empty string was used in earlier versions in place of None:
-    if value is None or value == '':
-        return u''
     if isinstance(value, Range):
         begin, end = normalize_range_name((value.first, value.last))
         return key + '=' + begin + '/' + end
@@ -190,10 +189,8 @@ def format_param(key, value):
     elif key == 'range':
         if isinstance(value, basestring):
             return key + '=' + normalize_range_name(value)
-        elif isinstance(value, collections.Mapping):
-            begin, end = value['first'], value['last']
         else:
-            begin, end = value[0], value[1]
+            begin, end = value
         begin, end = normalize_range_name((str(begin), str(end)))
         return key + '=' + begin + '/' + end
     # check for basestrings before collections.Sequence, because every
@@ -342,12 +339,6 @@ def format_command(*args, **kwargs):
     return u', '.join(filter(None, _args)) + ';'
 
 
-def is_match_param(v):
-    return v.lower() in ['rmatrix', 'chrom', 'beta0', 'deltap',
-            'betx','alfx','mux','x','px','dx','dpx',
-            'bety','alfy','muy','y','py','dy','dpy' ]
-
-
 # validation of MAD-X expressions
 
 def _regex(expr):
@@ -393,7 +384,7 @@ def check_expression(expr):
 
     """
     Check if the given expression is a valid MAD-X expression that is safe to
-    pass to :meth:`cpymad.madx.Madx.evaluate`.
+    pass to :meth:`cpymad.madx.Madx.eval`.
 
     :param str expr:
     :returns: True
