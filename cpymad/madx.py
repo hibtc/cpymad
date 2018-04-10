@@ -7,7 +7,7 @@ The most interesting class for users is :class:`Madx`.
 
 from __future__ import absolute_import
 
-from functools import partial, wraps
+from functools import wraps
 from itertools import product
 import logging
 import os
@@ -848,9 +848,9 @@ class Command(_MutableMapping):
         self._madx.input(
             name + ': ' + util.format_command(self, *args, **kwargs))
 
-    def _missing(self, value):
-        raise ValueError('Unknown parameter {!r} for command: {!r}!'
-                         .format(key, cmd))
+    def _missing(self, key):
+        raise ValueError('Unknown parameter {!r} for {!r} command!'
+                         .format(key, self.name))
 
 
 class Element(Command):
