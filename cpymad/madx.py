@@ -1099,7 +1099,7 @@ class VarList(_MutableMapping):
             self._madx.input(name + ' := ' + str(value) + ';')
 
     def __delitem__(self, name):
-        raise NotImplementedError("Currently, can't erase a MAD-X global.")
+        raise NotImplementedError("Can't erase a MAD-X global.")
 
     def __iter__(self):
         """Iterate names of all non-constant globals."""
