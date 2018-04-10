@@ -48,7 +48,6 @@ __all__ = [
 
     # Globals
     'get_var',
-    'set_var',
     'num_globals',
     'get_globals',
     'get_var_type',
@@ -212,33 +211,6 @@ def get_var_type(name):
         3   string
     """
     return _get_var(name).type
-
-
-def set_var(name, value):
-    """
-    Set the value of a global variable.
-
-    If the value is a string set the variable as a deferred expression.
-    """
-    cdef bytes _name = _cstr(name.lower())
-    cdef double _value = 0
-    cdef int var_type = 1       # 0: const, 1: direct, 2: deferred
-    cdef int val_type = 1       # 0: int, 1: double, 3: string
-    cdef clib.expression* expr = NULL
-    cdef clib.variable* var
-    try:
-        value = value.expr
-    except AttributeError:
-        pass
-    if isinstance(value, basestring):
-        var_type = 2            # deferred
-        expr = _make_expr(value)
-    else:
-        _value = value
-        if isinstance(value, int):
-            val_type = 0        # int
-    var = clib.new_variable(_name, _value, val_type, var_type, expr, NULL)
-    clib.add_to_var_list(var, clib.variable_list, 1)
 
 
 def num_globals():

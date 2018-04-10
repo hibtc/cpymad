@@ -9,6 +9,7 @@ from __future__ import absolute_import
 
 from functools import wraps
 from itertools import product
+from numbers import Number
 import logging
 import os
 import collections
@@ -186,7 +187,7 @@ class Madx(object):
     @property
     def globals(self):
         """Get a dict-like interface to global MAD-X variables."""
-        return VarList(self._libmadx)
+        return VarList(self)
 
     @property
     def elements(self):
@@ -1193,22 +1194,27 @@ class Table(_Mapping):
         """Beam matrix."""
         return self.getmat('sig', idx, dim, dim)
 
+
 class VarList(_MutableMapping):
 
     """
     Provides dict-like access to MAD-X global variables.
     """
 
-    __slots__ = ('_libmadx',)
+    __slots__ = ('_madx', '_libmadx')
 
-    def __init__(self, libmadx):
-        self._libmadx = libmadx
+    def __init__(self, madx):
+        self._madx = madx
+        self._libmadx = madx._libmadx
 
     def __getitem__(self, name):
         return self._libmadx.get_var(name.lower())[0]
 
     def __setitem__(self, name, value):
-        self._libmadx.set_var(name, value)
+        if isinstance(value, Number):
+            self._madx.input(name + ' = ' + str(value) + ';')
+        else:
+            self._madx.input(name + ' := ' + str(value) + ';')
 
     def __delitem__(self, name):
         raise NotImplementedError("Currently, can't erase a MAD-X global.")
