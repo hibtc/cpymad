@@ -38,12 +38,15 @@ except ImportError:         # Windows
 
 class AsyncReader:
 
-    """Read stream asynchronously in a worker thread."""
+    """Read stream asynchronously in a worker thread. Note that the worker
+    thread will only be active while have entered the `with` context."""
 
     def __init__(self, stream, callback):
         super().__init__()
         self.queue = Queue()
-        self.event = Event()
+        self.loop = Event()
+        self.idle = Event()
+        self.poll = Event()
         self.stream = stream
         self.callback = callback
         self.thread = Thread(target=self._read_thread)
@@ -59,14 +62,23 @@ class AsyncReader:
                 return
             yield x
 
+    def __enter__(self):
+        self.poll.set()
+        return self
+
+    def __exit__(self, *exc_info):
+        self.flush()
+
     def _read_thread(self):
         set_nonblocking(self.stream)
         while True:
+            self.loop.set()
             try:
                 line = self.stream.readline()
             except IOError:
-                self.event.set()
-                time.sleep(0.001)
+                time.sleep(0)
+                self.idle.set()
+                self.poll.wait()
                 continue
             if not line:
                 return
@@ -75,7 +87,11 @@ class AsyncReader:
 
     def flush(self):
         """Read all data from the remote."""
-        self.event.clear()
-        self.event.wait()
+        self.poll.set()
+        self.loop.clear()
+        self.loop.wait()
+        self.idle.clear()
+        self.idle.wait()
+        self.poll.clear()
         if not self.queue.empty():
             self.callback(self)         # emit signal in direct mode!
