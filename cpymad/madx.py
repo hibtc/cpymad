@@ -345,7 +345,6 @@ class Madx(object):
               weight=None,
               method=('lmdif', {}),
               knobfile=None,
-              twiss_init={},
               **kwargs):
         """
         Perform a simple MATCH operation.
@@ -378,7 +377,7 @@ class Madx(object):
         ...           'qp2->k1'],
         ...     **twiss_init,
         ... )
-        >>> tw = m.twiss('mysequence', twiss_init=twiss_init)
+        >>> tw = m.twiss('mysequence', **twiss_init)
         """
         command = self.command
         # MATCH (=start)
