@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>cpymad.util &mdash; cpymad 0.17.3 documentation</title>
+  <title>cpymad.util &mdash; cpymad 1.0.0rc0 documentation</title>
   
 
   
@@ -25,25 +25,17 @@
   
 
   
-  
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="cpymad 0.17.3 documentation" href="../../index.html"/>
-        <link rel="up" title="Module code" href="../index.html"/> 
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -65,7 +57,7 @@
             
             
               <div class="version">
-                0.17.3
+                1.0.0rc0
               </div>
             
           
@@ -105,7 +97,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">cpymad</a>
@@ -113,9 +105,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -145,8 +138,6 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
-        
       </li>
     
   </ul>
@@ -167,8 +158,9 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span> <span class="nn">numbers</span> <span class="k">import</span> <span class="n">Number</span>
 
-<span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Range</span><span class="p">,</span> <span class="n">Constraint</span><span class="p">,</span> <span class="n">Expression</span>
+<span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Range</span><span class="p">,</span> <span class="n">Constraint</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -176,9 +168,10 @@
     <span class="s1">&#39;is_identifier&#39;</span><span class="p">,</span>
     <span class="s1">&#39;name_from_internal&#39;</span><span class="p">,</span>
     <span class="s1">&#39;name_to_internal&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;mad_parameter&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;mad_command&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;check_expression&#39;</span>
+    <span class="s1">&#39;format_param&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;format_cmdpar&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;format_command&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;check_expression&#39;</span><span class="p">,</span>
     <span class="s1">&#39;temp_filename&#39;</span><span class="p">,</span>
 <span class="p">]</span>
 
@@ -194,22 +187,41 @@
 <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>   <span class="c1"># python3</span>
     <span class="n">basestring</span> <span class="o">=</span> <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
 
+<span class="n">NoneType</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
 
 <div class="viewcode-block" id="mad_quote"><a class="viewcode-back" href="../../cpymad/util.html#cpymad.util.mad_quote">[docs]</a><span class="k">def</span> <span class="nf">mad_quote</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Add quotes to a string value.&quot;&quot;&quot;</span>
-    <span class="n">quoted</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">quoted</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="k">if</span> <span class="n">quoted</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;u&#39;</span> <span class="k">else</span> <span class="n">quoted</span></div>
+    <span class="k">if</span> <span class="s1">&#39;&quot;&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span>
+    <span class="k">if</span> <span class="s2">&quot;&#39;&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span>
+    <span class="c1"># MAD-X doesn&#39;t do any unescaping (otherwise I&#39;d simply use `json.dumps`):</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;MAD-X unable to parse string with escaped quotes: </span><span class="si">{!r}</span><span class="s2">&quot;</span>
+                     <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
 
 
 <span class="c1"># precompile regexes for performance:</span>
-<span class="n">_re_is_identifier</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[a-z_]\w*$&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
-<span class="n">_re_element_internal</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^([a-z_][\w.$]*)(:\d+)?$&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
-<span class="n">_re_element_external</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^([a-z_][\w.$]*)(\[\d+\])?$&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+<span class="n">re_compile</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">unicode</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+<span class="n">_re_is_identifier</span> <span class="o">=</span> <span class="n">re_compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[a-z_][a-z0-9_]*$&#39;</span><span class="p">)</span>
+<span class="n">_re_symbol</span> <span class="o">=</span> <span class="n">re_compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;([a-z_][a-z0-9._]*(-&gt;[a-z_][a-z0-9._]*(\[[0-9]+\])?)?)&#39;</span><span class="p">)</span>
+<span class="n">_re_element_internal</span> <span class="o">=</span> <span class="n">re_compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^([a-z_][a-z0-9_.$]*)(:\d+)?$&#39;</span><span class="p">)</span>
+<span class="n">_re_element_external</span> <span class="o">=</span> <span class="n">re_compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^([a-z_][a-z0-9_.$]*)(\[\d+\])?$&#39;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="is_identifier"><a class="viewcode-back" href="../../cpymad/util.html#cpymad.util.is_identifier">[docs]</a><span class="k">def</span> <span class="nf">is_identifier</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Check if ``name`` is a valid identifier in MAD-X.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">_re_is_identifier</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">name</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">expr_symbols</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return all symbols names used in an expression.</span>
+
+<span class="sd">    For now this includes not only variables but also element attributes (e.g.</span>
+<span class="sd">    ``quad-&gt;k1``) as well as function names (e.g. ``sin``).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">_re_symbol</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">expr</span><span class="p">)}</span>
 
 
 <div class="viewcode-block" id="name_from_internal"><a class="viewcode-back" href="../../cpymad/util.html#cpymad.util.name_from_internal">[docs]</a><span class="k">def</span> <span class="nf">name_from_internal</span><span class="p">(</span><span class="n">element_name</span><span class="p">):</span>
@@ -278,20 +290,38 @@
         <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">normalize_range_name</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;$end&#39;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;#e&#39;</span>
+        <span class="k">return</span> <span class="sa">u</span><span class="s1">&#39;#e&#39;</span>
     <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;$start&#39;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;#s&#39;</span>
+        <span class="k">return</span> <span class="sa">u</span><span class="s1">&#39;#s&#39;</span>
     <span class="k">return</span> <span class="n">name</span>
 
 
-<div class="viewcode-block" id="mad_parameter"><a class="viewcode-back" href="../../cpymad/util.html#cpymad.util.mad_parameter">[docs]</a><span class="k">def</span> <span class="nf">mad_parameter</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="n">PARAM_TYPE_LOGICAL</span>       <span class="o">=</span> <span class="mi">0</span>
+<span class="n">PARAM_TYPE_INTEGER</span>       <span class="o">=</span> <span class="mi">1</span>
+<span class="n">PARAM_TYPE_DOUBLE</span>        <span class="o">=</span> <span class="mi">2</span>
+<span class="n">PARAM_TYPE_STRING</span>        <span class="o">=</span> <span class="mi">3</span>
+<span class="n">PARAM_TYPE_CONSTRAINT</span>    <span class="o">=</span> <span class="mi">4</span>
+<span class="n">PARAM_TYPE_LOGICAL_ARRAY</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">PARAM_TYPE_INTEGER_ARRAY</span> <span class="o">=</span> <span class="mi">11</span>
+<span class="n">PARAM_TYPE_DOUBLE_ARRAY</span>  <span class="o">=</span> <span class="mi">12</span>
+<span class="n">PARAM_TYPE_STRING_ARRAY</span>  <span class="o">=</span> <span class="mi">13</span>
+
+<span class="n">QUOTED_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="s1">&#39;halofile&#39;</span><span class="p">,</span> <span class="s1">&#39;sectorfile&#39;</span><span class="p">,</span> <span class="s1">&#39;trueprofile&#39;</span>
+                 <span class="s1">&#39;pipefile&#39;</span><span class="p">,</span> <span class="s1">&#39;trackfile&#39;</span><span class="p">,</span> <span class="s1">&#39;summary_file&#39;</span><span class="p">,</span> <span class="s1">&#39;filename&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;echo&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="s1">&#39;format&#39;</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="format_param"><a class="viewcode-back" href="../../cpymad/util.html#cpymad.util.format_param">[docs]</a><span class="k">def</span> <span class="nf">format_param</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Format a single MAD-X command parameter.</span>
+
+<span class="sd">    This is the old version that does not use type information from MAD-X. It</span>
+<span class="sd">    is therefore not limited to existing MAD-X commands and attributes, but</span>
+<span class="sd">    also less reliable for producing valid MAD-X statements.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
     <span class="n">key</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="c1"># the empty string was used in earlier versions in place of None:</span>
-    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">value</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;&#39;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Range</span><span class="p">):</span>
         <span class="n">begin</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">normalize_range_name</span><span class="p">((</span><span class="n">value</span><span class="o">.</span><span class="n">first</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">last</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="n">begin</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">end</span>
@@ -302,26 +332,22 @@
         <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">max</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">constr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;&lt;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">max</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">constr</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">constr</span><span class="p">)</span>
+            <span class="k">return</span> <span class="sa">u</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">constr</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Expression</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;:=&#39;</span> <span class="o">+</span> <span class="n">value</span><span class="o">.</span><span class="n">expr</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">key</span>
+        <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;range&#39;</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="n">normalize_range_name</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
-            <span class="n">begin</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s1">&#39;first&#39;</span><span class="p">],</span> <span class="n">value</span><span class="p">[</span><span class="s1">&#39;last&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">begin</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">begin</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">value</span>
         <span class="n">begin</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">normalize_range_name</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">begin</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">end</span><span class="p">)))</span>
         <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="n">begin</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">end</span>
     <span class="c1"># check for basestrings before collections.Sequence, because every</span>
     <span class="c1"># basestring is also a Sequence:</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;file&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">QUOTED_PARAMS</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="n">mad_quote</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># MAD-X parses strings incorrectly, if followed by a boolean.</span>
@@ -329,16 +355,113 @@
             <span class="c1"># these values need to be quoted. (NOTE: MAD-X uses lower-case</span>
             <span class="c1"># internally and the quotes prevent automatic case conversion)</span>
             <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="n">mad_quote</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+    <span class="c1"># don&#39;t quote expressions:</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;:=&#39;</span> <span class="o">+</span> <span class="n">value</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;={&#39;</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;}&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="mad_command"><a class="viewcode-back" href="../../cpymad/util.html#cpymad.util.mad_command">[docs]</a><span class="k">def</span> <span class="nf">mad_command</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="format_cmdpar"><a class="viewcode-back" href="../../cpymad/util.html#cpymad.util.format_cmdpar">[docs]</a><span class="k">def</span> <span class="nf">format_cmdpar</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Format a single MAD-X command parameter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cmdpar</span> <span class="o">=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">cmdpar</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">cmdpar</span><span class="o">.</span><span class="n">dtype</span>
+    <span class="c1"># the empty string was used in earlier versions in place of None:</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">value</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">u</span><span class="s1">&#39;&#39;</span>
+
+    <span class="c1"># NUMERIC</span>
+    <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">PARAM_TYPE_LOGICAL</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>         <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="p">(</span><span class="n">PARAM_TYPE_LOGICAL</span><span class="p">,</span>
+                 <span class="n">PARAM_TYPE_INTEGER</span><span class="p">,</span>
+                 <span class="n">PARAM_TYPE_DOUBLE</span><span class="p">,</span>
+                 <span class="n">PARAM_TYPE_CONSTRAINT</span><span class="p">,</span>
+                 <span class="c1"># NOTE: allow passing scalar values to numeric arrays, mainly</span>
+                 <span class="c1"># useful because many of the `match` command parameters are</span>
+                 <span class="c1"># arrays, but we usually call it with a single sequence and</span>
+                 <span class="c1"># would like to treat it similar to the `twiss` command:</span>
+                 <span class="n">PARAM_TYPE_LOGICAL_ARRAY</span><span class="p">,</span>
+                 <span class="n">PARAM_TYPE_INTEGER_ARRAY</span><span class="p">,</span>
+                 <span class="n">PARAM_TYPE_DOUBLE_ARRAY</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>         <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>       <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>   <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;:=&#39;</span> <span class="o">+</span> <span class="n">value</span>
+    <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">PARAM_TYPE_CONSTRAINT</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Constraint</span><span class="p">):</span>
+            <span class="n">constr</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">min</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">constr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;&gt;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">min</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">max</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">constr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;&lt;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">max</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">constr</span><span class="p">:</span>
+                <span class="k">return</span> <span class="sa">u</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">constr</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="p">(</span><span class="n">PARAM_TYPE_LOGICAL_ARRAY</span><span class="p">,</span>
+                 <span class="n">PARAM_TYPE_INTEGER_ARRAY</span><span class="p">,</span>
+                 <span class="n">PARAM_TYPE_DOUBLE_ARRAY</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Number</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;={&#39;</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;}&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;:={&#39;</span><span class="p">,</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;}&#39;</span>
+
+    <span class="c1"># STRING</span>
+    <span class="k">def</span> <span class="nf">format_str</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">QUOTED_PARAMS</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mad_quote</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="c1"># NOTE: MAD-X stops parsing the current argument as soon as it</span>
+        <span class="c1"># encounters another parameter name of the current command:</span>
+        <span class="k">elif</span> <span class="n">is_identifier</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cmd</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mad_quote</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">PARAM_TYPE_STRING</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;range&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="n">normalize_range_name</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+                <span class="n">begin</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s1">&#39;first&#39;</span><span class="p">],</span> <span class="n">value</span><span class="p">[</span><span class="s1">&#39;last&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">begin</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">begin</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">normalize_range_name</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">begin</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">end</span><span class="p">)))</span>
+            <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="n">begin</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">end</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="n">format_str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Range</span><span class="p">):</span>
+            <span class="n">begin</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">normalize_range_name</span><span class="p">((</span><span class="n">value</span><span class="o">.</span><span class="n">first</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">last</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="n">begin</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">end</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;range&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="n">normalize_range_name</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+                <span class="n">begin</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s1">&#39;first&#39;</span><span class="p">],</span> <span class="n">value</span><span class="p">[</span><span class="s1">&#39;last&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">begin</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">begin</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">normalize_range_name</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">begin</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">end</span><span class="p">)))</span>
+            <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="n">begin</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">end</span>
+    <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">PARAM_TYPE_STRING_ARRAY</span><span class="p">:</span>
+        <span class="c1"># NOTE: allowing single scalar value to STRING_ARRAY, mainly useful</span>
+        <span class="c1"># for `match`, see above.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="n">format_str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;={&#39;</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">format_str</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;}&#39;</span>
+
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Unexpected command argument type: </span><span class="si">{}</span><span class="s1">=</span><span class="si">{!r}</span><span class="s1"> (</span><span class="si">{}</span><span class="s1">)&#39;</span>
+                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="format_command"><a class="viewcode-back" href="../../cpymad/util.html#cpymad.util.format_command">[docs]</a><span class="k">def</span> <span class="nf">format_command</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a MAD-X command from its name and parameter list.</span>
 
+<span class="sd">    :param cmd: base command (serves as template for parameter types)</span>
 <span class="sd">    :param args: initial bareword command arguments (including command name!)</span>
 <span class="sd">    :param kwargs: following named command arguments</span>
 <span class="sd">    :returns: command string</span>
@@ -346,31 +469,31 @@
 
 <span class="sd">    Examples:</span>
 
-<span class="sd">    &gt;&gt;&gt; mad_command(&#39;twiss&#39;, sequence=&#39;lhc&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; format_command(&#39;twiss&#39;, sequence=&#39;lhc&#39;)</span>
 <span class="sd">    &#39;twiss, sequence=lhc;&#39;</span>
 
-<span class="sd">    &gt;&gt;&gt; mad_command(&#39;option&#39;, echo=True)</span>
+<span class="sd">    &gt;&gt;&gt; format_command(&#39;option&#39;, echo=True)</span>
 <span class="sd">    &#39;option, echo;&#39;</span>
 
-<span class="sd">    &gt;&gt;&gt; mad_command(&#39;constraint&#39;, betx=Constraint(max=3.13))</span>
+<span class="sd">    &gt;&gt;&gt; format_command(&#39;constraint&#39;, betx=Constraint(max=3.13))</span>
 <span class="sd">    &#39;constraint, betx&lt;3.13;&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_args</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
-    <span class="n">_keys</span> <span class="o">=</span> <span class="n">ordered_keys</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">_args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">mad_parameter</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">_keys</span><span class="p">]</span>
-    <span class="k">return</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">_args</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span></div>
-
-
-<span class="k">def</span> <span class="nf">is_match_param</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;rmatrix&#39;</span><span class="p">,</span> <span class="s1">&#39;chrom&#39;</span><span class="p">,</span> <span class="s1">&#39;beta0&#39;</span><span class="p">,</span> <span class="s1">&#39;deltap&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;betx&#39;</span><span class="p">,</span><span class="s1">&#39;alfx&#39;</span><span class="p">,</span><span class="s1">&#39;mux&#39;</span><span class="p">,</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;px&#39;</span><span class="p">,</span><span class="s1">&#39;dx&#39;</span><span class="p">,</span><span class="s1">&#39;dpx&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;bety&#39;</span><span class="p">,</span><span class="s1">&#39;alfy&#39;</span><span class="p">,</span><span class="s1">&#39;muy&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="s1">&#39;py&#39;</span><span class="p">,</span><span class="s1">&#39;dy&#39;</span><span class="p">,</span><span class="s1">&#39;dpy&#39;</span> <span class="p">]</span>
+    <span class="n">cmd</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+        <span class="n">_args</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmd</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">_keys</span> <span class="o">=</span> <span class="n">ordered_keys</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">_args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">format_param</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">_keys</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_args</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmd</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">_keys</span> <span class="o">=</span> <span class="n">ordered_keys</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">_args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">format_cmdpar</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">_keys</span><span class="p">]</span>
+    <span class="k">return</span> <span class="sa">u</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">_args</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span></div>
 
 
 <span class="c1"># validation of MAD-X expressions</span>
 
 <span class="k">def</span> <span class="nf">_regex</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
-    <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+    <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">unicode</span><span class="p">(</span><span class="n">expr</span><span class="p">))</span>
     <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
         <span class="n">m</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">:])</span>
         <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">end</span><span class="p">()</span> <span class="k">if</span> <span class="n">m</span> <span class="k">else</span> <span class="mi">0</span>
@@ -388,7 +511,7 @@
     <span class="p">(</span><span class="s1">&#39;LPAREN&#39;</span><span class="p">,</span>      <span class="n">_choice</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">)),</span>
     <span class="p">(</span><span class="s1">&#39;RPAREN&#39;</span><span class="p">,</span>      <span class="n">_choice</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">)),</span>
     <span class="p">(</span><span class="s1">&#39;OPERATOR&#39;</span><span class="p">,</span>    <span class="n">_choice</span><span class="p">(</span><span class="s1">&#39;+-/*^&#39;</span><span class="p">)),</span>
-    <span class="p">(</span><span class="s1">&#39;SYMBOL&#39;</span><span class="p">,</span>      <span class="n">_regex</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[a-zA-Z_][\w.]*(-&gt;[a-zA-Z_]\w*)?&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;SYMBOL&#39;</span><span class="p">,</span>      <span class="n">_regex</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[a-zA-Z_][a-zA-Z0-9_.]*(-&gt;[a-zA-Z_][a-zA-Z0-9_]*)?&#39;</span><span class="p">)),</span>
     <span class="p">(</span><span class="s1">&#39;NUMBER&#39;</span><span class="p">,</span>      <span class="n">_regex</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(\d+(\.\d*)?|\.\d+)([eE][+\-]?\d+)?&#39;</span><span class="p">)),</span>
 <span class="p">]</span>
 
@@ -408,11 +531,11 @@
                              <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">expr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">expr</span><span class="p">[:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span>
 
 
-<span class="k">def</span> <span class="nf">check_expression</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
+<div class="viewcode-block" id="check_expression"><a class="viewcode-back" href="../../cpymad/util.html#cpymad.util.check_expression">[docs]</a><span class="k">def</span> <span class="nf">check_expression</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check if the given expression is a valid MAD-X expression that is safe to</span>
-<span class="sd">    pass to :meth:`cpymad.madx.Madx.evaluate`.</span>
+<span class="sd">    pass to :meth:`cpymad.madx.Madx.eval`.</span>
 
 <span class="sd">    :param str expr:</span>
 <span class="sd">    :returns: True</span>
@@ -423,11 +546,6 @@
 <span class="sd">    formatting &#39;.&#39; representing zero.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">try</span><span class="p">:</span>
-        <span class="c1"># handle instance of type Expression:</span>
-        <span class="n">expr</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">expr</span>
-    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-        <span class="k">pass</span>
     <span class="n">expr</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">unexpected</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">l</span><span class="p">):</span>
@@ -482,12 +600,12 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> unclosed left-parens in expression: </span><span class="si">{!r}</span><span class="s2">&quot;</span>
                          <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paren_level</span><span class="p">,</span> <span class="n">expr</span><span class="p">))</span>
 
-    <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
 
 
 <span class="c1"># misc</span>
 
-<span class="nd">@contextmanager</span>
+<div class="viewcode-block" id="temp_filename"><a class="viewcode-back" href="../../cpymad/util.html#cpymad.util.temp_filename">[docs]</a><span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">temp_filename</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get filename for use within &#39;with&#39; block and delete file afterwards.&quot;&quot;&quot;</span>
     <span class="n">fd</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">()</span>
@@ -496,13 +614,11 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-        <span class="k">pass</span>
+        <span class="k">pass</span></div>
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -515,7 +631,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -533,7 +649,8 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.17.3',
+            VERSION:'1.0.0rc0',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -551,14 +668,13 @@
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

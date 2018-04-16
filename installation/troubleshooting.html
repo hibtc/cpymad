@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Troubleshooting &mdash; cpymad 0.17.3 documentation</title>
+  <title>Troubleshooting &mdash; cpymad 1.0.0rc0 documentation</title>
   
 
   
@@ -25,27 +25,19 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="cpymad 0.17.3 documentation" href="../index.html"/>
-        <link rel="up" title="Installation Instructions" href="index.html"/>
-        <link rel="next" title="API Reference" href="../cpymad/index.html"/>
-        <link rel="prev" title="Windows" href="windows.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Reference" href="../cpymad/index.html" />
+    <link rel="prev" title="Windows" href="windows.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -67,7 +59,7 @@
             
             
               <div class="version">
-                0.17.3
+                1.0.0rc0
               </div>
             
           
@@ -92,6 +84,7 @@
             
             
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation Instructions</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="unix.html">Unix</a></li>
 <li class="toctree-l2"><a class="reference internal" href="windows.html">Windows</a></li>
@@ -105,6 +98,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../cpymad/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../known-issues.html">Known issues</a></li>
 </ul>
 
             
@@ -116,7 +110,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">cpymad</a>
@@ -124,9 +118,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -177,36 +172,36 @@ that might occur during installation.</p>
 <div class="section" id="importerror-libmadx-so">
 <h2>ImportError: libmadx.so<a class="headerlink" href="#importerror-libmadx-so" title="Permalink to this headline">¶</a></h2>
 <p>Message:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ne">ImportError</span><span class="p">:</span> <span class="n">libmadx</span><span class="o">.</span><span class="n">so</span><span class="p">:</span> <span class="n">cannot</span> <span class="nb">open</span> <span class="n">shared</span> <span class="nb">object</span> <span class="n">file</span><span class="p">:</span> <span class="n">No</span> <span class="n">such</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">directory</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ne">ImportError</span><span class="p">:</span> <span class="n">libmadx</span><span class="o">.</span><span class="n">so</span><span class="p">:</span> <span class="n">cannot</span> <span class="nb">open</span> <span class="n">shared</span> <span class="nb">object</span> <span class="n">file</span><span class="p">:</span> <span class="n">No</span> <span class="n">such</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">directory</span>
 </pre></div>
 </div>
 <p>Solution:
 You can pass the correct path to the setup script when building:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>python setup.py install --madxdir<span class="o">=</span>&lt;prefix&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py install --madxdir<span class="o">=</span>&lt;prefix&gt;
 <span class="c1"># or alternatively:</span>
 python setup.py build_ext --rpath<span class="o">=</span>&lt;rpath&gt;
 python setup.py install
 </pre></div>
 </div>
-<p>Where <code class="docutils literal"><span class="pre">&lt;prefix&gt;</span></code> is the base folder containing the subfolders <code class="docutils literal"><span class="pre">bin</span></code>,
-<code class="docutils literal"><span class="pre">include</span></code>, <code class="docutils literal"><span class="pre">lib</span></code> of the MAD-X build and <code class="docutils literal"><span class="pre">&lt;rpath&gt;</span></code> contains the
+<p>Where <code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;</span></code> is the base folder containing the subfolders <code class="docutils literal notranslate"><span class="pre">bin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">include</span></code>, <code class="docutils literal notranslate"><span class="pre">lib</span></code> of the MAD-X build and <code class="docutils literal notranslate"><span class="pre">&lt;rpath&gt;</span></code> contains the
 dynamic library files.</p>
-<p>If this does not work, you can set the <code class="docutils literal"><span class="pre">LD_LIBRARY_PATH</span></code> (or
-<code class="docutils literal"><span class="pre">DYLD_LIBRARY_PATH</span></code> on OSX) environment variable before running pymad, for
+<p>If this does not work, you can set the <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> (or
+<code class="docutils literal notranslate"><span class="pre">DYLD_LIBRARY_PATH</span></code> on OSX) environment variable before running pymad, for
 example:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:<span class="nv">$HOME</span>/.local/lib/
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:<span class="nv">$HOME</span>/.local/lib/
 </pre></div>
 </div>
 </div>
 <div class="section" id="oserror-missing-source-file">
 <h2>OSError: Missing source file<a class="headerlink" href="#oserror-missing-source-file" title="Permalink to this headline">¶</a></h2>
 <p>Message:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ne">OSError</span><span class="p">:</span> <span class="n">Missing</span> <span class="n">source</span> <span class="n">file</span><span class="p">:</span> <span class="s1">&#39;cpymad/libmadx.c&#39;</span><span class="o">.</span> <span class="n">Install</span> <span class="n">Cython</span> <span class="n">to</span> <span class="n">resolve</span> <span class="n">this</span> <span class="n">problem</span><span class="o">.</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ne">OSError</span><span class="p">:</span> <span class="n">Missing</span> <span class="n">source</span> <span class="n">file</span><span class="p">:</span> <span class="s1">&#39;cpymad/libmadx.c&#39;</span><span class="o">.</span> <span class="n">Install</span> <span class="n">Cython</span> <span class="n">to</span> <span class="n">resolve</span> <span class="n">this</span> <span class="n">problem</span><span class="o">.</span>
 </pre></div>
 </div>
 <p>Solution:
 The easiest way to install Cython is:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>pip install cython
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install cython
 </pre></div>
 </div>
 <p>Alternatively, you can install pymad from the PyPI source distribution
@@ -215,18 +210,18 @@ which includes all source files.</p>
 <div class="section" id="unable-to-find-vcvarsall-bat">
 <h2>Unable to find vcvarsall.bat<a class="headerlink" href="#unable-to-find-vcvarsall-bat" title="Permalink to this headline">¶</a></h2>
 <p>Message:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">error</span><span class="p">:</span> <span class="n">Unable</span> <span class="n">to</span> <span class="n">find</span> <span class="n">vcvarsall</span><span class="o">.</span><span class="n">bat</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">error</span><span class="p">:</span> <span class="n">Unable</span> <span class="n">to</span> <span class="n">find</span> <span class="n">vcvarsall</span><span class="o">.</span><span class="n">bat</span>
 </pre></div>
 </div>
 <p>Solution:
-Open or create the file <code class="file docutils literal"><span class="pre">C:\Python27\Lib\distutils\distutils.cfg</span></code>
+Open or create the file <code class="file docutils literal notranslate"><span class="pre">C:\Python27\Lib\distutils\distutils.cfg</span></code>
 and add the following lines:</p>
-<div class="highlight-cfg"><div class="highlight"><pre><span></span><span class="k">[build]</span>
+<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="k">[build]</span>
 <span class="na">compiler</span><span class="o">=</span><span class="s">mingw32</span>
 </pre></div>
 </div>
 <p>If you do not want to modify your python system configuration you can place
-this as <code class="file docutils literal"><span class="pre">setup.cfg</span></code> in the current directory.</p>
+this as <code class="file docutils literal notranslate"><span class="pre">setup.cfg</span></code> in the current directory.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference external" href="http://stackoverflow.com/q/2817869/650222">http://stackoverflow.com/q/2817869/650222</a></p>
@@ -235,16 +230,16 @@ this as <code class="file docutils literal"><span class="pre">setup.cfg</span></
 <div class="section" id="unrecognized-command-line-option-mno-cygwin">
 <h2>unrecognized command line option ‘-mno-cygwin’<a class="headerlink" href="#unrecognized-command-line-option-mno-cygwin" title="Permalink to this headline">¶</a></h2>
 <p>Message:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gcc</span><span class="p">:</span> <span class="n">error</span><span class="p">:</span> <span class="n">unrecognized</span> <span class="n">command</span> <span class="n">line</span> <span class="n">option</span> <span class="s1">&#39;-mno-cygwin&#39;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gcc</span><span class="p">:</span> <span class="n">error</span><span class="p">:</span> <span class="n">unrecognized</span> <span class="n">command</span> <span class="n">line</span> <span class="n">option</span> <span class="s1">&#39;-mno-cygwin&#39;</span>
 <span class="n">error</span><span class="p">:</span> <span class="n">command</span> <span class="s1">&#39;gcc&#39;</span> <span class="n">failed</span> <span class="k">with</span> <span class="n">exit</span> <span class="n">status</span> <span class="mi">1</span>
 </pre></div>
 </div>
 <p>Solution:
-In the file <code class="file docutils literal"><span class="pre">C:\Python27\Lib\distutils\cygwinccompiler.py</span></code> delete
-every occurence of the string <code class="docutils literal"><span class="pre">-mno-cygwin</span></code> in the <code class="docutils literal"><span class="pre">class</span>
+In the file <code class="file docutils literal notranslate"><span class="pre">C:\Python27\Lib\distutils\cygwinccompiler.py</span></code> delete
+every occurence of the string <code class="docutils literal notranslate"><span class="pre">-mno-cygwin</span></code> in the <code class="docutils literal notranslate"><span class="pre">class</span>
 <span class="pre">Mingw32CCompiler</span></code> (about line 320). Depending on your version of
 distutils, for example:</p>
-<div class="highlight-diff"><div class="highlight"><pre><span></span><span class="gu">@@ -319,11 +319,11 @@ class Mingw32CCompiler (CygwinCCompiler):</span>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span><span class="gu">@@ -319,11 +319,11 @@ class Mingw32CCompiler (CygwinCCompiler):</span>
         else:
             entry_point = &#39;&#39;
 
@@ -272,9 +267,7 @@ distutils, for example:</p>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -296,7 +289,7 @@ distutils, for example:</p>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -314,7 +307,8 @@ distutils, for example:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.17.3',
+            VERSION:'1.0.0rc0',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -332,14 +326,13 @@ distutils, for example:</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

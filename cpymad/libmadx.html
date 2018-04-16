@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>cpymad.libmadx &mdash; cpymad 0.17.3 documentation</title>
+  <title>cpymad.libmadx &mdash; cpymad 1.0.0rc0 documentation</title>
   
 
   
@@ -25,27 +25,19 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="cpymad 0.17.3 documentation" href="../index.html"/>
-        <link rel="up" title="API Reference" href="index.html"/>
-        <link rel="next" title="cpymad.util" href="util.html"/>
-        <link rel="prev" title="cpymad.madx" href="madx.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="cpymad.util" href="util.html" />
+    <link rel="prev" title="cpymad.madx" href="madx.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -67,7 +59,7 @@
             
             
               <div class="version">
-                0.17.3
+                1.0.0rc0
               </div>
             
           
@@ -113,7 +105,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">cpymad</a>
@@ -121,9 +113,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -170,8 +163,10 @@
   <div class="section" id="module-cpymad.libmadx">
 <span id="cpymad-libmadx"></span><h1>cpymad.libmadx<a class="headerlink" href="#module-cpymad.libmadx" title="Permalink to this headline">¶</a></h1>
 <p>Low level cython binding to MAD-X.</p>
-<p>CAUTION: Do not import this module directly! Use <code class="xref py py-class docutils literal"><span class="pre">Madx</span></code> instead.</p>
+<p>CAUTION: Do not import this module directly! Use <code class="xref py py-class docutils literal notranslate"><span class="pre">Madx</span></code> instead.</p>
 <ul class="simple">
+<li>The API of this module is considered private, i.e. it may change between
+versions without further notice.</li>
 <li>Importing this module means loading MAD-X directly into the process space.
 This means that any crash in the (extremely fragile) MAD-X interpreter will
 crash the importing process with it.</li>
@@ -218,7 +213,7 @@ crash the importing process with it.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">whether <a class="reference internal" href="#cpymad.libmadx.start" title="cpymad.libmadx.start"><code class="xref py py-func docutils literal"><span class="pre">start()</span></code></a> was called without matching <a class="reference internal" href="#cpymad.libmadx.finish" title="cpymad.libmadx.finish"><code class="xref py py-func docutils literal"><span class="pre">finish()</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">whether <a class="reference internal" href="#cpymad.libmadx.start" title="cpymad.libmadx.start"><code class="xref py py-func docutils literal notranslate"><span class="pre">start()</span></code></a> was called without matching <a class="reference internal" href="#cpymad.libmadx.finish" title="cpymad.libmadx.finish"><code class="xref py py-func docutils literal notranslate"><span class="pre">finish()</span></code></a></td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
 </tr>
@@ -253,8 +248,8 @@ crash the importing process with it.</li>
 </dd></dl>
 
 <dl class="function">
-<dt id="cpymad.libmadx.evaluate">
-<code class="descclassname">cpymad.libmadx.</code><code class="descname">evaluate</code><span class="sig-paren">(</span><em>expression</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.evaluate" title="Permalink to this definition">¶</a></dt>
+<dt id="cpymad.libmadx.eval">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">eval</code><span class="sig-paren">(</span><em>expression</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.eval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluates an expression and returns the result as double.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -271,21 +266,13 @@ crash the importing process with it.</li>
 <p>NOTE: This function does not perform rigorous input validation! It uses
 nothing but the MAD-X builtin rather incompetent error checks. This means
 invalid input such as ‘+’ can lead to program crashes! If you’re looking
-for more secure validation, see <code class="xref py py-func docutils literal"><span class="pre">cpymad.util.check_expression()</span></code>.</p>
+for more secure validation, see <a class="reference internal" href="util.html#cpymad.util.check_expression" title="cpymad.util.check_expression"><code class="xref py py-func docutils literal notranslate"><span class="pre">cpymad.util.check_expression()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="cpymad.libmadx.get_var">
 <code class="descclassname">cpymad.libmadx.</code><code class="descname">get_var</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_var" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the value of a global variable.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="cpymad.libmadx.set_var">
-<code class="descclassname">cpymad.libmadx.</code><code class="descname">set_var</code><span class="sig-paren">(</span><em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.set_var" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the value of a global variable.</p>
-<p>If the value is a string or <code class="xref py py-class docutils literal"><span class="pre">Expression</span></code> set the variable as a
-deferred expression.</p>
 </dd></dl>
 
 <dl class="function">
@@ -636,6 +623,12 @@ is done automatically for you if using libmadx in a remote service
 </dd></dl>
 
 <dl class="function">
+<dt id="cpymad.libmadx.get_table_row">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_table_row</code><span class="sig-paren">(</span><em>table_name</em>, <em>row_index</em>, <em>columns=u'selected'</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_table_row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return row as tuple of values.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="cpymad.libmadx.get_table_row_count">
 <code class="descclassname">cpymad.libmadx.</code><code class="descname">get_table_row_count</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_table_row_count" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return total number of rows in the table.</p>
@@ -645,6 +638,15 @@ is done automatically for you if using libmadx in a remote service
 <dt id="cpymad.libmadx.get_table_row_names">
 <code class="descclassname">cpymad.libmadx.</code><code class="descname">get_table_row_names</code><span class="sig-paren">(</span><em>table_name</em>, <em>indices</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_table_row_names" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return row names for every index (row number) in the list.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.apply_table_selections">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">apply_table_selections</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.apply_table_selections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply the SELECT/DESELECT commands for table columns/rows.</p>
+<p>Needed as replacement for the missing <code class="docutils literal notranslate"><span class="pre">out_table</span></code> call for initializing
+<code class="docutils literal notranslate"><span class="pre">t.row_out</span></code>, <code class="docutils literal notranslate"><span class="pre">t.col_out</span></code> if the twiss command was performed without a
+filename.</p>
 </dd></dl>
 
 <dl class="function">
@@ -1064,24 +1066,44 @@ recommended for frequent execution.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="cpymad.libmadx.get_base_type_names">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_base_type_names</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_base_type_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of element names for base types.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_defined_command">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_defined_command</code><span class="sig-paren">(</span><em>command_name</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_defined_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return MAD-X command as dict of values.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cpymad.libmadx.get_defined_command_names">
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">get_defined_command_names</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_defined_command_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of MAD-X command names.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="cpymad.libmadx.chdir">
-<code class="descclassname">cpymad.libmadx.</code><code class="descname">chdir</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.chdir" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">chdir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.chdir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the current working directory to the specified path.</p>
+<p>path may always be specified as a string.
+On some platforms, path may also be specified as an open file descriptor.</p>
+<blockquote>
+<div>If this functionality is unavailable, using it raises an exception.</div></blockquote>
 </dd></dl>
 
 <dl class="function">
 <dt id="cpymad.libmadx.getcwd">
-<code class="descclassname">cpymad.libmadx.</code><code class="descname">getcwd</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; path<a class="headerlink" href="#cpymad.libmadx.getcwd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a string representing the current working directory.</p>
+<code class="descclassname">cpymad.libmadx.</code><code class="descname">getcwd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.getcwd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a unicode string representing the current working directory.</p>
 </dd></dl>
 
 </div>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -1103,7 +1125,7 @@ recommended for frequent execution.</p>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1121,7 +1143,8 @@ recommended for frequent execution.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.17.3',
+            VERSION:'1.0.0rc0',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -1139,14 +1162,13 @@ recommended for frequent execution.</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

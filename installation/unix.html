@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Unix &mdash; cpymad 0.17.3 documentation</title>
+  <title>Unix &mdash; cpymad 1.0.0rc0 documentation</title>
   
 
   
@@ -25,27 +25,19 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="cpymad 0.17.3 documentation" href="../index.html"/>
-        <link rel="up" title="Installation Instructions" href="index.html"/>
-        <link rel="next" title="Windows" href="windows.html"/>
-        <link rel="prev" title="Installation Instructions" href="index.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Windows" href="windows.html" />
+    <link rel="prev" title="Installation Instructions" href="index.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -67,7 +59,7 @@
             
             
               <div class="version">
-                0.17.3
+                1.0.0rc0
               </div>
             
           
@@ -92,6 +84,7 @@
             
             
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation Instructions</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Unix</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#install-dependencies">Install dependencies</a></li>
@@ -104,6 +97,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../cpymad/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../known-issues.html">Known issues</a></li>
 </ul>
 
             
@@ -115,7 +109,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">cpymad</a>
@@ -123,9 +117,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -198,11 +193,11 @@ install method.</p>
 <h2>Install libmadx<a class="headerlink" href="#install-libmadx" title="Permalink to this headline">¶</a></h2>
 <p>Download the <a class="reference external" href="https://github.com/MethodicalAcceleratorDesign/MAD-X/releases">latest MAD-X release</a> from github or use directly the source
 code from master (unstable):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
 </pre></div>
 </div>
 <p>Build and install the library</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
 cmake ../madX <span class="se">\</span>
     -DMADX_STATIC<span class="o">=</span>OFF <span class="se">\</span>
     -DBUILD_SHARED_LIBS<span class="o">=</span>ON <span class="se">\</span>
@@ -217,12 +212,12 @@ installation prefix.</p>
 <div class="section" id="install-cpymad">
 <h2>Install cpymad<a class="headerlink" href="#install-cpymad" title="Permalink to this headline">¶</a></h2>
 <p>The latest <a class="reference external" href="https://pypi.python.org/pypi/cpymad#downloads">cpymad release</a> can conveniently be installed using <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a>:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>pip install cpymad
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install cpymad
 </pre></div>
 </div>
 <p>If you run into problems with this, you should manually download and
 install the <a class="reference external" href="https://github.com/hibtc/cpymad">cpymad</a> <a class="reference external" href="https://github.com/hibtc/cpymad/zipball/master">source</a> to see in which step the problem occurs:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>git clone https://github.com/hibtc/cpymad
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/hibtc/cpymad
 <span class="nb">cd</span> cpymad
 python setup.py build
 python setup.py install
@@ -235,9 +230,7 @@ python setup.py install
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -259,7 +252,7 @@ python setup.py install
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -277,7 +270,8 @@ python setup.py install
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.17.3',
+            VERSION:'1.0.0rc0',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -295,14 +289,13 @@ python setup.py install
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

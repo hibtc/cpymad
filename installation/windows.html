@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Windows &mdash; cpymad 0.17.3 documentation</title>
+  <title>Windows &mdash; cpymad 1.0.0rc0 documentation</title>
   
 
   
@@ -25,27 +25,19 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="cpymad 0.17.3 documentation" href="../index.html"/>
-        <link rel="up" title="Installation Instructions" href="index.html"/>
-        <link rel="next" title="Troubleshooting" href="troubleshooting.html"/>
-        <link rel="prev" title="Unix" href="unix.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Troubleshooting" href="troubleshooting.html" />
+    <link rel="prev" title="Unix" href="unix.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -67,7 +59,7 @@
             
             
               <div class="version">
-                0.17.3
+                1.0.0rc0
               </div>
             
           
@@ -92,6 +84,7 @@
             
             
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation Instructions</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="unix.html">Unix</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Windows</a><ul>
@@ -109,6 +102,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../cpymad/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../known-issues.html">Known issues</a></li>
 </ul>
 
             
@@ -120,7 +114,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">cpymad</a>
@@ -128,9 +122,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -182,7 +177,7 @@
 linux when building from source. Therefore, I will try to provide <a class="reference external" href="https://pypi.python.org/pypi/cpymad/#downloads">built
 versions</a> for some platforms. If your platform is supported, you can just
 run</p>
-<div class="highlight-bat"><div class="highlight"><pre><span></span>pip install cpymad
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>pip install cpymad
 </pre></div>
 </div>
 <p>from your terminal and that’s it.</p>
@@ -190,23 +185,23 @@ run</p>
 <div class="section" id="offline-installation">
 <h2>Offline installation<a class="headerlink" href="#offline-installation" title="Permalink to this headline">¶</a></h2>
 <p>If you want to install to a target machine without internet access (or with
-firewall), you can manually <a class="reference external" href="https://pypi.python.org/pypi/cpymad/#downloads">download</a> the <code class="docutils literal"><span class="pre">.whl</span></code> file for your platform and
+firewall), you can manually <a class="reference external" href="https://pypi.python.org/pypi/cpymad/#downloads">download</a> the <code class="docutils literal notranslate"><span class="pre">.whl</span></code> file for your platform and
 then use <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a> to install that particular file. For example:</p>
-<div class="highlight-bat"><div class="highlight"><pre><span></span>pip install cpymad-0.17.3-cp27-none-win32.whl
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>pip install cpymad-0.17.3-cp27-none-win32.whl
 </pre></div>
 </div>
 <p>In this case you will also need to grab and install <em>numpy</em>, <em>PyYAML</em> and
 <em>setuptools</em> (and possibly their dependencies if any). Installable <a class="reference external" href="https://wheel.readthedocs.org/en/latest/">wheel</a>
 archives for these packages can be conveniently downloaded from here:
 <a class="reference external" href="http://www.lfd.uci.edu/~gohlke/pythonlibs/">Unofficial Windows Binaries for Python Extension Packages</a>.</p>
-<p>To simplify this process, <code class="docutils literal"><span class="pre">pip</span></code> can automatically download all required
+<p>To simplify this process, <code class="docutils literal notranslate"><span class="pre">pip</span></code> can automatically download all required
 files:</p>
-<div class="highlight-bat"><div class="highlight"><pre><span></span><span class="k">mkdir</span> packages
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="k">mkdir</span> packages
 pip download -d packages cpymad
 </pre></div>
 </div>
 <p>and then later install them in the offline environment like this:</p>
-<div class="highlight-bat"><div class="highlight"><pre><span></span>pip install -f packages cpymad
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>pip install -f packages cpymad
 </pre></div>
 </div>
 <p>If you want/have to build from source, have a look at following guide.</p>
@@ -224,11 +219,11 @@ python’s windows build process.</p>
 <p>First install <a class="reference external" href="http://www.cmake.org/">CMake</a>. In the <em>Install options</em> dialog choose to <em>Add CMake
 to the system PATH for all/current user</em> according to your liking.
 Alternatively, manually extend your PATH later in the terminal:</p>
-<div class="highlight-bat"><div class="highlight"><pre><span></span><span class="k">set</span> <span class="nv">PATH</span><span class="p">=</span><span class="nv">%PATH%</span>;C:\Program Files (x86)\CMake\bin
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="k">set</span> <span class="nv">PATH</span><span class="p">=</span><span class="nv">%PATH%</span>;C:\Program Files (x86)\CMake\bin
 </pre></div>
 </div>
 <p>Next, install <a class="reference external" href="https://pypi.python.org/pypi/minrpc">minrpc</a>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">minrpc</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">minrpc</span>
 </pre></div>
 </div>
 </div>
@@ -236,12 +231,12 @@ Alternatively, manually extend your PATH later in the terminal:</p>
 <h3>Build libmadx<a class="headerlink" href="#build-libmadx" title="Permalink to this headline">¶</a></h3>
 <p>Download and extract the <a class="reference external" href="https://github.com/MethodicalAcceleratorDesign/MAD-X/releases">latest MAD-X release</a>.</p>
 <p>I recommend to build MAD-X as a <em>static</em> library as described below. This
-way, you won’t need to carry any <code class="docutils literal"><span class="pre">.dll</span></code> files around and you won’t run
+way, you won’t need to carry any <code class="docutils literal notranslate"><span class="pre">.dll</span></code> files around and you won’t run
 into version problems when having a multiple MAD-X library builds around.</p>
-<p>Open a terminal by executing the <code class="file docutils literal"><span class="pre">%WinPython%\WinPython</span> <span class="pre">Command</span>
+<p>Open a terminal by executing the <code class="file docutils literal notranslate"><span class="pre">%WinPython%\WinPython</span> <span class="pre">Command</span>
 <span class="pre">Prompt.exe</span></code>. Change the directory to the extracted MAD-X folder with the
-<code class="docutils literal"><span class="pre">cd</span></code> command and prepare the build:</p>
-<div class="highlight-bat"><div class="highlight"><pre><span></span><span class="k">mkdir</span> build
+<code class="docutils literal notranslate"><span class="pre">cd</span></code> command and prepare the build:</p>
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="k">mkdir</span> build
 <span class="k">cd</span> build
 cmake .. \
     -G <span class="s2">&quot;MinGW Makefiles&quot;</span> \
@@ -251,48 +246,39 @@ cmake .. \
     -DUSE_GC=ON
 </pre></div>
 </div>
-<p>In the file <code class="file docutils literal"><span class="pre">%MADX%\build\src\CMakeFiles\madxbin.dir\link.txt</span></code> and
-<code class="file docutils literal"><span class="pre">linklibs.rsp</span></code> search for <code class="docutils literal"><span class="pre">-lgcc_eh</span></code> and remove it (if present) -
+<p>In the file <code class="file docutils literal notranslate"><span class="pre">%MADX%\build\src\CMakeFiles\madxbin.dir\link.txt</span></code> and
+<code class="file docutils literal notranslate"><span class="pre">linklibs.rsp</span></code> search for <code class="docutils literal notranslate"><span class="pre">-lgcc_eh</span></code> and remove it (if present) -
 otherwise you may get linker errors at the end of the next command.</p>
 <p>The following step will build the library. This may take a few minutes, so go
 and grab a coffee meanwhile:</p>
-<div class="highlight-bat"><div class="highlight"><pre><span></span>mingw32-make
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>mingw32-make
 mingw32-make install
 </pre></div>
 </div>
 <p>If all went well the last command will have installed binaries and library
-files to the <code class="file docutils literal"><span class="pre">%MADX%\install</span></code> subfolder.</p>
+files to the <code class="file docutils literal notranslate"><span class="pre">%MADX%\install</span></code> subfolder.</p>
 </div>
 <div class="section" id="build-cpymad">
 <h3>Build cpymad<a class="headerlink" href="#build-cpymad" title="Permalink to this headline">¶</a></h3>
 <p>Download and extract the latest <a class="reference external" href="https://github.com/hibtc/cpymad/releases">cpymad release</a>. Alternatively, use git to
 retrieve the current development version (unstable):</p>
-<div class="highlight-bat"><div class="highlight"><pre><span></span>git clone https://github.com/hibtc/cpmyad
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/hibtc/cpmyad
 </pre></div>
 </div>
 <p>Then go to the cpymad folder and build as follows:</p>
-<div class="highlight-bat"><div class="highlight"><pre><span></span>python setup.py build_ext --madxdir=<span class="p">&lt;</span>madx-install-path<span class="p">&gt;</span> -lquadmath
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>python setup.py build_ext --static --madxdir=<span class="p">&lt;</span>madx-install-path&gt;
 python setup.py build
 </pre></div>
 </div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>The <code class="docutils literal"><span class="pre">-lquadmath</span></code> argument is required to avoid errors like the following:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>.../libgfortran.a(write.o):(.text$write_float+0xbb): undefined reference to `signbitq&#39;
-.../lib/gcc/i686-w64-mingw32/4.9.2/libgfortran.a(write.o):(.text$write_float+0xe7): undefined reference to `finiteq&#39;
-</pre></div>
-</div>
-<p class="last">If the build fails, try to leave it out.</p>
-</div>
 <p>From the built package you can create a so called <a class="reference external" href="https://wheel.readthedocs.org/en/latest/">wheel</a>, which is
 essentially a zip archive containing all the files ready for installation:</p>
-<div class="highlight-bat"><div class="highlight"><pre><span></span>python setup.py bdist_wheel
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>python setup.py bdist_wheel
 </pre></div>
 </div>
-<p>This will create a <code class="docutils literal"><span class="pre">.whl</span></code> file named after the package and its target
+<p>This will create a <code class="docutils literal notranslate"><span class="pre">.whl</span></code> file named after the package and its target
 platform. This file can now be used for installation in your favorite
 python distribution, like so:</p>
-<div class="highlight-bat"><div class="highlight"><pre><span></span>pip install dist\cpymad-0.17.3-cp27-none-win32.whl
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>pip install dist\cpymad-0.17.3-cp27-none-win32.whl
 </pre></div>
 </div>
 </div>
@@ -301,9 +287,7 @@ python distribution, like so:</p>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -325,7 +309,7 @@ python distribution, like so:</p>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -343,7 +327,8 @@ python distribution, like so:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.17.3',
+            VERSION:'1.0.0rc0',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -361,14 +346,13 @@ python distribution, like so:</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>
