@@ -1,4 +1,4 @@
-from threading import Thread, Event
+from threading import Thread, Event, Condition
 
 
 # The following code makes sure to read all available stdout lines before
@@ -43,8 +43,7 @@ class AsyncReader:
     def __init__(self, stream, callback):
         super().__init__()
         self.lines = []
-        self.loop = Event()
-        self.idle = Event()
+        self.lock = Condition()
         self.poll = Event()
         self.stream = stream
         self.callback = callback
@@ -56,29 +55,27 @@ class AsyncReader:
         self.poll.set()
 
     def __exit__(self, *exc_info):
-        self.loop.clear()
-        self.loop.wait()
-        self.idle.clear()
-        self.idle.wait()
-        self.poll.clear()
-        if self.lines:
+        with self.lock:
+            self.lock.wait()
+            self.poll.clear()
             self.callback("\n".join(self.lines))
             self.lines = []
 
     def _read_thread(self):
         set_nonblocking(self.stream)
         while True:
-            self.loop.set()
-            try:
-                line = self.stream.readline()
-            except IOError:
-                time.sleep(0)
-                self.idle.set()
-                self.poll.wait()
-                continue
-            if not line:
-                return
-            self.lines.append(line.decode('utf-8', 'replace')[:-1])
+            self.poll.wait()
+            with self.lock:
+                while True:
+                    try:
+                        line = self.stream.readline()
+                    except IOError:
+                        break
+                    if not line:
+                        return
+                    self.lines.append(line.decode('utf-8', 'replace')[:-1])
+                self.lock.notify()
+            time.sleep(0)
 
     def flush(self):
         """Read all data from the remote."""
