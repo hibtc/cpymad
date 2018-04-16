@@ -1,6 +1,58 @@
 Changelog
 ~~~~~~~~~
 
+1.0.0rc0
+========
+Date: 16.04.2018
+
+First pre-release for 1.0.0 with several backward incompatibilities.
+
+- the Madx methods have been simplified to be only thin wrappers over the
+  corresponding MAD-X commands, not taking any extra responsibilities such as
+  automatically using sequences etc.
+- rename ``Madx.tables/sequences`` to singular form
+- disable passing dicts as range parameter for commands
+- remove ``cpymad.util.is_match_param``.
+- remove ``cpymad.libmadx.set_var`` routine. Always use ``input``!
+- remove ``Madx.get_table`` method, use ``Madx.table.X`` instead
+- rename ``Madx.evaluate`` to ``eval``
+- remove ``Madx.set_value/set_expression/update_value``. Use assignment to
+  attributes of ``Madx.globals/command/element`` instead.
+- rename ``util.mad_command`` -> ``format_command``
+- only ignore ``None`` parameters when generating MAD-X commands. This allows
+  passing empty strings.
+- remove ``cpymad.types.Expression``, replaced by new ``Parameter`` class, see
+  below.
+- remove ``Madx.active_sequence``, use ``Madx.sequence()`` instead
+- the ``at/l`` attributes are now kept as the values specified by the user
+  (relative to *refer* flag), and not overwritten anymore by the actual
+  position or length. Use ``.position`` and ``.length`` attributes to access
+  the node position/length instead!
+- the ``name`` attribute is now the command/element name. The node name is
+  now available as ``node_name``.
+
+Introduced a new API for accessing additional metadata about command
+parameters:
+
+- added a ``Command.cmdpar.X`` namespace that can be used to retrieve a
+  ``Parameter`` instance with additional metadata about the command parameter.
+- rigorously distinguish between MAD-X command parameters and other attributes
+  on elements/commands
+- only command parameters can be accessed using the dict-like item access
+  syntax while other metadata can only be accessed via attribute access
+- use the type information for improving the composition of MAD-X command
+  statements
+
+Misc changes:
+
+- add method ``Madx.sectortable2`` to access 2nd order sector map (as well as
+  related methods to ``Table``). Method name is subject to change!
+- show implicit drifts with ``[0]`` again (the suffix is needed when matching
+  on implicit drifts)
+- perfect kwargs forwarding
+- expose ``occ_count/enable/base_name`` attributes on nodes
+
+
 0.19.1
 ======
 Date: 02.04.2018
@@ -46,6 +98,7 @@ Date: 25.03.2018
 
 - raise cython language_level to 3
 - require MAD-X 5.04.00
+
 
 0.18.2
 ======
