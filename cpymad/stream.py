@@ -54,10 +54,16 @@ class AsyncReader:
 
     def __enter__(self):
         self.poll.set()
-        return self
 
     def __exit__(self, *exc_info):
-        self.flush()
+        self.loop.clear()
+        self.loop.wait()
+        self.idle.clear()
+        self.idle.wait()
+        self.poll.clear()
+        if self.lines:
+            self.callback("\n".join(self.lines))
+            self.lines = []
 
     def _read_thread(self):
         set_nonblocking(self.stream)
@@ -76,12 +82,5 @@ class AsyncReader:
 
     def flush(self):
         """Read all data from the remote."""
-        self.poll.set()
-        self.loop.clear()
-        self.loop.wait()
-        self.idle.clear()
-        self.idle.wait()
-        self.poll.clear()
-        if self.lines:
-            self.callback("\n".join(self.lines))
-            self.lines = []
+        with self:
+            pass
