@@ -1,4 +1,4 @@
-from threading import Thread, Event, Condition
+from multiprocessing.dummy import Pool as ThreadPool
 
 
 # The following code makes sure to read all available stdout lines before
@@ -42,40 +42,31 @@ class AsyncReader:
 
     def __init__(self, stream, callback):
         super().__init__()
-        self.lines = []
-        self.lock = Condition()
-        self.poll = Event()
+        set_nonblocking(stream)
+        self.pool = ThreadPool(1)
         self.stream = stream
         self.callback = callback
-        self.thread = Thread(target=self._read_thread)
-        self.thread.daemon = True   # don't block program exit
-        self.thread.start()
 
     def __enter__(self):
-        self.poll.set()
+        self.stop = False
+        self.result = self.pool.apply_async(self._read_thread)
 
     def __exit__(self, *exc_info):
-        with self.lock:
-            self.lock.wait()
-            self.poll.clear()
-            self.callback("\n".join(self.lines))
-            self.lines = []
+        self.stop = True
+        self.callback("\n".join(self.result.get()))
 
     def _read_thread(self):
-        set_nonblocking(self.stream)
+        lines = []
         while True:
-            self.poll.wait()
-            with self.lock:
-                while True:
-                    try:
-                        line = self.stream.readline()
-                    except IOError:
-                        break
-                    if not line:
-                        return
-                    self.lines.append(line.decode('utf-8', 'replace')[:-1])
-                self.lock.notify()
-            time.sleep(0)
+            try:
+                line = self.stream.readline()
+            except IOError:
+                if self.stop:
+                    return lines
+                continue
+            if not line:
+                return lines
+            lines.append(line.decode('utf-8', 'replace')[:-1])
 
     def flush(self):
         """Read all data from the remote."""
