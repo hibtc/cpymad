@@ -31,9 +31,8 @@ corresponding MAD-X commands. For example:
         betx=0.1, bety=0.1,
         alfx=0.1, alfy=0.1)
 
-These methods allow short-hand notation by leaving out some parameter names
-like ``file`` or ``sequence`` and sometimes do more than the MAD-X command
-itself.
+Only some commands are exposed directly on the :class:`Madx` object, generally
+this is done only to add some extra functionality around the MAD-X command.
 
 For example, :meth:`~cpymad.madx.Madx.call` allows to temporarily change the
 directory to the one of the executed file by setting the optional ``chdir``
@@ -204,32 +203,38 @@ Access to global elements:
     # check whether an element is defined:
     print('qp1' in madx.elements)
 
-    # get dictionary of all element properties:
-    elem = madx.elements['qp1']
-    print(elem['k1'])
-    print(elem['l'])
+    # get element properties:
+    elem = madx.elements.qp1
+    print(elem.k1)
+    print(elem.l)
+
+Note that elements support dict-like item access to retrieve properties (i.e.
+``elem['k1']``) besides attribute access. The same is true in other places.
 
 
-tables
-------
+table
+-----
 
-Dict-like view of MAD-X tables:
+View of MAD-X tables:
 
 .. code-block:: python
 
     # list of existing table names
-    print(list(madx.tables)):
+    print(list(madx.table)):
 
     # get table as dict-like object:
-    twiss = madx.tables['twiss']
+    twiss = madx.table.twiss
 
     # get columns as numpy arrays:
-    alfx = twiss['alfx']
-    betx = twiss['betx']
+    alfx = twiss.alfx
+    betx = twiss.alfy
+
+    # get all twiss variables for 10th element:
+    row = twiss[10]
 
 
-variables
----------
+globals
+-------
 
 Dictionary-like view of the MAD-X global variables:
 
@@ -239,7 +244,7 @@ Dictionary-like view of the MAD-X global variables:
     print(list(madx.globals))
 
     # value of a builtin variable
-    print(madx.globals['PI'])
+    print(madx.globals.PI)
 
 Evaluate an expression in the MAD-X interpreter:
 
@@ -247,21 +252,22 @@ Evaluate an expression in the MAD-X interpreter:
 
     print(madx.eval('sb->angle / pi * 180'))
 
-sequences
----------
+
+sequence
+--------
 
 Dictionary like view of all defined sequences:
 
 .. code-block:: python
 
     # list of sequence names
-    print(list(madx.sequences))
+    print(list(madx.sequence))
 
     # get a proxy object for the sequence
-    fodo = madx.sequences['fodo']
+    fodo = madx.sequence.fodo
 
     beam = fodo.beam
-    print(beam['ex'], beam['ey'])
+    print(beam.ex, beam.ey)
 
     # ordered dict-like object of explicitly defined elements:
     elements = fodo.elements
