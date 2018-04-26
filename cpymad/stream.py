@@ -4,7 +4,6 @@
 #       windows: https://stackoverflow.com/a/34504971/650222
 #                https://gist.github.com/techtonik/48c2561f38f729a15b7b
 
-import time
 try:                        # Linux
     import fcntl
     from os import O_NONBLOCK
