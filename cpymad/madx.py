@@ -1092,10 +1092,16 @@ class VarList(_MutableMapping):
         return self._libmadx.get_var(name.lower())[0]
 
     def __setitem__(self, name, value):
+        try:
+            v, e = self._libmadx.get_var(name.lower())
+        except (TypeError, KeyError):
+            v, e = None, None
         if isinstance(value, Number):
-            self._madx.input(name + ' = ' + str(value) + ';')
+            if value != v:
+                self._madx.input(name + ' = ' + str(value) + ';')
         else:
-            self._madx.input(name + ' := ' + str(value) + ';')
+            if value != e:
+                self._madx.input(name + ' := ' + str(value) + ';')
 
     def __delitem__(self, name):
         raise NotImplementedError("Can't erase a MAD-X global.")
