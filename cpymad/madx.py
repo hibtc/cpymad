@@ -157,6 +157,10 @@ class Madx(object):
 
     __nonzero__ = __bool__      # alias for python2 compatibility
 
+    def __getattr__(self, name):
+        """Resolve missing attributes as commands."""
+        return getattr(self._commands, name)
+
     @property
     def version(self):
         """Get the MAD-X version."""
