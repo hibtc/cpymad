@@ -188,6 +188,8 @@ class Madx(object):
             # catch + reraise in order to shorten stack trace (~3-5 levels):
             raise RuntimeError("MAD-X has stopped working!")
 
+    __call__ = input
+
     @property
     def globals(self):
         """Get a dict-like interface to global MAD-X variables."""
