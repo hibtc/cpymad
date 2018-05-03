@@ -255,21 +255,6 @@ class Madx(object):
         else:
             self.command.call(file=filename)
 
-    def select(self, flag, columns, pattern=[]):
-        """
-        Run SELECT command.
-
-        :param str flag: one of: twiss, makethin, error, seqedit
-        :param list columns: column names
-        :param list pattern: selected patterns
-        """
-        select = self.command.select
-        select(flag=flag, clear=True)
-        if columns:
-            select(flag=flag, column=columns)
-        for p in pattern:
-            select(flag=flag, pattern=p)
-
     def twiss(self, **kwargs):
         """
         Run TWISS.
