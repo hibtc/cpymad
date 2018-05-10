@@ -25,10 +25,10 @@ class Parameter(object):
         self.inform = inform
 
     def __call__(self):
-        return self.argument
+        return self.definition
 
     @property
-    def argument(self):
+    def definition(self):
         """Return command argument as should be used for MAD-X input to
         create an identical element."""
         if isinstance(self.value, list):
@@ -37,7 +37,7 @@ class Parameter(object):
             return self.expr or self.value
 
     def __str__(self):
-        return str(self.argument)
+        return str(self.definition)
 
 
 class Constraint(object):
