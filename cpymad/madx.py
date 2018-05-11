@@ -161,6 +161,8 @@ class Madx(object):
         """Resolve missing attributes as commands."""
         return getattr(self._commands, name)
 
+    # Data descriptors:
+
     @property
     def version(self):
         """Get the MAD-X version."""
@@ -171,6 +173,33 @@ class Madx(object):
     def command(self):
         """Namespace of all MAD-X commands."""
         return self._commands
+
+    @property
+    def globals(self):
+        """Get a dict-like interface to global MAD-X variables."""
+        return VarList(self)
+
+    @property
+    def elements(self):
+        """Get a dict-like interface to globally visible elements."""
+        return GlobalElementList(self)
+
+    @property
+    def base_types(self):
+        """Get a dict-like interface to base types."""
+        return BaseTypeMap(self)
+
+    @property
+    def sequence(self):
+        """A dict like view of all sequences in memory."""
+        return SequenceMap(self)
+
+    @property
+    def table(self):
+        """A dict like view of all tables in memory."""
+        return TableMap(self._libmadx)
+
+    # Methods:
 
     def input(self, text):
         """
@@ -189,21 +218,6 @@ class Madx(object):
             raise RuntimeError("MAD-X has stopped working!")
 
     __call__ = input
-
-    @property
-    def globals(self):
-        """Get a dict-like interface to global MAD-X variables."""
-        return VarList(self)
-
-    @property
-    def elements(self):
-        """Get a dict-like interface to globally visible elements."""
-        return GlobalElementList(self)
-
-    @property
-    def base_types(self):
-        """Get a dict-like interface to base types."""
-        return BaseTypeMap(self)
 
     def expr_vars(self, expr):
         """Find all variable names used in an expression. This does *not*
@@ -319,7 +333,6 @@ class Madx(object):
                        np.ones((1, 1, cnt)))),
         )).transpose((2,0,1))
 
-
     def match(self,
               constraints=[],
               vary=[],
@@ -393,16 +406,6 @@ class Madx(object):
         # NOTE: this limits to a sane subset of accepted MAD-X expressions.
         util.check_expression(expr)
         return self._libmadx.eval(expr)
-
-    @property
-    def sequence(self):
-        """A dict like view of all sequences in memory."""
-        return SequenceMap(self)
-
-    @property
-    def table(self):
-        """A dict like view of all tables in memory."""
-        return TableMap(self._libmadx)
 
 
 class _Mapping(collections.Mapping):
