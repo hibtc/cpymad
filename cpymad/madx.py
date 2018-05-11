@@ -176,32 +176,32 @@ class Madx(object):
 
     @property
     def command(self):
-        """Namespace of all MAD-X commands."""
+        """Mapping of all MAD-X commands."""
         return self._commands
 
     @property
     def globals(self):
-        """Get a dict-like interface to global MAD-X variables."""
+        """Mapping of global MAD-X variables."""
         return self._globals
 
     @property
     def elements(self):
-        """Get a dict-like interface to globally visible elements."""
+        """Mapping of globally visible elements."""
         return self._elements
 
     @property
     def base_types(self):
-        """Get a dict-like interface to base types."""
+        """Mapping of MAD-X base elements."""
         return self._base_types
 
     @property
     def sequence(self):
-        """A dict like view of all sequences in memory."""
+        """Mapping of all sequences in memory."""
         return self._sequences
 
     @property
     def table(self):
-        """A dict like view of all tables in memory."""
+        """Mapping of all tables in memory."""
         return self._tables
 
     # Methods:
@@ -474,9 +474,7 @@ class AttrDict(_Mapping):
 
 class SequenceMap(_Mapping):
 
-    """
-    A dict like view of all sequences (:class:`Sequence`) in memory.
-    """
+    """Mapping of all sequences (:class:`Sequence`) in memory."""
 
     def __init__(self, madx):
         self._madx = madx
@@ -508,9 +506,7 @@ class SequenceMap(_Mapping):
 
 class TableMap(_Mapping):
 
-    """
-    A dict like view of all tables (:class:`Table`) in memory.
-    """
+    """Mapping of all tables (:class:`Table`) in memory."""
 
     def __init__(self, libmadx):
         self._libmadx = libmadx
@@ -787,11 +783,7 @@ class BaseElementList(object):
     """
 
     def __contains__(self, element):
-        """
-        Check if sequence contains element with specified name.
-
-        Can be invoked with either the element dict or the element name.
-        """
+        """Check if sequence contains element with specified name."""
         try:
             self.index(element)
             return True
@@ -895,9 +887,7 @@ class ExpandedElementList(ElementList):
 
 class GlobalElementList(BaseElementList, _Mapping):
 
-    """
-    Provides dict-like access to MAD-X global elements.
-    """
+    """Mapping of the global elements in MAD-X."""
 
     def __init__(self, madx):
         self._madx = madx
@@ -1067,9 +1057,7 @@ class Table(_Mapping):
 
 class VarList(_MutableMapping):
 
-    """
-    Provides dict-like access to MAD-X global variables.
-    """
+    """Mapping of global MAD-X variables."""
 
     __slots__ = ('_madx', '_libmadx')
 
