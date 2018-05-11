@@ -792,7 +792,7 @@ class BaseElementList(object):
 
     def __getitem__(self, index):
         """Return element with specified index."""
-        if isinstance(index, (dict, basestring)):
+        if isinstance(index, basestring):
             # allow element names to be passed for convenience:
             index = self.index(index)
         # _get_element accepts indices in the range [0, len-1]. The following
@@ -811,18 +811,12 @@ class BaseElementList(object):
         """Get number of elements."""
         return self._get_element_count()
 
-    def index(self, element):
+    def index(self, name):
         """
         Find index of element with specified name.
 
-        Can be invoked with either the element dict or the element name.
-
         :raises ValueError: if the element is not found
         """
-        if isinstance(element, dict):
-            name = element['node_name']
-        else:
-            name = element
         if len(self) == 0:
             raise ValueError('Empty element list.')
         if name == '#s':
