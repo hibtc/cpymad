@@ -180,7 +180,7 @@ over the pipe.</p>
 <dl class="attribute">
 <dt id="cpymad.madx.Madx.base_types">
 <code class="descname">base_types</code><a class="headerlink" href="#cpymad.madx.Madx.base_types" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a dict-like interface to base types.</p>
+<dd><p>Mapping of MAD-X base elements.</p>
 </dd></dl>
 
 <dl class="method">
@@ -232,13 +232,13 @@ the directory).</p>
 <dl class="attribute">
 <dt id="cpymad.madx.Madx.command">
 <code class="descname">command</code><a class="headerlink" href="#cpymad.madx.Madx.command" title="Permalink to this definition">¶</a></dt>
-<dd><p>Namespace of all MAD-X commands.</p>
+<dd><p>Mapping of all MAD-X commands.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="cpymad.madx.Madx.elements">
 <code class="descname">elements</code><a class="headerlink" href="#cpymad.madx.Madx.elements" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a dict-like interface to globally visible elements.</p>
+<dd><p>Mapping of globally visible elements.</p>
 </dd></dl>
 
 <dl class="method">
@@ -269,21 +269,7 @@ include element attribute nor function names.</p>
 <dl class="attribute">
 <dt id="cpymad.madx.Madx.globals">
 <code class="descname">globals</code><a class="headerlink" href="#cpymad.madx.Madx.globals" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a dict-like interface to global MAD-X variables.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cpymad.madx.Madx.help">
-<code class="descname">help</code><span class="sig-paren">(</span><em>cmd=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.help" title="Permalink to this definition">¶</a></dt>
-<dd><p>Show help about a command or list all MAD-X commands.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<em>str</em>) – command name</td>
-</tr>
-</tbody>
-</table>
+<dd><p>Mapping of global MAD-X variables.</p>
 </dd></dl>
 
 <dl class="method">
@@ -361,29 +347,10 @@ for the given elements and return as Nx7x7 array.</p>
 <dd><p>Read sectormap + kicks from memory and return as Nx7x7 array.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="cpymad.madx.Madx.select">
-<code class="descname">select</code><span class="sig-paren">(</span><em>flag</em>, <em>columns</em>, <em>pattern=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.Madx.select" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run SELECT command.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>flag</strong> (<em>str</em>) – one of: twiss, makethin, error, seqedit</li>
-<li><strong>columns</strong> (<em>list</em>) – column names</li>
-<li><strong>pattern</strong> (<em>list</em>) – selected patterns</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="attribute">
 <dt id="cpymad.madx.Madx.sequence">
 <code class="descname">sequence</code><a class="headerlink" href="#cpymad.madx.Madx.sequence" title="Permalink to this definition">¶</a></dt>
-<dd><p>A dict like view of all sequences in memory.</p>
+<dd><p>Mapping of all sequences in memory.</p>
 </dd></dl>
 
 <dl class="method">
@@ -407,7 +374,7 @@ for the given elements and return as Nx7x7 array.</p>
 <dl class="attribute">
 <dt id="cpymad.madx.Madx.table">
 <code class="descname">table</code><a class="headerlink" href="#cpymad.madx.Madx.table" title="Permalink to this definition">¶</a></dt>
-<dd><p>A dict like view of all tables in memory.</p>
+<dd><p>Mapping of all tables in memory.</p>
 </dd></dl>
 
 <dl class="method">
@@ -532,9 +499,8 @@ for the given elements and return as Nx7x7 array.</p>
 <p>Each element is a dictionary containing its properties.</p>
 <dl class="method">
 <dt id="cpymad.madx.BaseElementList.index">
-<code class="descname">index</code><span class="sig-paren">(</span><em>element</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#BaseElementList.index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.BaseElementList.index" title="Permalink to this definition">¶</a></dt>
+<code class="descname">index</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#BaseElementList.index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cpymad.madx.BaseElementList.index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find index of element with specified name.</p>
-<p>Can be invoked with either the element dict or the element name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
