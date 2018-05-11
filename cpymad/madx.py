@@ -819,11 +819,12 @@ class BaseElementList(object):
         """
         if len(self) == 0:
             raise ValueError('Empty element list.')
+        name = name.lower()
         if name == '#s':
             return 0
         elif name == '#e':
             return len(self) - 1
-        index = self._get_element_index(name.lower())
+        index = self._get_element_index(name)
         if index == -1:
             raise ValueError("Element not in list: {!r}".format(name))
         return index
