@@ -147,6 +147,11 @@ class Madx(object):
         self._command_log = command_log
         self._error_log = error_log
         self._commands = CommandMap(self)
+        self._globals = VarList(self)
+        self._elements = GlobalElementList(self)
+        self._base_types = BaseTypeMap(self)
+        self._sequences = SequenceMap(self)
+        self._tables = TableMap(self._libmadx)
 
     def __bool__(self):
         """Check if MAD-X is up and running."""
@@ -177,27 +182,27 @@ class Madx(object):
     @property
     def globals(self):
         """Get a dict-like interface to global MAD-X variables."""
-        return VarList(self)
+        return self._globals
 
     @property
     def elements(self):
         """Get a dict-like interface to globally visible elements."""
-        return GlobalElementList(self)
+        return self._elements
 
     @property
     def base_types(self):
         """Get a dict-like interface to base types."""
-        return BaseTypeMap(self)
+        return self._base_types
 
     @property
     def sequence(self):
         """A dict like view of all sequences in memory."""
-        return SequenceMap(self)
+        return self._sequences
 
     @property
     def table(self):
         """A dict like view of all tables in memory."""
-        return TableMap(self._libmadx)
+        return self._tables
 
     # Methods:
 
