@@ -213,16 +213,6 @@ class Madx(object):
                 and v in self.globals
                 and self._libmadx.get_var_type(v) > 0]
 
-    def help(self, cmd=None):
-        """
-        Show help about a command or list all MAD-X commands.
-
-        :param str cmd: command name
-        """
-        # The case 'cmd == None' will be handled by format_command
-        # appropriately.
-        self.command.help(cmd)
-
     def chdir(self, path):
         """
         Change the directory of the MAD-X process (not the current python process).
