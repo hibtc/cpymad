@@ -1048,7 +1048,7 @@ class VarList(_MutableMapping):
         except (TypeError, KeyError):
             v, e = None, None
         if isinstance(value, Number):
-            if value != v:
+            if value != v or e:
                 self._madx.input(name + ' = ' + str(value) + ';')
         else:
             if value != e:
