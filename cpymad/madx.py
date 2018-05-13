@@ -698,6 +698,13 @@ class Command(_MutableMapping):
         raise ValueError('Unknown parameter {!r} for {!r} command!'
                          .format(key, self.name))
 
+    @property
+    def defs(self):
+        return AttrDict({
+            key: par.definition
+            for key, par in self.cmdpar.items()
+        })
+
 
 class Element(Command):
 
@@ -1069,6 +1076,14 @@ class VarList(_MutableMapping):
 
     def expr(self, name):
         return self._libmadx.get_var(name.lower())[1]
+
+    @property
+    def defs(self):
+        return AttrDict({
+            var: expr or value
+            for var in self
+            for value, expr in [self._libmadx.get_var(var)]
+        })
 
 
 class Metadata(object):
