@@ -1,6 +1,26 @@
 Changelog
 ~~~~~~~~~
 
+1.0.0rc1
+========
+Date: 13.05.2018
+
+Collecting further backward incompatibilities before the final 1.0 release, as
+well as minor bugfixes.
+
+- only execute variable updates if their value has changed
+- use ``__slots__`` for Parameter
+- remove cpymad-specific behaviour for ``Madx.select``
+- allow direct access to MAD-X commands as attributes on the ``Madx`` instance
+- rename ``Parameter.argument`` to ``Parameter.definition``
+- add ``VarList.defs``, ``Command.defs`` instance variables for accessing the
+  definitions (provisional API)
+- create the accessor proxies in advance
+- disallow indexing ``ElementList`` by ``dict`` instances (i.e. by element
+  object)
+- handle uppercase '#S' and '#E' in ``ElementList``
+
+
 1.0.0rc0
 ========
 Date: 16.04.2018
