@@ -99,6 +99,15 @@ class Madx(object):
     The state of the MAD-X interpreter is accessed by directly reading the
     values from the C variables in-memory and sending the results pickled back
     over the pipe.
+
+    Data attributes:
+
+    :ivar command:      Mapping of all MAD-X commands.
+    :ivar globals:      Mapping of global MAD-X variables.
+    :ivar elements:     Mapping of globally visible elements.
+    :ivar base_types:   Mapping of MAD-X base elements.
+    :ivar sequence:     Mapping of all sequences in memory.
+    :ivar table:        Mapping of all tables in memory.
     """
 
     def __init__(self, libmadx=None, command_log=None, error_log=None,
@@ -146,12 +155,12 @@ class Madx(object):
         self._libmadx = libmadx
         self._command_log = command_log
         self._error_log = error_log
-        self._commands = CommandMap(self)
-        self._globals = VarList(self)
-        self._elements = GlobalElementList(self)
-        self._base_types = BaseTypeMap(self)
-        self._sequences = SequenceMap(self)
-        self._tables = TableMap(self._libmadx)
+        self.command = CommandMap(self)
+        self.globals = VarList(self)
+        self.elements = GlobalElementList(self)
+        self.base_types = BaseTypeMap(self)
+        self.sequence = SequenceMap(self)
+        self.table = TableMap(self._libmadx)
 
     def __bool__(self):
         """Check if MAD-X is up and running."""
@@ -164,7 +173,7 @@ class Madx(object):
 
     def __getattr__(self, name):
         """Resolve missing attributes as commands."""
-        return getattr(self._commands, name)
+        return getattr(self.command, name)
 
     # Data descriptors:
 
@@ -173,36 +182,6 @@ class Madx(object):
         """Get the MAD-X version."""
         return Version(self._libmadx.get_version_number(),
                        self._libmadx.get_version_date())
-
-    @property
-    def command(self):
-        """Mapping of all MAD-X commands."""
-        return self._commands
-
-    @property
-    def globals(self):
-        """Mapping of global MAD-X variables."""
-        return self._globals
-
-    @property
-    def elements(self):
-        """Mapping of globally visible elements."""
-        return self._elements
-
-    @property
-    def base_types(self):
-        """Mapping of MAD-X base elements."""
-        return self._base_types
-
-    @property
-    def sequence(self):
-        """Mapping of all sequences in memory."""
-        return self._sequences
-
-    @property
-    def table(self):
-        """Mapping of all tables in memory."""
-        return self._tables
 
     # Methods:
 
