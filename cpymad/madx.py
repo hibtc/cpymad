@@ -1040,18 +1040,26 @@ class VarList(_MutableMapping):
 
     """Mapping of global MAD-X variables."""
 
-    __slots__ = ('_madx', '_libmadx')
+    __slots__ = ('_madx', 'cmdpar')
 
     def __init__(self, madx):
         self._madx = madx
-        self._libmadx = madx._libmadx
+        self.cmdpar = VarParamList(madx)
+
+    def __repr__(self):
+        return str({
+            key: par.definition
+            for key, par in self.cmdpar.items()
+            if par.inform
+        })
 
     def __getitem__(self, name):
-        return self._libmadx.get_var(name.lower())[0]
+        return self.cmdpar[name].value
 
     def __setitem__(self, name, value):
         try:
-            v, e = self._libmadx.get_var(name.lower())
+            var = self.cmdpar[name]
+            v, e = var.value, var.expr
         except (TypeError, KeyError):
             v, e = None, None
         if isinstance(value, Number):
@@ -1066,24 +1074,38 @@ class VarList(_MutableMapping):
 
     def __iter__(self):
         """Iterate names of all non-constant globals."""
-        for name in self._libmadx.get_globals():
-            # var_type=0 is for (predefined) constants like PI:
-            if self._libmadx.get_var_type(name) > 0:
-                yield name
+        return iter(self.cmdpar)
 
     def __len__(self):
-        return self._libmadx.num_globals()
-
-    def expr(self, name):
-        return self._libmadx.get_var(name.lower())[1]
+        return len(self.cmdpar)
 
     @property
     def defs(self):
         return AttrDict({
-            var: expr or value
-            for var in self
-            for value, expr in [self._libmadx.get_var(var)]
+            key: par.definition
+            for key, par in self.cmdpar.items()
         })
+
+
+class VarParamList(_Mapping):
+
+    """Mapping of global MAD-X variables."""
+
+    __slots__ = ('_madx', '_libmadx')
+
+    def __init__(self, madx):
+        self._madx = madx
+        self._libmadx = madx._libmadx
+
+    def __getitem__(self, name):
+        return self._libmadx.get_var(name.lower())
+
+    def __iter__(self):
+        """Iterate names of all non-constant globals."""
+        return iter(self._libmadx.get_globals())
+
+    def __len__(self):
+        return self._libmadx.num_globals()
 
 
 class Metadata(object):

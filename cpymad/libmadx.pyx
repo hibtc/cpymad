@@ -191,14 +191,18 @@ def get_var(name):
     """
     cdef clib.variable* var = _get_var(name)
     if var.type == 3:
-        return _str(var.string)
+        return Parameter(
+            name, _str(var.string), None,
+            dtype=clib.PARAM_TYPE_STRING, inform=0)
     cdef double value = clib.variable_value(var)
     cdef int typeid
     if var.val_type == 0:
         typeid = clib.PARAM_TYPE_INTEGER
     else:
         typeid = clib.PARAM_TYPE_DOUBLE
-    return _expr(var.expr, value, typeid)
+    return Parameter(
+        name, *_expr(var.expr, value, typeid),
+        dtype=typeid, inform=var.type)
 
 
 def get_var_type(name):
