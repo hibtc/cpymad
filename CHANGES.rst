@@ -1,6 +1,14 @@
 Changelog
 ~~~~~~~~~
 
+1.0.0rc2
+========
+Date: 15.05.2018
+
+- serve globals as ``Parameter`` instances from libmadx module
+- add ``cmdpar`` attribute to ``globals``
+
+
 1.0.0rc1
 ========
 Date: 13.05.2018
