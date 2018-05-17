@@ -15,14 +15,22 @@ Range = namedtuple('Range', ['first', 'last'])
 
 class Parameter(object):
 
-    __slots__ = ('name', 'value', 'expr', 'dtype', 'inform')
+    __slots__ = ('name', 'value', 'expr', 'dtype', 'inform', 'var_type')
 
-    def __init__(self, name, value, expr, dtype, inform):
+    def __init__(self, name, value, expr, dtype, inform, var_type=None):
         self.name = name
         self.value = value
         self.expr = expr
         self.dtype = dtype
         self.inform = inform
+        if var_type is None:
+            if isinstance(value, str):
+                var_type = 3
+            elif isinstance(value, list):
+                var_type = 2 if expr and any(expr) else 1
+            else:
+                var_type = 2 if expr else 1
+        self.var_type = var_type
 
     def __call__(self):
         return self.definition

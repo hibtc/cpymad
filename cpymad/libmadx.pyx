@@ -190,10 +190,12 @@ def get_var(name):
     Get the value of a global variable.
     """
     cdef clib.variable* var = _get_var(name)
+    cdef int index = clib.name_list_pos(var.name, clib.variable_list.list)
+    cdef int inform = index >= clib.start_var
     if var.type == 3:
         return Parameter(
             name, _str(var.string), None,
-            dtype=clib.PARAM_TYPE_STRING, inform=0)
+            dtype=clib.PARAM_TYPE_STRING, inform=inform, var_type=3)
     cdef double value = clib.variable_value(var)
     cdef int typeid
     if var.val_type == 0:
@@ -202,7 +204,7 @@ def get_var(name):
         typeid = clib.PARAM_TYPE_DOUBLE
     return Parameter(
         name, *_expr(var.expr, value, typeid),
-        dtype=typeid, inform=var.type)
+        dtype=typeid, inform=inform, var_type=var.type)
 
 
 def get_var_type(name):
