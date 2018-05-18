@@ -155,6 +155,11 @@ PARAM_TYPE_INTEGER_ARRAY = 11
 PARAM_TYPE_DOUBLE_ARRAY  = 12
 PARAM_TYPE_STRING_ARRAY  = 13
 
+VAR_TYPE_CONST    = 0
+VAR_TYPE_DIRECT   = 1
+VAR_TYPE_DEFERRED = 2
+VAR_TYPE_STRING   = 3
+
 QUOTED_PARAMS = {'file', 'halofile', 'sectorfile', 'trueprofile'
                  'pipefile', 'trackfile', 'summary_file', 'filename',
                  'echo', 'title', 'text', 'format'}
