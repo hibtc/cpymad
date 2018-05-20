@@ -263,7 +263,7 @@ def format_cmdpar(cmd, key, value):
             if all(isinstance(v, Number) for v in value):
                 return key + '={' + ','.join(map(str, value)) + '}'
             else:
-                return key + ':={', + ','.join(map(str, value)) + '}'
+                return key + ':={' + ','.join(map(str, value)) + '}'
 
     # STRING
     def format_str(value):
