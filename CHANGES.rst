@@ -1,6 +1,16 @@
 Changelog
 ~~~~~~~~~
 
+1.0.0rc3
+========
+Date: 31.05.2018
+
+- add ``Parameter.var_type`` that tells apart constant/direct/expression vars
+- change the meaning of ``inform`` for globals, ``inform=0`` means now
+  "predefined variable"
+- fix TypeError occuring in ``mad_command`` when composing string arrays
+
+
 1.0.0rc2
 ========
 Date: 15.05.2018
