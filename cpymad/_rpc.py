@@ -58,4 +58,4 @@ class LibMadxClient(Client):
 
     @property
     def libmadx(self):
-        return self.modules['cpymad.libmadx']
+        return self.get_module('cpymad.libmadx')
