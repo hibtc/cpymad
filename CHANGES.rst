@@ -1,6 +1,18 @@
 Changelog
 ~~~~~~~~~
 
+1.0.0
+=====
+Date: 11.06.2018
+
+Please see the comprehensive list of changes and backward incompatibilities
+mentioned in the prereleases!
+
+In addition:
+
+- update to minrpc 0.0.7
+
+
 1.0.0rc3
 ========
 Date: 31.05.2018
