@@ -11,6 +11,7 @@ mentioned in the prereleases!
 In addition:
 
 - update to minrpc 0.0.7
+- the windows wheels are built using MAD-X 5.04.01
 
 
 1.0.0rc3
