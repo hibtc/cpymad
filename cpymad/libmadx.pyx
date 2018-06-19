@@ -472,9 +472,11 @@ def get_table_row(table_name, row_index, columns='selected'):
     """
     cdef clib.table* table = _find_table(table_name)
 
-    if row_index < 0 or row_index >= table.curr:
+    if row_index < -table.curr or row_index >= table.curr:
         raise IndexError("Index out of range: {0} (element count is {1})"
                          .format(row_index, table.curr))
+    if row_index < 0:
+        row_index += table.curr
 
     def fetch_value(col_index):
         inform = table.columns.inform[col_index]
