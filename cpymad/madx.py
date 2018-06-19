@@ -695,7 +695,7 @@ class Command(_MutableMapping):
             name + ': ' + util.format_command(self, *args, **kwargs))
 
     def _missing(self, key):
-        raise ValueError('Unknown parameter {!r} for {!r} command!'
+        raise ValueError('Unknown attribute {!r} for {!r} command!'
                          .format(key, self.name))
 
     @property
