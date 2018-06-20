@@ -259,9 +259,10 @@ class Madx(object):
         Note that the kwargs overwrite any arguments in twiss_init.
         """
         self.command.twiss(**kwargs)
+        table = kwargs.get('table', 'twiss')
         if 'file' not in kwargs:
-            self._libmadx.apply_table_selections(kwargs.get('table', 'twiss'))
-        return self.table.twiss
+            self._libmadx.apply_table_selections(table)
+        return self.table[table]
 
     def survey(self, **kwargs):
         """
@@ -271,9 +272,10 @@ class Madx(object):
         :param kwargs: keyword arguments for the MAD-X command
         """
         self.command.survey(**kwargs)
+        table = kwargs.get('table', 'survey')
         if 'file' not in kwargs:
-            self._libmadx.apply_table_selections(kwargs.get('table', 'survey'))
-        return self.table.survey
+            self._libmadx.apply_table_selections(table)
+        return self.table[table]
 
     def use(self, sequence):
         """
