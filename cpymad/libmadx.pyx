@@ -178,6 +178,7 @@ def input(cmd):
 
     :param str cmd: command to be executed by the MAD-X interpreter
     """
+    cmd = cmd.strip().replace('\n', '')
     cdef bytes _cmd = _cstr(cmd)
     cdef char* _pch = _cmd
     with nogil:
