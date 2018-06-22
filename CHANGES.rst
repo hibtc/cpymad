@@ -1,6 +1,18 @@
 Changelog
 ~~~~~~~~~
 
+1.0.1
+=====
+Date: 22.06.2018
+
+- improve error message on missing command attributes
+- allow negative indices when accessing table rows
+- fix returning the correct table from ``twiss()``/``survey()`` if a
+  non-default table is used
+- improve support for multi-line commands in ``input()`` (but still no comments!)
+- automatically add missing semicolons at the end of command strings
+
+
 1.0.0
 =====
 Date: 11.06.2018
