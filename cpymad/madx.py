@@ -697,8 +697,8 @@ class Command(_MutableMapping):
             name + ': ' + util.format_command(self, *args, **kwargs))
 
     def _missing(self, key):
-        raise ValueError('Unknown attribute {!r} for {!r} command!'
-                         .format(key, self.name))
+        raise AttributeError('Unknown attribute {!r} for {!r} command!'
+                             .format(key, self.name))
 
     @property
     def defs(self):
@@ -718,8 +718,9 @@ class Element(Command):
 
     def __delitem__(self, name):
         if self.parent is self:
-            raise ValueError("Can't delete attribute {!r} in base element {!r}"
-                             .format(self.name, name))
+            raise NotImplementedError(
+                "Can't delete attribute {!r} in base element {!r}"
+                .format(self.name, name))
         self[name] = self.parent[name]
 
     @property
@@ -910,7 +911,10 @@ class CommandMap(_Mapping):
     @cached
     def __getitem__(self, name):
         madx = self._madx
-        data = madx._libmadx.get_defined_command(name)
+        try:
+            data = madx._libmadx.get_defined_command(name)
+        except ValueError:
+            raise KeyError("Not a MAD-X command name: {!r}".format(name))
         return Command(madx, data)
 
     def __contains__(self, name):
