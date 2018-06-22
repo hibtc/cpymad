@@ -445,7 +445,6 @@ def check_expression(expr):
                 expect = _ATOM
             else:
                 raise ValueError(unexpected(tok, i, l))
-            continue
 
     if expect != _OPERATOR:
         raise ValueError("Unexpected end-of-string in expression: {!r}"

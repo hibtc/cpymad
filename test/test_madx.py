@@ -7,7 +7,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 
 # tested class
-from cpymad.madx import Madx, CommandLog
+from cpymad.madx import Madx, CommandLog, metadata
 from cpymad.types import Constraint
 
 
@@ -64,6 +64,11 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         _close(self.mad)
         del self.mad
 
+    def test_copyright(self):
+        import cpymad
+        notice = cpymad.get_copyright_notice()
+        self.assertIsInstance(notice, type(u""))
+
     def test_version(self):
         """Check that the Madx.version attribute can be used as expected."""
         version = self.mad.version
@@ -76,6 +81,13 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertGreaterEqual((year, month, day), (2018, 3, 2))
         self.assertLessEqual(month, 12)
         self.assertLessEqual(day, 31)
+        self.assertTrue(str(version).startswith(
+            'MAD-X {}'.format(version.release)))
+
+    def test_metadata(self):
+        version = self.mad.version
+        self.assertEqual(metadata.__version__, version.release)
+        self.assertIsInstance(metadata.get_copyright_notice(), type(u""))
 
     def test_independent_instances(self):
         # create a second Madx instance (1st one is created in setUp)
@@ -104,10 +116,30 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         del mad
         os.remove(history_filename)
 
-    # TODO:
-    # def test_command(self):
-    # def test_help(self):
-    # def test_call(self):
+    def test_call_and_chdir(self):
+        folder = os.path.abspath(os.path.dirname(__file__))
+        parent = os.path.dirname(folder)
+        getcwd = self.mad._libmadx.getcwd
+        g = self.mad.globals
+
+        self.mad.chdir(folder)
+        self.assertEqual(getcwd(), folder)
+        self.mad.call('answer_42.madx')
+        self.assertEqual(g.answer, 42)
+
+        with self.mad.chdir('..'):
+            self.assertEqual(getcwd(), parent)
+            self.mad.call('test/answer_43.madx')
+            self.assertEqual(g.answer, 43)
+            self.mad.call('test/answer_call42.madx', True)
+            self.assertEqual(g.answer, 42)
+
+        self.assertEqual(getcwd(), folder)
+        self.mad.call('answer_43.madx')
+        self.assertEqual(g.answer, 43)
+
+        self.mad.chdir('..')
+        self.assertEqual(getcwd(), parent)
 
     def _check_twiss(self, seq_name):
         beam = 'ex=1, ey=2, particle=electron, sequence={0};'.format(seq_name)
@@ -177,9 +209,20 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertEqual(tab.range, ('dr[2]', 'sb'))
         self.assertIn('betx', tab)
 
-    # def test_survey(self):
-    # def test_aperture(self):
-    # def test_use(self):
+    def test_survey(self):
+        self.mad.beam()
+        self.mad.use('s1')
+        tab = self.mad.survey()
+        self.assertEqual(tab._name, 'survey')
+        self.assertIn('x', tab)
+        self.assertIn('y', tab)
+        self.assertIn('z', tab)
+        self.assertIn('theta', tab)
+        self.assertIn('phi', tab)
+        self.assertIn('psi', tab)
+        self.assertLess(tab.x[-1], -1)
+        assert_allclose(tab.y, 0)
+        self.assertGreater(tab.z[-1], 7)
 
     def test_match(self):
         beam = 'ex=1, ey=2, particle=electron, sequence=s2;'
@@ -191,16 +234,25 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
                       sequence='s2')
 
         self.mad.match(constraints=[dict(range='s1$end', betx=2.0)],
+                       weight={'betx': 2},
                        vary=['qp2->k1'],
                        **params)
         twiss = self.mad.twiss(**params)
         val = twiss.betx[-1]
         self.assertAlmostEqual(val, 2.0, places=2)
 
-    # def test_verbose(self):
+    def test_verbose(self):
+        get_command = self.mad._libmadx.get_defined_command
+        self.mad.verbose(False)
+        self.assertEqual(self.mad.options.echo, False)
+        self.assertEqual(self.mad.options.info, False)
+        self.mad.verbose(True)
+        self.assertEqual(self.mad.options.echo, True)
+        self.assertEqual(self.mad.options.info, True)
 
     def test_active_sequence(self):
         self.mad.command.beam('ex=1, ey=2, particle=electron, sequence=s1;')
+        self.assertEqual(self.mad.sequence(), None)
         self.mad.use('s1')
         self.assertEqual(self.mad.sequence(), 's1')
 
@@ -215,8 +267,11 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertItemsEqual(seqs, ['s1', 's2'])
 
     def test_eval(self):
-        val = self.mad.eval("1/QP_K1")
-        self.assertAlmostEqual(val, 0.5)
+        self.assertEqual(self.mad.eval(True), True)
+        self.assertEqual(self.mad.eval(13), 13)
+        self.assertEqual(self.mad.eval(1.3), 1.3)
+        self.assertEqual(self.mad.eval([2, True, 'QP_K1']), [2, True, 2.0])
+        self.assertAlmostEqual(self.mad.eval("1/QP_K1"), 0.5)
 
     def test_globals(self):
         g = self.mad.globals
@@ -235,9 +290,27 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertEqual(self.mad.eval('BAR'), 9)
         g['FOO'] = 4
         self.assertEqual(self.mad.eval('BAR'), 12)
+        self.assertEqual(g.defs.bar, "3*foo")
+        self.assertEqual(g.cmdpar.bar.definition, "3*foo")
         # attribute access:
         g.bar = 42
+        self.assertEqual(g.defs.bar, 42)
+        self.assertEqual(g.cmdpar.bar.definition, 42)
         self.assertEqual(g.BAR, 42)
+        # repr
+        self.assertIn("'bar': 42.0", str(g))
+        with self.assertRaises(NotImplementedError):
+            del g['bar']
+        with self.assertRaises(NotImplementedError):
+            del g.bar
+        self.assertEqual(g.bar, 42) # still there
+        self.assertIn('bar', list(g))
+        self.assertIn('foo', list(g))
+        #self.assertEqual(list(g), list(g.defs))
+        #self.assertEqual(list(g), list(g.cmdpar))
+        self.assertEqual(len(g), len(list(g)))
+        self.assertEqual(len(g.defs), len(list(g.defs)))
+        self.assertEqual(len(g.cmdpar), len(list(g.cmdpar)))
 
     def test_elements(self):
         self.assertIn('sb', self.mad.elements)
@@ -248,9 +321,85 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         elem = self.mad.elements[idx]
         self.assertEqual(elem['k1'], 3)
 
-    # def test_sequence_beam(self):
-    # def test_sequence_twiss(self):
-    # def test_sequence_twissname(self):
+    def test_sequence_map(self):
+        seq = self.mad.sequence
+        self.assertEqual(len(seq), 2)
+        self.assertEqual(set(seq), {'s1', 's2'})
+        self.assertIn('s1', seq)
+        self.assertNotIn('s3', seq)
+        self.assertTrue(hasattr(seq, 's1'))
+        self.assertFalse(hasattr(seq, 's3'))
+        self.assertEqual(seq.s1.name, 's1')
+        self.assertEqual(seq.s2.name, 's2')
+        with self.assertRaises(AttributeError):
+            seq.s3
+
+    def test_active_sequence(self):
+        self.mad.beam()
+        self.mad.use('s2')
+        self.assertEqual(self.mad.sequence().name, 's2')
+
+    def test_table_map(self):
+        self.mad.beam()
+        self.mad.use('s2')
+        self.mad.survey(sequence='s2')
+        tab = self.mad.table
+        self.assertIn('survey', list(tab))
+        self.assertIn('survey', tab)
+        self.assertNotIn('foobar', tab)
+        self.assertEqual(len(tab), len(list(tab)))
+        with self.assertRaises(AttributeError):
+            tab.foobar
+
+    def test_sequence(self):
+        s1 = self.mad.sequence.s1
+        self.assertEqual(str(s1), '<Sequence: s1>')
+        self.assertEqual(s1, self.mad.sequence.s1)
+        self.assertEqual(s1, 's1')
+        self.assertNotEqual(s1, self.mad.sequence.s2)
+        self.assertNotEqual(s1, 's2')
+        with self.assertRaises(RuntimeError):
+            s1.beam
+        with self.assertRaises(RuntimeError):
+            s1.twiss_table
+        with self.assertRaises(RuntimeError):
+            s1.twiss_table_name
+        self.assertFalse(s1.has_beam)
+        self.assertFalse(s1.is_expanded)
+        s1.expand()
+        self.assertTrue(s1.has_beam)
+        self.assertTrue(s1.is_expanded)
+        s1.expand()     # idempotent
+        self.assertTrue(s1.has_beam)
+        self.assertTrue(s1.is_expanded)
+        initial = dict(alfx=0.5, alfy=1.5,
+                       betx=2.5, bety=3.5)
+        twiss = self.mad.twiss(sequence='s1', sectormap=True,
+                               table='my_twiss', **initial)
+        # Now works:
+        self.assertEqual(s1.beam.particle, 'positron')
+        self.assertEqual(s1.twiss_table_name, 'my_twiss')
+        self.assertEqual(s1.twiss_table.betx[0], 2.5)
+        self.assertEqual(s1.element_names(), [
+            's1$start',
+            'dr', 'qp', 'dr[2]', 'qp[2]', 'dr[3]', 'sb', 'dr[4]',
+            's1$end',
+        ])
+        self.assertEqual(s1.expanded_element_names(), s1.element_names())
+        self.assertEqual(len(s1.element_names()), len(s1.element_positions()))
+        self.assertEqual(s1.element_positions(), [
+            0.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 7.0, 8.0])
+        self.assertEqual(s1.expanded_element_positions(), [
+            0.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 7.0, 8.0])
+
+        self.assertEqual(s1.elements[0].name, 's1$start')
+        self.assertEqual(s1.elements[-1].name, 's1$end')
+        self.assertEqual(s1.elements[-1].index, len(s1.elements)-1)
+        self.assertEqual(s1.elements[3].index, 3)
+
+        self.assertEqual(s1.elements.index('#s'), 0)
+        self.assertEqual(s1.elements.index('#e'), len(s1.elements)-1)
+        self.assertEqual(s1.elements.index('sb'), 6)
 
     def _get_elems(self, seq_name):
         elems = self.mad.sequence[seq_name].elements
@@ -294,9 +443,11 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
 
     def test_crash(self):
         """Check that a RuntimeError is raised in case MAD-X crashes."""
+        self.assertTrue(self.mad)
         # a.t.m. MAD-X crashes on this input, because the L (length)
         # parametere is missing:
         self.assertRaises(RuntimeError, self.mad.input, 'XXX: sequence;')
+        self.assertFalse(self.mad)
 
     def test_sequence_elements(self):
         elements = self.mad.sequence['s1'].elements
@@ -332,6 +483,159 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
             name for name in elem
             if elem.cmdpar[name].inform
         })
+
+    def test_table(self):
+        beam = 'ex=1, ey=2, particle=electron, sequence=s1;'
+        self.mad.command.beam(beam)
+        self.mad.use('s1')
+        initial = dict(alfx=0.5, alfy=1.5,
+                       betx=2.5, bety=3.5)
+        twiss = self.mad.twiss(sequence='s1', sectormap=True, **initial)
+        sector = self.mad.table.sectortable
+
+        self.assertEqual(str(twiss), '<Table: twiss>')
+        self.assertEqual(str(sector), '<Table: sectortable>')
+
+        self.assertIn('betx', twiss)
+        self.assertIn('t111', sector)
+        self.assertNotIn('t111', twiss)
+        self.assertNotIn('betx', sector)
+
+        self.assertEqual(len(twiss), len(list(twiss)))
+        self.assertEqual(set(twiss), set(twiss[0]))
+        self.assertEqual(twiss.s[5], twiss[5].s)
+        self.assertEqual(twiss.s[-1], twiss[-1].s)
+
+        copy = twiss.copy()
+        assert_allclose(copy['betx'], twiss.betx)
+        self.assertEqual(set(copy), set(twiss))
+        copy = twiss.copy(['betx'])
+        self.assertEqual(set(copy), {'betx'})
+
+        ALL = slice(None)
+
+        self.assertEqual(sector.tmat(0).shape, (6, 6, 6))
+        assert_allclose(sector.tmat(ALL)[0,0,0,:], sector.t111)
+        assert_allclose(sector.tmat(ALL)[1,5,3,:], sector.t264)
+        assert_allclose(sector.tmat(ALL)[3,0,3,:], sector.t414)
+        assert_allclose(sector.tmat(ALL)[4,4,4,:], sector.t555)
+
+        assert_allclose(sector.rmat(ALL)[0,0,:], sector.r11)
+        assert_allclose(sector.rmat(ALL)[1,5,:], sector.r26)
+        assert_allclose(sector.rmat(ALL)[3,0,:], sector.r41)
+        assert_allclose(sector.rmat(ALL)[4,4,:], sector.r55)
+
+        assert_allclose(sector.kvec(ALL)[0,:], sector.k1)
+        assert_allclose(sector.kvec(ALL)[1,:], sector.k2)
+        assert_allclose(sector.kvec(ALL)[3,:], sector.k4)
+        assert_allclose(sector.kvec(ALL)[4,:], sector.k5)
+
+        r = self.mad.sectortable()[:,:6,:6]
+        k = self.mad.sectortable()[:, 6,:6]
+        t = self.mad.sectortable2()
+
+        num_elems = len(self.mad.sequence.s1.elements)
+        self.assertEqual(t.shape, (num_elems, 6, 6, 6))
+        self.assertEqual(r.shape, (num_elems, 6, 6))
+        self.assertEqual(k.shape, (num_elems, 6))
+
+        assert_allclose(t[:,0,0,0], sector.t111)
+        assert_allclose(t[:,1,5,3], sector.t264)
+        assert_allclose(t[:,3,0,3], sector.t414)
+        assert_allclose(t[:,4,4,4], sector.t555)
+
+        assert_allclose(r[:,0,0], sector.r11)
+        assert_allclose(r[:,1,5], sector.r26)
+        assert_allclose(r[:,3,0], sector.r41)
+        assert_allclose(r[:,4,4], sector.r55)
+
+        assert_allclose(k[:,0], sector.k1)
+        assert_allclose(k[:,1], sector.k2)
+        assert_allclose(k[:,3], sector.k4)
+        assert_allclose(k[:,4], sector.k5)
+
+    def test_attr(self):
+        self.assertTrue(hasattr(self.mad, 'constraint'))
+        self.assertTrue(hasattr(self.mad, 'constraint_'))
+        self.assertTrue(hasattr(self.mad, 'global_'))
+        self.assertFalse(hasattr(self.mad, 'foobar'))
+        self.assertFalse(hasattr(self.mad, '_constraint'))
+
+    def test_expr(self):
+        g = self.mad.globals
+        vars = self.mad.expr_vars
+        g.foo = 1
+        g.bar = 2
+        self.assertEqual(set(vars('foo')), {'foo'})
+        self.assertEqual(set(vars('(foo) * sin(2*pi*bar)')), {'foo', 'bar'})
+
+    def test_command(self):
+        twiss = self.mad.command.twiss
+        sbend = self.mad.elements.sb
+        clone = sbend.clone('foobar', angle="pi/5", l=1)
+
+        self.assertIn('betx=0', str(twiss))
+        self.assertIn('angle=', str(sbend))
+        self.assertIn('tilt', sbend)
+        self.assertEqual(sbend.tilt, 0)
+        self.assertEqual(len(sbend), len(list(sbend)))
+        self.assertIn('tilt', list(sbend))
+
+        self.assertEqual(clone.name, 'foobar')
+        self.assertEqual(clone.base_type.name, 'sbend')
+        self.assertEqual(clone.parent.name, 'sb')
+        self.assertEqual(clone.defs.angle, 'pi / 5')
+        self.assertAlmostEqual(clone.angle, 0.6283185307179586)
+        self.assertEqual(len(clone), len(sbend))
+
+        self.assertIn('angle=0.628', str(clone))
+        self.assertNotIn('tilt', str(clone))
+        clone.angle = 0.125
+        clone = self.mad.elements.foobar            # need to update cache
+        self.assertEqual(clone.angle, 0.125)
+        self.assertEqual(len(twiss), len(list(twiss)))
+        self.assertIn('betx', list(twiss))
+
+        self.assertNotEqual(clone.angle, clone.parent.angle)
+        del clone.angle
+        clone = self.mad.elements.foobar            # need to update cache
+        self.assertEqual(clone.angle, clone.parent.angle)
+
+        with self.assertRaises(AttributeError):
+            clone.missing_attribute
+
+        with self.assertRaises(NotImplementedError):
+            del twiss['betx']
+        with self.assertRaises(NotImplementedError):
+            del clone.base_type.angle
+
+    def test_array_attribute(self):
+        self.mad.globals.nine = 9
+        clone = self.mad.elements.multipole.clone('foo', knl=[0, 'nine/3', 4])
+        knl = clone.knl
+        self.assertEqual(knl[0], 0)
+        self.assertEqual(knl[1], 3)
+        self.assertEqual(knl[2], 4)
+        self.assertEqual(len(knl), 3)
+        self.assertEqual(list(knl), [0.0, 3.0, 4.0])
+        self.assertEqual(str(knl), '[0.0, 3.0, 4.0]')
+        knl[1] = '3*nine'
+        self.assertEqual(self.mad.elements.foo.defs.knl[1], '3 * nine')
+        self.assertEqual(self.mad.elements.foo.knl[1], 27)
+
+    def test_command_map(self):
+        command = self.mad.command
+        self.assertIn('match', command)
+        self.assertIn('sbend', command)
+
+        self.assertNotIn('foooo', command)
+        self.assertIn('match', list(command))
+        self.assertEqual(len(command), len(list(command)))
+        self.assertIn('match', str(command))
+        self.assertIn('sbend', str(command))
+
+        self.assertIn('sbend', self.mad.base_types)
+        self.assertNotIn('match', self.mad.base_types)
 
 
 class TestTransferMap(unittest.TestCase):
