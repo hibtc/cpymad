@@ -296,7 +296,7 @@ class Madx(object):
             self.command.select(flag='sectormap', range=elem)
         with util.temp_filename() as sectorfile:
             self.twiss(sectormap=True, sectorfile=sectorfile, **kwargs)
-        return self.sectortable()
+        return self.sectortable(kwargs.get('sectortable', 'sectortable'))
 
     def sectortable(self, name='sectortable'):
         """Read sectormap + kicks from memory and return as Nx7x7 array."""
