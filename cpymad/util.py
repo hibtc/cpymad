@@ -190,7 +190,7 @@ def format_param(key, value):
         if constr:
             return u', '.join(constr)
         else:
-            return key + '=' + str(value.value)
+            return key + '=' + str(value.val)
     elif isinstance(value, bool):
         return key + '=' + str(value).lower()
     elif key == 'range':
@@ -257,7 +257,7 @@ def format_cmdpar(cmd, key, value):
             if constr:
                 return u', '.join(constr)
             else:
-                return key + '=' + str(value.value)
+                return key + '=' + str(value.val)
     if dtype in (PARAM_TYPE_LOGICAL_ARRAY,
                  PARAM_TYPE_INTEGER_ARRAY,
                  PARAM_TYPE_DOUBLE_ARRAY):
