@@ -52,6 +52,8 @@ __all__ = [
     'get_globals',
     'get_var_type',
 
+    'get_options',
+
     # iterate sequences
     'sequence_exists',
     'get_sequence_names',
@@ -221,6 +223,11 @@ def get_var_type(name):
     return _get_var(name).type
 
 
+def get_options():
+    """Get the current option values."""
+    return _parse_command(clib.options)
+
+
 def num_globals():
     """
     Return the number of global variables.
@@ -381,7 +388,7 @@ def get_table_column_names(table_name):
     indices = [table.col_out.i[i] for i in range(table.col_out.curr)]
     # NOTE: we can't enforce lower-case on the column names here, since this
     # breaks their usage with get_table_column():
-    return [table.columns.names[i] for i in indices]
+    return [_str(table.columns.names[i]) for i in indices]
 
 
 def get_table_column_names_all(table_name):
@@ -457,7 +464,7 @@ def get_table_column(table_name, column_name):
     # string:
     elif dtype == b'S':
         char_tmp = <char**> info.data
-        return np.array([char_tmp[i] for i in range(info.length)])
+        return np.array([_str(char_tmp[i]) for i in range(info.length)])
     # invalid:
     elif dtype == b'V':
         raise ValueError("Column {!r} is not in table {!r}."

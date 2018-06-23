@@ -183,6 +183,11 @@ class Madx(object):
         return Version(self._libmadx.get_version_number(),
                        self._libmadx.get_version_date())
 
+    @property
+    def options(self):
+        """Values of current options."""
+        return Command(self, self._libmadx.get_options())
+
     # Methods:
 
     def input(self, text):
@@ -296,7 +301,7 @@ class Madx(object):
             self.command.select(flag='sectormap', range=elem)
         with util.temp_filename() as sectorfile:
             self.twiss(sectormap=True, sectorfile=sectorfile, **kwargs)
-        return self.sectortable()
+        return self.sectortable(kwargs.get('sectortable', 'sectortable'))
 
     def sectortable(self, name='sectortable'):
         """Read sectormap + kicks from memory and return as Nx7x7 array."""
@@ -310,14 +315,9 @@ class Madx(object):
         )).transpose((2,0,1))
 
     def sectortable2(self, name='sectortable'):
-        tab = self.get_table(name)
-        cnt = len(tab['t111'])
-        return np.vstack((
-            np.hstack((tab.rmat(slice(None)),
-                       tab.kvec(slice(None)).reshape((6,1,-1)))),
-            np.hstack((np.zeros((1, 6, cnt)),
-                       np.ones((1, 1, cnt)))),
-        )).transpose((2,0,1))
+        """Read 2nd order sectormap T_ijk, return as Nx6x6x6 array."""
+        tab = self.table[name]
+        return tab.tmat(slice(None)).transpose((3,0,1,2))
 
     def match(self,
               constraints=[],
@@ -585,18 +585,6 @@ class Sequence(object):
     def expanded_element_positions(self):
         return self._libmadx.get_expanded_element_positions(self._name)
 
-    def _parse_range(self, range):
-        """
-        Return a tuple (start, stop) for the given range.
-        """
-        if range is None:
-            beg, end = ('#s', '#e')
-        elif isinstance(range, basestring):
-            beg, end = range.split('/')
-        else:
-            beg, end = range
-        return beg, end
-
     @property
     def is_expanded(self):
         """Check if sequence is already expanded."""
@@ -695,10 +683,11 @@ class Command(_MutableMapping):
         self, name, args = args[0], args[1], args[2:]
         self._madx.input(
             name + ': ' + util.format_command(self, *args, **kwargs))
+        return self._madx.elements.get(name)
 
     def _missing(self, key):
-        raise ValueError('Unknown attribute {!r} for {!r} command!'
-                         .format(key, self.name))
+        raise AttributeError('Unknown attribute {!r} for {!r} command!'
+                             .format(key, self.name))
 
     @property
     def defs(self):
@@ -718,8 +707,9 @@ class Element(Command):
 
     def __delitem__(self, name):
         if self.parent is self:
-            raise ValueError("Can't delete attribute {!r} in base element {!r}"
-                             .format(self.name, name))
+            raise NotImplementedError(
+                "Can't delete attribute {!r} in base element {!r}"
+                .format(self.name, name))
         self[name] = self.parent[name]
 
     @property
@@ -910,7 +900,10 @@ class CommandMap(_Mapping):
     @cached
     def __getitem__(self, name):
         madx = self._madx
-        data = madx._libmadx.get_defined_command(name)
+        try:
+            data = madx._libmadx.get_defined_command(name)
+        except ValueError:
+            raise KeyError("Not a MAD-X command name: {!r}".format(name))
         return Command(madx, data)
 
     def __contains__(self, name):
