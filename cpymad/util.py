@@ -178,10 +178,7 @@ def format_param(key, value):
     if value is None:
         return None
     key = str(key).lower()
-    if isinstance(value, Range):
-        begin, end = normalize_range_name((value.first, value.last))
-        return key + '=' + begin + '/' + end
-    elif isinstance(value, Constraint):
+    if isinstance(value, Constraint):
         constr = []
         if value.min is not None:
             constr.append(key + '>' + str(value.min))
@@ -193,13 +190,8 @@ def format_param(key, value):
             return key + '=' + str(value.val)
     elif isinstance(value, bool):
         return key + '=' + str(value).lower()
-    elif key == 'range':
-        if isinstance(value, basestring):
-            return key + '=' + normalize_range_name(value)
-        else:
-            begin, end = value
-        begin, end = normalize_range_name((str(begin), str(end)))
-        return key + '=' + begin + '/' + end
+    elif key == 'range' or isinstance(value, Range):
+        return key + '=' + _format_range(value)
     # check for basestrings before collections.Sequence, because every
     # basestring is also a Sequence:
     elif isinstance(value, basestring):
@@ -218,6 +210,17 @@ def format_param(key, value):
         return key + '={' + ','.join(map(str, value)) + '}'
     else:
         return key + '=' + str(value)
+
+
+def _format_range(value):
+    if isinstance(value, basestring):
+        return normalize_range_name(value)
+    elif isinstance(value, Range):
+        begin, end = value.first, value.last
+    else:
+        begin, end = value
+    begin, end = normalize_range_name((str(begin), str(end)))
+    return begin + '/' + end
 
 
 def format_cmdpar(cmd, key, value):
@@ -278,32 +281,17 @@ def format_cmdpar(cmd, key, value):
         else:
             return mad_quote(value.lower())
     if dtype == PARAM_TYPE_STRING:
-        if key == 'range':
-            if isinstance(value, basestring):
-                return key + '=' + normalize_range_name(value)
-            elif isinstance(value, collections.Mapping):
-                begin, end = value['first'], value['last']
-            else:
-                begin, end = value[0], value[1]
-            begin, end = normalize_range_name((str(begin), str(end)))
-            return key + '=' + begin + '/' + end
+        if key == 'range' or isinstance(value, Range):
+            return key + '=' + _format_range(value)
         if isinstance(value, basestring):
             return key + '=' + format_str(value)
-        if isinstance(value, Range):
-            begin, end = normalize_range_name((value.first, value.last))
-            return key + '=' + begin + '/' + end
-        if key == 'range':
-            if isinstance(value, basestring):
-                return key + '=' + normalize_range_name(value)
-            elif isinstance(value, collections.Mapping):
-                begin, end = value['first'], value['last']
-            else:
-                begin, end = value[0], value[1]
-            begin, end = normalize_range_name((str(begin), str(end)))
-            return key + '=' + begin + '/' + end
     if dtype == PARAM_TYPE_STRING_ARRAY:
         # NOTE: allowing single scalar value to STRING_ARRAY, mainly useful
         # for `match`, see above.
+        if key == 'range' or isinstance(value, Range):
+            if isinstance(value, list):
+                return key + '={' + ','.join(map(_format_range, value)) + '}'
+            return key + '=' + _format_range(value)
         if isinstance(value, basestring):
             return key + '=' + format_str(value)
         if isinstance(value, collections.Sequence):
