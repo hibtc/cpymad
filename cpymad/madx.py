@@ -688,6 +688,7 @@ class Command(_MutableMapping):
         self, name, args = args[0], args[1], args[2:]
         self._madx.input(
             name + ': ' + util.format_command(self, *args, **kwargs))
+        return self._madx.elements.get(name)
 
     def _missing(self, key):
         raise AttributeError('Unknown attribute {!r} for {!r} command!'
