@@ -137,6 +137,8 @@ def normalize_range_name(name):
     """Make element name usable as argument to the RANGE attribute."""
     if isinstance(name, tuple):
         return tuple(map(normalize_range_name, name))
+    if '/' in name:
+        return '/'.join(map(normalize_range_name, name.split('/')))
     name = name.lower()
     if name.endswith('$end'):
         return u'#e'
