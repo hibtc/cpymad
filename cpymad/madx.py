@@ -590,18 +590,6 @@ class Sequence(object):
     def expanded_element_positions(self):
         return self._libmadx.get_expanded_element_positions(self._name)
 
-    def _parse_range(self, range):
-        """
-        Return a tuple (start, stop) for the given range.
-        """
-        if range is None:
-            beg, end = ('#s', '#e')
-        elif isinstance(range, basestring):
-            beg, end = range.split('/')
-        else:
-            beg, end = range
-        return beg, end
-
     @property
     def is_expanded(self):
         """Check if sequence is already expanded."""
