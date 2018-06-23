@@ -315,14 +315,9 @@ class Madx(object):
         )).transpose((2,0,1))
 
     def sectortable2(self, name='sectortable'):
-        tab = self.get_table(name)
-        cnt = len(tab['t111'])
-        return np.vstack((
-            np.hstack((tab.rmat(slice(None)),
-                       tab.kvec(slice(None)).reshape((6,1,-1)))),
-            np.hstack((np.zeros((1, 6, cnt)),
-                       np.ones((1, 1, cnt)))),
-        )).transpose((2,0,1))
+        """Read 2nd order sectormap T_ijk, return as Nx6x6x6 array."""
+        tab = self.table[name]
+        return tab.tmat(slice(None)).transpose((3,0,1,2))
 
     def match(self,
               constraints=[],
