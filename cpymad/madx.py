@@ -183,6 +183,11 @@ class Madx(object):
         return Version(self._libmadx.get_version_number(),
                        self._libmadx.get_version_date())
 
+    @property
+    def options(self):
+        """Values of current options."""
+        return Command(self, self._libmadx.get_options())
+
     # Methods:
 
     def input(self, text):

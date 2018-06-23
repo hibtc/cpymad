@@ -52,6 +52,8 @@ __all__ = [
     'get_globals',
     'get_var_type',
 
+    'get_options',
+
     # iterate sequences
     'sequence_exists',
     'get_sequence_names',
@@ -219,6 +221,11 @@ def get_var_type(name):
         3   string
     """
     return _get_var(name).type
+
+
+def get_options():
+    """Get the current option values."""
+    return _parse_command(clib.options)
 
 
 def num_globals():
