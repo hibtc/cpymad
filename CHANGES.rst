@@ -1,6 +1,27 @@
 Changelog
 ~~~~~~~~~
 
+1.0.2
+=====
+Date: 25.06.2018
+
+Increase test coverage up to ``96%`` (from 75), and fix a few minor bugs
+detected in the tests:
+
+Command composition:
+- handle composite ranges (``A/B``) in
+- fix AttributeError when composing command with equality ``Constraint``
+- fix incorrect output for STRING_ARRAY range parameters (MATCH)
+- fix passing ``Range`` objects as ranges
+
+Misc:
+- fix table column names being ``bytes``, return as unicode ``str``
+- fix the ``sectortable2`` method
+- add ``Madx.options`` property that allows to view the current set of options
+- remove unused helper method ``Sequence._parse_range``
+- return the cloned element from ``Element.clone``
+
+
 1.0.1
 =====
 Date: 22.06.2018
