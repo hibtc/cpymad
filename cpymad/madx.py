@@ -772,7 +772,10 @@ class BaseElementList(object):
         """Return element with specified index."""
         if isinstance(index, basestring):
             # allow element names to be passed for convenience:
-            index = self.index(index)
+            try:
+                index = self.index(index)
+            except ValueError:
+                raise KeyError("Unknown element: {!r}".format(index))
         # _get_element accepts indices in the range [0, len-1]. The following
         # extends the accepted range to [-len, len+1], just like for lists:
         _len = len(self)
