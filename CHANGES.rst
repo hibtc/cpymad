@@ -1,6 +1,13 @@
 Changelog
 ~~~~~~~~~
 
+1.0.3
+=====
+Date: 02.07.2018
+
+- Fix ValueError for missing values in ElementList.get
+
+
 1.0.2
 =====
 Date: 25.06.2018
