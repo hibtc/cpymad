@@ -4,3 +4,4 @@ include cpymad/COPYING/*
 include LICENSE/*
 include README.rst CHANGES.rst COPYING.rst
 include setup.py
+include utils/build_madx.py
