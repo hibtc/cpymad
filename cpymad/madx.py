@@ -325,6 +325,7 @@ class Madx(object):
               weight=None,
               method=('lmdif', {}),
               knobfile=None,
+              limits=None,
               **kwargs):
         """
         Perform a simple MATCH operation.
@@ -366,8 +367,9 @@ class Madx(object):
             command.weight(**weight)
         for c in constraints:
             command.constraint(**c)
+        limits = limits or {}
         for v in vary:
-            command.vary(name=v)
+            command.vary(name=v, **limits.get(v, {}))
         command[method[0]](**method[1])
         command.endmatch(knobfile=knobfile)
         return dict((knob, self.eval(knob)) for knob in vary)
