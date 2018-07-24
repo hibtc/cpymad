@@ -1,11 +1,20 @@
 Changelog
 ~~~~~~~~~
 
+1.0.4
+=====
+Date: 25.07.2018
+
+- add ``limits`` parameter to ``Madx.match``
+- try to download and build MAD-X in setup.py if it is not already available
+
+
 1.0.3.post1
 ===========
 Date: 15.07.2018
 
 - Build windows wheels against the real (July) 5.04.01 release of MAD-X
+
 
 1.0.3
 =====
