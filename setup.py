@@ -8,6 +8,8 @@ For more information, see
     http://hibtc.github.io/cpymad/installation
 """
 
+from __future__ import print_function
+
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext as _build_ext
 from distutils.util import get_platform, convert_path
@@ -42,7 +44,7 @@ def fix_distutils_sysconfig_mingw():
 class build_ext(_build_ext):
 
     def finalize_options(self):
-        super().finalize_options()
+        _build_ext.finalize_options(self)
         self.madxdir = madxdir
         self.static = static
 
@@ -53,7 +55,7 @@ class build_ext(_build_ext):
             # available. This prevents us from unnecessary work for example
             # when performing the `install` stage without passing `--madxdir`
             # after already having done `build_ext` successfully:
-            return super().build_extension(ext)
+            return _build_ext.build_extension(self, ext)
         # NOTE that we don't catch LinkerError since that indicates that MAD-X
         # is available but somehow missconfigured and we should never attempt
         # to download/rebuild in that case:
@@ -86,7 +88,7 @@ class build_ext(_build_ext):
         """), file=sys.stderr)
         self.build_madx(int(os.environ.get('MADX_STATIC', '1')))
         ext.__dict__.update(get_extension_args(self.madxdir, self.static))
-        return super().build_extension(ext)
+        return _build_ext.build_extension(self, ext)
 
     def has_madx(self):
         return self.madxdir or self.check_dependency(dedent("""
