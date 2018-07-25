@@ -85,22 +85,16 @@ The full changelog is available online in CHANGES.rst_.
 
 def remove_arg(args, opt):
     """
-    Remove all occurences of ``--PARAM=VALUE`` or ``--PARAM VALUE`` from
+    Remove one occurence of ``--PARAM=VALUE`` or ``--PARAM VALUE`` from
     ``args`` and return the corresponding values.
     """
-    iterargs = iter(args)
-    result = []
-    remain = []
-    for arg in iterargs:
+    for i, arg in enumerate(args):
         if arg == opt:
-            result.append(next(iterargs))
-            continue
+            del args[i]
+            return args.pop(i)
         elif arg.startswith(opt + '='):
-            result.append(arg.split('=', 1)[1])
-            continue
-        remain.append(arg)
-    args[:] = remain
-    return result
+            del args[i]
+            return arg.split('=', 1)[1]
 
 
 def get_extension_args(argv):
@@ -112,11 +106,12 @@ def get_extension_args(argv):
     # use build_ext.user_options instead, but then the --madxdir argument can
     # be passed only to the 'build_ext' command, not to 'build' or 'install',
     # which is a minor nuisance.
-    for dir_ in remove_arg(argv, '--madxdir'):
-        prefix = path.expanduser(dir_)
-        include_dirs += [path.join(prefix, 'include')]
-        library_dirs += [path.join(prefix, 'lib'),
-                         path.join(prefix, 'lib64')]
+    madxdir = remove_arg(argv, '--madxdir')
+    if madxdir:
+        prefix = os.path.expanduser(madxdir)
+        include_dirs += [os.path.join(prefix, 'include')]
+        library_dirs += [os.path.join(prefix, 'lib'),
+                         os.path.join(prefix, 'lib64')]
 
     # Windows:  win32/win-amd64
     # Linux:    linux-x86_64/...
