@@ -1,6 +1,12 @@
 Changelog
 ~~~~~~~~~
 
+1.0.3.post1
+===========
+Date: 15.07.2018
+
+- Build windows wheels against the real (July) 5.04.01 release of MAD-X
+
 1.0.3
 =====
 Date: 02.07.2018
