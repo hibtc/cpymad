@@ -27,7 +27,7 @@ then use pip_ to install that particular file. For example:
 
     pip install cpymad-0.17.3-cp27-none-win32.whl
 
-In this case you will also need to grab and install *numpy*, *PyYAML* and
+In this case you will also need to grab and install *numpy* and
 *setuptools* (and possibly their dependencies if any). Installable wheel_
 archives for these packages can be conveniently downloaded from here:
 `Unofficial Windows Binaries for Python Extension Packages`_.

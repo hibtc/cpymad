@@ -270,7 +270,6 @@ def get_setup_args(argv):
         install_requires=[
             'setuptools>=18.0',
             'numpy',
-            'PyYAML',
             'minrpc>=0.0.7',
         ],
         cmdclass={'build_ext': build_ext},

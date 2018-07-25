@@ -25,7 +25,6 @@ Furthermore, cpymad depends on the following python packages:
 - setuptools_
 - Cython_
 - NumPy_
-- PyYAML_
 - minrpc_
 
 The python packages can be installed using pip_.
@@ -34,7 +33,6 @@ The python packages can be installed using pip_.
 .. _setuptools: https://pypi.python.org/pypi/setuptools
 .. _Cython: http://cython.org/
 .. _NumPy: http://www.numpy.org/
-.. _PyYAML: https://pypi.python.org/pypi/PyYAML
 .. _pip: https://pypi.python.org/pypi/pip
 .. _minrpc: https://pypi.python.org/pypi/minrpc
 
