@@ -1,6 +1,13 @@
 Changelog
 ~~~~~~~~~
 
+1.0.4.post1
+===========
+Date: 24.07.2018
+
+- fix py2 syntax error in setup.py
+
+
 1.0.4
 =====
 Date: 25.07.2018
