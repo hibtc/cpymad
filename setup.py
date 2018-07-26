@@ -87,7 +87,8 @@ class build_ext(_build_ext):
             http://hibtc.github.io/cpymad/installation/index.html
 
         """), file=sys.stderr)
-        self.build_madx(int(os.environ.get('MADX_STATIC', '1')))
+        is_win = get_platform().startswith('win')
+        self.build_madx(int(os.environ.get('MADX_STATIC', is_win)))
         ext.__dict__.update(get_extension_args(self.madxdir, self.shared))
         return _build_ext.build_extension(self, ext)
 
