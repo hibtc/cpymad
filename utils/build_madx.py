@@ -44,24 +44,16 @@ def mkdir(dirname):
         return False
 
 
-def build_madx(source_dir, build_dir, install_dir, static):
+def build_madx(source_dir, build_dir, install_dir, static=False, shared=False):
     cmake_args = [
         'cmake', os.path.abspath(source_dir),
         '-DMADX_ONLINE=OFF',
         '-DMADX_INSTALL_DOC=OFF',
         '-DCMAKE_INSTALL_PREFIX=' + os.path.abspath(install_dir),
         '-DCMAKE_BUILD_TYPE=Release',
+        '-DMADX_STATIC='       + ('ON' if static else 'OFF')
+        '-DBUILD_SHARED_LIBS=' + ('ON' if shared else 'OFF')
     ]
-    if static:
-        cmake_args += [
-            '-DMADX_STATIC=ON',
-            '-DBUILD_SHARED_LIBS=OFF',
-        ]
-    else:
-        cmake_args += [
-            '-DMADX_STATIC=OFF',
-            '-DBUILD_SHARED_LIBS=ON',
-        ]
     with chdir(build_dir):
         subprocess.call(cmake_args)
         subprocess.call(['make'])
@@ -77,7 +69,7 @@ def chdir(path):
         os.chdir(old_cwd)
 
 
-def install_madx(version=MADX_VERSION, prefix='.', static=False):
+def install_madx(version=MADX_VERSION, prefix='.', static=False, shared=False):
 
     FILE    = '{}.zip'.format(version)
     BASE    = 'https://github.com/MethodicalAcceleratorDesign/MAD-X/archive/'
@@ -108,7 +100,7 @@ def install_madx(version=MADX_VERSION, prefix='.', static=False):
 
     print("Building MAD-X in: {}".format(BUILD))
     if mkdir(BUILD):
-        build_madx(FOLDER, BUILD, INSTALL, static=static)
+        build_madx(FOLDER, BUILD, INSTALL, static=static, shared=shared)
     else:
         print(" -> already built!")
     print()
