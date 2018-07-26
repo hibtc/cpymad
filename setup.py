@@ -87,8 +87,7 @@ class build_ext(_build_ext):
             http://hibtc.github.io/cpymad/installation/index.html
 
         """), file=sys.stderr)
-        is_win = get_platform().startswith('win')
-        self.build_madx(int(os.environ.get('MADX_STATIC', is_win)))
+        self.build_madx()
         ext.__dict__.update(get_extension_args(self.madxdir, self.shared))
         return _build_ext.build_extension(self, ext)
 
@@ -102,12 +101,12 @@ class build_ext(_build_ext):
         }
         """))
 
-    def build_madx(self, static):
+    def build_madx(self):
         sys.path.append('utils')
         from build_madx import install_madx
         sys.path.remove('utils')
-        self.static = static
-        self.madxdir = install_madx(prefix=self.build_temp, static=static)
+        self.madxdir = install_madx(prefix=self.build_temp,
+                                    static=self.static, shared=self.shared)
 
     def check_dependency(self, c_code):
         """Check if an external library can be found by trying to compile a
@@ -211,7 +210,10 @@ def remove_opt(args, opt):
     if opt in args:
         args.remove(opt)
         return True
-    return False
+    neg = '--no' + opt[1:]
+    if neg in args:
+        args.remove(neg)
+        return False
 
 
 def get_extension_args(madxdir, shared):
@@ -286,10 +288,14 @@ def get_setup_args(argv):
         cmdclass={'build_ext': build_ext},
     )
 
-
+is_win = get_platform().startswith('win')
 madxdir = remove_arg(sys.argv, '--madxdir')
 static = remove_opt(sys.argv, '--static')
 shared = remove_opt(sys.argv, '--shared')
+
+if madxdir is None: madxdir = os.environ.get('MADXDIR')
+if static is None: static = int(os.environ.get('MADX_STATIC', is_win))
+if shared is None: shared = int(os.environ.get('BUILD_SHARED_LIBS', '0'))
 
 
 def main():
