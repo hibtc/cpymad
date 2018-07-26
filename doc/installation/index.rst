@@ -1,19 +1,25 @@
 Installation Instructions
 *************************
 
-There are three basic steps when installing cpymad:
+In order to install cpymad, please try:
 
-- install dependencies
-- build MAD-X as a library
-- build the cpymad binding
+.. code-block:: bash
 
-Depending on your platform, this can be more or less complicated.
+    pip install cpymad
 
-Note that it is recommended to use python3, preferrably 3.6 or later. On
-python2, there are likely unicode issues that will only surface once you pass
-any non-ascii characters to/from MAD-X (which you probably should not do
-anyway).
+This may need to build MAD-X in which case it can take a *long* time (roughly
+between 5 and 30 minutes, depending on your internet connection and overall
+system performance).
 
+During this command some error messages may be generated in between even if
+the overall command succeeds. The success of the installation can be judged
+from messages printed to the screen near the end.
+
+If the installation fails (which is not too unlikely due to the complexity of
+the MAD-X dependency), you may have to install some dependencies first and
+perhaps even build a MAD-X library version and the cpymad python extension
+separately. In this case, please refer to the platform specific installation
+instructions below:
 
 .. toctree::
    :maxdepth: 1
@@ -21,3 +27,8 @@ anyway).
    unix
    windows
    troubleshooting
+
+Note that it is recommended to use python 3, preferrably 3.6 or later. As of
+yet, python 2.7 is still supported, even if more likely to suffer latent
+issues from the less stringent bytes and unicode handling in python 2. Support
+for python 2 may be phased out in the upcoming versions.

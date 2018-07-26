@@ -4,7 +4,33 @@ Troubleshooting
 ---------------
 
 In the following we will try to keep a list of the various issues and fixes
-that might occur during installation.
+that might occur during or after installation.
+
+After a successful installation, please use the following command to verify
+that the extension can be loaded:
+
+.. code-block:: bash
+
+    python -c 'import cpymad.libmadx as l; l.start()'
+
+The MAD-X banner should appear.
+
+
+ImportError: undefined symbol: dgelsd\_
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Message::
+
+    ImportError: /home/thomas/hit/dev/cpymad/cpymad/libmadx.cpython-36m-x86_64-linux-gnu.so: undefined symbol: dgelsd_
+
+This problem can occur due to not specifying relevant link libraries, in
+particular blas and/or lapack if they are available on your system (cpymad
+does not try to detect if they are and just assumes they are not).
+
+You can fix the problem by passing the appropriate libraries during the build
+step::
+
+    python setup.py build_ext -lblas -llapack
 
 
 ImportError: libmadx.so
@@ -14,8 +40,12 @@ Message::
 
     ImportError: libmadx.so: cannot open shared object file: No such file or directory
 
-Solution:
-You can pass the correct path to the setup script when building:
+
+This error occors if cpymad was linked against a dynamic library version of
+MAD-X that can not be found at runtime. Reasons may be that the MAD-X
+installation was moved or removed after building cpymad, or that ``RPATH`` was
+not set properly on the cpymad extension. You can fix the problem by
+specifying the correct ``RPATH`` to the setup script when building:
 
 .. code-block:: bash
 
@@ -44,7 +74,6 @@ Message::
 
     OSError: Missing source file: 'cpymad/libmadx.c'. Install Cython to resolve this problem.
 
-Solution:
 The easiest way to install Cython is:
 
 .. code-block:: bash
