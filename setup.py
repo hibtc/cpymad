@@ -220,10 +220,18 @@ def get_extension_args(madxdir, shared):
     """Get arguments for C-extension (include pathes, libraries, etc)."""
     include_dirs = []
     library_dirs = []
-    # Parse command line option: --madxdir=/path/to/madxinstallation. We could
-    # use build_ext.user_options instead, but then the --madxdir argument can
-    # be passed only to the 'build_ext' command, not to 'build' or 'install',
-    # which is a minor nuisance.
+    if madxdir is None:
+        searchpaths = [
+            os.path.expanduser('~/.local'),
+            '/opt/madx',
+            '/usr/local',
+        ]
+        for d in searchpaths:
+            if os.path.exists(os.path.join(
+                    d, 'include', 'madX', 'madx.h')):
+                madxdir = d
+                break
+
     if madxdir:
         prefix = os.path.expanduser(madxdir)
         include_dirs += [os.path.join(prefix, 'include')]
@@ -288,6 +296,10 @@ def get_setup_args(argv):
         cmdclass={'build_ext': build_ext},
     )
 
+# Parse command line option: --madxdir=/path/to/madxinstallation. We could
+# use build_ext.user_options instead, but then the --madxdir argument can
+# be passed only to the 'build_ext' command, not to 'build' or 'install',
+# which is a minor nuisance.
 is_win = get_platform().startswith('win')
 madxdir = remove_arg(sys.argv, '--madxdir')
 static = remove_opt(sys.argv, '--static')
