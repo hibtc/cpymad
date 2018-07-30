@@ -240,19 +240,19 @@ class Madx(object):
         # of ChangeDirectory:
         return ChangeDirectory(path, self._libmadx)
 
-    def call(self, filename, chdir=False):
+    def call(self, file, chdir=False):
         """
         CALL a file in the MAD-X interpreter.
 
-        :param str filename: file name with path
+        :param str file: file name with path
         :param bool chdir: temporarily change directory in MAD-X process
         """
         if chdir:
-            dirname, basename = os.path.split(filename)
+            dirname, basename = os.path.split(file)
             with self.chdir(dirname):
                 self.command.call(file=basename)
         else:
-            self.command.call(file=filename)
+            self.command.call(file=file)
 
     def twiss(self, **kwargs):
         """
