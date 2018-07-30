@@ -229,6 +229,7 @@ class Madx(object):
         # of ChangeDirectory:
         return ChangeDirectory(path, self._libmadx)
 
+    @Command.override_exec
     def call(self, file, chdir=False):
         """
         CALL a file in the MAD-X interpreter.
@@ -243,6 +244,7 @@ class Madx(object):
         else:
             self.command.call(file=file)
 
+    @Command.override_exec
     def twiss(self, **kwargs):
         """
         Run TWISS.
@@ -258,6 +260,7 @@ class Madx(object):
             self._libmadx.apply_table_selections(table)
         return self.table[table]
 
+    @Command.override_exec
     def survey(self, **kwargs):
         """
         Run SURVEY.
@@ -271,6 +274,7 @@ class Madx(object):
             self._libmadx.apply_table_selections(table)
         return self.table[table]
 
+    @Command.override_exec
     def use(self, sequence=None, range=None, **kwargs):
         """
         Run USE to expand a sequence.
