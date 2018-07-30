@@ -282,14 +282,14 @@ class Madx(object):
             self._libmadx.apply_table_selections(table)
         return self.table[table]
 
-    def use(self, sequence):
+    def use(self, sequence=None, range=None, **kwargs):
         """
         Run USE to expand a sequence.
 
         :param str sequence: sequence name
         :returns: name of active sequence
         """
-        self.command.use(sequence=sequence)
+        self.command.use(sequence=sequence, range=range, **kwargs)
 
     def sectormap(self, elems, **kwargs):
         """
