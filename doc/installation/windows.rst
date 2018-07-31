@@ -4,16 +4,15 @@ Windows
 Prebuilt binaries
 =================
 
-On a windows platform, you are likely to run into more problems than on
-linux when building from source. Therefore, I will try to provide `built
-versions`_ for some platforms. If your platform is supported, you can just
-run
+On windows, I provide `built versions`_ for some python versions. If your
+platform is supported, you can just run
 
 .. code-block:: bat
 
     pip install cpymad
 
-from your terminal and that's it.
+from your terminal and that's it. In case of problems please read the rest of
+this section.
 
 
 Offline installation
@@ -110,9 +109,9 @@ Prompt.exe`. Change the directory to the extracted MAD-X folder with the
     cmake .. \
         -G "MinGW Makefiles" \
         -DBUILD_SHARED_LIBS=OFF \
-        -DCMAKE_INSTALL_PREFIX=..\install \
-        -DMADX_NTPSA=OFF \
-        -DUSE_GC=ON
+        -DMADX_STATIC=ON \
+        -DMADX_INSTALL_DOC=OFF \
+        -DCMAKE_INSTALL_PREFIX=..\install
 
 In the file :file:`%MADX%\\build\\src\\CMakeFiles\\madxbin.dir\\link.txt` and
 :file:`linklibs.rsp` search for ``-lgcc_eh`` and remove it (if present) -

@@ -1,19 +1,12 @@
 cpymad
 ******
 
-cpymad_ is a Cython_ binding to MAD-X_ (`MAD-X source`_).
+cpymad_ is a Cython_ binding to MAD-X_ for giving full control and access to a
+MAD-X interpreter within the python environment.
 
 .. _cpymad: https://github.com/hibtc/cpymad
 .. _Cython: http://cython.org/
 .. _MAD-X: http://cern.ch/mad
-.. _MAD-X source: https://github.com/MethodicalAcceleratorDesign/MAD-X
-
-cpymad is NOT maintained by CERN members and links against an unofficial build
-of MAD-X that is not supported by CERN, i.e. this binary may have problems
-that the official binary does not have and vice versa. See also: `Reporting
-issues`_.
-
-.. _Reporting issues: https://github.com/hibtc/cpymad#reporting-issues
 
 
 Contents
@@ -31,21 +24,22 @@ Contents
 Links
 =====
 
-- `Getting Started`_
-- `Installation`_
 - `Source code`_
-- `Documentation`_
 - `Issue tracker`_
-- `Releases`_
+- `Latest release`_
+- `MAD-X source`_
 
-Feel free to report bugs, request features and ask questions.
-
-.. _Getting Started: http://hibtc.github.io/cpymad/getting-started
-.. _Installation: http://hibtc.github.io/cpymad/installation
 .. _Source code: https://github.com/hibtc/cpymad
-.. _Documentation: http://hibtc.github.io/cpymad
 .. _Issue tracker: https://github.com/hibtc/cpymad/issues
-.. _Releases: https://pypi.python.org/pypi/cpymad#downloads
+.. _Latest release: https://pypi.org/project/cpymad#files
+.. _MAD-X source: https://github.com/MethodicalAcceleratorDesign/MAD-X
+
+Note that cpymad is NOT maintained by CERN members and links against an
+unofficial build of MAD-X that is not supported by CERN, i.e. this binary may
+have problems that the official binary does not have and vice versa. See also:
+`Reporting issues`_.
+
+.. _Reporting issues: https://github.com/hibtc/cpymad#reporting-issues
 
 
 Indices and tables
