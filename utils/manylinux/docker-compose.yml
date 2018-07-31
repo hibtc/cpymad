@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  cpymad-manylinux:
+    build: .
+    volumes:
+      - ../..:/io/cpymad
+      - .:/io
+    cap_drop:
+      - all
+    init: true
