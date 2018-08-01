@@ -243,7 +243,7 @@ def get_extension_args(madxdir, shared):
     # Mac:      darwin*
     platform = get_platform()
 
-    if shared:
+    if not shared:
         libraries = ['madx', 'ptc', 'gc-lib',
                      'stdc++', 'gfortran', 'quadmath']
         # NOTE: If MAD-X was built with BLAS/LAPACK, you must manually provide
@@ -251,7 +251,7 @@ def get_extension_args(madxdir, shared):
     else:
         libraries = ['madx']
 
-    if shared and platform.startswith('linux'):
+    if not shared and platform.startswith('linux'):
         libraries += ['X11']
 
     return dict(
