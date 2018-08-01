@@ -50,7 +50,7 @@ class build_ext(_build_ext):
         self.shared = shared
 
     def build_extension(self, ext):
-        ext.__dict__.update(get_extension_args(self.madxdir, self.shared))
+        ext.__dict__.update(get_extension_args(self.madxdir, self.shared, self.static))
         try:
             # Return if the extension has already been built or MAD-X is
             # available. This prevents us from unnecessary work for example
@@ -88,7 +88,7 @@ class build_ext(_build_ext):
 
         """), file=sys.stderr)
         self.build_madx()
-        ext.__dict__.update(get_extension_args(self.madxdir, self.shared))
+        ext.__dict__.update(get_extension_args(self.madxdir, self.shared, self.static))
         return _build_ext.build_extension(self, ext)
 
     def has_madx(self):
@@ -130,7 +130,7 @@ class build_ext(_build_ext):
         tmp_src = tmp_bin + '.c'
         with open(tmp_src, 'w') as f:
             f.write(c_code)
-        ext_args = get_extension_args(self.madxdir, self.shared)
+        ext_args = get_extension_args(self.madxdir, self.shared, self.static)
         try:
             self.compiler.compile(
                 [tmp_src],
@@ -216,7 +216,7 @@ def remove_opt(args, opt):
         return False
 
 
-def get_extension_args(madxdir, shared):
+def get_extension_args(madxdir, shared, static):
     """Get arguments for C-extension (include pathes, libraries, etc)."""
     include_dirs = []
     library_dirs = []
@@ -243,16 +243,15 @@ def get_extension_args(madxdir, shared):
     # Mac:      darwin*
     platform = get_platform()
 
-    if shared:
-        libraries = ['madx', 'ptc', 'gc-lib',
-                     'stdc++', 'gfortran', 'quadmath']
+    libraries = ['madx']
+    if not shared:
         # NOTE: If MAD-X was built with BLAS/LAPACK, you must manually provide
         # arguments `python setup.py build_ext -lblas -llapack`!
-    else:
-        libraries = ['madx']
+        libraries += ['ptc', 'gc-lib', 'stdc++', 'gfortran', 'quadmath']
+        if platform.startswith('linux'):
+            libraries += ['X11']
 
-    if shared and platform.startswith('linux'):
-        libraries += ['X11']
+    link_args = ['--static'] if static else []
 
     return dict(
         libraries=libraries,
@@ -260,6 +259,7 @@ def get_extension_args(madxdir, shared):
         library_dirs=library_dirs,
         runtime_library_dirs=library_dirs,
         extra_compile_args=['-std=gnu99'],
+        extra_link_args=link_args,
     )
 
 
