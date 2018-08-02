@@ -50,7 +50,7 @@ install:
   # without having *any* dependencies installed:
   - python setup.py sdist
   - pip uninstall cython -y
-  - pip install $(ls ./dist/*.tar.gz | sort -rV | head -n1)
+  - BLAS=1 LAPACK=1 pip install $(ls ./dist/*.tar.gz | sort -rV | head -n1)
   # Need to remove cpymad folder otherwise it will be imported, but we want
   # to check the version installed from the source distribution:
   - rm -r cpymad

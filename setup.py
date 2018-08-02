@@ -48,9 +48,12 @@ class build_ext(_build_ext):
         self.madxdir = madxdir
         self.static = static
         self.shared = shared
+        self.extra = ((['blas'] if blas else []) +
+                      (['lapack'] if lapack else []))
 
     def build_extension(self, ext):
-        ext.__dict__.update(get_extension_args(self.madxdir, self.shared, self.static))
+        ext.__dict__.update(get_extension_args(
+            self.madxdir, self.shared, self.static, self.extra))
         try:
             # Return if the extension has already been built or MAD-X is
             # available. This prevents us from unnecessary work for example
@@ -88,7 +91,8 @@ class build_ext(_build_ext):
 
         """), file=sys.stderr)
         self.build_madx()
-        ext.__dict__.update(get_extension_args(self.madxdir, self.shared, self.static))
+        ext.__dict__.update(get_extension_args(
+            self.madxdir, self.shared, self.static, self.extra))
         return _build_ext.build_extension(self, ext)
 
     def has_madx(self):
@@ -130,7 +134,8 @@ class build_ext(_build_ext):
         tmp_src = tmp_bin + '.c'
         with open(tmp_src, 'w') as f:
             f.write(c_code)
-        ext_args = get_extension_args(self.madxdir, self.shared, self.static)
+        ext_args = get_extension_args(
+            self.madxdir, self.shared, self.static, self.extra)
         try:
             self.compiler.compile(
                 [tmp_src],
@@ -216,7 +221,7 @@ def remove_opt(args, opt):
         return False
 
 
-def get_extension_args(madxdir, shared, static):
+def get_extension_args(madxdir, shared, static, extra_libs=()):
     """Get arguments for C-extension (include pathes, libraries, etc)."""
     include_dirs = []
     library_dirs = []
@@ -251,6 +256,7 @@ def get_extension_args(madxdir, shared, static):
         if platform.startswith('linux'):
             libraries += ['X11']
 
+    libraries += extra_libs
     link_args = ['--static'] if static else []
 
     return dict(
@@ -304,10 +310,14 @@ is_win = get_platform().startswith('win')
 madxdir = remove_arg(sys.argv, '--madxdir')
 static = remove_opt(sys.argv, '--static')
 shared = remove_opt(sys.argv, '--shared')
+lapack = remove_opt(sys.argv, '--lapack')
+blas = remove_opt(sys.argv, '--blas')
 
 if madxdir is None: madxdir = os.environ.get('MADXDIR')
 if static is None: static = int(os.environ.get('MADX_STATIC', is_win))
 if shared is None: shared = int(os.environ.get('BUILD_SHARED_LIBS', '0'))
+if lapack is None: lapack = int(os.environ.get('LAPACK', '0'))
+if blas is None: blas = int(os.environ.get('BLAS', '0'))
 
 
 def main():
