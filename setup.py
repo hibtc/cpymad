@@ -49,7 +49,8 @@ class build_ext(_build_ext):
         self.static = static
         self.shared = shared
         self.extra = ((['blas'] if blas else []) +
-                      (['lapack'] if lapack else []))
+                      (['lapack'] if lapack else []) +
+                      (['X11'] if x11 else []))
 
     def build_extension(self, ext):
         ext.__dict__.update(get_extension_args(
@@ -253,8 +254,6 @@ def get_extension_args(madxdir, shared, static, extra_libs=()):
         # NOTE: If MAD-X was built with BLAS/LAPACK, you must manually provide
         # arguments `python setup.py build_ext -lblas -llapack`!
         libraries += ['ptc', 'gc-lib', 'stdc++', 'gfortran', 'quadmath']
-        if platform.startswith('linux'):
-            libraries += ['X11']
 
     libraries += extra_libs
     link_args = ['--static'] if static else []
@@ -312,12 +311,14 @@ static = remove_opt(sys.argv, '--static')
 shared = remove_opt(sys.argv, '--shared')
 lapack = remove_opt(sys.argv, '--lapack')
 blas = remove_opt(sys.argv, '--blas')
+x11 = remove_opt(sys.argv, '--x11')
 
 if madxdir is None: madxdir = os.environ.get('MADXDIR')
 if static is None: static = int(os.environ.get('MADX_STATIC', is_win))
 if shared is None: shared = int(os.environ.get('BUILD_SHARED_LIBS', '0'))
 if lapack is None: lapack = int(os.environ.get('LAPACK', '0'))
 if blas is None: blas = int(os.environ.get('BLAS', '0'))
+if x11 is None: x11 = int(os.environ.get('X11', not is_win))
 
 
 def main():
