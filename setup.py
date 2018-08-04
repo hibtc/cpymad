@@ -20,7 +20,6 @@ from textwrap import dedent
 import sys
 import os
 
-
 try:
     # Use Cython if available:
     from Cython.Build import cythonize
@@ -28,6 +27,9 @@ except ImportError:
     # Otherwise, use the shipped .c file:
     def cythonize(extensions):
         return extensions
+
+sys.path.append(os.path.dirname(__file__))
+from utils.clopts import remove_arg, remove_opt
 
 
 def fix_distutils_sysconfig_mingw():
@@ -107,9 +109,7 @@ class build_ext(_build_ext):
         """))
 
     def build_madx(self):
-        sys.path.append('utils')
-        from build_madx import install_madx
-        sys.path.remove('utils')
+        from utils.build_madx import install_madx
         self.madxdir = install_madx(prefix=self.build_temp,
                                     static=self.static, shared=self.shared)
 
@@ -194,32 +194,6 @@ The full changelog is available online in CHANGES.rst_.
     except (IOError, UnicodeDecodeError):
         pass
     return long_description
-
-
-def remove_arg(args, opt):
-    """
-    Remove one occurence of ``--PARAM=VALUE`` or ``--PARAM VALUE`` from
-    ``args`` and return the corresponding values.
-    """
-    for i, arg in enumerate(args):
-        if arg == opt:
-            del args[i]
-            return args.pop(i)
-        elif arg.startswith(opt + '='):
-            del args[i]
-            return arg.split('=', 1)[1]
-
-
-def remove_opt(args, opt):
-    """Remove one occurence of ``--PARAM`` or ``--no-PARAM`` from ``args``
-    and return the corresponding boolean value."""
-    if opt in args:
-        args.remove(opt)
-        return True
-    neg = '--no' + opt[1:]
-    if neg in args:
-        args.remove(neg)
-        return False
 
 
 def get_extension_args(madxdir, shared, static, extra_libs=()):
