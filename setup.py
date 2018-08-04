@@ -280,12 +280,12 @@ def get_setup_args(argv):
 # be passed only to the 'build_ext' command, not to 'build' or 'install',
 # which is a minor nuisance.
 is_win = get_platform().startswith('win')
-madxdir = remove_arg(sys.argv, '--madxdir', 'MADXDIR')
-static = remove_opt(sys.argv, '--static', 'MADX_STATIC', is_win)
-shared = remove_opt(sys.argv, '--shared', 'BUILD_SHARED_LIBS', False)
-lapack = remove_opt(sys.argv, '--lapack', 'LAPACK', False)
-blas = remove_opt(sys.argv, '--blas', 'BLAS', False)
-x11 = remove_opt(sys.argv, '--x11', 'X11', not is_win)
+madxdir = remove_arg(sys.argv, 'madxdir')
+static = remove_opt(sys.argv, 'static', is_win)
+shared = remove_opt(sys.argv, 'shared', False)
+lapack = remove_opt(sys.argv, 'lapack', False)
+blas = remove_opt(sys.argv, 'blas', False)
+x11 = remove_opt(sys.argv, 'X11', not is_win)
 
 
 def main():
