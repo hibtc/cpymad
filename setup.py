@@ -280,19 +280,12 @@ def get_setup_args(argv):
 # be passed only to the 'build_ext' command, not to 'build' or 'install',
 # which is a minor nuisance.
 is_win = get_platform().startswith('win')
-madxdir = remove_arg(sys.argv, '--madxdir')
-static = remove_opt(sys.argv, '--static')
-shared = remove_opt(sys.argv, '--shared')
-lapack = remove_opt(sys.argv, '--lapack')
-blas = remove_opt(sys.argv, '--blas')
-x11 = remove_opt(sys.argv, '--x11')
-
-if madxdir is None: madxdir = os.environ.get('MADXDIR')
-if static is None: static = int(os.environ.get('MADX_STATIC', is_win))
-if shared is None: shared = int(os.environ.get('BUILD_SHARED_LIBS', '0'))
-if lapack is None: lapack = int(os.environ.get('LAPACK', '0'))
-if blas is None: blas = int(os.environ.get('BLAS', '0'))
-if x11 is None: x11 = int(os.environ.get('X11', not is_win))
+madxdir = remove_arg(sys.argv, '--madxdir', 'MADXDIR')
+static = remove_opt(sys.argv, '--static', 'MADX_STATIC', is_win)
+shared = remove_opt(sys.argv, '--shared', 'BUILD_SHARED_LIBS', False)
+lapack = remove_opt(sys.argv, '--lapack', 'LAPACK', False)
+blas = remove_opt(sys.argv, '--blas', 'BLAS', False)
+x11 = remove_opt(sys.argv, '--x11', 'X11', not is_win)
 
 
 def main():
