@@ -262,7 +262,7 @@ def get_extension_args(madxdir, shared, static, extra_libs=()):
         libraries=libraries,
         include_dirs=include_dirs,
         library_dirs=library_dirs,
-        runtime_library_dirs=library_dirs,
+        runtime_library_dirs=library_dirs if shared else [],
         extra_compile_args=['-std=gnu99'],
         extra_link_args=link_args,
     )
