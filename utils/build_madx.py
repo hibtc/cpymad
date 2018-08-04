@@ -51,8 +51,8 @@ def build_madx(source_dir, build_dir, install_dir, static=False, shared=False):
         '-DMADX_INSTALL_DOC=OFF',
         '-DCMAKE_INSTALL_PREFIX=' + os.path.abspath(install_dir),
         '-DCMAKE_BUILD_TYPE=Release',
-        '-DMADX_STATIC='       + ('ON' if static else 'OFF')
-        '-DBUILD_SHARED_LIBS=' + ('ON' if shared else 'OFF')
+        '-DMADX_STATIC='       + ('ON' if static else 'OFF'),
+        '-DBUILD_SHARED_LIBS=' + ('ON' if shared else 'OFF'),
     ]
     with chdir(build_dir):
         subprocess.call(cmake_args)
