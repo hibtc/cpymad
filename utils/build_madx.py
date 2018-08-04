@@ -86,7 +86,7 @@ def install_madx(version=MADX_VERSION, prefix='.', static=False, shared=False):
 
     print("Downloading: {}".format(ARCHIVE))
     if not os.path.exists(ARCHIVE):
-        archive = download(URL, ARCHIVE)
+        download(URL, ARCHIVE)
     else:
         print(" -> already downloaded.")
     print()
