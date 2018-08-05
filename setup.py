@@ -1,3 +1,4 @@
+# encoding: utf-8
 """
 Installation script for cpymad.
 
@@ -29,7 +30,7 @@ except ImportError:
         return extensions
 
 sys.path.append(os.path.dirname(__file__))
-from utils.clopts import remove_arg, remove_opt
+from utils.clopts import parse_opts
 
 
 def fix_distutils_sysconfig_mingw():
@@ -45,18 +46,23 @@ def fix_distutils_sysconfig_mingw():
 
 class build_ext(_build_ext):
 
-    def finalize_options(self):
-        _build_ext.finalize_options(self)
-        self.madxdir = madxdir
-        self.static = static
-        self.shared = shared
-        self.extra = ((['blas'] if blas else []) +
-                      (['lapack'] if lapack else []) +
-                      (['X11'] if x11 else []))
+    # We parse command line options using our own mechanim… We could use
+    # build_ext.user_options instead, but then these parameters can be passed
+    # only to the 'build_ext' command, not to 'build', 'develop', or
+    # 'install'…
+    is_win = get_platform().startswith('win')
+    options = {
+        'madxdir':  ('arg', None        ),
+        'static':   ('opt', is_win,     ),
+        'shared':   ('opt', False,      ),
+        'lapack':   ('opt', False,      ),
+        'blas':     ('opt', False,      ),
+        'X11':      ('opt', not is_win, ),
+    }
+    optvals = {}
 
     def build_extension(self, ext):
-        ext.__dict__.update(get_extension_args(
-            self.madxdir, self.shared, self.static, self.extra))
+        ext.__dict__.update(get_extension_args(**self.optvals))
         try:
             # Return if the extension has already been built or MAD-X is
             # available. This prevents us from unnecessary work for example
@@ -94,12 +100,11 @@ class build_ext(_build_ext):
 
         """), file=sys.stderr)
         self.build_madx()
-        ext.__dict__.update(get_extension_args(
-            self.madxdir, self.shared, self.static, self.extra))
+        ext.__dict__.update(get_extension_args(**self.optvals))
         return _build_ext.build_extension(self, ext)
 
     def has_madx(self):
-        return self.madxdir or self.check_dependency(dedent("""
+        return self.optvals.get('madxdir') or self.check_dependency(dedent("""
         #include "madX/madx.h"
         int main(int argc, char* argv[])
         {
@@ -110,8 +115,10 @@ class build_ext(_build_ext):
 
     def build_madx(self):
         from utils.build_madx import install_madx
-        self.madxdir = install_madx(prefix=self.build_temp,
-                                    static=self.static, shared=self.shared)
+        self.optvals['madxdir'] = install_madx(
+            prefix=self.build_temp,
+            static=self.optvals['static'],
+            shared=self.optvals['shared'])
 
     def check_dependency(self, c_code):
         """Check if an external library can be found by trying to compile a
@@ -135,8 +142,7 @@ class build_ext(_build_ext):
         tmp_src = tmp_bin + '.c'
         with open(tmp_src, 'w') as f:
             f.write(c_code)
-        ext_args = get_extension_args(
-            self.madxdir, self.shared, self.static, self.extra)
+        ext_args = get_extension_args(**self.optvals)
         try:
             self.compiler.compile(
                 [tmp_src],
@@ -196,7 +202,7 @@ The full changelog is available online in CHANGES.rst_.
     return long_description
 
 
-def get_extension_args(madxdir, shared, static, extra_libs=()):
+def get_extension_args(madxdir, shared, static, X11=True, **libs):
     """Get arguments for C-extension (include pathes, libraries, etc)."""
     include_dirs = []
     library_dirs = []
@@ -229,7 +235,8 @@ def get_extension_args(madxdir, shared, static, extra_libs=()):
         # arguments `python setup.py build_ext -lblas -llapack`!
         libraries += ['ptc', 'gc-lib', 'stdc++', 'gfortran', 'quadmath']
 
-    libraries += extra_libs
+    libs['X11'] = X11
+    libraries += [lib for lib, use in libs.items() if use]
     link_args = ['--static'] if static else []
 
     return dict(
@@ -242,7 +249,7 @@ def get_extension_args(madxdir, shared, static, extra_libs=()):
     )
 
 
-def get_setup_args(argv):
+def get_setup_args(optvals):
     """Accumulate metadata for setup."""
     long_description = get_long_description()
     metadata = exec_file('cpymad/__init__.py')
@@ -272,33 +279,13 @@ def get_setup_args(argv):
             'numpy',
             'minrpc>=0.0.7',
         ],
-        cmdclass={'build_ext': build_ext},
+        cmdclass={'build_ext': type('build_ext', (build_ext, object), {
+            'optvals': optvals,
+        })},
     )
-
-# Parse command line option: --madxdir=/path/to/madxinstallation. We could
-# use build_ext.user_options instead, but then the --madxdir argument can
-# be passed only to the 'build_ext' command, not to 'build' or 'install',
-# which is a minor nuisance.
-is_win = get_platform().startswith('win')
-madxdir = remove_arg(sys.argv, 'madxdir')
-static = remove_opt(sys.argv, 'static', is_win)
-shared = remove_opt(sys.argv, 'shared', False)
-lapack = remove_opt(sys.argv, 'lapack', False)
-blas = remove_opt(sys.argv, 'blas', False)
-x11 = remove_opt(sys.argv, 'X11', not is_win)
-
-
-def main():
-    """
-    Execute setup.
-
-    Note that this operation is controlled via sys.argv and has side-effects
-    both on sys.argv as well as some parts of the distutils package.
-    """
-    fix_distutils_sysconfig_mingw()
-    setup_args = get_setup_args(sys.argv)
-    setup(**setup_args)
 
 
 if __name__ == '__main__':
-    main()
+    fix_distutils_sysconfig_mingw()
+    optvals = parse_opts(sys.argv, build_ext.options)
+    setup(**get_setup_args(optvals))

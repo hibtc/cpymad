@@ -5,7 +5,7 @@ Parse command line options.
 from os import environ
 
 
-def remove_arg(args, name):
+def remove_arg(args, name, default=None):
     """
     Remove one occurence of ``--PARAM=VALUE`` or ``--PARAM VALUE`` from
     ``args`` and return the corresponding values.
@@ -18,7 +18,7 @@ def remove_arg(args, name):
         elif arg.startswith(opt + '='):
             del args[i]
             return arg.split('=', 1)[1]
-    return environ.get(name.upper())
+    return environ.get(name.upper(), default)
 
 
 def remove_opt(args, name, default=None):
@@ -34,3 +34,11 @@ def remove_opt(args, name, default=None):
         return False
     envname = name.upper()
     return bool(int(environ[envname])) if envname in environ else default
+
+
+def parse_opts(argv, opts):
+    parser = {'arg': remove_arg, 'opt': remove_opt}
+    return {
+        name: parser[kind](argv, name, default)
+        for name, (kind, default) in opts.items()
+    }
