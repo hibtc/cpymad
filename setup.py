@@ -102,14 +102,14 @@ class build_ext(_build_ext):
         """), file=sys.stderr)
         # If unspecified, let's build MAD-X without X11 (as this removes
         # potential linking complications):
-        if self.optvals.get('X11') is None:
+        if self.optvals['X11'] is None:
             self.optvals['X11'] = False
         self.build_madx()
         ext.__dict__.update(get_extension_args(**self.get_optvals()))
         return _build_ext.build_extension(self, ext)
 
     def has_madx(self):
-        return self.optvals.get('madxdir') or self.check_dependency(dedent("""
+        return self.optvals['madxdir'] or self.check_dependency(dedent("""
         #include "madX/madx.h"
         int main(int argc, char* argv[])
         {
@@ -164,10 +164,10 @@ class build_ext(_build_ext):
 
     def get_optvals(self):
         optvals = self.optvals.copy()
-        if optvals.get('static') is None:
+        if optvals['static'] is None:
             optvals['static'] = IS_WIN
         # If unspecified, assume MAD-X was built without disabling X11:
-        if optvals.get('X11') is None:
+        if optvals['X11'] is None:
             optvals['X11'] = not IS_WIN
         return optvals
 
