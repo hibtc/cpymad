@@ -32,6 +32,8 @@ except ImportError:
 sys.path.append(os.path.dirname(__file__))
 from utils.clopts import parse_opts
 
+IS_WIN = get_platform().startswith('win')
+
 
 def fix_distutils_sysconfig_mingw():
     """
@@ -50,14 +52,13 @@ class build_ext(_build_ext):
     # build_ext.user_options instead, but then these parameters can be passed
     # only to the 'build_ext' command, not to 'build', 'develop', or
     # 'install'…
-    is_win = get_platform().startswith('win')
     options = {
-        'madxdir':  ('arg', None        ),
-        'static':   ('opt', is_win,     ),
-        'shared':   ('opt', False,      ),
-        'lapack':   ('opt', False,      ),
-        'blas':     ('opt', False,      ),
-        'X11':      ('opt', None,       ),
+        'madxdir':  'arg',
+        'static':   'opt',
+        'shared':   'opt',
+        'lapack':   'opt',
+        'blas':     'opt',
+        'X11':      'opt',
     }
     optvals = {}
 
@@ -163,9 +164,11 @@ class build_ext(_build_ext):
 
     def get_optvals(self):
         optvals = self.optvals.copy()
+        if optvals.get('static') is None:
+            optvals['static'] = IS_WIN
         # If unspecified, assume MAD-X was built without disabling X11:
         if optvals.get('X11') is None:
-            optvals['X11'] = not self.is_win
+            optvals['X11'] = not IS_WIN
         return optvals
 
 

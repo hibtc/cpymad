@@ -39,6 +39,6 @@ def remove_opt(args, name, default=None):
 def parse_opts(argv, opts):
     parser = {'arg': remove_arg, 'opt': remove_opt}
     return {
-        name: parser[kind](argv, name, default)
-        for name, (kind, default) in opts.items()
+        name: parser[kind](argv, name)
+        for name, kind in opts.items()
     }
