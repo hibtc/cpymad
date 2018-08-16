@@ -1,0 +1,52 @@
+#! /usr/bin/env bash
+
+set -ex
+
+: ${MADX_VERSION:=6448a105b7319971c61b76a987d52d152305c29c}
+: ${CPYMAD_VERSION:=6b7f878d1693bafd9a9adc0611a2fd7034601873}
+
+# Download MAD-X:
+if [[ ! -e /io/MAD-X ]]; then
+    git clone git://github.com/MethodicalAcceleratorDesign/MAD-X /io/MAD-X
+    git -C /io/MAD-X checkout $MADX_VERSION
+fi
+
+# Download cpymad:
+if [[ ! -e /io/cpymad ]]; then
+    git clone git://github.com/hibtc/cpymad /io/cpymad
+    git -C /io/cpymad checkout $CPYMAD_VERSION
+fi
+
+# Build MAD-X
+mkdir -p /io/madx-build
+cd /io/madx-build
+cmake28 /io/MAD-X \
+    -DBUILD_SHARED_LIBS=OFF \
+    -DMADX_STATIC=ON \
+    -DCMAKE_INSTALL_PREFIX=/io/madx-install \
+    -DMADX_INSTALL_DOC=OFF \
+    -DMADX_ONLINE=OFF \
+    -DMADX_FORCE_32=OFF \
+    -DMADX_X11=OFF
+make install
+
+# cythonize once instead of re-cythonizing for each dependency:
+# (this requires that you
+cd /io/cpymad
+/opt/python/cp36-cp36m/bin/pip install cython
+/opt/python/cp36-cp36m/bin/cythonize cpymad/cpymad.pyx
+
+# Create wheels:
+cd /io/cpymad
+for PYBIN in /opt/python/*/bin; do
+    #"${PYBIN}/pip" install cython
+    "${PYBIN}/python" setup.py build_ext \
+        --madxdir=/io/madx-install --static --no-X11
+    "${PYBIN}/python" setup.py bdist_wheel
+done
+
+# Bundle external shared libraries into the wheels
+mkdir -p /io/wheels
+for whl in dist/*.whl; do
+    auditwheel repair "$whl" -w /io/wheels/
+done
