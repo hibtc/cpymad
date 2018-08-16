@@ -218,7 +218,7 @@ The full changelog is available online in CHANGES.rst_.
     return long_description
 
 
-def get_extension_args(madxdir, shared, static, X11=True, **libs):
+def get_extension_args(madxdir, shared, static, **libs):
     """Get arguments for C-extension (include pathes, libraries, etc)."""
     include_dirs = []
     library_dirs = []
@@ -250,9 +250,8 @@ def get_extension_args(madxdir, shared, static, X11=True, **libs):
         # NOTE: If MAD-X was built with BLAS/LAPACK, you must manually provide
         # arguments `python setup.py build_ext -lblas -llapack`!
         libraries += ['ptc', 'gc-lib', 'stdc++', 'gfortran', 'quadmath']
+        libraries += [lib for lib, use in libs.items() if use]
 
-    libs['X11'] = X11
-    libraries += [lib for lib, use in libs.items() if use]
     link_args = ['--static'] if static else []
 
     return dict(
