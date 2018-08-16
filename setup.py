@@ -252,7 +252,7 @@ def get_extension_args(madxdir, shared, static, **libs):
         libraries += ['ptc', 'gc-lib', 'stdc++', 'gfortran', 'quadmath']
         libraries += [lib for lib, use in libs.items() if use]
 
-    link_args = ['--static'] if static else []
+    link_args = ['--static'] if static and not IS_WIN else []
 
     return dict(
         libraries=libraries,
