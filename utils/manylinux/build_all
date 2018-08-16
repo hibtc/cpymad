@@ -3,7 +3,7 @@
 set -ex
 
 : ${MADX_VERSION:=6448a105b7319971c61b76a987d52d152305c29c}
-: ${CPYMAD_VERSION:=6b7f878d1693bafd9a9adc0611a2fd7034601873}
+: ${CPYMAD_VERSION:=1.0.5}
 
 # Download MAD-X:
 if [[ ! -e /io/MAD-X ]]; then

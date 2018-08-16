@@ -1,6 +1,25 @@
 Changelog
 ~~~~~~~~~
 
+1.0.5
+=====
+Date: 16.08.2018
+
+API:
+- rename ``Madx.call``'s first parameter as in MAD-X
+- handle all ``USE`` parameters in ``Madx.use``
+
+setup:
+- provide manylinux wheels!
+- remove spurious dependency on pyyaml
+- finally get the real meaning of MADX_STATIC and BUILD_SHARED_LIBS
+- default to BUILD_SHARED_LIBS=OFF on all platforms
+- rework arguments for setup.py
+- make linking against X11 optional (requires unreleased MAD-X ``5.04.02``)
+- default to X11=OFF if building MAD-X
+- improve documentation
+
+
 1.0.4.post1
 ===========
 Date: 24.07.2018
