@@ -118,7 +118,8 @@ class build_ext(_build_ext):
         self.optvals['madxdir'] = install_madx(
             prefix=self.build_temp,
             static=self.optvals['static'],
-            shared=self.optvals['shared'])
+            shared=self.optvals['shared'],
+            X11=self.optvals['X11'])
 
     def check_dependency(self, c_code):
         """Check if an external library can be found by trying to compile a
