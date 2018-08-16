@@ -72,7 +72,7 @@ def chdir(path):
 
 
 def install_madx(version=MADX_VERSION, prefix='.',
-                 static=False, shared=False, X11=True):
+                 static=False, shared=False, X11=False):
 
     FILE    = '{}.zip'.format(version)
     BASE    = 'https://github.com/MethodicalAcceleratorDesign/MAD-X/archive/'
@@ -104,7 +104,7 @@ def install_madx(version=MADX_VERSION, prefix='.',
     print("Building MAD-X in: {}".format(BUILD))
     if mkdir(BUILD):
         build_madx(FOLDER, BUILD, INSTALL,
-                   static=static, shared=shared, X11=X11)
+                   static=static, shared=shared, X11=False)
     else:
         print(" -> already built!")
     print()

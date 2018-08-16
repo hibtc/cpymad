@@ -57,12 +57,12 @@ class build_ext(_build_ext):
         'shared':   ('opt', False,      ),
         'lapack':   ('opt', False,      ),
         'blas':     ('opt', False,      ),
-        'X11':      ('opt', not is_win, ),
+        'X11':      ('opt', None,       ),
     }
     optvals = {}
 
     def build_extension(self, ext):
-        ext.__dict__.update(get_extension_args(**self.optvals))
+        ext.__dict__.update(get_extension_args(**self.get_optvals()))
         try:
             # Return if the extension has already been built or MAD-X is
             # available. This prevents us from unnecessary work for example
@@ -99,8 +99,12 @@ class build_ext(_build_ext):
             http://hibtc.github.io/cpymad/installation/index.html
 
         """), file=sys.stderr)
+        # If unspecified, let's build MAD-X without X11 (as this removes
+        # potential linking complications):
+        if self.optvals.get('X11') is None:
+            self.optvals['X11'] = False
         self.build_madx()
-        ext.__dict__.update(get_extension_args(**self.optvals))
+        ext.__dict__.update(get_extension_args(**self.get_optvals()))
         return _build_ext.build_extension(self, ext)
 
     def has_madx(self):
@@ -115,11 +119,12 @@ class build_ext(_build_ext):
 
     def build_madx(self):
         from utils.build_madx import install_madx
+        optvals = self.get_optvals()
         self.optvals['madxdir'] = install_madx(
             prefix=self.build_temp,
-            static=self.optvals['static'],
-            shared=self.optvals['shared'],
-            X11=self.optvals['X11'])
+            static=optvals['static'],
+            shared=optvals['shared'],
+            X11=optvals['X11'])
 
     def check_dependency(self, c_code):
         """Check if an external library can be found by trying to compile a
@@ -143,7 +148,7 @@ class build_ext(_build_ext):
         tmp_src = tmp_bin + '.c'
         with open(tmp_src, 'w') as f:
             f.write(c_code)
-        ext_args = get_extension_args(**self.optvals)
+        ext_args = get_extension_args(**self.get_optvals())
         try:
             self.compiler.compile(
                 [tmp_src],
@@ -155,6 +160,13 @@ class build_ext(_build_ext):
             return False
         finally:
             shutil.rmtree(tmp_dir)
+
+    def get_optvals(self):
+        optvals = self.optvals.copy()
+        # If unspecified, assume MAD-X was built without disabling X11:
+        if optvals.get('X11') is None:
+            optvals['X11'] = not self.is_win
+        return optvals
 
 
 def read_file(path):
