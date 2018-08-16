@@ -138,11 +138,11 @@ you should also set the corresponding option:
 
 .. code-block:: bash
 
-    export BUILD_SHARED_LIBS=1
+    export SHARED=1
 
     # or:
 
-    export MADX_STATIC=1
+    export STATIC=1
 
 With these settings in place, you can try installing cpymad as before:
 
