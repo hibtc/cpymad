@@ -8,7 +8,7 @@ CAUTION: Do not import this module directly! Use :class:`Madx` instead.
 - The API of this module is considered private, i.e. it may change between
   versions without further notice.
 - Importing this module means loading MAD-X directly into the process space.
-  This means that any crash in the (extremely fragile) MAD-X interpreter will
+  This means that any crash in the (sometimes fragile) MAD-X interpreter will
   crash the importing process with it.
 - All functions in this module operate on a shared global state.
 - this module exposes a very C-ish API that is not convenient to work with.
