@@ -10,7 +10,6 @@ from __future__ import absolute_import
 from functools import wraps
 from itertools import product
 from numbers import Number
-import logging
 import os
 import collections
 
@@ -110,14 +109,12 @@ class Madx(object):
     :ivar table:        Mapping of all tables in memory.
     """
 
-    def __init__(self, libmadx=None, command_log=None, error_log=None,
-                 **Popen_args):
+    def __init__(self, libmadx=None, command_log=None, **Popen_args):
         """
         Initialize instance variables.
 
         :param libmadx: :mod:`libmadx` compatible object
         :param command_log: Log all MAD-X commands issued via cpymad.
-        :param error_log: logger instance ``logging.Logger``
         :param Popen_args: Additional parameters to ``subprocess.Popen``
 
         If ``libmadx`` is NOT specified, a new MAD-X interpreter will
@@ -134,9 +131,6 @@ class Madx(object):
             m = Madx(stdout=subprocess.PIPE)
             f = m._process.stdout
         """
-        # get logger
-        if error_log is None:
-            error_log = logging.getLogger(__name__)
         # open history file
         if isinstance(command_log, basestring):
             command_log = CommandLog.create(command_log)
@@ -154,7 +148,6 @@ class Madx(object):
         # init instance variables:
         self._libmadx = libmadx
         self._command_log = command_log
-        self._error_log = error_log
         self.command = CommandMap(self)
         self.globals = VarList(self)
         self.elements = GlobalElementList(self)
