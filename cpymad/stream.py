@@ -40,7 +40,6 @@ class AsyncReader:
     thread will only be active while have entered the `with` context."""
 
     def __init__(self, stream, callback):
-        super().__init__()
         set_nonblocking(stream)
         self.pool = ThreadPool(1)
         self.stream = stream
