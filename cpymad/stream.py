@@ -51,7 +51,9 @@ class AsyncReader:
 
     def __exit__(self, *exc_info):
         self.stop = True
-        self.callback(b''.join(self.result.get()))
+        output_lines = self.result.get()
+        if output_lines:
+            self.callback(b''.join(output_lines))
 
     def _read_thread(self):
         lines = []

@@ -110,11 +110,10 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertIn(b'+ Execution date: ',                           output[0])
         #self.assertIn(b'+ Support: mad@cern.ch, ', output[1])
         m.input('foo = 3;')
-        self.assertEqual(len(output), 2)
-        self.assertEqual(output[1], b'')
+        self.assertEqual(len(output), 1)
         m.input('foo = 3;')
-        self.assertEqual(len(output), 3)
-        self.assertEqual(output[2], b'++++++ info: foo redefined\n')
+        self.assertEqual(len(output), 2)
+        self.assertEqual(output[1], b'++++++ info: foo redefined\n')
 
     def test_command_log(self):
         """Check that the command log contains all input commands."""
