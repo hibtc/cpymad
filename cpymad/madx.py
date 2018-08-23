@@ -12,6 +12,7 @@ from itertools import product
 from numbers import Number
 import os
 import collections
+import subprocess
 
 import numpy as np
 
@@ -19,6 +20,7 @@ from minrpc.util import ChangeDirectory
 
 from . import _rpc
 from . import util
+from .stream import AsyncReader
 
 try:
     basestring
@@ -58,6 +60,10 @@ def _fix_name(name):
     if name.endswith('_'):
         name = name[:-1]
     return name
+
+
+class NullContext(object):
+    __enter__ = __exit__ = lambda *_: None
 
 
 class CommandLog(object):
@@ -134,8 +140,12 @@ class Madx(object):
         # open history file
         if isinstance(command_log, basestring):
             command_log = CommandLog.create(command_log)
+        self.reader = NullContext()
         # start libmadx subprocess
         if libmadx is None:
+            stdout = Popen_args.get('stdout')
+            if callable(stdout):
+                Popen_args['stdout'] = subprocess.PIPE
             # stdin=None leads to an error on windows when STDIN is broken.
             # Therefore, we need set stdin=os.devnull by passing stdin=False:
             Popen_args.setdefault('stdin', False)
@@ -143,8 +153,11 @@ class Madx(object):
             self._service, self._process = \
                 _rpc.LibMadxClient.spawn_subprocess(**Popen_args)
             libmadx = self._service.libmadx
+            if callable(stdout):
+                self.reader = AsyncReader(self._process.stdout, stdout)
         if not libmadx.is_started():
-            libmadx.start()
+            with self.reader:
+                libmadx.start()
         # init instance variables:
         self._libmadx = libmadx
         self._command_log = command_log
@@ -194,7 +207,8 @@ class Madx(object):
         if self._command_log:
             self._command_log(text)
         try:
-            self._libmadx.input(text)
+            with self.reader:
+                self._libmadx.input(text)
         except _rpc.RemoteProcessCrashed:
             # catch + reraise in order to shorten stack trace (~3-5 levels):
             raise RuntimeError("MAD-X has stopped working!")
