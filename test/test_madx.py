@@ -100,6 +100,22 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertEqual(madxness.eval('ANSWER'), 43);
         _close(madxness)
 
+    def test_streamreader(self):
+        output = []
+        m = Madx(stdout=output.append)
+        self.assertEqual(len(output), 1)
+        self.assertIn(b'++++++++++++++++++++++++++++++++++++++++++++', output[0])
+        self.assertIn(b'+ Support: mad@cern.ch,',                      output[0])
+        self.assertIn(b'+ Release   date: ',                           output[0])
+        self.assertIn(b'+ Execution date: ',                           output[0])
+        #self.assertIn(b'+ Support: mad@cern.ch, ', output[1])
+        m.input('foo = 3;')
+        self.assertEqual(len(output), 2)
+        self.assertEqual(output[1], b'')
+        m.input('foo = 3;')
+        self.assertEqual(len(output), 3)
+        self.assertEqual(output[2], b'++++++ info: foo redefined\n')
+
     def test_command_log(self):
         """Check that the command log contains all input commands."""
         # create a new Madx instance that uses the history feature:
