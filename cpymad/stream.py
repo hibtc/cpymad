@@ -66,8 +66,3 @@ class AsyncReader:
             if not line:
                 return lines
             lines.append(line)
-
-    def flush(self):
-        """Read all data from the remote."""
-        with self:
-            pass
