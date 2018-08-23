@@ -134,8 +134,7 @@ class Madx(object):
             with open('madx_output.log', 'w') as f:
                 m = Madx(stdout=f)
 
-            m = Madx(stdout=subprocess.PIPE)
-            f = m._process.stdout
+            m = Madx(stdout=sys.stdout)
         """
         # open history file
         if isinstance(command_log, basestring):
@@ -144,6 +143,11 @@ class Madx(object):
         # start libmadx subprocess
         if libmadx is None:
             stdout = Popen_args.get('stdout')
+            if hasattr(stdout, 'write'):
+                try:
+                    stdout.fileno()
+                except (AttributeError, OSError):
+                    stdout = stdout.write
             if callable(stdout):
                 Popen_args['stdout'] = subprocess.PIPE
             # stdin=None leads to an error on windows when STDIN is broken.
