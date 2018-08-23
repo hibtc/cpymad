@@ -52,7 +52,7 @@ class AsyncReader:
 
     def __exit__(self, *exc_info):
         self.stop = True
-        self.callback("\n".join(self.result.get()))
+        self.callback(b''.join(self.result.get()))
 
     def _read_thread(self):
         lines = []
@@ -65,7 +65,7 @@ class AsyncReader:
                 continue
             if not line:
                 return lines
-            lines.append(line.decode('utf-8', 'replace')[:-1])
+            lines.append(line)
 
     def flush(self):
         """Read all data from the remote."""
