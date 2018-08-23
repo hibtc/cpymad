@@ -24,6 +24,10 @@ import numpy as np      # Import the Python-level symbols of numpy
 cdef extern from "pyport.h":
     ctypedef int Py_intptr_t
 
+cdef extern from "string.h" nogil:
+    char* strstr(char* s1, char* s2)
+    char* strchr(char* s, int c)
+
 from cpymad.types import Constraint, Parameter
 from cpymad.util import name_to_internal, name_from_internal, normalize_range_name
 cimport cpymad.clibmadx as clib
@@ -44,6 +48,7 @@ __all__ = [
     'start',
     'finish',
     'input',
+    'input_multiline',
     'eval',
 
     # Globals
@@ -185,6 +190,22 @@ def input(cmd):
     cdef bytes _cmd = _cstr(cmd)
     cdef char* _pch = _cmd
     with nogil:
+        clib.stolower_nq(_pch)
+        clib.pro_input(_pch)
+
+
+def input_multiline(cmd):
+    """
+    Pass one input command to MAD-X.
+
+    :param str cmd: command to be executed by the MAD-X interpreter
+    """
+    cmd = cmd.rstrip().rstrip(';') + ';'
+    cdef bytes _cmd = _cstr(cmd)
+    cdef char* _pch = _cmd
+    with nogil:
+        _strip_comments(_pch)
+        clib.supp_lt(_pch, 0)
         clib.stolower_nq(_pch)
         clib.pro_input(_pch)
 
@@ -1192,3 +1213,28 @@ cdef clib.variable* _get_var(name) except NULL:
     if var is NULL:
         raise KeyError("Variable not defined: {!r}".format(name))
     return var
+
+
+cdef void _strip_comments(char* text) nogil:
+    cdef char* dest = text
+    cdef char c, d
+    while True:
+        c = text[0]
+        if c == 0:
+            break
+        d = text[1]
+        if c == b'!' or (c == b'/' and d == b'/'):
+            text = strchr(text+1, b'\n')
+            if text == NULL:
+                break
+            continue
+        if c == b'/' and d == b'*':
+            text = strstr(text+2, b"*/")
+            if text == NULL:
+                break
+            text += 2
+            continue
+        dest[0] = text[0]
+        text += 1
+        dest += 1
+    dest[0] = 0
