@@ -48,7 +48,6 @@ __all__ = [
     'start',
     'finish',
     'input',
-    'input_multiline',
     'eval',
 
     # Globals
@@ -180,21 +179,6 @@ def finish():
 
 
 def input(cmd):
-    """
-    Pass one input command to MAD-X.
-
-    :param str cmd: command to be executed by the MAD-X interpreter
-    """
-    cmd = cmd.strip().replace('\n', '')
-    cmd = cmd.rstrip(';') + ';'
-    cdef bytes _cmd = _cstr(cmd)
-    cdef char* _pch = _cmd
-    with nogil:
-        clib.stolower_nq(_pch)
-        clib.pro_input(_pch)
-
-
-def input_multiline(cmd):
     """
     Pass one input command to MAD-X.
 
