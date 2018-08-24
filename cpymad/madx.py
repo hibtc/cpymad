@@ -115,12 +115,13 @@ class Madx(object):
     :ivar table:        Mapping of all tables in memory.
     """
 
-    def __init__(self, libmadx=None, command_log=None, **Popen_args):
+    def __init__(self, libmadx=None, command_log=None, stdout=None, **Popen_args):
         """
         Initialize instance variables.
 
         :param libmadx: :mod:`libmadx` compatible object
         :param command_log: Log all MAD-X commands issued via cpymad.
+        :param stdout: file descriptor, file object or callable
         :param Popen_args: Additional parameters to ``subprocess.Popen``
 
         If ``libmadx`` is NOT specified, a new MAD-X interpreter will
@@ -142,14 +143,13 @@ class Madx(object):
         self.reader = NullContext()
         # start libmadx subprocess
         if libmadx is None:
-            stdout = Popen_args.get('stdout')
             if hasattr(stdout, 'write'):
                 try:
-                    stdout.fileno()
+                    stdout = stdout.fileno()
                 except (AttributeError, OSError):
                     stdout = stdout.write
-            if callable(stdout):
-                Popen_args['stdout'] = subprocess.PIPE
+            Popen_args['stdout'] = \
+                subprocess.PIPE if callable(stdout) else stdout
             # stdin=None leads to an error on windows when STDIN is broken.
             # Therefore, we need set stdin=os.devnull by passing stdin=False:
             Popen_args.setdefault('stdin', False)
