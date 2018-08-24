@@ -1,6 +1,18 @@
 Changelog
 ~~~~~~~~~
 
+1.0.6
+=====
+Date: 28.08.2018
+
+- remove unused ``error_log`` from ``Madx``
+- support passing arbitrary callables to ``Madx(stdout=...)``
+- support passing non-file ``IOBase`` objects as ``stdout``
+- default to ``sys.stdout``
+- can pass almost arbitrary MAD-X scripts to ``input``, including
+  comments/multiline commands
+
+
 1.0.5
 =====
 Date: 16.08.2018
