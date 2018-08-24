@@ -5,6 +5,10 @@ This file contains declarations of data structures and exported functions
 of the C-API of MAD-X.
 """
 
+cdef extern from "<stdio.h>" nogil:
+    ctypedef struct FILE
+    cdef FILE *stdin
+
 # Data structures:
 
 # The following declarations are only used by the Cython compiler (so it
@@ -43,6 +47,14 @@ cdef extern from "madX/mad_array.h" nogil:
     struct double_array:
         int curr
         double* a
+
+cdef extern from "madX/mad_stream.h" nogil:
+    struct in_buffer:
+        char_array* c_a
+
+    struct in_buff_list:
+        int curr
+        in_buffer** buffers
 
 cdef extern from "madX/mad_name.h" nogil:
     struct name_list:
@@ -217,6 +229,10 @@ cdef extern from "madX/mad_gvar.h" nogil:
     el_list* base_type_list     # list of base types
     command_list* defined_commands  # with base types, but no user elements
     int start_var               # start of variables after predefined constants
+    in_buff_list* in_ "in"      # list of all active input buffers
+    int stop_flag               # 1 if stop condition
+    int return_flag             # 1 when "return" read
+    int in_stop                 # input buffer stop flag
 
 
 # Function declarations:
@@ -251,6 +267,9 @@ cdef extern from "madX/mad_table.h" nogil:
     char_p_array* table_get_header(char* table_name)
     int table_exists(char* table_name)
     void out_table(char* tname, table*, char* filename)
+
+cdef extern from "madX/mad_cmd.h" nogil:
+    int get_stmt(FILE*, int supp_flag)
 
 cdef extern from "madX/mad_var.h" nogil:
     # NOTE: C API uses "const char* name"

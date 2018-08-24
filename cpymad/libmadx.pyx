@@ -16,6 +16,7 @@ CAUTION: Do not import this module directly! Use :class:`Madx` instead.
 
 from os import chdir, getcwd
 
+import sys
 import ctypes
 import numpy as np      # Import the Python-level symbols of numpy
 
@@ -26,11 +27,13 @@ cdef extern from "pyport.h":
 
 from cpymad.types import Constraint, Parameter
 from cpymad.util import name_to_internal, name_from_internal, normalize_range_name
+from cpymad.stream import ThreadPool, set_nonblocking
 cimport cpymad.clibmadx as clib
 
 
 # Remember whether start() was called
 _madx_started = False
+_pool = None
 
 
 # Python-level binding to libmadx:
@@ -161,8 +164,10 @@ def start():
     Initialize MAD-X.
     """
     clib.madx_start()
-    global _madx_started
+    global _madx_started, _pool
+    set_nonblocking(sys.stdin)
     _madx_started = True
+    _pool = ThreadPool(1)
 
 
 def finish():
@@ -172,6 +177,35 @@ def finish():
     clib.madx_finish()
     global _madx_started
     _madx_started = False
+
+
+stop = False
+result = None
+def start_input():
+    global result, stop
+    stop = False
+    result = _pool.apply_async(mainloop)
+
+def finish_input():
+    global result, stop
+    stop = True
+    return result.join()
+
+
+def mainloop():
+    num_commands = 0
+
+    while not clib.in_stop:
+        if clib.get_stmt(clib.stdin, 0) == 0:
+            if stop:
+                break
+            continue
+        clib.stolower_nq(clib.in_.buffers[clib.in_.curr].c_a.c)
+        clib.pro_input(clib.in_.buffers[clib.in_.curr].c_a.c)
+        if clib.stop_flag:
+            break
+
+    return num_commands
 
 
 def input(cmd):

@@ -67,3 +67,38 @@ class AsyncReader:
             if not line:
                 return lines
             lines.append(line)
+
+class AsyncWriter:
+
+    """Write stream asynchronously in a worker thread. Note that the worker
+    thread will only be active while have entered the `with` context."""
+
+    def __init__(self, stream, callback):
+        set_nonblocking(stream)
+        self.pool = ThreadPool(1)
+        self.stream = stream
+        self.callback = callback
+
+    @contextmanager
+    def write(self, text):
+        self.stop = False
+        self.result = self.pool.apply_async(self._write_thread)
+
+    def __exit__(self, *exc_info):
+        self.stop = True
+        output_lines = self.result.get()
+        if output_lines:
+            self.callback(b''.join(output_lines))
+
+    def _write_thread(self):
+        lines = []
+        while True:
+            try:
+                line = self.stream.readline()
+            except IOError:
+                if self.stop:
+                    return lines
+                continue
+            if not line:
+                return lines
+            lines.append(line)

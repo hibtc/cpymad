@@ -152,7 +152,7 @@ class Madx(object):
                 Popen_args['stdout'] = subprocess.PIPE
             # stdin=None leads to an error on windows when STDIN is broken.
             # Therefore, we need set stdin=os.devnull by passing stdin=False:
-            Popen_args.setdefault('stdin', False)
+            Popen_args.setdefault('stdin', subprocess.PIPE)
             Popen_args.setdefault('bufsize', 0)
             self._service, self._process = \
                 _rpc.LibMadxClient.spawn_subprocess(**Popen_args)
@@ -212,7 +212,9 @@ class Madx(object):
             self._command_log(text)
         try:
             with self.reader:
-                self._libmadx.input(text)
+                self._libmadx.start_input()
+                self._process.stdin.write(text.encode('utf-8') + '\n')
+                return self._libmadx.finish_input()
         except _rpc.RemoteProcessCrashed:
             # catch + reraise in order to shorten stack trace (~3-5 levels):
             raise RuntimeError("MAD-X has stopped working!")
