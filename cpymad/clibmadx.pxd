@@ -233,6 +233,7 @@ cdef extern from "madX/mad_name.h" nogil:
 cdef extern from "madX/mad_str.h" nogil:
     void stolower_nq(char*)
     int mysplit(char*, char_p_array*)
+    int supp_lt(char*, int)
 
 cdef extern from "madX/mad_eval.h" nogil:
     void pro_input(char*)

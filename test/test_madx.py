@@ -652,6 +652,52 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertIn('sbend', self.mad.base_types)
         self.assertNotIn('match', self.mad.base_types)
 
+    def test_comments(self):
+        mad = self.mad
+        var = mad.globals
+        mad('x = 1; ! x = 2;')
+        self.assertEqual(var.x, 1)
+        mad('x = 2; // x = 3;')
+        self.assertEqual(var.x, 2)
+        mad('x = 3; /* x = 4; */')
+        self.assertEqual(var.x, 3)
+        mad('/* x = 3; */ x = 4;')
+        self.assertEqual(var.x, 4)
+        mad('x = 5; ! /* */ x = 6;')
+        self.assertEqual(var.x, 5)
+        mad('x = 5; /* ! */ x = 6;')
+        self.assertEqual(var.x, 6)
+
+    def test_multiline_input(self):
+        mad = self.mad
+        var = mad.globals
+        mad('''
+            x = 1;
+            y = 2;
+        ''')
+        self.assertEqual(var.x, 1)
+        self.assertEqual(var.y, 2)
+        mad('''
+            x = /* 3;
+            y =*/ 4;
+        ''')
+        self.assertEqual(var.x, 4)
+        self.assertEqual(var.y, 2)
+        mad('''
+            x = 1; /*  */ x = 2;
+            */ if (x == 1) {
+                x = 3;
+            }
+        ''')
+        self.assertEqual(var.x, 2)
+        mad('''
+            x = 1; /* x = 2;
+            */ if (x == 1) {
+                x = 3;
+            }
+        ''')
+        self.assertEqual(var.x, 3)
+
 
 class TestTransferMap(unittest.TestCase):
 
