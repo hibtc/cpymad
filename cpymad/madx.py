@@ -143,6 +143,8 @@ class Madx(object):
         self.reader = NullContext()
         # start libmadx subprocess
         if libmadx is None:
+            if stdout is None:
+                from sys import stdout
             if hasattr(stdout, 'write'):
                 try:
                     stdout = stdout.fileno()
