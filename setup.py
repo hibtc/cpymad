@@ -292,7 +292,7 @@ def get_setup_args(optvals):
         install_requires=[
             'setuptools>=18.0',
             'numpy',
-            'minrpc>=0.0.7',
+            'minrpc>=0.0.8',
         ],
         cmdclass={'build_ext': type('build_ext', (build_ext, object), {
             'optvals': optvals,
