@@ -10,6 +10,7 @@ from multiprocessing.dummy import Pool as ThreadPool
 try:                        # Linux
     import fcntl
     from os import O_NONBLOCK
+
     def set_nonblocking(pipe):
         fd = pipe.fileno()
         fl = fcntl.fcntl(fd, fcntl.F_GETFL)
