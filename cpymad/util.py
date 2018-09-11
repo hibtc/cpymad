@@ -1,13 +1,16 @@
 """
 Utility functions used in other parts of the pymad package.
 """
-import collections
 import re
 import os
 import sys
 import tempfile
 from contextlib import contextmanager
 from numbers import Number
+try:
+    import collections.abc as abc
+except ImportError:
+    import collections as abc
 
 from .types import Range, Constraint
 
@@ -192,7 +195,7 @@ def format_param(key, value):
         return key + '=' + str(value).lower()
     elif key == 'range' or isinstance(value, Range):
         return key + '=' + _format_range(value)
-    # check for basestrings before collections.Sequence, because every
+    # check for basestrings before abc.Sequence, because every
     # basestring is also a Sequence:
     elif isinstance(value, basestring):
         if key in QUOTED_PARAMS:
@@ -206,7 +209,7 @@ def format_param(key, value):
     # don't quote expressions:
     elif isinstance(value, basestring):
         return key + ':=' + value
-    elif isinstance(value, collections.Sequence):
+    elif isinstance(value, abc.Sequence):
         return key + '={' + ','.join(map(str, value)) + '}'
     else:
         return key + '=' + str(value)
@@ -264,7 +267,7 @@ def format_cmdpar(cmd, key, value):
     if dtype in (PARAM_TYPE_LOGICAL_ARRAY,
                  PARAM_TYPE_INTEGER_ARRAY,
                  PARAM_TYPE_DOUBLE_ARRAY):
-        if isinstance(value, collections.Sequence):
+        if isinstance(value, abc.Sequence):
             if all(isinstance(v, Number) for v in value):
                 return key + '={' + ','.join(map(str, value)) + '}'
             else:
@@ -294,7 +297,7 @@ def format_cmdpar(cmd, key, value):
             return key + '=' + _format_range(value)
         if isinstance(value, basestring):
             return key + '=' + format_str(value)
-        if isinstance(value, collections.Sequence):
+        if isinstance(value, abc.Sequence):
             return key + '={' + ','.join(map(format_str, value)) + '}'
 
     raise TypeError('Unexpected command argument type: {}={!r} ({})'

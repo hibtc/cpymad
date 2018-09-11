@@ -11,8 +11,12 @@ from functools import wraps
 from itertools import product
 from numbers import Number
 import os
-import collections
 import subprocess
+
+try:
+    import collections.abc as abc
+except ImportError:                 # py2
+    import collections as abc
 
 import numpy as np
 
@@ -409,7 +413,7 @@ class Madx(object):
         return self._libmadx.eval(expr)
 
 
-class _Mapping(collections.Mapping):
+class _Mapping(abc.Mapping):
 
     def __repr__(self):
         """String representation of a custom mapping object."""
@@ -429,7 +433,7 @@ class _Mapping(collections.Mapping):
         raise AttributeError(key)
 
 
-class _MutableMapping(_Mapping, collections.MutableMapping):
+class _MutableMapping(_Mapping, abc.MutableMapping):
 
     __slots__ = ()
 
@@ -451,7 +455,7 @@ class _MutableMapping(_Mapping, collections.MutableMapping):
 class AttrDict(_Mapping):
 
     def __init__(self, data):
-        if not isinstance(data, collections.Mapping):
+        if not isinstance(data, abc.Mapping):
             data = dict(data)
         self._data = data
 
@@ -738,7 +742,7 @@ class Element(Command):
         return (self if self.name == name else self._madx.elements[name])
 
 
-class ArrayAttribute(collections.Sequence):
+class ArrayAttribute(abc.Sequence):
 
     def __init__(self, element, values, name):
         self._element = element
@@ -826,7 +830,7 @@ class BaseElementList(object):
         return index
 
 
-class ElementList(BaseElementList, collections.Sequence):
+class ElementList(BaseElementList, abc.Sequence):
 
     def __init__(self, madx, sequence_name):
         """
