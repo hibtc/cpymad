@@ -199,7 +199,8 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         # the full sequence. This checks that none of the range selections
         # have side-effects on each other:
         betx_full1 = self.mad.twiss(**params)['betx'].copy(columns)
-        betx_range = self.mad.twiss(range=('dr[2]', 'sb'), **params)['betx'].copy(columns)
+        betx_range = (self.mad.twiss(range=('dr[2]', 'sb'), **params)['betx']
+                      .copy(columns))
         betx_full2 = self.mad.twiss(**params)['betx'].copy(columns)
         # Check that the results have the expected lengths:
         self.assertEqual(len(betx_full1), 9)

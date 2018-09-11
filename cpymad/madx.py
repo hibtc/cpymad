@@ -860,16 +860,19 @@ class ElementList(BaseElementList, collections.Sequence):
 class ExpandedElementList(ElementList):
 
     def _get_element(self, element_index):
-        return self._libmadx.get_expanded_element(self._sequence_name, element_index)
+        return self._libmadx.get_expanded_element(
+            self._sequence_name, element_index)
 
     def _get_element_count(self):
         return self._libmadx.get_expanded_element_count(self._sequence_name)
 
     def _get_element_index(self, element_name):
-        return self._libmadx.get_expanded_element_index(self._sequence_name, element_name)
+        return self._libmadx.get_expanded_element_index(
+            self._sequence_name, element_name)
 
     def _get_element_at(self, pos):
-        return self._libmadx.get_expanded_element_index_by_position(self._sequence_name, pos)
+        return self._libmadx.get_expanded_element_index_by_position(
+            self._sequence_name, pos)
 
     def __repr__(self):
         return '[{}]'.format(', '.join(
