@@ -530,23 +530,23 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         ALL = slice(None)
 
         self.assertEqual(sector.tmat(0).shape, (6, 6, 6))
-        assert_allclose(sector.tmat(ALL)[0,0,0,:], sector.t111)
-        assert_allclose(sector.tmat(ALL)[1,5,3,:], sector.t264)
-        assert_allclose(sector.tmat(ALL)[3,0,3,:], sector.t414)
-        assert_allclose(sector.tmat(ALL)[4,4,4,:], sector.t555)
+        assert_allclose(sector.tmat(ALL)[0, 0, 0, :], sector.t111)
+        assert_allclose(sector.tmat(ALL)[1, 5, 3, :], sector.t264)
+        assert_allclose(sector.tmat(ALL)[3, 0, 3, :], sector.t414)
+        assert_allclose(sector.tmat(ALL)[4, 4, 4, :], sector.t555)
 
-        assert_allclose(sector.rmat(ALL)[0,0,:], sector.r11)
-        assert_allclose(sector.rmat(ALL)[1,5,:], sector.r26)
-        assert_allclose(sector.rmat(ALL)[3,0,:], sector.r41)
-        assert_allclose(sector.rmat(ALL)[4,4,:], sector.r55)
+        assert_allclose(sector.rmat(ALL)[0, 0, :], sector.r11)
+        assert_allclose(sector.rmat(ALL)[1, 5, :], sector.r26)
+        assert_allclose(sector.rmat(ALL)[3, 0, :], sector.r41)
+        assert_allclose(sector.rmat(ALL)[4, 4, :], sector.r55)
 
-        assert_allclose(sector.kvec(ALL)[0,:], sector.k1)
-        assert_allclose(sector.kvec(ALL)[1,:], sector.k2)
-        assert_allclose(sector.kvec(ALL)[3,:], sector.k4)
-        assert_allclose(sector.kvec(ALL)[4,:], sector.k5)
+        assert_allclose(sector.kvec(ALL)[0, :], sector.k1)
+        assert_allclose(sector.kvec(ALL)[1, :], sector.k2)
+        assert_allclose(sector.kvec(ALL)[3, :], sector.k4)
+        assert_allclose(sector.kvec(ALL)[4, :], sector.k5)
 
-        r = self.mad.sectortable()[:,:6,:6]
-        k = self.mad.sectortable()[:, 6,:6]
+        r = self.mad.sectortable()[:, :6, :6]
+        k = self.mad.sectortable()[:, 6, :6]
         t = self.mad.sectortable2()
 
         num_elems = len(self.mad.sequence.s1.elements)
@@ -554,20 +554,20 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertEqual(r.shape, (num_elems, 6, 6))
         self.assertEqual(k.shape, (num_elems, 6))
 
-        assert_allclose(t[:,0,0,0], sector.t111)
-        assert_allclose(t[:,1,5,3], sector.t264)
-        assert_allclose(t[:,3,0,3], sector.t414)
-        assert_allclose(t[:,4,4,4], sector.t555)
+        assert_allclose(t[:, 0, 0, 0], sector.t111)
+        assert_allclose(t[:, 1, 5, 3], sector.t264)
+        assert_allclose(t[:, 3, 0, 3], sector.t414)
+        assert_allclose(t[:, 4, 4, 4], sector.t555)
 
-        assert_allclose(r[:,0,0], sector.r11)
-        assert_allclose(r[:,1,5], sector.r26)
-        assert_allclose(r[:,3,0], sector.r41)
-        assert_allclose(r[:,4,4], sector.r55)
+        assert_allclose(r[:, 0, 0], sector.r11)
+        assert_allclose(r[:, 1, 5], sector.r26)
+        assert_allclose(r[:, 3, 0], sector.r41)
+        assert_allclose(r[:, 4, 4], sector.r55)
 
-        assert_allclose(k[:,0], sector.k1)
-        assert_allclose(k[:,1], sector.k2)
-        assert_allclose(k[:,3], sector.k4)
-        assert_allclose(k[:,4], sector.k5)
+        assert_allclose(k[:, 0], sector.k1)
+        assert_allclose(k[:, 1], sector.k2)
+        assert_allclose(k[:, 3], sector.k4)
+        assert_allclose(k[:, 4], sector.k5)
 
     def test_attr(self):
         self.assertTrue(hasattr(self.mad, 'constraint'))
@@ -727,12 +727,12 @@ class TestTransferMap(unittest.TestCase):
                         rtol=rtol, atol=atol)
 
         # transport of beam matrix:
-        tm = smap[0:6,0:6]
+        tm = smap[0:6, 0:6]
         tab_len = len(tw['sig11'])
         sig_init = tw.sigmat(0)
         sig_final_tw = tw.sigmat(tab_len-1)
         sig_final_sm = np.dot(tm, np.dot(sig_init, tm.T))
-        assert_allclose(sig_final_tw[0:4,0:4], sig_final_sm[0:4,0:4],
+        assert_allclose(sig_final_tw[0:4, 0:4], sig_final_sm[0:4, 0:4],
                         rtol=rtol, atol=atol)
         _close(mad)
 
