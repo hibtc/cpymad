@@ -8,7 +8,6 @@ from numpy.testing import assert_allclose
 
 # tested class
 from cpymad.madx import Madx, CommandLog, metadata
-from cpymad.types import Constraint
 
 
 class _TestCaseCompat(object):
@@ -163,8 +162,6 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         initial = dict(alfx=0.5, alfy=1.5,
                        betx=2.5, bety=3.5)
         twiss = self.mad.twiss(sequence=seq_name, **initial)
-        betx, bety = twiss['betx'], twiss['bety']
-        alfx, alfy = twiss['alfx'], twiss['alfy']
         # Check initial values:
         self.assertAlmostEqual(twiss['alfx'][0], initial['alfx'])
         self.assertAlmostEqual(twiss['alfy'][0], initial['alfy'])
@@ -257,7 +254,6 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertAlmostEqual(val, 2.0, places=2)
 
     def test_verbose(self):
-        get_command = self.mad._libmadx.get_defined_command
         self.mad.verbose(False)
         self.assertEqual(self.mad.options.echo, False)
         self.assertEqual(self.mad.options.info, False)
@@ -267,17 +263,17 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
 
     def test_active_sequence(self):
         self.mad.command.beam('ex=1, ey=2, particle=electron, sequence=s1;')
-        self.assertEqual(self.mad.sequence(), None)
         self.mad.use('s1')
         self.assertEqual(self.mad.sequence(), 's1')
+        self.mad.beam()
+        self.mad.use('s2')
+        self.assertEqual(self.mad.sequence().name, 's2')
 
     def test_get_sequence(self):
         with self.assertRaises(KeyError):
             self.mad.sequence['sN']
         s1 = self.mad.sequence['s1']
         self.assertEqual(s1.name, 's1')
-
-    def test_get_sequence(self):
         seqs = self.mad.sequence
         self.assertItemsEqual(seqs, ['s1', 's2'])
 
@@ -349,11 +345,6 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         with self.assertRaises(AttributeError):
             seq.s3
 
-    def test_active_sequence(self):
-        self.mad.beam()
-        self.mad.use('s2')
-        self.assertEqual(self.mad.sequence().name, 's2')
-
     def test_table_map(self):
         self.mad.beam()
         self.mad.use('s2')
@@ -389,8 +380,8 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertTrue(s1.is_expanded)
         initial = dict(alfx=0.5, alfy=1.5,
                        betx=2.5, bety=3.5)
-        twiss = self.mad.twiss(sequence='s1', sectormap=True,
-                               table='my_twiss', **initial)
+        self.mad.twiss(sequence='s1', sectormap=True,
+                       table='my_twiss', **initial)
         # Now works:
         self.assertEqual(s1.beam.particle, 'positron')
         self.assertEqual(s1.twiss_table_name, 'my_twiss')
