@@ -29,9 +29,6 @@ except ImportError:
     def cythonize(extensions):
         return extensions
 
-sys.path.append(os.path.dirname(__file__))
-from utils.clopts import parse_opts
-
 # Windows:  win32/win-amd64
 # Linux:    linux-x86_64/...
 # Mac:      darwin*
@@ -299,6 +296,8 @@ def get_setup_args(optvals):
 
 
 if __name__ == '__main__':
+    sys.path.append(os.path.dirname(__file__))
+    from utils.clopts import parse_opts
     fix_distutils_sysconfig_mingw()
     optvals = parse_opts(sys.argv, build_ext.options)
     setup(**get_setup_args(optvals))
