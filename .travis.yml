@@ -35,8 +35,8 @@ before_install:
 # Setup (performed within virtualenv)
 install:
   # Error before performing long builds:
-  - pip install pyflakes
-  - pyflakes .
+  - pip install flake8
+  - flake8
 
   # prepare dependency cache:
   - pip wheel -v cython pyyaml
