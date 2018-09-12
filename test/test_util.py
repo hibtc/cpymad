@@ -80,38 +80,38 @@ class TestUtil(unittest.TestCase):
 
         self.assertEqual(
             util.format_command(
-                'twiss', sequence='lhc'),
-                'twiss, sequence="lhc";')
+                'twiss', sequence='lhc'
+            ), 'twiss, sequence="lhc";')
         self.assertEqual(
             util.format_command(
-                'option', echo=True),
-                'option, echo=true;')
+                'option', echo=True
+            ), 'option, echo=true;')
         self.assertEqual(
             util.format_command(
-                'constraint', betx=Constraint(max=3.13)),
-                'constraint, betx<3.13;')
+                'constraint', betx=Constraint(max=3.13)
+            ), 'constraint, betx<3.13;')
         self.assertEqual(
             util.format_command(
-                m.command.quadrupole, k1='pi/2'),
-                'quadrupole, k1:=pi/2;')
+                m.command.quadrupole, k1='pi/2'
+            ), 'quadrupole, k1:=pi/2;')
         self.assertEqual(
             util.format_command(
-                'multipole', knl=[0.0, 1.0, 2.0]),
-                'multipole, knl={0.0,1.0,2.0};')
+                'multipole', knl=[0.0, 1.0, 2.0]
+            ), 'multipole, knl={0.0,1.0,2.0};')
         self.assertEqual(
             util.format_command(
-                'twiss', range=Range('#s', '#e')),
-                'twiss, range=#s/#e;')
+                'twiss', range=Range('#s', '#e')
+            ), 'twiss, range=#s/#e;')
 
         self.assertEqual(
             util.format_command(
-                m.elements.quadrupole, k1="hello + world"),
-                'quadrupole, k1:=hello + world;')
+                m.elements.quadrupole, k1="hello + world"
+            ), 'quadrupole, k1:=hello + world;')
         self.assertEqual(
             util.format_command(
                 # match->sequence parameter is list in MAD-X!
-                m.command.match, sequence="foo"),
-                "match, sequence=foo;")
+                m.command.match, sequence="foo"
+            ), "match, sequence=foo;")
 
     def test_format_param(self):
         fmt = util.format_param
