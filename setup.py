@@ -280,12 +280,12 @@ def get_setup_args(optvals):
         url=metadata['__uri__'],
         license=metadata['__license__'],
         classifiers=metadata['__classifiers__'],
-        ext_modules = cythonize([
+        ext_modules=cythonize([
             Extension('cpymad.libmadx',
                       sources=["cpymad/libmadx.pyx"],
                       libraries=['madx']),
         ]),
-        packages = [
+        packages=[
             "cpymad",
         ],
         include_package_data=True, # include files matched by MANIFEST.in
