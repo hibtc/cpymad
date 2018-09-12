@@ -286,7 +286,7 @@ def get_setup_args(optvals):
         packages=[
             "cpymad",
         ],
-        include_package_data=True, # include files matched by MANIFEST.in
+        include_package_data=True,  # include files matched by MANIFEST.in
         install_requires=[
             'setuptools>=18.0',
             'numpy',

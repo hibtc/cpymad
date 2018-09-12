@@ -206,10 +206,10 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         # Check numeric results. Since the first 3 elements of range and full
         # sequence are identical, equal results are expected. And non-equal
         # results afterwards.
-        self.assertAlmostEqual(betx_range[0], betx_full1[1]) # dr:2, dr:1
-        self.assertAlmostEqual(betx_range[1], betx_full1[2]) # qp:2, qp:1
-        self.assertAlmostEqual(betx_range[2], betx_full1[3]) # dr:3, dr:2
-        self.assertNotAlmostEqual(betx_range[3], betx_full1[4]) # sb, qp:2
+        self.assertAlmostEqual(betx_range[0], betx_full1[1])      # dr:2, dr:1
+        self.assertAlmostEqual(betx_range[1], betx_full1[2])      # qp:2, qp:1
+        self.assertAlmostEqual(betx_range[2], betx_full1[3])      # dr:3, dr:2
+        self.assertNotAlmostEqual(betx_range[3], betx_full1[4])   # sb, qp:2
 
     def test_range_row_api(self):
         beam = 'ex=1, ey=2, particle=electron, sequence=s1;'
@@ -315,7 +315,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
             del g['bar']
         with self.assertRaises(NotImplementedError):
             del g.bar
-        self.assertEqual(g.bar, 42) # still there
+        self.assertEqual(g.bar, 42)     # still there
         self.assertIn('bar', list(g))
         self.assertIn('foo', list(g))
         #self.assertEqual(list(g), list(g.defs))
