@@ -95,8 +95,8 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         # instance:
         self.mad.input('ANSWER=42;')
         madxness.input('ANSWER=43;')
-        self.assertEqual(self.mad.eval('ANSWER'), 42);
-        self.assertEqual(madxness.eval('ANSWER'), 43);
+        self.assertEqual(self.mad.eval('ANSWER'), 42)
+        self.assertEqual(madxness.eval('ANSWER'), 43)
         _close(madxness)
 
     def test_streamreader(self):
