@@ -1,6 +1,5 @@
 # standard library
 import unittest
-from functools import partial
 
 # tested objects
 from cpymad import util

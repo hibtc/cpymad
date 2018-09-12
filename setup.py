@@ -32,6 +32,9 @@ except ImportError:
 sys.path.append(os.path.dirname(__file__))
 from utils.clopts import parse_opts
 
+# Windows:  win32/win-amd64
+# Linux:    linux-x86_64/...
+# Mac:      darwin*
 IS_WIN = get_platform().startswith('win')
 
 
@@ -73,7 +76,7 @@ class build_ext(_build_ext):
         # NOTE that we don't catch LinkerError since that indicates that MAD-X
         # is available but somehow missconfigured and we should never attempt
         # to download/rebuild in that case:
-        except (PreprocessError, CompileError) as e:
+        except (PreprocessError, CompileError):
             # Stop if the user had specified `--madxdir` or if the error is
             # not due to the inavailability of MAD-X. In these cases we should
             # not start trying to build MAD-X:
@@ -157,7 +160,7 @@ class build_ext(_build_ext):
                 include_dirs=ext_args['include_dirs'],
                 extra_postargs=ext_args['extra_compile_args'])
             return True
-        except (PreprocessError, CompileError) as e:
+        except (PreprocessError, CompileError):
             return False
         finally:
             shutil.rmtree(tmp_dir)
@@ -240,11 +243,6 @@ def get_extension_args(madxdir, shared, static, **libs):
         library_dirs += [os.path.join(prefix, 'lib'),
                          os.path.join(prefix, 'lib64')]
 
-    # Windows:  win32/win-amd64
-    # Linux:    linux-x86_64/...
-    # Mac:      darwin*
-    platform = get_platform()
-
     libraries = ['madx']
     if not shared:
         # NOTE: If MAD-X was built with BLAS/LAPACK, you must manually provide
@@ -292,7 +290,7 @@ def get_setup_args(optvals):
         install_requires=[
             'setuptools>=18.0',
             'numpy',
-            'minrpc>=0.0.7',
+            'minrpc>=0.0.8',
         ],
         cmdclass={'build_ext': type('build_ext', (build_ext, object), {
             'optvals': optvals,
