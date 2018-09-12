@@ -95,8 +95,8 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         # instance:
         self.mad.input('ANSWER=42;')
         madxness.input('ANSWER=43;')
-        self.assertEqual(self.mad.eval('ANSWER'), 42);
-        self.assertEqual(madxness.eval('ANSWER'), 43);
+        self.assertEqual(self.mad.eval('ANSWER'), 42)
+        self.assertEqual(madxness.eval('ANSWER'), 43)
         _close(madxness)
 
     def test_streamreader(self):
@@ -107,7 +107,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertIn(b'+ Support: mad@cern.ch,',                      output[0])
         self.assertIn(b'+ Release   date: ',                           output[0])
         self.assertIn(b'+ Execution date: ',                           output[0])
-        #self.assertIn(b'+ Support: mad@cern.ch, ', output[1])
+        # self.assertIn(b'+ Support: mad@cern.ch, ', output[1])
         m.input('foo = 3;')
         self.assertEqual(len(output), 1)
         m.input('foo = 3;')
@@ -196,7 +196,8 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         # the full sequence. This checks that none of the range selections
         # have side-effects on each other:
         betx_full1 = self.mad.twiss(**params)['betx'].copy(columns)
-        betx_range = self.mad.twiss(range=('dr[2]', 'sb'), **params)['betx'].copy(columns)
+        betx_range = (self.mad.twiss(range=('dr[2]', 'sb'), **params)['betx']
+                      .copy(columns))
         betx_full2 = self.mad.twiss(**params)['betx'].copy(columns)
         # Check that the results have the expected lengths:
         self.assertEqual(len(betx_full1), 9)
@@ -205,10 +206,10 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         # Check numeric results. Since the first 3 elements of range and full
         # sequence are identical, equal results are expected. And non-equal
         # results afterwards.
-        self.assertAlmostEqual(betx_range[0], betx_full1[1]) # dr:2, dr:1
-        self.assertAlmostEqual(betx_range[1], betx_full1[2]) # qp:2, qp:1
-        self.assertAlmostEqual(betx_range[2], betx_full1[3]) # dr:3, dr:2
-        self.assertNotAlmostEqual(betx_range[3], betx_full1[4]) # sb, qp:2
+        self.assertAlmostEqual(betx_range[0], betx_full1[1])      # dr:2, dr:1
+        self.assertAlmostEqual(betx_range[1], betx_full1[2])      # qp:2, qp:1
+        self.assertAlmostEqual(betx_range[2], betx_full1[3])      # dr:3, dr:2
+        self.assertNotAlmostEqual(betx_range[3], betx_full1[4])   # sb, qp:2
 
     def test_range_row_api(self):
         beam = 'ex=1, ey=2, particle=electron, sequence=s1;'
@@ -314,11 +315,11 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
             del g['bar']
         with self.assertRaises(NotImplementedError):
             del g.bar
-        self.assertEqual(g.bar, 42) # still there
+        self.assertEqual(g.bar, 42)     # still there
         self.assertIn('bar', list(g))
         self.assertIn('foo', list(g))
-        #self.assertEqual(list(g), list(g.defs))
-        #self.assertEqual(list(g), list(g.cmdpar))
+        # self.assertEqual(list(g), list(g.defs))
+        # self.assertEqual(list(g), list(g.cmdpar))
         self.assertEqual(len(g), len(list(g)))
         self.assertEqual(len(g.defs), len(list(g.defs)))
         self.assertEqual(len(g.cmdpar), len(list(g.cmdpar)))
@@ -521,23 +522,23 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         ALL = slice(None)
 
         self.assertEqual(sector.tmat(0).shape, (6, 6, 6))
-        assert_allclose(sector.tmat(ALL)[0,0,0,:], sector.t111)
-        assert_allclose(sector.tmat(ALL)[1,5,3,:], sector.t264)
-        assert_allclose(sector.tmat(ALL)[3,0,3,:], sector.t414)
-        assert_allclose(sector.tmat(ALL)[4,4,4,:], sector.t555)
+        assert_allclose(sector.tmat(ALL)[0, 0, 0, :], sector.t111)
+        assert_allclose(sector.tmat(ALL)[1, 5, 3, :], sector.t264)
+        assert_allclose(sector.tmat(ALL)[3, 0, 3, :], sector.t414)
+        assert_allclose(sector.tmat(ALL)[4, 4, 4, :], sector.t555)
 
-        assert_allclose(sector.rmat(ALL)[0,0,:], sector.r11)
-        assert_allclose(sector.rmat(ALL)[1,5,:], sector.r26)
-        assert_allclose(sector.rmat(ALL)[3,0,:], sector.r41)
-        assert_allclose(sector.rmat(ALL)[4,4,:], sector.r55)
+        assert_allclose(sector.rmat(ALL)[0, 0, :], sector.r11)
+        assert_allclose(sector.rmat(ALL)[1, 5, :], sector.r26)
+        assert_allclose(sector.rmat(ALL)[3, 0, :], sector.r41)
+        assert_allclose(sector.rmat(ALL)[4, 4, :], sector.r55)
 
-        assert_allclose(sector.kvec(ALL)[0,:], sector.k1)
-        assert_allclose(sector.kvec(ALL)[1,:], sector.k2)
-        assert_allclose(sector.kvec(ALL)[3,:], sector.k4)
-        assert_allclose(sector.kvec(ALL)[4,:], sector.k5)
+        assert_allclose(sector.kvec(ALL)[0, :], sector.k1)
+        assert_allclose(sector.kvec(ALL)[1, :], sector.k2)
+        assert_allclose(sector.kvec(ALL)[3, :], sector.k4)
+        assert_allclose(sector.kvec(ALL)[4, :], sector.k5)
 
-        r = self.mad.sectortable()[:,:6,:6]
-        k = self.mad.sectortable()[:, 6,:6]
+        r = self.mad.sectortable()[:, :6, :6]
+        k = self.mad.sectortable()[:, 6, :6]
         t = self.mad.sectortable2()
 
         num_elems = len(self.mad.sequence.s1.elements)
@@ -545,20 +546,20 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertEqual(r.shape, (num_elems, 6, 6))
         self.assertEqual(k.shape, (num_elems, 6))
 
-        assert_allclose(t[:,0,0,0], sector.t111)
-        assert_allclose(t[:,1,5,3], sector.t264)
-        assert_allclose(t[:,3,0,3], sector.t414)
-        assert_allclose(t[:,4,4,4], sector.t555)
+        assert_allclose(t[:, 0, 0, 0], sector.t111)
+        assert_allclose(t[:, 1, 5, 3], sector.t264)
+        assert_allclose(t[:, 3, 0, 3], sector.t414)
+        assert_allclose(t[:, 4, 4, 4], sector.t555)
 
-        assert_allclose(r[:,0,0], sector.r11)
-        assert_allclose(r[:,1,5], sector.r26)
-        assert_allclose(r[:,3,0], sector.r41)
-        assert_allclose(r[:,4,4], sector.r55)
+        assert_allclose(r[:, 0, 0], sector.r11)
+        assert_allclose(r[:, 1, 5], sector.r26)
+        assert_allclose(r[:, 3, 0], sector.r41)
+        assert_allclose(r[:, 4, 4], sector.r55)
 
-        assert_allclose(k[:,0], sector.k1)
-        assert_allclose(k[:,1], sector.k2)
-        assert_allclose(k[:,3], sector.k4)
-        assert_allclose(k[:,4], sector.k5)
+        assert_allclose(k[:, 0], sector.k1)
+        assert_allclose(k[:, 1], sector.k2)
+        assert_allclose(k[:, 3], sector.k4)
+        assert_allclose(k[:, 4], sector.k5)
 
     def test_attr(self):
         self.assertTrue(hasattr(self.mad, 'constraint'))
@@ -718,12 +719,12 @@ class TestTransferMap(unittest.TestCase):
                         rtol=rtol, atol=atol)
 
         # transport of beam matrix:
-        tm = smap[0:6,0:6]
+        tm = smap[0:6, 0:6]
         tab_len = len(tw['sig11'])
         sig_init = tw.sigmat(0)
         sig_final_tw = tw.sigmat(tab_len-1)
         sig_final_sm = np.dot(tm, np.dot(sig_init, tm.T))
-        assert_allclose(sig_final_tw[0:4,0:4], sig_final_sm[0:4,0:4],
+        assert_allclose(sig_final_tw[0:4, 0:4], sig_final_sm[0:4, 0:4],
                         rtol=rtol, atol=atol)
         _close(mad)
 

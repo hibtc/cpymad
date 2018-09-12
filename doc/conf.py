@@ -51,7 +51,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'cpymad'
-copyright = u'2014-2017, T. Gläßle (HIT), 2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN)'
+copyright = (u'2014-2017, T. Gläßle (HIT),'
+             u'2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN)')
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

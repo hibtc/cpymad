@@ -13,6 +13,7 @@ __all__ = [
 
 Range = namedtuple('Range', ['first', 'last'])
 
+
 class Parameter(object):
 
     __slots__ = ('name', 'value', 'expr', 'dtype', 'inform', 'var_type')

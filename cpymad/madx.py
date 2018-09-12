@@ -326,15 +326,15 @@ class Madx(object):
         cnt = len(tab['r11'])
         return np.vstack((
             np.hstack((tab.rmat(slice(None)),
-                       tab.kvec(slice(None)).reshape((6,1,-1)))),
+                       tab.kvec(slice(None)).reshape((6, 1, -1)))),
             np.hstack((np.zeros((1, 6, cnt)),
                        np.ones((1, 1, cnt)))),
-        )).transpose((2,0,1))
+        )).transpose((2, 0, 1))
 
     def sectortable2(self, name='sectortable'):
         """Read 2nd order sectormap T_ijk, return as Nx6x6x6 array."""
         tab = self.table[name]
-        return tab.tmat(slice(None)).transpose((3,0,1,2))
+        return tab.tmat(slice(None)).transpose((3, 0, 1, 2))
 
     def match(self,
               constraints=[],
@@ -864,16 +864,19 @@ class ElementList(BaseElementList, abc.Sequence):
 class ExpandedElementList(ElementList):
 
     def _get_element(self, element_index):
-        return self._libmadx.get_expanded_element(self._sequence_name, element_index)
+        return self._libmadx.get_expanded_element(
+            self._sequence_name, element_index)
 
     def _get_element_count(self):
         return self._libmadx.get_expanded_element_count(self._sequence_name)
 
     def _get_element_index(self, element_name):
-        return self._libmadx.get_expanded_element_index(self._sequence_name, element_name)
+        return self._libmadx.get_expanded_element_index(
+            self._sequence_name, element_name)
 
     def _get_element_at(self, pos):
-        return self._libmadx.get_expanded_element_index_by_position(self._sequence_name, pos)
+        return self._libmadx.get_expanded_element_index_by_position(
+            self._sequence_name, pos)
 
     def __repr__(self):
         return '[{}]'.format(', '.join(

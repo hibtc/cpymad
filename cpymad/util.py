@@ -31,7 +31,7 @@ __all__ = [
 # In CPython 3.6 dicts preserve insertion order (until deleting an element)
 # Although, this is considered an implementation detail that should not be
 # relied upon, we do so anyway:
-ordered_keys = dict.keys if sys.version_info >= (3,6) else sorted
+ordered_keys = dict.keys if sys.version_info >= (3, 6) else sorted
 
 
 try:

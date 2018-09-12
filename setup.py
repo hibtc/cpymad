@@ -29,9 +29,6 @@ except ImportError:
     def cythonize(extensions):
         return extensions
 
-sys.path.append(os.path.dirname(__file__))
-from utils.clopts import parse_opts
-
 # Windows:  win32/win-amd64
 # Linux:    linux-x86_64/...
 # Mac:      darwin*
@@ -278,15 +275,15 @@ def get_setup_args(optvals):
         url=metadata['__uri__'],
         license=metadata['__license__'],
         classifiers=metadata['__classifiers__'],
-        ext_modules = cythonize([
+        ext_modules=cythonize([
             Extension('cpymad.libmadx',
                       sources=["cpymad/libmadx.pyx"],
                       libraries=['madx']),
         ]),
-        packages = [
+        packages=[
             "cpymad",
         ],
-        include_package_data=True, # include files matched by MANIFEST.in
+        include_package_data=True,  # include files matched by MANIFEST.in
         install_requires=[
             'setuptools>=18.0',
             'numpy',
@@ -299,6 +296,8 @@ def get_setup_args(optvals):
 
 
 if __name__ == '__main__':
+    sys.path.append(os.path.dirname(__file__))
+    from utils.clopts import parse_opts
     fix_distutils_sysconfig_mingw()
     optvals = parse_opts(sys.argv, build_ext.options)
     setup(**get_setup_args(optvals))
