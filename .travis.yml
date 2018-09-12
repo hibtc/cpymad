@@ -34,6 +34,10 @@ before_install:
 
 # Setup (performed within virtualenv)
 install:
+  # Error before performing long builds:
+  - pip install pyflakes
+  - pyflakes .
+
   # prepare dependency cache:
   - pip wheel -v cython pyyaml
   # NOTE: not creating a numpy wheel, since numpy is already installed on
