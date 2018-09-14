@@ -63,7 +63,7 @@ create self-contained binaries which can later be used on other python
 distributions as well. Python≥3.5 is currently unsupported due to a change in
 python's windows build process.
 
-.. _WinPython: http://winpython.sourceforge.net/
+.. _WinPython: http://winpython.github.io/
 
 
 Install dependencies

@@ -1,22 +1,14 @@
 Unix
 ----
-
-Before trying to install cpymad, make sure that you have recent versions of
-
-- cmake_ >= 3.0
-- gcc >= 4.8, along with g++ and gfortran (other C/C++/fortran compiler suites
-  may work too but are untested as of now)
-
-On the python side, you need:
-
-- python >= 2.7, but higher versions (>=3.7) are preferred
-- setuptools_ python package
-
-You can now build and install cpymad using the command:
+There are now binary wheels for most supported target platforms. With these
+the installation is as simple as:
 
 .. code-block:: bash
 
     pip install cpymad
+
+If a wheel for your platform is not available, this command may pick up the
+source package and try to build from scratch.
 
 Since cpymad is linked against a special library version of MAD-X, and
 therefore must usually compile MAD-X from source before it can be built (even
@@ -24,7 +16,7 @@ if you have the MAD-X executable installed). This means that the cpymad setup
 can take between 5 and 30 minutes, depending on your internet bandwidth and
 machine performance.
 
-If the setup fails, you should build MAD-X and cpymad manually, as described
+In case of failure, you should build MAD-X and cpymad manually, as described
 below.
 
 
@@ -110,6 +102,8 @@ Install cpymad
 
 After having built MAD-X we can now build cpymad. You will need:
 
+- python >= 2.7, but higher versions (>=3.7) are preferred
+- setuptools_ python package
 - Cython_, if you plan to work with the git checkout. Cython can be installed
   using ``pip install cython`` (this is unnecessary for the release tarball
   from PyPI)
@@ -148,7 +142,7 @@ With these settings in place, you can try installing cpymad as before:
 
 .. code-block:: bash
 
-    pip install cpymad
+    pip install --no-binary=cpymad cpymad
 
 
 Building cpymad manually
@@ -160,7 +154,7 @@ control over the build options and alter the setup script if necessary):
 
 .. code-block:: bash
 
-    pip download --no-deps cpymad
+    pip download --no-binary=cpymad --no-deps cpymad
     tar -xzf cpymad-*.tar.gz
 
 Alternatively, fetch the very latest cpymad_ source_ from git:
@@ -177,7 +171,6 @@ path as above):
 
     cd cpymad
     python setup.py build_ext
-    python setup.py develop
 
 The advantage with this method is that you can pass additional compiler or
 linker arguments to the ``build_ext`` command. For example, if you happened to
