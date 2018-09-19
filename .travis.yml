@@ -33,8 +33,9 @@ before_install:
 # Setup (performed within virtualenv)
 install:
   # Error before performing long builds:
-  - pip install flake8
+  - pip install flake8 docutils
   - flake8
+  - python setup.py check --strict --restructuredtext --metadata
 
   # prepare dependency cache:
   - pip wheel -v cython pyyaml
