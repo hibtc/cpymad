@@ -1,4 +1,5 @@
 # standard library
+import os
 import unittest
 
 # tested objects
@@ -25,6 +26,9 @@ def _close(m):
 class TestUtil(unittest.TestCase):
 
     """Tests for the objects in :mod:`cpymad.util`."""
+
+    def setUp(self):
+        os.environ['COVERAGE_PROCESS_START'] = '1'
 
     def tearDown(self):
         if hasattr(self, 'madx'):

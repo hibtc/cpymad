@@ -60,6 +60,10 @@ install:
   - pip install nose coverage coveralls
 # Actual tests:
 script:
+  - SITEDIR=$(python -c 'import site; print(site.USER_SITE)')
+  - mkdir -p "$SITEDIR"
+  - echo 'import coverage; coverage.process_startup()'
+        > "$SITEDIR/subprocess_coverage.pth"
   - coverage run --source=cpymad -a test/test_util.py     -v
   - coverage run --source=cpymad -a test/test_madx.py     -v
 

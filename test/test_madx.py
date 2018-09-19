@@ -49,6 +49,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
     """
 
     def setUp(self):
+        os.environ['COVERAGE_PROCESS_START'] = '1'
         self.mad = Madx(command_log=CommandLog(sys.stdout, 'X:> '))
         here = os.path.dirname(__file__)
         there = os.path.join(here, 'testseq.madx')
