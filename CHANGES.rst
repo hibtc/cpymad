@@ -1,6 +1,16 @@
 Changelog
 ~~~~~~~~~
 
+1.0.7
+=====
+Date: 19.09.2018
+
+- fix io.UnsupportedOperation on python2 when sys.stdout is not a file
+- increase minrpc dependency to better comply with redirected stdouts
+- fix DeprecationWarning due to not importing ABCs from collections.abc
+- improvements in test suite and automatic style checks
+
+
 1.0.6
 =====
 Date: 28.08.2018
