@@ -40,8 +40,8 @@ License
 
 The cpymad source code itself is under free license.
 
-However, note that the MAD-X software package and henceforth all binary
-cpymad package distributions are **NOT FREE**.
+However, the MAD-X software package and henceforth all binary cpymad package
+distributions are **NOT FREE**.
 
 For more details, see COPYING.rst_ and the `MAD-X license`_.
 
@@ -54,8 +54,7 @@ Reporting issues
 
 cpymad is NOT maintained by CERN members and links against an unofficial build
 of MAD-X that is not supported by CERN, i.e. this binary may have problems
-that the official binary does not have and vice versa. See also: `Reporting
-issues`_.
+that the official binary does not have and vice versa.
 
 If you have a problem with a sequence file, first try to check if that
 problem remains when using the MAD-X command line client distributed by
@@ -67,8 +66,8 @@ CERN, then:
   official command line client.
 
 For issues regarding the cpymad code itself or usage information, I'm happy to
-answer. Just keep in mind to be **precise**, **specific**, **concise** and
-provide all the necessary information.
+answer. Please keep it *precise*, *specific*, and *concise* and provide all
+the necessary information.
 
 .. Badges:
 
