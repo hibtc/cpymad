@@ -152,7 +152,7 @@ class Madx(object):
             if hasattr(stdout, 'write'):
                 try:
                     stdout = stdout.fileno()
-                except (AttributeError, OSError):
+                except (AttributeError, OSError, IOError):
                     stdout = stdout.write
             Popen_args['stdout'] = \
                 subprocess.PIPE if callable(stdout) else stdout
