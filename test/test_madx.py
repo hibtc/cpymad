@@ -191,14 +191,12 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         params = dict(alfx=0.5, alfy=1.5,
                       betx=2.5, bety=3.5,
                       sequence='s1')
-        columns = ['betx', 'bety']
         # Compute TWISS on full sequence, then on a sub-range, then again on
         # the full sequence. This checks that none of the range selections
         # have side-effects on each other:
-        betx_full1 = self.mad.twiss(**params)['betx'].copy(columns)
-        betx_range = (self.mad.twiss(range=('dr[2]', 'sb'), **params)['betx']
-                      .copy(columns))
-        betx_full2 = self.mad.twiss(**params)['betx'].copy(columns)
+        betx_full1 = self.mad.twiss(**params)['betx']
+        betx_range = self.mad.twiss(range=('dr[2]', 'sb'), **params)['betx']
+        betx_full2 = self.mad.twiss(**params)['betx']
         # Check that the results have the expected lengths:
         self.assertEqual(len(betx_full1), 9)
         self.assertEqual(len(betx_range), 4)
