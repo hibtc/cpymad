@@ -1032,6 +1032,11 @@ class Table(_Mapping):
             columns = self
         return {column: self[column] for column in columns}
 
+    def dframe(self, columns=None):
+        """Return table as ``pandas.DataFrame``."""
+        import pandas as pd
+        return pd.DataFrame(self.copy(columns))
+
     def getmat(self, name, idx, *dim):
         s = () if isinstance(idx, int) else (-1,)
         return np.array([
