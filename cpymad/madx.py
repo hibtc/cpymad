@@ -211,6 +211,8 @@ class Madx(object):
         Run any textual MAD-X input.
 
         :param str text: command text
+        :returns: whether the command has completed without error
+        :rtype: bool
         """
         # write to history before performing the input, so if MAD-X
         # crashes, it is easier to see, where it happened:
@@ -218,7 +220,7 @@ class Madx(object):
             self._command_log(text)
         try:
             with self.reader:
-                self._libmadx.input(text)
+                return self._libmadx.input(text)
         except _rpc.RemoteProcessCrashed:
             # catch + reraise in order to shorten stack trace (~3-5 levels):
             raise RuntimeError("MAD-X has stopped working!")
