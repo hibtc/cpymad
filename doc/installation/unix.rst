@@ -55,15 +55,19 @@ The basic process looks as follows:
     cmake .. \
         -DMADX_ONLINE=OFF \
         -DMADX_INSTALL_DOC=OFF \
-        -CMAKE_INSTALL_PREFIX=../install
+        -DCMAKE_INSTALL_PREFIX=../install \
+        -DCMAKE_C_FLAGS="-fvisibility=hidden"
     make && make install
 
 Here, we have turned off the online model, documentation files and, more
 importantly, have used a custom installation prefix to prevent cmake from
 installing MAD-X to a system directory (which would require root privileges,
-and may be harder to remove completely). If you prefer a more permanent
-install location (``-DCMAKE_INSTALL_PREFIX=XXX``), the most common ones are
-as follows::
+and may be harder to remove completely). The last argument prevents a class of
+crashes due to symbol collisions with other subsystems such as the C standard
+library.
+
+If you prefer a more permanent install location
+(``-DCMAKE_INSTALL_PREFIX=XXX``), the most common ones are as follows::
 
     ~/.local                user-level installation, no sudo required
     /opt/madx               system-wide but easily removable installation
@@ -85,11 +89,12 @@ MAD-X, just not against the c/c++/fortran/etc runtimes.
 You can pass ``-DBUILD_SHARED_LIBS=ON`` if you want to link cpymad dynamically
 against MAD-X. In theory, this allows using, testing and even updating the
 MAD-X shared object independently of cpymad, but probably does more harm than
-good in practice. If using this option, you have to make sure to **install
-MAD-X to a permanent location** where it can be found at runtime. Usually this
-means installing to the (default) system directories, but it can also be done
-by setting the LD_LIBRARY_PATH_ environment variable or passing appropriate
-``--rpath`` to the setup script.
+good in practice. If using this option, please change the visibility to
+``-DCMAKE_C_FLAGS="-fvisibility=protected"`` and be aware that you have to
+make sure to **install MAD-X to a permanent location** where it can be found
+at runtime. Usually this means installing to the (default) system directories,
+but it can also be done by setting the LD_LIBRARY_PATH_ environment variable
+or passing appropriate ``--rpath`` to the setup script.
 
 .. _CMake: http://www.cmake.org/
 .. _latest MAD-X release: http://madx.web.cern.ch/madx/releases/last-rel
