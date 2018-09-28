@@ -227,6 +227,10 @@ cdef extern from "madX/mad_core.h" nogil:
     void madx_start()
     void madx_finish()
 
+cdef extern from "madX/mad_err.h" nogil:
+    int geterrorflag();
+    void clearerrorflag();
+
 cdef extern from "madX/mad_name.h" nogil:
     int name_list_pos(char*, name_list*)  # NOTE: C API uses "const char*"
 

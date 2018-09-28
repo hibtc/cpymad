@@ -183,15 +183,21 @@ def input(cmd):
     Pass one input command to MAD-X.
 
     :param str cmd: command to be executed by the MAD-X interpreter
+    :returns: success status, whether the command has completed without error
+    :rtype: bool
     """
     cmd = cmd.rstrip().rstrip(';') + ';'
     cdef bytes _cmd = _cstr(cmd)
     cdef char* _pch = _cmd
+    cdef int error = 0
     with nogil:
         _strip_comments(_pch)
         clib.supp_lt(_pch, 0)
         clib.stolower_nq(_pch)
         clib.pro_input(_pch)
+        error = clib.geterrorflag()
+        clib.clearerrorflag()
+    return not error
 
 
 def get_var(name):
