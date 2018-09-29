@@ -461,3 +461,12 @@ def temp_filename():
         os.remove(filename)
     except OSError:
         pass
+
+
+@contextmanager
+def suppress(*exceptions):
+    """Compat for contextlib.suppress for python < 3.4."""
+    try:
+        yield None
+    except exceptions:
+        pass

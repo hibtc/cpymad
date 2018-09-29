@@ -191,6 +191,17 @@ class Madx(object):
         """Resolve missing attributes as commands."""
         return getattr(self.command, name)
 
+    def quit(self):
+        """Shutdown MAD-X interpreter and stop process."""
+        with util.suppress(AttributeError, RuntimeError):
+            self.input('quit;')
+        with util.suppress(AttributeError, RuntimeError):
+            self._service.close()
+        with util.suppress(AttributeError, RuntimeError):
+            self._process.wait()
+
+    exit = quit
+
     # Data descriptors:
 
     @property
