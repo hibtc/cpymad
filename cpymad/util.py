@@ -456,11 +456,13 @@ def temp_filename():
     """Get filename for use within 'with' block and delete file afterwards."""
     fd, filename = tempfile.mkstemp()
     os.close(fd)
-    yield filename
     try:
-        os.remove(filename)
-    except OSError:
-        pass
+        yield filename
+    finally:
+        try:
+            os.remove(filename)
+        except OSError:
+            pass
 
 
 @contextmanager
