@@ -58,7 +58,7 @@ install:
   # to check the version installed from the source distribution:
   - rm -r cpymad
 
-  - pip install nose coverage coveralls
+  - pip install coverage coveralls
 # Actual tests:
 script:
   - coverage run --source=cpymad -a test/test_util.py     -v
