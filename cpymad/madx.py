@@ -181,7 +181,9 @@ class Madx(object):
     def __bool__(self):
         """Check if MAD-X is up and running."""
         try:
-            return self._libmadx.is_started()
+            libmadx = self._libmadx
+            # short-circuit implemented in minrpc.client.RemoteModule:
+            return bool(libmadx) and libmadx.is_started()
         except (_rpc.RemoteProcessClosed, _rpc.RemoteProcessCrashed):
             return False
 
