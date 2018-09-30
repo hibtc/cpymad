@@ -175,6 +175,17 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         for k in twiss.summary:
             self.assertEqual(k, k.lower())
 
+    def test_error(self):
+        self.mad.input("""
+            seq: sequence, l=1;
+            endsequence;
+            beam;
+            use, sequence=seq;
+        """)
+        # Errors in MAD-X must not crash, but return False instead:
+        self.assertFalse(self.mad.input('twiss;'))
+        self.assertTrue(self.mad.input('twiss, betx=1, bety=1;'))
+
     def test_twiss_1(self):
         self._check_twiss('s1')     # s1 can be computed at start
         self._check_twiss('s1')     # s1 can be computed multiple times
