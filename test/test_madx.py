@@ -124,6 +124,16 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         with self.assertRaises(RuntimeError):
             self.mad.input(';')
 
+    def test_context_manager(self):
+        output = []
+        with Madx(stdout=output.append) as m:
+            m.input('foo = 3;')
+            self.assertEqual(m.globals.foo, 3)
+        self.assertIn(b'+          MAD-X finished normally ', output[-1])
+        self.assertFalse(bool(m))
+        with self.assertRaises(RuntimeError):
+            m.input(';')
+
     def test_command_log(self):
         """Check that the command log contains all input commands."""
         # create a new Madx instance that uses the history feature:

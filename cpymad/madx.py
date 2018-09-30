@@ -204,6 +204,13 @@ class Madx(object):
 
     exit = quit
 
+    def __enter__(self):
+        """Use as context manager to ensure that MAD-X is terminated."""
+        return self
+
+    def __exit__(self, *exc_info):
+        self.quit()
+
     # Data descriptors:
 
     @property
