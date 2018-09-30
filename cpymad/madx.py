@@ -181,7 +181,9 @@ class Madx(object):
     def __bool__(self):
         """Check if MAD-X is up and running."""
         try:
-            return self._libmadx.is_started()
+            libmadx = self._libmadx
+            # short-circuit implemented in minrpc.client.RemoteModule:
+            return bool(libmadx) and libmadx.is_started()
         except (_rpc.RemoteProcessClosed, _rpc.RemoteProcessCrashed):
             return False
 
@@ -190,6 +192,24 @@ class Madx(object):
     def __getattr__(self, name):
         """Resolve missing attributes as commands."""
         return getattr(self.command, name)
+
+    def quit(self):
+        """Shutdown MAD-X interpreter and stop process."""
+        with util.suppress(AttributeError, RuntimeError):
+            self.input('quit;')
+        with util.suppress(AttributeError, RuntimeError):
+            self._service.close()
+        with util.suppress(AttributeError, RuntimeError):
+            self._process.wait()
+
+    exit = quit
+
+    def __enter__(self):
+        """Use as context manager to ensure that MAD-X is terminated."""
+        return self
+
+    def __exit__(self, *exc_info):
+        self.quit()
 
     # Data descriptors:
 

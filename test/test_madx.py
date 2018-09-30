@@ -113,6 +113,26 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         m.input('foo = 3;')
         self.assertEqual(len(output), 2)
         self.assertEqual(output[1], b'++++++ info: foo redefined\n')
+        m.quit()
+        self.assertEqual(len(output), 3)
+        self.assertIn(b'+          MAD-X finished normally ', output[2])
+
+    def test_quit(self):
+        self.mad.quit()
+        self.assertIsNot(self.mad._process.returncode, None)
+        self.assertFalse(bool(self.mad))
+        with self.assertRaises(RuntimeError):
+            self.mad.input(';')
+
+    def test_context_manager(self):
+        output = []
+        with Madx(stdout=output.append) as m:
+            m.input('foo = 3;')
+            self.assertEqual(m.globals.foo, 3)
+        self.assertIn(b'+          MAD-X finished normally ', output[-1])
+        self.assertFalse(bool(m))
+        with self.assertRaises(RuntimeError):
+            m.input(';')
 
     def test_command_log(self):
         """Check that the command log contains all input commands."""
