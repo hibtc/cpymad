@@ -11,7 +11,16 @@ python:
 matrix:
   include:
     # Ubuntu 16.04 (Xenial Xerus) required for py3.7:
-    - {python: "3.7", dist: xenial}
+    - python: "3.7"
+      dist: xenial
+      deploy:
+        provider: pages
+        local-dir: doc/_build/html
+        skip-cleanup: true
+        github-token:
+          secure: "Z5vSkkgj12/5DdsbV0C58zO9TK4zN/f2VgQMoSNnCwEoziTN7jaLStUzIE98qpREthBUU5SE/Sd9SXEW+gW4HeryqqKI9liNb3r83jprs/Z5SsEfhEqiVXDwyidbXjn7rx+yMUUfnD+feW31fj9XiHhCE2oe7A+lFnNziVdsx8o="
+        on:
+          branch: master
 
 # Build on Ubuntu 14.04 LTS Server Edition 64 bit (Trusty Tahr) to avoid
 # problems building MAD-X with the older fortran compiler on Precise Pangolin:
@@ -25,6 +34,10 @@ env:
     - PIP_WHEEL_DIR=$HOME/.pip-cache
 
 before_install:
+  # Extra debug info:
+  - lsb_release -a
+  - env | sort
+
   # Install MAD-X from PPA (see https://github.com/hibtc/madx-debian):
   - sudo add-apt-repository -y ppa:coldfix/madx
   - sudo apt-get -qq update
@@ -64,11 +77,16 @@ script:
   - coverage run --source=cpymad -a test/test_util.py     -v
   - coverage run --source=cpymad -a test/test_madx.py     -v
 
+  - pip install sphinx sphinx_rtd_theme
+  - cd doc; make html; cd ..
+  - touch doc/_build/html/.nojekyll
+
 after_success:
   - base=`python -c 'import os,cpymad; print(os.path.dirname(cpymad.__file__))'`/..
   - mv .git .coverage $base
   - cd $base
   - coveralls
+  - cd -
 
 cache:
   apt: true
