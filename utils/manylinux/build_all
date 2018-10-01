@@ -35,7 +35,7 @@ make install
 # (this requires that you
 cd /io/cpymad
 /opt/python/cp36-cp36m/bin/pip install cython
-/opt/python/cp36-cp36m/bin/cythonize cpymad/cpymad.pyx
+/opt/python/cp36-cp36m/bin/cythonize cpymad/libmadx.pyx
 
 # Create wheels:
 cd /io/cpymad
