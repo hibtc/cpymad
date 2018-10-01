@@ -9,13 +9,10 @@ python:
   - "3.6"
 # - "3.7"   in `jobs`, see below!
 
-# Build on Ubuntu 14.04 LTS Server Edition 64 bit (Trusty Tahr) to avoid
-# problems building MAD-X with the older fortran compiler on Precise Pangolin:
 sudo: required
 dist: trusty
 
 before_install:
-  # Extra debug info:
   - lsb_release -a
   - env | sort
 
@@ -24,32 +21,26 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y libmadx-dev
 
-# Setup (performed within virtualenv)
 install:
-  # Error before performing long builds:
-  - pip install flake8 docutils
-  - flake8
-  - python setup.py check --strict --restructuredtext --metadata
-
-  # We need to install cython here, since Travis uses the checkout from the
-  # repository which doesn't contain ".c" source files (unlike the source
-  # distribution from PyPI):
+  # Check that the source distribution can be used for installation:
   - pip install cython
-
-  # Check that the source distribution can be used for installation -
-  # without having *any* dependencies installed:
   - python setup.py sdist
   - pip uninstall cython -y
   - X11=0 BLAS=1 LAPACK=1 pip install $(ls ./dist/*.tar.gz | sort -rV | head -n1)
+
+  # docutils is required for `setup.py check -r`:
+  - pip install flake8 docutils
+  - pip install coverage coveralls
+
+script:
+  - python setup.py check -rsm
+  - flake8
+
   # Need to remove cpymad folder otherwise it will be imported, but we want
   # to check the version installed from the source distribution:
   - rm -r cpymad
-
-  - pip install coverage coveralls
-# Actual tests:
-script:
-  - coverage run --source=cpymad -a test/test_util.py     -v
-  - coverage run --source=cpymad -a test/test_madx.py     -v
+  - coverage run --source=cpymad -a test/test_util.py -v
+  - coverage run --source=cpymad -a test/test_madx.py -v
 
 after_success:
   - base=`python -c 'import os,cpymad; print(os.path.dirname(cpymad.__file__))'`/..
@@ -59,6 +50,7 @@ after_success:
 
 cache:
   pip: true
+
 
 # Each stage is executed only if all previous stages have succeeded:
 stages:
