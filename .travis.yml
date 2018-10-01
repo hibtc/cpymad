@@ -27,12 +27,6 @@ matrix:
 sudo: required
 dist: trusty
 
-env:
-  global:
-    # Enable caching of python wheels
-    - PIP_FIND_LINKS=file://$HOME/.pip-cache
-    - PIP_WHEEL_DIR=$HOME/.pip-cache
-
 before_install:
   # Extra debug info:
   - lsb_release -a
@@ -49,13 +43,6 @@ install:
   - pip install flake8 docutils
   - flake8
   - python setup.py check --strict --restructuredtext --metadata
-
-  # prepare dependency cache:
-  - pip wheel -v cython pyyaml
-  # NOTE: not creating a numpy wheel, since numpy is already installed on
-  # Travis. Therefore, creating a wheel would require compiling numpy which
-  # increases the build time. See:
-  # http://docs.travis-ci.com/user/ci-environment/#Preinstalled-pip-packages
 
   # We need to install cython here, since Travis uses the checkout from the
   # repository which doesn't contain ".c" source files (unlike the source
@@ -89,6 +76,4 @@ after_success:
   - cd -
 
 cache:
-  apt: true
-  directories:
-    - $PIP_WHEEL_DIR
+  pip: true
