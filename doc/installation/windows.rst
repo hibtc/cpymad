@@ -106,11 +106,11 @@ Prompt.exe`. Change the directory to the extracted MAD-X folder with the
 
     mkdir build
     cd build
-    cmake .. \
-        -G "MinGW Makefiles" \
-        -DBUILD_SHARED_LIBS=OFF \
-        -DMADX_STATIC=ON \
-        -DMADX_INSTALL_DOC=OFF \
+    cmake .. ^
+        -G "MinGW Makefiles" ^
+        -DBUILD_SHARED_LIBS=OFF ^
+        -DMADX_STATIC=ON ^
+        -DMADX_INSTALL_DOC=OFF ^
         -DCMAKE_INSTALL_PREFIX=..\install
 
 In the file :file:`%MADX%\\build\\src\\CMakeFiles\\madxbin.dir\\link.txt` and
