@@ -7,20 +7,7 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
-
-matrix:
-  include:
-    # Ubuntu 16.04 (Xenial Xerus) required for py3.7:
-    - python: "3.7"
-      dist: xenial
-      deploy:
-        provider: pages
-        local-dir: doc/_build/html
-        skip-cleanup: true
-        github-token:
-          secure: "Z5vSkkgj12/5DdsbV0C58zO9TK4zN/f2VgQMoSNnCwEoziTN7jaLStUzIE98qpREthBUU5SE/Sd9SXEW+gW4HeryqqKI9liNb3r83jprs/Z5SsEfhEqiVXDwyidbXjn7rx+yMUUfnD+feW31fj9XiHhCE2oe7A+lFnNziVdsx8o="
-        on:
-          branch: master
+# - "3.7"   in `jobs`, see below!
 
 # Build on Ubuntu 14.04 LTS Server Edition 64 bit (Trusty Tahr) to avoid
 # problems building MAD-X with the older fortran compiler on Precise Pangolin:
@@ -64,16 +51,42 @@ script:
   - coverage run --source=cpymad -a test/test_util.py     -v
   - coverage run --source=cpymad -a test/test_madx.py     -v
 
-  - pip install sphinx sphinx_rtd_theme
-  - cd doc; make html; cd ..
-  - touch doc/_build/html/.nojekyll
-
 after_success:
   - base=`python -c 'import os,cpymad; print(os.path.dirname(cpymad.__file__))'`/..
   - mv .git .coverage $base
   - cd $base
   - coveralls
-  - cd -
 
 cache:
   pip: true
+
+# Each stage is executed only if all previous stages have succeeded:
+stages:
+  - test        # the default (global) stage
+  - deploy      # see below
+
+jobs:
+  include:
+    # Ubuntu 16.04 (Xenial Xerus) required for py3.7:
+    - stage: test
+      python: "3.7"
+      dist: xenial
+
+    - stage: deploy
+      name: GitHub Pages
+      python: "3.6"
+      install:
+        - pip install cython sphinx sphinx_rtd_theme
+        - X11=0 BLAS=1 LAPACK=1 python setup.py develop
+      script:
+        - cd doc
+        - make html
+      after_success: skip
+      deploy:
+        provider: pages
+        local-dir: doc/_build/html
+        skip-cleanup: true
+        github-token:
+          secure: "Z5vSkkgj12/5DdsbV0C58zO9TK4zN/f2VgQMoSNnCwEoziTN7jaLStUzIE98qpREthBUU5SE/Sd9SXEW+gW4HeryqqKI9liNb3r83jprs/Z5SsEfhEqiVXDwyidbXjn7rx+yMUUfnD+feW31fj9XiHhCE2oe7A+lFnNziVdsx8o="
+        on:
+          branch: master
