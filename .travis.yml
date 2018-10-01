@@ -7,34 +7,12 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
+# - "3.7"   in `jobs`, see below!
 
-matrix:
-  include:
-    # Ubuntu 16.04 (Xenial Xerus) required for py3.7:
-    - python: "3.7"
-      dist: xenial
-      deploy:
-        provider: pages
-        local-dir: doc/_build/html
-        skip-cleanup: true
-        github-token:
-          secure: "Z5vSkkgj12/5DdsbV0C58zO9TK4zN/f2VgQMoSNnCwEoziTN7jaLStUzIE98qpREthBUU5SE/Sd9SXEW+gW4HeryqqKI9liNb3r83jprs/Z5SsEfhEqiVXDwyidbXjn7rx+yMUUfnD+feW31fj9XiHhCE2oe7A+lFnNziVdsx8o="
-        on:
-          branch: master
-
-# Build on Ubuntu 14.04 LTS Server Edition 64 bit (Trusty Tahr) to avoid
-# problems building MAD-X with the older fortran compiler on Precise Pangolin:
 sudo: required
 dist: trusty
 
-env:
-  global:
-    # Enable caching of python wheels
-    - PIP_FIND_LINKS=file://$HOME/.pip-cache
-    - PIP_WHEEL_DIR=$HOME/.pip-cache
-
 before_install:
-  # Extra debug info:
   - lsb_release -a
   - env | sort
 
@@ -43,52 +21,64 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y libmadx-dev
 
-# Setup (performed within virtualenv)
 install:
-  # Error before performing long builds:
-  - pip install flake8 docutils
-  - flake8
-  - python setup.py check --strict --restructuredtext --metadata
-
-  # prepare dependency cache:
-  - pip wheel -v cython pyyaml
-  # NOTE: not creating a numpy wheel, since numpy is already installed on
-  # Travis. Therefore, creating a wheel would require compiling numpy which
-  # increases the build time. See:
-  # http://docs.travis-ci.com/user/ci-environment/#Preinstalled-pip-packages
-
-  # We need to install cython here, since Travis uses the checkout from the
-  # repository which doesn't contain ".c" source files (unlike the source
-  # distribution from PyPI):
+  # Check that the source distribution can be used for installation:
   - pip install cython
-
-  # Check that the source distribution can be used for installation -
-  # without having *any* dependencies installed:
   - python setup.py sdist
   - pip uninstall cython -y
   - X11=0 BLAS=1 LAPACK=1 pip install $(ls ./dist/*.tar.gz | sort -rV | head -n1)
+
+  # docutils is required for `setup.py check -r`:
+  - pip install flake8 docutils
+  - pip install coverage coveralls
+
+script:
+  - python setup.py check -rsm
+  - flake8
+
   # Need to remove cpymad folder otherwise it will be imported, but we want
   # to check the version installed from the source distribution:
   - rm -r cpymad
-
-  - pip install coverage coveralls
-# Actual tests:
-script:
-  - coverage run --source=cpymad -a test/test_util.py     -v
-  - coverage run --source=cpymad -a test/test_madx.py     -v
-
-  - pip install sphinx sphinx_rtd_theme
-  - cd doc; make html; cd ..
-  - touch doc/_build/html/.nojekyll
+  - coverage run --source=cpymad -a test/test_util.py -v
+  - coverage run --source=cpymad -a test/test_madx.py -v
 
 after_success:
   - base=`python -c 'import os,cpymad; print(os.path.dirname(cpymad.__file__))'`/..
   - mv .git .coverage $base
   - cd $base
   - coveralls
-  - cd -
 
 cache:
-  apt: true
-  directories:
-    - $PIP_WHEEL_DIR
+  pip: true
+
+
+# Each stage is executed only if all previous stages have succeeded:
+stages:
+  - test        # the default (global) stage
+  - deploy      # see below
+
+jobs:
+  include:
+    # Ubuntu 16.04 (Xenial Xerus) required for py3.7:
+    - stage: test
+      python: "3.7"
+      dist: xenial
+
+    - stage: deploy
+      name: GitHub Pages
+      python: "3.6"
+      install:
+        - pip install cython sphinx sphinx_rtd_theme
+        - X11=0 BLAS=1 LAPACK=1 python setup.py develop
+      script:
+        - cd doc
+        - make html
+      after_success: skip
+      deploy:
+        provider: pages
+        local-dir: doc/_build/html
+        skip-cleanup: true
+        github-token:
+          secure: "Z5vSkkgj12/5DdsbV0C58zO9TK4zN/f2VgQMoSNnCwEoziTN7jaLStUzIE98qpREthBUU5SE/Sd9SXEW+gW4HeryqqKI9liNb3r83jprs/Z5SsEfhEqiVXDwyidbXjn7rx+yMUUfnD+feW31fj9XiHhCE2oe7A+lFnNziVdsx8o="
+        on:
+          branch: master
