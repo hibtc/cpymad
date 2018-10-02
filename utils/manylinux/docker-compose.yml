@@ -7,4 +7,6 @@ services:
       - .:/io
     cap_drop:
       - all
+    cap_add:
+      - dac_override        # fix "Permission denied" when writing to /io
     init: true
