@@ -5,6 +5,15 @@ set -ex
 : ${MADX_VERSION:=6448a105b7319971c61b76a987d52d152305c29c}
 : ${CPYMAD_VERSION:=1.0.7}
 
+# Extract user-specified .tar.gz release tarballs:
+if [[ -f $CPYMAD_ARCHIVE ]]; then
+    tar -xzf $CPYMAD_ARCHIVE --one-top-level=/io/cpymad --strip-components 1
+fi
+
+if [[ -f $MADX_ARCHIVE ]]; then
+    tar -xzf $MADX_ARCHIVE --one-top-level=/io/madx --strip-components 1
+fi
+
 # Download MAD-X:
 if [[ ! -e /io/MAD-X ]]; then
     git clone git://github.com/MethodicalAcceleratorDesign/MAD-X /io/MAD-X
