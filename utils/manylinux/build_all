@@ -41,7 +41,7 @@ cd /io/cpymad
 cd /io/cpymad
 for PYBIN in /opt/python/*/bin; do
     #"${PYBIN}/pip" install cython
-    "${PYBIN}/python" setup.py build_ext \
+    "${PYBIN}/python" setup.py build_ext --force \
         --madxdir=/io/madx-install --no-X11
     "${PYBIN}/python" setup.py bdist_wheel
 done
