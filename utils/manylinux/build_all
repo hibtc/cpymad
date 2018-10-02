@@ -37,10 +37,6 @@ cd /io/cpymad
 /opt/python/cp36-cp36m/bin/pip install cython
 /opt/python/cp36-cp36m/bin/cythonize cpymad/libmadx.pyx
 
-# Hotfix problem for bug in auditwheel:
-# https://github.com/pypa/auditwheel/issues/102
-/opt/python/cp36-cp36m/bin/pip install -I wheel==0.31.1
-
 # Create wheels:
 cd /io/cpymad
 for PYBIN in /opt/python/*/bin; do
