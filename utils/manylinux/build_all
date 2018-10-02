@@ -24,6 +24,7 @@ cmake28 /io/MAD-X \
     -DBUILD_SHARED_LIBS=OFF \
     -DMADX_STATIC=ON \
     -DCMAKE_INSTALL_PREFIX=/io/madx-install \
+    -DCMAKE_C_FLAGS="-fvisibility=hidden" \
     -DMADX_INSTALL_DOC=OFF \
     -DMADX_ONLINE=OFF \
     -DMADX_FORCE_32=OFF \
