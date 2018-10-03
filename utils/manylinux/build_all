@@ -43,8 +43,8 @@ make install
 # cythonize once instead of re-cythonizing for each dependency:
 # (this requires that you
 cd /io/cpymad
-/opt/python/cp36-cp36m/bin/pip install cython
-/opt/python/cp36-cp36m/bin/cythonize cpymad/libmadx.pyx
+$PY/pip install cython
+$PY/cythonize cpymad/libmadx.pyx
 
 # Create wheels:
 cd /io/cpymad
