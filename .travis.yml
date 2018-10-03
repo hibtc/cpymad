@@ -12,6 +12,13 @@ python:
 sudo: required
 dist: trusty
 
+env:
+  global:
+    # GITHUB_TOKEN:
+    - secure: "fdvPaSzbpf47Qb/2zDg/eHAS0bBFaAkWFxyxmhHQOkD0PlVxwi1Fh0Sq3dUZVwQgmmYj+hF6cFpqkFQJQe3zFqw9k14Ccr4dk69yjPNbQA1+yg0ARFntyqtM2DUN86brMcZG3ZM6V2HFuzKn9cQUvtjCQSKS26HybEnCG4vXz24="
+    # PYPI_PASSWORD:
+    - secure: "A/bn3uZV6tNCCOMspsjo6A38s4WyOAK8ScuMOtlSl/pbm68RirCakDT/QT/UTlTjUGfFRZGOtc3Mktb/7P52JokTYSGWfWTv9a7IC5vv7MzJTgI40LU23K+zaTesZH6OYhvHoiQ+u74o5JkZQT9h0nc1G0jYo4wn82RxiIO4veo="
+
 before_install:
   - lsb_release -a
   - env | sort
@@ -65,6 +72,54 @@ jobs:
       dist: xenial
 
     - stage: deploy
+      name: Upload release tarballs
+      python: "3.6"
+      services:
+        - docker
+      before_install: skip
+      install:
+        - pip install docker-compose
+      script:
+        - docker build -t wheelbuilder utils/manylinux
+        # at the time of writing, mounting /io/cpymad as readonly volume
+        # (the `:ro` option) causes container init error when executed on
+        # travis (not on my local machine though), so we use `:rw` instead:
+        - docker run --init --name artifacts
+            -v `pwd`:/io/cpymad:rw
+            --cap-drop=all
+            wheelbuilder
+        - mkdir -p artifacts
+        - docker cp artifacts:/io/wheels ./artifacts/
+        - mkdir -p dist
+        - cp artifacts/wheels/*.whl dist/
+      after_success: true   # don't "skip"! it makes travis skip "deploy:" too!
+      deploy:
+      # Upload artifacts to github
+      - provider: pages
+        local-dir: ./artifacts
+        skip_cleanup: true
+        on:
+          all_branches: true
+        repo: hibtc/cpymad-artifacts
+        target-branch: master
+        github-token: $GITHUB_TOKEN
+      # Upload manylinux wheels to test.pypi.org (only on branch test-release)
+      - provider: pypi
+        skip_cleanup: true
+        server: https://test.pypi.org/legacy/
+        on:
+          branch: test-release
+        user: hibtc-deploy
+        password: $PYPI_PASSWORD
+      # Upload manylinux wheels (only when pushing tags)
+      - provider: pypi
+        skip_cleanup: true
+        on:
+          tags: true
+        user: hibtc-deploy
+        password: $PYPI_PASSWORD
+
+    - stage: deploy
       name: GitHub Pages
       python: "3.6"
       install:
@@ -78,7 +133,6 @@ jobs:
         provider: pages
         local-dir: doc/_build/html
         skip-cleanup: true
-        github-token:
-          secure: "Z5vSkkgj12/5DdsbV0C58zO9TK4zN/f2VgQMoSNnCwEoziTN7jaLStUzIE98qpREthBUU5SE/Sd9SXEW+gW4HeryqqKI9liNb3r83jprs/Z5SsEfhEqiVXDwyidbXjn7rx+yMUUfnD+feW31fj9XiHhCE2oe7A+lFnNziVdsx8o="
+        github-token: $GITHUB_TOKEN
         on:
           branch: master
