@@ -1,12 +1,9 @@
 version: "3.7"
 services:
-  cpymad-manylinux:
+  cpymad:
     build: .
     volumes:
-      - ../..:/io/cpymad
-      - .:/io
+      - ../..:/io/cpymad:ro
     cap_drop:
       - all
-    cap_add:
-      - dac_override        # fix "Permission denied" when writing to /io
     init: true

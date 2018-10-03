@@ -27,12 +27,12 @@ if [[ ! -e /io/cpymad ]]; then
 fi
 
 # Build MAD-X
-mkdir -p /io/madx-build
-cd /io/madx-build
+mkdir -p /io/build/madx
+cd /io/build/madx
 cmake28 /io/MAD-X \
     -DBUILD_SHARED_LIBS=OFF \
     -DMADX_STATIC=ON \
-    -DCMAKE_INSTALL_PREFIX=/io/madx-install \
+    -DCMAKE_INSTALL_PREFIX=/io/install \
     -DCMAKE_C_FLAGS="-fvisibility=hidden" \
     -DMADX_INSTALL_DOC=OFF \
     -DMADX_ONLINE=OFF \
@@ -40,18 +40,27 @@ cmake28 /io/MAD-X \
     -DMADX_X11=OFF
 make install
 
-# cythonize once instead of re-cythonizing for each dependency:
-# (this requires that you
+# The cpymad folder may be mounted from the host OS. In this case we should
+# not create root owned files there or modify any of the user's data. For this
+# reason, we first copy the source files to a build folder and perform all
+# further steps from there:
 cd /io/cpymad
+rm -rf /io/build/cpymad
+mkdir -p /io/build/cpymad
+$PY/python setup.py egg_info
+tar -c $(cat cpymad.egg-info/SOURCES.txt) |
+    tar -x -C /io/build/cpymad --no-same-owner
+
+# cythonize once instead of re-cythonizing for each dependency:
+cd /io/build/cpymad
 $PY/pip install cython
 $PY/cythonize cpymad/libmadx.pyx
 
 # Create wheels:
-cd /io/cpymad
+cd /io/build/cpymad
 for PYBIN in /opt/python/*/bin; do
-    #"${PYBIN}/pip" install cython
     "${PYBIN}/python" setup.py build_ext --force \
-        --madxdir=/io/madx-install --no-X11
+        --madxdir=/io/install --no-X11
     "${PYBIN}/python" setup.py bdist_wheel
 done
 
