@@ -73,7 +73,7 @@ jobs:
       script:
         - cd doc
         - make html
-      after_success: skip
+      after_success: true   # don't "skip"! it makes travis skip "deploy:" too!
       deploy:
         provider: pages
         local-dir: doc/_build/html
