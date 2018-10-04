@@ -1,9 +1,5 @@
 FROM quay.io/pypa/manylinux1_x86_64
 
-# Cache cython installation:
-ENV PY="/opt/python/cp36-cp36m/bin"
-RUN $PY/pip install cython
-
 COPY ./build_all /opt
 
 # NOTE: already installed:
