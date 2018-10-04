@@ -1,32 +1,38 @@
 language: python
+sudo: false
 
 # See: https://docs.travis-ci.com/user/languages/python/
 python:
   - "2.7"
-  - "3.3"
+# - "3.3"   no manylinux support
   - "3.4"
   - "3.5"
   - "3.6"
 # - "3.7"   in `jobs`, see below!
 
-sudo: required
-dist: trusty
+env:
+  global:
+    # GITHUB_TOKEN:
+    - secure: "fdvPaSzbpf47Qb/2zDg/eHAS0bBFaAkWFxyxmhHQOkD0PlVxwi1Fh0Sq3dUZVwQgmmYj+hF6cFpqkFQJQe3zFqw9k14Ccr4dk69yjPNbQA1+yg0ARFntyqtM2DUN86brMcZG3ZM6V2HFuzKn9cQUvtjCQSKS26HybEnCG4vXz24="
+    # PYPI_PASSWORD:
+    - secure: "A/bn3uZV6tNCCOMspsjo6A38s4WyOAK8ScuMOtlSl/pbm68RirCakDT/QT/UTlTjUGfFRZGOtc3Mktb/7P52JokTYSGWfWTv9a7IC5vv7MzJTgI40LU23K+zaTesZH6OYhvHoiQ+u74o5JkZQT9h0nc1G0jYo4wn82RxiIO4veo="
+
+    - ART_REPO=https://$GITHUB_TOKEN@github.com/hibtc/cpymad-artifacts
+    - ART_BRANCH=_$TRAVIS_BUILD_NUMBER-$TRAVIS_COMMIT
 
 before_install:
   - lsb_release -a
   - env | sort
 
-  # Install MAD-X from PPA (see https://github.com/hibtc/madx-debian):
-  - sudo add-apt-repository -y ppa:coldfix/madx
-  - sudo apt-get -qq update
-  - sudo apt-get install -y libmadx-dev
-
 install:
-  # Check that the source distribution can be used for installation:
-  - pip install cython
-  - python setup.py sdist
-  - pip uninstall cython -y
-  - X11=0 BLAS=1 LAPACK=1 pip install $(ls ./dist/*.tar.gz | sort -rV | head -n1)
+  - pip install wheel
+  - PY_ABI_TAG=$(python -c
+        'from wheel.pep425tags import get_abi_tag; print(get_abi_tag())')
+
+  # download wheels generated during build stage:
+  - git clone $ART_REPO --single-branch --branch $ART_BRANCH
+  - pip install ./cpymad-artifacts/wheels/*-$PY_ABI_TAG-*.whl
+  - rm -rf cpymad-artifacts
 
   # docutils is required for `setup.py check -r`:
   - pip install flake8 docutils
@@ -50,12 +56,14 @@ after_success:
 
 cache:
   pip: true
+  directories:
+    - /home/travis/io
 
 
-# Each stage is executed only if all previous stages have succeeded:
 stages:
-  - test        # the default (global) stage
-  - deploy      # see below
+  - build
+  - test
+  - deploy
 
 jobs:
   include:
@@ -63,14 +71,75 @@ jobs:
     - stage: test
       python: "3.7"
       dist: xenial
+      sudo: true
+
+    - stage: build
+      name: Build manylinux wheels
+      python: "3.6"
+      sudo: true
+      services:
+        - docker
+      install:
+        - pip install docker-compose
+      script:
+        - mkdir -p /home/travis/io
+        - chmod 777 /home/travis/io
+        - docker build -t wheelbuilder utils/manylinux
+        # at the time of writing, mounting /io/cpymad as readonly volume
+        # (the `:ro` option) causes container init error when executed on
+        # travis (not on my local machine though), so we use `:rw` instead:
+        - docker run --init --name artifacts
+            -v /home/travis/io:/io:rw
+            -v `pwd`:/io/cpymad:rw
+            --cap-drop=all
+            wheelbuilder
+        - mkdir -p artifacts
+        - docker cp artifacts:/io/wheels ./artifacts/
+      after_success:
+        # Upload artifacts to github:
+        - cd artifacts
+        - git init
+        - git add -f wheels/*.whl
+        - git commit -m "Build $TRAVIS_JOB_NUMBER" -m "$TRAVIS_BUILD_WEB_URL"
+        # Upload to a unique branch for deterministic fetches during the later
+        # stages, and to master for the user's convenience. The unique branch
+        # can be removed after the run has finished.
+        - git push -f $ART_REPO master:master master:$ART_BRANCH
+      after_script:
+        - ./utils/cleanup_artifacts.py $ART_REPO $TRAVIS_BUILD_NUMBER 5
 
     - stage: deploy
-      name: GitHub Pages
+      name: Upload release to PyPI
       python: "3.6"
+      if: branch = test-release OR tag IS present
       install:
-        - pip install cython sphinx sphinx_rtd_theme
-        - X11=0 BLAS=1 LAPACK=1 python setup.py develop
+        - git clone $ART_REPO artifacts --single-branch --branch $ART_BRANCH
+        - pip install cython
       script:
+        - python setup.py sdist
+      after_success: true   # don't "skip"! it makes travis skip "deploy:" too!
+      deploy:
+      # Upload manylinux wheels to test.pypi.org (only on branch test-release)
+      - provider: pypi
+        skip_cleanup: true
+        server: https://test.pypi.org/legacy/
+        on:
+          branch: test-release
+        user: hibtc-deploy
+        password: $PYPI_PASSWORD
+      # Upload manylinux wheels (only when pushing tags)
+      - provider: pypi
+        skip_cleanup: true
+        on:
+          tags: true
+        user: hibtc-deploy
+        password: $PYPI_PASSWORD
+
+    - stage: deploy
+      name: Update Documentation
+      python: "3.6"
+      script:
+        - pip install sphinx sphinx_rtd_theme
         - cd doc
         - make html
       after_success: true   # don't "skip"! it makes travis skip "deploy:" too!
@@ -78,7 +147,6 @@ jobs:
         provider: pages
         local-dir: doc/_build/html
         skip-cleanup: true
-        github-token:
-          secure: "Z5vSkkgj12/5DdsbV0C58zO9TK4zN/f2VgQMoSNnCwEoziTN7jaLStUzIE98qpREthBUU5SE/Sd9SXEW+gW4HeryqqKI9liNb3r83jprs/Z5SsEfhEqiVXDwyidbXjn7rx+yMUUfnD+feW31fj9XiHhCE2oe7A+lFnNziVdsx8o="
+        github-token: $GITHUB_TOKEN
         on:
           branch: master

@@ -8,44 +8,40 @@ installed on many linux (without having to build MAD-X and cpymad manually).
 Build instructions
 ~~~~~~~~~~~~~~~~~~
 
-It is possible to build cpymad wheels with a MAD-X version from the working
-directory by cloning it here and modifying as desired::
+Using docker-compose
+````````````````````
 
-    git clone git@github.com:MethodicalAcceleratorDesign/MAD-X
+This requires that you have docker installed. In order to build the wheels
+go to the cpymad root directory and execute::
 
-This requires that you have docker installed. The wheels are built as
-follows::
+    docker-compose -f utils/manylinux/docker-compose.yml up --build
 
-    docker-compose up
+To retrieve your shiny new wheels, type::
 
-Or manually:
+    docker cp manylinux_cpymad_1:/io/wheels .
+
+
+Using docker
+````````````
+
+If you want to (or have to) use lower level tools, you can do so as follows:
 
 .. code-block:: bash
 
-    docker build -t cpymad-manylinux .
+    docker create -v /io --name artifacts busybox
 
-    # if running from current directory:
-    docker run --rm --init \
-        -v `pwd`:/io \
-        -v `pwd`/../..:/io/cpymad \
+    docker build -t cpymad-manylinux utils/manylinux
+
+    docker run --init --rm \
+        --volumes-from artifacts \
+        -v `pwd`:/io/cpymad:ro \
         --cap-drop=all \
         cpymad-manylinux
 
-    # OR, running from cpymad root directory:
-    docker run --rm --init \
-        -v `pwd`/utils/manylinux:/io \
-        -v `pwd`:/io/cpymad \
-        --cap-drop=all \
-        cpymad-manylinux
+    docker cp artifacts:/io/wheels .
 
-When debugging, it can be useful to run an interactive session in the docker
-container::
-
-    docker run --rm -it cpymad-manylinux
-
-Finally, find and upload your wheels in the ``wheels/`` subdirectory::
-
-    twine upload wheels/*.whl
+Note this makes use of a data container that will persist build artifacts and
+therefore significantly speedup subsequent runs.
 
 
 Known issues
