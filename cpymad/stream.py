@@ -58,12 +58,17 @@ class AsyncReader:
 
     def _read_thread(self):
         lines = []
+        stop = False
         while True:
             try:
                 line = self.stream.readline()
             except IOError:
-                if self.stop:
+                if stop:
                     return lines
+                # do one more iteration, this prevents missing output due to
+                # unfortunate thread scheduling:
+                if self.stop:
+                    stop = True
                 continue
             if not line:
                 return lines
