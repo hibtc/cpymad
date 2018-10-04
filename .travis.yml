@@ -106,6 +106,7 @@ jobs:
         # can be removed after the run has finished.
         - git push -f $ART_REPO master:master master:$ART_BRANCH
       after_script:
+        - cd $TRAVIS_BUILD_DIR
         - ./utils/cleanup_artifacts.py $ART_REPO $TRAVIS_BUILD_NUMBER 5
 
     - stage: deploy
