@@ -25,9 +25,13 @@ before_install:
   - env | sort
 
 install:
+  - pip install wheel
+  - PY_ABI_TAG=$(python -c
+        'from wheel.pep425tags import get_abi_tag; print(get_abi_tag())')
+
   # download wheels generated during build stage:
   - git clone $ART_REPO --single-branch --branch $ART_BRANCH
-  - pip install cpymad -f ./cpymad-artifacts/wheels
+  - pip install ./cpymad-artifacts/wheels/*-$PY_ABI_TAG-*.whl
   - rm -rf cpymad-artifacts
 
   # docutils is required for `setup.py check -r`:
