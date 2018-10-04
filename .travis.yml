@@ -111,6 +111,7 @@ jobs:
     - stage: deploy
       name: Upload release to PyPI
       python: "3.6"
+      if: branch = test-release OR tag IS present
       install:
         - git clone $ART_REPO artifacts --single-branch --branch $ART_BRANCH
         - pip install cython
