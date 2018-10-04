@@ -1,16 +1,14 @@
 language: python
+sudo: false
 
 # See: https://docs.travis-ci.com/user/languages/python/
 python:
   - "2.7"
-  - "3.3"
+# - "3.3"   no manylinux support
   - "3.4"
   - "3.5"
   - "3.6"
 # - "3.7"   in `jobs`, see below!
-
-sudo: required
-dist: trusty
 
 env:
   global:
@@ -19,21 +17,18 @@ env:
     # PYPI_PASSWORD:
     - secure: "A/bn3uZV6tNCCOMspsjo6A38s4WyOAK8ScuMOtlSl/pbm68RirCakDT/QT/UTlTjUGfFRZGOtc3Mktb/7P52JokTYSGWfWTv9a7IC5vv7MzJTgI40LU23K+zaTesZH6OYhvHoiQ+u74o5JkZQT9h0nc1G0jYo4wn82RxiIO4veo="
 
+    - ART_REPO=https://$GITHUB_TOKEN@github.com/hibtc/cpymad-artifacts
+    - ART_BRANCH=_$TRAVIS_BUILD_NUMBER-$TRAVIS_COMMIT
+
 before_install:
   - lsb_release -a
   - env | sort
 
-  # Install MAD-X from PPA (see https://github.com/hibtc/madx-debian):
-  - sudo add-apt-repository -y ppa:coldfix/madx
-  - sudo apt-get -qq update
-  - sudo apt-get install -y libmadx-dev
-
 install:
-  # Check that the source distribution can be used for installation:
-  - pip install cython
-  - python setup.py sdist
-  - pip uninstall cython -y
-  - X11=0 BLAS=1 LAPACK=1 pip install $(ls ./dist/*.tar.gz | sort -rV | head -n1)
+  # download wheels generated during build stage:
+  - git clone $ART_REPO --single-branch --branch $ART_BRANCH
+  - pip install cpymad -f ./cpymad-artifacts/wheels
+  - rm -rf cpymad-artifacts
 
   # docutils is required for `setup.py check -r`:
   - pip install flake8 docutils
@@ -59,10 +54,10 @@ cache:
   pip: true
 
 
-# Each stage is executed only if all previous stages have succeeded:
 stages:
-  - test        # the default (global) stage
-  - deploy      # see below
+  - build
+  - test
+  - deploy
 
 jobs:
   include:
@@ -70,13 +65,14 @@ jobs:
     - stage: test
       python: "3.7"
       dist: xenial
+      sudo: true
 
-    - stage: deploy
-      name: Upload release tarballs
+    - stage: build
+      name: Build manylinux wheels
       python: "3.6"
+      sudo: true
       services:
         - docker
-      before_install: skip
       install:
         - pip install docker-compose
       script:
@@ -90,19 +86,27 @@ jobs:
             wheelbuilder
         - mkdir -p artifacts
         - docker cp artifacts:/io/wheels ./artifacts/
-        - mkdir -p dist
-        - cp artifacts/wheels/*.whl dist/
       after_success: true   # don't "skip"! it makes travis skip "deploy:" too!
       deploy:
-      # Upload artifacts to github
       - provider: pages
         local-dir: ./artifacts
         skip_cleanup: true
         on:
           all_branches: true
         repo: hibtc/cpymad-artifacts
-        target-branch: master
+        target-branch: $ART_BRANCH
         github-token: $GITHUB_TOKEN
+
+    - stage: deploy
+      name: Upload release to PyPI
+      python: "3.6"
+      install:
+        - git clone $ART_REPO artifacts --single-branch --branch $ART_BRANCH
+        - pip install cython
+      script:
+        - python setup.py sdist
+      after_success: true   # don't "skip"! it makes travis skip "deploy:" too!
+      deploy:
       # Upload manylinux wheels to test.pypi.org (only on branch test-release)
       - provider: pypi
         skip_cleanup: true
@@ -120,12 +124,10 @@ jobs:
         password: $PYPI_PASSWORD
 
     - stage: deploy
-      name: GitHub Pages
+      name: Update Documentation
       python: "3.6"
-      install:
-        - pip install cython sphinx sphinx_rtd_theme
-        - X11=0 BLAS=1 LAPACK=1 python setup.py develop
       script:
+        - pip install sphinx sphinx_rtd_theme
         - cd doc
         - make html
       after_success: true   # don't "skip"! it makes travis skip "deploy:" too!
