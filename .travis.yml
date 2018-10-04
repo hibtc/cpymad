@@ -86,16 +86,16 @@ jobs:
             wheelbuilder
         - mkdir -p artifacts
         - docker cp artifacts:/io/wheels ./artifacts/
-      after_success: true   # don't "skip"! it makes travis skip "deploy:" too!
-      deploy:
-      - provider: pages
-        local-dir: ./artifacts
-        skip_cleanup: true
-        on:
-          all_branches: true
-        repo: hibtc/cpymad-artifacts
-        target-branch: $ART_BRANCH
-        github-token: $GITHUB_TOKEN
+      after_success:
+        # Upload artifacts to github:
+        - cd artifacts
+        - git init
+        - git add -f wheels/*.whl
+        - git commit -m "Build $TRAVIS_JOB_NUMBER" -m "$TRAVIS_BUILD_WEB_URL"
+        # Upload to a unique branch for deterministic fetches during the later
+        # stages, and to master for the user's convenience. The unique branch
+        # can be removed after the run has finished.
+        - git push -f $ART_REPO master:master master:$ART_BRANCH
 
     - stage: deploy
       name: Upload release to PyPI
