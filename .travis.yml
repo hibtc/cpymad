@@ -56,6 +56,8 @@ after_success:
 
 cache:
   pip: true
+  directories:
+    - /home/travis/io
 
 
 stages:
@@ -80,11 +82,14 @@ jobs:
       install:
         - pip install docker-compose
       script:
+        - mkdir -p /home/travis/io
+        - chmod 777 /home/travis/io
         - docker build -t wheelbuilder utils/manylinux
         # at the time of writing, mounting /io/cpymad as readonly volume
         # (the `:ro` option) causes container init error when executed on
         # travis (not on my local machine though), so we use `:rw` instead:
         - docker run --init --name artifacts
+            -v /home/travis/io:/io:rw
             -v `pwd`:/io/cpymad:rw
             --cap-drop=all
             wheelbuilder
