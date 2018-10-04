@@ -105,6 +105,8 @@ jobs:
         # stages, and to master for the user's convenience. The unique branch
         # can be removed after the run has finished.
         - git push -f $ART_REPO master:master master:$ART_BRANCH
+      after_script:
+        - ./utils/cleanup_artifacts.py $ART_REPO $TRAVIS_BUILD_NUMBER 5
 
     - stage: deploy
       name: Upload release to PyPI
