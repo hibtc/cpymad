@@ -17,6 +17,6 @@ VOLUME /io
 # command in order to copy them to a separate build folder. Naturally, this
 # requires write access to the `cpymad.egg-info` subfolder, which we can grant
 # by making at another volume:
-VOLUME /io/cpymad/cpymad.egg-info
+VOLUME /io/cpymad/src/cpymad.egg-info
 
 CMD ["/opt/build_all"]

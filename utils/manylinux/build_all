@@ -49,13 +49,13 @@ cd /io/cpymad
 rm -rf /io/build/cpymad
 mkdir -p /io/build/cpymad
 $PY/python setup.py egg_info
-tar -c $(cat cpymad.egg-info/SOURCES.txt) |
+tar -c $(cat src/cpymad.egg-info/SOURCES.txt) |
     tar -x -C /io/build/cpymad --no-same-owner
 
 # cythonize once instead of re-cythonizing for each dependency:
 cd /io/build/cpymad
 $PY/pip install cython
-$PY/cythonize cpymad/libmadx.pyx
+$PY/cythonize src/cpymad/libmadx.pyx
 
 # Create wheels:
 cd /io/build/cpymad

@@ -11,7 +11,7 @@ For more information, see
 
 from __future__ import print_function
 
-from setuptools import setup, Extension
+from setuptools import setup, find_packages, Extension
 from setuptools.command.build_ext import build_ext as _build_ext
 from distutils.util import get_platform, convert_path
 from distutils import sysconfig
@@ -262,7 +262,7 @@ def get_extension_args(madxdir, shared, static, **libs):
 def get_setup_args(optvals):
     """Accumulate metadata for setup."""
     long_description = get_long_description()
-    metadata = exec_file('cpymad/__init__.py')
+    metadata = exec_file('src/cpymad/__init__.py')
     return dict(
         name='cpymad',
         version=metadata['__version__'],
@@ -277,12 +277,11 @@ def get_setup_args(optvals):
         classifiers=metadata['__classifiers__'],
         ext_modules=cythonize([
             Extension('cpymad.libmadx',
-                      sources=["cpymad/libmadx.pyx"],
+                      sources=["src/cpymad/libmadx.pyx"],
                       libraries=['madx']),
         ]),
-        packages=[
-            "cpymad",
-        ],
+        packages=find_packages('src'),
+        package_dir={'': 'src'},
         include_package_data=True,  # include files matched by MANIFEST.in
         install_requires=[
             'setuptools>=18.0',
