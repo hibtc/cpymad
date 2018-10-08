@@ -207,13 +207,13 @@ def get_var(name):
     cdef clib.variable* var = _get_var(name)
     cdef int index = clib.name_list_pos(var.name, clib.variable_list.list)
     cdef int inform = index >= clib.start_var
-    if var.type == 3:
+    if var.type == clib.VAR_TYPE_STRING:
         return Parameter(
             name, _str(var.string), None,
-            dtype=clib.PARAM_TYPE_STRING, inform=inform, var_type=3)
+            dtype=clib.PARAM_TYPE_STRING, inform=inform, var_type=var.type)
     cdef double value = clib.variable_value(var)
     cdef int typeid
-    if var.val_type == 0:
+    if var.val_type == clib.VAL_TYPE_INTEGER:
         typeid = clib.PARAM_TYPE_INTEGER
     else:
         typeid = clib.PARAM_TYPE_DOUBLE

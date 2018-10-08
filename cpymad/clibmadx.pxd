@@ -121,6 +121,16 @@ cdef enum:
     CONSTR_TYPE_BOTH = 3
     CONSTR_TYPE_VALUE = 4
 
+cdef enum:                          # struct variable::type
+    VAR_TYPE_CONST = 0
+    VAR_TYPE_DIRECT = 1
+    VAR_TYPE_DEFERRED = 2
+    VAR_TYPE_STRING = 3
+
+cdef enum:                          # struct variable::val_type
+    VAL_TYPE_INTEGER = 0
+    VAL_TYPE_DOUBLE = 1
+
 cdef extern from "madX/mad_cmd.h" nogil:
     struct command:
         char[NAME_L] name
