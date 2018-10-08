@@ -142,7 +142,6 @@ jobs:
       script:
         - pip install sphinx sphinx_rtd_theme
         - make -C doc html
-        - touch doc/_build/html/.nojekyll
       after_success: true   # don't "skip"! it makes travis skip "deploy:" too!
       deploy:
         provider: pages
