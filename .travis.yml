@@ -45,13 +45,12 @@ script:
   # Need to remove cpymad folder otherwise it will be imported, but we want
   # to check the version installed from the source distribution:
   - rm -r cpymad
-  - coverage run --source=cpymad -a test/test_util.py -v
-  - coverage run --source=cpymad -a test/test_madx.py -v
+  - coverage run --source=cpymad -p test/test_util.py -v
+  - coverage run --source=cpymad -p test/test_madx.py -v
+  - git checkout HEAD -- cpymad
 
 after_success:
-  - base=`python -c 'import os,cpymad; print(os.path.dirname(cpymad.__file__))'`/..
-  - mv .git .coverage $base
-  - cd $base
+  - coverage combine
   - coveralls
 
 cache:
