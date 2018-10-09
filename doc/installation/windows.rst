@@ -79,12 +79,13 @@ Alternatively, manually extend your PATH later in the terminal:
 
     set PATH=%PATH%;C:\Program Files (x86)\CMake\bin
 
-Next, install minrpc_::
+Next, install minrpc_ and cython_::
 
-    pip install minrpc
+    pip install minrpc cython
 
 .. _CMake: http://www.cmake.org/
 .. _minrpc: https://pypi.python.org/pypi/minrpc
+.. _cython: https://cython.org
 
 
 Build libmadx
@@ -137,7 +138,7 @@ retrieve the current development version (unstable):
 
 .. code-block:: bat
 
-    git clone https://github.com/hibtc/cpmyad
+    git clone https://github.com/hibtc/cpymad
 
 Then go to the cpymad folder and build as follows:
 
