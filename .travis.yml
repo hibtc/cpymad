@@ -106,7 +106,7 @@ jobs:
         # Upload artifacts to github:
         - cd artifacts
         - git init
-        - git add -f wheels/*.whl
+        - git add -f wheels/*.whl wheels/*.tar.gz
         - git commit -m "Build $TRAVIS_JOB_NUMBER" -m "$TRAVIS_BUILD_WEB_URL"
         # Upload to a unique branch for deterministic fetches during the later
         # stages, and to master for the user's convenience. The unique branch
@@ -123,9 +123,7 @@ jobs:
       install:
         - git clone $ART_REPO artifacts -b $ART_BRANCH --depth 1
         - mv artifacts/wheels dist
-        - pip install cython
-      script:
-        - python setup.py sdist
+      script: skip
       after_success: true   # don't "skip"! it makes travis skip "deploy:" too!
       deploy:
       # Upload manylinux wheels to test.pypi.org (only on branch test-release)
@@ -136,6 +134,7 @@ jobs:
           branch: test-release
         user: hibtc-deploy
         password: $PYPI_PASSWORD
+        distributions: ""
       # Upload manylinux wheels (only when pushing tags)
       - provider: pypi
         skip_cleanup: true
@@ -143,6 +142,7 @@ jobs:
           tags: true
         user: hibtc-deploy
         password: $PYPI_PASSWORD
+        distributions: ""
 
     - stage: deploy
       name: Update Documentation
