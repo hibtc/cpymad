@@ -111,6 +111,7 @@ jobs:
       if: branch = test-release OR tag IS present
       install:
         - git clone $ART_REPO artifacts --single-branch --branch $ART_BRANCH
+        - mv artifacts/wheels dist
         - pip install cython
       script:
         - python setup.py sdist
