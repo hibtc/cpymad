@@ -42,12 +42,8 @@ script:
   - python setup.py check -rsm
   - flake8
 
-  # Need to remove cpymad folder otherwise it will be imported, but we want
-  # to check the version installed from the source distribution:
-  - rm -r cpymad
   - coverage run --source=cpymad -p test/test_util.py -v
   - coverage run --source=cpymad -p test/test_madx.py -v
-  - git checkout HEAD -- cpymad
 
 after_success:
   - coverage combine
