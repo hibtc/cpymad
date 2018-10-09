@@ -55,7 +55,8 @@ tar -c $(cat src/cpymad.egg-info/SOURCES.txt) |
 # cythonize once instead of re-cythonizing for each dependency:
 cd /io/build/cpymad
 $PY/pip install cython
-$PY/cythonize src/cpymad/libmadx.pyx
+$PY/cython src/cpymad/libmadx.pyx
+$PY/pip uninstall cython -y
 
 # Create wheels:
 cd /io/build/cpymad
