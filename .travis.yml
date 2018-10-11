@@ -34,7 +34,7 @@ install:
         'from wheel.pep425tags import get_abi_tag; print(get_abi_tag())')
 
   # download wheels generated during build stage:
-  - git clone $ART_REPO --single-branch --branch $ART_BRANCH
+  - git clone $ART_REPO -b $ART_BRANCH --depth 1
   - pip install ./cpymad-artifacts/wheels/*-$PY_ABI_TAG-*.whl
   - rm -rf cpymad-artifacts
 
@@ -114,7 +114,7 @@ jobs:
       python: "3.6"
       if: branch = test-release OR tag IS present
       install:
-        - git clone $ART_REPO artifacts --single-branch --branch $ART_BRANCH
+        - git clone $ART_REPO artifacts -b $ART_BRANCH --depth 1
         - mv artifacts/wheels dist
         - pip install cython
       script:
