@@ -12,7 +12,7 @@ if [[ -f $CPYMAD_ARCHIVE ]]; then
 fi
 
 if [[ -f $MADX_ARCHIVE ]]; then
-    tar -xzf $MADX_ARCHIVE --one-top-level=/io/madx --strip-components 1
+    tar -xzf $MADX_ARCHIVE --one-top-level=/io/MAD-X --strip-components 1
 fi
 
 # Download MAD-X:
