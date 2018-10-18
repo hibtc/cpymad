@@ -1,6 +1,33 @@
 Changelog
 ~~~~~~~~~
 
+1.0.8
+=====
+Date: 18.10.2018
+
+- add ``Table.dframe()`` method to return pandas dataframe (provisional API)
+- return success status from ``Madx.input`` (MAD-X errorflag)
+- update install instructions to account for symbol visibility
+- fix MAD-X crash on errors due to interposition of ``error`` by libc (linux)
+- automatically update documentation from travis
+- add ``quit`` method to shutdown the interpreter and wait for the process
+- fix file deletion in case of errors within ``temp_filename`` context
+- make ``Madx`` usable as context manager
+- use the correct line continuation in .bat example
+- fix manylinux build error: not creating libmadx.c
+- fix "Permission denied" error when having to clone MAD-X etc
+- fix incorrect ABI in the -cp27mu- wheel
+- allow specifying MAD-X/cpymad source tarballs for manylinux build
+- rework usage of data volumes in manylinux container: readonly cpymad folder
+- automatically build and upload manylinux releases from travis!
+- fix rare race-condition in stream reader -> delayed output
+- replace some magic numbers with human readable names
+- use ``coverage combine`` instead of custom path hack before uploading
+  coverage data
+- move cpymad package to unimportable subdirectory
+- update to MAD-X 5.04.02
+
+
 1.0.7
 =====
 Date: 19.09.2018
