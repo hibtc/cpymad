@@ -82,8 +82,15 @@ jobs:
       install:
         - pip install docker-compose
       script:
+        - git rev-parse HEAD:utils/manylinux > /tmp/cache_key
+        - if [[ ! -e /home/travis/io/cache_key ]] ||
+                ! cmp /home/travis/io/cache_key /tmp/cache_key; then
+            echo "Clearing MAD-X build cache due to updated build scripts" ;
+            sudo rm -rf /home/travis/io ;
+          fi
         - mkdir -p /home/travis/io
         - chmod 777 /home/travis/io
+        - sudo mv /tmp/cache_key /home/travis/io/
         - docker build -t wheelbuilder utils/manylinux
         # at the time of writing, mounting /io/cpymad as readonly volume
         # (the `:ro` option) causes container init error when executed on
