@@ -16,8 +16,7 @@ try:
 except ImportError:     # py2
     from urllib import urlretrieve
 
-# 5.04.01 is not available as tag yet:
-MADX_VERSION = '8058f63da3b91983fc2646fbcac419c226186138'
+MADX_VERSION = '5.04.02'
 
 
 def download(url, to=None):

@@ -73,11 +73,11 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         version = self.mad.version
         # check format:
         major, minor, micro = map(int, version.release.split('.'))
-        # We need at least MAD-X 5.04.00:
-        self.assertGreaterEqual((major, minor, micro), (5, 4, 0))
+        # We need at least MAD-X 5.04.02:
+        self.assertGreaterEqual((major, minor, micro), (5, 4, 2))
         # check format:
         year, month, day = map(int, version.date.split('.'))
-        self.assertGreaterEqual((year, month, day), (2018, 3, 2))
+        self.assertGreaterEqual((year, month, day), (2018, 10, 3))
         self.assertLessEqual(month, 12)
         self.assertLessEqual(day, 31)
         self.assertTrue(str(version).startswith(

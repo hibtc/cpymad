@@ -35,8 +35,8 @@ Download the `latest MAD-X release`_ `from github`_:
 
 .. code-block:: bash
 
-    wget https://github.com/MethodicalAcceleratorDesign/MAD-X/archive/5.04.01.tar.gz
-    tar -xzf MAD-X-5.04.01.tar.gz
+    wget https://github.com/MethodicalAcceleratorDesign/MAD-X/archive/5.04.02.tar.gz
+    tar -xzf MAD-X-5.04.02.tar.gz
 
 or use directly the source code from master (unstable):
 

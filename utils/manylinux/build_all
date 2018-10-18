@@ -2,7 +2,7 @@
 
 set -ex
 
-: ${MADX_VERSION:=6448a105b7319971c61b76a987d52d152305c29c}
+: ${MADX_VERSION:=5.04.02}
 : ${CPYMAD_VERSION:=1.0.7}
 : ${PY:=/opt/python/cp36-cp36m/bin}
 
