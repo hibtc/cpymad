@@ -191,7 +191,11 @@ class Madx(object):
 
     def __getattr__(self, name):
         """Resolve missing attributes as commands."""
-        return getattr(self.command, name)
+        try:
+            return getattr(self.command, name)
+        except AttributeError:
+            raise AttributeError('Unknown attribute or command: {!r}'
+                                 .format(name))
 
     def quit(self):
         """Shutdown MAD-X interpreter and stop process."""
@@ -689,7 +693,10 @@ class Command(_MutableMapping):
             return _Mapping.__getattr__(self, name)
 
     def __getitem__(self, name):
-        return self._data[name.lower()].value
+        try:
+            return self._data[name.lower()].value
+        except KeyError:
+            raise KeyError("Unknown command: {!r}".format(name))
 
     def __delitem__(self, name):
         raise NotImplementedError()
