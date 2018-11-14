@@ -42,6 +42,10 @@ __all__ = [
 ]
 
 
+class TwissFailed(RuntimeError):
+    pass
+
+
 class Version(object):
 
     """Version information struct. """
@@ -308,7 +312,8 @@ class Madx(object):
 
         Note that the kwargs overwrite any arguments in twiss_init.
         """
-        self.command.twiss(**kwargs)
+        if not self.command.twiss(**kwargs):
+            raise TwissFailed()
         table = kwargs.get('table', 'twiss')
         if 'file' not in kwargs:
             self._libmadx.apply_table_selections(table)
@@ -722,7 +727,7 @@ class Command(_MutableMapping):
         self, args = args[0], args[1:]
         if self.name == 'beam' and self.sequence:
             kwargs.setdefault('sequence', self.sequence)
-        self._madx.input(util.format_command(self, *args, **kwargs))
+        return self._madx.input(util.format_command(self, *args, **kwargs))
 
     def clone(*args, **kwargs):
         """
