@@ -83,8 +83,7 @@ jobs:
         - pip install docker-compose
       script:
         - git rev-parse HEAD:utils/manylinux > /tmp/cache_key
-        - if [[ ! -e /home/travis/io/cache_key ]] ||
-                ! cmp /home/travis/io/cache_key /tmp/cache_key; then
+        - if ! cmp /home/travis/io/cache_key /tmp/cache_key; then
             echo "Clearing MAD-X build cache due to updated build scripts" ;
             sudo rm -rf /home/travis/io ;
           fi
