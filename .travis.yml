@@ -127,22 +127,24 @@ jobs:
       after_success: true   # don't "skip"! it makes travis skip "deploy:" too!
       deploy:
       # Upload manylinux wheels to test.pypi.org (only on branch test-release)
-      - provider: pypi
+      - provider: script
         skip_cleanup: true
-        server: https://test.pypi.org/legacy/
         on:
           branch: test-release
-        user: hibtc-deploy
-        password: $PYPI_PASSWORD
-        distributions: ""
+        script:
+          - twine upload
+                -u hibtc-deploy -p "$PYPI_PASSWORD"
+                -r https://test.pypi.org/legacy/
+                dist/*.tar.gz dist/*.whl
       # Upload manylinux wheels (only when pushing tags)
-      - provider: pypi
+      - provider: script
         skip_cleanup: true
         on:
           tags: true
-        user: hibtc-deploy
-        password: $PYPI_PASSWORD
-        distributions: ""
+        script:
+          - twine upload
+                -u hibtc-deploy -p "$PYPI_PASSWORD"
+                dist/*.tar.gz dist/*.whl
 
     - stage: deploy
       name: Update Documentation
