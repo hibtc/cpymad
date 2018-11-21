@@ -7,25 +7,31 @@ set -ex
 : ${PY:=/opt/python/cp36-cp36m/bin}
 
 # Build MAD-X
-if [[ -f $MADX_ARCHIVE ]]; then
-    tar -xzf $MADX_ARCHIVE --one-top-level=/io/MAD-X --strip-components 1
-elif [[ ! -e /io/MAD-X ]]; then
-    git clone git://github.com/MethodicalAcceleratorDesign/MAD-X /io/MAD-X
-    git -C /io/MAD-X checkout $MADX_VERSION
-fi
+if [[ $(cat /io/install/version) != $MADX_VERSION ]]; then
+    rm -rf /io/install
+    mkdir -p /io/install
+    echo $MADX_VERSION > /io/install/version
 
-mkdir -p /io/build/madx
-cd /io/build/madx
-cmake28 /io/MAD-X \
-    -DBUILD_SHARED_LIBS=OFF \
-    -DMADX_STATIC=ON \
-    -DCMAKE_INSTALL_PREFIX=/io/install \
-    -DCMAKE_C_FLAGS="-fvisibility=hidden" \
-    -DMADX_INSTALL_DOC=OFF \
-    -DMADX_ONLINE=OFF \
-    -DMADX_FORCE_32=OFF \
-    -DMADX_X11=OFF
-make install
+    if [[ -f $MADX_ARCHIVE ]]; then
+        tar -xzf $MADX_ARCHIVE --one-top-level=/io/MAD-X --strip-components 1
+    elif [[ ! -e /io/MAD-X ]]; then
+        git clone git://github.com/MethodicalAcceleratorDesign/MAD-X /io/MAD-X
+        git -C /io/MAD-X checkout $MADX_VERSION
+    fi
+
+    mkdir -p /io/build/madx
+    cd /io/build/madx
+    cmake28 /io/MAD-X \
+        -DBUILD_SHARED_LIBS=OFF \
+        -DMADX_STATIC=ON \
+        -DCMAKE_INSTALL_PREFIX=/io/install \
+        -DCMAKE_C_FLAGS="-fvisibility=hidden" \
+        -DMADX_INSTALL_DOC=OFF \
+        -DMADX_ONLINE=OFF \
+        -DMADX_FORCE_32=OFF \
+        -DMADX_X11=OFF
+    make install
+fi
 
 # Download cpymad:
 if [[ ! -f $CPYMAD_ARCHIVE ]]; then
