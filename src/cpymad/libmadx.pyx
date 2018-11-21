@@ -1166,11 +1166,9 @@ cdef _get_node(clib.node* node, int ref_flag, int is_expanded, int line):
 
 cdef double _get_node_entry_pos(clib.node* node, int ref_flag, int is_expanded):
     """Normalize 'at' value to node entry."""
-    cdef double position
     if is_expanded:
-        position = node.position
-    else:
-        position = node.at_value
+        return node.position - node.length / 2
+    cdef double position = node.at_value
     if ref_flag == clib.REF_CENTER:
         return position - node.length / 2
     elif ref_flag == clib.REF_EXIT:
