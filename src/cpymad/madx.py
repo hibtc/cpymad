@@ -1031,7 +1031,8 @@ class Table(_Mapping):
                 self._libmadx.get_table_column_count_all(self._name))
 
     def __repr__(self):
-        return "<{}: {}>".format(self.__class__.__name__, self._name)
+        return "<{} {!r}: {{{}}}>".format(
+            self.__class__.__name__, self._name, ', '.join(self))
 
     @property
     def summary(self):

@@ -529,8 +529,8 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         twiss = self.mad.twiss(sequence='s1', sectormap=True, **initial)
         sector = self.mad.table.sectortable
 
-        self.assertEqual(str(twiss), '<Table: twiss>')
-        self.assertEqual(str(sector), '<Table: sectortable>')
+        self.assertTrue(str(twiss).startswith("<Table 'twiss': "))
+        self.assertTrue(str(sector).startswith("<Table 'sectortable': "))
 
         self.assertIn('betx', twiss)
         self.assertIn('t111', sector)
