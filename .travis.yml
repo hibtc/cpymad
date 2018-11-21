@@ -1,5 +1,4 @@
 language: python
-sudo: false
 
 # See: https://docs.travis-ci.com/user/languages/python/
 python:
@@ -23,7 +22,7 @@ env:
 before_install:
   - lsb_release -a
   - env | sort
-  - if [[ $TRAVIS_BRANCH = test-release ]]; then
+  - if [[ -z $TRAVIS_TAG ]]; then
       sed -i "/^__version__ = /s/'\$/.dev$TRAVIS_BUILD_NUMBER'/"
         src/cpymad/__init__.py ;
     fi
@@ -56,8 +55,7 @@ after_success:
 cache:
   pip: true
   directories:
-    - /home/travis/io/MAD-X
-    - /home/travis/io/build
+    - /home/travis/io
 
 
 stages:
@@ -71,20 +69,17 @@ jobs:
     - stage: test
       python: "3.7"
       dist: xenial
-      sudo: true
 
     - stage: build
       name: Build manylinux wheels
       python: "3.6"
-      sudo: true
       services:
         - docker
       install:
         - pip install docker-compose
       script:
         - git rev-parse HEAD:utils/manylinux > /tmp/cache_key
-        - if [[ ! -e /home/travis/io/cache_key ]] ||
-                ! cmp /home/travis/io/cache_key /tmp/cache_key; then
+        - if ! cmp /home/travis/io/cache_key /tmp/cache_key; then
             echo "Clearing MAD-X build cache due to updated build scripts" ;
             sudo rm -rf /home/travis/io ;
           fi
@@ -106,7 +101,7 @@ jobs:
         # Upload artifacts to github:
         - cd artifacts
         - git init
-        - git add -f wheels/*.whl
+        - git add -f wheels/*.whl wheels/*.tar.gz
         - git commit -m "Build $TRAVIS_JOB_NUMBER" -m "$TRAVIS_BUILD_WEB_URL"
         # Upload to a unique branch for deterministic fetches during the later
         # stages, and to master for the user's convenience. The unique branch
@@ -121,28 +116,15 @@ jobs:
       python: "3.6"
       if: branch = test-release OR tag IS present
       install:
-        - git clone $ART_REPO artifacts -b $ART_BRANCH --depth 1
-        - mv artifacts/wheels dist
-        - pip install cython
+        - pip install twine
       script:
-        - python setup.py sdist
-      after_success: true   # don't "skip"! it makes travis skip "deploy:" too!
-      deploy:
-      # Upload manylinux wheels to test.pypi.org (only on branch test-release)
-      - provider: pypi
-        skip_cleanup: true
-        server: https://test.pypi.org/legacy/
-        on:
-          branch: test-release
-        user: hibtc-deploy
-        password: $PYPI_PASSWORD
-      # Upload manylinux wheels (only when pushing tags)
-      - provider: pypi
-        skip_cleanup: true
-        on:
-          tags: true
-        user: hibtc-deploy
-        password: $PYPI_PASSWORD
+        - git clone $ART_REPO artifacts -b $ART_BRANCH --depth 1
+        - if [[ -z $TRAVIS_TAG ]]; then
+            REPO=( --repository-url https://test.pypi.org/legacy/ ) ;
+          fi
+        - twine upload -u hibtc-deploy -p "$PYPI_PASSWORD" "${REPO[@]}"
+            artifacts/wheels/*.tar.gz artifacts/wheels/*.whl
+      after_success: skip
 
     - stage: deploy
       name: Update Documentation

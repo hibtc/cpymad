@@ -6,68 +6,70 @@ set -ex
 : ${CPYMAD_VERSION:=1.0.8}
 : ${PY:=/opt/python/cp36-cp36m/bin}
 
-# Extract user-specified .tar.gz release tarballs:
-if [[ -f $CPYMAD_ARCHIVE ]]; then
-    tar -xzf $CPYMAD_ARCHIVE --one-top-level=/io/cpymad --strip-components 1
-fi
+# Build MAD-X
+if [[ $(cat /io/install/version) != $MADX_VERSION ]]; then
+    rm -rf /io/install
+    mkdir -p /io/install
+    echo $MADX_VERSION > /io/install/version
 
-if [[ -f $MADX_ARCHIVE ]]; then
-    tar -xzf $MADX_ARCHIVE --one-top-level=/io/madx --strip-components 1
-fi
+    if [[ -f $MADX_ARCHIVE ]]; then
+        tar -xzf $MADX_ARCHIVE --one-top-level=/io/MAD-X --strip-components 1
+    elif [[ ! -e /io/MAD-X ]]; then
+        git clone git://github.com/MethodicalAcceleratorDesign/MAD-X /io/MAD-X
+        git -C /io/MAD-X checkout $MADX_VERSION
+    fi
 
-# Download MAD-X:
-if [[ ! -e /io/MAD-X ]]; then
-    git clone git://github.com/MethodicalAcceleratorDesign/MAD-X /io/MAD-X
-    git -C /io/MAD-X checkout $MADX_VERSION
+    mkdir -p /io/build/madx
+    cd /io/build/madx
+    cmake28 /io/MAD-X \
+        -DBUILD_SHARED_LIBS=OFF \
+        -DMADX_STATIC=ON \
+        -DCMAKE_INSTALL_PREFIX=/io/install \
+        -DCMAKE_C_FLAGS="-fvisibility=hidden" \
+        -DMADX_INSTALL_DOC=OFF \
+        -DMADX_ONLINE=OFF \
+        -DMADX_FORCE_32=OFF \
+        -DMADX_X11=OFF
+    make install
 fi
 
 # Download cpymad:
-if [[ ! -e /io/cpymad ]]; then
-    git clone git://github.com/hibtc/cpymad /io/cpymad
-    git -C /io/cpymad checkout $CPYMAD_VERSION
+if [[ ! -f $CPYMAD_ARCHIVE ]]; then
+    if [[ ! -e /io/cpymad ]]; then
+        git clone git://github.com/hibtc/cpymad /io/cpymad
+        git -C /io/cpymad checkout $CPYMAD_VERSION
+    fi
+
+    # The cpymad folder may be mounted from the host OS. For this reason we
+    # should not create root owned files there or modify any of the user's data.
+    # For this reason, we first copy the source files to a build folder and
+    # perform all further steps from there:
+    cd /io/cpymad
+    rm -rf /io/build/cpymad
+    mkdir -p /io/build/cpymad
+    $PY/python setup.py egg_info
+    tar -c $(cat src/cpymad.egg-info/SOURCES.txt) |
+        tar -x -C /io/build/cpymad --no-same-owner
+
+    # We create the wheels from the source distribution to verify that the
+    # source distribution can be used as installation medium. We will later
+    # upload this exact source distribution to PyPI:
+    cd /io/build/cpymad
+    $PY/pip install cython
+    $PY/python setup.py sdist
+    $PY/pip uninstall cython -y
+
+    CPYMAD_ARCHIVE="$(ls /io/build/cpymad/dist/*.tar.gz)"
 fi
 
-# Build MAD-X
-mkdir -p /io/build/madx
-cd /io/build/madx
-cmake28 /io/MAD-X \
-    -DBUILD_SHARED_LIBS=OFF \
-    -DMADX_STATIC=ON \
-    -DCMAKE_INSTALL_PREFIX=/io/install \
-    -DCMAKE_C_FLAGS="-fvisibility=hidden" \
-    -DMADX_INSTALL_DOC=OFF \
-    -DMADX_ONLINE=OFF \
-    -DMADX_FORCE_32=OFF \
-    -DMADX_X11=OFF
-make install
-
-# The cpymad folder may be mounted from the host OS. In this case we should
-# not create root owned files there or modify any of the user's data. For this
-# reason, we first copy the source files to a build folder and perform all
-# further steps from there:
-cd /io/cpymad
-rm -rf /io/build/cpymad
-mkdir -p /io/build/cpymad
-$PY/python setup.py egg_info
-tar -c $(cat src/cpymad.egg-info/SOURCES.txt) |
-    tar -x -C /io/build/cpymad --no-same-owner
-
-# cythonize once instead of re-cythonizing for each dependency:
-cd /io/build/cpymad
-$PY/pip install cython
-$PY/cython src/cpymad/libmadx.pyx
-$PY/pip uninstall cython -y
-
-# Create wheels:
-cd /io/build/cpymad
+export X11=0 BLAS=0 LAPACK=0 MADXDIR=/io/install
 for PYBIN in /opt/python/*/bin; do
-    "${PYBIN}/python" setup.py build_ext --force \
-        --madxdir=/io/install --no-X11
-    "${PYBIN}/python" setup.py bdist_wheel
+    "${PYBIN}/pip" wheel "$CPYMAD_ARCHIVE" --no-deps -w /io/dist/
 done
 
 # Bundle external shared libraries into the wheels
 mkdir -p /io/wheels
-for whl in dist/*.whl; do
+for whl in /io/dist/*.whl; do
     auditwheel repair "$whl" -w /io/wheels/
 done
+cp "$CPYMAD_ARCHIVE" /io/wheels/
