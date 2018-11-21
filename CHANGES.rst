@@ -1,6 +1,21 @@
 Changelog
 ~~~~~~~~~
 
+1.0.9
+=====
+Date: 21.11.2018
+
+- suppress internal stack traces
+- raise exception for failed twiss instead of returning invalid table that
+  will crash later on
+- fix incorrect ``Element.position`` attribute for sequences with
+  ``refer=entry`` or ``refer=exit``
+- allow passing parameters with underscore suffix to commands, this allows
+  passing parameters as bare words that conflict with python keywords (e.g.
+  ``madx.command.select(class_='quadrupole')``
+- improve ``repr()`` for ``Table``: show column names
+
+
 1.0.8
 =====
 Date: 18.10.2018

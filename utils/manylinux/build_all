@@ -3,7 +3,7 @@
 set -ex
 
 : ${MADX_VERSION:=5.04.02}
-: ${CPYMAD_VERSION:=1.0.8}
+: ${CPYMAD_VERSION:=1.0.9}
 : ${PY:=/opt/python/cp36-cp36m/bin}
 
 # Build MAD-X
