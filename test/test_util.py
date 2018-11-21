@@ -102,6 +102,10 @@ class TestUtil(unittest.TestCase):
             util.format_command(
                 'twiss', range=Range('#s', '#e')
             ), 'twiss, range=#s/#e;')
+        self.assertEqual(
+            util.format_command(
+                'select', class_='quadrupole',
+            ), 'select, class="quadrupole";')
 
         self.assertEqual(
             util.format_command(
@@ -112,6 +116,10 @@ class TestUtil(unittest.TestCase):
                 # match->sequence parameter is list in MAD-X!
                 m.command.match, sequence="foo"
             ), "match, sequence=foo;")
+        self.assertEqual(
+            util.format_command(
+                m.command.select, class_='quadrupole',
+            ), 'select, class=quadrupole;')
 
     def test_format_param(self):
         fmt = util.format_param

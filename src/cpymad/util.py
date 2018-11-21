@@ -53,6 +53,15 @@ def mad_quote(value):
                      .format(value))
 
 
+def _fix_name(name):
+    if name.startswith('_'):
+        raise AttributeError("Unknown item: {!r}! Did you mean {!r}?"
+                             .format(name, name.strip('_') + '_'))
+    if name.endswith('_'):
+        name = name[:-1]
+    return name
+
+
 # precompile regexes for performance:
 re_compile = lambda s: re.compile(unicode(s), re.IGNORECASE)
 _re_is_identifier = re_compile(r'^[a-z_][a-z0-9_]*$')
@@ -180,7 +189,7 @@ def format_param(key, value):
     """
     if value is None:
         return None
-    key = str(key).lower()
+    key = _fix_name(str(key).lower())
     if isinstance(value, Constraint):
         constr = []
         if value.min is not None:
@@ -230,6 +239,7 @@ def format_cmdpar(cmd, key, value):
     """
     Format a single MAD-X command parameter.
     """
+    key = _fix_name(str(key).lower())
     cmdpar = cmd.cmdpar[key]
     dtype = cmdpar.dtype
     # the empty string was used in earlier versions in place of None:

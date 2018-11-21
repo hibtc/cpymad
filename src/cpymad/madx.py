@@ -61,15 +61,6 @@ class Version(object):
         return "MAD-X {} ({})".format(self.release, self.date)
 
 
-def _fix_name(name):
-    if name.startswith('_'):
-        raise AttributeError("Unknown item: {!r}! Did you mean {!r}?"
-                             .format(name, name.strip('_') + '_'))
-    if name.endswith('_'):
-        name = name[:-1]
-    return name
-
-
 class NullContext(object):
     __enter__ = __exit__ = lambda *_: None
 
@@ -456,7 +447,7 @@ class _Mapping(abc.Mapping):
         return repr(self)
 
     def __getattr__(self, key):
-        key = _fix_name(key)
+        key = util._fix_name(key)
         try:
             return self[key]
         except KeyError:
@@ -475,14 +466,14 @@ class _MutableMapping(_Mapping, abc.MutableMapping):
         if key in self.__slots__:
             object.__setattr__(self, key, val)
         else:
-            key = _fix_name(key)
+            key = util._fix_name(key)
             self[key] = val
 
     def __delattr__(self, key):
         if key in self.__slots__:
             object.__delattr__(self, key)
         else:
-            key = _fix_name(key)
+            key = util._fix_name(key)
             del self[key]
 
 
