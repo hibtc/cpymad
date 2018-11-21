@@ -121,30 +121,15 @@ jobs:
       python: "3.6"
       if: branch = test-release OR tag IS present
       install:
+        - pip install twine
+      script:
         - git clone $ART_REPO artifacts -b $ART_BRANCH --depth 1
-        - mv artifacts/wheels dist
-      script: skip
-      after_success: true   # don't "skip"! it makes travis skip "deploy:" too!
-      deploy:
-      # Upload manylinux wheels to test.pypi.org (only on branch test-release)
-      - provider: script
-        skip_cleanup: true
-        on:
-          branch: test-release
-        script:
-          - twine upload
-                -u hibtc-deploy -p "$PYPI_PASSWORD"
-                -r https://test.pypi.org/legacy/
-                dist/*.tar.gz dist/*.whl
-      # Upload manylinux wheels (only when pushing tags)
-      - provider: script
-        skip_cleanup: true
-        on:
-          tags: true
-        script:
-          - twine upload
-                -u hibtc-deploy -p "$PYPI_PASSWORD"
-                dist/*.tar.gz dist/*.whl
+        - if [[ -z $TRAVIS_TAG ]]; then
+            REPO=( --repository-url https://test.pypi.org/legacy/ ) ;
+          fi
+        - twine upload -u hibtc-deploy -p "$PYPI_PASSWORD" "${REPO[@]}"
+            artifacts/wheels/*.tar.gz artifacts/wheels/*.whl
+      after_success: skip
 
     - stage: deploy
       name: Update Documentation
