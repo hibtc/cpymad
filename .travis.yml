@@ -55,8 +55,7 @@ after_success:
 cache:
   pip: true
   directories:
-    - /home/travis/io/MAD-X
-    - /home/travis/io/build
+    - /home/travis/io
 
 
 stages:
