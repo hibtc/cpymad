@@ -23,7 +23,7 @@ env:
 before_install:
   - lsb_release -a
   - env | sort
-  - if [[ $TRAVIS_BRANCH = test-release ]]; then
+  - if [[ -z $TRAVIS_TAG ]]; then
       sed -i "/^__version__ = /s/'\$/.dev$TRAVIS_BUILD_NUMBER'/"
         src/cpymad/__init__.py ;
     fi
