@@ -1,5 +1,4 @@
 language: python
-sudo: false
 
 # See: https://docs.travis-ci.com/user/languages/python/
 python:
@@ -71,12 +70,10 @@ jobs:
     - stage: test
       python: "3.7"
       dist: xenial
-      sudo: true
 
     - stage: build
       name: Build manylinux wheels
       python: "3.6"
-      sudo: true
       services:
         - docker
       install:
