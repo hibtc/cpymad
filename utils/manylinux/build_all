@@ -64,12 +64,12 @@ fi
 
 export X11=0 BLAS=0 LAPACK=0 MADXDIR=/io/install
 for PYBIN in /opt/python/*/bin; do
-    "${PYBIN}/pip" wheel "$CPYMAD_ARCHIVE" --no-deps -w /io/dist/
+    "${PYBIN}/pip" wheel "$CPYMAD_ARCHIVE" --no-deps -w /io/build/cpymad/dist/
 done
 
 # Bundle external shared libraries into the wheels
 mkdir -p /io/wheels
-for whl in /io/dist/*.whl; do
+for whl in /io/build/cpymad/dist/*.whl; do
     auditwheel repair "$whl" -w /io/wheels/
 done
 cp "$CPYMAD_ARCHIVE" /io/wheels/

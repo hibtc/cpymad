@@ -93,6 +93,7 @@ jobs:
         - docker run --init --name artifacts
             -v /home/travis/io:/io:rw
             -v `pwd`:/io/cpymad:rw
+            -v /io/wheels
             --cap-drop=all
             wheelbuilder
         - mkdir -p artifacts
