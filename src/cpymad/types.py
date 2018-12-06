@@ -26,6 +26,17 @@ VAR_TYPE_DIRECT   = 1
 VAR_TYPE_DEFERRED = 2
 VAR_TYPE_STRING   = 3
 
+dtype_to_native = {
+    PARAM_TYPE_LOGICAL: bool,
+    PARAM_TYPE_INTEGER: int,
+    PARAM_TYPE_DOUBLE: float,
+    PARAM_TYPE_STRING: str,
+    PARAM_TYPE_LOGICAL_ARRAY: list,
+    PARAM_TYPE_INTEGER_ARRAY: list,
+    PARAM_TYPE_DOUBLE_ARRAY: list,
+    PARAM_TYPE_STRING_ARRAY: list,
+}
+
 
 Range = namedtuple('Range', ['first', 'last'])
 
