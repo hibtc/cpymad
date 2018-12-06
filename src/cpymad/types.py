@@ -42,11 +42,10 @@ class Parameter(object):
         self.inform = inform
         if var_type is None:
             if isinstance(value, str):
-                var_type = 3
-            elif isinstance(value, list):
-                var_type = 2 if expr and any(expr) else 1
+                var_type = VAR_TYPE_STRING
             else:
-                var_type = 2 if expr else 1
+                has_expr = expr and (not isinstance(value, list) or any(expr))
+                var_type = VAR_TYPE_DEFERRED if has_expr else VAR_TYPE_DIRECT
         self.var_type = var_type
 
     def __call__(self):
