@@ -12,7 +12,12 @@ try:
 except ImportError:
     import collections as abc
 
-from .types import Range, Constraint
+from .types import (
+    Range, Constraint,
+    PARAM_TYPE_LOGICAL, PARAM_TYPE_INTEGER,
+    PARAM_TYPE_DOUBLE, PARAM_TYPE_STRING, PARAM_TYPE_CONSTRAINT,
+    PARAM_TYPE_LOGICAL_ARRAY, PARAM_TYPE_INTEGER_ARRAY,
+    PARAM_TYPE_DOUBLE_ARRAY, PARAM_TYPE_STRING_ARRAY)
 
 
 __all__ = [
@@ -158,21 +163,6 @@ def normalize_range_name(name):
         return u'#s'
     return name
 
-
-PARAM_TYPE_LOGICAL       = 0
-PARAM_TYPE_INTEGER       = 1
-PARAM_TYPE_DOUBLE        = 2
-PARAM_TYPE_STRING        = 3
-PARAM_TYPE_CONSTRAINT    = 4
-PARAM_TYPE_LOGICAL_ARRAY = 10
-PARAM_TYPE_INTEGER_ARRAY = 11
-PARAM_TYPE_DOUBLE_ARRAY  = 12
-PARAM_TYPE_STRING_ARRAY  = 13
-
-VAR_TYPE_CONST    = 0
-VAR_TYPE_DIRECT   = 1
-VAR_TYPE_DEFERRED = 2
-VAR_TYPE_STRING   = 3
 
 QUOTED_PARAMS = {'file', 'halofile', 'sectorfile', 'trueprofile'
                  'pipefile', 'trackfile', 'summary_file', 'filename',
