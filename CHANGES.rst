@@ -1,6 +1,15 @@
 Changelog
 ~~~~~~~~~
 
+1.0.10
+======
+Date: 07.12.2018
+
+- fix broken caching logic in travis config
+- move type constants to ``cpymad.types``
+- export a MAD-X dtype to python type mapping from ``cpymad.types``
+
+
 1.0.9
 =====
 Date: 21.11.2018
