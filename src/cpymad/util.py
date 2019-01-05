@@ -150,17 +150,18 @@ def name_to_internal(element_name):
     return name + ':' + str(1 if count is None else count)
 
 
-def normalize_range_name(name):
+def normalize_range_name(name, elems=None):
     """Make element name usable as argument to the RANGE attribute."""
     if isinstance(name, tuple):
         return tuple(map(normalize_range_name, name))
     if '/' in name:
         return '/'.join(map(normalize_range_name, name.split('/')))
     name = name.lower()
-    if name.endswith('$end'):
-        return u'#e'
-    if name.endswith('$start'):
-        return u'#s'
+    if name.endswith('$end') or name.endswith('$start'):
+        if elems is None:
+            return u'#s' if name.endswith('$start') else u'#e'
+        else:
+            return u'#s' if elems.index(name) == 0 else u'#e'
     return name
 
 
