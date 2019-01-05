@@ -251,6 +251,8 @@ class Madx(object):
     def expr_vars(self, expr):
         """Find all variable names used in an expression. This does *not*
         include element attribute nor function names."""
+        if not isinstance(expr, basestring):
+            return []
         return [v for v in util.expr_symbols(expr)
                 if util.is_identifier(v)
                 and v in self.globals
