@@ -36,7 +36,7 @@ __all__ = [
     'Madx',
     'Sequence',
     'BaseElementList',
-    'Table',
+    'OfflineTable',
     'CommandLog',
     'metadata',
 ]
@@ -459,6 +459,9 @@ class _Mapping(abc.Mapping):
     def _missing(self, key):
         raise AttributeError(key)
 
+    def copy(self):
+        return dict(self.items())
+
 
 class _MutableMapping(_Mapping, abc.MutableMapping):
 
@@ -544,7 +547,7 @@ class TableMap(_Mapping):
 
     def __getitem__(self, name):
         try:
-            return Table(name, self._libmadx)
+            return OnlineTable(name, self._libmadx)
         except ValueError:
             pass
         raise KeyError("Table not found {!r}".format(name))
@@ -604,7 +607,7 @@ class Sequence(object):
     @property
     def twiss_table(self):
         """Get the TWISS results from the last calculation."""
-        return Table(self.twiss_table_name, self._libmadx)
+        return OnlineTable(self.twiss_table_name, self._libmadx)
 
     @property
     def twiss_table_name(self):
@@ -989,7 +992,97 @@ class BaseTypeMap(CommandMap):
         return self._madx.elements[name]
 
 
-class Table(_Mapping):
+class BaseTable(_Mapping):
+
+    def __repr__(self):
+        return "<{} {!r}: {{{}}}>".format(
+            self.__class__.__name__, self._name, ', '.join(self))
+
+    def copy(self, columns=None):
+        """
+        Return a frozen table with the desired columns.
+
+        :param list columns: column names or ``None`` for all columns.
+        :returns: column data
+        :rtype: dict
+        :raises ValueError: if the table name is invalid
+        """
+        if columns is None:
+            columns = self
+        return {column: self[column] for column in columns}
+
+    def dframe(self, columns=None):
+        """Return table as ``pandas.DataFrame``."""
+        import pandas as pd
+        return pd.DataFrame(self.copy(columns))
+
+    def getmat(self, name, idx, *dim):
+        s = () if isinstance(idx, int) else (-1,)
+        return np.array([
+            self[name + ''.join(str(i+1) for i in ijk)][idx]
+            for ijk in product(*map(range, dim))
+        ]).reshape(dim+s)
+
+    def kvec(self, idx, dim=6):
+        """Kicks."""
+        return self.getmat('k', idx, dim)
+
+    def rmat(self, idx, dim=6):
+        """Sectormap."""
+        return self.getmat('r', idx, dim, dim)
+
+    def tmat(self, idx, dim=6):
+        """2nd order sectormap."""
+        return self.getmat('t', idx, dim, dim, dim)
+
+    def sigmat(self, idx, dim=6):
+        """Beam matrix."""
+        return self.getmat('sig', idx, dim, dim)
+
+    def download(self, columns=None):
+        """Make a snapshot of given columns (all if unspecified)."""
+        if columns is None:
+            columns = self
+        return OfflineTable(self._name, {
+            col: self[col]
+            for col in columns
+        }, self.summary.copy())
+
+
+class OfflineTable(BaseTable):
+
+    """Downloaded MAD-X table."""
+
+    def __init__(self, name, data, summary):
+        self._name = name
+        self._data = data
+        self._summary = summary
+
+    @property
+    def summary(self):
+        """Get the table summary."""
+        return AttrDict(self._summary)
+
+    def row(self, index, columns='selected'):
+        """Retrieve one row from the table."""
+        return AttrDict({k: v[index] for k, v in self.items()})
+
+    def __getitem__(self, column):
+        """Get the column data."""
+        if isinstance(column, int):
+            return self.row(column)
+        return self._data[column.lower()]
+
+    def __iter__(self):
+        """Iterate over all column names."""
+        return iter(self._data)
+
+    def __len__(self):
+        """Return number of columns."""
+        return len(self._data)
+
+
+class OnlineTable(BaseTable):
 
     """
     MAD-X twiss table.
@@ -1056,47 +1149,6 @@ class Table(_Mapping):
     def row(self, index, columns='selected'):
         """Retrieve one row from the table."""
         return AttrDict(self._libmadx.get_table_row(self._name, index, columns))
-
-    def copy(self, columns=None):
-        """
-        Return a frozen table with the desired columns.
-
-        :param list columns: column names or ``None`` for all columns.
-        :returns: column data
-        :rtype: dict
-        :raises ValueError: if the table name is invalid
-        """
-        if columns is None:
-            columns = self
-        return {column: self[column] for column in columns}
-
-    def dframe(self, columns=None):
-        """Return table as ``pandas.DataFrame``."""
-        import pandas as pd
-        return pd.DataFrame(self.copy(columns))
-
-    def getmat(self, name, idx, *dim):
-        s = () if isinstance(idx, int) else (-1,)
-        return np.array([
-            self[name + ''.join(str(i+1) for i in ijk)][idx]
-            for ijk in product(*map(range, dim))
-        ]).reshape(dim+s)
-
-    def kvec(self, idx, dim=6):
-        """Kicks."""
-        return self.getmat('k', idx, dim)
-
-    def rmat(self, idx, dim=6):
-        """Sectormap."""
-        return self.getmat('r', idx, dim, dim)
-
-    def tmat(self, idx, dim=6):
-        """2nd order sectormap."""
-        return self.getmat('t', idx, dim, dim, dim)
-
-    def sigmat(self, idx, dim=6):
-        """Beam matrix."""
-        return self.getmat('sig', idx, dim, dim)
 
 
 class VarList(_MutableMapping):
