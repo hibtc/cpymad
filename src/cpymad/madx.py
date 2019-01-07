@@ -1094,7 +1094,6 @@ class OnlineTable(BaseTable):
         """Just store the table name for now."""
         self._name = name = name.lower()
         self._libmadx = libmadx
-        self._cache = {}
         if _check and not libmadx.table_exists(name):
             raise ValueError("Invalid table: {!r}".format(name))
 
@@ -1102,10 +1101,7 @@ class OnlineTable(BaseTable):
         """Get the column data."""
         if isinstance(column, int):
             return self.row(column)
-        try:
-            return self._cache[column.lower()]
-        except KeyError:
-            return self.reload(column)
+        return self._query(column)
 
     def _query(self, column):
         """Retrieve the column data."""
@@ -1140,11 +1136,6 @@ class OnlineTable(BaseTable):
         row_count = self._libmadx.get_table_row_count(self._name)
         range = (0, row_count-1)
         return tuple(self._libmadx.get_table_row_names(self._name, range))
-
-    def reload(self, column):
-        """Reload (recache) one column from MAD-X."""
-        self._cache[column.lower()] = data = self._query(column)
-        return data
 
     def row(self, index, columns='selected'):
         """Retrieve one row from the table."""
