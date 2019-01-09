@@ -1,4 +1,17 @@
 #! /usr/bin/env python
+"""
+Delete old branches from a github repository. This script is used in
+`.travis.yml` to limit the number of space used by old builds on
+https://github.com/hibtc/cpymad-artifacts.
+
+Usage:
+    python cleanup_artifacts.py REPO_URL CURRENT_REV NUM_KEEP
+
+Arguments:
+    REPO_URL        "https://{AUTH_TOKEN}@github.com/hibtc/cpymad-artifacts"
+    CURRENT_REV     Newest build number, use $TRAVIS_BUILD_NUMBER
+    NUM_KEEP        Number of old revisions to keep, e.g. 5
+"""
 
 from subprocess import run, check_output
 import json
