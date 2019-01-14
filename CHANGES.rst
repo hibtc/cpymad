@@ -1,6 +1,13 @@
 Changelog
 ~~~~~~~~~
 
+1.0.10.post1
+============
+Date: 11.12.2018
+
+- build windows wheels with bdwgc 7.6.8 to mitigate problems on win10
+
+
 1.0.10
 ======
 Date: 07.12.2018
