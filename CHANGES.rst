@@ -1,6 +1,14 @@
 Changelog
 ~~~~~~~~~
 
+1.0.11
+======
+Date: 18.01.2019
+
+- guard ``expr_vars`` against passing ``None`` etc
+- add ``elems`` parameter to ``normalize_range_name``
+
+
 1.0.10.post1
 ============
 Date: 11.12.2018
