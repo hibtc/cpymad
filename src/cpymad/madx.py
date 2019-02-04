@@ -498,6 +498,9 @@ class AttrDict(_Mapping):
     def __len__(self):
         return len(self._data)
 
+    def update(self, *args, **kwargs):
+        self._data.update(*args, **kwargs)
+
 
 class SequenceMap(_Mapping):
 
