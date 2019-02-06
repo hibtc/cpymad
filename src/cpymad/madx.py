@@ -1044,6 +1044,10 @@ class Table(_Mapping):
         """Get the table summary."""
         return AttrDict(self._libmadx.get_table_summary(self._name))
 
+    def row_names(self):
+        """Get table row names."""
+        return self._libmadx.get_table_row_names(self._name)
+
     @property
     def range(self):
         """Get the element names (first, last) of the valid range."""
