@@ -1080,7 +1080,7 @@ class Table(_Mapping):
     def dframe(self, columns=None):
         """Return table as ``pandas.DataFrame``."""
         import pandas as pd
-        return pd.DataFrame(self.copy(columns))
+        return pd.DataFrame(self.copy(columns), index=self.row_names())
 
     def getmat(self, name, idx, *dim):
         s = () if isinstance(idx, int) else (-1,)
