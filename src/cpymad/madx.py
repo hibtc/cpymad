@@ -7,6 +7,7 @@ The most interesting class for users is :class:`Madx`.
 
 from __future__ import absolute_import
 
+from contextlib import contextmanager
 from functools import wraps
 from itertools import product
 from numbers import Number
@@ -172,6 +173,8 @@ class Madx(object):
         self.base_types = BaseTypeMap(self)
         self.sequence = SequenceMap(self)
         self.table = TableMap(self._libmadx)
+        self._enter_count = 0
+        self._batch = None
 
     def __bool__(self):
         """Check if MAD-X is up and running."""
@@ -234,6 +237,9 @@ class Madx(object):
         :returns: whether the command has completed without error
         :rtype: bool
         """
+        if self._enter_count > 0:
+            self._batch.append(text)
+            return True
         # write to history before performing the input, so if MAD-X
         # crashes, it is easier to see, where it happened:
         if self._command_log:
@@ -247,6 +253,29 @@ class Madx(object):
         raise RuntimeError("MAD-X has stopped working!")
 
     __call__ = input
+
+    @contextmanager
+    def batch(self):
+        """
+        Collect input and send in a single batch when leaving context. This is
+        useful to improve performance when issueing many related commands in
+        quick succession.
+
+        Example:
+
+        >>> with madx.batch():
+        ...     madx.globals.update(optic)
+        """
+        self._enter_count += 1
+        if self._enter_count == 1:
+            self._batch = []
+        try:
+            yield None
+        finally:
+            self._enter_count -= 1
+            if self._enter_count == 0:
+                self.input("\n".join(self._batch))
+                self._batch = None
 
     def expr_vars(self, expr):
         """Find all variable names used in an expression. This does *not*
