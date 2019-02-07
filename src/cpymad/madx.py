@@ -115,7 +115,8 @@ class Madx(object):
     :ivar table:        Mapping of all tables in memory.
     """
 
-    def __init__(self, libmadx=None, command_log=None, stdout=None, **Popen_args):
+    def __init__(self, libmadx=None, command_log=None, stdout=None,
+                 history=None, **Popen_args):
         """
         Initialize instance variables.
 
@@ -165,6 +166,7 @@ class Madx(object):
             with self.reader:
                 libmadx.start()
         # init instance variables:
+        self.history = history
         self._libmadx = libmadx
         self._command_log = command_log
         self.command = CommandMap(self)
@@ -242,6 +244,8 @@ class Madx(object):
             return True
         # write to history before performing the input, so if MAD-X
         # crashes, it is easier to see, where it happened:
+        if self.history is not None:
+            self.history.append(text)
         if self._command_log:
             self._command_log(text)
         try:
