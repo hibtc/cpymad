@@ -9,6 +9,7 @@ import os
 import sys
 import zipfile
 import subprocess
+import platform
 from contextlib import contextmanager
 
 try:
@@ -16,6 +17,8 @@ try:
 except ImportError:     # py2
     from urllib import urlretrieve
 
+IS_WIN32 = platform.system() == 'Windows'
+MAKE = 'mingw32-make' if IS_WIN32 else 'make'
 MADX_VERSION = '5.04.02'
 
 
@@ -44,9 +47,10 @@ def mkdir(dirname):
 
 
 def build_madx(source_dir, build_dir, install_dir,
-               static=False, shared=False, X11=True):
+               static=IS_WIN32, shared=False, X11=True):
     cmake_args = [
         'cmake', os.path.abspath(source_dir),
+        '-G', ('MinGW Makefiles' if IS_WIN32 else 'Unix Makefiles'),
         '-DMADX_ONLINE=OFF',
         '-DMADX_INSTALL_DOC=OFF',
         '-DCMAKE_INSTALL_PREFIX=' + os.path.abspath(install_dir),
@@ -57,7 +61,7 @@ def build_madx(source_dir, build_dir, install_dir,
     ]
     with chdir(build_dir):
         subprocess.call(cmake_args)
-        subprocess.call(['make'])
+        subprocess.call([MAKE])
 
 
 @contextmanager
@@ -71,7 +75,7 @@ def chdir(path):
 
 
 def install_madx(version=MADX_VERSION, prefix='.',
-                 static=False, shared=False, X11=False):
+                 static=IS_WIN32, shared=False, X11=False):
 
     FILE    = '{}.zip'.format(version)
     BASE    = 'https://github.com/MethodicalAcceleratorDesign/MAD-X/archive/'
@@ -111,7 +115,7 @@ def install_madx(version=MADX_VERSION, prefix='.',
     print("Installing MAD-X to: {}".format(INSTALL))
     if mkdir(INSTALL):
         with chdir(BUILD):
-            subprocess.call(['make', 'install'])
+            subprocess.call([MAKE, 'install'])
     else:
         print(" -> already installed!")
     print()
