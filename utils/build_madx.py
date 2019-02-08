@@ -74,7 +74,7 @@ def chdir(path):
         os.chdir(old_cwd)
 
 
-def install_madx(version=MADX_VERSION, prefix='.',
+def install_madx(version=MADX_VERSION, prefix='.', install_dir='',
                  static=IS_WIN32, shared=False, X11=False):
 
     FILE    = '{}.zip'.format(version)
@@ -84,6 +84,8 @@ def install_madx(version=MADX_VERSION, prefix='.',
     FOLDER  = os.path.join(prefix, 'MAD-X-{}'.format(version))
     BUILD   = os.path.join(FOLDER, 'build')
     INSTALL = os.path.join(FOLDER, 'install')
+    if install_dir:
+        INSTALL = install_dir
 
     try:
         os.makedirs(prefix)

@@ -52,7 +52,7 @@ install:
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
 
   # build MAD-X
-  - call "utils\build_madx.py" %MADXVER% "%MADXDIR%"
+  - call "utils\build_madx.py" %MADXVER% C:\ "%MADXDIR%"
 
   # build and install cpymad
   - python setup.py build_ext -c mingw32
