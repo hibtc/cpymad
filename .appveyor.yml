@@ -27,6 +27,9 @@ environment:
     COVERALLS_REPO_TOKEN:
       secure: PomPESKrst4rtCnkZOCyfyBEb03xcHzg6O0bGrYw7lf3oGWcA/ufdhu+7+shaJRF
 
+    TWINE_USERNAME: hibtc-deploy
+    TWINE_PASSWORD:
+      secure: y7p5ueCXptYxkKjMeEbUHPX3+UnXM2o7KV6N5d5Pc0g=
 
 install:
   # Log environment for informational purposes:
@@ -74,7 +77,11 @@ after_test:
  - coveralls
 
 artifacts:
-  - path: dist\*
+  - path: 'dist\*.whl'
+    name: wheel
+
+deploy_script:
+- ps: if ($env:APPVEYOR_REPO_TAG -eq $TRUE) { pip install twine; twine upload dist/* }
 
 cache:
   - '%LOCALAPPDATA%\pip\Cache'
