@@ -60,8 +60,8 @@ def build_madx(source_dir, build_dir, install_dir,
         '-DBUILD_SHARED_LIBS=' + ('ON' if shared else 'OFF'),
     ]
     with chdir(build_dir):
-        subprocess.call(cmake_args)
-        subprocess.call([MAKE])
+        subprocess.check_call(cmake_args)
+        subprocess.check_call([MAKE])
 
 
 @contextmanager
@@ -115,7 +115,7 @@ def install_madx(version=MADX_VERSION, prefix='.',
     print("Installing MAD-X to: {}".format(INSTALL))
     if mkdir(INSTALL):
         with chdir(BUILD):
-            subprocess.call([MAKE, 'install'])
+            subprocess.check_call([MAKE, 'install'])
     else:
         print(" -> already installed!")
     print()
