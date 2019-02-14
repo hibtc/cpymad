@@ -20,7 +20,7 @@ call conda install -qy -n py34 -c conda-forge mingwpy
 :: Prepare cython source:
 call activate py34
 call conda install -qy cython
-cython src\cpymad\libmadx.pyx -I %MADXDIR%\include
+call cython src\cpymad\libmadx.pyx -I %MADXDIR%\include
 
 :: Locate gcc from mingwpy in py34 (used later for build_cpymad2):
 for /f %%G in ('python -c "import sys; print(sys.prefix)"') do (
@@ -76,14 +76,14 @@ setlocal
         set "pythondir=%%~fG"
     )
 
-    %gcc% -mdll -O -Wall ^
+    call %gcc% -mdll -O -Wall ^
         -I%MADXDIR%\include ^
         -I%pythondir%\include ^
         -c src/cpymad/libmadx.c ^
         -o %tempdir%\libmadx.obj ^
         -std=gnu99
 
-    %gcc% -shared -s ^
+    call %gcc% -shared -s ^
         %tempdir%\libmadx.obj ^
         -L%MADXDIR%\lib ^
         -L%pythondir%\libs ^
