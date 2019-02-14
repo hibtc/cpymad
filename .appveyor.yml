@@ -63,9 +63,8 @@ install:
   - python setup.py bdist_wheel
   - conda install -q numpy
 
-  # wildcard expansion is a pain in CMD.exe and just a little less in
-  # powershell:
-  - ps: "pip install (ls dist\\* | % {\"$_\"})"
+  # install cpymad
+  - for /f %%G in ("dist\*.whl") do ( pip install %%G )
 
 build: off
 
