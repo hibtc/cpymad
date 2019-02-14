@@ -13,9 +13,9 @@ call conda create -qy -n py36 python=3.6 wheel
 call conda create -qy -n py37 python=3.7 wheel
 
 :: Install mingwpy where available:
-call conda install -qy -n py27 -c conda-forge mingwpy
-call conda install -qy -n py33 -c conda-forge mingwpy
-call conda install -qy -n py34 -c conda-forge mingwpy
+call activate py27 && call pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy
+call activate py33 && call pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy
+call activate py34 && call pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy
 
 :: Prepare cython source:
 call activate py34
