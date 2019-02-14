@@ -39,32 +39,30 @@ install:
   - if "%PLATFORM%" == "x64" set "CONDAPATH=%CONDAPATH%-x64"
   - set "PATH=%CONDAPATH%\bin;%CONDAPATH%\Scripts;%PATH%"
 
-  # Update and activate conda
-  - conda config --set always_yes yes --set changeps1 no
-  - conda update -q conda
-  - conda create -q -n madx python=%PYVER%
-  - activate           madx
-
-  # Install build/test deps:
-  - conda install -q setuptools wheel cython
-  - conda install -q coverage
-  - conda install -q -c conda-forge mingwpy
-
   # Remove git from path, since there is a `sh.exe` here that will cause CMake
   # to complain and stop:
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
 
+  # Configure and update conda:
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+
   # build MAD-X
+  - conda create -q -n madx python=3.4
+  - activate madx
+  - conda install -q -c conda-forge mingwpy
   - call "utils\build_madx.py" %MADXVER% C:\ "%MADXDIR%"
 
-  # build and install cpymad
-  - python setup.py build_ext -c mingw32
-  - python setup.py build
-  - python setup.py bdist_wheel
-  - conda install -q numpy
+  # build cpymad
+  - utils\build_wheels.bat
 
   # install cpymad
-  - for /f %%G in ("dist\*.whl") do ( pip install %%G )
+  - conda install -q numpy
+  - pip install minrpc
+  - pip install --no-index -f dist cpymad
+
+  # Install build/test deps:
+  - conda install -q coverage
 
 build: off
 
@@ -81,7 +79,7 @@ artifacts:
     name: wheel
 
 deploy_script:
-- ps: if ($env:APPVEYOR_REPO_TAG -eq $TRUE) { pip install twine; twine upload dist/* }
+- ps: if ($env:APPVEYOR_REPO_TAG -eq $TRUE) { pip install twine; twine upload dist/*.whl }
 
 cache:
   - '%LOCALAPPDATA%\pip\Cache'
