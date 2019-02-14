@@ -6,20 +6,10 @@ environment:
   # For Python versions available on Appveyor, see
   # https://www.appveyor.com/docs/windows-images-software/#python
   matrix:
-  # - PYVER: '2.7'
-  #   CONDAPATH: 'C:\Miniconda'
-
+    # We use mingwpy on python 3.4 to build madx, and conda to build
+    # wheels for other python versions:
     - PYVER: '3.4'
       CONDAPATH: 'C:\Miniconda34'
-
-  # - PYVER: '3.5'
-  #   CONDAPATH: 'C:\Miniconda35'
-
-  # - PYVER: '3.6'
-  #   CONDAPATH: 'C:\Miniconda36'
-
-  # - PYVER: '3.7'
-  #   CONDAPATH: 'C:\Miniconda37'
 
   global:
     MADXVER: 5.04.02
