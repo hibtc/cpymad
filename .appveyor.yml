@@ -26,6 +26,7 @@ install:
   - set
 
   # Add python and installed scripts to PATH
+  - if "%PLATFORM%" == "x86" set CONDA_FORCE_32BIT=1
   - if "%PLATFORM%" == "x64" set "CONDAPATH=%CONDAPATH%-x64"
   - set "PATH=%CONDAPATH%\bin;%CONDAPATH%\Scripts;%PATH%"
 
