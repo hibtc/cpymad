@@ -41,7 +41,8 @@ install:
   - conda create -q -n madx python=3.4
   - activate madx
   - conda install -q -c conda-forge mingwpy
-  - call "utils\build_madx.py" %MADXVER% C:\ "%MADXDIR%"
+  - pip install patch
+  - python "utils\build_madx.py" %MADXVER% C:\ "%MADXDIR%" utils\patches
 
   # build cpymad
   - utils\build_wheels.bat

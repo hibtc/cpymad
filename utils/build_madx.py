@@ -5,6 +5,7 @@ Simple setup utility to download and build MAD-X.
 from __future__ import print_function
 from __future__ import division
 
+import glob
 import os
 import sys
 import zipfile
@@ -64,6 +65,19 @@ def build_madx(source_dir, build_dir, install_dir,
         subprocess.check_call([MAKE])
 
 
+def apply_patches(source_dir, patch_dir):
+    import patch
+    patches = (glob.glob(os.path.join(patch_dir, '*.diff')) +
+               glob.glob(os.path.join(patch_dir, '*.patch')))
+    for filename in patches:
+        print("Applying patch: {!r}".format(filename))
+        patchset = patch.fromfile(filename)
+        success = patchset.apply(1, root=source_dir)
+        if not success:
+            print("Failed to apply patch! Exitting...")
+            sys.exit(1)
+
+
 @contextmanager
 def chdir(path):
     old_cwd = os.getcwd()
@@ -75,7 +89,7 @@ def chdir(path):
 
 
 def install_madx(version=MADX_VERSION, prefix='.', install_dir='',
-                 static=IS_WIN32, shared=False, X11=False):
+                 patches=None, static=IS_WIN32, shared=False, X11=False):
 
     FILE    = '{}.zip'.format(version)
     BASE    = 'https://github.com/MethodicalAcceleratorDesign/MAD-X/archive/'
@@ -105,6 +119,10 @@ def install_madx(version=MADX_VERSION, prefix='.', install_dir='',
     else:
         print(" -> already extracted!")
     print()
+
+    if patches:
+        print("Applying patches: {}".format(FOLDER))
+        apply_patches(FOLDER, patches)
 
     print("Building MAD-X in: {}".format(BUILD))
     if mkdir(BUILD):
