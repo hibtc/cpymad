@@ -61,6 +61,7 @@ install:
   - python setup.py build_ext -c mingw32
   - python setup.py build
   - python setup.py bdist_wheel
+  - conda install -q numpy
 
   # wildcard expansion is a pain in CMD.exe and just a little less in
   # powershell:
