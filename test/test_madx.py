@@ -28,14 +28,6 @@ class _TestCaseCompat(object):
         self.assertTrue(first < second)
 
 
-def _close(m):
-    try:
-        m._service.close()
-    except (RuntimeError, IOError, EOFError, OSError):
-        pass
-    m._process.wait()
-
-
 class TestMadx(unittest.TestCase, _TestCaseCompat):
 
     """
@@ -60,7 +52,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
                 self.mad._libmadx.input(line)
 
     def tearDown(self):
-        _close(self.mad)
+        self.mad.quit()
         del self.mad
 
     def test_copyright(self):
@@ -97,7 +89,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         madxness.input('ANSWER=43;')
         self.assertEqual(self.mad.eval('ANSWER'), 42)
         self.assertEqual(madxness.eval('ANSWER'), 43)
-        _close(madxness)
+        madxness.quit()
 
     def test_streamreader(self):
         output = []
@@ -146,7 +138,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
             history = history_file.read()
         self.assertEqual(history.strip(), self.doc.strip())
         # remove history file
-        _close(mad)
+        mad.quit()
         del mad
         os.remove(history_filename)
 
@@ -755,7 +747,7 @@ class TestTransferMap(unittest.TestCase):
         sig_final_sm = np.dot(tm, np.dot(sig_init, tm.T))
         assert_allclose(sig_final_tw[0:4, 0:4], sig_final_sm[0:4, 0:4],
                         rtol=rtol, atol=atol)
-        _close(mad)
+        mad.quit()
 
     def test_drift(self):
         self._test_transfer_map('s', '#s/#e', """
