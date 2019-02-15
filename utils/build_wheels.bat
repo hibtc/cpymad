@@ -5,12 +5,12 @@
 ::          python build_madx.py --static
 
 :: Create python environments:
-call conda create -qy -n py27 python=2.7 wheel cython
-call conda create -qy -n py33 python=3.3 wheel cython
-call conda create -qy -n py34 python=3.4 wheel cython
-call conda create -qy -n py35 python=3.5 wheel cython
-call conda create -qy -n py36 python=3.6 wheel cython
-call conda create -qy -n py37 python=3.7 wheel cython
+call conda create -qyf -n py27 python=2.7 wheel cython
+call conda create -qyf -n py33 python=3.3 wheel cython
+call conda create -qyf -n py34 python=3.4 wheel cython
+call conda create -qyf -n py35 python=3.5 wheel cython
+call conda create -qyf -n py36 python=3.6 wheel cython
+call conda create -qyf -n py37 python=3.7 wheel cython
 
 :: Install mingwpy where available:
 call activate py27 && call pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy

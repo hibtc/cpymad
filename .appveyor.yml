@@ -50,7 +50,7 @@ install:
   - conda update -q conda
 
   # build MAD-X
-  - conda create -q -n madx python=3.4
+  - conda create -qf -n madx python=3.4
   - activate madx
   - conda install -q -c conda-forge mingwpy
   - pip install patch
