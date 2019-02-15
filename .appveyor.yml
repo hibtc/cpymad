@@ -46,7 +46,7 @@ install:
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
 
   # Configure and update conda:
-  - conda config --set always_yes yes --set changeps1 no
+  - conda config --set always_yes yes --set changeps1 yes
   - conda update -q conda
 
   # build MAD-X
