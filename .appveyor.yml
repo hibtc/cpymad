@@ -28,7 +28,7 @@ install:
   # safety against accidentally uploading a release version number to the
   # actual pypi:
   - ps: if ($env:APPVEYOR_REPO_TAG -ne $TRUE) {
-          sed -i "/^__version__ = /s/'\$/.dev$env:APPVEYOR_BUILD_NUMBER'/"
+          sed -i "/^__version__ = /s/'$/.dev$env:APPVEYOR_BUILD_NUMBER'/"
               src/cpymad/__init__.py ;
         }
   - python -c "import sys; sys.path.append('src'); import cpymad;
