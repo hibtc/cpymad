@@ -73,18 +73,26 @@ class CommandLog(object):
     @classmethod
     def create(cls, filename, prefix='', suffix='\n'):
         """Create CommandLog from filename (overwrite/create)."""
-        return cls(open(filename, 'wt'), prefix=prefix, suffix=suffix)
+        return cls(open(filename, 'wt'), prefix, suffix, own=True)
 
-    def __init__(self, file, prefix='', suffix='\n'):
+    def __init__(self, file, prefix='', suffix='\n', own=False):
         """Create CommandLog from file instance."""
         self._file = file
         self._prefix = prefix
         self._suffix = suffix
+        self._own = own
+
+    def __del__(self):
+        self.close()
 
     def __call__(self, command):
         """Log a single history line and flush to file immediately."""
         self._file.write(self._prefix + command + self._suffix)
         self._file.flush()
+
+    def close(self):
+        if self._own:
+            self._file.close()
 
 
 class Madx(object):
@@ -206,6 +214,9 @@ class Madx(object):
             self._service.close()
         with util.suppress(AttributeError, RuntimeError):
             self._process.wait()
+        if hasattr(self._command_log, 'close'):
+            self._command_log.close()
+            self._command_log = None
 
     exit = quit
 
