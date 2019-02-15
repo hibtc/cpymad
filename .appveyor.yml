@@ -76,6 +76,11 @@ deploy_script:
         pip install twine 2>&1 ;
         twine upload dist/*.whl
       }
+- ps: if ($env:APPVEYOR_REPO_BRANCH -eq "test-release") {
+        $env:TWINE_REPOSITORY_URL = "https://test.pypi.org/legacy/" ;
+        pip install twine 2>&1 ;
+        twine upload dist/*.whl
+      }
 
 cache:
   - '%LOCALAPPDATA%\pip\Cache'
