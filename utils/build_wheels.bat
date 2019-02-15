@@ -48,19 +48,16 @@ exit /b %ERRORLEVEL%
 
 :: Build cpymad on py27-py34
 :build_cpymad
-setlocal
     set "py_env=%1"
 
     call activate %py_env% & @echo on
     call python setup.py build_ext -c mingw32 --static
     call python setup.py bdist_wheel
-endlocal
 exit /b 0
 
 
 :: Build cpymad on py35+
 :build_cpymad2
-setlocal
     set "py_env=%1"
     set "py_ver=%2"
     set "dir_tag=%3"
@@ -97,5 +94,4 @@ setlocal
         -o %builddir%\libmadx.%file_tag%.pyd
 
     call python setup.py bdist_wheel
-endlocal
 exit /b 0
