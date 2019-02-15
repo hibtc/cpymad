@@ -28,7 +28,7 @@ for /f %%G in ('python -c "import sys; print(sys.prefix)"') do (
 )
 
 :: Build cpymad wheels:
-if %PLATFORM% == "x86" (
+if "%PLATFORM%" == "x86" (
     call :build_cpymad  py27
     call :build_cpymad  py33
     call :build_cpymad  py34
