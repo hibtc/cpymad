@@ -81,6 +81,3 @@ deploy_script:
         pip install twine 2>&1 ;
         twine upload dist/*.whl
       }
-
-cache:
-  - '%LOCALAPPDATA%\pip\Cache'
