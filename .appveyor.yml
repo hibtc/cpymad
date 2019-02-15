@@ -34,18 +34,16 @@ install:
   - python -c "import sys; sys.path.append('src'); import cpymad;
     print('building cpymad version:', cpymad.__version__);"
 
-  # Add python and installed scripts to PATH
-  - if "%PLATFORM%" == "x86" set CONDA_FORCE_32BIT=1
+  # Configure and activate conda:
   - if "%PLATFORM%" == "x64" set "CONDAPATH=%CONDAPATH%-x64"
   - set "PATH=%CONDAPATH%\bin;%CONDAPATH%\Scripts;%PATH%"
+  - conda config --set always_yes yes --set changeps1 yes
+  - conda update -q conda
+  - if "%PLATFORM%" == "x86" set "CONDA_FORCE_32BIT=1"
 
   # Remove git from path, since there is a `sh.exe` here that will cause CMake
   # to complain and stop:
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
-
-  # Configure and update conda:
-  - conda config --set always_yes yes --set changeps1 yes
-  - conda update -q conda
 
   # build MAD-X
   - conda create -qf -n madx python=3.4
