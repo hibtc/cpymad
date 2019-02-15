@@ -13,8 +13,9 @@ env:
   global:
     # GITHUB_TOKEN:
     - secure: "fdvPaSzbpf47Qb/2zDg/eHAS0bBFaAkWFxyxmhHQOkD0PlVxwi1Fh0Sq3dUZVwQgmmYj+hF6cFpqkFQJQe3zFqw9k14Ccr4dk69yjPNbQA1+yg0ARFntyqtM2DUN86brMcZG3ZM6V2HFuzKn9cQUvtjCQSKS26HybEnCG4vXz24="
-    # PYPI_PASSWORD:
-    - secure: "Ae0fgJfDzOvcZe0Ra8QlqBSj4y7sK6cN1OZwvDM1HhTCuIU3oNan5JczWK5gmcwt3ThRshVl6vqx8gumkzxz9GUcgbRb8xHF5URrctB/PfZ1GbZLGviapsGDK13upqR/7SgkX/cvg0PeOYE+Eiw8ShWbPl4nDzNXLTzSFIJQ03k="
+    - TWINE_USERNAME=hibtc-deploy
+    # TWINE_PASSWORD:
+    - secure: "A2y/CUVGmBDemj+JCsupqexE7YiYcdIg6nOKPmBNjTCaum9CrvhebTmLDqtSfn1qFA3CbbFwyHIo/nlGioIMZfLhSYw/l3JlLTCMx57ESVqYRR7ou882mb1zizc5DrAfT1Sk8rHuBMI/iqpQOwsQPTOvBMW4ttnEsFWK/WrYKNM="
 
     - ART_REPO=https://$GITHUB_TOKEN@github.com/hibtc/cpymad-artifacts
     - ART_BRANCH=_$TRAVIS_BUILD_NUMBER-$TRAVIS_COMMIT
@@ -121,10 +122,9 @@ jobs:
       script:
         - git clone $ART_REPO artifacts -b $ART_BRANCH --depth 1
         - if [[ -z $TRAVIS_TAG ]]; then
-            REPO=( --repository-url https://test.pypi.org/legacy/ ) ;
+            export TWINE_REPOSITORY_URL=https://test.pypi.org/legacy/ ;
           fi
-        - twine upload -u hibtc-deploy -p "$PYPI_PASSWORD" "${REPO[@]}"
-            artifacts/wheels/*.tar.gz artifacts/wheels/*.whl
+        - twine upload artifacts/wheels/*.tar.gz artifacts/wheels/*.whl
       after_success: skip
 
     - stage: deploy
