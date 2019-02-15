@@ -60,8 +60,8 @@ install:
 build: off
 
 test_script:
-  - coverage run --source=cpymad -a test/test_util.py -v
-  - coverage run --source=cpymad -a test/test_madx.py -v
+  - coverage run --source=cpymad -p test/test_util.py -v
+  - coverage run --source=cpymad -p test/test_madx.py -v
 
 after_test:
  - coverage combine
