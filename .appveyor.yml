@@ -54,7 +54,8 @@ install:
   - pip install --no-index -f dist cpymad
 
   # Install build/test deps:
-  - conda install -q coverage coveralls
+  - conda install -q coverage
+  - pip install coveralls
 
 build: off
 
