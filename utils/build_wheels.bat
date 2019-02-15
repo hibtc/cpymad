@@ -5,21 +5,21 @@
 ::          python build_madx.py --static
 
 :: Create python environments:
-conda create -q -n py27 python=2.7 wheel
-conda create -q -n py33 python=3.3 wheel
-conda create -q -n py34 python=3.4 wheel
-conda create -q -n py35 python=3.5 wheel
-conda create -q -n py36 python=3.6 wheel
-conda create -q -n py37 python=3.7 wheel
+conda create -qy -n py27 python=2.7 wheel
+conda create -qy -n py33 python=3.3 wheel
+conda create -qy -n py34 python=3.4 wheel
+conda create -qy -n py35 python=3.5 wheel
+conda create -qy -n py36 python=3.6 wheel
+conda create -qy -n py37 python=3.7 wheel
 
 :: Install mingwpy where available:
-conda install -q -n py27 -c conda-forge mingwpy
-conda install -q -n py33 -c conda-forge mingwpy
-conda install -q -n py34 -c conda-forge mingwpy
+conda install -qy -n py27 -c conda-forge mingwpy
+conda install -qy -n py33 -c conda-forge mingwpy
+conda install -qy -n py34 -c conda-forge mingwpy
 
 :: Prepare cython source:
 activate py34
-conda install -q cython
+conda install -qy cython
 cython src\cpymad\libmadx.pyx -I %MADXDIR%\include
 
 :: Locate gcc from mingwpy in py34 (used later for build_cpymad2):
