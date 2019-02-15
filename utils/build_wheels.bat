@@ -5,24 +5,20 @@
 ::          python build_madx.py --static
 
 :: Create python environments:
-call conda create -qy -n py27 python=2.7 wheel
-call conda create -qy -n py33 python=3.3 wheel
-call conda create -qy -n py34 python=3.4 wheel
-call conda create -qy -n py35 python=3.5 wheel
-call conda create -qy -n py36 python=3.6 wheel
-call conda create -qy -n py37 python=3.7 wheel
+call conda create -qy -n py27 python=2.7 wheel cython
+call conda create -qy -n py33 python=3.3 wheel cython
+call conda create -qy -n py34 python=3.4 wheel cython
+call conda create -qy -n py35 python=3.5 wheel cython
+call conda create -qy -n py36 python=3.6 wheel cython
+call conda create -qy -n py37 python=3.7 wheel cython
 
 :: Install mingwpy where available:
 call activate py27 && call pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy
 call activate py33 && call pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy
 call activate py34 && call pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy
 
-:: Prepare cython source:
-call activate py34
-call conda install -qy cython
-call cython src\cpymad\libmadx.pyx -I %MADXDIR%\include
-
 :: Locate gcc from mingwpy in py34 (used later for build_cpymad2):
+call activate py34
 for /f %%G in ('python -c "import sys; print(sys.prefix)"') do (
     set "gcc=%%~fG\Scripts\gcc.exe"
 )
@@ -50,6 +46,9 @@ exit /b %ERRORLEVEL%
 :build_cpymad
     set "py_env=%1"
 
+    del /f src\cpymad\libmadx.c ^
+           src\cpymad\libmadx.pyd
+
     call activate %py_env% & @echo on
     call python setup.py build_ext -c mingw32 --static
     call python setup.py bdist_wheel
@@ -63,6 +62,9 @@ exit /b 0
     set "dir_tag=%3"
     set "file_tag=%4"
 
+    del /f src\cpymad\libmadx.c ^
+           src\cpymad\libmadx.pyd
+
     call activate %py_env% & @echo on
     set tempdir=build\temp.%dir_tag%\Release\src\cpymad
     set builddir=build\lib.%dir_tag%\cpymad
@@ -72,6 +74,8 @@ exit /b 0
     for /f %%G in ('python -c "import sys; print(sys.prefix)"') do (
         set "pythondir=%%~fG"
     )
+
+    call python setup.py build_py
 
     call %gcc% -mdll -O -Wall ^
         -I%MADXDIR%\include ^
