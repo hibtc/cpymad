@@ -25,6 +25,17 @@ install:
   # Log environment for informational purposes:
   - set
 
+  # Switch to development version. This is necessary to prevent uploading the
+  # same version twice to test.pypi.org on test-release, and provides some
+  # safety against accidentally uploading a release version number to the
+  # actual pypi:
+  - ps: if ($env:APPVEYOR_REPO_TAG -ne $TRUE) {
+          sed -i "/^__version__ = /s/'\$/.dev$env:APPVEYOR_BUILD_NUMBER'/"
+              src/cpymad/__init__.py ;
+        }
+  - python -c "import sys; sys.path.append('src'); import cpymad;
+    print('building cpymad version:', cpymad.__version__);"
+
   # Add python and installed scripts to PATH
   - if "%PLATFORM%" == "x86" set CONDA_FORCE_32BIT=1
   - if "%PLATFORM%" == "x64" set "CONDAPATH=%CONDAPATH%-x64"
