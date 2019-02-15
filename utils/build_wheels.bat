@@ -51,7 +51,7 @@ exit /b %ERRORLEVEL%
 setlocal
     set "py_env=%1"
 
-    call activate %py_env%
+    call activate %py_env% & @echo on
     call python setup.py build_ext -c mingw32 --static
     call python setup.py bdist_wheel
 endlocal
@@ -66,7 +66,7 @@ setlocal
     set "dir_tag=%3"
     set "file_tag=%4"
 
-    call activate %py_env%
+    call activate %py_env% & @echo on
     set tempdir=build\temp.%dir_tag%\Release\src\cpymad
     set builddir=build\lib.%dir_tag%\cpymad
     mkdir %tempdir%
