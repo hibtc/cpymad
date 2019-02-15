@@ -83,12 +83,17 @@ setlocal
         -o %tempdir%\libmadx.obj ^
         -std=gnu99
 
+    :: Linking directly against the pythonXX.dll is the only way I found to
+    :: satisfy the linker with conda. With WinPython, I used to successfully
+    :: link using the conventional `-L%pythondir%\libs -lpython%py_ver%`
+    :: command line. With conda however, the linker complains about about a
+    :: large number of undefined references, such as `__imp__Py_NoneStruct`,
+    :: when using this method.
     call %gcc% -shared -s ^
         %tempdir%\libmadx.obj ^
         -L%MADXDIR%\lib ^
-        -L%pythondir%\libs ^
         -lmadx -lptc -lgc-lib -lstdc++ -lgfortran ^
-        -lquadmath -lpython%py_ver% -lmsvcr100 ^
+        -lquadmath %pythondir%\python%py_ver%.dll -lmsvcr100 ^
         -o %builddir%\libmadx.%file_tag%.pyd
 
     call python setup.py bdist_wheel
