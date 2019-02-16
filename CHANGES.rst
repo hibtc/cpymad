@@ -1,6 +1,30 @@
 Changelog
 ~~~~~~~~~
 
+1.1.0
+=====
+Date: 16.02.2019
+
+- add ``AttrDict.update()`` method similar to regular dicts
+- add ``Table.row_names()`` query method
+- use row names as table index for pandas dataframe
+- add ``Madx.batch()`` context manager to collect commands before sending them
+  to MAD-X in a single batch all at once (performance)
+- add a convenience parameter ``Madx(history=[])`` to simplify capturing
+  history
+- explicitly specify ``zip_safe=False`` for the cpymad package. This will work
+  better for builds against shared MAD-X library
+- close CommandLog files when calling ``Madx.quit()`` (if they were opened
+  by us)
+
+Finally, this is the first release to automate the release process for windows
+wheels:
+
+- build windows wheels on appveyor
+- upload windows wheels to pypi on tags
+- test cpymad on windows using appveyor
+
+
 1.0.11
 ======
 Date: 18.01.2019
