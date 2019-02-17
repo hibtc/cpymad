@@ -1,7 +1,9 @@
 version: "3.7"
 services:
   cpymad:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile_x86
     volumes:
       - ../..:/io/cpymad:ro
     cap_drop:

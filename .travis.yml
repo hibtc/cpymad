@@ -35,7 +35,7 @@ install:
 
   # download wheels generated during build stage:
   - git clone $ART_REPO -b $ART_BRANCH --depth 1
-  - pip install ./cpymad-artifacts/wheels/*-$PY_ABI_TAG-*.whl
+  - pip install ./cpymad-artifacts/wheels/*-$PY_ABI_TAG-*_x86_64.whl
   - rm -rf cpymad-artifacts
 
   # docutils is required for `setup.py check -r`:
@@ -87,18 +87,26 @@ jobs:
         - mkdir -p /home/travis/io
         - chmod 777 /home/travis/io
         - sudo mv /tmp/cache_key /home/travis/io/
-        - docker build -t wheelbuilder utils/manylinux
+        - docker build -t wheelbuilder32 utils/manylinux -f utils/manylinux/Dockerfile_x86
+        - docker build -t wheelbuilder64 utils/manylinux -f utils/manylinux/Dockerfile_x64
         # at the time of writing, mounting /io/cpymad as readonly volume
         # (the `:ro` option) causes container init error when executed on
         # travis (not on my local machine though), so we use `:rw` instead:
-        - docker run --init --name artifacts
-            -v /home/travis/io:/io:rw
+        - docker run --init --name artifacts32
+            -v /home/travis/io/32:/io:rw
             -v `pwd`:/io/cpymad:rw
             -v /io/wheels
             --cap-drop=all
-            wheelbuilder
+            wheelbuilder32
+        - docker run --init --name artifacts64
+            -v /home/travis/io/64:/io:rw
+            -v `pwd`:/io/cpymad:rw
+            -v /io/wheels
+            --cap-drop=all
+            wheelbuilder64
         - mkdir -p artifacts
-        - docker cp artifacts:/io/wheels ./artifacts/
+        - docker cp artifacts32:/io/wheels ./artifacts/
+        - docker cp artifacts64:/io/wheels ./artifacts/
       after_success:
         # Upload artifacts to github:
         - cd artifacts

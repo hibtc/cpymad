@@ -14,7 +14,7 @@ Using docker-compose
 This requires that you have docker installed. In order to build the wheels
 go to the cpymad root directory and execute::
 
-    docker-compose -f utils/manylinux/docker-compose.yml up --build
+    docker-compose -f utils/manylinux/docker-compose_x64.yml up --build
 
 To retrieve your shiny new wheels, type::
 
@@ -30,7 +30,7 @@ If you want to (or have to) use lower level tools, you can do so as follows:
 
     docker create -v /io --name artifacts busybox
 
-    docker build -t cpymad-manylinux utils/manylinux
+    docker build -t cpymad-manylinux utils/manylinux -f Dockerfile_x64
 
     docker run --init --rm \
         --volumes-from artifacts \
