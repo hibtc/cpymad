@@ -66,8 +66,9 @@ def apply_patches(source_dir, patch_dir):
                glob.glob(os.path.join(patch_dir, '*.patch')))
     for filename in patches:
         print("Applying patch: {!r}".format(filename))
-        subprocess.check_call([
-            'patch', '-p1', '-d', source_dir, '-i', filename])
+        with open(filename) as f:
+            with chdir(source_dir):
+                subprocess.check_call(['patch', '-p1'], stdin=f)
 
 
 @contextmanager
