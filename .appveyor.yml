@@ -46,10 +46,9 @@ install:
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
 
   # build MAD-X
-  - conda create -qf -n madx python=3.4
+  - conda create -qf -n madx python=3.4 patch
   - activate madx
   - conda install -q -c conda-forge mingwpy
-  - pip install patch
   - python "utils\build_madx.py" %MADXVER% C:\ "%MADXDIR%" utils\patches
 
   # build cpymad
