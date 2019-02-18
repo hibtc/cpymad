@@ -8,9 +8,9 @@ from __future__ import division
 import glob
 import os
 import sys
-import zipfile
 import subprocess
 import platform
+from shutil import unpack_archive
 from contextlib import contextmanager
 
 try:
@@ -32,11 +32,6 @@ def download(url, to=None):
     filename, http_result = urlretrieve(url, to, reporthook=report_progress)
     print()                 # terminate line
     return filename
-
-
-def extract(filename, to=None):
-    with zipfile.ZipFile(filename) as f:
-        f.extractall(to)
 
 
 def mkdir(dirname):
@@ -91,10 +86,10 @@ def chdir(path):
 def install_madx(version=MADX_VERSION, prefix='.', install_dir='',
                  patches=None, static=IS_WIN32, shared=False, X11=False):
 
-    FILE    = '{}.zip'.format(version)
+    FILE    = '{}.tar.gz'.format(version)
     BASE    = 'https://github.com/MethodicalAcceleratorDesign/MAD-X/archive/'
     URL     = BASE + FILE
-    ARCHIVE = os.path.join(prefix, 'MAD-X-{}.zip'.format(version))
+    ARCHIVE = os.path.join(prefix, 'MAD-X-{}.tar.gz'.format(version))
     FOLDER  = os.path.join(prefix, 'MAD-X-{}'.format(version))
     BUILD   = os.path.join(FOLDER, 'build')
     INSTALL = os.path.join(FOLDER, 'install')
@@ -115,7 +110,7 @@ def install_madx(version=MADX_VERSION, prefix='.', install_dir='',
 
     print("Extracting to: {}".format(FOLDER))
     if not os.path.exists(FOLDER):
-        extract(ARCHIVE, prefix)
+        unpack_archive(ARCHIVE, prefix)
     else:
         print(" -> already extracted!")
     print()
