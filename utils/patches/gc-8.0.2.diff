@@ -7,15 +7,15 @@ index e90fe6c5..9bc57263 100644
  if(USE_GC)
     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 -   add_subdirectory(libs/gc/gc-7.2f)
-+   add_subdirectory(libs/gc/gc-7.6.4)
++   add_subdirectory(libs/gc/gc-8.0.2)
  endif()
  
  # 
-diff --git a/libs/gc/gc-7.6.4/CMakeLists.txt b/libs/gc/gc-7.6.4/CMakeLists.txt
+diff --git a/libs/gc/gc-8.0.2/CMakeLists.txt b/libs/gc/gc-8.0.2/CMakeLists.txt
 index d04abe95..61c4f4fc 100644
---- a/libs/gc/gc-7.6.4/CMakeLists.txt
-+++ b/libs/gc/gc-7.6.4/CMakeLists.txt
-@@ -220,3 +220,10 @@ IF(WIN32)
+--- a/libs/gc/gc-8.0.2/CMakeLists.txt
++++ b/libs/gc/gc-8.0.2/CMakeLists.txt
+@@ -259,3 +259,10 @@ IF(WIN32)
  ENDIF(WIN32)
  
  ADD_SUBDIRECTORY(tests)
@@ -35,7 +35,7 @@ index 3a2b7e9b..91776cb6 100644
  # Garbage collector:
  if(USE_GC)
 -   include_directories(${CMAKE_SOURCE_DIR}/libs/gc/gc-7.2f/include)
-+   include_directories(${CMAKE_SOURCE_DIR}/libs/gc/gc-7.6.4/include)
++   include_directories(${CMAKE_SOURCE_DIR}/libs/gc/gc-8.0.2/include)
  endif()
  
  # Defining specific stuff for packaging:

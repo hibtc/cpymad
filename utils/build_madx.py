@@ -8,9 +8,9 @@ from __future__ import division
 import glob
 import os
 import sys
-import zipfile
 import subprocess
 import platform
+from shutil import unpack_archive
 from contextlib import contextmanager
 
 try:
@@ -32,11 +32,6 @@ def download(url, to=None):
     filename, http_result = urlretrieve(url, to, reporthook=report_progress)
     print()                 # terminate line
     return filename
-
-
-def extract(filename, to=None):
-    with zipfile.ZipFile(filename) as f:
-        f.extractall(to)
 
 
 def mkdir(dirname):
@@ -62,7 +57,7 @@ def build_madx(source_dir, build_dir, install_dir,
     ]
     with chdir(build_dir):
         subprocess.check_call(cmake_args)
-        subprocess.check_call([MAKE])
+        subprocess.check_call([MAKE, 'install'])
 
 
 def apply_patches(source_dir, patch_dir):
@@ -91,15 +86,22 @@ def chdir(path):
 def install_madx(version=MADX_VERSION, prefix='.', install_dir='',
                  patches=None, static=IS_WIN32, shared=False, X11=False):
 
-    FILE    = '{}.zip'.format(version)
+    FILE    = '{}.tar.gz'.format(version)
     BASE    = 'https://github.com/MethodicalAcceleratorDesign/MAD-X/archive/'
     URL     = BASE + FILE
-    ARCHIVE = os.path.join(prefix, 'MAD-X-{}.zip'.format(version))
+    ARCHIVE = os.path.join(prefix, 'MAD-X-{}.tar.gz'.format(version))
     FOLDER  = os.path.join(prefix, 'MAD-X-{}'.format(version))
     BUILD   = os.path.join(FOLDER, 'build')
     INSTALL = os.path.join(FOLDER, 'install')
     if install_dir:
         INSTALL = install_dir
+
+    GC_VER = '8.0.2'
+    GC_TAR = 'gc-{}.tar.gz'.format(GC_VER)
+    GC_URL = ('https://github.com/ivmai/bdwgc/releases/download/v{}/{}'
+              .format(GC_VER, GC_TAR))
+    GC_PTH = os.path.join(FOLDER, 'libs', 'gc')
+    GC_DIR = os.path.join(GC_PTH, 'gc-{}'.format(GC_VER))
 
     try:
         os.makedirs(prefix)
@@ -115,7 +117,21 @@ def install_madx(version=MADX_VERSION, prefix='.', install_dir='',
 
     print("Extracting to: {}".format(FOLDER))
     if not os.path.exists(FOLDER):
-        extract(ARCHIVE, prefix)
+        unpack_archive(ARCHIVE, prefix)
+    else:
+        print(" -> already extracted!")
+    print()
+
+    print("Downloading GC: {}".format(GC_TAR))
+    if not os.path.exists(GC_TAR):
+        download(GC_URL, GC_TAR)
+    else:
+        print(" -> already extracted!")
+    print()
+
+    print("Extracting to: {}".format(GC_DIR))
+    if not os.path.exists(GC_DIR):
+        unpack_archive(GC_TAR, GC_PTH)
     else:
         print(" -> already extracted!")
     print()
@@ -130,14 +146,6 @@ def install_madx(version=MADX_VERSION, prefix='.', install_dir='',
                    static=static, shared=shared, X11=False)
     else:
         print(" -> already built!")
-    print()
-
-    print("Installing MAD-X to: {}".format(INSTALL))
-    if mkdir(INSTALL):
-        with chdir(BUILD):
-            subprocess.check_call([MAKE, 'install'])
-    else:
-        print(" -> already installed!")
     print()
 
     return INSTALL

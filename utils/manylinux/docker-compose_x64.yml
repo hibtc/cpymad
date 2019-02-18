@@ -1,0 +1,11 @@
+version: "3.7"
+services:
+  cpymad:
+    build:
+      context: .
+      dockerfile: Dockerfile_x64
+    volumes:
+      - ../..:/io/cpymad:ro
+    cap_drop:
+      - all
+    init: true
