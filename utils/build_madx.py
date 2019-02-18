@@ -62,7 +62,7 @@ def build_madx(source_dir, build_dir, install_dir,
     ]
     with chdir(build_dir):
         subprocess.check_call(cmake_args)
-        subprocess.check_call([MAKE])
+        subprocess.check_call([MAKE, 'install'])
 
 
 def apply_patches(source_dir, patch_dir):
@@ -130,14 +130,6 @@ def install_madx(version=MADX_VERSION, prefix='.', install_dir='',
                    static=static, shared=shared, X11=False)
     else:
         print(" -> already built!")
-    print()
-
-    print("Installing MAD-X to: {}".format(INSTALL))
-    if mkdir(INSTALL):
-        with chdir(BUILD):
-            subprocess.check_call([MAKE, 'install'])
-    else:
-        print(" -> already installed!")
     print()
 
     return INSTALL
