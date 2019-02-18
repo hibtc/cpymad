@@ -1,6 +1,14 @@
 Changelog
 ~~~~~~~~~
 
+1.1.1
+=====
+Date: 18.02.2019
+
+- build with GC 8.0.2 on windows
+- build 32bit wheels for linux
+
+
 1.1.0
 =====
 Date: 16.02.2019
