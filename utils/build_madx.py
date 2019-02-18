@@ -96,6 +96,13 @@ def install_madx(version=MADX_VERSION, prefix='.', install_dir='',
     if install_dir:
         INSTALL = install_dir
 
+    GC_VER = '8.0.2'
+    GC_TAR = 'gc-{}.tar.gz'.format(GC_VER)
+    GC_URL = ('https://github.com/ivmai/bdwgc/releases/download/v{}/{}'
+              .format(GC_VER, GC_TAR))
+    GC_PTH = os.path.join(FOLDER, 'libs', 'gc')
+    GC_DIR = os.path.join(GC_PTH, 'gc-{}'.format(GC_VER))
+
     try:
         os.makedirs(prefix)
     except OSError:
@@ -111,6 +118,20 @@ def install_madx(version=MADX_VERSION, prefix='.', install_dir='',
     print("Extracting to: {}".format(FOLDER))
     if not os.path.exists(FOLDER):
         unpack_archive(ARCHIVE, prefix)
+    else:
+        print(" -> already extracted!")
+    print()
+
+    print("Downloading GC: {}".format(GC_TAR))
+    if not os.path.exists(GC_TAR):
+        download(GC_URL, GC_TAR)
+    else:
+        print(" -> already extracted!")
+    print()
+
+    print("Extracting to: {}".format(GC_DIR))
+    if not os.path.exists(GC_DIR):
+        unpack_archive(GC_TAR, GC_PTH)
     else:
         print(" -> already extracted!")
     print()
