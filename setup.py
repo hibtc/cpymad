@@ -124,17 +124,6 @@ def get_extension_args(madxdir, shared, static, **libs):
         optvals['X11'] = not IS_WIN
     include_dirs = []
     library_dirs = []
-    if madxdir is None:
-        searchpaths = [
-            os.path.expanduser('~/.local'),
-            '/opt/madx',
-            '/usr/local',
-        ]
-        for d in searchpaths:
-            if os.path.exists(os.path.join(
-                    d, 'include', 'madX', 'madx.h')):
-                madxdir = d
-                break
 
     if madxdir:
         prefix = os.path.expanduser(madxdir)
