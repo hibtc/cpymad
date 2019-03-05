@@ -1,4 +1,9 @@
 #Requires -Version 3.0
+
+# On some machines required to make HTTPS work:
+[Net.ServicePointManager]::Expect100Continue = $true;
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;
+
 $MADXDIR = if ($env:MADXDIR) { $env:MADXDIR } else { "madx-bin" }
 $MADXDIR = [System.IO.Path]::Combine($(pwd), $MADXDIR)
 
