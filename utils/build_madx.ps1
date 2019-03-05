@@ -1,4 +1,5 @@
 #Requires -Version 3.0
+$ErrorActionPreference = "Stop"
 
 # On some machines required to make HTTPS work:
 [Net.ServicePointManager]::Expect100Continue = $true;
@@ -17,6 +18,12 @@ $GC_ZIP = "v$GC_VER.zip"
 $GC_URL = "https://github.com/ivmai/bdwgc/archive/"
 $GC_DIR = "$MADX_DIR\libs\gc\gc-$GC_VER"
 
+function call()
+{
+    & $args[0] $args[1..$args.length]
+    if (!$?) { throw "Exit code $LastExitCode from command `"$args`"." }
+}
+
 $web = New-Object System.Net.WebClient
 $web.DownloadFile("$MADX_URL/$MADX_ZIP", $MADX_ZIP)
 $web.DownloadFile("$GC_URL/$GC_ZIP", $GC_ZIP)
@@ -25,12 +32,12 @@ Expand-Archive -LiteralPath $GC_ZIP -DestinationPath .
 mv bdwgc-$GC_VER $GC_DIR
 
 # Patch garbage collector to newer version, see #41:
-& patch -d $MADX_DIR -p1 -i "$PSScriptRoot\patches\gc-8.0.2.diff"
+call patch -d $MADX_DIR -p1 -i "$PSScriptRoot\patches\gc-8.0.2.diff"
 
 # Build MAD-X as library:
 mkdir "$MADX_DIR\build"
 cd "$MADX_DIR\build"
-& cmake .. -G 'MinGW Makefiles' `
+call cmake .. -G 'MinGW Makefiles' `
     -DMADX_ONLINE=OFF `
     -DMADX_INSTALL_DOC=OFF `
     -DCMAKE_INSTALL_PREFIX=$MADXDIR `
@@ -38,4 +45,4 @@ cd "$MADX_DIR\build"
     -DMADX_STATIC=ON `
     -DBUILD_SHARED_LIBS=OFF
 
-& mingw32-make install
+call mingw32-make install

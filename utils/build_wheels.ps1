@@ -15,8 +15,16 @@
 # check the resulting `libmadx.pyd` file with "Dependency Walker"
 # (http://www.dependencywalker.com/) for non-system runtime dependencies!
 
+$ErrorActionPreference = "Stop"
+
 $MADXDIR = if ($env:MADXDIR) { $env:MADXDIR } else { "madx-bin" }
 $MADXDIR = [System.IO.Path]::Combine($(pwd), $MADXDIR)
+
+function call()
+{
+    & $args[0] $args[1..$args.length]
+    if (!$?) { throw "Exit code $LastExitCode from command `"$args`"." }
+}
 
 # Create python environments:
 mkdir -Force envs
@@ -30,9 +38,9 @@ conda create -qy -p envs\py37 python=3.7 wheel cython
 # Install mingwpy where available (note that mingwpy is not available on py35+
 # and that the simpler installation command `conda install -n py33 mingwpy`
 # fails due to a version conflict on py33):
-conda activate .\envs\py27; & call pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy
-conda activate .\envs\py33; & call pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy
-conda activate .\envs\py34; & call pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy
+conda activate .\envs\py27; call pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy
+conda activate .\envs\py33; call pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy
+conda activate .\envs\py34; call pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy
 
 
 function build_all()
@@ -70,8 +78,8 @@ function build_native($py_env)
     Remove-Item -ErrorAction Ignore src\cpymad\libmadx.pyd
 
     conda activate .\envs\$py_env
-    & python setup.py build_ext -c mingw32 --static --madxdir=$MADXDIR
-    & python setup.py bdist_wheel
+    call python setup.py build_ext -c mingw32 --static --madxdir=$MADXDIR
+    call python setup.py bdist_wheel
 }
 
 
@@ -100,12 +108,12 @@ function build_cross($py_env, $py_ver, $dir_tag, $file_tag)
     mkdir -Force $tempdir
     mkdir -Force $libdir
 
-    $pythondir = & python -c "import sys; print(sys.prefix)"
+    $pythondir = call python -c "import sys; print(sys.prefix)"
 
     # This will cythonize `.pyx` to `.c`:
-    & python setup.py build_py
+    call python setup.py build_py
 
-    & $gcc -mdll -O -Wall `
+    call $gcc -mdll -O -Wall `
         -I$MADXDIR\include `
         -I$pythondir\include `
         -c src/cpymad/libmadx.c `
@@ -117,14 +125,14 @@ function build_cross($py_env, $py_ver, $dir_tag, $file_tag)
     # command line `-L%pythondir%\libs -lpython%py_ver%` used to work fine on
     # WinPython, but fails on conda with large number of complaints about
     # about undefined references, such as `__imp__Py_NoneStruct`,
-    & $gcc -shared -s `
+    call $gcc -shared -s `
         $tempdir\libmadx.obj `
         -L$MADXDIR\lib `
         -lmadx -lptc -lgc-lib -lstdc++ -lgfortran `
         -lquadmath $pythondir\python$py_ver.dll -lmsvcr100 `
         -o $libdir\libmadx.$file_tag.pyd
 
-    & python setup.py bdist_wheel
+    call python setup.py bdist_wheel
 }
 
 build_all
