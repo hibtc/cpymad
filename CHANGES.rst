@@ -6,6 +6,8 @@ next
 Date: (t.b.d.)
 
 - update to MAD-X 5.05.00
+- implement Madx.chdir using the new CHDIR command. This improves readability
+  and repeatability of command histories.
 
 
 1.1.2

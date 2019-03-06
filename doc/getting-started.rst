@@ -124,12 +124,8 @@ chdir()
 -------
 
 :meth:`~cpymad.madx.Madx.chdir` changes the directory of the MAD-X process
-(not the current python process).
-
-This method is special in that it is currently the only modification of the
-MAD-X interpreter state that does not go through the
-:meth:`~cpymad.madx.Madx.input` method (because there is no MAD-X command to
-change the directory).
+(not the current python process). If the return value can be used as a context
+manager, that reverts to the original directory upon leaving the context.
 
 Others
 ------

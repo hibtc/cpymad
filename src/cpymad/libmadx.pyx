@@ -14,7 +14,7 @@ CAUTION: Do not import this module directly! Use :class:`Madx` instead.
 - this module exposes a very C-ish API that is not convenient to work with.
 """
 
-from os import chdir, getcwd
+from os import getcwd
 
 import ctypes
 import numpy as np      # Import the Python-level symbols of numpy
@@ -117,9 +117,8 @@ __all__ = [
     'get_defined_command',
     'get_defined_command_names',
 
-    # these are imported from 'os' for convenience in madx.Madx and should
-    # not really be considered part of the public interface:
-    'chdir',
+    # imported from 'os' for convenience in madx.Madx and should not be
+    # considered part of the public interface:
     'getcwd',
 ]
 

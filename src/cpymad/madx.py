@@ -21,8 +21,6 @@ except ImportError:                 # py2
 
 import numpy as np
 
-from minrpc.util import ChangeDirectory
-
 from . import _rpc
 from . import util
 from .stream import AsyncReader
@@ -302,7 +300,7 @@ class Madx(object):
                 and v in self.globals
                 and self._libmadx.get_var_type(v) > 0]
 
-    def chdir(self, path):
+    def chdir(self, dir):
         """
         Change the directory of the MAD-X process (not the current python process).
 
@@ -315,16 +313,12 @@ class Madx(object):
             with madx.chdir('/x/y/z'):
                 madx.call('file.x')
                 madx.call('file.y')
-
-        This method is special in that it is currently the only modification
-        of the MAD-X interpreter state that doesn't go through the
-        :meth:`Madx.input` method (because there is no MAD-X command to change
-        the directory).
         """
-        # Note, that the libmadx module includes the functions 'getcwd' and
-        # 'chdir' so it can be used as a valid 'os' module for the purposes
-        # of ChangeDirectory:
-        return ChangeDirectory(path, self._libmadx)
+        return util.ChangeDirectory(dir, self._chdir, self._libmadx.getcwd)
+
+    # Turns `dir` into a keyword argument for CHDIR command:
+    def _chdir(self, dir):
+        return self.command.chdir(dir=dir)
 
     def call(self, file, chdir=False):
         """
