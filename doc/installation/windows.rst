@@ -160,7 +160,7 @@ zip archive containing all the files ready for installation:
 .. code-block:: bat
 
     conda install wheel cython
-    python setup.py build_ext --static --madxdir=<madx-install-path>
+    python setup.py build_ext -c mingw32 --static --madxdir=../MAD-X/install
     python setup.py bdist_wheel
 
 If you built MAD-X as DLL (dynamic build), just replace ``--static`` in the
@@ -204,8 +204,8 @@ and certain platform/abi tags:
         set "gcc=%~fG\..\py34\Scripts\gcc.exe"
     )
 
-    for /f %%G in ('python -c "import sys; print(sys.prefix)"') do (
-        set "pythondir=%%~fG"
+    for /f %G in ('python -c "import sys; print(sys.prefix)"') do (
+        set "pythondir=%~fG"
     )
 
     set py_ver=37
@@ -243,6 +243,8 @@ And use this for good as follows:
         -lmadx -lptc -lgc-lib -lstdc++ -lgfortran ^
         -lquadmath %pythondir%\python%py_ver%.dll -lmsvcr100 ^
         -o %libdir%\libmadx.%file_tag%.pyd
+
+    python setup.py build_wheel
 
 
 Install cpymad
