@@ -1,23 +1,21 @@
 Windows
 -------
 
-Prebuilt binaries
-=================
-
 On windows, I provide `built versions`_ for some python versions. If your
-platform is supported, you can just run
+platform is supported, you can just run:
 
 .. code-block:: bat
 
     pip install cpymad
 
-from your terminal and that's it. In case of problems please read the rest of
-this section.
+In case of problems, or if you plan on changing cpymad code, please read the
+rest of this page. You will have to manually compile first MAD-X and then
+cpymad.
 
 .. _built versions: https://pypi.python.org/pypi/cpymad/#downloads
 
 
-Manual build
+Preparations
 ============
 
 In order to build cpymad manually, I recommend using **conda** which makes it
@@ -28,13 +26,11 @@ anaconda should work fine too.
 
 .. _miniconda: https://conda.io/en/latest/miniconda.html
 
-Build libmadx
-~~~~~~~~~~~~~
-
 After installing conda, open the conda command prompt. In order to build
-MAD-X, first create a python 3.4 environment with cmake_ and mingwpy_ -- even
-if you plan using cpymad on a higher python version! If you want cpymad on
-py2.7 or 3.3 use the target python version for building MAD-X instead of 3.4.
+MAD-X, first **create a python 3.4** environment with cmake_ and mingwpy_ --
+even if you plan using cpymad on a higher python version! If you want cpymad
+on py2.7 or 3.3 you can use the target python version for building MAD-X
+instead of 3.4.
 
 .. code-block:: bat
 
@@ -45,24 +41,39 @@ py2.7 or 3.3 use the target python version for building MAD-X instead of 3.4.
 .. _cmake: http://www.cmake.org/
 .. _mingwpy: https://mingwpy.github.io/
 
-Now download and extract the `latest MAD-X release`_.
+Now download and extract the latest `MAD-X release`_ and  `cpymad release`_,
+Alternatively, use git to retrieve the current development version (unstable):
 
-.. _latest MAD-X release: https://github.com/MethodicalAcceleratorDesign/MAD-X/releases
+.. code-block:: bat
 
-I recommend to build MAD-X as a *static* library as described below. This
-way, you won't need to carry any ``.dll`` files around and you won't run
-into version problems when having a multiple MAD-X library builds around.
+    conda install git
+    git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
+    git clone https://github.com/hibtc/cpymad
 
-However, it is somewhat easier to link cpymad *dynamically* against MAD-X on
-python versions above 3.4, i.e. using a DLL. This comes at the cost of having
-to redistribute the ``madx.dll`` along. The choice is yours.
+.. _MAD-X release: https://github.com/MethodicalAcceleratorDesign/MAD-X/releases
+.. _cpymad release: https://github.com/hibtc/cpymad/releases
 
-Static build:
+In the following there are two alternatives how to build MAD-X:
+
+- I recommend to build MAD-X as a *static* library as described below. This
+  way, you won't need to carry any ``.dll`` files around and you won't run
+  into version problems when having a multiple MAD-X library builds around.
+
+- However, it is somewhat easier to link cpymad *dynamically* against MAD-X on
+  python versions above 3.4, i.e. using a DLL. This comes at the cost of
+  having to redistribute the ``madx.dll`` along. The choice is yours.
+
+
+Static build (recommended)
+==========================
+
+In the **python 3.4** environment, type:
 
 .. code-block:: bat
 
     mkdir MAD-X\build-static
     cd MAD-X\build-static
+
     cmake .. ^
         -G "MinGW Makefiles" ^
         -DBUILD_SHARED_LIBS=OFF ^
@@ -70,68 +81,28 @@ Static build:
         -DMADX_INSTALL_DOC=OFF ^
         -DCMAKE_INSTALL_PREFIX=..\install
 
-DLL build:
-
-.. code-block:: bat
-
-    mkdir MAD-X\build-shared
-    cd MAD-X\build-shared
-    cmake .. ^
-        -G "MinGW Makefiles" ^
-        -DBUILD_SHARED_LIBS=ON ^
-        -DMADX_STATIC=OFF ^
-        -DMADX_INSTALL_DOC=OFF ^
-        -DCMAKE_INSTALL_PREFIX=..\install
-
-The following step will build the library. This may take a few minutes, so go
-and grab a coffee meanwhile:
-
-.. code-block:: bat
-
-    mingw32-make
     mingw32-make install
+
+The final step will build the library. This may take a few minutes, so go
+and grab a coffee meanwhile.
 
 If all went well the last command will have installed binaries and library
 files to the :file:`%MADX%\\install` subfolder.
 
-Save the full path to the install directory in the ``MADXDIR`` enviroment
-variable, this variable will be used later by the ``setup.py`` script to
-locate the MAD-X headers and library:
+Save the **absolute path** to this install directory in the ``MADXDIR``
+enviroment variable, this variable will be used later by the ``setup.py``
+script to locate the MAD-X headers and library, for example:
 
 .. code-block:: bat
 
     set "MADXDIR=C:\Users\<....>\MAD-X\install"
 
 
-Get cpymad source
-~~~~~~~~~~~~~~~~~
+Targetting py35 or above
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-Next, download and extract the latest `cpymad release`_. Alternatively, use
-git to retrieve the current development version (unstable):
-
-.. code-block:: bat
-
-    git clone https://github.com/hibtc/cpymad
-
-
-Build cpymad on py34 or below
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Go to the cpymad folder and build a so called wheel_, which is essentially a
-zip archive containing all the files ready for installation:
-
-.. code-block:: bat
-
-    conda install wheel cython
-    python setup.py build_ext -c mingw32 --static --madxdir=../MAD-X/install
-    python setup.py bdist_wheel
-
-If you built MAD-X as DLL (dynamic build), just replace ``--static`` in the
-second line by ``--shared``.
-
-
-Build cpymad on py35 or above
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If you want to use cpymad on a python version later than 3.4, read here,
+otherwise skip to the next section.
 
 Create an environment with your target python version, e.g.:
 
@@ -140,47 +111,30 @@ Create an environment with your target python version, e.g.:
     conda create -n py37 python=3.7 wheel cython
     conda activate py37
 
-If you created MAD-X as DLL, the build should work essentially the same as
-on earlier python versions, except that you have to install the Visual C
-compiler first and activate the compiler environment as follows:
+Now comes the tricky part, you will will have to "cross-compile" (sort of) the
+cython extension on the target platform with GCC from mingwpy in python 3.4.
+
+First, set a few environment variables with the path of GCC, the python prefix
+of the target python version and certain platform/abi tags. For a 64bit
+python 3.7 this would look as follows:
 
 .. code-block:: bat
-
-    call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
-
-Then
-
-.. code-block:: bat
-
-    python setup.py build_ext --shared --madxdir=<madx-install-path>
-    python setup.py bdist_wheel
-
-Now comes the tricky part, if you have built MAD-X as a static library, you
-will have to "cross-compile" (sort of) the cython extension on the target
-platform with GCC from mingwpy in python 3.4. First, set a few environment
-variables with the path of GCC, the python prefix of the target python version
-and certain platform/abi tags:
-
-.. code-block:: bat
-
-    for /f %G in ('python -c "import sys; print(sys.prefix)"') do (
-        set "gcc=%~fG\..\py34\Scripts\gcc.exe"
-    )
-
-    for /f %G in ('python -c "import sys; print(sys.prefix)"') do (
-        set "pythondir=%~fG"
-    )
 
     set py_ver=37
     set dir_tag=win-amd64-3.7
     set file_tag=cp37-win_amd64
 
-    set tempdir=build\temp.%dir_tag%\Release\src\cpymad
-    set libdir=build\lib.%dir_tag%\cpymad
-
 And use this for good as follows:
 
 .. code-block:: bat
+
+    for /f %G in ('python -c "import sys; print(sys.prefix)"') do (
+        set "gcc=%~fG\..\py34\Scripts\gcc.exe"
+        set "pythondir=%~fG"
+    )
+
+    set tempdir=build\temp.%dir_tag%\Release\src\cpymad
+    set libdir=build\lib.%dir_tag%\cpymad
 
     mkdir %tempdir%
     mkdir %libdir%
@@ -207,19 +161,173 @@ And use this for good as follows:
         -lquadmath %pythondir%\python%py_ver%.dll -lmsvcr100 ^
         -o %libdir%\libmadx.%file_tag%.pyd
 
-    python setup.py build_wheel
+Now skip to the final topic: Installation_.
 
 
-Install cpymad
+Targetting py34 or below
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+This works only if you are planning to **use** cpymad on an old python
+version, on 3.4 or below.
+
+Make sure that you are in a conda environment with the targeted python version
+and type:
+
+.. code-block:: bat
+
+    conda install wheel cython
+    python setup.py build_ext -c mingw32 --static --madxdir=%MADXDIR%
+
+If this worked, go to the final topic: Installation_.
+
+
+Dynamic build (easier)
+======================
+
+The DLL build works very similar, with a few minor differences. Type the
+following:
+
+.. code-block:: bat
+
+    mkdir MAD-X\build-shared
+    cd MAD-X\build-shared
+
+    cmake .. ^
+        -G "MinGW Makefiles" ^
+        -DBUILD_SHARED_LIBS=ON ^
+        -DMADX_STATIC=OFF ^
+        -DMADX_INSTALL_DOC=OFF ^
+        -DCMAKE_INSTALL_PREFIX=..\install
+
+    mingw32-make install
+
+If all went well the last command will have installed binaries and library
+files to the :file:`%MADX%\\install` subfolder.
+
+Save the **absolute path** to the install directory in the ``MADXDIR``
+enviroment variable, this variable will be used later by the ``setup.py``
+script to locate the MAD-X headers and library. For example:
+
+.. code-block:: bat
+
+    set "MADXDIR=C:\Users\<....>\MAD-X\install"
+
+You are now free to choose between mingw or Microsoft Visual Studios to build
+the cpymad C extension.
+
+
+mingw
+~~~~~
+
+For py35 or above
+`````````````````
+
+This works according to the static case (`Targetting py35 or above`_), but you
+should drop all the library dependencies from the linking step (i.e. the last
+command), leaving only ``-lmadx`` and the ``pythonXX.dll``.
+
+
+For py34 or below
+`````````````````
+
+Just enter:
+
+.. code-block:: bat
+
+    conda install wheel cython
+    python setup.py build_ext -c mingw32 --shared --madxdir=%MADXDIR%
+
+That should be all, proceed to: Installation_.
+
+
+Visual Studios
 ~~~~~~~~~~~~~~
 
+Python's official binaries are all compiled with the Visual C compiler and
+therefore this is the only officially supported method to build C extensions.
+I will list it here for completeness.
+
+First, look up `the correct Visual Studio version`_ and download and install
+it directly from microsoft. It is possible that older versions are not
+supported anymore.
+
+.. _the correct Visual Studio version: https://wiki.python.org/moin/WindowsCompilers#Which_Microsoft_Visual_C.2B-.2B-_compiler_to_use_with_a_specific_Python_version_.3F
+
+After that, activate the Visual Studio tools by calling ``vcvarsall.bat``.
+Depending on your Visual Studio version and install path, this might look like
+this:
+
+.. code-block:: bat
+
+    call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
+
+Finally, build cpymad:
+
+.. code-block:: bat
+
+    conda create -n py37 python=3.7
+    conda activate py37
+    conda install wheel cython
+    python setup.py build_ext --shared --madxdir=%MADXDIR%
+
+
+Installation
+============
+
+If you have arrived here, you have most of the work behind you. At this point,
+you should have successfully built the python C extension.
+
+For users
+~~~~~~~~~
+
+We now proceed to build a so called wheel_. Wheels are zip archives containing
+all the files ready for installation, as well as some metadata such as version
+numbers etc. The wheel can be built as follows:
+
+.. code-block:: bat
+
+    python setup.py bdist_wheel
+
 The ``.whl`` file is named after the package and its target platform. This
-file can now be used for installation like so:
+file can now be used for installation on this or any other machine running the
+same operating system and python version. Install as follows:
 
 .. code-block:: bat
 
     pip install dist\cpymad-0.17.3-cp27-none-win32.whl
 
+Finally, do a quick check that your cpymad installation is working by typing
+the following:
 
-.. _cpymad release: https://github.com/hibtc/cpymad/releases
+.. code-block:: bat
+
+    python -c "import cpymad.libmadx as l; l.start()"
+
+The MAD-X startup banner should appear. Congratulations, you are now free to
+delete the MAD-X and cpymad folders (but keep your wheel!).
+
 .. _wheel: https://wheel.readthedocs.org/en/latest/
+
+
+For developers
+~~~~~~~~~~~~~~
+
+If you plan on changing cpymad code, do the following instead:
+
+.. code-block:: bat
+
+    pip install -e .
+
+Quickcheck your installation for a MAD-X startup banner by typing the
+following:
+
+.. code-block:: bat
+
+    python -c "import cpymad.libmadx as l; l.start()"
+
+You can also run more tests as follows:
+
+.. code-block:: bat
+
+    python test\test_madx.py
+    python test\test_util.py
