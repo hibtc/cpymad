@@ -1,10 +1,10 @@
+.. highlight:: python
+
 Getting Started
 ~~~~~~~~~~~~~~~
 
 The basic way to use cpymad is to create a :class:`~cpymad.madx.Madx`
-instance that can be used to control and access the state of a MAD-X process:
-
-.. code-block:: python
+instance that can be used to control and access the state of a MAD-X process::
 
     from cpymad.madx import Madx
     madx = Madx()
@@ -28,9 +28,7 @@ Basic MAD-X commands
 Now that you started MAD-X, most MAD-X commands can be executed using the
 corresponding method on the :class:`~cpymad.madx.Madx` instance (except in the
 case where the name of the command conflicts with another property, in this
-case, see the `command()`_ property). For example:
-
-.. code-block:: python
+case, see the `command()`_ property). For example::
 
     madx.option(echo=True)
 
@@ -52,17 +50,13 @@ additional functionality over the raw MAD-X commands:
 
 :meth:`~cpymad.madx.Madx.call` allows to temporarily change the directory to
 the one of the executed file by setting the optional ``chdir`` parameter to
-``True``:
-
-.. code-block:: python
+``True``::
 
     # change directory to `/path/to/your/` during CALL:
     madx.call('/path/to/your/file.madx', chdir=True)
 
 :meth:`~cpymad.madx.Madx.twiss` returns the resulting twiss table_, which can
-be used conveniently for your own analysis, e.g.:
-
-.. code-block:: python
+be used conveniently for your own analysis, e.g.::
 
     twiss = madx.twiss(sequence='LEBT', betx=1, bety=1)
 
@@ -87,9 +81,7 @@ input()
 The method responsible for feeding textual input to MAD-X is
 :meth:`~cpymad.madx.Madx.input` method. It is called with a single string
 argument that will be forwarded as input to the MAD-X interpreter. For
-example:
-
-.. code-block:: python
+example::
 
     madx.input('CALL, FILE="fodo.madx";')
 
@@ -102,33 +94,25 @@ While it can be necessary to use :meth:`~cpymad.madx.Madx.input` for some
 constructs like macros or loops, most of the time your most favorable option
 is to use the :attr:`~cpymad.madx.Madx.command` attribute. It provides syntactic
 sugar for composing regular MAD-X commands from python variables and feeding
-the generated command string to :meth:`~cpymad.madx.Madx.input`.
-
-.. code-block:: python
+the generated command string to :meth:`~cpymad.madx.Madx.input`::
 
     madx.command.beam(sequence='fodo', particle='PROTON')
 
 If you need to override how :attr:`~cpymad.madx.Madx.command` generates the
 command string (argument order/formatting), you can pass strings as positional
-arguments. For example:
-
-.. code-block:: python
+arguments. For example::
 
     madx.command.beam('sequence=fodo', particle='PROTON')
 
 Note that positional and keyword parameters can be mixed.
 
 A single trailing underscore will be stripped from the attribute name. This is
-useful for MAD-X commands that are python keywords:
-
-.. code-block:: python
+useful for MAD-X commands that are python keywords::
 
     madx.command.global_(sequence='cassps', Q1=26.58)
 
 In order to clone a command or element (colon syntax in MAD-X), use the
-:meth:`~cpymad.madx.Command.clone` method:
-
-.. code-block:: python
+:meth:`~cpymad.madx.Command.clone` method::
 
     madx.command.quadrupole.clone('QP', AT=2, L=1)
 
@@ -191,9 +175,7 @@ show *actions*.
 version
 -------
 
-Access the MAD-X version:
-
-.. code-block:: python
+Access the MAD-X version::
 
     print(madx.version)
     # individual parts
@@ -206,9 +188,7 @@ Access the MAD-X version:
 elements
 --------
 
-Access to global elements:
-
-.. code-block:: python
+Access to global elements::
 
     # list of element names:
     print(list(madx.elements))
@@ -228,9 +208,7 @@ Note that elements support dict-like item access to retrieve properties (i.e.
 table
 -----
 
-View of MAD-X tables:
-
-.. code-block:: python
+View of MAD-X tables::
 
     # list of existing table names
     print(list(madx.table)):
@@ -249,9 +227,7 @@ View of MAD-X tables:
 globals
 -------
 
-Dictionary-like view of the MAD-X global variables:
-
-.. code-block:: python
+Dictionary-like view of the MAD-X global variables::
 
     # list of variable names
     print(list(madx.globals))
@@ -259,9 +235,7 @@ Dictionary-like view of the MAD-X global variables:
     # value of a builtin variable
     print(madx.globals.PI)
 
-Evaluate an expression in the MAD-X interpreter:
-
-.. code-block:: python
+Evaluate an expression in the MAD-X interpreter::
 
     print(madx.eval('sb->angle / pi * 180'))
 
@@ -269,9 +243,7 @@ Evaluate an expression in the MAD-X interpreter:
 sequence
 --------
 
-Dictionary like view of all defined sequences:
-
-.. code-block:: python
+Dictionary like view of all defined sequences::
 
     # list of sequence names
     print(list(madx.sequence))
@@ -295,9 +267,7 @@ Logging commands
 For the purpose of debugging, reproducibility and transparency in general, it
 is important to be able to get a listing of the user input sent to
 MAD-X. This can be controlled using the ``command_log`` parameter. It accepts
-file names, arbitrary callables and file-like objects as follows:
-
-.. code-block:: python
+file names, arbitrary callables and file-like objects as follows::
 
     madx = Madx(command_log="log.madx")
     madx = Madx(command_log=print)
@@ -309,23 +279,17 @@ Redirecting output
 
 The output of the MAD-X interpreter can be controlled using the ``redirect``
 parameter of the :class:`~cpymad.madx.Madx` constructor. It allows to disable
-the output completely:
-
-.. code-block:: python
+the output completely::
 
     madx = Madx(stdout=False)
 
-redirect it to a file:
-
-.. code-block:: python
+redirect it to a file::
 
     with open('madx_output.log', 'w') as f:
         madx = Madx(stdout=f)
 
 or send the MAD-X output directly to an in-memory pipe without going through
-the filesystem:
-
-.. code-block:: python
+the filesystem::
 
     madx = Madx(stdout=subprocess.PIPE)
     pipe = m._process.stdout

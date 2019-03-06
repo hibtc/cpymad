@@ -1,9 +1,10 @@
+.. highlight:: bash
+
 Unix
 ----
-There are now binary wheels for most supported target platforms. With these
-the installation is as simple as:
 
-.. code-block:: bash
+There are now binary wheels for most supported target platforms. With these
+the installation is as simple as::
 
     pip install cpymad
 
@@ -31,24 +32,18 @@ programs:
 - gcc >= 4.8, along with gfortran (other C/C++/fortran compiler suites may
   work too but are untested as of now)
 
-Download the `latest MAD-X release`_ `from github`_:
-
-.. code-block:: bash
+Download the `latest MAD-X release`_ `from github`_::
 
     wget https://github.com/MethodicalAcceleratorDesign/MAD-X/archive/5.04.02.tar.gz
     tar -xzf MAD-X-5.04.02.tar.gz
 
-or use directly the source code from master (unstable):
-
-.. code-block:: bash
+or use directly the source code from master (unstable)::
 
     git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
 
 We will do an out-of-source build in a ``build/`` subdirectory. This way, you
 can easily delete the ``build`` directory and restart if anything goes wrong.
-The basic process looks as follows:
-
-.. code-block:: bash
+The basic process looks as follows::
 
     cd MAD-X
     mkdir build && cd build
@@ -126,16 +121,12 @@ you can download all dependencies using the command ``pip download cpymad``.
 
 We will need to tell the cpymad setup script to use our MAD-X installation
 path from before. The easiest way to do this is by setting an environment
-variable:
-
-.. code-block:: bash
+variable::
 
     export MADXDIR=/PATH/TO/CMAKE_INSTALL_PREFIX
 
 If you did build MAD-X with ``-DBUILD_SHARED_LIBS`` or ``-DMADX_STATIC``
-you should also set the corresponding option:
-
-.. code-block:: bash
+you should also set the corresponding option::
 
     export SHARED=1
 
@@ -143,9 +134,7 @@ you should also set the corresponding option:
 
     export STATIC=1
 
-With these settings in place, you can try installing cpymad as before:
-
-.. code-block:: bash
+With these settings in place, you can try installing cpymad as before::
 
     pip install --no-binary=cpymad cpymad
 
@@ -155,46 +144,34 @@ Building cpymad manually
 
 If the installation fails or produces an unloadable version of cpymad, fetch
 `latest cpymad release`_ from PyPI (the idea is that this grants you more
-control over the build options and alter the setup script if necessary):
-
-.. code-block:: bash
+control over the build options and alter the setup script if necessary)::
 
     pip download --no-binary=cpymad --no-deps cpymad
     tar -xzf cpymad-*.tar.gz
 
-Alternatively, fetch the very latest cpymad_ source_ from git:
-
-.. code-block:: bash
+Alternatively, fetch the very latest cpymad_ source_ from git::
 
     git clone https://github.com/hibtc/cpymad
 
 After that, build cpymad and enter development mode so that changes in the
 local directory will take effect immediately (don't forget to export the MAD-X
-path as above):
-
-.. code-block:: bash
+path as above)::
 
     cd cpymad
     python setup.py build_ext
 
 The advantage with this method is that you can pass additional compiler or
 linker arguments to the ``build_ext`` command. For example, if you happened to
-build MAD-X with blas/lapack, you may need to pass additional linklibs:
-
-.. code-block:: bash
+build MAD-X with blas/lapack, you may need to pass additional linklibs::
 
     python setup.py build_ext -lblas -llapack
 
 Once you get cpymad working you may wish to make your installation more
-permanent, by e.g. using the ``install`` command:
-
-.. code-block:: bash
+permanent, by e.g. using the ``install`` command::
 
     python setup.py install
 
-Or even creating a wheel that can be installed using pip:
-
-.. code-block:: bash
+Or even creating a wheel that can be installed using pip::
 
     python setup.py bdist_wheel
     pip install dist/cpymad-*.whl

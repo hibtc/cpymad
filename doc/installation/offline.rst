@@ -1,11 +1,11 @@
+.. highlight:: bat
+
 Offline installation
 ====================
 
 If you want to install to a target machine without internet access (or with
 firewall), you can manually download_ the ``.whl`` file for your platform and
-then use pip_ to install that particular file. For example:
-
-.. code-block:: bat
+then use pip_ to install that particular file. For example::
 
     pip install cpymad-0.17.3-cp27-none-win32.whl
 
@@ -15,16 +15,12 @@ archives for these packages can be conveniently downloaded from here:
 `Unofficial Windows Binaries for Python Extension Packages`_.
 
 To simplify this process, ``pip`` can automatically download all required
-files:
-
-.. code-block:: bat
+files::
 
     mkdir packages
     pip download -d packages cpymad
 
-and then later install them in the offline environment like this:
-
-.. code-block:: bat
+and then later install them in the offline environment like this::
 
     pip install -f packages cpymad
 

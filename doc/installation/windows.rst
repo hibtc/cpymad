@@ -1,10 +1,10 @@
+.. highlight:: bat
+
 Windows
 -------
 
 On windows, I provide `built versions`_ for some python versions. If your
-platform is supported, you can just run:
-
-.. code-block:: bat
+platform is supported, you can just run::
 
     pip install cpymad
 
@@ -30,9 +30,7 @@ After installing conda, open the conda command prompt. In order to build
 MAD-X, first **create a python 3.4** environment with cmake_ and mingwpy_ --
 even if you plan using cpymad on a higher python version! If you want cpymad
 on py2.7 or 3.3 you can use the target python version for building MAD-X
-instead of 3.4.
-
-.. code-block:: bat
+instead of 3.4::
 
     conda create -n py34 python=3.4 cmake
     conda activate py34
@@ -42,9 +40,8 @@ instead of 3.4.
 .. _mingwpy: https://mingwpy.github.io/
 
 Now download and extract the latest `MAD-X release`_ and  `cpymad release`_,
-Alternatively, use git to retrieve the current development version (unstable):
-
-.. code-block:: bat
+Alternatively, use git to retrieve the current development version
+(unstable)::
 
     conda install git
     git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
@@ -67,9 +64,7 @@ In the following there are two alternatives how to build MAD-X:
 Static build (recommended)
 ==========================
 
-In the **python 3.4** environment, type:
-
-.. code-block:: bat
+In the **python 3.4** environment, type::
 
     mkdir MAD-X\build-static
     cd MAD-X\build-static
@@ -91,9 +86,7 @@ files to the :file:`%MADX%\\install` subfolder.
 
 Save the **absolute path** to this install directory in the ``MADXDIR``
 enviroment variable, this variable will be used later by the ``setup.py``
-script to locate the MAD-X headers and library, for example:
-
-.. code-block:: bat
+script to locate the MAD-X headers and library, for example::
 
     set "MADXDIR=C:\Users\<....>\MAD-X\install"
 
@@ -104,9 +97,7 @@ Targetting py35 or above
 If you want to use cpymad on a python version later than 3.4, read here,
 otherwise skip to the next section.
 
-Create an environment with your target python version, e.g.:
-
-.. code-block:: bat
+Create an environment with your target python version, e.g.::
 
     conda create -n py37 python=3.7 wheel cython
     conda activate py37
@@ -116,17 +107,13 @@ cython extension on the target platform with GCC from mingwpy in python 3.4.
 
 First, set a few environment variables with the path of GCC, the python prefix
 of the target python version and certain platform/abi tags. For a 64bit
-python 3.7 this would look as follows:
-
-.. code-block:: bat
+python 3.7 this would look as follows::
 
     set py_ver=37
     set dir_tag=win-amd64-3.7
     set file_tag=cp37-win_amd64
 
-And use this for good as follows:
-
-.. code-block:: bat
+And use this for good as follows::
 
     for /f %G in ('python -c "import sys; print(sys.prefix)"') do (
         set "gcc=%~fG\..\py34\Scripts\gcc.exe"
@@ -171,9 +158,7 @@ This works only if you are planning to **use** cpymad on an old python
 version, on 3.4 or below.
 
 Make sure that you are in a conda environment with the targeted python version
-and type:
-
-.. code-block:: bat
+and type::
 
     conda install wheel cython
     python setup.py build_ext -c mingw32 --static --madxdir=%MADXDIR%
@@ -185,9 +170,7 @@ Dynamic build (easier)
 ======================
 
 The DLL build works very similar, with a few minor differences. Type the
-following:
-
-.. code-block:: bat
+following::
 
     mkdir MAD-X\build-shared
     cd MAD-X\build-shared
@@ -206,9 +189,7 @@ files to the :file:`%MADX%\\install` subfolder.
 
 Save the **absolute path** to the install directory in the ``MADXDIR``
 enviroment variable, this variable will be used later by the ``setup.py``
-script to locate the MAD-X headers and library. For example:
-
-.. code-block:: bat
+script to locate the MAD-X headers and library. For example::
 
     set "MADXDIR=C:\Users\<....>\MAD-X\install"
 
@@ -230,9 +211,7 @@ command), leaving only ``-lmadx`` and the ``pythonXX.dll``.
 For py34 or below
 `````````````````
 
-Just enter:
-
-.. code-block:: bat
+Just enter::
 
     conda install wheel cython
     python setup.py build_ext -c mingw32 --shared --madxdir=%MADXDIR%
@@ -255,15 +234,11 @@ supported anymore.
 
 After that, activate the Visual Studio tools by calling ``vcvarsall.bat``.
 Depending on your Visual Studio version and install path, this might look like
-this:
-
-.. code-block:: bat
+this::
 
     call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
 
-Finally, build cpymad:
-
-.. code-block:: bat
+Finally, build cpymad::
 
     conda create -n py37 python=3.7
     conda activate py37
@@ -282,24 +257,18 @@ For users
 
 We now proceed to build a so called wheel_. Wheels are zip archives containing
 all the files ready for installation, as well as some metadata such as version
-numbers etc. The wheel can be built as follows:
-
-.. code-block:: bat
+numbers etc. The wheel can be built as follows::
 
     python setup.py bdist_wheel
 
 The ``.whl`` file is named after the package and its target platform. This
 file can now be used for installation on this or any other machine running the
-same operating system and python version. Install as follows:
-
-.. code-block:: bat
+same operating system and python version. Install as follows::
 
     pip install dist\cpymad-0.17.3-cp27-none-win32.whl
 
 Finally, do a quick check that your cpymad installation is working by typing
-the following:
-
-.. code-block:: bat
+the following::
 
     python -c "import cpymad.libmadx as l; l.start()"
 
@@ -312,22 +281,16 @@ delete the MAD-X and cpymad folders (but keep your wheel!).
 For developers
 ~~~~~~~~~~~~~~
 
-If you plan on changing cpymad code, do the following instead:
-
-.. code-block:: bat
+If you plan on changing cpymad code, do the following instead::
 
     pip install -e .
 
 Quickcheck your installation for a MAD-X startup banner by typing the
-following:
-
-.. code-block:: bat
+following::
 
     python -c "import cpymad.libmadx as l; l.start()"
 
-You can also run more tests as follows:
-
-.. code-block:: bat
+You can also run more tests as follows::
 
     python test\test_madx.py
     python test\test_util.py
