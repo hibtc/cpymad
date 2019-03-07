@@ -26,6 +26,7 @@ instructions below:
 
    unix
    windows
+   offline
    troubleshooting
 
 Note that it is recommended to use python 3, preferrably 3.6 or later. As of
