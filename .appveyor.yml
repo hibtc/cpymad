@@ -46,7 +46,7 @@ install:
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
 
   # build MAD-X
-  - conda create -qf -n madx python=3.4 patch cmake pywget 7za
+  - conda create -qf -n madx python=3.4 patch cmake
   - activate madx
   - conda install -q -c conda-forge mingwpy
   - powershell -File utils\build_madx.ps1
