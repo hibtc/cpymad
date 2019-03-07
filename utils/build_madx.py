@@ -61,16 +61,14 @@ def build_madx(source_dir, build_dir, install_dir,
 
 
 def apply_patches(source_dir, patch_dir):
-    import patch
+    patch_dir = os.path.abspath(patch_dir)
     patches = (glob.glob(os.path.join(patch_dir, '*.diff')) +
                glob.glob(os.path.join(patch_dir, '*.patch')))
     for filename in patches:
         print("Applying patch: {!r}".format(filename))
-        patchset = patch.fromfile(filename)
-        success = patchset.apply(1, root=source_dir)
-        if not success:
-            print("Failed to apply patch! Exitting...")
-            sys.exit(1)
+        with open(filename) as f:
+            with chdir(source_dir):
+                subprocess.check_call(['patch', '-p1'], stdin=f)
 
 
 @contextmanager
