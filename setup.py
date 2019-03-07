@@ -1,23 +1,33 @@
 # encoding: utf-8
 """
-Installation script for cpymad.
+Setup script for cpymad.
 
 Usage:
-    python setup.py install --madxdir=/path/to/madx/installation
+    python setup.py build_wheel --madxdir=/path/to/madx/installation
+
+This script is meant only for packagers and developers and can be used to
+install cpymad or create installers assuming you have already built MAD-X
+beforehand.
 
 For more information, see
     http://hibtc.github.io/cpymad/installation
 """
 
+# Now that we distribute wheels for most supported platforms we do not attempt
+# to build MAD-X automatically! These are the preferred method of installation
+# for most users while for packagers/developers it is preferrable to have
+# direct control over the MAD-X build process itself. Therefore, there are few
+# who would actually profit from automatic setup. Furthermore, building MAD-X
+# in setup.py adds a lot of complexity. If you don't believe me, take a look
+# at the commit that first added this paragraph (can be identified using `git
+# blame`) and the simplifications that were possible in the following commits.
+
 from __future__ import print_function
 
 from setuptools import setup, find_packages, Extension
-from setuptools.command.build_ext import build_ext as _build_ext
 from distutils.util import get_platform, convert_path
 from distutils import sysconfig
-from distutils.errors import PreprocessError, CompileError
 
-from textwrap import dedent
 import sys
 import os
 
@@ -35,6 +45,20 @@ except ImportError:
 IS_WIN = get_platform().startswith('win')
 
 
+# We parse command line options using our own mechanim. We could use
+# build_ext.user_options instead, but then these parameters can be passed
+# only to the 'build_ext' command, not to 'build', 'develop', or
+# 'install'.
+OPTIONS = {
+    'madxdir':  'arg',
+    'static':   'opt',
+    'shared':   'opt',
+    'lapack':   'opt',
+    'blas':     'opt',
+    'X11':      'opt',
+}
+
+
 def fix_distutils_sysconfig_mingw():
     """
     When using windows and MinGW, in distutils.sysconfig the compiler (CC) is
@@ -44,132 +68,6 @@ def fix_distutils_sysconfig_mingw():
     """
     if sysconfig.get_config_var('CC') is None:
         sysconfig._config_vars['CC'] = 'gcc'
-
-
-class build_ext(_build_ext):
-
-    # We parse command line options using our own mechanim… We could use
-    # build_ext.user_options instead, but then these parameters can be passed
-    # only to the 'build_ext' command, not to 'build', 'develop', or
-    # 'install'…
-    options = {
-        'madxdir':  'arg',
-        'static':   'opt',
-        'shared':   'opt',
-        'lapack':   'opt',
-        'blas':     'opt',
-        'X11':      'opt',
-    }
-    optvals = {}
-
-    def build_extension(self, ext):
-        ext.__dict__.update(get_extension_args(**self.get_optvals()))
-        try:
-            # Return if the extension has already been built or MAD-X is
-            # available. This prevents us from unnecessary work for example
-            # when performing the `install` stage without passing `--madxdir`
-            # after already having done `build_ext` successfully:
-            return _build_ext.build_extension(self, ext)
-        # NOTE that we don't catch LinkerError since that indicates that MAD-X
-        # is available but somehow missconfigured and we should never attempt
-        # to download/rebuild in that case:
-        except (PreprocessError, CompileError):
-            # Stop if the user had specified `--madxdir` or if the error is
-            # not due to the inavailability of MAD-X. In these cases we should
-            # not start trying to build MAD-X:
-            if self.has_madx():
-                raise
-        print(dedent("""
-
-        Could not find MAD-X development files.
-
-        We will now try to download and build MAD-X for you. This may
-        take several minutes (depending on your internet connection
-        and overall system performance), and requires recent versions
-        of the following programs:
-
-            - cmake
-            - gcc
-            - gfortran
-
-        In case of problems, please build MAD-X manually and then pass
-        the installation directory using the `--madxdir` argument to
-        `setup.py`. For further information please check the
-        installation instructions at:
-
-            http://hibtc.github.io/cpymad/installation/index.html
-
-        """), file=sys.stderr)
-        # If unspecified, let's build MAD-X without X11 (as this removes
-        # potential linking complications):
-        if self.optvals['X11'] is None:
-            self.optvals['X11'] = False
-        self.build_madx()
-        ext.__dict__.update(get_extension_args(**self.get_optvals()))
-        return _build_ext.build_extension(self, ext)
-
-    def has_madx(self):
-        return self.optvals['madxdir'] or self.check_dependency(dedent("""
-        #include "madX/madx.h"
-        int main(int argc, char* argv[])
-        {
-            madx_start();
-            return 0;
-        }
-        """))
-
-    def build_madx(self):
-        from utils.build_madx import install_madx
-        optvals = self.get_optvals()
-        self.optvals['madxdir'] = install_madx(
-            prefix=self.build_temp,
-            static=optvals['static'],
-            shared=optvals['shared'],
-            X11=optvals['X11'])
-
-    def check_dependency(self, c_code):
-        """Check if an external library can be found by trying to compile a
-        small program."""
-        # This method is needed to prevent us from downloading and building
-        # MAD-X on every error in the C code itself during development even
-        # if MAD-X is available.
-        print(dedent("""
-
-        No `--madxdir` specified. We will now try to check if the MAD-X
-        development files are already installed in a system directory.
-
-        If you have installed MAD-X in a non-standard or user directory,
-        please pass the `--madxdir=PATH` argument to `setup.py`.
-
-        """), file=sys.stderr)
-        import tempfile
-        import shutil
-        tmp_dir = tempfile.mkdtemp(prefix='tmp_cpymad_madx_')
-        tmp_bin = os.path.join(tmp_dir, 'test_madx')
-        tmp_src = tmp_bin + '.c'
-        with open(tmp_src, 'w') as f:
-            f.write(c_code)
-        ext_args = get_extension_args(**self.get_optvals())
-        try:
-            self.compiler.compile(
-                [tmp_src],
-                output_dir=tmp_dir,
-                include_dirs=ext_args['include_dirs'],
-                extra_postargs=ext_args['extra_compile_args'])
-            return True
-        except (PreprocessError, CompileError):
-            return False
-        finally:
-            shutil.rmtree(tmp_dir)
-
-    def get_optvals(self):
-        optvals = self.optvals.copy()
-        if optvals['static'] is None:
-            optvals['static'] = IS_WIN
-        # If unspecified, assume MAD-X was built without disabling X11:
-        if optvals['X11'] is None:
-            optvals['X11'] = not IS_WIN
-        return optvals
 
 
 def read_file(path):
@@ -185,54 +83,30 @@ def exec_file(path):
     return namespace
 
 
-def first_sections(document, heading_type, num_sections):
-    cur_section = 0
-    prev_line = None
-    for line in document.splitlines():
-        if line.startswith(heading_type*3) and set(line) == {heading_type}:
-            cur_section += 1
-            if cur_section == num_sections:
-                break
-        if prev_line is not None:
-            yield prev_line
-        prev_line = line
-
-
 def get_long_description():
     """Compose a long description for PyPI."""
-    long_description = None
     try:
-        long_description = read_file('README.rst').decode('utf-8')
-        changelog = read_file('CHANGES.rst').decode('utf-8')
-        changelog = "\n".join(first_sections(changelog, '=', 4)) + """
-Older versions
-==============
+        return read_file('README.rst').decode('utf-8') + """
+
+CHANGELOG
+=========
 
 The full changelog is available online in CHANGES.rst_.
 
 .. _CHANGES.rst: https://github.com/hibtc/cpymad/blob/master/CHANGES.rst
 """
-        long_description += '\n' + changelog
     except (IOError, UnicodeDecodeError):
-        pass
-    return long_description
+        return None
 
 
 def get_extension_args(madxdir, shared, static, **libs):
     """Get arguments for C-extension (include pathes, libraries, etc)."""
+    if optvals['static'] is None:
+        optvals['static'] = IS_WIN
+    if optvals['X11'] is None:
+        optvals['X11'] = not IS_WIN
     include_dirs = []
     library_dirs = []
-    if madxdir is None:
-        searchpaths = [
-            os.path.expanduser('~/.local'),
-            '/opt/madx',
-            '/usr/local',
-        ]
-        for d in searchpaths:
-            if os.path.exists(os.path.join(
-                    d, 'include', 'madX', 'madx.h')):
-                madxdir = d
-                break
 
     if madxdir:
         prefix = os.path.expanduser(madxdir)
@@ -278,7 +152,7 @@ def get_setup_args(optvals):
         ext_modules=cythonize([
             Extension('cpymad.libmadx',
                       sources=["src/cpymad/libmadx.pyx"],
-                      libraries=['madx']),
+                      **get_extension_args(**optvals)),
         ]),
         packages=find_packages('src'),
         package_dir={'': 'src'},
@@ -289,9 +163,6 @@ def get_setup_args(optvals):
             'numpy',
             'minrpc>=0.0.8',
         ],
-        cmdclass={'build_ext': type('build_ext', (build_ext, object), {
-            'optvals': optvals,
-        })},
     )
 
 
@@ -299,5 +170,5 @@ if __name__ == '__main__':
     sys.path.append(os.path.dirname(__file__))
     from utils.clopts import parse_opts
     fix_distutils_sysconfig_mingw()
-    optvals = parse_opts(sys.argv, build_ext.options)
+    optvals = parse_opts(sys.argv, OPTIONS)
     setup(**get_setup_args(optvals))

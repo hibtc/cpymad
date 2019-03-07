@@ -46,10 +46,10 @@ install:
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
 
   # build MAD-X
-  - conda create -qf -n madx python=3.4 patch
+  - conda create -qf -n madx python=3.4 patch cmake pywget 7za
   - activate madx
   - conda install -q -c conda-forge mingwpy
-  - python "utils\build_madx.py" %MADXVER% C:\ "%MADXDIR%" utils\patches
+  - utils\build_madx.bat
 
   # build cpymad
   - utils\build_wheels.bat
