@@ -77,8 +77,8 @@ function build_native($py_env)
     Remove-Item -ErrorAction Ignore src\cpymad\libmadx.c
     Remove-Item -ErrorAction Ignore src\cpymad\libmadx.pyd
 
-    conda activate .\envs\$py_env
-    call python setup.py build_ext -c mingw32 --static --madxdir=$MADXDIR
+    conda activate ".\envs\$py_env"
+    call python setup.py build_ext -c mingw32 --static "--madxdir=$MADXDIR"
     call python setup.py bdist_wheel
 }
 
@@ -102,7 +102,7 @@ function build_cross($py_env, $py_ver, $dir_tag, $file_tag)
     # `.pyd` in %libdir%) to prevent the final `python setup.py bdist_wheel`
     # command from trying trying to perform either of these steps with MSVC.
 
-    conda activate .\envs\$py_env
+    conda activate ".\envs\$py_env"
     $tempdir = "build\temp.$dir_tag\Release\src\cpymad"
     $libdir = "build\lib.$dir_tag\cpymad"
     mkdir -Force $tempdir
@@ -114,10 +114,10 @@ function build_cross($py_env, $py_ver, $dir_tag, $file_tag)
     call python setup.py build_py
 
     call $gcc -mdll -O -Wall `
-        -I$MADXDIR\include `
-        -I$pythondir\include `
-        -c src/cpymad/libmadx.c `
-        -o $tempdir\libmadx.obj `
+        "-I$MADXDIR\include" `
+        "-I$pythondir\include" `
+        -c "src/cpymad/libmadx.c" `
+        -o "$tempdir\libmadx.obj" `
         -std=gnu99
 
     # Linking directly against the `pythonXX.dll` is the only way I found to
@@ -126,11 +126,11 @@ function build_cross($py_env, $py_ver, $dir_tag, $file_tag)
     # WinPython, but fails on conda with large number of complaints about
     # about undefined references, such as `__imp__Py_NoneStruct`,
     call $gcc -shared -s `
-        $tempdir\libmadx.obj `
-        -L$MADXDIR\lib `
+        "$tempdir\libmadx.obj" `
+        "-L$MADXDIR\lib" `
         -lmadx -lptc -lgc-lib -lstdc++ -lgfortran `
-        -lquadmath $pythondir\python$py_ver.dll -lmsvcr100 `
-        -o $libdir\libmadx.$file_tag.pyd
+        -lquadmath "$pythondir\python$py_ver.dll" -lmsvcr100 `
+        -o "$libdir\libmadx.$file_tag.pyd"
 
     call python setup.py bdist_wheel
 }

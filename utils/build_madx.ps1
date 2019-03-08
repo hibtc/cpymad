@@ -33,7 +33,7 @@ $web.DownloadFile("$MADX_URL/$MADX_ZIP", $MADX_ZIP)
 $web.DownloadFile("$GC_URL/$GC_ZIP", $GC_ZIP)
 Expand-Archive -LiteralPath $MADX_ZIP -DestinationPath .
 Expand-Archive -LiteralPath $GC_ZIP -DestinationPath .
-mv bdwgc-$GC_VER $GC_DIR
+mv "bdwgc-$GC_VER" $GC_DIR
 
 # Patch garbage collector to newer version, see #41:
 call patch -d $MADX_DIR -p1 -i "$PSScriptRoot\patches\gc-8.0.2.diff"
@@ -44,7 +44,7 @@ cd "$MADX_DIR\build"
 call cmake .. -G 'MinGW Makefiles' `
     -DMADX_ONLINE=OFF `
     -DMADX_INSTALL_DOC=OFF `
-    -DCMAKE_INSTALL_PREFIX=$MADXDIR `
+    "-DCMAKE_INSTALL_PREFIX=$MADXDIR" `
     -DCMAKE_BUILD_TYPE=Release `
     -DMADX_STATIC=ON `
     -DBUILD_SHARED_LIBS=OFF
