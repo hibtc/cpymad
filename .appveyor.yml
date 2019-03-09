@@ -36,25 +36,23 @@ install:
 
   # Configure and activate conda:
   - if "%PLATFORM%" == "x64" set "CONDAPATH=%CONDAPATH%-x64"
-  - set "PATH=%CONDAPATH%\bin;%CONDAPATH%\Scripts;%PATH%"
+  - set "PATH=%CONDAPATH%\condabin;%CONDAPATH%\Scripts;%PATH%"
   - conda config --set always_yes yes --set changeps1 yes
   - conda update -q conda
+  - conda init powershell
   - if "%PLATFORM%" == "x86" set "CONDA_FORCE_32BIT=1"
 
   # Remove git from path, since there is a `sh.exe` here that will cause CMake
   # to complain and stop:
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
 
-  # build MAD-X
-  - conda create -qf -n madx python=3.4 patch cmake
-  - activate madx
-  - conda install -q -c conda-forge mingwpy
-  - powershell -File utils\build_madx.ps1
-
   # build cpymad
+  - powershell -File utils\build_madx.ps1
   - powershell -File utils\build_wheels.ps1
 
   # install cpymad
+  - conda create -n py37 python=3.7
+  - conda activate py37
   - conda install -q numpy
   - pip install minrpc
   - pip install --no-index -f dist cpymad

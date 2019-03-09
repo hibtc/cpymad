@@ -24,6 +24,10 @@ function call()
     if (!$?) { throw "Exit code $LastExitCode from command `"$args`"." }
 }
 
+conda create -qf -n madx python=3.4 patch cmake
+conda activate madx
+conda install -q -c conda-forge mingwpy
+
 $web = New-Object System.Net.WebClient
 $web.DownloadFile("$MADX_URL/$MADX_ZIP", $MADX_ZIP)
 $web.DownloadFile("$GC_URL/$GC_ZIP", $GC_ZIP)
