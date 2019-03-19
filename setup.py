@@ -3,7 +3,7 @@
 Setup script for cpymad.
 
 Usage:
-    python setup.py build_wheel --madxdir=/path/to/madx/installation
+    python setup.py bdist_wheel --madxdir=/path/to/madx/installation
 
 This script is meant only for packagers and developers and can be used to
 install cpymad or create installers assuming you have already built MAD-X
@@ -83,22 +83,6 @@ def exec_file(path):
     return namespace
 
 
-def get_long_description():
-    """Compose a long description for PyPI."""
-    try:
-        return read_file('README.rst').decode('utf-8') + """
-
-CHANGELOG
-=========
-
-The full changelog is available online in CHANGES.rst_.
-
-.. _CHANGES.rst: https://github.com/hibtc/cpymad/blob/master/CHANGES.rst
-"""
-    except (IOError, UnicodeDecodeError):
-        return None
-
-
 def get_extension_args(madxdir, shared, static, **libs):
     """Get arguments for C-extension (include pathes, libraries, etc)."""
     if optvals['static'] is None:
@@ -135,7 +119,7 @@ def get_extension_args(madxdir, shared, static, **libs):
 
 def get_setup_args(optvals):
     """Accumulate metadata for setup."""
-    long_description = get_long_description()
+    long_description = read_file('README.rst').decode('utf-8')
     metadata = exec_file('src/cpymad/__init__.py')
     return dict(
         name='cpymad',
@@ -158,8 +142,9 @@ def get_setup_args(optvals):
         package_dir={'': 'src'},
         zip_safe=False,             # zip is bad for redistributing shared libs
         include_package_data=True,  # include files matched by MANIFEST.in
+        python_requires='>=2.7, !=3.0, !=3.1, !=3.2',
         install_requires=[
-            'setuptools>=18.0',
+            'importlib_resources',
             'numpy',
             'minrpc>=0.0.8',
         ],

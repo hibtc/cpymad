@@ -113,3 +113,11 @@ following continuous integration (CI) systems:
 .. |Python| image::     https://img.shields.io/pypi/pyversions/cpymad.svg
    :target:             https://pypi.org/project/cpymad#files
    :alt:                Python versions
+
+
+CHANGELOG
+=========
+
+The full changelog is available online in CHANGES.rst_.
+
+.. _CHANGES.rst: https://github.com/hibtc/cpymad/blob/master/CHANGES.rst

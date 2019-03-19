@@ -56,7 +56,7 @@ install:
 
   # install cpymad
   - conda install -q numpy
-  - pip install minrpc
+  - pip install minrpc importlib_resources
   - pip install --no-index -f dist cpymad
 
   # Install build/test deps:

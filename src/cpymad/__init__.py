@@ -47,5 +47,5 @@ __classifiers__ = [
 
 
 def get_copyright_notice():
-    from pkg_resources import resource_string
-    return resource_string('cpymad', 'COPYING/cpymad.rst').decode('utf-8')
+    from importlib_resources import read_text
+    return read_text('cpymad.COPYING', 'cpymad.rst', encoding='utf-8')
