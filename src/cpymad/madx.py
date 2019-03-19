@@ -1252,8 +1252,8 @@ class Metadata(object):
     )
 
     def get_copyright_notice(self):
-        from pkg_resources import resource_string
-        return resource_string('cpymad', 'COPYING/madx.rst').decode('utf-8')
+        from importlib_resources import read_text
+        return read_text('cpymad.COPYING', 'madx.rst', encoding='utf-8')
 
     _libmadx = None
 

@@ -144,7 +144,7 @@ def get_setup_args(optvals):
         include_package_data=True,  # include files matched by MANIFEST.in
         python_requires='>=2.7, !=3.0, !=3.1, !=3.2',
         install_requires=[
-            'setuptools>=18.0',
+            'importlib_resources',
             'numpy',
             'minrpc>=0.0.8',
         ],
