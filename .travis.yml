@@ -24,8 +24,7 @@ before_install:
   - lsb_release -a
   - env | sort
   - if [[ -z $TRAVIS_TAG ]]; then
-      sed -i "/^__version__ = /s/'\$/.dev$TRAVIS_BUILD_NUMBER'/"
-        src/cpymad/__init__.py ;
+      echo "\\n[egg_info]\\ntag-build = dev$TRAVIS_BUILD_NUMBER" >> setup.cfg ;
     fi
 
 install:
