@@ -44,6 +44,8 @@ if [[ ! -f $CPYMAD_ARCHIVE ]]; then
         git -C /io/cpymad checkout $CPYMAD_VERSION
     fi
 
+    $PY/pip install cython
+
     # The cpymad folder may be mounted from the host OS. For this reason we
     # should not create root owned files there or modify any of the user's data.
     # For this reason, we first copy the source files to a build folder and
@@ -59,15 +61,14 @@ if [[ ! -f $CPYMAD_ARCHIVE ]]; then
     # source distribution can be used as installation medium. We will later
     # upload this exact source distribution to PyPI:
     cd /io/build/cpymad
-    $PY/pip install cython
     $PY/python setup.py sdist
-    $PY/pip uninstall cython -y
 
     CPYMAD_ARCHIVE="$(ls /io/build/cpymad/dist/*.tar.gz)"
 fi
 
 export X11=0 BLAS=0 LAPACK=0 MADXDIR=/io/install
 for PYBIN in /opt/python/*/bin; do
+    "${PYBIN}/pip" install cython
     "${PYBIN}/pip" wheel "$CPYMAD_ARCHIVE" --no-deps -w /io/build/cpymad/dist/
 done
 

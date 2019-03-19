@@ -29,13 +29,10 @@ from distutils import sysconfig
 import sys
 import os
 
-try:
-    # Use Cython if available:
-    from Cython.Build import cythonize
-except ImportError:
-    # Otherwise, use the shipped .c file:
-    def cythonize(extensions):
-        return extensions
+# Everyone who wants to build cpymad from source needs cython because the
+# generated C code is partially incompatible across different python versions,
+# see: 77c5012e "Recythonize for each python version":
+from Cython.Build import cythonize
 
 # Windows:  win32/win-amd64
 # Linux:    linux-x86_64/...
