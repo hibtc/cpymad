@@ -104,8 +104,7 @@ exit /b 0
         set "pythondir=%%~fG"
     )
 
-    :: This will cythonize `.pyx` to `.c`:
-    call python setup.py build_py
+    call cythonize src\cpymad\libmadx.pyx
 
     call %gcc% -mdll -O -Wall ^
         -I%MADXDIR%\include ^

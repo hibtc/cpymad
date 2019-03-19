@@ -29,11 +29,6 @@ from distutils import sysconfig
 import sys
 import os
 
-# Everyone who wants to build cpymad from source needs cython because the
-# generated C code is partially incompatible across different python versions,
-# see: 77c5012e "Recythonize for each python version":
-from Cython.Build import cythonize
-
 # Windows:  win32/win-amd64
 # Linux:    linux-x86_64/...
 # Mac:      darwin*
@@ -103,11 +98,11 @@ if __name__ == '__main__':
     fix_distutils_sysconfig_mingw()
     optvals = parse_opts(sys.argv, OPTIONS)
     setup(
-        ext_modules=cythonize([
+        ext_modules=[
             Extension('cpymad.libmadx',
                       sources=["src/cpymad/libmadx.pyx"],
                       **get_extension_args(**optvals)),
-        ]),
+        ],
         packages=find_packages('src'),
         package_dir={'': 'src'},
     )
