@@ -3,7 +3,7 @@
 Setup script for cpymad.
 
 Usage:
-    python setup.py build_wheel --madxdir=/path/to/madx/installation
+    python setup.py bdist_wheel --madxdir=/path/to/madx/installation
 
 This script is meant only for packagers and developers and can be used to
 install cpymad or create installers assuming you have already built MAD-X
