@@ -23,6 +23,7 @@ For more information, see
 # blame`) and the simplifications that were possible in the following commits.
 
 from setuptools import setup, find_packages, Extension
+from setuptools.command.build_ext import build_ext as _build_ext
 from distutils.util import get_platform
 from distutils import sysconfig
 
@@ -47,6 +48,18 @@ OPTIONS = {
     'blas':     'opt',
     'X11':      'opt',
 }
+
+
+class build_ext_cythonize(_build_ext):
+
+    def finalize_options(self):
+        # Everyone who wants to build cpymad from source needs cython because
+        # the generated C code is partially incompatible across different
+        # python versions, see: 77c5012e "Recythonize for each python
+        # version":
+        from Cython.Build import cythonize
+        self.extensions = cythonize(self.extensions)
+        _build_ext.finalize_options(self)
 
 
 def fix_distutils_sysconfig_mingw():
@@ -105,4 +118,5 @@ if __name__ == '__main__':
         ],
         packages=find_packages('src'),
         package_dir={'': 'src'},
+        cmdclass={'build_ext': build_ext_cythonize},
     )
