@@ -1091,6 +1091,11 @@ class Table(_Mapping):
         empty)."""
         return self._libmadx.get_table_column_names(self._name, selected=True)
 
+    def selected_rows(self):
+        """Get list of row indices that were selected by the user (can be
+        empty)."""
+        return self._libmadx.get_table_selected_rows(self._name)
+
     def col_names(self):
         """Get list of all columns in the table."""
         return self._libmadx.get_table_column_names(self._name)
