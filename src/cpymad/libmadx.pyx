@@ -486,7 +486,7 @@ def get_table_column(table_name, column_name):
                            .format(_str(dtype), column_name))
 
 
-def get_table_row(table_name, row_index, columns='selected'):
+def get_table_row(table_name, row_index, columns='all'):
     """
     Return row as tuple of values.
     """
