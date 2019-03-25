@@ -83,6 +83,7 @@ __all__ = [
     'get_table_row_count',
     'get_table_row_names',
 
+    'get_table_selected_rows',
     'apply_table_selections',
 
     # sequence element list access
@@ -526,11 +527,19 @@ def get_table_row_names(table_name, indices=None):
     Return row names for every index (row number) in the list.
     """
     cdef clib.table* table = _find_table(table_name)
-    if isinstance(indices, int):
-        return _get_table_row_name(table, indices)
-    elif indices is None:
+    if indices == 'all' or indices is None:
         indices = range(table.curr)
+    elif indices == 'selected':
+        indices = [table.row_out.i[i] for i in range(table.curr)]
+    elif isinstance(indices, int):
+        return _get_table_row_name(table, indices)
     return [_get_table_row_name(table, i) for i in indices]
+
+
+def get_table_selected_rows(table_name):
+    """Return list of selected row indices in table (may be empty)."""
+    cdef clib.table* table = _find_table(table_name)
+    return [table.row_out.i[i] for i in range(table.curr)]
 
 
 def apply_table_selections(table_name):
