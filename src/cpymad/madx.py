@@ -1075,7 +1075,7 @@ class Table(_Mapping):
 
     def __len__(self):
         """Return number of columns."""
-        return self._libmadx.get_table_column_count_all(self._name)
+        return self._libmadx.get_table_column_count(self._name)
 
     def __repr__(self):
         return "<{} {!r}: {{{}}}>".format(
@@ -1089,11 +1089,11 @@ class Table(_Mapping):
     def selected_columns(self):
         """Get list of column names that were selected by the user (can be
         empty)."""
-        return self._libmadx.get_table_column_names(self._name)
+        return self._libmadx.get_table_column_names(self._name, selected=True)
 
     def col_names(self):
         """Get list of all columns in the table."""
-        return self._libmadx.get_table_column_names_all(self._name)
+        return self._libmadx.get_table_column_names(self._name)
 
     def row_names(self):
         """Get table row names."""

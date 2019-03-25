@@ -77,9 +77,7 @@ __all__ = [
     # table access
     'get_table_summary',
     'get_table_column_names',
-    'get_table_column_names_all',
     'get_table_column_count',
-    'get_table_column_count_all',
     'get_table_column',
     'get_table_row',
     'get_table_row_count',
@@ -386,27 +384,12 @@ def get_table_summary(table_name):
                  for i in range(header.curr)])
 
 
-def get_table_column_names(table_name):
-    """
-    Get a list of all column names in the table that were selected for output.
-
-    :param str table_name: table name
-    :returns: column names
-    :rtype: list
-    :raises ValueError: if the table name is invalid
-    """
-    cdef clib.table* table = _find_table(table_name)
-    indices = [table.col_out.i[i] for i in range(table.col_out.curr)]
-    # NOTE: we can't enforce lower-case on the column names here, since this
-    # breaks their usage with get_table_column():
-    return [_str(table.columns.names[i]) for i in indices]
-
-
-def get_table_column_names_all(table_name):
+def get_table_column_names(table_name, selected=False):
     """
     Get a list of all column names in the table.
 
     :param str table_name: table name
+    :param bool selected: consider only selected columns
     :returns: column names
     :rtype: list
     :raises ValueError: if the table name is invalid
@@ -414,33 +397,28 @@ def get_table_column_names_all(table_name):
     cdef clib.table* table = _find_table(table_name)
     # NOTE: we can't enforce lower-case on the column names here, since this
     # breaks their usage with get_table_column():
-    return _name_list(table.columns)
+    if selected:
+        indices = [table.col_out.i[i] for i in range(table.col_out.curr)]
+        return [_str(table.columns.names[i]) for i in indices]
+    else:
+        return _name_list(table.columns)
 
 
-def get_table_column_count(table_name):
-    """
-    Get a number of columns selected for display in the table.
-
-    :param str table_name: table name
-    :returns: number of columns
-    :rtype: int
-    :raises ValueError: if the table name is invalid
-    """
-    cdef clib.table* table = _find_table(table_name)
-    return table.col_out.curr
-
-
-def get_table_column_count_all(table_name):
+def get_table_column_count(table_name, selected=False):
     """
     Get a number of columns in the table.
 
     :param str table_name: table name
+    :param bool selected: consider only selected columns
     :returns: number of columns
     :rtype: int
     :raises ValueError: if the table name is invalid
     """
     cdef clib.table* table = _find_table(table_name)
-    return table.columns.curr
+    if selected:
+        return table.col_out.curr
+    else:
+        return table.columns.curr
 
 
 def get_table_column(table_name, column_name):
