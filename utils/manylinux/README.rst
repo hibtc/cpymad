@@ -18,7 +18,7 @@ go to the cpymad root directory and execute::
 
 To retrieve your shiny new wheels, type::
 
-    docker cp manylinux_cpymad_1:/io/wheels .
+    docker cp manylinux_cpymad_1:/io/dist .
 
 
 Using docker
@@ -38,7 +38,7 @@ If you want to (or have to) use lower level tools, you can do so as follows:
         --cap-drop=all \
         cpymad-manylinux
 
-    docker cp artifacts:/io/wheels .
+    docker cp artifacts:/io/dist .
 
 Note this makes use of a data container that will persist build artifacts and
 therefore significantly speedup subsequent runs.

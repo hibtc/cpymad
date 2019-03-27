@@ -29,9 +29,8 @@ install:
         'from wheel.pep425tags import get_abi_tag; print(get_abi_tag())')
 
   # download wheels generated during build stage:
-  - git clone $ART_REPO -b $ART_BRANCH --depth 1
-  - pip install ./cpymad-artifacts/wheels/*-$PY_ABI_TAG-*_x86_64.whl
-  - rm -rf cpymad-artifacts
+  - git clone $ART_REPO dist -b $ART_BRANCH --depth 1
+  - pip install dist/*-$PY_ABI_TAG-*_x86_64.whl
 
   - pip install flake8 coverage coveralls
 
@@ -80,24 +79,23 @@ jobs:
         - docker run --init --name artifacts32
             -v /home/travis/io/32:/io:rw
             -v `pwd`:/io/cpymad:rw
-            -v /io/wheels
+            -v /io/dist
             --cap-drop=all
             wheelbuilder32
         - docker run --init --name artifacts64
             -v /home/travis/io/64:/io:rw
             -v `pwd`:/io/cpymad:rw
-            -v /io/wheels
+            -v /io/dist
             --cap-drop=all
             wheelbuilder64
-        - mkdir -p artifacts
-        - docker cp artifacts32:/io/wheels ./artifacts/
-        - docker cp artifacts64:/io/wheels ./artifacts/
-        - twine check artifacts/wheels/*.whl
+        - docker cp artifacts32:/io/dist .
+        - docker cp artifacts64:/io/dist .
+        - twine check dist/*
       after_success:
         # Upload artifacts to github:
-        - cd artifacts
+        - cd dist
         - git init
-        - git add -f wheels/*.whl wheels/*.tar.gz
+        - git add -f *.whl *.tar.gz
         - git commit -m "Build $TRAVIS_JOB_NUMBER" -m "$TRAVIS_BUILD_WEB_URL"
         # Upload to a unique branch for deterministic fetches during the later
         # stages, and to master for the user's convenience. The unique branch
@@ -113,8 +111,8 @@ jobs:
       if: branch = test-release OR tag IS present
       install:
         - pip install twine
-        - git clone $ART_REPO artifacts -b $ART_BRANCH --depth 1
-      script: twine upload artifacts/wheels/*.tar.gz artifacts/wheels/*.whl
+        - git clone $ART_REPO dist -b $ART_BRANCH --depth 1
+      script: twine upload dist/*.tar.gz dist/*.whl
       after_success: skip
       env:
         - TWINE_USERNAME=hibtc-deploy

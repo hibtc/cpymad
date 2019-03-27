@@ -68,8 +68,8 @@ for PYBIN in /opt/python/*/bin; do
 done
 
 # Bundle external shared libraries into the wheels
-mkdir -p /io/wheels
+mkdir -p /io/dist
 for whl in /io/build/cpymad/dist/*.whl; do
-    auditwheel repair "$whl" -w /io/wheels/
+    auditwheel repair "$whl" -w /io/dist
 done
-cp "$CPYMAD_ARCHIVE" /io/wheels/
+cp "$CPYMAD_ARCHIVE" /io/dist
