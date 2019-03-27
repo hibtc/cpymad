@@ -1,31 +1,27 @@
 language: python
-
-# See: https://docs.travis-ci.com/user/languages/python/
+dist: xenial
 python:
   - "2.7"
 # - "3.3"   no manylinux support
   - "3.4"
   - "3.5"
   - "3.6"
-# - "3.7"   in `jobs`, see below!
+  - "3.7"
 
 env:
   global:
     # GITHUB_TOKEN:
     - secure: "fdvPaSzbpf47Qb/2zDg/eHAS0bBFaAkWFxyxmhHQOkD0PlVxwi1Fh0Sq3dUZVwQgmmYj+hF6cFpqkFQJQe3zFqw9k14Ccr4dk69yjPNbQA1+yg0ARFntyqtM2DUN86brMcZG3ZM6V2HFuzKn9cQUvtjCQSKS26HybEnCG4vXz24="
-    - TWINE_USERNAME=hibtc-deploy
-    # TWINE_PASSWORD:
-    - secure: "A2y/CUVGmBDemj+JCsupqexE7YiYcdIg6nOKPmBNjTCaum9CrvhebTmLDqtSfn1qFA3CbbFwyHIo/nlGioIMZfLhSYw/l3JlLTCMx57ESVqYRR7ou882mb1zizc5DrAfT1Sk8rHuBMI/iqpQOwsQPTOvBMW4ttnEsFWK/WrYKNM="
-
     - ART_REPO=https://$GITHUB_TOKEN@github.com/hibtc/cpymad-artifacts
     - ART_BRANCH=_$TRAVIS_BUILD_NUMBER-$TRAVIS_COMMIT
 
 before_install:
   - lsb_release -a
-  - env | sort
   - if [[ -z $TRAVIS_TAG ]]; then
       echo -e "\n[egg_info]\ntag-build = dev$TRAVIS_BUILD_NUMBER" >> setup.cfg ;
+      export TWINE_REPOSITORY_URL=https://test.pypi.org/legacy/ ;
     fi
+  - env | sort
 
 install:
   - pip install wheel
@@ -37,14 +33,10 @@ install:
   - pip install ./cpymad-artifacts/wheels/*-$PY_ABI_TAG-*_x86_64.whl
   - rm -rf cpymad-artifacts
 
-  # docutils is required for `setup.py check -r`:
-  - pip install flake8 docutils
-  - pip install coverage coveralls
+  - pip install flake8 coverage coveralls
 
 script:
-  - python setup.py check -rsm
   - flake8
-
   - coverage run --source=cpymad -p test/test_util.py -v
   - coverage run --source=cpymad -p test/test_madx.py -v
 
@@ -57,7 +49,6 @@ cache:
   directories:
     - /home/travis/io
 
-
 stages:
   - build
   - test
@@ -65,18 +56,13 @@ stages:
 
 jobs:
   include:
-    # Ubuntu 16.04 (Xenial Xerus) required for py3.7:
-    - stage: test
-      python: "3.7"
-      dist: xenial
-
     - stage: build
       name: Build manylinux wheels
       python: "3.6"
       services:
         - docker
       install:
-        - pip install docker-compose
+        - pip install docker-compose twine
       script:
         - git rev-parse HEAD:utils/manylinux > /tmp/cache_key
         - if ! cmp /home/travis/io/cache_key /tmp/cache_key; then
@@ -106,6 +92,7 @@ jobs:
         - mkdir -p artifacts
         - docker cp artifacts32:/io/wheels ./artifacts/
         - docker cp artifacts64:/io/wheels ./artifacts/
+        - twine check artifacts/wheels/*.whl
       after_success:
         # Upload artifacts to github:
         - cd artifacts
@@ -126,13 +113,13 @@ jobs:
       if: branch = test-release OR tag IS present
       install:
         - pip install twine
-      script:
         - git clone $ART_REPO artifacts -b $ART_BRANCH --depth 1
-        - if [[ -z $TRAVIS_TAG ]]; then
-            export TWINE_REPOSITORY_URL=https://test.pypi.org/legacy/ ;
-          fi
-        - twine upload artifacts/wheels/*.tar.gz artifacts/wheels/*.whl
+      script: twine upload artifacts/wheels/*.tar.gz artifacts/wheels/*.whl
       after_success: skip
+      env:
+        - TWINE_USERNAME=hibtc-deploy
+        # TWINE_PASSWORD:
+        - secure: "A2y/CUVGmBDemj+JCsupqexE7YiYcdIg6nOKPmBNjTCaum9CrvhebTmLDqtSfn1qFA3CbbFwyHIo/nlGioIMZfLhSYw/l3JlLTCMx57ESVqYRR7ou882mb1zizc5DrAfT1Sk8rHuBMI/iqpQOwsQPTOvBMW4ttnEsFWK/WrYKNM="
 
     - stage: deploy
       name: Update Documentation
