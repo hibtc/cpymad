@@ -1240,8 +1240,6 @@ class Metadata(object):
         u'simulate beam dynamics and optimize beam optics.'
     )
 
-    __support__ = u'mad@cern.ch'
-
     __uri__ = u'http://madx.web.cern.ch/madx/'
 
     __credits__ = (
