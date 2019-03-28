@@ -22,10 +22,8 @@ For more information, see
 # at the commit that first added this paragraph (can be identified using `git
 # blame`) and the simplifications that were possible in the following commits.
 
-from __future__ import print_function
-
 from setuptools import setup, find_packages, Extension
-from distutils.util import get_platform, convert_path
+from distutils.util import get_platform
 from distutils import sysconfig
 
 import sys
@@ -70,19 +68,6 @@ def fix_distutils_sysconfig_mingw():
         sysconfig._config_vars['CC'] = 'gcc'
 
 
-def read_file(path):
-    """Read a file in binary mode."""
-    with open(convert_path(path), 'rb') as f:
-        return f.read()
-
-
-def exec_file(path):
-    """Execute a python file and return the `globals` dictionary."""
-    namespace = {}
-    exec(read_file(path), namespace, namespace)
-    return namespace
-
-
 def get_extension_args(madxdir, shared, static, **libs):
     """Get arguments for C-extension (include pathes, libraries, etc)."""
     if optvals['static'] is None:
@@ -117,22 +102,12 @@ def get_extension_args(madxdir, shared, static, **libs):
     )
 
 
-def get_setup_args(optvals):
-    """Accumulate metadata for setup."""
-    long_description = read_file('README.rst').decode('utf-8')
-    metadata = exec_file('src/cpymad/__init__.py')
-    return dict(
-        name='cpymad',
-        version=metadata['__version__'],
-        description=metadata['__summary__'],
-        long_description=long_description,
-        author=metadata['__author__'],
-        author_email=metadata['__author_email__'],
-        maintainer=metadata['__maintainer__'],
-        maintainer_email=metadata['__maintainer_email__'],
-        url=metadata['__uri__'],
-        license=metadata['__license__'],
-        classifiers=metadata['__classifiers__'],
+if __name__ == '__main__':
+    sys.path.append(os.path.dirname(__file__))
+    from utils.clopts import parse_opts
+    fix_distutils_sysconfig_mingw()
+    optvals = parse_opts(sys.argv, OPTIONS)
+    setup(
         ext_modules=cythonize([
             Extension('cpymad.libmadx',
                       sources=["src/cpymad/libmadx.pyx"],
@@ -140,20 +115,4 @@ def get_setup_args(optvals):
         ]),
         packages=find_packages('src'),
         package_dir={'': 'src'},
-        zip_safe=False,             # zip is bad for redistributing shared libs
-        include_package_data=True,  # include files matched by MANIFEST.in
-        python_requires='>=2.7, !=3.0, !=3.1, !=3.2',
-        install_requires=[
-            'importlib_resources',
-            'numpy',
-            'minrpc>=0.0.8',
-        ],
     )
-
-
-if __name__ == '__main__':
-    sys.path.append(os.path.dirname(__file__))
-    from utils.clopts import parse_opts
-    fix_distutils_sysconfig_mingw()
-    optvals = parse_opts(sys.argv, OPTIONS)
-    setup(**get_setup_args(optvals))
