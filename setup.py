@@ -70,10 +70,8 @@ def fix_distutils_sysconfig_mingw():
 
 def get_extension_args(madxdir, shared, static, **libs):
     """Get arguments for C-extension (include pathes, libraries, etc)."""
-    if optvals['static'] is None:
-        optvals['static'] = IS_WIN
-    if optvals['X11'] is None:
-        optvals['X11'] = not IS_WIN
+    if libs.get('X11') is None:
+        libs['X11'] = not IS_WIN
     include_dirs = []
     library_dirs = []
 
