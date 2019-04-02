@@ -27,7 +27,6 @@ from setuptools.command.build_ext import build_ext as _build_ext
 from distutils.util import get_platform
 from distutils import sysconfig
 
-import sys
 import os
 
 # Windows:  win32/win-amd64
@@ -36,62 +35,55 @@ import os
 IS_WIN = get_platform().startswith('win')
 
 
-# We parse command line options using our own mechanim. We could use
-# build_ext.user_options instead, but then these parameters can be passed
-# only to the 'build_ext' command, not to 'build', 'develop', or
-# 'install'.
-OPTIONS = {
-    'madxdir':  'arg',
-    'static':   'opt',
-    'shared':   'opt',
-    'lapack':   'opt',
-    'blas':     'opt',
-    'X11':      'opt',
-}
-
-
 class build_ext_cythonize(_build_ext):
 
+    # NOTE: If MAD-X was built with X11/BLAS/LAPACK, you must manually
+    # provide arguments `python setup.py build_ext -lX11 -lblas -llapack`!
+
+    user_options = _build_ext.user_options + [
+        ('madxdir=', 'M', 'Specify the installation prefix used for MAD-X'),
+        ('shared', None, 'MAD-X was built as shared library'),
+        ('static', None, 'Link statically (not recommended)'),
+    ]
+
+    def initialize_options(self):
+        self.madxdir = None
+        self.shared = False
+        self.static = False
+        _build_ext.initialize_options(self)
+
     def finalize_options(self):
+        print(self.madxdir)
+        exit()
         # Everyone who wants to build cpymad from source needs cython because
         # the generated C code is partially incompatible across different
         # python versions, see: 77c5012e "Recythonize for each python
         # version":
         from Cython.Build import cythonize
-        self.extensions = cythonize(self.extensions)
+        self.extensions = cythonize([
+            Extension(ext.name, ext.sources, **get_extension_args(
+                self.madxdir, self.shared, self.static))
+            for ext in self.extensions
+        ])
+        # When using windows and MinGW, in distutils.sysconfig the C compiler
+        # (CC) is not initialized at all, see http://bugs.python.org/issue2437.
+        if sysconfig.get_config_var('CC') is None:
+            sysconfig._config_vars['CC'] = 'gcc'
         _build_ext.finalize_options(self)
 
 
-def fix_distutils_sysconfig_mingw():
-    """
-    When using windows and MinGW, in distutils.sysconfig the compiler (CC) is
-    not initialized at all, see http://bugs.python.org/issue2437. The
-    following manual fix for this problem may cause other issues, but it's a
-    good shot.
-    """
-    if sysconfig.get_config_var('CC') is None:
-        sysconfig._config_vars['CC'] = 'gcc'
-
-
-def get_extension_args(madxdir, shared, static, **libs):
+def get_extension_args(madxdir, shared, static):
     """Get arguments for C-extension (include pathes, libraries, etc)."""
-    if libs.get('X11') is None:
-        libs['X11'] = not IS_WIN
     include_dirs = []
     library_dirs = []
 
     if madxdir:
         prefix = os.path.expanduser(madxdir)
         include_dirs += [os.path.join(prefix, 'include')]
-        library_dirs += [os.path.join(prefix, 'lib'),
-                         os.path.join(prefix, 'lib64')]
+        library_dirs += [os.path.join(prefix, 'lib')]
 
-    libraries = ['madx']
-    if not shared:
-        # NOTE: If MAD-X was built with BLAS/LAPACK, you must manually provide
-        # arguments `python setup.py build_ext -lblas -llapack`!
-        libraries += ['ptc', 'gc-lib', 'stdc++', 'gfortran', 'quadmath']
-        libraries += [lib for lib, use in libs.items() if use]
+    libraries = ['madx'] + ([] if shared else [
+        'ptc', 'gc-lib', 'stdc++', 'gfortran', 'quadmath'])
 
     link_args = ['--static'] if static and not IS_WIN else []
 
@@ -105,18 +97,11 @@ def get_extension_args(madxdir, shared, static, **libs):
     )
 
 
-if __name__ == '__main__':
-    sys.path.append(os.path.dirname(__file__))
-    from utils.clopts import parse_opts
-    fix_distutils_sysconfig_mingw()
-    optvals = parse_opts(sys.argv, OPTIONS)
-    setup(
-        ext_modules=[
-            Extension('cpymad.libmadx',
-                      sources=["src/cpymad/libmadx.pyx"],
-                      **get_extension_args(**optvals)),
-        ],
-        packages=find_packages('src'),
-        package_dir={'': 'src'},
-        cmdclass={'build_ext': build_ext_cythonize},
-    )
+setup(
+    ext_modules=[
+        Extension('cpymad.libmadx', ["src/cpymad/libmadx.pyx"]),
+    ],
+    packages=find_packages('src'),
+    package_dir={'': 'src'},
+    cmdclass={'build_ext': build_ext_cythonize},
+)
