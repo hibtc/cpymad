@@ -35,7 +35,13 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
+    'autodocsumm',
 ]
+
+autodoc_default_options = {
+    'autosummary': True,
+}
+autodata_content = 'both'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

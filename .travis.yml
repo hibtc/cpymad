@@ -123,7 +123,7 @@ jobs:
       name: Update Documentation
       python: "3.6"
       script:
-        - pip install sphinx sphinx_rtd_theme
+        - pip install sphinx sphinx_rtd_theme autodocsumm
         - make -C doc html
       after_success: true   # don't "skip"! it makes travis skip "deploy:" too!
       deploy:
