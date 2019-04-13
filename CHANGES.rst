@@ -1,6 +1,20 @@
 Changelog
 ~~~~~~~~~
 
+1.1.2
+=====
+Date: 13.04.2019
+
+- expose all columns in table, don't limit by current selection
+- unify the get_table_column_XXX functions in libmadx
+- add Table.selected_columns method
+- add Table.selected_rows method
+- drop ability to build MAD-X through setup.py
+- don't search for MAD-X in system locations
+- simplifications in setup script
+- replace runtime dependency on setuptools by importlib_resources
+
+
 1.1.1
 =====
 Date: 18.02.2019
