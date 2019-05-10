@@ -1,9 +1,9 @@
 Changelog
 ~~~~~~~~~
 
-next
-====
-Date: (t.b.d.)
+1.2.0
+=====
+Date: 11.05.2019
 
 - update to MAD-X 5.05.00
 - implement Madx.chdir using the new CHDIR command. This improves readability
