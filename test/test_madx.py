@@ -10,6 +10,13 @@ from numpy.testing import assert_allclose
 from cpymad.madx import Madx, CommandLog, metadata
 
 
+def normalize(path):
+    """Normalize path name to eliminate different spellings of the same path.
+    This is needed for path comparisons in tests, especially on windows where
+    pathes are case insensitive and allow a multitude of spellings."""
+    return os.path.normcase(os.path.normpath(path))
+
+
 class _TestCaseCompat(object):
 
     """
@@ -149,23 +156,23 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         g = self.mad.globals
 
         self.mad.chdir(folder)
-        self.assertEqual(getcwd(), folder)
+        self.assertEqual(normalize(getcwd()), normalize(folder))
         self.mad.call('answer_42.madx')
         self.assertEqual(g.answer, 42)
 
         with self.mad.chdir('..'):
-            self.assertEqual(getcwd(), parent)
+            self.assertEqual(normalize(getcwd()), normalize(parent))
             self.mad.call('test/answer_43.madx')
             self.assertEqual(g.answer, 43)
             self.mad.call('test/answer_call42.madx', True)
             self.assertEqual(g.answer, 42)
 
-        self.assertEqual(getcwd(), folder)
+        self.assertEqual(normalize(getcwd()), normalize(folder))
         self.mad.call('answer_43.madx')
         self.assertEqual(g.answer, 43)
 
         self.mad.chdir('..')
-        self.assertEqual(getcwd(), parent)
+        self.assertEqual(normalize(getcwd()), normalize(parent))
 
     def _check_twiss(self, seq_name):
         beam = 'ex=1, ey=2, particle=electron, sequence={0};'.format(seq_name)
