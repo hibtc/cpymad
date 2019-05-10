@@ -66,6 +66,7 @@ exit /b %ERRORLEVEL%
            src\cpymad\libmadx.pyd
 
     call activate %py_env% & @echo on
+    call pip install -U setuptools
     call python setup.py build_ext -c mingw32 --static
     call python setup.py bdist_wheel
 exit /b 0
@@ -105,6 +106,7 @@ exit /b 0
     )
 
     :: This will cythonize `.pyx` to `.c`:
+    call pip install -U setuptools
     call python setup.py build_py
 
     call %gcc% -mdll -O -Wall ^

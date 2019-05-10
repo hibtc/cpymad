@@ -68,6 +68,7 @@ fi
 
 export X11=0 BLAS=0 LAPACK=0 MADXDIR=/io/install
 for PYBIN in /opt/python/*/bin; do
+    "${PYBIN}/pip" install -U setuptools
     "${PYBIN}/pip" wheel "$CPYMAD_ARCHIVE" --no-deps -w /io/build/cpymad/dist/
 done
 

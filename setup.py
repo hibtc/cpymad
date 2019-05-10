@@ -106,6 +106,7 @@ if __name__ == '__main__':
     fix_distutils_sysconfig_mingw()
     optvals = parse_opts(sys.argv, OPTIONS)
     setup(
+        name='cpymad',
         ext_modules=cythonize([
             Extension('cpymad.libmadx',
                       sources=["src/cpymad/libmadx.pyx"],
