@@ -1,6 +1,13 @@
 Changelog
 ~~~~~~~~~
 
+next
+====
+Date: (t.b.d.)
+
+- update to MAD-X 5.05.00
+
+
 1.1.2
 =====
 Date: 13.04.2019
