@@ -1263,7 +1263,9 @@ class Metadata(object):
 
     def _get_libmadx(self):
         if not self._libmadx:
-            svc, proc = _rpc.LibMadxClient.spawn_subprocess()
+            # Need to disable stdin, otherwise it will hang for windows GUI
+            # applications, where there is no valid stdin:
+            svc, proc = _rpc.LibMadxClient.spawn_subprocess(stdin=False)
             self._libmadx = svc.libmadx
         return self._libmadx
 
