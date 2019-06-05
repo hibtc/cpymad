@@ -1,6 +1,14 @@
 Changelog
 ~~~~~~~~~
 
+1.2.1
+=====
+Date: 05.06.2019
+
+- fix deadlock if accessing the global ``cpymad.madx.metadata`` object with
+  closed or invalid STDIN (after ``os.close(0)`` or in windows GUI application)
+
+
 1.2.0
 =====
 Date: 11.05.2019
