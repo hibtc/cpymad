@@ -69,7 +69,7 @@ jobs:
             sudo rm -rf /home/travis/io ;
           fi
         - mkdir -p /home/travis/io
-        - chmod 777 /home/travis/io
+        - chmod -R 777 /home/travis/io
         - sudo mv /tmp/cache_key /home/travis/io/
         - docker build -t wheelbuilder32 utils/manylinux -f utils/manylinux/Dockerfile_x86
         - docker build -t wheelbuilder64 utils/manylinux -f utils/manylinux/Dockerfile_x64
