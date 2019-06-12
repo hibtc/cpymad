@@ -68,6 +68,14 @@ def fix_distutils_sysconfig_mingw():
         sysconfig._config_vars['CC'] = 'gcc'
 
 
+def exec_file(path):
+    """Execute a python file and return the `globals` dictionary."""
+    namespace = {}
+    with open(path, 'rb') as f:
+        exec(f.read(), namespace, namespace)
+    return namespace
+
+
 def get_extension_args(madxdir, shared, static, **libs):
     """Get arguments for C-extension (include pathes, libraries, etc)."""
     if libs.get('X11') is None:
@@ -105,8 +113,11 @@ if __name__ == '__main__':
     from utils.clopts import parse_opts
     fix_distutils_sysconfig_mingw()
     optvals = parse_opts(sys.argv, OPTIONS)
+    metadata = exec_file('src/cpymad/__init__.py')
     setup(
         name='cpymad',
+        version=metadata['__version__'],
+        description=metadata['__summary__'],
         ext_modules=cythonize([
             Extension('cpymad.libmadx',
                       sources=["src/cpymad/libmadx.pyx"],
@@ -114,4 +125,11 @@ if __name__ == '__main__':
         ]),
         packages=find_packages('src'),
         package_dir={'': 'src'},
+        zip_safe=False,             # zip is bad for redistributing shared libs
+        include_package_data=True,  # include files matched by MANIFEST.in
+        install_requires=[
+            'importlib_resources',
+            'numpy',
+            'minrpc>=0.0.8',
+        ],
     )
