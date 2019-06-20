@@ -169,6 +169,9 @@ cdef extern from "madX/mad_node.h" nogil:
         expression* at_expr
         char* from_name
         element* p_elem
+        double_array* p_al_err
+        double_array* p_fd_err
+        double_array* p_ph_err
 
     struct node_list:
         int curr
