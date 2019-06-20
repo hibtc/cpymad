@@ -1127,7 +1127,7 @@ cdef bytes _cstr(s):
 cdef _node_name(clib.node* node):
     return name_from_internal(_str(node.name))
 
-cdef _double_array(clib.double_array* ptr):
+cdef _double_array_copy(clib.double_array* ptr):
     arr = np.empty(ptr.curr,dtype='d')
     for ii in range(ptr.curr):
         arr[ii]=ptr.a[ii]
@@ -1155,11 +1155,11 @@ cdef _get_node(clib.node* node, int ref_flag, int is_expanded, int line):
     data['position'] = _get_node_entry_pos(node, ref_flag, is_expanded)
     data['length'] = node.length
     if node.p_al_err is not NULL:
-        data['align_errors']=_double_array(node.p_al_err)
+        data['align_errors']=_double_array_copy(node.p_al_err)
     if node.p_fd_err is not NULL:
-        data['field_errors']=_double_array(node.p_fd_err)
+        data['field_errors']=_double_array_copy(node.p_fd_err)
     if node.p_ph_err is not NULL:
-        data['phase_errors']=_double_array(node.p_ph_err)
+        data['phase_errors']=_double_array_copy(node.p_ph_err)
     return data
 
 
