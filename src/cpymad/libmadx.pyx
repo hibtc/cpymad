@@ -1128,11 +1128,10 @@ cdef _node_name(clib.node* node):
     return name_from_internal(_str(node.name))
 
 cdef _double_array(clib.double_array* ptr):
-    addr = <Py_intptr_t> ptr.a
-    array_type = ctypes.c_double * ptr.curr
-    array_data = array_type.from_address(addr)
-    return np.ctypeslib.as_array(array_data)
-
+    arr = np.empty(ptr.curr,dtype='d')
+    for ii in range(ptr.curr):
+        arr[ii]=ptr.a[ii]
+    return arr
 
 cdef _get_node(clib.node* node, int ref_flag, int is_expanded, int line):
     """Return dictionary with node + element attributes."""
