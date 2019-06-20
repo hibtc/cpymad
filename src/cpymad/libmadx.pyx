@@ -442,14 +442,10 @@ def get_table_column(table_name, column_name):
     cdef bytes _col_name = _cstr(column_name)
     cdef clib.column_info info = clib.table_get_column(_tab_name, _col_name)
     dtype = <bytes> info.datatype
-    size = <int> info.length
-    addr = <Py_intptr_t> info.data
     # double:
     if dtype == b'i' or dtype == b'd':
         # YES, integers are internally stored as doubles in MAD-X:
-        array_type = ctypes.c_double * size
-        array_data = array_type.from_address(addr)
-        return np.ctypeslib.as_array(array_data)
+        return _inplace_double_array(<double*>info.data, info.length)
     # string:
     elif dtype == b'S':
         char_tmp = <char**> info.data
@@ -1127,11 +1123,20 @@ cdef bytes _cstr(s):
 cdef _node_name(clib.node* node):
     return name_from_internal(_str(node.name))
 
+
 cdef _double_array_copy(clib.double_array* ptr):
-    arr = np.empty(ptr.curr,dtype='d')
-    for ii in range(ptr.curr):
-        arr[ii]=ptr.a[ii]
-    return arr
+    """Returns a numpy array from the given MAD-X array, or None."""
+    if ptr is not NULL:
+        return _inplace_double_array(ptr.a, ptr.curr)
+
+
+cdef _inplace_double_array(double* data, int size):
+    """Return inplace numpy array from the given C array."""
+    addr = <Py_intptr_t> data
+    array_type = ctypes.c_double * size
+    array_data = array_type.from_address(addr)
+    return np.ctypeslib.as_array(array_data)
+
 
 cdef _get_node(clib.node* node, int ref_flag, int is_expanded, int line):
     """Return dictionary with node + element attributes."""
@@ -1154,12 +1159,9 @@ cdef _get_node(clib.node* node, int ref_flag, int is_expanded, int line):
     data['base_name'] = _str(node.base_name)
     data['position'] = _get_node_entry_pos(node, ref_flag, is_expanded)
     data['length'] = node.length
-    if node.p_al_err is not NULL:
-        data['align_errors']=_double_array_copy(node.p_al_err)
-    if node.p_fd_err is not NULL:
-        data['field_errors']=_double_array_copy(node.p_fd_err)
-    if node.p_ph_err is not NULL:
-        data['phase_errors']=_double_array_copy(node.p_ph_err)
+    data['align_errors'] = _double_array_copy(node.p_al_err)
+    data['field_errors'] = _double_array_copy(node.p_fd_err)
+    data['phase_errors'] = _double_array_copy(node.p_ph_err)
     return data
 
 
