@@ -718,6 +718,22 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         ''')
         self.assertEqual(var.x, 3)
 
+    def test_field_errors(self):
+        mad = self.mad
+        mad.beam()
+        mad.use(sequence='s1')
+        mad.select(flag='error', range='qp')
+        dkn=[1e-6, 2e-6, 3e-6]
+        dks=[4e-6, 5e-6, 6e-6]
+        mad.efcomp(dkn=dkn, dks=dks)
+        mad.ealign(dx=1e-3,dy=-4e-3)
+        fd =mad.sequence['s1'].expanded_elements['qp'].field_errors
+        al =mad.sequence['s1'].expanded_elements['qp'].align_errors
+        assert_allclose(fd[:6:2],dkn)
+        assert_allclose(fd[1:6:2],dks)
+        assert_allclose(al[0],1e-3)
+        assert_allclose(al[1],-4e-3)
+
 
 class TestTransferMap(unittest.TestCase):
 
