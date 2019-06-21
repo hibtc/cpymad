@@ -33,6 +33,7 @@ from cpymad.util import name_to_internal, name_from_internal, normalize_range_na
 cimport cpymad.clibmadx as clib
 
 
+
 # Remember whether start() was called
 _madx_started = False
 
@@ -1138,6 +1139,39 @@ cdef _inplace_double_array(double* data, int size):
     return np.ctypeslib.as_array(array_data)
 
 
+cdef class FieldError:
+    cdef public object dkn
+    cdef public object dks
+
+    def __cinit__(self,dkn,dks):
+         self.dkn=dkn
+         self.dks=dks
+
+cdef class AlignError:
+    cdef public double dx
+    cdef public double dy
+    cdef public double ds
+    cdef public double dphi
+    cdef public double dtheta
+    cdef public double dpsi
+    cdef public double mrex
+    cdef public double mrey
+    cdef public double mredx
+    cdef public double mredy
+    cdef public double arex
+    cdef public double arey
+    cdef public double mscalx
+    cdef public double mscaly
+
+
+cdef class PhaseError:
+    cdef public object dpn
+    cdef public object dps
+
+    def __cinit__(self,dpn,dps):
+         self.dpn=dpn
+         self.dps=dps
+
 cdef _get_node(clib.node* node, int ref_flag, int is_expanded, int line):
     """Return dictionary with node + element attributes."""
     if node.p_elem is NULL:
@@ -1159,9 +1193,37 @@ cdef _get_node(clib.node* node, int ref_flag, int is_expanded, int line):
     data['base_name'] = _str(node.base_name)
     data['position'] = _get_node_entry_pos(node, ref_flag, is_expanded)
     data['length'] = node.length
-    data['align_errors'] = _double_array_copy(node.p_al_err)
-    data['field_errors'] = _double_array_copy(node.p_fd_err)
-    data['phase_errors'] = _double_array_copy(node.p_ph_err)
+    cdef double [::] fd
+    cdef double [::] ph
+    if node.p_fd_err is not NULL:
+        fd = <double[:node.p_fd_err.curr]> node.p_fd_err.a
+        data['field_errors'] = FieldError(np.array(fd[0::2]), np.array(fd[1::2]))
+    else:
+        data['field_errors'] = None
+    if node.p_al_err is not NULL:
+        al=AlignError()
+        al.dx    =node.p_al_err.a[0]
+        al.dy    =node.p_al_err.a[1]
+        al.ds    =node.p_al_err.a[2]
+        al.dphi  =node.p_al_err.a[3]
+        al.dtheta=node.p_al_err.a[4]
+        al.dpsi  =node.p_al_err.a[5]
+        al.mrex  =node.p_al_err.a[6]
+        al.mrey  =node.p_al_err.a[7]
+        al.mredx =node.p_al_err.a[8]
+        al.mredy =node.p_al_err.a[9]
+        al.arex  =node.p_al_err.a[10]
+        al.arey  =node.p_al_err.a[11]
+        al.mscalx=node.p_al_err.a[12]
+        al.mscaly=node.p_al_err.a[13]
+        data['align_errors'] = al
+    else:
+        data['align_errors'] = None
+    if node.p_ph_err is not NULL:
+        ph = <double[:node.p_ph_err.curr]> node.p_ph_err.a
+        data['phase_errors'] = FieldError(np.array(ph[0::2]), np.array(ph[1::2]))
+    else:
+        data['phase_errors'] = None
     return data
 
 
