@@ -33,6 +33,21 @@ from cpymad.util import name_to_internal, name_from_internal, normalize_range_na
 cimport cpymad.clibmadx as clib
 
 
+cdef class FieldError:
+    cdef public object dkn
+    cdef public object dks
+
+cdef class AlignError:
+    cdef public double dx
+    cdef public double dy
+    ...
+
+cdef class PhaseError:
+    cdef public object dpn
+    cdef public object dps
+
+
+
 # Remember whether start() was called
 _madx_started = False
 
