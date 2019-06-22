@@ -718,7 +718,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         ''')
         self.assertEqual(var.x, 3)
 
-    def test_field_errors(self):
+    def test_errors(self):
         mad = self.mad
         mad.beam()
         mad.use(sequence='s1')
@@ -729,10 +729,12 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         mad.ealign(dx=1e-3, dy=-4e-3)
         fd = mad.sequence['s1'].expanded_elements['qp'].field_errors
         al = mad.sequence['s1'].expanded_elements['qp'].align_errors
-        assert_allclose(fd[:6:2], dkn)
-        assert_allclose(fd[1:6:2], dks)
-        assert_allclose(al[0], 1e-3)
-        assert_allclose(al[1], -4e-3)
+        expected_dkn = np.hstack((dkn, np.zeros(len(fd.dkn) - len(dkn))))
+        expected_dks = np.hstack((dks, np.zeros(len(fd.dks) - len(dks))))
+        assert_allclose(fd.dkn, expected_dkn)
+        assert_allclose(fd.dks, expected_dks)
+        assert_allclose(al.dx, 1e-3)
+        assert_allclose(al.dy, -4e-3)
 
 
 class TestTransferMap(unittest.TestCase):

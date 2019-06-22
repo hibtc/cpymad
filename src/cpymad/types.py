@@ -40,6 +40,15 @@ dtype_to_native = {
 
 Range = namedtuple('Range', ['first', 'last'])
 
+AlignError = namedtuple('AlignError', [
+    'dx', 'dy', 'ds',
+    'dphi', 'dtheta', 'dpsi',
+    'mrex', 'mrey', 'mredx', 'mredy',
+    'arex', 'arey', 'mscalx', 'mscaly',
+])
+FieldError = namedtuple('FieldError', ['dkn', 'dks'])
+PhaseError = namedtuple('PhaseError', ['dpn', 'dps'])
+
 
 class Parameter(object):
 

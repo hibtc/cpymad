@@ -28,7 +28,7 @@ cdef extern from "string.h" nogil:
     char* strstr(char* s1, char* s2)
     char* strchr(char* s, int c)
 
-from cpymad.types import Constraint, Parameter
+from cpymad.types import Constraint, Parameter, AlignError, FieldError, PhaseError
 from cpymad.util import name_to_internal, name_from_internal, normalize_range_name
 cimport cpymad.clibmadx as clib
 
@@ -445,7 +445,7 @@ def get_table_column(table_name, column_name):
     # double:
     if dtype == b'i' or dtype == b'd':
         # YES, integers are internally stored as doubles in MAD-X:
-        return _inplace_double_array(<double*>info.data, info.length)
+        return np.ctypeslib.as_array(<double [:info.length]> info.data)
     # string:
     elif dtype == b'S':
         char_tmp = <char**> info.data
@@ -1124,20 +1124,6 @@ cdef _node_name(clib.node* node):
     return name_from_internal(_str(node.name))
 
 
-cdef _double_array_copy(clib.double_array* ptr):
-    """Returns a numpy array from the given MAD-X array, or None."""
-    if ptr is not NULL:
-        return _inplace_double_array(ptr.a, ptr.curr)
-
-
-cdef _inplace_double_array(double* data, int size):
-    """Return inplace numpy array from the given C array."""
-    addr = <Py_intptr_t> data
-    array_type = ctypes.c_double * size
-    array_data = array_type.from_address(addr)
-    return np.ctypeslib.as_array(array_data)
-
-
 cdef _get_node(clib.node* node, int ref_flag, int is_expanded, int line):
     """Return dictionary with node + element attributes."""
     if node.p_elem is NULL:
@@ -1159,10 +1145,19 @@ cdef _get_node(clib.node* node, int ref_flag, int is_expanded, int line):
     data['base_name'] = _str(node.base_name)
     data['position'] = _get_node_entry_pos(node, ref_flag, is_expanded)
     data['length'] = node.length
-    data['align_errors'] = _double_array_copy(node.p_al_err)
-    data['field_errors'] = _double_array_copy(node.p_fd_err)
-    data['phase_errors'] = _double_array_copy(node.p_ph_err)
+    data['align_errors'] = None if node.p_al_err is NULL else AlignError(
+        *_memview(node.p_al_err))
+    data['field_errors'] = None if node.p_fd_err is NULL else FieldError(
+        dkn=list(_memview(node.p_fd_err)[0::2]),
+        dks=list(_memview(node.p_fd_err)[1::2]))
+    data['phase_errors'] = None if node.p_ph_err is NULL else PhaseError(
+        dpn=list(_memview(node.p_ph_err)[0::2]),
+        dps=list(_memview(node.p_ph_err)[1::2]))
     return data
+
+
+cdef double [:] _memview(clib.double_array* array):
+    return <double [:array.curr]> array.a
 
 
 cdef double _get_node_entry_pos(clib.node* node, int ref_flag, int is_expanded):
