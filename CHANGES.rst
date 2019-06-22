@@ -1,6 +1,14 @@
 Changelog
 ~~~~~~~~~
 
+1.3.0
+=====
+Date: 22.06.2019
+
+- expose MAD-X errors as ``element.field_errors``, ``.phase_errors``, and
+  ``.align_errors`` when accessed through sequence
+
+
 1.2.2
 =====
 Date: 12.06.2019
