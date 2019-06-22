@@ -445,7 +445,7 @@ def get_table_column(table_name, column_name):
     # double:
     if dtype == b'i' or dtype == b'd':
         # YES, integers are internally stored as doubles in MAD-X:
-        return _inplace_double_array(<double*>info.data, info.length)
+        return np.ctypeslib.as_array(<double [:info.length]> info.data)
     # string:
     elif dtype == b'S':
         char_tmp = <char**> info.data
@@ -1127,15 +1127,7 @@ cdef _node_name(clib.node* node):
 cdef _double_array_copy(clib.double_array* ptr):
     """Returns a numpy array from the given MAD-X array, or None."""
     if ptr is not NULL:
-        return _inplace_double_array(ptr.a, ptr.curr)
-
-
-cdef _inplace_double_array(double* data, int size):
-    """Return inplace numpy array from the given C array."""
-    addr = <Py_intptr_t> data
-    array_type = ctypes.c_double * size
-    array_data = array_type.from_address(addr)
-    return np.ctypeslib.as_array(array_data)
+        return np.ctypeslib.as_array(<double [:ptr.curr]> ptr.a)
 
 
 cdef _get_node(clib.node* node, int ref_flag, int is_expanded, int line):
