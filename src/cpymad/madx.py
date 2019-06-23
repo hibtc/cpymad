@@ -658,6 +658,11 @@ class Sequence(object):
         return ElementList(self._madx, self._name)
 
     @property
+    def length(self):
+        """Return sequence length in the declaration"""
+        return self._libmadx.get_sequence_length(self._name)
+
+    @property
     def expanded_elements(self):
         """List of elements including implicit drifts."""
         return ExpandedElementList(self._madx, self._name)
