@@ -298,6 +298,23 @@ def get_sequence_beam(sequence_name):
     return _parse_command(seq.beam)
 
 
+def get_sequence_length(sequence_name):
+    """
+    Get the length associated to the sequence.
+
+    :param str sequence_name: sequence name
+    :returns: sequence length
+    :rtype: Parameter
+    :raises ValueError: if the sequence name is invalid
+    """
+    cdef clib.sequence* seq = _find_sequence(sequence_name)
+    length = Parameter(
+            'length',
+            *_expr(seq.l_expr, seq.length),
+            dtype=clib.PARAM_TYPE_DOUBLE,
+            inform=1)
+    return length
+
 def get_active_sequence_name():
     """
     Get the name of the active sequence.

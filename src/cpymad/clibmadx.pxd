@@ -184,6 +184,8 @@ cdef extern from "madX/mad_seq.h" nogil:
         char[NAME_L] name
         int ref_flag
         int line
+        double length
+        expression* l_expr
         node_list* nodes
         command* beam
         # expanded sequence

@@ -435,6 +435,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertEqual(s1.elements.index('#s'), 0)
         self.assertEqual(s1.elements.index('#e'), len(s1.elements)-1)
         self.assertEqual(s1.elements.index('sb'), 6)
+        self.assertEqual(s1.length, 8.0)
 
     def _get_elems(self, seq_name):
         elems = self.mad.sequence[seq_name].elements
