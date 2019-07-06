@@ -1,6 +1,13 @@
 Changelog
 ~~~~~~~~~
 
+1.4.0
+=====
+Date: 06.07.2019
+
+- expose sequence length as ``Sequence.length``
+
+
 1.3.0
 =====
 Date: 22.06.2019
