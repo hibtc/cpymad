@@ -46,7 +46,7 @@ install:
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
 
   # build MAD-X
-  - conda create -qf -n madx python=3.4 patch cmake pywget 7za
+  - conda create -qf -n madx python=3.4 patch cmake pywget 7za -c anaconda
   - activate madx
   - conda install -q -c conda-forge mingwpy
   - utils\build_madx.bat
@@ -55,12 +55,12 @@ install:
   - utils\build_wheels.bat
 
   # install cpymad
-  - conda install -q numpy
+  - conda install -q numpy -c anaconda
   - pip install minrpc importlib_resources
   - pip install --no-index -f dist cpymad
 
   # Install build/test deps:
-  - conda install -q coverage
+  - conda install -q coverage -c anaconda
   - pip install coveralls
 
 build: off
