@@ -21,8 +21,6 @@ except ImportError:                 # py2
 
 import numpy as np
 
-from minrpc.util import ChangeDirectory
-
 from . import _rpc
 from . import util
 from .stream import AsyncReader
@@ -302,7 +300,7 @@ class Madx(object):
                 and v in self.globals
                 and self._libmadx.get_var_type(v) > 0]
 
-    def chdir(self, path):
+    def chdir(self, dir):
         """
         Change the directory of the MAD-X process (not the current python process).
 
@@ -315,16 +313,12 @@ class Madx(object):
             with madx.chdir('/x/y/z'):
                 madx.call('file.x')
                 madx.call('file.y')
-
-        This method is special in that it is currently the only modification
-        of the MAD-X interpreter state that doesn't go through the
-        :meth:`Madx.input` method (because there is no MAD-X command to change
-        the directory).
         """
-        # Note, that the libmadx module includes the functions 'getcwd' and
-        # 'chdir' so it can be used as a valid 'os' module for the purposes
-        # of ChangeDirectory:
-        return ChangeDirectory(path, self._libmadx)
+        return util.ChangeDirectory(dir, self._chdir, self._libmadx.getcwd)
+
+    # Turns `dir` into a keyword argument for CHDIR command:
+    def _chdir(self, dir):
+        return self.command.chdir(dir=dir)
 
     def call(self, file, chdir=False):
         """
@@ -662,6 +656,15 @@ class Sequence(object):
     def elements(self):
         """Get list of elements."""
         return ElementList(self._madx, self._name)
+
+    def _get_length_parameter(self):
+        """Return sequence length in the declaration"""
+        return self._libmadx.get_sequence_length(self._name)
+
+    @property
+    def length(self):
+        """Return sequence length in the declaration"""
+        return self._get_length_parameter().value
 
     @property
     def expanded_elements(self):
@@ -1071,13 +1074,11 @@ class Table(_Mapping):
 
     def __iter__(self):
         """Iterate over all column names."""
-        return iter(self._libmadx.get_table_column_names(self._name) or
-                    self._libmadx.get_table_column_names_all(self._name))
+        return iter(self.col_names())
 
     def __len__(self):
         """Return number of columns."""
-        return (self._libmadx.get_table_column_count(self._name) or
-                self._libmadx.get_table_column_count_all(self._name))
+        return self._libmadx.get_table_column_count(self._name)
 
     def __repr__(self):
         return "<{} {!r}: {{{}}}>".format(
@@ -1087,6 +1088,20 @@ class Table(_Mapping):
     def summary(self):
         """Get the table summary."""
         return AttrDict(self._libmadx.get_table_summary(self._name))
+
+    def selected_columns(self):
+        """Get list of column names that were selected by the user (can be
+        empty)."""
+        return self._libmadx.get_table_column_names(self._name, selected=True)
+
+    def selected_rows(self):
+        """Get list of row indices that were selected by the user (can be
+        empty)."""
+        return self._libmadx.get_table_selected_rows(self._name)
+
+    def col_names(self):
+        """Get list of all columns in the table."""
+        return self._libmadx.get_table_column_names(self._name)
 
     def row_names(self):
         """Get table row names."""
@@ -1104,7 +1119,7 @@ class Table(_Mapping):
         self._cache[column.lower()] = data = self._query(column)
         return data
 
-    def row(self, index, columns='selected'):
+    def row(self, index, columns='all'):
         """Retrieve one row from the table."""
         return AttrDict(self._libmadx.get_table_row(self._name, index, columns))
 
@@ -1240,8 +1255,6 @@ class Metadata(object):
         u'simulate beam dynamics and optimize beam optics.'
     )
 
-    __support__ = u'mad@cern.ch'
-
     __uri__ = u'http://madx.web.cern.ch/madx/'
 
     __credits__ = (
@@ -1252,14 +1265,16 @@ class Metadata(object):
     )
 
     def get_copyright_notice(self):
-        from pkg_resources import resource_string
-        return resource_string('cpymad', 'COPYING/madx.rst').decode('utf-8')
+        from importlib_resources import read_text
+        return read_text('cpymad.COPYING', 'madx.rst', encoding='utf-8')
 
     _libmadx = None
 
     def _get_libmadx(self):
         if not self._libmadx:
-            svc, proc = _rpc.LibMadxClient.spawn_subprocess()
+            # Need to disable stdin to avoid deadlock that occurs if starting
+            # with closed or invalid stdin:
+            svc, proc = _rpc.LibMadxClient.spawn_subprocess(stdin=False)
             self._libmadx = svc.libmadx
         return self._libmadx
 

@@ -56,6 +56,7 @@ cdef extern from "madX/mad_table.h" nogil:
         int curr
         char_p_array* header
         int_array* col_out      # column no.s to be written (in this order)
+        int_array* row_out      # row numbers to be written (in this order)
         char_p_array* node_nm   # names of nodes at each row
         char*** s_cols
         double** d_cols
@@ -168,6 +169,9 @@ cdef extern from "madX/mad_node.h" nogil:
         expression* at_expr
         char* from_name
         element* p_elem
+        double_array* p_al_err
+        double_array* p_fd_err
+        double_array* p_ph_err
 
     struct node_list:
         int curr
@@ -180,6 +184,8 @@ cdef extern from "madX/mad_seq.h" nogil:
         char[NAME_L] name
         int ref_flag
         int line
+        double length
+        expression* l_expr
         node_list* nodes
         command* beam
         # expanded sequence

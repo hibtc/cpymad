@@ -1,6 +1,6 @@
 FROM quay.io/pypa/manylinux1_x86_64
 
-COPY ./build_all /opt
+COPY ./build_all ./*.patch /opt/
 
 # NOTE: already installed:
 # RUN yum install -y cmake28 devtoolset-2-gcc-gfortran.x86_64

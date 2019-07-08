@@ -30,6 +30,7 @@ __all__ = [
     'format_command',
     'check_expression',
     'temp_filename',
+    'ChangeDirectory',
 ]
 
 
@@ -473,3 +474,38 @@ def suppress(*exceptions):
         yield None
     except exceptions:
         pass
+
+
+class ChangeDirectory(object):
+
+    """
+    Context manager for temporarily changing current working directory.
+
+    :param str path: new path name
+    :param _os: module with ``getcwd`` and ``chdir`` functions
+    """
+
+    # Note that the code is generic enough to be applied for any temporary
+    # value patch, but we currently only need change directory, and therefore
+    # have named it so.
+
+    def __init__(self, path, chdir, getcwd):
+        self._chdir = chdir
+        self._getcwd = getcwd
+        # Contrary to common implementations of a similar context manager,
+        # we change the path immediately in the constructor. That enables
+        # this utility to be used without any 'with' statement:
+        if path:
+            self._restore = getcwd()
+            chdir(path)
+        else:
+            self._restore = None
+
+    def __enter__(self):
+        """Enter 'with' context."""
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Exit 'with' context and restore old path."""
+        if self._restore:
+            self._chdir(self._restore)

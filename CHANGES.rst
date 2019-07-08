@@ -1,6 +1,59 @@
 Changelog
 ~~~~~~~~~
 
+1.4.0
+=====
+Date: 06.07.2019
+
+- expose sequence length as ``Sequence.length``
+
+
+1.3.0
+=====
+Date: 22.06.2019
+
+- expose MAD-X errors as ``element.field_errors``, ``.phase_errors``, and
+  ``.align_errors`` when accessed through sequence
+
+
+1.2.2
+=====
+Date: 12.06.2019
+
+- update to MAD-X 5.05.01
+
+
+1.2.1
+=====
+Date: 05.06.2019
+
+- fix deadlock if accessing the global ``cpymad.madx.metadata`` object with
+  closed or invalid STDIN (after ``os.close(0)`` or in windows GUI application)
+
+
+1.2.0
+=====
+Date: 11.05.2019
+
+- update to MAD-X 5.05.00
+- implement Madx.chdir using the new CHDIR command. This improves readability
+  and repeatability of command histories.
+
+
+1.1.2
+=====
+Date: 13.04.2019
+
+- expose all columns in table, don't limit by current selection
+- unify the get_table_column_XXX functions in libmadx
+- add Table.selected_columns method
+- add Table.selected_rows method
+- drop ability to build MAD-X through setup.py
+- don't search for MAD-X in system locations
+- simplifications in setup script
+- replace runtime dependency on setuptools by importlib_resources
+
+
 1.1.1
 =====
 Date: 18.02.2019

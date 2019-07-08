@@ -10,6 +10,13 @@ from numpy.testing import assert_allclose
 from cpymad.madx import Madx, CommandLog, metadata
 
 
+def normalize(path):
+    """Normalize path name to eliminate different spellings of the same path.
+    This is needed for path comparisons in tests, especially on windows where
+    pathes are case insensitive and allow a multitude of spellings."""
+    return os.path.normcase(os.path.normpath(path))
+
+
 class _TestCaseCompat(object):
 
     """
@@ -65,11 +72,11 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         version = self.mad.version
         # check format:
         major, minor, micro = map(int, version.release.split('.'))
-        # We need at least MAD-X 5.04.02:
-        self.assertGreaterEqual((major, minor, micro), (5, 4, 2))
+        # We need at least MAD-X 5.05.00:
+        self.assertGreaterEqual((major, minor, micro), (5, 5, 0))
         # check format:
         year, month, day = map(int, version.date.split('.'))
-        self.assertGreaterEqual((year, month, day), (2018, 10, 3))
+        self.assertGreaterEqual((year, month, day), (2019, 5, 10))
         self.assertLessEqual(month, 12)
         self.assertLessEqual(day, 31)
         self.assertTrue(str(version).startswith(
@@ -149,23 +156,23 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         g = self.mad.globals
 
         self.mad.chdir(folder)
-        self.assertEqual(getcwd(), folder)
+        self.assertEqual(normalize(getcwd()), normalize(folder))
         self.mad.call('answer_42.madx')
         self.assertEqual(g.answer, 42)
 
         with self.mad.chdir('..'):
-            self.assertEqual(getcwd(), parent)
+            self.assertEqual(normalize(getcwd()), normalize(parent))
             self.mad.call('test/answer_43.madx')
             self.assertEqual(g.answer, 43)
             self.mad.call('test/answer_call42.madx', True)
             self.assertEqual(g.answer, 42)
 
-        self.assertEqual(getcwd(), folder)
+        self.assertEqual(normalize(getcwd()), normalize(folder))
         self.mad.call('answer_43.madx')
         self.assertEqual(g.answer, 43)
 
         self.mad.chdir('..')
-        self.assertEqual(getcwd(), parent)
+        self.assertEqual(normalize(getcwd()), normalize(parent))
 
     def _check_twiss(self, seq_name):
         beam = 'ex=1, ey=2, particle=electron, sequence={0};'.format(seq_name)
@@ -428,6 +435,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertEqual(s1.elements.index('#s'), 0)
         self.assertEqual(s1.elements.index('#e'), len(s1.elements)-1)
         self.assertEqual(s1.elements.index('sb'), 6)
+        self.assertEqual(s1.length, 8.0)
 
     def _get_elems(self, seq_name):
         elems = self.mad.sequence[seq_name].elements
@@ -710,6 +718,24 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
             }
         ''')
         self.assertEqual(var.x, 3)
+
+    def test_errors(self):
+        mad = self.mad
+        mad.beam()
+        mad.use(sequence='s1')
+        mad.select(flag='error', range='qp')
+        dkn = [1e-6, 2e-6, 3e-6]
+        dks = [4e-6, 5e-6, 6e-6]
+        mad.efcomp(dkn=dkn, dks=dks)
+        mad.ealign(dx=1e-3, dy=-4e-3)
+        fd = mad.sequence['s1'].expanded_elements['qp'].field_errors
+        al = mad.sequence['s1'].expanded_elements['qp'].align_errors
+        expected_dkn = np.hstack((dkn, np.zeros(len(fd.dkn) - len(dkn))))
+        expected_dks = np.hstack((dks, np.zeros(len(fd.dks) - len(dks))))
+        assert_allclose(fd.dkn, expected_dkn)
+        assert_allclose(fd.dks, expected_dks)
+        assert_allclose(al.dx, 1e-3)
+        assert_allclose(al.dy, -4e-3)
 
 
 class TestTransferMap(unittest.TestCase):

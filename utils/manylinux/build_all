@@ -2,8 +2,8 @@
 
 set -ex
 
-: ${MADX_VERSION:=5.04.02}
-: ${CPYMAD_VERSION:=1.1.1}
+: ${MADX_VERSION:=5.05.01}
+: ${CPYMAD_VERSION:=1.4.0}
 : ${PY:=/opt/python/cp36-cp36m/bin}
 
 # Build MAD-X
@@ -17,6 +17,10 @@ if [[ $(cat /io/install/version) != $MADX_VERSION ]]; then
     elif [[ ! -e /io/MAD-X ]]; then
         git clone git://github.com/MethodicalAcceleratorDesign/MAD-X /io/MAD-X
         git -C /io/MAD-X checkout $MADX_VERSION
+
+        # Patch an incompatibility with cmake28 in recent MAD-X (my fault). We
+        # can drop this once migrating to manylinux 2019 (with newer cmake):
+        patch -d /io/MAD-X -p1 < /opt/cmake28_hotfix.patch
     fi
 
     mkdir -p /io/build/madx
@@ -64,12 +68,13 @@ fi
 
 export X11=0 BLAS=0 LAPACK=0 MADXDIR=/io/install
 for PYBIN in /opt/python/*/bin; do
+    "${PYBIN}/pip" install -U setuptools
     "${PYBIN}/pip" wheel "$CPYMAD_ARCHIVE" --no-deps -w /io/build/cpymad/dist/
 done
 
 # Bundle external shared libraries into the wheels
-mkdir -p /io/wheels
+mkdir -p /io/dist
 for whl in /io/build/cpymad/dist/*.whl; do
-    auditwheel repair "$whl" -w /io/wheels/
+    auditwheel repair "$whl" -w /io/dist
 done
-cp "$CPYMAD_ARCHIVE" /io/wheels/
+cp "$CPYMAD_ARCHIVE" /io/dist

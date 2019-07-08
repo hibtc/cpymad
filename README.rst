@@ -11,7 +11,7 @@ Python 3 is recommended but not (yet) required.
 
 .. _Cython: https://cython.org/
 .. _MAD-X: https://cern.ch/mad
-.. |VERSION| replace:: 5.04.02
+.. |VERSION| replace:: 5.05.01
 
 
 Links
@@ -75,17 +75,14 @@ Tests
 When a commit is pushed upstream, the tests are automatically run on the
 following continuous integration (CI) systems:
 
-- AppVeyor_ runs the tests in windows environments for python{2.7,3.4}.
+- AppVeyor_ builds and tests cpymad on windows
   |AppVeyor|
 
-- `Travis CI`_ runs the tests in a linux container for python{2.7,3.3,3.4,3.5,3.6}.
-  For performance reasons the tests make use of a precompiled version of
-  the MAD-X library which is hosted in an *unofficial* launchpad PPA_.
+- `Travis CI`_ builds and tests cpymad on linux.
   |Travis| |Coverage|
 
 .. _AppVeyor: https://ci.appveyor.com/project/coldfix/cpymad
 .. _Travis CI: https://travis-ci.org/hibtc/cpymad
-.. _PPA: https://launchpad.net/~coldfix/+archive/ubuntu/madx/
 
 
 .. Badges:
@@ -113,3 +110,11 @@ following continuous integration (CI) systems:
 .. |Python| image::     https://img.shields.io/pypi/pyversions/cpymad.svg
    :target:             https://pypi.org/project/cpymad#files
    :alt:                Python versions
+
+
+CHANGELOG
+=========
+
+The full changelog is available online in CHANGES.rst_.
+
+.. _CHANGES.rst: https://github.com/hibtc/cpymad/blob/master/CHANGES.rst

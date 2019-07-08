@@ -14,7 +14,7 @@ CAUTION: Do not import this module directly! Use :class:`Madx` instead.
 - this module exposes a very C-ish API that is not convenient to work with.
 """
 
-from os import chdir, getcwd
+from os import getcwd
 
 import ctypes
 import numpy as np      # Import the Python-level symbols of numpy
@@ -28,7 +28,7 @@ cdef extern from "string.h" nogil:
     char* strstr(char* s1, char* s2)
     char* strchr(char* s, int c)
 
-from cpymad.types import Constraint, Parameter
+from cpymad.types import Constraint, Parameter, AlignError, FieldError, PhaseError
 from cpymad.util import name_to_internal, name_from_internal, normalize_range_name
 cimport cpymad.clibmadx as clib
 
@@ -77,14 +77,13 @@ __all__ = [
     # table access
     'get_table_summary',
     'get_table_column_names',
-    'get_table_column_names_all',
     'get_table_column_count',
-    'get_table_column_count_all',
     'get_table_column',
     'get_table_row',
     'get_table_row_count',
     'get_table_row_names',
 
+    'get_table_selected_rows',
     'apply_table_selections',
 
     # sequence element list access
@@ -118,9 +117,8 @@ __all__ = [
     'get_defined_command',
     'get_defined_command_names',
 
-    # these are imported from 'os' for convenience in madx.Madx and should
-    # not really be considered part of the public interface:
-    'chdir',
+    # imported from 'os' for convenience in madx.Madx and should not be
+    # considered part of the public interface:
     'getcwd',
 ]
 
@@ -300,6 +298,23 @@ def get_sequence_beam(sequence_name):
     return _parse_command(seq.beam)
 
 
+def get_sequence_length(sequence_name):
+    """
+    Get the length associated to the sequence.
+
+    :param str sequence_name: sequence name
+    :returns: sequence length
+    :rtype: Parameter
+    :raises ValueError: if the sequence name is invalid
+    """
+    cdef clib.sequence* seq = _find_sequence(sequence_name)
+    length = Parameter(
+            'length',
+            *_expr(seq.l_expr, seq.length),
+            dtype=clib.PARAM_TYPE_DOUBLE,
+            inform=1)
+    return length
+
 def get_active_sequence_name():
     """
     Get the name of the active sequence.
@@ -386,27 +401,12 @@ def get_table_summary(table_name):
                  for i in range(header.curr)])
 
 
-def get_table_column_names(table_name):
-    """
-    Get a list of all column names in the table that were selected for output.
-
-    :param str table_name: table name
-    :returns: column names
-    :rtype: list
-    :raises ValueError: if the table name is invalid
-    """
-    cdef clib.table* table = _find_table(table_name)
-    indices = [table.col_out.i[i] for i in range(table.col_out.curr)]
-    # NOTE: we can't enforce lower-case on the column names here, since this
-    # breaks their usage with get_table_column():
-    return [_str(table.columns.names[i]) for i in indices]
-
-
-def get_table_column_names_all(table_name):
+def get_table_column_names(table_name, selected=False):
     """
     Get a list of all column names in the table.
 
     :param str table_name: table name
+    :param bool selected: consider only selected columns
     :returns: column names
     :rtype: list
     :raises ValueError: if the table name is invalid
@@ -414,33 +414,28 @@ def get_table_column_names_all(table_name):
     cdef clib.table* table = _find_table(table_name)
     # NOTE: we can't enforce lower-case on the column names here, since this
     # breaks their usage with get_table_column():
-    return _name_list(table.columns)
+    if selected:
+        indices = [table.col_out.i[i] for i in range(table.col_out.curr)]
+        return [_str(table.columns.names[i]) for i in indices]
+    else:
+        return _name_list(table.columns)
 
 
-def get_table_column_count(table_name):
-    """
-    Get a number of columns selected for display in the table.
-
-    :param str table_name: table name
-    :returns: number of columns
-    :rtype: int
-    :raises ValueError: if the table name is invalid
-    """
-    cdef clib.table* table = _find_table(table_name)
-    return table.col_out.curr
-
-
-def get_table_column_count_all(table_name):
+def get_table_column_count(table_name, selected=False):
     """
     Get a number of columns in the table.
 
     :param str table_name: table name
+    :param bool selected: consider only selected columns
     :returns: number of columns
     :rtype: int
     :raises ValueError: if the table name is invalid
     """
     cdef clib.table* table = _find_table(table_name)
-    return table.columns.curr
+    if selected:
+        return table.col_out.curr
+    else:
+        return table.columns.curr
 
 
 def get_table_column(table_name, column_name):
@@ -464,14 +459,10 @@ def get_table_column(table_name, column_name):
     cdef bytes _col_name = _cstr(column_name)
     cdef clib.column_info info = clib.table_get_column(_tab_name, _col_name)
     dtype = <bytes> info.datatype
-    size = <int> info.length
-    addr = <Py_intptr_t> info.data
     # double:
     if dtype == b'i' or dtype == b'd':
         # YES, integers are internally stored as doubles in MAD-X:
-        array_type = ctypes.c_double * size
-        array_data = array_type.from_address(addr)
-        return np.ctypeslib.as_array(array_data)
+        return np.ctypeslib.as_array(<double [:info.length]> info.data)
     # string:
     elif dtype == b'S':
         char_tmp = <char**> info.data
@@ -486,7 +477,7 @@ def get_table_column(table_name, column_name):
                            .format(_str(dtype), column_name))
 
 
-def get_table_row(table_name, row_index, columns='selected'):
+def get_table_row(table_name, row_index, columns='all'):
     """
     Return row as tuple of values.
     """
@@ -548,11 +539,19 @@ def get_table_row_names(table_name, indices=None):
     Return row names for every index (row number) in the list.
     """
     cdef clib.table* table = _find_table(table_name)
-    if isinstance(indices, int):
-        return _get_table_row_name(table, indices)
-    elif indices is None:
+    if indices == 'all' or indices is None:
         indices = range(table.curr)
+    elif indices == 'selected':
+        indices = [table.row_out.i[i] for i in range(table.curr)]
+    elif isinstance(indices, int):
+        return _get_table_row_name(table, indices)
     return [_get_table_row_name(table, i) for i in indices]
+
+
+def get_table_selected_rows(table_name):
+    """Return list of selected row indices in table (may be empty)."""
+    cdef clib.table* table = _find_table(table_name)
+    return [table.row_out.i[i] for i in range(table.curr)]
 
 
 def apply_table_selections(table_name):
@@ -1163,7 +1162,19 @@ cdef _get_node(clib.node* node, int ref_flag, int is_expanded, int line):
     data['base_name'] = _str(node.base_name)
     data['position'] = _get_node_entry_pos(node, ref_flag, is_expanded)
     data['length'] = node.length
+    data['align_errors'] = None if node.p_al_err is NULL else AlignError(
+        *_memview(node.p_al_err))
+    data['field_errors'] = None if node.p_fd_err is NULL else FieldError(
+        dkn=list(_memview(node.p_fd_err)[0::2]),
+        dks=list(_memview(node.p_fd_err)[1::2]))
+    data['phase_errors'] = None if node.p_ph_err is NULL else PhaseError(
+        dpn=list(_memview(node.p_ph_err)[0::2]),
+        dps=list(_memview(node.p_ph_err)[1::2]))
     return data
+
+
+cdef double [:] _memview(clib.double_array* array):
+    return <double [:array.curr]> array.a
 
 
 cdef double _get_node_entry_pos(clib.node* node, int ref_flag, int is_expanded):
