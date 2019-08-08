@@ -26,45 +26,8 @@ anaconda should work fine too.
 
 .. _miniconda: https://conda.io/en/latest/miniconda.html
 
-After installing conda, open the conda command prompt.
-
-Proxy configuration
-===================
-
-In order to further continue using the conda environment, some proxy configuration files are needed if you are working behind a firewall, which restricts the free download and upload of data.
-If you don't have such limitations you can omit this part and go directly to build a Conda-environment_).  
-
-First, open a text file and type the following::
-  
-    auto_update_conda: false
-    
-    proxy_servers:
-      http: http://"Your username in the server":"Your password in the server"@"The name of the proxy"
-      https: https://"Your username in the server":"Your password in the server"@"The name of the proxy
-   
-And save the document as .condarc in the SysDisc/User/"Your Username"/
-directory.
-
-Some of the applications won't be downloadable via conda install, so we also recommend installing pip::
-
-  conda install pip
-
-In the same way open a a text file and type::
-
-  [global]
-  proxy=http://"Your username in the server":"Your password in the server"@"The name of the proxy":8080
-
-Save the document as pip.ini in SysDisc/User/"Your Username"/
-directory and now you should also be able to use the command::
-
-  pip install "Some app"
-
-Note that you might have to refresh continuosly your web browser. 
-
-Conda-environment
-==================
-
-In order to build MAD-X, first **create a python 3.4** environment with cmake_ and mingwpy_ --
+After installing conda, open the conda command prompt. In order to build
+MAD-X, first **create a python 3.4** environment with cmake_ and mingwpy_ --
 even if you plan using cpymad on a higher python version! If you want cpymad
 on py2.7 or 3.3 you can use the target python version for building MAD-X
 instead of 3.4::
