@@ -168,8 +168,7 @@ def normalize_range_name(name, elems=None):
 
 QUOTED_PARAMS = {'file', 'halofile', 'sectorfile', 'trueprofile'
                  'pipefile', 'trackfile', 'summary_file', 'filename',
-                 'echo', 'title', 'text', 'format'}
-
+                 'echo', 'title', 'text', 'format', 'dir'}
 
 def format_param(key, value):
     """
