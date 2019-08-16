@@ -170,6 +170,7 @@ QUOTED_PARAMS = {'file', 'halofile', 'sectorfile', 'trueprofile'
                  'pipefile', 'trackfile', 'summary_file', 'filename',
                  'echo', 'title', 'text', 'format', 'dir'}
 
+
 def format_param(key, value):
     """
     Format a single MAD-X command parameter.
