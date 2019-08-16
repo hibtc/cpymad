@@ -1,6 +1,13 @@
 Changelog
 ~~~~~~~~~
 
+1.4.1
+=====
+Date: 16.08.2019
+
+- fix bug in Madx.chdir with paths including uppercase letters
+
+
 1.4.0
 =====
 Date: 06.07.2019
