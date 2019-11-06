@@ -1,6 +1,6 @@
 cpymad
 ------
-|Version| |License| |Python| |Travis| |AppVeyor| |Coverage|
+|Version| |License| |Python| |Travis| |AppVeyor| |Coverage| |Gitter|
 
 cpymad is a Cython_ binding to MAD-X_ for giving full control and access to a
 MAD-X interpreter within the python environment.
@@ -110,6 +110,10 @@ following continuous integration (CI) systems:
 .. |Python| image::     https://img.shields.io/pypi/pyversions/cpymad.svg
    :target:             https://pypi.org/project/cpymad#files
    :alt:                Python versions
+
+.. |Gitter| image::     https://badges.gitter.im/cpymad.svg
+   :target:             https://gitter.im/cpymad
+   :alt:                Join chat on Gitter
 
 
 CHANGELOG
