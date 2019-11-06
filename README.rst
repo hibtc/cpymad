@@ -1,8 +1,6 @@
 cpymad
 ------
-Community: |Version| |License| |Gitter|
-
-Tests: |Python| |Travis| |AppVeyor| |Coverage|
+|Version| |Python| |License| |Gitter|
 
 cpymad is a Cython_ binding to MAD-X_ for giving full control and access to a
 MAD-X interpreter within the python environment.
