@@ -13,7 +13,6 @@ Python 3 is recommended but not (yet) required.
 .. _MAD-X: https://cern.ch/mad
 .. |VERSION| replace:: 5.05.01
 
-
 Links
 ~~~~~
 
