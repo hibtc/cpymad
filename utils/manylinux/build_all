@@ -2,10 +2,8 @@
 
 set -ex
 
-here="$(dirname "$(readlink -nf "$BASH_SOURCE")")"
-
-: ${MADX_VERSION:=5.05.01}
-: ${CPYMAD_VERSION:=1.4.1}
+: ${MADX_VERSION:=5.05.02}
+: ${CPYMAD_VERSION:=1.4.2}
 : ${PY:=/opt/python/cp36-cp36m/bin}
 
 # Build MAD-X
