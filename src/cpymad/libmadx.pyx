@@ -412,13 +412,17 @@ def get_table_column_names(table_name, selected=False):
     :raises ValueError: if the table name is invalid
     """
     cdef clib.table* table = _find_table(table_name)
+    cdef clib.name_list* columns = table.columns;
+    cdef int i
     # NOTE: we can't enforce lower-case on the column names here, since this
     # breaks their usage with get_table_column():
     if selected:
         indices = [table.col_out.i[i] for i in range(table.col_out.curr)]
         return [_str(table.columns.names[i]) for i in indices]
     else:
-        return _name_list(table.columns)
+        VALID = (PARAM_TYPE_INTEGER, PARAM_TYPE_DOUBLE, PARAM_TYPE_STRING)
+        return [_str(columns.names[i]) for i in range(columns.curr)
+                if columns.inform[i] in VALID]
 
 
 def get_table_column_count(table_name, selected=False):
