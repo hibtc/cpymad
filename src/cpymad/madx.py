@@ -159,6 +159,7 @@ class Madx(object):
                     stdout = stdout.write
             Popen_args['stdout'] = \
                 subprocess.PIPE if callable(stdout) else stdout
+            Popen_args['stderr'] =  Popen_args['stdout']
             # stdin=None leads to an error on windows when STDIN is broken.
             # Therefore, we need set stdin=os.devnull by passing stdin=False:
             Popen_args.setdefault('stdin', False)
