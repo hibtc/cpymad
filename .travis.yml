@@ -62,7 +62,7 @@ jobs:
       services:
         - docker
       install:
-        - pip install docker-compose twine
+        - pip install twine
       script:
         - git rev-parse HEAD:utils/manylinux > /tmp/cache_key
         - if ! cmp /home/travis/io/cache_key /tmp/cache_key; then
@@ -72,23 +72,25 @@ jobs:
         - mkdir -p /home/travis/io
         - chmod -R 777 /home/travis/io
         - sudo mv /tmp/cache_key /home/travis/io/
-        - docker build -t wheelbuilder32 utils/manylinux -f utils/manylinux/Dockerfile_x86
-        - docker build -t wheelbuilder64 utils/manylinux -f utils/manylinux/Dockerfile_x64
         # at the time of writing, mounting /io/cpymad as readonly volume
         # (the `:ro` option) causes container init error when executed on
         # travis (not on my local machine though), so we use `:rw` instead:
         - docker run --init --name artifacts32
             -v /home/travis/io/32:/io:rw
             -v `pwd`:/io/cpymad:rw
+            -v /io/cpymad/src/cpymad.egg-info
             -v /io/dist
             --cap-drop=all
-            wheelbuilder32
+            quay.io/pypa/manylinux2010_i686
+            /io/cpymad/utils/manylinux/build_all
         - docker run --init --name artifacts64
             -v /home/travis/io/64:/io:rw
             -v `pwd`:/io/cpymad:rw
+            -v /io/cpymad/src/cpymad.egg-info
             -v /io/dist
             --cap-drop=all
-            wheelbuilder64
+            quay.io/pypa/manylinux2010_x86_64
+            /io/cpymad/utils/manylinux/build_all
         - docker cp artifacts32:/io/dist .
         - docker cp artifacts64:/io/dist .
         - twine check dist/*
