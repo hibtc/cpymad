@@ -2,6 +2,8 @@
 
 set -ex
 
+here="$(dirname "$(readlink -nf "$BASH_SOURCE")")"
+
 : ${MADX_VERSION:=5.05.01}
 : ${CPYMAD_VERSION:=1.4.1}
 : ${PY:=/opt/python/cp36-cp36m/bin}
@@ -20,7 +22,7 @@ if [[ $(cat /io/install/version) != $MADX_VERSION ]]; then
 
         # Patch an incompatibility with cmake28 in recent MAD-X (my fault). We
         # can drop this once migrating to manylinux 2019 (with newer cmake):
-        patch -d /io/MAD-X -p1 < /opt/cmake28_hotfix.patch
+        patch -d /io/MAD-X -p1 < "$here"/cmake28_hotfix.patch
     fi
 
     mkdir -p /io/build/madx

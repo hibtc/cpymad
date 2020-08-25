@@ -8,40 +8,27 @@ installed on many linux (without having to build MAD-X and cpymad manually).
 Build instructions
 ~~~~~~~~~~~~~~~~~~
 
-Using docker-compose
-````````````````````
-
-This requires that you have docker installed. In order to build the wheels
+This requires that you have docker running. In order to build the wheels
 go to the cpymad root directory and execute::
 
-    docker-compose -f utils/manylinux/docker-compose_x64.yml up --build
-
-To retrieve your shiny new wheels, type::
-
-    docker cp manylinux_cpymad_1:/io/dist .
-
-
-Using docker
-````````````
-
-If you want to (or have to) use lower level tools, you can do so as follows:
-
-.. code-block:: bash
-
     docker create -v /io --name artifacts busybox
-
-    docker build -t cpymad-manylinux utils/manylinux -f Dockerfile_x64
 
     docker run --init --rm \
         --volumes-from artifacts \
         -v `pwd`:/io/cpymad:ro \
+        -v /io/cpymad/src/cpymad.egg-info \
         --cap-drop=all \
-        cpymad-manylinux
+        quay.io/pypa/manylinux2010_x86_64 \
+        /io/cpymad/utils/manylinux/build_all
 
     docker cp artifacts:/io/dist .
 
-Note this makes use of a data container that will persist build artifacts and
+This makes use of a data container that will persist build artifacts and
 therefore significantly speedup subsequent runs.
+
+Note the use of a separate volume for the ``.egg-info`` directory! This is
+needed to allow mounting all host filesystems as read-only — which avoids a
+number of potential permission issues in both host and container.
 
 
 Known issues
@@ -52,12 +39,3 @@ Unfortunately, the available static ``libgfortran.a`` libraries (shipped in
 compiled with -fPIC and therefore can not be used for static linking. This is
 probably not a huge problem because the ``auditwheel`` step takes care to
 include the ``libgfortran.so`` into the wheel.
-
-However, the cpymad C extension still has other runtime dependencies (check
-``readelf -d``) that are not included into the wheel. I am not sure whether
-any of these may be problematic:
-
-- ``libstdc++.so.6``
-- ``libgcc_s.so.1``
-- ``libpthread.so.0``
-- ``libc.so.6``

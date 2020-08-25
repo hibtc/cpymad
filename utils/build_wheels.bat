@@ -22,6 +22,7 @@ call conda create -qyf -n py34 python=3.4 wheel cython -c anaconda
 call conda create -qyf -n py35 python=3.5 wheel cython -c anaconda
 call conda create -qyf -n py36 python=3.6 wheel cython -c anaconda
 call conda create -qyf -n py37 python=3.7 wheel cython -c anaconda
+call conda create -qyf -n py38 python=3.8 wheel cython -c anaconda
 
 :: Install mingwpy where available (note that mingwpy is not available on py35+
 :: and that the simpler installation command `conda install -n py33 mingwpy`
@@ -44,6 +45,7 @@ if "%PLATFORM%" == "x86" (
     call :build_cpymad2 py35 35 win32-3.5 cp35-win32
     call :build_cpymad2 py36 36 win32-3.6 cp36-win32
     call :build_cpymad2 py37 37 win32-3.7 cp37-win32
+    call :build_cpymad2 py38 38 win32-3.8 cp38-win32
 ) else (
     call :build_cpymad  py27
     call :build_cpymad  py33
@@ -51,6 +53,7 @@ if "%PLATFORM%" == "x86" (
     call :build_cpymad2 py35 35 win-amd64-3.5 cp35-win_amd64
     call :build_cpymad2 py36 36 win-amd64-3.6 cp36-win_amd64
     call :build_cpymad2 py37 37 win-amd64-3.7 cp37-win_amd64
+    call :build_cpymad2 py38 38 win-amd64-3.8 cp38-win_amd64
 )
 exit /b %ERRORLEVEL%
 
