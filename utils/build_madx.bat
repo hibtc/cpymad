@@ -1,7 +1,7 @@
 if not defined MADXDIR ( set "MADXDIR=%~dp0\madx-bin" )
 
 :: Acquire MAD-X:
-set "MADX_VER=5.05.01"
+set "MADX_VER=5.06.00"
 set "MADX_ZIP=%MADX_VER%.zip"
 set "MADX_URL=https://github.com/MethodicalAcceleratorDesign/MAD-X/archive/"
 set "MADX_DIR=MAD-X-%MADX_VER%"

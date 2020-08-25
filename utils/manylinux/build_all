@@ -2,10 +2,8 @@
 
 set -ex
 
-here="$(dirname "$(readlink -nf "$BASH_SOURCE")")"
-
-: ${MADX_VERSION:=5.05.01}
-: ${CPYMAD_VERSION:=1.4.1}
+: ${MADX_VERSION:=5.06.00}
+: ${CPYMAD_VERSION:=1.4.2}
 : ${PY:=/opt/python/cp36-cp36m/bin}
 
 # Build MAD-X
@@ -17,17 +15,14 @@ if [[ $(cat /io/install/version) != $MADX_VERSION ]]; then
     if [[ -f $MADX_ARCHIVE ]]; then
         tar -xzf $MADX_ARCHIVE --one-top-level=/io/MAD-X --strip-components 1
     elif [[ ! -e /io/MAD-X ]]; then
-        git clone git://github.com/MethodicalAcceleratorDesign/MAD-X /io/MAD-X
-        git -C /io/MAD-X checkout $MADX_VERSION
-
-        # Patch an incompatibility with cmake28 in recent MAD-X (my fault). We
-        # can drop this once migrating to manylinux 2019 (with newer cmake):
-        patch -d /io/MAD-X -p1 < "$here"/cmake28_hotfix.patch
+        git clone git://github.com/MethodicalAcceleratorDesign/MAD-X \
+            /io/MAD-X -b $MADX_VERSION --depth 1
     fi
 
     mkdir -p /io/build/madx
     cd /io/build/madx
-    cmake28 /io/MAD-X \
+    $PY/pip install --upgrade cmake
+    $PY/cmake /io/MAD-X \
         -DBUILD_SHARED_LIBS=OFF \
         -DMADX_STATIC=ON \
         -DCMAKE_INSTALL_PREFIX=/io/install \
@@ -42,8 +37,8 @@ fi
 # Download cpymad:
 if [[ ! -f $CPYMAD_ARCHIVE ]]; then
     if [[ ! -e /io/cpymad ]]; then
-        git clone git://github.com/hibtc/cpymad /io/cpymad
-        git -C /io/cpymad checkout $CPYMAD_VERSION
+        git clone git://github.com/hibtc/cpymad /io/cpymad \
+            /io/cpymad -b $CPYMAD_VERSION --depth 1
     fi
 
     # The cpymad folder may be mounted from the host OS. For this reason we

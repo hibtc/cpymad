@@ -93,7 +93,7 @@ def get_extension_args(madxdir, shared, static, **libs):
     if not shared:
         # NOTE: If MAD-X was built with BLAS/LAPACK, you must manually provide
         # arguments `python setup.py build_ext -lblas -llapack`!
-        libraries += ['ptc', 'gc-lib', 'stdc++', 'gfortran', 'quadmath']
+        libraries += ['DISTlib', 'ptc', 'gc-lib', 'stdc++', 'gfortran', 'quadmath']
         libraries += [lib for lib, use in libs.items() if use]
 
     link_args = ['--static'] if static and not IS_WIN else []
