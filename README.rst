@@ -11,7 +11,7 @@ Python 3 is recommended but not (yet) required.
 
 .. _Cython: https://cython.org/
 .. _MAD-X: https://cern.ch/mad
-.. |VERSION| replace:: 5.05.02
+.. |VERSION| replace:: 5.06.00
 
 
 Links

@@ -1,18 +1,13 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 0044b9d8..f6922ec6 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -2,11 +2,11 @@ cmake_minimum_required(VERSION 2.8)
- 
- set(CMAKE_LEGACY_CYGWIN_WIN32 0) # Remove when CMake >= 2.8.4 is required
- 
--PROJECT(madX LANGUAGES C CXX Fortran)
-+PROJECT(madX C CXX Fortran)
- 
- if(COMMAND cmake_policy)
-   cmake_policy(SET CMP0003 NEW)
--  if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.0)
-+  if(${CMAKE_VERSION} VERSION_GREATER 2.99999)
-     cmake_policy(SET CMP0042 NEW)
-   endif()
- endif()
+diff --git a/cmake/compilers/setupGNU.cmake b/cmake/compilers/setupGNU.cmake
+index dbe694b7..0d27f68f 100644
+--- a/cmake/compilers/setupGNU.cmake
++++ b/cmake/compilers/setupGNU.cmake
+@@ -13,7 +13,7 @@ if (CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
+     if(${CMAKE_Fortran_COMPILER_VERSION} VERSION_GREATER 4.3.9)
+         add_definitions(-D_GFORTRAN)
+     endif()
+-    if(${CMAKE_Fortran_COMPILER_VERSION} VERSION_GREATER_EQUAL 10.0.0)
++    if(NOT ${CMAKE_Fortran_COMPILER_VERSION} VERSION_LESS 10.0.0)
+         set(CMAKE_Fortran_FLAGS "-fallow-invalid-boz ${CMAKE_Fortran_FLAGS}")
+     endif()
+     # Release flags:
