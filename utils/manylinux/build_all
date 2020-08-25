@@ -17,15 +17,12 @@ if [[ $(cat /io/install/version) != $MADX_VERSION ]]; then
     elif [[ ! -e /io/MAD-X ]]; then
         git clone git://github.com/MethodicalAcceleratorDesign/MAD-X /io/MAD-X
         git -C /io/MAD-X checkout $MADX_VERSION
-
-        # Patch an incompatibility with cmake28 in recent MAD-X (my fault). We
-        # can drop this once migrating to manylinux 2019 (with newer cmake):
-        patch -d /io/MAD-X -p1 < "$here"/cmake28_hotfix.patch
     fi
 
     mkdir -p /io/build/madx
     cd /io/build/madx
-    cmake28 /io/MAD-X \
+    $PY/pip install --upgrade cmake
+    $PY/cmake /io/MAD-X \
         -DBUILD_SHARED_LIBS=OFF \
         -DMADX_STATIC=ON \
         -DCMAKE_INSTALL_PREFIX=/io/install \
