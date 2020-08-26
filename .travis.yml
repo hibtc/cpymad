@@ -25,6 +25,7 @@ before_install:
   - env | sort
 
 install:
+  - pip install --upgrade pip
   - pip install wheel
   - PY_ABI_TAG=$(python -c
         'from wheel.pep425tags import get_abi_tag; print(get_abi_tag())')
