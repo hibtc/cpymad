@@ -19,9 +19,6 @@ environment:
     TWINE_PASSWORD:
       secure: y7p5ueCXptYxkKjMeEbUHPX3+UnXM2o7KV6N5d5Pc0g=
 
-on_finish:
-  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-
 install:
   # Log environment for informational purposes:
   - set
