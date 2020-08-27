@@ -7,7 +7,7 @@ environment:
   # https://www.appveyor.com/docs/windows-images-software/#python
   matrix:
     # Use conda to manage python environments:
-    - CONDAPATH: 'C:\Miniconda36'
+    - CONDAPATH: 'C:\Miniconda37'
 
   global:
     MADXVER: 5.06.00
@@ -36,7 +36,7 @@ install:
 
   # Configure and activate conda:
   - if "%PLATFORM%" == "x64" set "CONDAPATH=%CONDAPATH%-x64"
-  - set "PATH=%CONDAPATH%\bin;%CONDAPATH%\Scripts;%PATH%"
+  - set "PATH=%CONDAPATH%\condabin;%PATH%"
   - conda config --set always_yes yes --set changeps1 yes
   - conda update -q conda
   - if "%PLATFORM%" == "x86" set "CONDA_FORCE_32BIT=1"
@@ -47,7 +47,7 @@ install:
 
   # build MAD-X
   - conda create -qf -n madx python=3.8 cmake pywget -c anaconda
-  - activate madx
+  - conda activate madx
   - conda install -q -c msys2 m2w64-toolchain
   - utils\build_madx.bat
   - conda deactivate
@@ -56,7 +56,7 @@ install:
   - utils\build_wheels.bat
 
   # install cpymad
-  - activate py38
+  - conda activate py38
   - conda install -q numpy -c anaconda
   - python -m pip install -U pip
   - pip install minrpc importlib_resources

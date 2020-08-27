@@ -22,7 +22,7 @@ call conda create -qyf -n py37 python=3.7 wheel cython -c anaconda
 call conda create -qyf -n py38 python=3.8 wheel cython -c anaconda
 
 :: Locate gcc used during madx build (created in .appveyor.yml):
-call activate madx & @echo on
+call conda activate madx & @echo on
 for /f %%G in ('where gcc') do (
     set "gcc=%%~fG"
 )
@@ -68,7 +68,7 @@ exit /b %ERRORLEVEL%
     :: `.pyd` in %libdir%) to prevent the final `python setup.py bdist_wheel`
     :: command from trying trying to perform either of these steps with MSVC.
 
-    call activate %py_env% & @echo on
+    call conda activate %py_env% & @echo on
     set tempdir=build\temp.%dir_tag%\Release\src\cpymad
     set libdir=build\lib.%dir_tag%\cpymad
     mkdir %tempdir%
@@ -87,7 +87,7 @@ exit /b %ERRORLEVEL%
     :: the command errors with a windows error that is visible only via the
     :: remote desktop but doesn't get logged as console output.
     call conda deactivate
-    call activate madx & @echo on
+    call conda activate madx & @echo on
 
     call %gcc% %CFLAGS% -mdll -O -Wall ^
         -I%MADXDIR%\include ^
@@ -112,7 +112,7 @@ exit /b %ERRORLEVEL%
 
     :: Turn target python environment back on, see above:
     call conda deactivate
-    call activate %py_env% & @echo on
+    call conda activate %py_env% & @echo on
 
     call python setup.py bdist_wheel
 
