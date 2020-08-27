@@ -46,16 +46,18 @@ install:
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
 
   # build MAD-X
-  - conda create -qf -n madx python=3.4 cmake pywget -c anaconda
+  - conda create -qf -n madx python=3.8 cmake pywget -c anaconda
   - activate madx
-  - conda install -q -c conda-forge mingwpy
+  - conda install -q -c msys2 m2w64-toolchain
   - utils\build_madx.bat
 
   # build cpymad
   - utils\build_wheels.bat
 
   # install cpymad
+  - activate py38
   - conda install -q numpy -c anaconda
+  - python -m pip install -U pip
   - pip install minrpc importlib_resources
   - pip install --no-index -f dist cpymad
 

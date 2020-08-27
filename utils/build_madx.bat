@@ -19,5 +19,5 @@ call cmake .. -G "MinGW Makefiles" ^
     -DMADX_STATIC=ON ^
     -DBUILD_SHARED_LIBS=OFF
 
-call mingw32-make install
+call cmake --build . --target install
 cd ..\..
