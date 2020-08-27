@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 __title__ = 'cpymad'
-__version__ = '1.4.1'
+__version__ = '1.5.0'
 
 __summary__ = 'Cython binding to MAD-X'
 __uri__ = 'https://github.com/hibtc/cpymad'

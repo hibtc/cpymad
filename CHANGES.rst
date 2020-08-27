@@ -1,6 +1,16 @@
 Changelog
 ~~~~~~~~~
 
+1.5.0
+=====
+Date: 27.08.2020
+
+- update to MAD-X 5.06.00
+- show empty tables as empty rather than raising exception (#57)
+- produce windows builds with msys2/mingw-w64 toolchain. No more dependency on
+  older MSVCRT dlls. Let's see if there will be any runtime errors from this.
+
+
 1.4.1
 =====
 Date: 16.08.2019
