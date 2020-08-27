@@ -127,7 +127,7 @@ exit /b 0
     call %gcc% -shared -s ^
         %tempdir%\libmadx.obj ^
         -L%MADXDIR%\lib ^
-        -lmadx -lptc -lgc-lib -lstdc++ -lgfortran ^
+        -lmadx -lDISTlib -lptc -lgc-lib -lstdc++ -lgfortran ^
         -lquadmath %pythondir%\python%py_ver%.dll -lmsvcr100 ^
         -o %libdir%\libmadx.%file_tag%.pyd
 

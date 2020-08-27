@@ -10,7 +10,7 @@ environment:
     - CONDAPATH: 'C:\Miniconda36'
 
   global:
-    MADXVER: 5.04.02
+    MADXVER: 5.06.00
     MADXDIR: C:\madx
     COVERALLS_REPO_TOKEN:
       secure: PomPESKrst4rtCnkZOCyfyBEb03xcHzg6O0bGrYw7lf3oGWcA/ufdhu+7+shaJRF
@@ -46,7 +46,7 @@ install:
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
 
   # build MAD-X
-  - conda create -qf -n madx python=3.4 patch cmake pywget 7za -c anaconda
+  - conda create -qf -n madx python=3.4 cmake pywget 7za -c anaconda
   - activate madx
   - conda install -q -c conda-forge mingwpy
   - utils\build_madx.bat
