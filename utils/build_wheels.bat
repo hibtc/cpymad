@@ -3,7 +3,7 @@
 ::
 :: - conda (for managing environments for different python versions)
 ::
-:: - created environment "msys" with "m2w64-toolchain" from msys2
+:: - created environment "madx" with "m2w64-toolchain" from msys2
 ::
 :: - %PLATFORM% environment variable set to either "x86" or "x64"
 ::
@@ -22,10 +22,11 @@ call conda create -qyf -n py37 python=3.7 wheel cython -c anaconda
 call conda create -qyf -n py38 python=3.8 wheel cython -c anaconda
 
 :: Locate gcc used during madx build (created in .appveyor.yml):
-call activate madx
+call activate madx & @echo on
 for /f %%G in ('where gcc') do (
     set "gcc=%%~fG"
 )
+call conda deactivate
 
 :: Build cpymad wheels:
 if "%PLATFORM%" == "x86" (
@@ -81,6 +82,13 @@ exit /b %ERRORLEVEL%
     call pip install -U setuptools
     call python setup.py build_py
 
+    :: We turn back on the 'madx' environment for building in order to set the
+    :: the path to the runtime DLLs required for running gcc.exe. Without this
+    :: the command errors with a windows error that is visible only via the
+    :: remote desktop but doesn't get logged as console output.
+    call conda deactivate
+    call activate madx & @echo on
+
     call %gcc% %CFLAGS% -mdll -O -Wall ^
         -I%MADXDIR%\include ^
         -I%pythondir%\include ^
@@ -102,5 +110,11 @@ exit /b %ERRORLEVEL%
         %pythondir%\python%py_ver%.dll ^
         -o %libdir%\libmadx.%file_tag%
 
+    :: Turn target python environment back on, see above:
+    call conda deactivate
+    call activate %py_env% & @echo on
+
     call python setup.py bdist_wheel
+
+    call conda deactivate
 exit /b 0
