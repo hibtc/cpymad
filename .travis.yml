@@ -74,10 +74,9 @@ jobs:
         - chmod -R 777 /home/travis/io
         - sudo mv /tmp/cache_key /home/travis/io/
 
-        # We still use manylinux1 for the 32bit builds, because there are linker
-        # issues on manylinux2010. While this means that we don't build for
-        # py3.8+ on 32bit, I can't imagine anyone uses 32bit anyway, let alone on
-        # a machine with a recent python distribution.
+        # We still use manylinux1, because the manylinux2010 produces linker
+        # errors on 32bit, and produces .so output files with missing symbols
+        # (_gfortran_stop_numeric_f08) on 64bit.
 
         # Ideally, we would like to mount /io/cpymad as readonly volume (`:ro`
         # option). However, at the time of writing this causes a container init
@@ -93,9 +92,6 @@ jobs:
             quay.io/pypa/manylinux1_i686
             /io/cpymad/utils/manylinux/build_all
 
-        # Build 64bit both with manylinux1 for support older systems as well
-        # as manylinux2010 which is nedeed for recent python versions:
-
         - docker run --init --name artifacts64_manylinux1
             -v /home/travis/io/64:/io:rw
             -v `pwd`:/io/cpymad:rw
@@ -105,18 +101,8 @@ jobs:
             quay.io/pypa/manylinux1_x86_64
             /io/cpymad/utils/manylinux/build_all
 
-        - docker run --init --name artifacts64_manylinux2010
-            -v /home/travis/io/64:/io:rw
-            -v `pwd`:/io/cpymad:rw
-            -v /io/cpymad/src/cpymad.egg-info
-            -v /io/dist
-            --cap-drop=all
-            quay.io/pypa/manylinux2010_x86_64
-            /io/cpymad/utils/manylinux/build_all
-
         - docker cp artifacts32:/io/dist .
         - docker cp artifacts64_manylinux1:/io/dist .
-        - docker cp artifacts64_manylinux2010:/io/dist .
         - twine check dist/*
       after_success:
         # Upload artifacts to github:
