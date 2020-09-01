@@ -23,17 +23,6 @@ install:
   # Log environment for informational purposes:
   - set
 
-  # Switch to development version. This is necessary to prevent uploading the
-  # same version twice to test.pypi.org on test-release, and provides some
-  # safety against accidentally uploading a release version number to the
-  # actual pypi:
-  - ps: if ($env:APPVEYOR_REPO_TAG -ne $TRUE) {
-          echo "`n[egg_info]`ntag-build = dev$env:APPVEYOR_BUILD_NUMBER" |
-            out-file -encoding ascii -append setup.cfg ;
-        }
-  - python -c "import sys; sys.path.append('src'); import cpymad;
-    print('building cpymad version:', cpymad.__version__);"
-
   # Configure and activate conda:
   - if "%PLATFORM%" == "x64" set "CONDAPATH=%CONDAPATH%-x64"
   - set "PATH=%CONDAPATH%\condabin;%PATH%"
@@ -82,11 +71,6 @@ artifacts:
 
 deploy_script:
 - ps: if ($env:APPVEYOR_REPO_TAG -eq $TRUE) {
-        pip install twine 2>&1 ;
-        twine upload dist/*.whl
-      }
-- ps: if ($env:APPVEYOR_REPO_BRANCH -eq "test-release") {
-        $env:TWINE_REPOSITORY_URL = "https://test.pypi.org/legacy/" ;
         pip install twine 2>&1 ;
         twine upload dist/*.whl
       }

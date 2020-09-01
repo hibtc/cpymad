@@ -18,10 +18,6 @@ env:
 
 before_install:
   - lsb_release -a
-  - if [[ -z $TRAVIS_TAG ]]; then
-      echo -e "\n[egg_info]\ntag-build = dev$TRAVIS_BUILD_NUMBER" >> setup.cfg ;
-      export TWINE_REPOSITORY_URL=https://test.pypi.org/legacy/ ;
-    fi
   - env | sort
 
 install:
@@ -121,7 +117,7 @@ jobs:
     - stage: deploy
       name: Upload release to PyPI
       python: "3.6"
-      if: branch = test-release OR tag IS present
+      if: tag IS present
       install:
         - pip install twine
         - git clone $ART_REPO dist -b $ART_BRANCH --depth 1
