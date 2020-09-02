@@ -5,7 +5,6 @@ set -ex
 here="$(dirname "$(readlink -nf "$BASH_SOURCE")")"
 
 : ${MADX_VERSION:=5.06.00}
-: ${CPYMAD_VERSION:=1.5.0}
 : ${PY:=/opt/python/cp36-cp36m/bin}
 
 # Build MAD-X
@@ -40,34 +39,24 @@ if [[ $(cat /io/install/version) != $MADX_VERSION ]]; then
     make install
 fi
 
-# Download cpymad:
-if [[ ! -f $CPYMAD_ARCHIVE ]]; then
-    if [[ ! -e /io/cpymad ]]; then
-        git clone git://github.com/hibtc/cpymad /io/cpymad \
-            /io/cpymad -b $CPYMAD_VERSION --depth 1
-    fi
+# Copy the cpymad source files to a build folder in order to avoid permission
+# permission issues with the host filesystem (on both sides) :
+cd /io/cpymad
+rm -rf /io/build/cpymad
+mkdir -p /io/build/cpymad
+$PY/python setup.py egg_info
+tar -c $(cat src/cpymad.egg-info/SOURCES.txt) |
+    tar -x -C /io/build/cpymad --no-same-owner
 
-    # The cpymad folder may be mounted from the host OS. For this reason we
-    # should not create root owned files there or modify any of the user's data.
-    # For this reason, we first copy the source files to a build folder and
-    # perform all further steps from there:
-    cd /io/cpymad
-    rm -rf /io/build/cpymad
-    mkdir -p /io/build/cpymad
-    $PY/python setup.py egg_info
-    tar -c $(cat src/cpymad.egg-info/SOURCES.txt) |
-        tar -x -C /io/build/cpymad --no-same-owner
+# We create the wheels from the source distribution to verify that the
+# source distribution can be used as installation medium. We will later
+# upload this exact source distribution to PyPI:
+cd /io/build/cpymad
+$PY/pip install cython
+$PY/python setup.py sdist
+$PY/pip uninstall cython -y
 
-    # We create the wheels from the source distribution to verify that the
-    # source distribution can be used as installation medium. We will later
-    # upload this exact source distribution to PyPI:
-    cd /io/build/cpymad
-    $PY/pip install cython
-    $PY/python setup.py sdist
-    $PY/pip uninstall cython -y
-
-    CPYMAD_ARCHIVE="$(ls /io/build/cpymad/dist/*.tar.gz)"
-fi
+CPYMAD_ARCHIVE="$(ls /io/build/cpymad/dist/*.tar.gz)"
 
 export CFLAGS="-flto"
 export LDFLAGS="-flto"
