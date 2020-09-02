@@ -28,16 +28,18 @@ for /f %%G in ('where gcc') do (
 )
 call conda deactivate
 
+set "CFLAGS=-flto"
+set "LDFLAGS=-flto"
+
 :: Build cpymad wheels:
 if "%PLATFORM%" == "x86" (
-    set "CFLAGS= "
     call :build_cpymad py27 27 win32-2.7 pyd
     call :build_cpymad py35 35 win32-3.5 cp35-win32.pyd
     call :build_cpymad py36 36 win32-3.6 cp36-win32.pyd
     call :build_cpymad py37 37 win32-3.7 cp37-win32.pyd
     call :build_cpymad py38 38 win32-3.8 cp38-win32.pyd
 ) else (
-    set CFLAGS=-DMS_WIN64
+    set "CFLAGS=-DMS_WIN64 %CFLAGS%"
     call :build_cpymad py27 27 win-amd64-2.7 pyd
     call :build_cpymad py35 35 win-amd64-3.5 cp35-win_amd64.pyd
     call :build_cpymad py36 36 win-amd64-3.6 cp36-win_amd64.pyd

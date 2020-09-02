@@ -2,6 +2,8 @@
 
 set -ex
 
+here="$(dirname "$(readlink -nf "$BASH_SOURCE")")"
+
 : ${MADX_VERSION:=5.06.00}
 : ${CPYMAD_VERSION:=1.5.0}
 : ${PY:=/opt/python/cp36-cp36m/bin}
@@ -17,6 +19,7 @@ if [[ $(cat /io/install/version) != $MADX_VERSION ]]; then
     elif [[ ! -e /io/MAD-X ]]; then
         git clone git://github.com/MethodicalAcceleratorDesign/MAD-X \
             /io/MAD-X -b $MADX_VERSION --depth 1
+        patch -d /io/MAD-X -p1 < "$here"/fix-cmake-Fortran_FLAGS.patch
     fi
 
     mkdir -p /io/build/madx
@@ -26,7 +29,10 @@ if [[ $(cat /io/install/version) != $MADX_VERSION ]]; then
         -DBUILD_SHARED_LIBS=OFF \
         -DMADX_STATIC=ON \
         -DCMAKE_INSTALL_PREFIX=/io/install \
-        -DCMAKE_C_FLAGS="-fvisibility=hidden" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_C_FLAGS="-fvisibility=hidden -flto" \
+        -DCMAKE_CXX_FLAGS="-fvisibility=hidden -flto" \
+        -DCMAKE_Fortran_FLAGS="-fvisibility=hidden -flto" \
         -DMADX_INSTALL_DOC=OFF \
         -DMADX_ONLINE=OFF \
         -DMADX_FORCE_32=OFF \
@@ -63,6 +69,8 @@ if [[ ! -f $CPYMAD_ARCHIVE ]]; then
     CPYMAD_ARCHIVE="$(ls /io/build/cpymad/dist/*.tar.gz)"
 fi
 
+export CFLAGS="-flto"
+export LDFLAGS="-flto"
 export X11=0 BLAS=0 LAPACK=0 MADXDIR=/io/install
 for PYBIN in /opt/python/*/bin; do
     "${PYBIN}/pip" install -U setuptools
