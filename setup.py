@@ -2,9 +2,6 @@
 """
 Setup script for cpymad.
 
-Usage:
-    python setup.py bdist_wheel --madxdir=/path/to/madx/installation
-
 This script is meant only for packagers and developers and can be used to
 install cpymad or create installers assuming you have already built MAD-X
 beforehand.
@@ -25,6 +22,7 @@ For more information, see
 from setuptools import setup, find_packages, Extension
 from distutils.util import get_platform
 from distutils import sysconfig
+from argparse import ArgumentParser
 
 import sys
 import os
@@ -47,14 +45,32 @@ IS_WIN = get_platform().startswith('win')
 # build_ext.user_options instead, but then these parameters can be passed
 # only to the 'build_ext' command, not to 'build', 'develop', or
 # 'install'.
-OPTIONS = {
-    'madxdir':  'arg',
-    'static':   'opt',
-    'shared':   'opt',
-    'lapack':   'opt',
-    'blas':     'opt',
-    'X11':      'opt',
-}
+def command_line_options():
+    usage = 'setup.py <command> [options]'
+    parser = ArgumentParser(description=__doc__, usage=usage)
+    parser.add_argument(
+        '--madxdir', dest='madxdir',
+        default=os.environ.get('MADXDIR'),
+        help='MAD-X installation prefix')
+    option(parser, 'static', 'do {NOT}use static linkage')
+    option(parser, 'shared', 'MAD-X was {NOT}built with BUILD_SHARED_LIBS')
+    option(parser, 'lapack', 'MAD-X was {NOT}built with LAPACK')
+    option(parser, 'blas', 'MAD-X was {NOT}built with BLAS')
+    option(parser, 'X11', 'MAD-X was {NOT}built with MADX_X11')
+    return parser
+
+
+def option(parser, name, descr):
+    """Add a negatable option to parser."""
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
+        '--' + name, dest=name,
+        default=bool(int(os.environ.get(name.upper()) or 0)),
+        action='store_true', help=descr.format(NOT=''))
+    group.add_argument(
+        '--no-' + name, dest=name,
+        action='store_false', help=descr.format(NOT='not '))
+    return group
 
 
 def fix_distutils_sysconfig_mingw():
@@ -110,9 +126,8 @@ def get_extension_args(madxdir, shared, static, **libs):
 
 if __name__ == '__main__':
     sys.path.append(os.path.dirname(__file__))
-    from utils.clopts import parse_opts
     fix_distutils_sysconfig_mingw()
-    optvals = parse_opts(sys.argv, OPTIONS)
+    options, sys.argv[1:] = command_line_options().parse_known_args()
     metadata = exec_file('src/cpymad/__init__.py')
     setup(
         name='cpymad',
@@ -121,7 +136,7 @@ if __name__ == '__main__':
         ext_modules=cythonize([
             Extension('cpymad.libmadx',
                       sources=["src/cpymad/libmadx.pyx"],
-                      **get_extension_args(**optvals)),
+                      **get_extension_args(**options.__dict__)),
         ]),
         packages=find_packages('src'),
         package_dir={'': 'src'},
