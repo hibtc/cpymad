@@ -17,9 +17,6 @@ call cmake .. -G "MinGW Makefiles" ^
     -DMADX_INSTALL_DOC=OFF ^
     -DCMAKE_INSTALL_PREFIX=%MADXDIR% ^
     -DCMAKE_BUILD_TYPE=Release ^
-    -DCMAKE_C_FLAGS=-flto ^
-    -DCMAKE_CXX_FLAGS=-flto ^
-    -DCMAKE_Fortran_FLAGS=-flto ^
     -DMADX_STATIC=ON ^
     -DBUILD_SHARED_LIBS=OFF
 
