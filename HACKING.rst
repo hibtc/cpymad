@@ -13,15 +13,3 @@ trivial. See also: `A Note About Git Commit Messages`_.
 .. _`unit tests`: http://docs.python.org/2/library/unittest.html
 .. _`Dependency injection`: http://www.youtube.com/watch?v=RlfLCWKxHJ0
 .. _`A Note About Git Commit Messages`: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
-
-Tests
-~~~~~
-
-The `Travis CI`_ service is mainly used to check that the unit tests for
-cpymad itself execute on several python versions. Python{2.7,3.3} are
-supported. The tests are executed on any update of an upstream branch.
-The Travis builds use a unofficial precompiled libmadx-dev_ package to
-avoid having to rebuild the entire MAD-X library on each invocation.
-
-.. _`Travis CI`: https://travis-ci.org/hibtc/cpymad
-.. _libmadx-dev: https://github.com/hibtc/madx-debian

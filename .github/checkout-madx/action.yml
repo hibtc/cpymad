@@ -1,0 +1,14 @@
+name: Download and prepare MAD-X sources
+inputs:
+  madx_version:
+    description: 'MAD-X version'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - run: git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
+        ../MAD-X -b "${{ inputs.madx_version }}" --depth 1
+      shell: bash
+    - run: patch -d ../MAD-X -p1 < .github/patch/fix-cmake-Fortran_FLAGS.patch
+      shell: bash

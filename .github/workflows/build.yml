@@ -1,0 +1,238 @@
+name: build
+on:
+  push:
+  pull_request:
+
+env:
+  MADX_VERSION: 5.06.00
+
+jobs:
+  build_linux:
+    name: "Build: Linux"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [i686, x86_64]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download cached MAD-X build
+        id: madx-build-cache
+        # Do NOT use cache@v2, it can't handle relative paths with '..' nor
+        # absolute paths on windows!
+        uses: actions/cache@v1
+        with:
+          path: ../MAD-X/dist
+          key: "\
+            madx-${{ env.MADX_VERSION }}-\
+            linux-${{ matrix.arch }}-\
+            patches-${{ hashFiles('.github/patch/*') }}-\
+            scripts-${{ hashFiles('.github/build/manylinux1/madx*') }}\
+          "
+
+      - name: Prepare MAD-X source
+        if: steps.madx-build-cache.outputs.cache-hit != 'true'
+        uses: ./.github/checkout-madx
+        with:
+          madx_version: ${{ env.MADX_VERSION }}
+
+      - name: Build MAD-X
+        if: steps.madx-build-cache.outputs.cache-hit != 'true'
+        run: |
+          docker run --rm --init \
+            -w /mnt/MAD-X \
+            -v `pwd`/..:/mnt \
+            quay.io/pypa/manylinux1_${{ matrix.arch }} \
+            ../cpymad/.github/build/manylinux1/madx.sh
+
+      - name: Build cpymad wheels
+        run: |
+          docker run --rm --init \
+            -w /mnt/cpymad \
+            -v `pwd`/..:/mnt \
+            quay.io/pypa/manylinux1_${{ matrix.arch }} \
+            .github/build/manylinux1/cpymad.sh
+
+      - name: Upload cpymad wheels
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist-linux-${{ matrix.arch }}
+          path: dist
+
+  build_windows:
+    name: "Build: Windows"
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        arch: [i686, x86_64]
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download cached MAD-X build
+        id: madx-build-cache
+        # Do NOT use cache@v2, it can't handle relative paths with '..' nor
+        # absolute paths on windows!
+        uses: actions/cache@v1
+        with:
+          path: ../MAD-X/dist
+          key: "\
+            madx-${{ env.MADX_VERSION }}-\
+            windows-${{ matrix.arch }}-\
+            patches-${{ hashFiles('.github/patch/*') }}-\
+            scripts-${{ hashFiles('.github/build/manylinux1/madx*') }}\
+          "
+
+      - name: Prepare MAD-X source
+        if: steps.madx-build-cache.outputs.cache-hit != 'true'
+        uses: ./.github/checkout-madx
+        with:
+          madx_version: ${{ env.MADX_VERSION }}
+
+      - name: Setup Miniconda
+        uses: goanpeca/setup-miniconda@v1
+        with:
+          architecture: ${{ matrix.arch == 'i686' && 'x86' || 'x64' }}
+          python-version: '3.8'
+          # must be explicitly specified if architecture is not x64:
+          miniconda-version: latest
+
+      - name: Install build tools
+        run: |
+          conda install -qy -c anaconda cmake
+          conda install -qy -c msys2 m2w64-toolchain
+
+      - name: Build MAD-X
+        if: steps.madx-build-cache.outputs.cache-hit != 'true'
+        run: cd ../MAD-X && ../cpymad/.github/build/msys2/madx.sh
+
+      - name: Build cpymad wheels
+        # We need 'bash -l' to make conda available within the script:
+        run: bash -l .github/build/msys2/cpymad.sh ${{ matrix.arch }} ../MAD-X/dist
+
+      - name: Upload cpymad wheels
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist-windows-${{ matrix.arch }}
+          path: dist
+
+  test:
+    name: Tests
+    runs-on: ${{ matrix.os == 'linux' && 'ubuntu' || 'windows' }}-latest
+    needs: [build_linux, build_windows]
+    strategy:
+      matrix:
+        # 32bit python is currently only available on windows in
+        # actions/setup-python:
+        os: [linux, windows]
+        arch: [x86_64]
+        python: ['2.7', '3.5', '3.6', '3.7', '3.8']
+        include:
+          - {os: windows, arch: i686, python: '2.7'}
+          - {os: windows, arch: i686, python: '3.5'}
+          - {os: windows, arch: i686, python: '3.6'}
+          - {os: windows, arch: i686, python: '3.7'}
+          - {os: windows, arch: i686, python: '3.8'}
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+          architecture: ${{ matrix.arch == 'i686' && 'x86' || 'x64' }}
+
+      - name: Download cpymad wheels
+        uses: actions/download-artifact@v2
+        with:
+          name: dist-${{ matrix.os }}-${{ matrix.arch }}
+          path: dist
+
+      - name: Install cpymad from wheel
+        run: |
+          set -ex
+          pip install -U pip
+          pip install cpymad -f dist --no-index --no-deps
+          pip install cpymad
+
+      - run: pip install flake8 twine coverage coveralls
+      - run: twine check dist/*
+      - run: flake8
+
+      - run: coverage run --source=cpymad -p test/test_util.py -v
+      - run: coverage run --source=cpymad -p test/test_madx.py -v
+
+      - run: coverage combine
+      - run: coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+
+  documentation:
+    name: Update documentation
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          path: doc/_build/html
+          ref: gh-pages
+      - uses: actions/setup-python@v2
+        with:
+          architecture: 'x64'
+          python-version: '3.x'
+      - uses: actions/download-artifact@v2
+        with:
+          name: dist-linux-x86_64
+          path: dist
+
+      - run: pip install sphinx sphinx_rtd_theme
+      - run: pip install cpymad -f dist
+      - run: make -C doc html
+
+      - name: Deploy to GitHub Pages
+        if: success() && (
+            startsWith(github.ref, 'refs/tags/v') ||
+            github.ref == 'refs/heads/master')
+        uses: crazy-max/ghaction-github-pages@v2
+        with:
+          build_dir: doc/_build/html
+          commit_message: Build documentation from ${{ github.ref }}@${{ github.sha }}
+          jekyll: false
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+  upload_release:
+    name: Upload release
+    needs: test
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Fetch built distributions
+        uses: actions/download-artifact@v2
+        with:
+          path: dist
+
+      - name: Merge artifacts to single folder
+        run: |
+          mv dist/dist-*/*.whl dist/
+          mv dist/dist-linux-x86_64/*.tar.gz dist/
+
+      - name: Install twine
+        run: pip install twine
+
+      - name: Publish PyPI package
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: twine upload dist/*.whl dist/*.tar.gz
