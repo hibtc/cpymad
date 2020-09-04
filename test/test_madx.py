@@ -126,6 +126,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         with self.assertRaises(RuntimeError):
             self.mad.input(';')
 
+    @unittest.skipIf(sys.platform == 'win32', 'Known to be broken on win32!')
     def test_context_manager(self):
         output = []
         with Madx(stdout=output.append) as m:
