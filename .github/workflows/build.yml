@@ -4,7 +4,7 @@ on:
   pull_request:
 
 env:
-  MADX_VERSION: 5.06.00
+  MADX_VERSION: 5.06.01
 
 jobs:
   build_linux:
