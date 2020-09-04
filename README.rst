@@ -1,6 +1,6 @@
 cpymad
 ------
-|Version| |Python| |License| |Gitter|
+|Version| |Python| |License| |Gitter| |Tests| |Coverage|
 
 cpymad is a Cython_ binding to MAD-X_ for giving full control and access to a
 MAD-X interpreter within the python environment.
@@ -69,31 +69,11 @@ answer. Please keep it *precise*, *specific*, and *concise* and provide all
 the necessary information.
 
 
-Tests
-~~~~~
-
-When a commit is pushed upstream, the tests are automatically run on the
-following continuous integration (CI) systems:
-
-- AppVeyor_ builds and tests cpymad on windows
-  |AppVeyor|
-
-- `Travis CI`_ builds and tests cpymad on linux.
-  |Travis| |Coverage|
-
-.. _AppVeyor: https://ci.appveyor.com/project/coldfix/cpymad
-.. _Travis CI: https://travis-ci.org/hibtc/cpymad
-
-
 .. Badges:
 
-.. |AppVeyor| image::   https://ci.appveyor.com/api/projects/status/github/hibtc/cpymad?branch=master&svg=true
-   :target:             https://ci.appveyor.com/project/coldfix/cpymad
-   :alt:                Windows built status
-
-.. |Travis| image::     https://api.travis-ci.org/hibtc/cpymad.svg?branch=master
-   :target:             https://travis-ci.org/hibtc/cpymad
-   :alt:                Linux build status
+.. |Tests| image::      https://github.com/hibtc/cpymad/workflows/build/badge.svg
+   :target:             https://github.com/hibtc/cpymad/actions?query=workflow%3A%22build%22
+   :alt:                GitHub Actions Status
 
 .. |Coverage| image::   https://coveralls.io/repos/hibtc/cpymad/badge.svg?branch=master
    :target:             https://coveralls.io/r/hibtc/cpymad
