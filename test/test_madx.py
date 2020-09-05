@@ -98,9 +98,6 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.assertEqual(madxness.eval('ANSWER'), 43)
         madxness.quit()
 
-    # TODO: We need to fix this on windows, but for now, I just need it to
-    # pass so that the CI builds the release...
-    @unittest.skipIf(sys.platform == 'win32', 'Known to be broken on win32!')
     def test_streamreader(self):
         output = []
         m = Madx(stdout=output.append)
@@ -126,7 +123,6 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         with self.assertRaises(RuntimeError):
             self.mad.input(';')
 
-    @unittest.skipIf(sys.platform == 'win32', 'Known to be broken on win32!')
     def test_context_manager(self):
         output = []
         with Madx(stdout=output.append) as m:
