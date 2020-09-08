@@ -156,7 +156,7 @@ jobs:
       - name: Install cpymad from wheel
         run: |
           set -ex
-          pip install -U pip
+          python -m pip install -U pip || sudo python -m pip install -U pip
           pip install cpymad -f dist --no-index --no-deps
           pip install cpymad
 
