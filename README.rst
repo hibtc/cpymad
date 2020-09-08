@@ -11,7 +11,7 @@ Python 3 is recommended but not (yet) required.
 
 .. _Cython: https://cython.org/
 .. _MAD-X: https://cern.ch/mad
-.. |VERSION| replace:: 5.06.00
+.. |VERSION| replace:: 5.06.01
 
 
 Links
@@ -51,17 +51,13 @@ For more details, see COPYING.rst_ and the `MAD-X license`_.
 Reporting issues
 ~~~~~~~~~~~~~~~~
 
-cpymad is NOT maintained by CERN members and links against an unofficial build
-of MAD-X that is not supported by CERN, i.e. this binary may have problems
-that the official binary does not have and vice versa.
-
 If you have a problem with a sequence file, first try to check if that
-problem remains when using the MAD-X command line client distributed by
+problem remains when using the MAD-X_ command line client distributed by
 CERN, then:
 
-- Report the issue to CERN only if it **can** be reproduced with their
-  official command line client.
-- Report the issue here only if it can **not** be reproduced with their
+- Report the issue to CERN only if it **can** be reproduced with MAD-X_
+  command line client.
+- Report the issue here only if it can **not** be reproduced with MAD-X_
   official command line client.
 
 For issues regarding the cpymad code itself or usage information, I'm happy to
