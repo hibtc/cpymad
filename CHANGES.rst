@@ -1,6 +1,19 @@
 Changelog
 ~~~~~~~~~
 
+1.6.0
+=====
+Date: 04.09.2020
+
+- update to MAD-X 5.06.01
+- halfen linux wheels sizes by building with -fvisibility=hidden and -flto,
+  hopefully increasing performance
+- internal improvements with the CI setup:
+- CI tests more configurations than before
+- CI tests should now run on pull-requests
+- reduce complexity
+
+
 1.5.0
 =====
 Date: 27.08.2020

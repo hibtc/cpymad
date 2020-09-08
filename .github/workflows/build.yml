@@ -4,7 +4,7 @@ on:
   pull_request:
 
 env:
-  MADX_VERSION: 5.06.00
+  MADX_VERSION: 5.06.01
 
 jobs:
   build_linux:
@@ -156,7 +156,7 @@ jobs:
       - name: Install cpymad from wheel
         run: |
           set -ex
-          pip install -U pip
+          python -m pip install -U pip || sudo python -m pip install -U pip
           pip install cpymad -f dist --no-index --no-deps
           pip install cpymad
 
