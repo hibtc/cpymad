@@ -741,6 +741,11 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         assert_allclose(al.dx, 1e-3)
         assert_allclose(al.dy, -4e-3)
 
+    def test_makethin(self):
+        # regression test for segfault, see #67:
+        self.mad.chdir(os.path.dirname(__file__))
+        self.mad.call('test_makethin.madx')
+
 
 class TestTransferMap(unittest.TestCase):
 
