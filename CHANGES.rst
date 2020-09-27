@@ -1,6 +1,12 @@
 Changelog
 ~~~~~~~~~
 
+1.6.1
+=====
+Date: 27.09.2020
+
+- replace -flto by -fno-lto in .github/build/manylinux1/cpymad.sh causing segfalt in makethin (see https://github.com/hibtc/cpymad/issues/67)
+
 1.6.0
 =====
 Date: 04.09.2020
