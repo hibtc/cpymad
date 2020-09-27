@@ -10,8 +10,8 @@ set -ex
 # Build variables:
 export MADXDIR=$(readlink -nf ../MAD-X/dist)
 export X11=0 BLAS=0 LAPACK=0
-export CFLAGS="-flto"
-export LDFLAGS="-flto"
+export CFLAGS="-fno-lto"
+export LDFLAGS="-fno-lto"
 
 # Copy the cpymad source files to a build folder in order to avoid permission
 # issues with the host filesystem (on both sides):
