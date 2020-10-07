@@ -124,8 +124,6 @@ jobs:
     strategy:
       matrix:
         arch: [x86_64]
-    env:
-      MACOSX_DEPLOYMENT_TARGET: "10.9"
     steps:
       - uses: actions/checkout@v2
 
@@ -155,30 +153,17 @@ jobs:
           cd ../MAD-X
           ../cpymad/.github/build/macos/madx.sh
 
-      - name: Setup python 2.7
-        uses: actions/setup-python@v2
-        with: {python-version: '2.7'}
-      - run: .github/build/macos/cpymad.sh
+      - name: Setup Miniconda
+        uses: goanpeca/setup-miniconda@v1
+        with:
+          architecture: ${{ matrix.arch == 'i686' && 'x86' || 'x64' }}
+          python-version: '3.8'
+          # must be explicitly specified if architecture is not x64:
+          miniconda-version: latest
 
-      - name: Setup python 3.5
-        uses: actions/setup-python@v2
-        with: {python-version: '3.5'}
-      - run: .github/build/macos/cpymad.sh
-
-      - name: Setup python 3.6
-        uses: actions/setup-python@v2
-        with: {python-version: '3.6'}
-      - run: .github/build/macos/cpymad.sh
-
-      - name: Setup python 3.7
-        uses: actions/setup-python@v2
-        with: {python-version: '3.7'}
-      - run: .github/build/macos/cpymad.sh
-
-      - name: Setup python 3.8
-        uses: actions/setup-python@v2
-        with: {python-version: '3.8'}
-      - run: .github/build/macos/cpymad.sh
+      - name: Build cpymad wheels
+        # We need 'bash -l' to make conda available within the script:
+        run: bash -l .github/build/macos/cpymad.sh ${{ matrix.arch }} ../MAD-X/dist
 
       - name: Fixup wheel dependencies
         run: |
