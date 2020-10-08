@@ -10,7 +10,8 @@ License for cpymad source
 
 applies to the python source of the cpymad package::
 
-    Copyright 2016-2018 HIT Betriebs GmbH
+    Copyright 2013-2020 Thomas Gläßle
+              2013-2019 HIT Betriebs GmbH
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
