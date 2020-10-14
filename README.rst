@@ -66,6 +66,36 @@ Please keep the code in the bug report as minimal as possible, i.e. remove
 everything that can be removed such that the issue still occurs. This will
 save us some effort in handling the error report.
 
+Please post the code inline, don't upload zip files, or link to external
+sources, if possible.
+
+Bug reports should describe the issue and contain a minimal python script
+similar to this:
+
+.. code-block:: python
+
+    from cpymad.madx import Madx
+    m = Madx()
+    m.call('commands.madx')
+
+as well as the content of the ``commands.madx`` file.
+
+You can create this file from your original python code with a minimal change
+that tells cpymad to write all MAD-X commands to a file:
+
+.. code-block:: python
+
+   m = Madx(command_log='commands.madx')
+   ...
+
+Now run this file with the official MAD-X command line client::
+
+    madx commands.madx
+
+If ``madx`` reports the same error, check if there are any syntax errors in
+the ``commands.madx`` file. These may result from incorrect usage of cpymad,
+or bugs in cpymad.
+
 
 .. Badges:
 
