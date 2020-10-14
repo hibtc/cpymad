@@ -4,13 +4,9 @@ Windows
 -------
 
 cpymad is linked against a library version of MAD-X, which means that in order
-to build cpymad you first have to compile MAD-X from source (even if you have
-the MAD-X executable installed).
-
-This is an intricate procedure that is not recommended for the average user,
-please refer to :ref:`installation` instead.
-
-.. rubric:: Contents
+to build cpymad you first have to compile MAD-X from source. The official
+``madx`` executable is not sufficient. These steps are described in the
+following subsections:
 
 .. contents:: :local:
 
@@ -23,10 +19,10 @@ on other platforms, and there are many pitfalls if not using the right
 compiler toolchain (such as linking against DLLs that are not present on most
 target systems).
 
-Therefore, we recommend that you install **conda**. It has proven to be a
-reliable tool for this job. Specifically, I recommend getting Miniconda_;
-anaconda should work too, but I wouldn't recommend it because it ships many
-unnecessary components.
+We recommend that you install **conda**. It has proven to be a reliable tool
+for this job. Specifically, I recommend getting Miniconda_; anaconda should
+work too, but I wouldn't recommend it because it ships many unnecessary
+components.
 
 Note that while conda is used to setup a consistent environment for the build
 process, the generated cpymad build will be usable with other python
@@ -110,7 +106,7 @@ In the build environment, type::
 If all went well the last command will have installed binaries and library
 files to the ``MAD-X\dist`` subfolder.
 
-Save the path to this install directory in the ``MADXDIR`` enviroment
+Save the path to this install directory in the ``MADXDIR`` environment
 variable. This variable will be used later by the ``setup.py`` script to
 locate the MAD-X headers and library, for example::
 

@@ -5,12 +5,8 @@ Linux
 
 cpymad is linked against a library version of MAD-X, which means that in order
 to build cpymad you first have to compile MAD-X from source. The official
-``madx`` executable is not sufficient.
-
-This is an intricate procedure that is not recommended for the average user,
-please refer to :ref:`installation` instead.
-
-.. rubric:: Contents
+``madx`` executable is not sufficient. These steps are described in the
+following subsections:
 
 .. contents:: :local:
 
@@ -55,21 +51,12 @@ The basic process looks as follows::
 
 Here we have specified a custom installation prefix to prevent cmake from
 installing MAD-X to a system directory (which would require root privileges,
-and may be harder to remove completely). The last argument prevents a class of
-crashes due to symbol collisions with other subsystems such as the C standard
-library.
+and may be harder to remove completely). You can also set a more permanent
+install location if you prefer (e.g. ``~/.local`` or ``/opt/madx``), but keep
+in mind that there is no ``uninstall`` command other than removing the files
+manually.
 
-If you prefer a more permanent install location
-(``-DCMAKE_INSTALL_PREFIX=XXX``), the most common ones are as follows::
-
-    ~/.local                user-level installation, no sudo required
-    /opt/madx               system-wide but easily removable installation
-    /opt/madx/<VERSION>     if you plan to install several versions side-by-side
-    /usr                    system, usually default, mixes with your system files
-    /usr/local              system, local machine (not always used), mixes like /usr
-
-Although the cmake command has many more options I will mention only the
-following:
+The cmake command has many more options, the most important ones being:
 
 - ``-DMADX_STATIC=ON``: Pass this flag to link statically against the
   dependencies of MAD-X (libc, libgfortran, libstdc++, blas, lapack, etc).
@@ -90,7 +77,7 @@ following:
 
 .. _LD_LIBRARY_PATH: http://tldp.org/HOWTO/Program-Library-HOWTO/shared-libraries.html
 
-Save the path to the install directory in the ``MADXDIR`` enviroment variable.
+Save the path to the install directory in the ``MADXDIR`` environment variable.
 This variable will be used later by the ``setup.py`` script to locate the
 MAD-X headers and library, for example::
 
