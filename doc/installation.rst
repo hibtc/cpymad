@@ -16,4 +16,10 @@ corresponding wheel, or refer to the :ref:`building-from-source` guide.
 Note that it is recommended to use python 3.6 or later. Support for old python
 versions will be phased out when they are no longer officially supported.
 
+Check your installation by typing the following::
+
+    python -c "import cpymad.libmadx as l; l.start()"
+
+The MAD-X banner should appear.
+
 .. _ping us: https://github.com/hibtc/cpymad/issues

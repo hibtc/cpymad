@@ -1,30 +1,40 @@
 .. highlight:: bash
 
-Unix
-----
+Linux
+-----
 
-Since cpymad is linked against a special library version of MAD-X, and
-therefore must usually compile MAD-X from source before it can be built (even
-if you have the MAD-X executable installed).
+cpymad is linked against a library version of MAD-X, which means that in order
+to build cpymad you first have to compile MAD-X from source. The official
+``madx`` executable is not sufficient.
+
+This is an intricate procedure that is not recommended for the average user,
+please refer to :ref:`installation` instead.
+
+.. rubric:: Contents
+
+.. contents:: :local:
 
 
-Install libmadx
-~~~~~~~~~~~~~~~
+Build MAD-X
+~~~~~~~~~~~
 
-cpymad requires a library build of MAD-X. The official executable is not
-sufficient. In order to build MAD-X from source you will need the following
-programs:
+In order to build MAD-X from source, please install the following build tools:
 
 - CMake_ >= 3.0
-- gcc >= 4.8, along with gfortran (other C/C++/fortran compiler suites may
-  work too but are untested as of now)
+- gcc >= 4.8
+- gfortran
 
-Download the `latest MAD-X release`_ `from github`_::
+Other C/C++/fortran compiler suites may work too but are untested as of now.
+
+Download and extract the latest `MAD-X release`_ from github, e.g.::
 
     wget https://github.com/MethodicalAcceleratorDesign/MAD-X/archive/5.06.01.tar.gz
     tar -xzf MAD-X-5.06.01.tar.gz
 
-or use directly the source code from master (unstable)::
+.. _CMake: http://www.cmake.org/
+.. _MAD-X release: https://github.com/MethodicalAcceleratorDesign/MAD-X/releases
+
+or directly checkout the source code using git (unstable)::
 
     git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
 
@@ -32,17 +42,18 @@ We will do an out-of-source build in a ``build/`` subdirectory. This way, you
 can easily delete the ``build`` directory and restart if anything goes wrong.
 The basic process looks as follows::
 
-    cd MAD-X
-    mkdir build && cd build
+    mkdir MAD-X/build
+    cd MAD-X/build
+
     cmake .. \
         -DMADX_ONLINE=OFF \
         -DMADX_INSTALL_DOC=OFF \
-        -DCMAKE_INSTALL_PREFIX=../install \
+        -DCMAKE_INSTALL_PREFIX=../dist \
         -DCMAKE_C_FLAGS="-fvisibility=hidden"
-    make && make install
 
-Here, we have turned off the online model, documentation files and, more
-importantly, have used a custom installation prefix to prevent cmake from
+    make install
+
+Here we have specified a custom installation prefix to prevent cmake from
 installing MAD-X to a system directory (which would require root privileges,
 and may be harder to remove completely). The last argument prevents a class of
 crashes due to symbol collisions with other subsystems such as the C standard
@@ -60,111 +71,56 @@ If you prefer a more permanent install location
 Although the cmake command has many more options I will mention only the
 following:
 
-You can pass ``-DMADX_STATIC=ON`` to specify that the link dependencies of
-MAD-X itself (libc, libgfortran, libstdc++, blas, lapack, etc) should be
-linked statically when building cpymad later. This may be attempted in case of
-problems and is not guaranteed to work on all platforms (if your OS e.g.  does
-not distribute ``libgfortran.a`` as is the case on archlinux). Note that even
-if you do not set this flag, cpymad will still be linked statically against
-MAD-X, just not against the c/c++/fortran/etc runtimes.
+- ``-DMADX_STATIC=ON``: Pass this flag to link statically against the
+  dependencies of MAD-X (libc, libgfortran, libstdc++, blas, lapack, etc).
+  This may be attempted in case of problems and is not guaranteed to work on
+  all platforms (if your OS e.g. does not distribute ``libgfortran.a`` as is
+  the case on archlinux). Note that even without this flag, cpymad will still
+  be linked statically against MAD-X, just not against its dependencies.
 
-You can pass ``-DBUILD_SHARED_LIBS=ON`` if you want to link cpymad dynamically
-against MAD-X. In theory, this allows using, testing and even updating the
-MAD-X shared object independently of cpymad, but probably does more harm than
-good in practice. If using this option, please change the visibility to
-``-DCMAKE_C_FLAGS="-fvisibility=protected"`` and be aware that you have to
-make sure to **install MAD-X to a permanent location** where it can be found
-at runtime. Usually this means installing to the (default) system directories,
-but it can also be done by setting the LD_LIBRARY_PATH_ environment variable
-or passing appropriate ``--rpath`` to the setup script.
+- ``-DBUILD_SHARED_LIBS=ON``: Pass this flag if you want to link cpymad
+  dynamically against MAD-X. In theory, this allows using, testing and even
+  updating the MAD-X shared object independently of cpymad. If using this
+  option, also change ``-DCMAKE_C_FLAGS="-fvisibility=protected"`` and be
+  aware that you have to redistribute the MAD-X shared object along with
+  cpymad, or install MAD-X to a permanent location where it can be found at
+  runtime. Usually this means installing to the (default) system directories,
+  but it can also be done by setting the LD_LIBRARY_PATH_ environment variable
+  or passing appropriate ``--rpath`` to the setup script.
 
-.. _CMake: http://www.cmake.org/
-.. _latest MAD-X release: http://madx.web.cern.ch/madx/releases/last-rel
-.. _from github: https://github.com/MethodicalAcceleratorDesign/MAD-X/releases
 .. _LD_LIBRARY_PATH: http://tldp.org/HOWTO/Program-Library-HOWTO/shared-libraries.html
 
+Save the path to the install directory in the ``MADXDIR`` enviroment variable.
+This variable will be used later by the ``setup.py`` script to locate the
+MAD-X headers and library, for example::
 
-Install cpymad
-~~~~~~~~~~~~~~
+    export MADXDIR="$(pwd)"/../dist
 
-After having built MAD-X we can now build cpymad. You will need:
+Also, set the following variables according to the flags passed to the cmake
+command above::
 
-- python >= 2.7, but higher versions (>=3.7) are preferred
-- setuptools_ python package
-- Cython_, if you plan to work with the git checkout. Cython can be installed
-  using ``pip install cython`` (this is unnecessary for the release tarball
-  from PyPI)
-
-Concerning runtime dependencies on other python packages, cpymad requires only
-numpy_ and minrpc_, both of which should usually be resolved automatically by
-pip_ or the setup script. If you plan to install in an offline environment,
-you can download all dependencies using the command ``pip download cpymad``.
-
-.. _setuptools: https://pypi.org/project/setuptools
-.. _cython:     http://cython.org/
-.. _numpy:      http://www.numpy.org/
-.. _pip:        https://pypi.org/project/pip
-.. _minrpc:     https://pypi.org/project/minrpc
-
-We will need to tell the cpymad setup script to use our MAD-X installation
-path from before. The easiest way to do this is by setting an environment
-variable::
-
-    export MADXDIR=/PATH/TO/CMAKE_INSTALL_PREFIX
-
-If you did build MAD-X with ``-DBUILD_SHARED_LIBS`` or ``-DMADX_STATIC``
-you should also set the corresponding option::
-
-    export SHARED=1
-
-    # or:
-
-    export STATIC=1
-
-With these settings in place, you can try installing cpymad as before::
-
-    pip install --no-binary=cpymad cpymad
+    set STATIC=1    # if -DMADX_STATIC=ON
+    set SHARED=1    # if -DBUILD_SHARED_LIBS=ON
 
 
-Building cpymad manually
-~~~~~~~~~~~~~~~~~~~~~~~~
+Building cpymad
+~~~~~~~~~~~~~~~
 
-If the installation fails or produces an unloadable version of cpymad, fetch
-`latest cpymad release`_ from PyPI (the idea is that this grants you more
-control over the build options and alter the setup script if necessary)::
+Enter the cpymad folder, and build as follows::
 
-    pip download --no-binary=cpymad --no-deps cpymad
-    tar -xzf cpymad-*.tar.gz
-
-Alternatively, fetch the very latest cpymad_ source_ from git::
-
-    git clone https://github.com/hibtc/cpymad
-
-After that, build cpymad and enter development mode so that changes in the
-local directory will take effect immediately (don't forget to export the MAD-X
-path as above)::
-
-    cd cpymad
     python setup.py build_ext
 
-The advantage with this method is that you can pass additional compiler or
-linker arguments to the ``build_ext`` command. For example, if you happened to
-build MAD-X with blas/lapack, you may need to pass additional linklibs::
+If you have installed blas/lapack and MAD-X found it during the cmake step,
+you have to pass them as additional link libraries::
 
     python setup.py build_ext -lblas -llapack
 
-Once you get cpymad working you may wish to make your installation more
-permanent, by e.g. using the ``install`` command::
-
-    python setup.py install
-
-Or even creating a wheel that can be installed using pip::
+You can now create and install a wheel as follows (however, note that this
+wheel probably won't be fit to be distributed to other systems)::
 
     python setup.py bdist_wheel
     pip install dist/cpymad-*.whl
 
+If you plan on changing cpymad code, do the following instead::
 
-.. _latest cpymad release: https://pypi.org/project/cpymad#files
-.. _pip: https://pypi.org/project/pip
-.. _cpymad: https://github.com/hibtc/cpymad
-.. _source: https://github.com/hibtc/cpymad/zipball/master
+    pip install -e .
