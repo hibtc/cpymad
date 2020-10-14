@@ -34,10 +34,9 @@ Links
 .. _Latest release: https://pypi.org/project/cpymad#files
 .. _MAD-X source: https://github.com/MethodicalAcceleratorDesign/MAD-X
 
-Note that cpymad is NOT maintained by CERN members and links against an
-unofficial build of MAD-X that is not supported by CERN, i.e. this binary may
-have problems that the official binary does not have and vice versa. See also:
-`Reporting issues`_.
+Note that cpymad links against a custom build of MAD-X that may differ from
+the official CERN command line client. This binary may have problems that the
+official binary does not have and vice versa. See also: `Reporting issues`_.
 
 .. _Reporting issues: https://github.com/hibtc/cpymad#reporting-issues
 

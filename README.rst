@@ -51,18 +51,20 @@ For more details, see COPYING.rst_ and the `MAD-X license`_.
 Reporting issues
 ~~~~~~~~~~~~~~~~
 
-If you have a problem with a sequence file, first try to check if that
-problem remains when using the MAD-X_ command line client distributed by
-CERN, then:
+Note that cpymad links against a custom build of MAD-X that may differ from
+the official CERN command line client. This binary may have problems that the
+official binary does not have and vice versa.
 
-- Report the issue to CERN only if it **can** be reproduced with MAD-X_
-  command line client.
-- Report the issue here only if it can **not** be reproduced with MAD-X_
-  official command line client.
+Therefore, before reporting issues, please make sure that you report to the
+correct recipient. First try to check if that problem remains when using the
+MAD-X command line client distributed by CERN, then report the issue:
 
-For issues regarding the cpymad code itself or usage information, I'm happy to
-answer. Please keep it *precise*, *specific*, and *concise* and provide all
-the necessary information.
+- to CERN if it can be reproduced with the official MAD-X executable
+- to us if it can not be reproduced with the official MAD-X executable
+
+Please keep the code in the bug report as minimal as possible, i.e. remove
+everything that can be removed such that the issue still occurs. This will
+save us some effort in handling the error report.
 
 
 .. Badges:
