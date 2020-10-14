@@ -16,4 +16,5 @@ if available (see :ref:`installation`).
 
    installation/unix
    installation/windows
+   installation/macos
    installation/troubleshooting
