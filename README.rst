@@ -3,7 +3,7 @@ cpymad
 |Version| |Platform| |Python| |License| |Gitter| |Tests| |Coverage|
 
 cpymad is a Cython_ binding to MAD-X_ for giving full control and access to a
-MAD-X interpreter within the python environment.
+MAD-X interpreter in python.
 
 This version of cpymad should be built against MAD-X |VERSION|. It can be
 installed on linux, Windows and Mac (but I can't offer much help for Mac).

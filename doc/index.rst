@@ -2,7 +2,7 @@ cpymad
 ******
 
 cpymad_ is a Cython_ binding to MAD-X_ for giving full control and access to a
-MAD-X interpreter within the python environment.
+MAD-X interpreter in python.
 
 .. _cpymad: https://github.com/hibtc/cpymad
 .. _Cython: http://cython.org/
