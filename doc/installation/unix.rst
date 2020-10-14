@@ -3,22 +3,9 @@
 Unix
 ----
 
-There are now binary wheels for most supported target platforms. With these
-the installation is as simple as::
-
-    pip install cpymad
-
-If a wheel for your platform is not available, this command may pick up the
-source package and try to build from scratch.
-
 Since cpymad is linked against a special library version of MAD-X, and
 therefore must usually compile MAD-X from source before it can be built (even
-if you have the MAD-X executable installed). This means that the cpymad setup
-can take between 5 and 30 minutes, depending on your internet bandwidth and
-machine performance.
-
-In case of failure, you should build MAD-X and cpymad manually, as described
-below.
+if you have the MAD-X executable installed).
 
 
 Install libmadx

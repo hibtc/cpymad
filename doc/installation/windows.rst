@@ -3,16 +3,9 @@
 Windows
 -------
 
-On windows, I provide `built versions`_ for some python versions. If your
-platform is supported, you can just run::
-
-    pip install cpymad
-
-In case of problems, or if you plan on changing cpymad code, please read the
-rest of this page. You will have to manually compile first MAD-X and then
-cpymad.
-
-.. _built versions: https://pypi.python.org/pypi/cpymad/#downloads
+The rest of this page describes how to build cpymad from source for those
+valiant enough to attempt that. You will have to manually compile first MAD-X
+and then cpymad.
 
 
 Preparations

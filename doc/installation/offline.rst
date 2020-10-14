@@ -1,5 +1,7 @@
 .. highlight:: bat
 
+.. _offline-installation:
+
 Offline installation
 ====================
 

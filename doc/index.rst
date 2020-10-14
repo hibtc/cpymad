@@ -15,8 +15,9 @@ Contents
 .. toctree::
    :maxdepth: 2
 
+   installation
+   building
    getting-started
-   installation/index
    cpymad/index
    known-issues
 
