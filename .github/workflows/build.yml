@@ -118,15 +118,74 @@ jobs:
           name: dist-windows-${{ matrix.arch }}
           path: dist
 
+  build_macos:
+    name: "Build: MacOS"
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        arch: [x86_64]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download cached MAD-X build
+        id: madx-build-cache
+        # Do NOT use cache@v2, it can't handle relative paths with '..' nor
+        # absolute paths on windows!
+        uses: actions/cache@v1
+        with:
+          path: ../MAD-X/dist
+          key: "\
+            madx-${{ env.MADX_VERSION }}-\
+            macos-${{ matrix.arch }}-\
+            patches-${{ hashFiles('.github/patch/*') }}-\
+            scripts-${{ hashFiles('.github/build/macos/madx*') }}\
+          "
+
+      - name: Prepare MAD-X source
+        if: steps.madx-build-cache.outputs.cache-hit != 'true'
+        uses: ./.github/checkout-madx
+        with:
+          madx_version: ${{ env.MADX_VERSION }}
+
+      - name: Build MAD-X
+        if: steps.madx-build-cache.outputs.cache-hit != 'true'
+        run: |
+          cd ../MAD-X
+          ../cpymad/.github/build/macos/madx.sh
+
+      - name: Setup Miniconda
+        uses: goanpeca/setup-miniconda@v1
+        with:
+          architecture: ${{ matrix.arch == 'i686' && 'x86' || 'x64' }}
+          python-version: '3.8'
+          # must be explicitly specified if architecture is not x64:
+          miniconda-version: latest
+
+      - name: Build cpymad wheels
+        # We need 'bash -l' to make conda available within the script:
+        run: bash -l .github/build/macos/cpymad.sh ${{ matrix.arch }} ../MAD-X/dist
+
+      - name: Fixup wheel dependencies
+        run: |
+          pip3 install delocate
+          delocate-wheel dist/*.whl
+          delocate-listdeps --all dist/*.whl
+
+      - name: Upload cpymad wheels
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist-macos-${{ matrix.arch }}
+          path: dist
+
   test:
     name: Tests
-    runs-on: ${{ matrix.os == 'linux' && 'ubuntu' || 'windows' }}-latest
-    needs: [build_linux, build_windows]
+    runs-on: ${{ matrix.os == 'linux' && 'ubuntu' || matrix.os }}-latest
+    needs: [build_linux, build_windows, build_macos]
     strategy:
       matrix:
         # 32bit python is currently only available on windows in
         # actions/setup-python:
-        os: [linux, windows]
+        os: [linux, windows, macos]
         arch: [x86_64]
         python: ['2.7', '3.5', '3.6', '3.7', '3.8']
         include:

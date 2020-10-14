@@ -12,3 +12,6 @@ runs:
       shell: bash
     - run: patch -d ../MAD-X -p1 < .github/patch/fix-cmake-Fortran_FLAGS.patch
       shell: bash
+    - name: 'Fix runtime error on macos: "Symbol not found: _mad_argc"'
+      run: patch -d ../MAD-X -p1 < .github/patch/fix-macos-symbol-not-found-mad_argc.patch
+      shell: bash
