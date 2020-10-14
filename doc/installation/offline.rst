@@ -1,4 +1,4 @@
-.. highlight:: bat
+.. highlight:: bash
 
 .. _offline-installation:
 
@@ -24,9 +24,11 @@ files::
 
 and then later install them in the offline environment like this::
 
-    pip install -f packages cpymad
+    pip install -f packages cpymad --no-index
 
-If you want/have to build from source, have a look at following guide.
+Optionally, pass ``--platform <platform> --python-version <version>`` to the
+``pip download`` command if downloading wheels on a platform that is different
+from the target system.
 
 .. _download: https://pypi.python.org/pypi/cpymad/#downloads
 .. _pip: https://pypi.python.org/pypi/pip

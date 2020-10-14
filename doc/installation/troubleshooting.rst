@@ -28,7 +28,9 @@ particular blas and/or lapack if they are available on your system (cpymad
 does not try to detect if they are and just assumes they are not).
 
 You can fix the problem by passing the appropriate libraries during the build
-step::
+step:
+
+.. code-block:: bash
 
     python setup.py build_ext -lblas -llapack
 

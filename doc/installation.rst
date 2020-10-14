@@ -1,11 +1,11 @@
+.. highlight:: bash
+
 .. _installation:
 
 Installation Instructions
 *************************
 
-In order to install cpymad, please try:
-
-.. code-block:: bash
+In order to install cpymad, please try::
 
     pip install cpymad --only-binary cpymad
 
