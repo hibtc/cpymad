@@ -7,7 +7,7 @@ In order to install cpymad, please try:
 
 .. code-block:: bash
 
-    pip install cpymad --only-binary
+    pip install cpymad --only-binary cpymad
 
 If this fails, it usually means that we haven't uploaded wheels for your
 platform or python version. In this case, either ping us about adding a
