@@ -8,18 +8,18 @@ build()
 {
     py_ver=$1
 
-    conda_ create -qyf -n py$py_ver python=$py_ver wheel cython -c anaconda
-    conda_ activate py$py_ver
+    _ conda create -qyf -n py$py_ver python=$py_ver wheel cython -c anaconda
+    _ conda activate py$py_ver
     pip install -U setuptools
     rm -f src/cpymad/libmadx.c
     python setup.py sdist bdist_wheel
-    conda_ deactivate
+    _ conda deactivate
 }
 
-conda_() {
-    # Conda with disabled trace (really noisy otherwise):
+_() {
+    # run command with disabled trace to decrease noise
     { set +x; } 2>/dev/null
-    conda "$@"; exitcode=$?
+    "$@"; exitcode=$?
     { set -x; return $exitcode; } 2>/dev/null
 }
 
