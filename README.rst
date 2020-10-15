@@ -12,20 +12,22 @@ MAD-X interpreter in python.
 Links
 ~~~~~
 
-- `Getting started`_
-- `Installation`_
-- `Source code`_
-- `Documentation`_
+- `Documentation`_:
+    - `Installation`_
+    - `Getting started`_
+
+- `Source code`_:
+    - `MAD-X source`_
+
 - `Issue tracker`_
-- `Latest release`_
-- `MAD-X source`_
+- `Releases`_
 
 .. _Getting started: http://hibtc.github.io/cpymad/getting-started
 .. _Installation: http://hibtc.github.io/cpymad/installation
 .. _Source code: https://github.com/hibtc/cpymad
 .. _Documentation: http://hibtc.github.io/cpymad
 .. _Issue tracker: https://github.com/hibtc/cpymad/issues
-.. _Latest release: https://pypi.org/project/cpymad#files
+.. _Releases: https://pypi.org/project/cpymad
 .. _MAD-X source: https://github.com/MethodicalAcceleratorDesign/MAD-X
 
 
@@ -42,7 +44,7 @@ distributions are **NOT FREE**., see `MAD-X license`_.
 
 
 CHANGELOG
-=========
+~~~~~~~~~
 
 The full changelog is available online in CHANGES.rst_.
 
