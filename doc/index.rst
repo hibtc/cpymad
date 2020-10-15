@@ -2,7 +2,7 @@ cpymad
 ******
 
 cpymad_ is a Cython_ binding to MAD-X_ for giving full control and access to a
-MAD-X interpreter within the python environment.
+MAD-X interpreter in python.
 
 .. _cpymad: https://github.com/hibtc/cpymad
 .. _Cython: http://cython.org/
@@ -15,8 +15,9 @@ Contents
 .. toctree::
    :maxdepth: 2
 
+   installation
+   building
    getting-started
-   installation/index
    cpymad/index
    known-issues
 
@@ -34,10 +35,9 @@ Links
 .. _Latest release: https://pypi.org/project/cpymad#files
 .. _MAD-X source: https://github.com/MethodicalAcceleratorDesign/MAD-X
 
-Note that cpymad is NOT maintained by CERN members and links against an
-unofficial build of MAD-X that is not supported by CERN, i.e. this binary may
-have problems that the official binary does not have and vice versa. See also:
-`Reporting issues`_.
+Note that cpymad links against a custom build of MAD-X that may differ from
+the official CERN command line client. This binary may have problems that the
+official binary does not have and vice versa. See also: `Reporting issues`_.
 
 .. _Reporting issues: https://github.com/hibtc/cpymad#reporting-issues
 
