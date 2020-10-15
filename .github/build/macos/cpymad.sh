@@ -19,8 +19,8 @@ build()
 conda_() {
     # Conda with disabled trace (really noisy otherwise):
     { set +x; } 2>/dev/null
-    conda "$@"
-    { set -x; } 2>/dev/null
+    conda "$@"; exitcode=$?
+    { set -x; return $exitcode; } 2>/dev/null
 }
 
 build 2.7
