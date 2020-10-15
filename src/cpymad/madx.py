@@ -492,10 +492,10 @@ class _Mapping(abc.Mapping):
             return self[key]
         except KeyError:
             pass
-        return self._missing(key)
+        raise AttributeError(self._missing(key))
 
     def _missing(self, key):
-        raise AttributeError(key)
+        return key
 
 
 class _MutableMapping(_Mapping, abc.MutableMapping):
@@ -789,8 +789,8 @@ class Command(_MutableMapping):
         return self._madx.elements.get(name)
 
     def _missing(self, key):
-        raise AttributeError('Unknown attribute {!r} for {!r} command!'
-                             .format(key, self.name))
+        return ('Unknown attribute {!r} for {!r} command!'
+                .format(key, self.name))
 
     @property
     def defs(self):

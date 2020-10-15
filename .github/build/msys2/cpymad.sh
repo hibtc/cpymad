@@ -11,11 +11,11 @@ main()
     MADXDIR=${2:-$MADXDIR}
 
     # Create python environments:
-    conda_ create -qyf -n py27 python=2.7 wheel cython -c anaconda
-    conda_ create -qyf -n py35 python=3.5 wheel cython -c anaconda
-    conda_ create -qyf -n py36 python=3.6 wheel cython -c anaconda
-    conda_ create -qyf -n py37 python=3.7 wheel cython -c anaconda
-    conda_ create -qyf -n py38 python=3.8 wheel cython -c anaconda
+    _ conda create -qyf -n py27 python=2.7 wheel cython -c anaconda
+    _ conda create -qyf -n py35 python=3.5 wheel cython -c anaconda
+    _ conda create -qyf -n py36 python=3.6 wheel cython -c anaconda
+    _ conda create -qyf -n py37 python=3.7 wheel cython -c anaconda
+    _ conda create -qyf -n py38 python=3.8 wheel cython -c anaconda
 
     # Build cpymad wheels:
     if [[ $ARCH == i686 ]]; then
@@ -57,7 +57,7 @@ build()
     # `.pyd` in $libdir) to prevent the final `python setup.py bdist_wheel`
     # command from trying trying to perform either of these steps with MSVC.
 
-    conda_ activate $py_env
+    _ conda activate $py_env
     tempdir=build/temp.$dir_tag/Release/src/cpymad
     libdir=build/lib.$dir_tag/cpymad
     mkdir -p $tempdir
@@ -73,7 +73,7 @@ build()
     # the path to the runtime DLLs required for running gcc. Without this
     # the command errors with a windows error that is visible only via the
     # remote desktop but doesn't get logged as console output.
-    conda_ deactivate
+    _ conda deactivate
 
     gcc -mdll -O -Wall -flto $CFLAGS \
         -I$MADXDIR/include \
@@ -97,16 +97,16 @@ build()
         -o $libdir/libmadx$file_tag.pyd
 
     # Turn target python environment back on, see above:
-    conda_ activate $py_env
+    _ conda activate $py_env
     python setup.py bdist_wheel
-    conda_ deactivate
+    _ conda deactivate
 }
 
-conda_() {
-    # Conda with disabled trace (really noisy otherwise):
+_() {
+    # run command with disabled trace to decrease noise
     { set +x; } 2>/dev/null
-    conda "$@"
-    { set -x; } 2>/dev/null
+    "$@"; exitcode=$?
+    { set -x; return $exitcode; } 2>/dev/null
 }
 
 main "$@"
