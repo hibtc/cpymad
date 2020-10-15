@@ -3,9 +3,6 @@ on:
   push:
   pull_request:
 
-env:
-  MADX_VERSION: 5.06.01
-
 jobs:
   build_linux:
     name: "Build: Linux"
@@ -15,6 +12,7 @@ jobs:
         arch: [i686, x86_64]
     steps:
       - uses: actions/checkout@v2
+      - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
 
       - name: Download cached MAD-X build
         id: madx-build-cache
@@ -70,6 +68,7 @@ jobs:
         shell: bash -l {0}
     steps:
       - uses: actions/checkout@v2
+      - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
 
       - name: Download cached MAD-X build
         id: madx-build-cache
@@ -126,6 +125,7 @@ jobs:
         arch: [x86_64]
     steps:
       - uses: actions/checkout@v2
+      - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
 
       - name: Download cached MAD-X build
         id: madx-build-cache

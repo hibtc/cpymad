@@ -6,6 +6,8 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
+    'sphinx-prompt',
+    'sphinx_substitution_extensions',
 ]
 
 templates_path = ['_templates']
@@ -26,6 +28,13 @@ copyright = (
 import cpymad
 release = cpymad.__version__                # The full version
 version = '.'.join(release.split('.')[:2])  # The short X.Y version
+
+with open('../MADX_VERSION') as f:
+    MADX_VERSION = f.read().strip()
+
+rst_prolog = """
+.. |VERSION| replace:: {}
+""".format(MADX_VERSION)
 
 
 # -- Options for HTML output ----------------------------------------------
