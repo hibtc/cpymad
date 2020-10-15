@@ -1,6 +1,6 @@
 cpymad
 ------
-|Platform| |Version| |Python| |License| |Tests| |Coverage|
+|Version| |Python| |Platform| |License| |Tests| |Coverage|
 
 cpymad is a Cython_ binding to MAD-X_ for giving full control and access to a
 MAD-X interpreter in python.
@@ -39,6 +39,14 @@ distributions are **NOT FREE**., see `MAD-X license`_.
 
 .. _COPYING.rst: https://github.com/hibtc/cpymad/blob/master/COPYING.rst
 .. _MAD-X license: https://github.com/MethodicalAcceleratorDesign/MAD-X/blob/master/License.txt
+
+
+CHANGELOG
+=========
+
+The full changelog is available online in CHANGES.rst_.
+
+.. _CHANGES.rst: https://github.com/hibtc/cpymad/blob/master/CHANGES.rst
 
 
 Reporting issues
@@ -108,18 +116,10 @@ or bugs in cpymad.
    :target:             https://github.com/hibtc/cpymad/blob/master/COPYING.rst
    :alt:                License: Source: CC0, Apache | Binary: Non-Free
 
-.. |Platform| image::   https://img.shields.io/badge/platform-linux%20%7C%20windows%20%7C%20macos-lightgrey
+.. |Platform| image::   https://img.shields.io/badge/platform-linux%20%7C%20windows%20%7C%20macos-blue
    :target:             https://pypi.org/project/cpymad#files
    :alt:                Supported platforms
 
 .. |Python| image::     https://img.shields.io/pypi/pyversions/cpymad.svg
    :target:             https://pypi.org/project/cpymad#files
    :alt:                Python versions
-
-
-CHANGELOG
-=========
-
-The full changelog is available online in CHANGES.rst_.
-
-.. _CHANGES.rst: https://github.com/hibtc/cpymad/blob/master/CHANGES.rst
