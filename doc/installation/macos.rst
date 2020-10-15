@@ -22,10 +22,13 @@ In order to build MAD-X from source, please install the following build tools:
 
 Other C/C++/fortran compiler suites may work too but are untested as of now.
 
-Download and extract the latest `MAD-X release`_ from github, e.g.::
+Download and extract the latest `MAD-X release`_ from github, e.g.:
 
-    curl -L -O https://github.com/MethodicalAcceleratorDesign/MAD-X/archive/5.06.01.tar.gz
-    tar -xzf 5.06.01.tar.gz
+.. code-block:: bash
+    :substitutions:
+
+    curl -L -O https://github.com/MethodicalAcceleratorDesign/MAD-X/archive/|VERSION|.tar.gz
+    tar -xzf |VERSION|.tar.gz
 
 .. _CMake: http://www.cmake.org/
 .. _MAD-X release: https://github.com/MethodicalAcceleratorDesign/MAD-X/releases

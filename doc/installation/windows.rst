@@ -191,7 +191,7 @@ The ``.whl`` file is named after the package and its target platform. This
 file can now be used for installation on this or any other machine running the
 same operating system and python version. Install as follows::
 
-    pip install dist\cpymad-1.6.1-cp37-cp37m-win_amd64.whl
+    pip install dist\cpymad-*.whl
 
 If you plan on changing cpymad code, do the following instead::
 
