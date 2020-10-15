@@ -234,7 +234,7 @@ jobs:
 
   documentation:
     name: Update documentation
-    needs: test
+    needs: build_linux
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -251,8 +251,7 @@ jobs:
           name: dist-linux-x86_64
           path: dist
 
-      - run: pip install sphinx sphinx_rtd_theme
-      - run: pip install cpymad -f dist
+      - run: pip install cpymad[doc] -f dist
       - run: make -C doc html
 
       - name: Deploy to GitHub Pages
