@@ -1,11 +1,21 @@
 Changelog
 ~~~~~~~~~
 
+1.6.2
+=====
+Date: 14.10.2020
+
+- add MacOS wheels for the first time. These are still mostly experimental
+  and require Apple's Accelerate framework to be installed on the user machine.
+- update documentation
+
+
 1.6.1
 =====
 Date: 27.09.2020
 
 - replace -flto by -fno-lto in .github/build/manylinux1/cpymad.sh causing segfalt in makethin (see https://github.com/hibtc/cpymad/issues/67)
+
 
 1.6.0
 =====
