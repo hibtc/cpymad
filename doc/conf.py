@@ -24,8 +24,8 @@ copyright = (
     u'2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN)')
 
 import cpymad
-version = cpymad.__version__  # The short X.Y version.
-release = cpymad.__version__  # The full version, including alpha/beta/rc tags.
+release = cpymad.__version__                # The full version
+version = '.'.join(release.split('.')[:2])  # The short X.Y version
 
 
 # -- Options for HTML output ----------------------------------------------
