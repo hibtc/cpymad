@@ -2,6 +2,7 @@
 import os
 import sys
 import unittest
+from textwrap import dedent
 
 import numpy as np
 from numpy.testing import assert_allclose
@@ -51,12 +52,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.mad = Madx(command_log=CommandLog(sys.stdout, 'X:> '))
         here = os.path.dirname(__file__)
         there = os.path.join(here, 'testseq.madx')
-        with open(there) as f:
-            self.doc = f.read()
-        for line in self.doc.splitlines():
-            line = line.split('!')[0].strip()
-            if line:
-                self.mad._libmadx.input(line)
+        self.mad.call(there)
 
     def tearDown(self):
         self.mad.quit()
@@ -147,12 +143,25 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         history_filename = '_test_madx.madx.tmp'
         mad = Madx(command_log=history_filename)
         try:
-            # feed some input and compare with history file:
-            for line in self.doc.splitlines():
+            # feed some input lines and compare with history file:
+            lines = dedent("""
+                l = 5;
+                f = 200;
+
+                fodo: sequence, refer=entry, l=100;
+                    QF: quadrupole, l=5, at= 0, k1= 1/(f*l);
+                    QD: quadrupole, l=5, at=50, k1=-1/(f*l);
+                endsequence;
+
+                beam, particle=proton, energy=2;
+                use, sequence=fodo;
+            """).splitlines()
+            lines = [line for line in lines if line.strip()]
+            for line in lines:
                 mad.input(line)
             with open(history_filename) as history_file:
                 history = history_file.read()
-            self.assertEqual(history.strip(), self.doc.strip())
+            self.assertEqual(history.strip(), '\n'.join(lines).strip())
         finally:
             # remove history file
             mad.quit()
@@ -772,8 +781,7 @@ class TestTransferMap(unittest.TestCase):
 
     def _mad(self, doc):
         mad = Madx(command_log=CommandLog(sys.stdout, 'X:> '))
-        for line in doc.splitlines():
-            mad._libmadx.input(line)
+        mad.input(doc)
         return mad
 
     def _test_transfer_map(self, seq, range_, doc, rtol=1e-7, atol=1e-15):
