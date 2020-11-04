@@ -2,6 +2,7 @@
 import os
 import sys
 import unittest
+from textwrap import dedent
 
 import numpy as np
 from numpy.testing import assert_allclose
@@ -51,12 +52,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         self.mad = Madx(command_log=CommandLog(sys.stdout, 'X:> '))
         here = os.path.dirname(__file__)
         there = os.path.join(here, 'testseq.madx')
-        with open(there) as f:
-            self.doc = f.read()
-        for line in self.doc.splitlines():
-            line = line.split('!')[0].strip()
-            if line:
-                self.mad._libmadx.input(line)
+        self.mad.call(there)
 
     def tearDown(self):
         self.mad.quit()
@@ -90,13 +86,15 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
     def test_independent_instances(self):
         # create a second Madx instance (1st one is created in setUp)
         madxness = Madx()
-        # Check independence by defining a variable differently in each
-        # instance:
-        self.mad.input('ANSWER=42;')
-        madxness.input('ANSWER=43;')
-        self.assertEqual(self.mad.eval('ANSWER'), 42)
-        self.assertEqual(madxness.eval('ANSWER'), 43)
-        madxness.quit()
+        try:
+            # Check independence by defining a variable differently in each
+            # instance:
+            self.mad.input('ANSWER=42;')
+            madxness.input('ANSWER=43;')
+            self.assertEqual(self.mad.eval('ANSWER'), 42)
+            self.assertEqual(madxness.eval('ANSWER'), 43)
+        finally:
+            madxness.quit()
 
     # TODO: We need to fix this on windows, but for now, I just need it to
     # pass so that the CI builds the release...
@@ -104,18 +102,20 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
     def test_streamreader(self):
         output = []
         m = Madx(stdout=output.append)
-        self.assertEqual(len(output), 1)
-        self.assertIn(b'++++++++++++++++++++++++++++++++++++++++++++', output[0])
-        self.assertIn(b'+ Support: mad@cern.ch,',                      output[0])
-        self.assertIn(b'+ Release   date: ',                           output[0])
-        self.assertIn(b'+ Execution date: ',                           output[0])
-        # self.assertIn(b'+ Support: mad@cern.ch, ', output[1])
-        m.input('foo = 3;')
-        self.assertEqual(len(output), 1)
-        m.input('foo = 3;')
-        self.assertEqual(len(output), 2)
-        self.assertEqual(output[1], b'++++++ info: foo redefined\n')
-        m.quit()
+        try:
+            self.assertEqual(len(output), 1)
+            self.assertIn(b'+++++++++++++++++++++++++++++++++', output[0])
+            self.assertIn(b'+ Support: mad@cern.ch,',           output[0])
+            self.assertIn(b'+ Release   date: ',                output[0])
+            self.assertIn(b'+ Execution date: ',                output[0])
+            # self.assertIn(b'+ Support: mad@cern.ch, ', output[1])
+            m.input('foo = 3;')
+            self.assertEqual(len(output), 1)
+            m.input('foo = 3;')
+            self.assertEqual(len(output), 2)
+            self.assertEqual(output[1], b'++++++ info: foo redefined\n')
+        finally:
+            m.quit()
         self.assertEqual(len(output), 3)
         self.assertIn(b'+          MAD-X finished normally ', output[2])
 
@@ -142,16 +142,46 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         # create a new Madx instance that uses the history feature:
         history_filename = '_test_madx.madx.tmp'
         mad = Madx(command_log=history_filename)
-        # feed some input and compare with history file:
-        for line in self.doc.splitlines():
-            mad.input(line)
-        with open(history_filename) as history_file:
-            history = history_file.read()
-        self.assertEqual(history.strip(), self.doc.strip())
-        # remove history file
-        mad.quit()
-        del mad
-        os.remove(history_filename)
+        try:
+            # feed some input lines and compare with history file:
+            lines = dedent("""
+                l = 5;
+                f = 200;
+
+                fodo: sequence, refer=entry, l=100;
+                    QF: quadrupole, l=5, at= 0, k1= 1/(f*l);
+                    QD: quadrupole, l=5, at=50, k1=-1/(f*l);
+                endsequence;
+
+                beam, particle=proton, energy=2;
+                use, sequence=fodo;
+            """).splitlines()
+            lines = [line for line in lines if line.strip()]
+            for line in lines:
+                mad.input(line)
+            with open(history_filename) as history_file:
+                history = history_file.read()
+            self.assertEqual(history.strip(), '\n'.join(lines).strip())
+        finally:
+            # remove history file
+            mad.quit()
+            del mad
+            os.remove(history_filename)
+
+    def test_append_semicolon(self):
+        """Check that semicolon is automatically appended to input() text."""
+        # Regression test for #73
+        log = []
+        mad = Madx(command_log=log.append)
+        try:
+            mad.input('a = 0')
+            mad.input('b = 1')
+            self.assertEqual(log, ['a = 0;', 'b = 1;'])
+            self.assertEqual(mad.globals.a, 0)
+            self.assertEqual(mad.globals.b, 1)
+        finally:
+            mad.quit()
+            del mad
 
     def test_call_and_chdir(self):
         folder = os.path.abspath(os.path.dirname(__file__))
@@ -751,8 +781,7 @@ class TestTransferMap(unittest.TestCase):
 
     def _mad(self, doc):
         mad = Madx(command_log=CommandLog(sys.stdout, 'X:> '))
-        for line in doc.splitlines():
-            mad._libmadx.input(line)
+        mad.input(doc)
         return mad
 
     def _test_transfer_map(self, seq, range_, doc, rtol=1e-7, atol=1e-15):
