@@ -90,13 +90,15 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
     def test_independent_instances(self):
         # create a second Madx instance (1st one is created in setUp)
         madxness = Madx()
-        # Check independence by defining a variable differently in each
-        # instance:
-        self.mad.input('ANSWER=42;')
-        madxness.input('ANSWER=43;')
-        self.assertEqual(self.mad.eval('ANSWER'), 42)
-        self.assertEqual(madxness.eval('ANSWER'), 43)
-        madxness.quit()
+        try:
+            # Check independence by defining a variable differently in each
+            # instance:
+            self.mad.input('ANSWER=42;')
+            madxness.input('ANSWER=43;')
+            self.assertEqual(self.mad.eval('ANSWER'), 42)
+            self.assertEqual(madxness.eval('ANSWER'), 43)
+        finally:
+            madxness.quit()
 
     # TODO: We need to fix this on windows, but for now, I just need it to
     # pass so that the CI builds the release...
@@ -104,18 +106,20 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
     def test_streamreader(self):
         output = []
         m = Madx(stdout=output.append)
-        self.assertEqual(len(output), 1)
-        self.assertIn(b'++++++++++++++++++++++++++++++++++++++++++++', output[0])
-        self.assertIn(b'+ Support: mad@cern.ch,',                      output[0])
-        self.assertIn(b'+ Release   date: ',                           output[0])
-        self.assertIn(b'+ Execution date: ',                           output[0])
-        # self.assertIn(b'+ Support: mad@cern.ch, ', output[1])
-        m.input('foo = 3;')
-        self.assertEqual(len(output), 1)
-        m.input('foo = 3;')
-        self.assertEqual(len(output), 2)
-        self.assertEqual(output[1], b'++++++ info: foo redefined\n')
-        m.quit()
+        try:
+            self.assertEqual(len(output), 1)
+            self.assertIn(b'++++++++++++++++++++++++++++++++++++++++++++', output[0])
+            self.assertIn(b'+ Support: mad@cern.ch,',                      output[0])
+            self.assertIn(b'+ Release   date: ',                           output[0])
+            self.assertIn(b'+ Execution date: ',                           output[0])
+            # self.assertIn(b'+ Support: mad@cern.ch, ', output[1])
+            m.input('foo = 3;')
+            self.assertEqual(len(output), 1)
+            m.input('foo = 3;')
+            self.assertEqual(len(output), 2)
+            self.assertEqual(output[1], b'++++++ info: foo redefined\n')
+        finally:
+            m.quit()
         self.assertEqual(len(output), 3)
         self.assertIn(b'+          MAD-X finished normally ', output[2])
 
@@ -142,16 +146,18 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         # create a new Madx instance that uses the history feature:
         history_filename = '_test_madx.madx.tmp'
         mad = Madx(command_log=history_filename)
-        # feed some input and compare with history file:
-        for line in self.doc.splitlines():
-            mad.input(line)
-        with open(history_filename) as history_file:
-            history = history_file.read()
-        self.assertEqual(history.strip(), self.doc.strip())
-        # remove history file
-        mad.quit()
-        del mad
-        os.remove(history_filename)
+        try:
+            # feed some input and compare with history file:
+            for line in self.doc.splitlines():
+                mad.input(line)
+            with open(history_filename) as history_file:
+                history = history_file.read()
+            self.assertEqual(history.strip(), self.doc.strip())
+        finally:
+            # remove history file
+            mad.quit()
+            del mad
+            os.remove(history_filename)
 
     def test_append_semicolon(self):
         """Check that semicolon is automatically appended to input() text."""
