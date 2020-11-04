@@ -248,6 +248,7 @@ class Madx(object):
         :returns: whether the command has completed without error
         :rtype: bool
         """
+        text = text.rstrip(';') + ';'
         if self._enter_count > 0:
             self._batch.append(text)
             return True

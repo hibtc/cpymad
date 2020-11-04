@@ -153,6 +153,21 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         del mad
         os.remove(history_filename)
 
+    def test_append_semicolon(self):
+        """Check that semicolon is automatically appended to input() text."""
+        # Regression test for #73
+        log = []
+        mad = Madx(command_log=log.append)
+        try:
+            mad.input('a = 0')
+            mad.input('b = 1')
+            self.assertEqual(log, ['a = 0;', 'b = 1;'])
+            self.assertEqual(mad.globals.a, 0)
+            self.assertEqual(mad.globals.b, 1)
+        finally:
+            mad.quit()
+            del mad
+
     def test_call_and_chdir(self):
         folder = os.path.abspath(os.path.dirname(__file__))
         parent = os.path.dirname(folder)
