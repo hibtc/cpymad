@@ -91,7 +91,7 @@ jobs:
           madx_version: ${{ env.MADX_VERSION }}
 
       - name: Setup Miniconda
-        uses: goanpeca/setup-miniconda@v1
+        uses: conda-incubator/setup-miniconda@v2
         with:
           architecture: ${{ matrix.arch == 'i686' && 'x86' || 'x64' }}
           python-version: '3.8'
@@ -154,7 +154,7 @@ jobs:
           ../cpymad/.github/build/macos/madx.sh
 
       - name: Setup Miniconda
-        uses: goanpeca/setup-miniconda@v1
+        uses: conda-incubator/setup-miniconda@v2
         with:
           architecture: ${{ matrix.arch == 'i686' && 'x86' || 'x64' }}
           python-version: '3.8'
