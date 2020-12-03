@@ -1,6 +1,16 @@
 Changelog
 ~~~~~~~~~
 
+1.6.3
+=====
+Date: 03.12.2020
+
+- add wheels for python 3.9
+- require newer version of minrpc, fixes UnpicklingError when transmitting
+  large datasets to/from MAD-X process
+- always append ';' to all ``input()`` text in the command log
+
+
 1.6.2
 =====
 Date: 14.10.2020

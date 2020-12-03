@@ -16,6 +16,7 @@ main()
     _ conda create -qyf -n py36 python=3.6 wheel cython -c anaconda
     _ conda create -qyf -n py37 python=3.7 wheel cython -c anaconda
     _ conda create -qyf -n py38 python=3.8 wheel cython -c anaconda
+    _ conda create -qyf -n py39 python=3.9 wheel cython -c anaconda
 
     # Build cpymad wheels:
     if [[ $ARCH == i686 ]]; then
@@ -25,6 +26,7 @@ main()
         build py36 36 win32-3.6 .cp36-win32
         build py37 37 win32-3.7 .cp37-win32
         build py38 38 win32-3.8 .cp38-win32
+        build py39 39 win32-3.9 .cp39-win32
     else
         CFLAGS=-DMS_WIN64
         build py27 27 win-amd64-2.7 ''
@@ -32,6 +34,7 @@ main()
         build py36 36 win-amd64-3.6 .cp36-win_amd64
         build py37 37 win-amd64-3.7 .cp37-win_amd64
         build py38 38 win-amd64-3.8 .cp38-win_amd64
+        build py39 39 win-amd64-3.9 .cp39-win_amd64
     fi
 }
 
