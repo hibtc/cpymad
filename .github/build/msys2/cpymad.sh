@@ -11,7 +11,6 @@ main()
     MADXDIR=${2:-$MADXDIR}
 
     # Create python environments:
-    _ conda create -qyf -n py27 python=2.7 wheel cython -c anaconda
     _ conda create -qyf -n py35 python=3.5 wheel cython -c anaconda
     _ conda create -qyf -n py36 python=3.6 wheel cython -c anaconda
     _ conda create -qyf -n py37 python=3.7 wheel cython -c anaconda
@@ -21,7 +20,6 @@ main()
     # Build cpymad wheels:
     if [[ $ARCH == i686 ]]; then
         CFLAGS=
-        build py27 27 win32-2.7 ''
         build py35 35 win32-3.5 .cp35-win32
         build py36 36 win32-3.6 .cp36-win32
         build py37 37 win32-3.7 .cp37-win32
@@ -29,7 +27,6 @@ main()
         build py39 39 win32-3.9 .cp39-win32
     else
         CFLAGS=-DMS_WIN64
-        build py27 27 win-amd64-2.7 ''
         build py35 35 win-amd64-3.5 .cp35-win_amd64
         build py36 36 win-amd64-3.6 .cp36-win_amd64
         build py37 37 win-amd64-3.7 .cp37-win_amd64

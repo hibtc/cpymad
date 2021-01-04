@@ -1,4 +1,3 @@
-# encoding: utf-8
 """
 This module defines a convenience layer to access the MAD-X interpreter.
 
@@ -7,20 +6,16 @@ The most interesting class for users is :class:`Madx`.
 
 from __future__ import absolute_import
 
-from contextlib import contextmanager
+from contextlib import contextmanager, suppress
 from functools import wraps
 from itertools import product
 from numbers import Number
+import collections.abc as abc
 import os
 import platform
 import subprocess
 import sys
 import warnings
-
-try:
-    import collections.abc as abc
-except ImportError:                 # py2
-    import collections as abc
 
 import numpy as np
 
@@ -42,12 +37,6 @@ if platform.architecture()[0] == '32bit':
         "If you need continued support for 32bit builds, let us know at:\n"
         "  https://github.com/hibtc/cpymad/issues")
     warnings.warn(_unsupported_platform, DeprecationWarning)
-
-
-try:
-    basestring
-except NameError:
-    basestring = str
 
 
 __all__ = [
@@ -164,7 +153,7 @@ class Madx(object):
             m = Madx(stdout=sys.stdout)
         """
         # open history file
-        if isinstance(command_log, basestring):
+        if isinstance(command_log, str):
             command_log = CommandLog.create(command_log)
         self.reader = NullContext()
         # start libmadx subprocess
@@ -212,8 +201,6 @@ class Madx(object):
         except (_rpc.RemoteProcessClosed, _rpc.RemoteProcessCrashed):
             return False
 
-    __nonzero__ = __bool__      # alias for python2 compatibility
-
     def __getattr__(self, name):
         """Resolve missing attributes as commands."""
         try:
@@ -225,11 +212,11 @@ class Madx(object):
 
     def quit(self):
         """Shutdown MAD-X interpreter and stop process."""
-        with util.suppress(AttributeError, RuntimeError):
+        with suppress(AttributeError, RuntimeError):
             self.input('quit;')
-        with util.suppress(AttributeError, RuntimeError):
+        with suppress(AttributeError, RuntimeError):
             self._service.close()
-        with util.suppress(AttributeError, RuntimeError):
+        with suppress(AttributeError, RuntimeError):
             self._process.wait()
         if hasattr(self._command_log, 'close'):
             self._command_log.close()
@@ -313,7 +300,7 @@ class Madx(object):
     def expr_vars(self, expr):
         """Find all variable names used in an expression. This does *not*
         include element attribute nor function names."""
-        if not isinstance(expr, basestring):
+        if not isinstance(expr, str):
             return []
         return [v for v in util.expr_symbols(expr)
                 if util.is_identifier(v)
@@ -641,11 +628,6 @@ class Sequence(object):
             other = other.name
         return self.name == other
 
-    # in py3 __ne__ delegates to __eq__, but we still need this for py2:
-    def __ne__(self, other):
-        """Comparison by sequence name."""
-        return not (self == other)
-
     __repr__ = __str__
 
     @property
@@ -893,7 +875,7 @@ class BaseElementList(object):
 
     def __getitem__(self, index):
         """Return element with specified index."""
-        if isinstance(index, basestring):
+        if isinstance(index, str):
             # allow element names to be passed for convenience:
             try:
                 index = self.index(index)

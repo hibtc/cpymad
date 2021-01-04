@@ -187,9 +187,8 @@ jobs:
         # actions/setup-python:
         os: [linux, windows, macos]
         arch: [x86_64]
-        python: ['2.7', '3.5', '3.6', '3.7', '3.8', '3.9']
+        python: ['3.5', '3.6', '3.7', '3.8', '3.9']
         include:
-          - {os: windows, arch: i686, python: '2.7'}
           - {os: windows, arch: i686, python: '3.5'}
           - {os: windows, arch: i686, python: '3.6'}
           - {os: windows, arch: i686, python: '3.7'}

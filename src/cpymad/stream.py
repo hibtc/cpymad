@@ -19,10 +19,7 @@ try:                        # Linux
 except ImportError:         # Windows
     import msvcrt
     from ctypes import windll, byref, WinError
-    try:
-        from ctypes.wintypes import HANDLE, DWORD, LPDWORD, BOOL
-    except ImportError:     # py27
-        from ctypes.wintypes import HANDLE, DWORD, LPVOID as LPDWORD, BOOL
+    from ctypes.wintypes import HANDLE, DWORD, LPDWORD, BOOL
 
     PIPE_NOWAIT = DWORD(0x00000001)
 

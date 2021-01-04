@@ -28,7 +28,7 @@ $PY/pip install cython
 $PY/python setup.py sdist
 $PY/pip uninstall cython -y
 
-for PYBIN in /opt/python/*/bin; do
+for PYBIN in /opt/python/cp3*/bin; do
     "${PYBIN}/pip" install -U setuptools
     "${PYBIN}/pip" wheel dist/*.tar.gz --no-deps -w dist/
 done
