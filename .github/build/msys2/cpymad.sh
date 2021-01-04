@@ -10,29 +10,19 @@ main()
     ARCH=$1
     MADXDIR=${2:-$MADXDIR}
 
-    # Create python environments:
-    _ conda create -qyf -n py35 python=3.5 wheel cython -c anaconda
-    _ conda create -qyf -n py36 python=3.6 wheel cython -c anaconda
-    _ conda create -qyf -n py37 python=3.7 wheel cython -c anaconda
-    _ conda create -qyf -n py38 python=3.8 wheel cython -c anaconda
-    _ conda create -qyf -n py39 python=3.9 wheel cython -c anaconda
-
-    # Build cpymad wheels:
     if [[ $ARCH == i686 ]]; then
         CFLAGS=
-        build py35 35 win32-3.5 .cp35-win32
-        build py36 36 win32-3.6 .cp36-win32
-        build py37 37 win32-3.7 .cp37-win32
-        build py38 38 win32-3.8 .cp38-win32
-        build py39 39 win32-3.9 .cp39-win32
+        PLATFORM=win32
     else
         CFLAGS=-DMS_WIN64
-        build py35 35 win-amd64-3.5 .cp35-win_amd64
-        build py36 36 win-amd64-3.6 .cp36-win_amd64
-        build py37 37 win-amd64-3.7 .cp37-win_amd64
-        build py38 38 win-amd64-3.8 .cp38-win_amd64
-        build py39 39 win-amd64-3.9 .cp39-win_amd64
+        PLATFORM=win-amd64
     fi
+
+    build 3.5
+    build 3.6
+    build 3.7
+    build 3.8
+    build 3.9
 }
 
 # We manually build the C extension using our msys gcc because setuptools is
@@ -42,10 +32,11 @@ main()
 # and cpymad!
 build()
 {
-    py_env=$1
-    py_ver=$2
-    dir_tag=$3
-    file_tag=$4
+    py_dot=$1
+    py_ver=${py_dot/./}
+    py_env=py${py_ver}
+    dir_tag=${PLATFORM}-${py_dot}
+    file_tag=.cp${py_ver}-${PLATFORM/-/_}
 
     # Ensure that cython code and extension module will be rebuilt since the
     # cython code is partially incompatible between python versions:
@@ -57,6 +48,7 @@ build()
     # `.pyd` in $libdir) to prevent the final `python setup.py bdist_wheel`
     # command from trying trying to perform either of these steps with MSVC.
 
+    _ conda create -qyf -n $py_env python=$py_dot wheel cython -c anaconda
     _ conda activate $py_env
     tempdir=build/temp.$dir_tag/Release/src/cpymad
     libdir=build/lib.$dir_tag/cpymad
