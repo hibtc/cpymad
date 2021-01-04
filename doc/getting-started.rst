@@ -10,16 +10,12 @@ instance that can be used to control and access the state of a MAD-X process::
     madx = Madx()
 
 This spawns a MAD-X process in the background and opens a communication
-channel that will be used to submit commands and fetch data using a simple RPC
-framework.
+channel to it.
 
-Note that running MAD-X in a separate process and using it via the remote
-channel has several benefits over loading it directly into the python process
-space. For one this allows to use any number of MAD-X instances in parallel.
-More than that the MAD-X interpreter can be started and stopped independently
-of the lifetime of the parent process, and perhaps most importantly, the main
-process is shielded from potential crashes occuring within the MAD-X
-interpreter.
+Running MAD-X in a separate process is necessary to create multiple instances
+with independent interpreter state. This is useful for resetting MAD-X to a
+clean initial state by simply creating a new instance; and is a requirement
+for parallelization (because MAD-X is not thread safe).
 
 
 Basic MAD-X commands
