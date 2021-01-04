@@ -7,16 +7,9 @@ set -ex
 
 main()
 {
-    ARCH=$1
-    MADXDIR=${2:-$MADXDIR}
-
-    if [[ $ARCH == i686 ]]; then
-        CFLAGS=
-        PLATFORM=win32
-    else
-        CFLAGS=-DMS_WIN64
-        PLATFORM=win-amd64
-    fi
+    MADXDIR=${1:-$MADXDIR}
+    CFLAGS=-DMS_WIN64
+    PLATFORM=win-amd64
 
     build 3.5
     build 3.6

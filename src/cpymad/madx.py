@@ -12,7 +12,6 @@ from itertools import product
 from numbers import Number
 import collections.abc as abc
 import os
-import platform
 import subprocess
 import sys
 import warnings
@@ -30,13 +29,6 @@ if sys.version_info < (3, 6):
         "If you need continued support for an older version, let us know at:\n"
         "  https://github.com/hibtc/cpymad/issues")
     warnings.warn(_unsupported_version, DeprecationWarning)
-
-if platform.architecture()[0] == '32bit':
-    _unsupported_platform = (
-        "32bit support will be removed in a future release!\n"
-        "If you need continued support for 32bit builds, let us know at:\n"
-        "  https://github.com/hibtc/cpymad/issues")
-    warnings.warn(_unsupported_platform, DeprecationWarning)
 
 
 __all__ = [
