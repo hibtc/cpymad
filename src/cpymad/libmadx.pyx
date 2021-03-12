@@ -1176,8 +1176,8 @@ cdef _get_node(clib.node* node, int ref_flag, int is_expanded, int line):
     data['phase_errors'] = None if node.p_ph_err is NULL else PhaseError(
         dpn=list(_memview(node.p_ph_err)[0::2]),
         dps=list(_memview(node.p_ph_err)[1::2]))
-    data['chkick']=node.chkick
-    data['cvkick']=node.cvkick
+    data['chkick'] = node.chkick
+    data['cvkick'] = node.cvkick
     return data
 
 
