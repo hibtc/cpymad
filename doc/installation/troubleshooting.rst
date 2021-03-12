@@ -38,10 +38,10 @@ If you see an error like this::
     /usr/bin/ld: mad_main.c:(.text.startup+0x11): undefined reference to `madx_finish'
     /usr/bin/ld: mad_main.c:(.text.startup+0x16): undefined reference to `geterrorflag_'
 
-It probably means that you attempted to tried to build MAD-X with
-``-DBUILD_SHARED_LIBS=ON`` and ``-DCMAKE_C_FLAGS="-fvisibility=hidden"``. If
-that is the case, either build MAD-X with ``-DBUILD_SHARED_LIBS=OFF``, or
-change *hidden* to *protected*, or leave out this option entirely.
+It probably means that you attempted to build MAD-X as *shared object*
+``-DBUILD_SHARED_LIBS=ON`` with ``-DCMAKE_C_FLAGS="-fvisibility=hidden"``.
+If that is the case, either build MAD-X with ``-DBUILD_SHARED_LIBS=OFF``, or
+change *hidden* to *protected*, or leave out the visibility option entirely.
 
 
 Setup or compile time errors
@@ -111,20 +111,21 @@ Errors that occur after a successful installation when trying to use cpymad.
 ImportError: undefined symbol: _ZGVbN2vv_pow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This means that MAD-X was compiled with vectorization optimizations. There are
-several fixes:
+There are several possible fixes:
 
-- link cpymad against ``libmvec`` by passing ``-lm`` while to
-  ``python setup.py build_ext -lm``. This is the recommended fix when building
-  for local use (on your own PC).
-- build MAD-X without vector optimizations by passing
-  ``-DCMAKE_C_FLAGS="-fno-tree-vectorize"
-  -DCMAKE_CXX_FLAGS="-fno-tree-vectorize"
-  -DCMAKE_Fortran_FLAGS="-fno-tree-vectorize"``
-- build MAD-X in a mode lower than release (disables vectorizations by
+- The simplest fix that works without rebuilding MAD-X is to link cpymad
+  against ``libmvec``. This can be done by passing ``-lm`` to the ``python
+  setup.py build_ext -lm`` command. You can also pass it through ``pip`` as
+  follows ``pip install -e . --global-option build_ext --global-option -lm``.
+  This fix is the recommended one when building for local use on your own
+  machine.
+- Rebuild MAD-X without vectorization optimizations by passing
+  ``-DCMAKE_C_FLAGS="-fno-tree-vectorize"``. Same for ``CMAKE_CXX_FLAGS``, and
+  ``CMAKE_Fortran_FLAGS``.
+- Rebuild MAD-X in Debug mode (where these optimizations are disabled by
   default)
-- build MAD-X as shared object: ``-DBUILD_SHARED_LIBS=ON
-  -DCMAKE_C_FLAGS="-fvisibility=protected"``, and run ``setup.py`` with
+- Rebuild MAD-X as shared object: ``-DBUILD_SHARED_LIBS=ON`` (also remove
+  ``-fvisibility`` or change to ``protected``), and run ``setup.py`` with
   ``export SHARED=1``.
 - use a manylinux build of cpymad
 
