@@ -18,6 +18,32 @@ The MAD-X banner should appear.
 .. contents:: :local:
 
 
+MAD-X build errors
+==================
+
+mad_main.c: undefined reference to 'madx_start'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you see an error like this::
+
+    [ 96%] Linking CXX executable madx
+    /usr/bin/ld: CMakeFiles/madxbin.dir/mad_main.c.o: in function `mad_init'
+    mad_main.c:(.text+0x44): undefined reference to `madx_start'
+    /usr/bin/ld: CMakeFiles/madxbin.dir/mad_main.c.o: in function `mad_run'
+    mad_main.c:(.text+0x73): undefined reference to `madx_input'
+    /usr/bin/ld: CMakeFiles/madxbin.dir/mad_main.c.o: in function `mad_fini'
+    mad_main.c:(.text+0x81): undefined reference to `madx_finish'
+    /usr/bin/ld: CMakeFiles/madxbin.dir/mad_main.c.o: in function `main'
+    mad_main.c:(.text.startup+0xc): undefined reference to `madx_input'
+    /usr/bin/ld: mad_main.c:(.text.startup+0x11): undefined reference to `madx_finish'
+    /usr/bin/ld: mad_main.c:(.text.startup+0x16): undefined reference to `geterrorflag_'
+
+It probably means that you attempted to tried to build MAD-X with
+``-DBUILD_SHARED_LIBS=ON`` and ``-DCMAKE_C_FLAGS="-fvisibility=hidden"``. If
+that is the case, either build MAD-X with ``-DBUILD_SHARED_LIBS=OFF``, or
+change *hidden* to *protected*, or leave out this option entirely.
+
+
 Setup or compile time errors
 ============================
 
@@ -80,6 +106,32 @@ Runtime errors
 ==============
 
 Errors that occur after a successful installation when trying to use cpymad.
+
+
+ImportError: undefined symbol: _ZGVbN2vv_pow
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This means that MAD-X was compiled with vectorization optimizations. There are
+several fixes:
+
+- link cpymad against ``libmvec`` by passing ``-lm`` while to
+  ``python setup.py build_ext -lm``. This is the recommended fix when building
+  for local use (on your own PC).
+- build MAD-X without vector optimizations by passing
+  ``-DCMAKE_C_FLAGS="-fno-tree-vectorize"
+  -DCMAKE_CXX_FLAGS="-fno-tree-vectorize"
+  -DCMAKE_Fortran_FLAGS="-fno-tree-vectorize"``
+- build MAD-X in a mode lower than release (disables vectorizations by
+  default)
+- build MAD-X as shared object: ``-DBUILD_SHARED_LIBS=ON
+  -DCMAKE_C_FLAGS="-fvisibility=protected"``, and run ``setup.py`` with
+  ``export SHARED=1``.
+- use a manylinux build of cpymad
+
+See also `cpymad#79`_.
+
+
+.. _cpymad#79: https://github.com/hibtc/cpymad/issues/79
 
 
 ImportError: undefined symbol: dgelsd\_
