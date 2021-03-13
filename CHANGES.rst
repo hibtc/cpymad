@@ -1,6 +1,13 @@
 Changelog
 ~~~~~~~~~
 
+1.7.0
+=====
+Date: 13.03.2021
+
+- read chkick/cvkick element attributes
+
+
 1.6.3
 =====
 Date: 03.12.2020
