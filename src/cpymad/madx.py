@@ -12,7 +12,10 @@ from functools import wraps
 from itertools import product
 from numbers import Number
 import os
+import platform
 import subprocess
+import sys
+import warnings
 
 try:
     import collections.abc as abc
@@ -24,6 +27,22 @@ import numpy as np
 from . import _rpc
 from . import util
 from .stream import AsyncReader
+
+
+if sys.version_info < (3, 6):
+    _unsupported_version = (
+        "Support for python 3.5 and below will be removed in a future release!\n"
+        "If you need continued support for an older version, let us know at:\n"
+        "  https://github.com/hibtc/cpymad/issues")
+    warnings.warn(_unsupported_version, DeprecationWarning)
+
+if platform.architecture()[0] == '32bit':
+    _unsupported_platform = (
+        "32bit support will be removed in a future release!\n"
+        "If you need continued support for 32bit builds, let us know at:\n"
+        "  https://github.com/hibtc/cpymad/issues")
+    warnings.warn(_unsupported_platform, DeprecationWarning)
+
 
 try:
     basestring
@@ -151,7 +170,7 @@ class Madx(object):
         # start libmadx subprocess
         if libmadx is None:
             if stdout is None:
-                from sys import stdout
+                stdout = sys.stdout
             if hasattr(stdout, 'write'):
                 try:
                     stdout = stdout.fileno()
