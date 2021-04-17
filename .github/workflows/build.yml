@@ -59,9 +59,18 @@ jobs:
     runs-on: windows-latest
     defaults:
       run:
-        shell: bash -l {0}
+        shell: msys2 {0}
     steps:
       - uses: actions/checkout@v2
+      - uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          path-type: inherit
+          install: mingw-w64-ucrt-x86_64-gcc
+                   mingw-w64-ucrt-x86_64-gcc-fortran
+                   mingw-w64-ucrt-x86_64-cmake
+
+      - run: echo "MSYSTEM=UCRT64" >> $GITHUB_ENV
       - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
 
       - name: Download cached MAD-X build
@@ -84,23 +93,29 @@ jobs:
         with:
           madx_version: ${{ env.MADX_VERSION }}
 
-      - name: Setup Miniconda
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          python-version: '3.8'
-
-      - name: Install build tools
-        run: |
-          conda install -qy -c anaconda cmake
-          conda install -qy -c msys2 m2w64-toolchain
-
       - name: Build MAD-X
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
         run: cd ../MAD-X && ../cpymad/.github/build/msys2/madx.sh
 
-      - name: Build cpymad wheels
-        # We need 'bash -l' to make conda available within the script:
-        run: bash -l .github/build/msys2/cpymad.sh ../MAD-X/dist
+      - uses: actions/setup-python@v2
+        with: {python-version: "3.5"}
+      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.5
+
+      - uses: actions/setup-python@v2
+        with: {python-version: "3.6"}
+      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.6
+
+      - uses: actions/setup-python@v2
+        with: {python-version: "3.7"}
+      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.7
+
+      - uses: actions/setup-python@v2
+        with: {python-version: "3.8"}
+      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.8
+
+      - uses: actions/setup-python@v2
+        with: {python-version: "3.9"}
+      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.9
 
       - name: Upload cpymad wheels
         uses: actions/upload-artifact@v2
