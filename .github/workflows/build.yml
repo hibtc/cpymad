@@ -7,9 +7,6 @@ jobs:
   build_linux:
     name: "Build: Linux"
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        arch: [i686, x86_64]
     steps:
       - uses: actions/checkout@v2
       - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
@@ -23,7 +20,7 @@ jobs:
           path: ../MAD-X/dist
           key: "\
             madx-${{ env.MADX_VERSION }}-\
-            linux-${{ matrix.arch }}-\
+            linux-\
             patches-${{ hashFiles('.github/patch/*') }}-\
             scripts-${{ hashFiles('.github/build/manylinux1/madx*') }}\
           "
@@ -40,7 +37,7 @@ jobs:
           docker run --rm --init \
             -w /mnt/MAD-X \
             -v `pwd`/..:/mnt \
-            quay.io/pypa/manylinux1_${{ matrix.arch }} \
+            quay.io/pypa/manylinux1_x86_64 \
             ../cpymad/.github/build/manylinux1/madx.sh
 
       - name: Build cpymad wheels
@@ -48,21 +45,18 @@ jobs:
           docker run --rm --init \
             -w /mnt/cpymad \
             -v `pwd`/..:/mnt \
-            quay.io/pypa/manylinux1_${{ matrix.arch }} \
+            quay.io/pypa/manylinux1_x86_64 \
             .github/build/manylinux1/cpymad.sh
 
       - name: Upload cpymad wheels
         uses: actions/upload-artifact@v2
         with:
-          name: dist-linux-${{ matrix.arch }}
+          name: dist-linux
           path: dist
 
   build_windows:
     name: "Build: Windows"
     runs-on: windows-latest
-    strategy:
-      matrix:
-        arch: [i686, x86_64]
     defaults:
       run:
         shell: bash -l {0}
@@ -79,7 +73,7 @@ jobs:
           path: ../MAD-X/dist
           key: "\
             madx-${{ env.MADX_VERSION }}-\
-            windows-${{ matrix.arch }}-\
+            windows-\
             patches-${{ hashFiles('.github/patch/*') }}-\
             scripts-${{ hashFiles('.github/build/manylinux1/madx*') }}\
           "
@@ -93,10 +87,7 @@ jobs:
       - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@v2
         with:
-          architecture: ${{ matrix.arch == 'i686' && 'x86' || 'x64' }}
           python-version: '3.8'
-          # must be explicitly specified if architecture is not x64:
-          miniconda-version: latest
 
       - name: Install build tools
         run: |
@@ -109,20 +100,17 @@ jobs:
 
       - name: Build cpymad wheels
         # We need 'bash -l' to make conda available within the script:
-        run: bash -l .github/build/msys2/cpymad.sh ${{ matrix.arch }} ../MAD-X/dist
+        run: bash -l .github/build/msys2/cpymad.sh ../MAD-X/dist
 
       - name: Upload cpymad wheels
         uses: actions/upload-artifact@v2
         with:
-          name: dist-windows-${{ matrix.arch }}
+          name: dist-windows
           path: dist
 
   build_macos:
     name: "Build: MacOS"
     runs-on: macos-latest
-    strategy:
-      matrix:
-        arch: [x86_64]
     steps:
       - uses: actions/checkout@v2
       - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
@@ -136,7 +124,7 @@ jobs:
           path: ../MAD-X/dist
           key: "\
             madx-${{ env.MADX_VERSION }}-\
-            macos-${{ matrix.arch }}-\
+            macos-\
             patches-${{ hashFiles('.github/patch/*') }}-\
             scripts-${{ hashFiles('.github/build/macos/madx*') }}\
           "
@@ -156,14 +144,11 @@ jobs:
       - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@v2
         with:
-          architecture: ${{ matrix.arch == 'i686' && 'x86' || 'x64' }}
           python-version: '3.8'
-          # must be explicitly specified if architecture is not x64:
-          miniconda-version: latest
 
       - name: Build cpymad wheels
         # We need 'bash -l' to make conda available within the script:
-        run: bash -l .github/build/macos/cpymad.sh ${{ matrix.arch }} ../MAD-X/dist
+        run: bash -l .github/build/macos/cpymad.sh ../MAD-X/dist
 
       - name: Fixup wheel dependencies
         run: |
@@ -174,7 +159,7 @@ jobs:
       - name: Upload cpymad wheels
         uses: actions/upload-artifact@v2
         with:
-          name: dist-macos-${{ matrix.arch }}
+          name: dist-macos
           path: dist
 
   test:
@@ -186,15 +171,7 @@ jobs:
         # 32bit python is currently only available on windows in
         # actions/setup-python:
         os: [linux, windows, macos]
-        arch: [x86_64]
-        python: ['2.7', '3.5', '3.6', '3.7', '3.8', '3.9']
-        include:
-          - {os: windows, arch: i686, python: '2.7'}
-          - {os: windows, arch: i686, python: '3.5'}
-          - {os: windows, arch: i686, python: '3.6'}
-          - {os: windows, arch: i686, python: '3.7'}
-          - {os: windows, arch: i686, python: '3.8'}
-          - {os: windows, arch: i686, python: '3.9'}
+        python: ['3.5', '3.6', '3.7', '3.8', '3.9']
 
     defaults:
       run:
@@ -205,12 +182,11 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
-          architecture: ${{ matrix.arch == 'i686' && 'x86' || 'x64' }}
 
       - name: Download cpymad wheels
         uses: actions/download-artifact@v2
         with:
-          name: dist-${{ matrix.os }}-${{ matrix.arch }}
+          name: dist-${{ matrix.os }}
           path: dist
 
       - name: Install cpymad from wheel
@@ -245,11 +221,10 @@ jobs:
           ref: gh-pages
       - uses: actions/setup-python@v2
         with:
-          architecture: 'x64'
           python-version: '3.x'
       - uses: actions/download-artifact@v2
         with:
-          name: dist-linux-x86_64
+          name: dist-linux
           path: dist
 
       - run: pip install cpymad[doc] -f dist
@@ -286,7 +261,7 @@ jobs:
       - name: Merge artifacts to single folder
         run: |
           mv dist/dist-*/*.whl dist/
-          mv dist/dist-linux-x86_64/*.tar.gz dist/
+          mv dist/dist-linux/*.tar.gz dist/
 
       - name: Install twine
         run: pip install twine

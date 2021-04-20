@@ -18,25 +18,7 @@ def normalize(path):
     return os.path.normcase(os.path.normpath(path))
 
 
-class _TestCaseCompat(object):
-
-    """
-    Compatibility layer for unittest.TestCase
-    """
-
-    try:
-        assertItemsEqual = unittest.TestCase.assertCountEqual
-    except AttributeError:
-        def assertItemsEqual(self, first, second):
-            """Method missing in python2.6 and renamed in python3."""
-            self.assertEqual(sorted(first), sorted(second))
-
-    def assertLess(self, first, second):
-        """Method missing in python2.6."""
-        self.assertTrue(first < second)
-
-
-class TestMadx(unittest.TestCase, _TestCaseCompat):
+class TestMadx(unittest.TestCase):
 
     """
     Test methods for the Madx class.
@@ -338,7 +320,7 @@ class TestMadx(unittest.TestCase, _TestCaseCompat):
         s1 = self.mad.sequence['s1']
         self.assertEqual(s1.name, 's1')
         seqs = self.mad.sequence
-        self.assertItemsEqual(seqs, ['s1', 's2'])
+        self.assertCountEqual(seqs, ['s1', 's2'])
 
     def test_eval(self):
         self.assertEqual(self.mad.eval(True), True)

@@ -7,10 +7,7 @@ import sys
 import tempfile
 from contextlib import contextmanager
 from numbers import Number
-try:
-    import collections.abc as abc
-except ImportError:
-    import collections as abc
+import collections.abc as abc
 
 from .types import (
     Range, Constraint,
@@ -40,14 +37,6 @@ __all__ = [
 ordered_keys = dict.keys if sys.version_info >= (3, 6) else sorted
 
 
-try:
-    unicode
-except NameError:   # python3
-    basestring = unicode = str
-
-NoneType = type(None)
-
-
 def mad_quote(value):
     """Add quotes to a string value."""
     if '"' not in value:
@@ -69,7 +58,7 @@ def _fix_name(name):
 
 
 # precompile regexes for performance:
-re_compile = lambda s: re.compile(unicode(s), re.IGNORECASE)
+re_compile = lambda s: re.compile(s, re.IGNORECASE)
 _re_is_identifier = re_compile(r'^[a-z_][a-z0-9_]*$')
 _re_symbol = re_compile(r'([a-z_][a-z0-9._]*(->[a-z_][a-z0-9._]*(\[[0-9]+\])?)?)')
 _re_element_internal = re_compile(r'^([a-z_][a-z0-9_.$]*)(:\d+)?$')
@@ -197,8 +186,8 @@ def format_param(key, value):
     elif key == 'range' or isinstance(value, Range):
         return key + '=' + _format_range(value)
     # check for basestrings before abc.Sequence, because every
-    # basestring is also a Sequence:
-    elif isinstance(value, basestring):
+    # string is also a Sequence:
+    elif isinstance(value, str):
         if key in QUOTED_PARAMS:
             return key + '=' + mad_quote(value)
         else:
@@ -208,7 +197,7 @@ def format_param(key, value):
             # internally and the quotes prevent automatic case conversion)
             return key + '=' + mad_quote(value.lower())
     # don't quote expressions:
-    elif isinstance(value, basestring):
+    elif isinstance(value, str):
         return key + ':=' + value
     elif isinstance(value, abc.Sequence):
         return key + '={' + ','.join(map(str, value)) + '}'
@@ -217,7 +206,7 @@ def format_param(key, value):
 
 
 def _format_range(value):
-    if isinstance(value, basestring):
+    if isinstance(value, str):
         return normalize_range_name(value)
     elif isinstance(value, Range):
         begin, end = value.first, value.last
@@ -254,7 +243,7 @@ def format_cmdpar(cmd, key, value):
                  PARAM_TYPE_DOUBLE_ARRAY):
         if isinstance(value, bool):         return key + '=' + str(int(value))
         if isinstance(value, Number):       return key + '=' + str(value)
-        if isinstance(value, basestring):   return key + ':=' + value
+        if isinstance(value, str):          return key + ':=' + value
     if dtype == PARAM_TYPE_CONSTRAINT:
         if isinstance(value, Constraint):
             constr = []
@@ -288,7 +277,7 @@ def format_cmdpar(cmd, key, value):
     if dtype == PARAM_TYPE_STRING:
         if key == 'range' or isinstance(value, Range):
             return key + '=' + _format_range(value)
-        if isinstance(value, basestring):
+        if isinstance(value, str):
             return key + '=' + format_str(value)
     if dtype == PARAM_TYPE_STRING_ARRAY:
         # NOTE: allowing single scalar value to STRING_ARRAY, mainly useful
@@ -297,7 +286,7 @@ def format_cmdpar(cmd, key, value):
             if isinstance(value, list):
                 return key + '={' + ','.join(map(_format_range, value)) + '}'
             return key + '=' + _format_range(value)
-        if isinstance(value, basestring):
+        if isinstance(value, str):
             return key + '=' + format_str(value)
         if isinstance(value, abc.Sequence):
             return key + '={' + ','.join(map(format_str, value)) + '}'
@@ -328,7 +317,7 @@ def format_command(*args, **kwargs):
     'constraint, betx<3.13;'
     """
     cmd, args = args[0], args[1:]
-    if isinstance(cmd, basestring):
+    if isinstance(cmd, str):
         _args = [cmd] + list(args)
         _keys = ordered_keys(kwargs)
         _args += [format_param(k, kwargs[k]) for k in _keys]
@@ -342,7 +331,7 @@ def format_command(*args, **kwargs):
 # validation of MAD-X expressions
 
 def _regex(expr):
-    regex = re.compile(unicode(expr))
+    regex = re.compile(expr)
     def match(text, i):
         m = regex.match(text[i:])
         return m.end() if m else 0
@@ -465,15 +454,6 @@ def temp_filename():
             os.remove(filename)
         except OSError:
             pass
-
-
-@contextmanager
-def suppress(*exceptions):
-    """Compat for contextlib.suppress for python < 3.4."""
-    try:
-        yield None
-    except exceptions:
-        pass
 
 
 class ChangeDirectory(object):
