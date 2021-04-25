@@ -1,22 +1,11 @@
 #! /usr/bin/env bash
 set -ex
 
-# Build cpymad from checked out sources.
-# Expects a built madx distribution in '../MAD-X/dist'.
+# Usage:
+# ./cpymad.sh <MADXDIR> <python-version>
+
+# Expects a built madx distribution in <MADXDIR>.
 # Builds in './build' and places wheels in './dist'.
-
-main()
-{
-    MADXDIR=${1:-$MADXDIR}
-    CFLAGS=-DMS_WIN64
-    PLATFORM=win-amd64
-
-    build 3.5
-    build 3.6
-    build 3.7
-    build 3.8
-    build 3.9
-}
 
 # We manually build the C extension using our msys gcc because setuptools is
 # not smart enough to figure out how to build it. The downside is that
@@ -25,11 +14,17 @@ main()
 # and cpymad!
 build()
 {
-    py_dot=$1
+    MADXDIR=${1:-$MADXDIR}
+    CFLAGS=-DMS_WIN64
+    PLATFORM=win-amd64
+
+    py_dot=$2
     py_ver=${py_dot/./}
     py_env=py${py_ver}
     dir_tag=${PLATFORM}-${py_dot}
     file_tag=.cp${py_ver}-${PLATFORM/-/_}
+
+    pip install cython wheel
 
     # Ensure that cython code and extension module will be rebuilt since the
     # cython code is partially incompatible between python versions:
@@ -41,8 +36,6 @@ build()
     # `.pyd` in $libdir) to prevent the final `python setup.py bdist_wheel`
     # command from trying trying to perform either of these steps with MSVC.
 
-    _ conda create -qyf -n $py_env python=$py_dot wheel cython -c anaconda
-    _ conda activate $py_env
     tempdir=build/temp.$dir_tag/Release/src/cpymad
     libdir=build/lib.$dir_tag/cpymad
     mkdir -p $tempdir
@@ -58,7 +51,6 @@ build()
     # the path to the runtime DLLs required for running gcc. Without this
     # the command errors with a windows error that is visible only via the
     # remote desktop but doesn't get logged as console output.
-    _ conda deactivate
 
     gcc -mdll -O -Wall -flto $CFLAGS \
         -I$MADXDIR/include \
@@ -82,16 +74,7 @@ build()
         -o $libdir/libmadx$file_tag.pyd
 
     # Turn target python environment back on, see above:
-    _ conda activate $py_env
     python setup.py bdist_wheel
-    _ conda deactivate
 }
 
-_() {
-    # run command with disabled trace to decrease noise
-    { set +x; } 2>/dev/null
-    "$@"; exitcode=$?
-    { set -x; return $exitcode; } 2>/dev/null
-}
-
-main "$@"
+build "$@"
