@@ -253,6 +253,7 @@ jobs:
         with:
           build_dir: doc/_build/html
           commit_message: Build documentation from ${{ github.ref }}@${{ github.sha }}
+          keep_history: false
           jekyll: false
         env:
           GITHUB_TOKEN: ${{ github.token }}
