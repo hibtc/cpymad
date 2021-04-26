@@ -8,8 +8,8 @@ MAD-X interpreter in python.
 .. _Cython: https://cython.org/
 .. _MAD-X: https://cern.ch/mad
 
-**Note:** Support for 32bit builds, python 2.7, and python <= 3.5
-will be dropped in one of the next releases.
+**Note:** Support for 32bit builds and python 2.7 has been removed in version
+1.8.0. python 3.5 is deprecated and will be removed in a future release.
 
 
 Links
