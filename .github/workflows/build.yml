@@ -84,7 +84,7 @@ jobs:
             madx-${{ env.MADX_VERSION }}-\
             windows-\
             patches-${{ hashFiles('.github/patch/*') }}-\
-            scripts-${{ hashFiles('.github/build/manylinux1/madx*') }}\
+            scripts-${{ hashFiles('.github/build/msys2/madx*') }}\
           "
 
       - name: Prepare MAD-X source
