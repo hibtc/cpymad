@@ -1,6 +1,16 @@
 Changelog
 ~~~~~~~~~
 
+1.8.0
+=====
+Date: 28.04.2021
+
+- drop support for 32bit
+- drop support for python 2.7
+- deprecate python 3.5
+- link windows binaries against UCRT (like the official python binary)
+
+
 1.7.0
 =====
 Date: 13.03.2021
