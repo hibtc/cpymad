@@ -50,7 +50,7 @@ FieldError = namedtuple('FieldError', ['dkn', 'dks'])
 PhaseError = namedtuple('PhaseError', ['dpn', 'dps'])
 
 
-class Parameter(object):
+class Parameter:
 
     __slots__ = ('name', 'value', 'expr', 'dtype', 'inform', 'var_type')
 
@@ -84,7 +84,7 @@ class Parameter(object):
         return str(self.definition)
 
 
-class Constraint(object):
+class Constraint:
 
     """Represents a MAD-X constraint, which has either min/max/both/value."""
 

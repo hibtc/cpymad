@@ -45,7 +45,7 @@ class TwissFailed(RuntimeError):
     pass
 
 
-class Version(object):
+class Version:
 
     """Version information struct. """
 
@@ -60,11 +60,11 @@ class Version(object):
         return "MAD-X {} ({})".format(self.release, self.date)
 
 
-class NullContext(object):
+class NullContext:
     __enter__ = __exit__ = lambda *_: None
 
 
-class CommandLog(object):
+class CommandLog:
 
     """Log MAD-X command history to a text file."""
 
@@ -93,7 +93,7 @@ class CommandLog(object):
             self._file.close()
 
 
-class Madx(object):
+class Madx:
 
     """
     Python interface for a MAD-X process.
@@ -596,7 +596,7 @@ class TableMap(_Mapping):
         return self._libmadx.get_table_count()
 
 
-class Sequence(object):
+class Sequence:
 
     """
     MAD-X sequence representation.
@@ -849,7 +849,7 @@ class ArrayAttribute(abc.Sequence):
         return str(self._values)
 
 
-class BaseElementList(object):
+class BaseElementList:
 
     """
     Immutable list of beam line elements.
@@ -1231,7 +1231,7 @@ class VarParamList(_Mapping):
         return self._libmadx.num_globals()
 
 
-class Metadata(object):
+class Metadata:
 
     """MAD-X metadata (license info, etc)."""
 

@@ -456,7 +456,7 @@ def temp_filename():
             pass
 
 
-class ChangeDirectory(object):
+class ChangeDirectory:
 
     """
     Context manager for temporarily changing current working directory.
