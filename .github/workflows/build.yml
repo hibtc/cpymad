@@ -230,10 +230,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/checkout@v2
-        with:
-          path: doc/_build/html
-          ref: gh-pages
       - uses: actions/setup-python@v2
         with:
           python-version: '3.x'
@@ -253,7 +249,6 @@ jobs:
         with:
           build_dir: doc/_build/html
           commit_message: Build documentation from ${{ github.ref }}@${{ github.sha }}
-          keep_history: false
           jekyll: false
         env:
           GITHUB_TOKEN: ${{ github.token }}
