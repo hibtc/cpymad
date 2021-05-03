@@ -198,9 +198,8 @@ class Madx:
         try:
             return getattr(self.command, name)
         except AttributeError:
-            pass
-        raise AttributeError('Unknown attribute or command: {!r}'
-                             .format(name))
+            raise AttributeError(
+                'Unknown attribute or command: {!r}'.format(name)) from None
 
     def quit(self):
         """Shutdown MAD-X interpreter and stop process."""
@@ -260,9 +259,7 @@ class Madx:
             with self.reader:
                 return self._libmadx.input(text)
         except _rpc.RemoteProcessCrashed:
-            # catch + reraise in order to shorten stack trace (~3-5 levels):
-            pass
-        raise RuntimeError("MAD-X has stopped working!")
+            raise RuntimeError("MAD-X has stopped working!") from None
 
     __call__ = input
 
@@ -490,8 +487,7 @@ class _Mapping(abc.Mapping):
         try:
             return self[key]
         except KeyError:
-            pass
-        raise AttributeError(self._missing(key))
+            raise AttributeError(self._missing(key)) from None
 
     def _missing(self, key):
         return key
@@ -554,8 +550,7 @@ class SequenceMap(_Mapping):
         try:
             return Sequence(name, self._madx)
         except ValueError:
-            pass
-        raise KeyError("Unknown sequence: {!r}".format(name))
+            raise KeyError("Unknown sequence: {!r}".format(name)) from None
 
     def __contains__(self, name):
         return self._libmadx.sequence_exists(name.lower())
@@ -586,8 +581,7 @@ class TableMap(_Mapping):
         try:
             return Table(name, self._libmadx)
         except ValueError:
-            pass
-        raise KeyError("Table not found {!r}".format(name))
+            raise KeyError("Table not found {!r}".format(name)) from None
 
     def __contains__(self, name):
         return self._libmadx.table_exists(name.lower())
@@ -737,15 +731,13 @@ class Command(_MutableMapping):
         try:
             return self._attr[name]
         except KeyError:
-            pass
-        return _Mapping.__getattr__(self, name)
+            return _Mapping.__getattr__(self, name)
 
     def __getitem__(self, name):
         try:
             return self._data[name.lower()].value
         except KeyError:
-            pass
-        raise KeyError("Unknown command: {!r}".format(name))
+            raise KeyError("Unknown command: {!r}".format(name)) from None
 
     def __delitem__(self, name):
         raise NotImplementedError()
@@ -872,7 +864,8 @@ class BaseElementList:
             try:
                 index = self.index(index)
             except ValueError:
-                raise KeyError("Unknown element: {!r}".format(index))
+                raise KeyError(
+                    "Unknown element: {!r}".format(index)) from None
         # _get_element accepts indices in the range [0, len-1]. The following
         # extends the accepted range to [-len, len+1], just like for lists:
         _len = len(self)
@@ -1006,10 +999,9 @@ class CommandMap(_Mapping):
         try:
             data = madx._libmadx.get_defined_command(name)
         except ValueError:
-            pass
-        else:
-            return Command(madx, data)
-        raise KeyError("Not a MAD-X command name: {!r}".format(name))
+            raise KeyError(
+                "Not a MAD-X command name: {!r}".format(name)) from None
+        return Command(madx, data)
 
     def __contains__(self, name):
         return name.lower() in self._names
@@ -1063,8 +1055,8 @@ class Table(_Mapping):
         try:
             return self._libmadx.get_table_column(self._name, column.lower())
         except ValueError:
-            pass
-        raise KeyError("Unknown table column: {!r}".format(column))
+            raise KeyError(
+                "Unknown table column: {!r}".format(column)) from None
 
     def __iter__(self):
         """Iterate over all column names."""

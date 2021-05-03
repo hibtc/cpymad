@@ -98,7 +98,7 @@ def name_from_internal(element_name):
         name, count = _re_element_internal.match(element_name).groups()
     except AttributeError:
         raise ValueError("Not a valid MAD-X element name: {!r}"
-                         .format(element_name))
+                         .format(element_name)) from None
     if count is None or count == ':1':
         return name
     return name + '[' + count[1:] + ']'
@@ -119,7 +119,7 @@ def _parse_element_name(element_name):
         name, count = _re_element_external.match(element_name).groups()
     except AttributeError:
         raise ValueError("Not a valid MAD-X element name: {!r}"
-                         .format(element_name))
+                         .format(element_name)) from None
     if count is None:
         return name, None
     return name, int(count[1:-1])
