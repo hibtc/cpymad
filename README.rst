@@ -1,6 +1,6 @@
 cpymad
 ------
-|Version| |Python| |Platform| |License| |Tests| |Coverage|
+|Version| |Python| |Platform| |License| |Tests| |Coverage| |Citation|
 
 cpymad is a Cython_ binding to MAD-X_ for giving full control and access to a
 MAD-X interpreter in python.
@@ -128,3 +128,7 @@ or bugs in cpymad.
 .. |Python| image::     https://img.shields.io/pypi/pyversions/cpymad.svg
    :target:             https://pypi.org/project/cpymad#files
    :alt:                Python versions
+
+.. |Citation| image::   https://zenodo.org/badge/DOI/10.5281/zenodo.4724856.svg
+   :target:             https://doi.org/10.5281/zenodo.4724856
+   :alt:                DOI and Citation

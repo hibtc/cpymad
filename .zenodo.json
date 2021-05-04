@@ -1,0 +1,27 @@
+{
+    "title": "cpymad",
+    "description": "<p>Cython binding for MAD-X</p>",
+    "license": "other-open",
+    "upload_type": "software",
+    "creators": [
+        {
+            "name": "Thomas Gläßle",
+            "orcid": "0000-0002-2735-0583",
+            "affiliation": "University of Tübingen"
+        },
+        {
+            "name": "Riccardo De Maria",
+            "orcid": "0000-0001-7929-7422",
+            "affiliation": "CERN"
+        },
+        {
+            "name": "Yngve Levinsen",
+            "orcid": "0000-0002-6139-722X",
+            "affiliation": "European Spallation Source"
+        },
+        {
+            "name": "Kajetan Fuchsberger"
+        }
+    ],
+    "access_right": "open"
+}
