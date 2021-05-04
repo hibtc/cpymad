@@ -1,6 +1,15 @@
 Changelog
 ~~~~~~~~~
 
+1.8.1
+=====
+Date: 04.05.2021
+
+- update to MAD-X 5.07.00
+- generate release DOIs for citation
+- python3 simplifications
+
+
 1.8.0
 =====
 Date: 28.04.2021
