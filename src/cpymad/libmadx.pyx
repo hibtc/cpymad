@@ -4,7 +4,8 @@
 """
 Low level cython binding to MAD-X.
 
-CAUTION: Do not import this module directly! Use :class:`Madx` instead.
+CAUTION: End users should usually not import this module directly! Use
+:class:`cpymad.madx.Madx` instead.
 
 - The API of this module is considered private, i.e. it may change between
   versions without further notice.
