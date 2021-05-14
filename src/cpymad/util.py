@@ -37,7 +37,7 @@ __all__ = [
 ordered_keys = dict.keys if sys.version_info >= (3, 6) else sorted
 
 
-def mad_quote(value):
+def mad_quote(value: str) -> str:
     """Add quotes to a string value."""
     if '"' not in value:
         return '"' + value + '"'
@@ -48,7 +48,7 @@ def mad_quote(value):
                      .format(value))
 
 
-def _fix_name(name):
+def _fix_name(name: str) -> str:
     if name.startswith('_'):
         raise AttributeError("Unknown item: {!r}! Did you mean {!r}?"
                              .format(name, name.strip('_') + '_'))
@@ -65,12 +65,12 @@ _re_element_internal = re_compile(r'^([a-z_][a-z0-9_.$]*)(:\d+)?$')
 _re_element_external = re_compile(r'^([a-z_][a-z0-9_.$]*)(\[\d+\])?$')
 
 
-def is_identifier(name):
+def is_identifier(name: str) -> bool:
     """Check if ``name`` is a valid identifier in MAD-X."""
     return bool(_re_is_identifier.match(name))
 
 
-def expr_symbols(expr):
+def expr_symbols(expr: str) -> set:
     """
     Return all symbols names used in an expression.
 
@@ -80,7 +80,7 @@ def expr_symbols(expr):
     return {m[0] for m in _re_symbol.findall(expr)}
 
 
-def name_from_internal(element_name):
+def name_from_internal(element_name: str) -> str:
     """
     Convert element name from internal representation to user API. Example:
 
@@ -104,7 +104,7 @@ def name_from_internal(element_name):
     return name + '[' + count[1:] + ']'
 
 
-def _parse_element_name(element_name):
+def _parse_element_name(element_name: str) -> tuple:
     """
     Parse element name from user API. Example:
 
@@ -125,7 +125,7 @@ def _parse_element_name(element_name):
     return name, int(count[1:-1])
 
 
-def name_to_internal(element_name):
+def name_to_internal(element_name: str) -> str:
     """
     Convert element name from user API to internal representation. Example:
 
@@ -140,7 +140,7 @@ def name_to_internal(element_name):
     return name + ':' + str(1 if count is None else count)
 
 
-def normalize_range_name(name, elems=None):
+def normalize_range_name(name: str, elems=None) -> str:
     """Make element name usable as argument to the RANGE attribute."""
     if isinstance(name, tuple):
         return tuple(map(normalize_range_name, name))
@@ -160,7 +160,7 @@ QUOTED_PARAMS = {'file', 'halofile', 'sectorfile', 'trueprofile'
                  'echo', 'title', 'text', 'format', 'dir'}
 
 
-def format_param(key, value):
+def format_param(key: str, value) -> str:
     """
     Format a single MAD-X command parameter.
 
@@ -205,7 +205,7 @@ def format_param(key, value):
         return key + '=' + str(value)
 
 
-def _format_range(value):
+def _format_range(value) -> str:
     if isinstance(value, str):
         return normalize_range_name(value)
     elif isinstance(value, Range):
@@ -216,9 +216,13 @@ def _format_range(value):
     return begin + '/' + end
 
 
-def format_cmdpar(cmd, key, value):
+def format_cmdpar(cmd, key: str, value) -> str:
     """
     Format a single MAD-X command parameter.
+
+    :param cmd: A MAD-X Command instance for which an argument is to be formatted
+    :param key: name of the parameter
+    :param value: argument value
     """
     key = _fix_name(str(key).lower())
     cmdpar = cmd.cmdpar[key]
@@ -295,7 +299,7 @@ def format_cmdpar(cmd, key, value):
                     .format(key, value, type(value)))
 
 
-def format_command(*args, **kwargs):
+def format_command(*args, **kwargs) -> str:
     """
     Create a MAD-X command from its name and parameter list.
 
@@ -303,7 +307,6 @@ def format_command(*args, **kwargs):
     :param args: initial bareword command arguments (including command name!)
     :param kwargs: following named command arguments
     :returns: command string
-    :rtype: str
 
     Examples:
 
@@ -330,7 +333,7 @@ def format_command(*args, **kwargs):
 
 # validation of MAD-X expressions
 
-def _regex(expr):
+def _regex(expr: str) -> callable:
     regex = re.compile(expr)
     def match(text, i):
         m = regex.match(text[i:])
@@ -338,7 +341,7 @@ def _regex(expr):
     return match
 
 
-def _choice(choices):
+def _choice(choices: str) -> callable:
     def match(text, i):
         return 1 if text[i] in choices else 0
     return match
@@ -354,7 +357,7 @@ _expr_tokens = [
 ]
 
 
-def _tokenize(tokens, expr):
+def _tokenize(tokens, expr: str):
     i = 0
     stop = len(expr)
     while i < stop:
@@ -369,13 +372,13 @@ def _tokenize(tokens, expr):
                              .format(expr[i], expr[:i+1]))
 
 
-def check_expression(expr):
+def check_expression(expr: str):
 
     """
     Check if the given expression is a valid MAD-X expression that is safe to
     pass to :meth:`cpymad.madx.Madx.eval`.
 
-    :param str expr:
+    :param expr:
     :returns: True
     :raises ValueError: if the expression is ill-formed
 

@@ -5,9 +5,28 @@ Python type analogues for MAD-X data structures.
 from collections import namedtuple
 
 __all__ = [
-    'Range',
-    'Parameter',
     'Constraint',
+    'Parameter',
+    'Range',
+
+    'AlignError',
+    'FieldError',
+    'PhaseError',
+
+    # constants:
+    'PARAM_TYPE_LOGICAL',
+    'PARAM_TYPE_INTEGER',
+    'PARAM_TYPE_DOUBLE',
+    'PARAM_TYPE_STRING',
+    'PARAM_TYPE_CONSTRAINT',
+    'PARAM_TYPE_LOGICAL_ARRAY',
+    'PARAM_TYPE_INTEGER_ARRAY',
+    'PARAM_TYPE_DOUBLE_ARRAY',
+    'PARAM_TYPE_STRING_ARRAY',
+    'VAR_TYPE_CONST',
+    'VAR_TYPE_DIRECT',
+    'VAR_TYPE_DEFERRED',
+    'VAR_TYPE_STRING',
 ]
 
 

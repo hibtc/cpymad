@@ -1,4 +1,5 @@
 # cython: embedsignature=True
+# cython: annotation_typing=False
 # cython: language_level=3
 """
 Low level cython binding to MAD-X.
@@ -14,8 +15,7 @@ CAUTION: Do not import this module directly! Use :class:`Madx` instead.
 - this module exposes a very C-ish API that is not convenient to work with.
 """
 
-from os import getcwd
-
+import os
 import ctypes
 import numpy as np      # Import the Python-level symbols of numpy
 
@@ -123,42 +123,44 @@ __all__ = [
 ]
 
 
-def _get_rightmost_word(sentence):
+def getcwd() -> str:
+    """Return the current working directory."""
+    return os.getcwd()
+
+
+def _get_rightmost_word(sentence: str) -> str:
     """Get the work right of the rightmost space character."""
     return sentence.rsplit(' ', 1)[-1]
 
 
-def get_version_number():
+def get_version_number() -> str:
     """
     Get the version number of loaded MAD-X interpreter.
 
     :returns: full version number
-    :rtype: str
     """
     return _get_rightmost_word(_str(clib.version_name))
 
 
-def get_version_date():
+def get_version_date() -> str:
     """
     Get the release date of loaded MAD-X interpreter.
 
     :returns: release date in YYYY.MM.DD format
-    :rtype: str
     """
     return _get_rightmost_word(_str(clib.version_date))
 
 
-def is_started():
+def is_started() -> bool:
     """
     Check whether MAD-X has been initialized.
 
     :returns: whether :func:`start` was called without matching :func:`finish`
-    :rtype: bool
     """
     return _madx_started
 
 
-def start():
+def start() -> None:
     """
     Initialize MAD-X.
     """
@@ -167,7 +169,7 @@ def start():
     _madx_started = True
 
 
-def finish():
+def finish() -> None:
     """
     Cleanup MAD-X.
     """
@@ -176,13 +178,12 @@ def finish():
     _madx_started = False
 
 
-def input(cmd):
+def input(cmd: str) -> bool:
     """
     Pass one input command to MAD-X.
 
     :param str cmd: command to be executed by the MAD-X interpreter
     :returns: success status, whether the command has completed without error
-    :rtype: bool
     """
     cmd = cmd.rstrip().rstrip(';') + ';'
     cdef bytes _cmd = _cstr(cmd)
@@ -198,7 +199,7 @@ def input(cmd):
     return not error
 
 
-def get_var(name):
+def get_var(name: str) -> Parameter:
     """
     Get the value of a global variable.
     """
@@ -220,7 +221,7 @@ def get_var(name):
         dtype=typeid, inform=inform, var_type=var.type)
 
 
-def get_var_type(name):
+def get_var_type(name: str) -> int:
     """
     Get the type of the variable:
 
@@ -232,32 +233,31 @@ def get_var_type(name):
     return _get_var(name).type
 
 
-def get_options():
+def get_options() -> dict:
     """Get the current option values."""
     return _parse_command(clib.options)
 
 
-def num_globals():
+def num_globals() -> int:
     """
     Return the number of global variables.
     """
     return clib.variable_list.curr
 
 
-def get_globals():
+def get_globals() -> list:
     """
     Get a list of names of all global variables.
     """
     return _name_list(clib.variable_list.list)
 
 
-def sequence_exists(sequence_name):
+def sequence_exists(sequence_name: str) -> bool:
     """
     Check if the sequence exists.
 
-    :param str sequence: sequence name
+    :param str sequence_name: sequence name
     :returns: True if the sequence exists
-    :rtype: bool
     """
     try:
         _find_sequence(sequence_name)
@@ -266,13 +266,12 @@ def sequence_exists(sequence_name):
         return False
 
 
-def get_sequence_twiss_table_name(sequence_name):
+def get_sequence_twiss_table_name(sequence_name: str) -> bool:
     """
     Get the last calculated twiss table for the given sequence.
 
     :param str sequence_name: sequence name
     :returns: twiss table name
-    :rtype: str
     :raises ValueError: if the sequence name is invalid
     :raises RuntimeError: if the twiss table is invalid
     """
@@ -282,13 +281,12 @@ def get_sequence_twiss_table_name(sequence_name):
     return _str(seq.tw_table.name)
 
 
-def get_sequence_beam(sequence_name):
+def get_sequence_beam(sequence_name: str) -> dict:
     """
     Get the beam associated to the sequence.
 
     :param str sequence_name: sequence name
     :returns: beam properties as set with the BEAM command (and some more)
-    :rtype: dict
     :raises ValueError: if the sequence name is invalid
     :raises RuntimeError: if the sequence has no associated beam
     """
@@ -298,13 +296,12 @@ def get_sequence_beam(sequence_name):
     return _parse_command(seq.beam)
 
 
-def get_sequence_length(sequence_name):
+def get_sequence_length(sequence_name: str) -> Parameter:
     """
     Get the length associated to the sequence.
 
     :param str sequence_name: sequence name
     :returns: sequence length
-    :rtype: Parameter
     :raises ValueError: if the sequence name is invalid
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
@@ -315,12 +312,12 @@ def get_sequence_length(sequence_name):
             inform=1)
     return length
 
-def get_active_sequence_name():
+
+def get_active_sequence_name() -> str:
     """
     Get the name of the active sequence.
 
     :returns: name of active sequence
-    :rtype: str
     :raises RuntimeError: if no sequence is activated
     """
     if clib.current_sequ is NULL:
@@ -328,12 +325,11 @@ def get_active_sequence_name():
     return _str(clib.current_sequ.name)
 
 
-def get_sequence_names():
+def get_sequence_names() -> list:
     """
     Get a list of all sequences currently in memory.
 
     :returns: sequence names
-    :rtype: list
     """
     cdef clib.sequence_list* seqs = clib.madextern_get_sequence_list()
     cdef int i
@@ -341,56 +337,51 @@ def get_sequence_names():
             for i in range(seqs.curr)]
 
 
-def get_sequence_count():
+def get_sequence_count() -> int:
     """
     Get the number of all sequences currently in memory.
 
     :returns: number of sequences
-    :rtype: int
     """
     return clib.madextern_get_sequence_list().curr
 
 
-def table_exists(table_name):
+def table_exists(table_name: str) -> bool:
     """
     Check if the table exists.
 
-    :param str table: table name
+    :param str table_name: table name
     :returns: True if the table exists
-    :rtype: bool
     """
     cdef bytes _table_name = _cstr(table_name)
     return bool(clib.table_exists(_table_name))
 
 
-def get_table_names():
+def get_table_names() -> list:
     """
     Return list of all table names.
 
     :returns: table names
-    :rtype: list
     """
     return [_str(clib.table_register.names.names[i])
             for i in range(clib.table_register.names.curr)]
 
 
-def get_table_count():
+def get_table_count() -> int:
     """
     Return number of existing tables.
 
     :returns: number of tables in memory
-    :rtype: int
     """
     return clib.table_register.names.curr
 
 
-def get_table_summary(table_name):
+def get_table_summary(table_name: str) -> dict:
     """
     Get table summary.
 
     :param str table_name: table name
     :returns: mapping of {column: value}
-    :rtype: dict
     """
     cdef bytes _table_name = _cstr(table_name)
     cdef clib.char_p_array* header = clib.table_get_header(_table_name)
@@ -401,14 +392,13 @@ def get_table_summary(table_name):
                  for i in range(header.curr)])
 
 
-def get_table_column_names(table_name, selected=False):
+def get_table_column_names(table_name: str, selected: bool = False) -> list:
     """
     Get a list of all column names in the table.
 
     :param str table_name: table name
     :param bool selected: consider only selected columns
     :returns: column names
-    :rtype: list
     :raises ValueError: if the table name is invalid
     """
     cdef clib.table* table = _find_table(table_name)
@@ -427,14 +417,13 @@ def get_table_column_names(table_name, selected=False):
                 if columns.inform[i] in VALID]
 
 
-def get_table_column_count(table_name, selected=False):
+def get_table_column_count(table_name: str, selected: bool = False) -> int:
     """
     Get a number of columns in the table.
 
     :param str table_name: table name
     :param bool selected: consider only selected columns
     :returns: number of columns
-    :rtype: int
     :raises ValueError: if the table name is invalid
     """
     cdef clib.table* table = _find_table(table_name)
@@ -444,14 +433,13 @@ def get_table_column_count(table_name, selected=False):
         return table.columns.curr
 
 
-def get_table_column(table_name, column_name):
+def get_table_column(table_name: str, column_name: str) -> np.ndarray:
     """
     Get data from the specified table.
 
     :param str table_name: table name
     :param str column_name: column name
     :returns: the data in the requested column
-    :rtype: numpy.array
     :raises ValueError: if the column cannot be found in the table
     :raises RuntimeError: if the column has unknown type
 
@@ -483,7 +471,7 @@ def get_table_column(table_name, column_name):
                            .format(_str(dtype), column_name))
 
 
-def get_table_row(table_name, row_index, columns='all'):
+def get_table_row(table_name: str, row_index: int, columns='all') -> dict:
     """
     Return row as tuple of values.
     """
@@ -533,14 +521,14 @@ def get_table_row(table_name, row_index, columns='all'):
     }
 
 
-def get_table_row_count(table_name):
+def get_table_row_count(table_name: str) -> int:
     """
     Return total number of rows in the table.
     """
     return _find_table(table_name).curr
 
 
-def get_table_row_names(table_name, indices=None):
+def get_table_row_names(table_name: str, indices=None) -> list:
     """
     Return row names for every index (row number) in the list.
     """
@@ -554,13 +542,13 @@ def get_table_row_names(table_name, indices=None):
     return [_get_table_row_name(table, i) for i in indices]
 
 
-def get_table_selected_rows(table_name):
+def get_table_selected_rows(table_name: str) -> list:
     """Return list of selected row indices in table (may be empty)."""
     cdef clib.table* table = _find_table(table_name)
     return [table.row_out.i[i] for i in range(table.curr)]
 
 
-def apply_table_selections(table_name):
+def apply_table_selections(table_name: str):
     """
     Apply the SELECT/DESELECT commands for table columns/rows.
 
@@ -574,14 +562,13 @@ def apply_table_selections(table_name):
         clib.out_table(_cstr(table_name), t, NULL)
 
 
-def get_element(sequence_name, element_index):
+def get_element(sequence_name: str, element_index: int) -> dict:
     """
     Return requested element in the original sequence.
 
     :param str sequence_name: sequence name
     :param int element_index: element index
     :returns: the element with the specified index
-    :rtype: dict
     :raises ValueError: if the sequence is invalid
     :raises IndexError: if the index is out of range
     """
@@ -592,13 +579,12 @@ def get_element(sequence_name, element_index):
     return _get_node(seq.nodes.nodes[element_index], seq.ref_flag, seq.n_nodes > 0, seq.line)
 
 
-def get_element_positions(sequence_name):
+def get_element_positions(sequence_name: str) -> list:
     """
     Get list with positions of all elements of a specific sequence.
 
     :param str sequence_name: sequence name
     :returns: positions of all elements in the sequence
-    :rtype: list
     :raises ValueError: if the sequence is invalid
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
@@ -607,13 +593,12 @@ def get_element_positions(sequence_name):
     return [_get_node_entry_pos(nodes[i], seq.ref_flag, seq.n_nodes > 0)
             for i in range(seq.nodes.curr)]
 
-def get_element_names(sequence_name):
+def get_element_names(sequence_name: str) -> list:
     """
     Get list with the names of all elements of a specific sequence.
 
     :param str sequence_name: sequence name
     :returns: names of all elements in the sequence
-    :rtype: list
     :raises ValueError: if the sequence is invalid
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
@@ -622,14 +607,13 @@ def get_element_names(sequence_name):
             for i in range(seq.nodes.curr)]
 
 
-def get_element_name(sequence_name, element_index):
+def get_element_name(sequence_name: str, element_index: int) -> str:
     """
     Get list with the names of all elements of a specific sequence.
 
     :param str sequence_name: sequence name
     :param int element_index: element index
     :returns: the name of the element with the specified index
-    :rtype: str
     :raises ValueError: if the sequence is invalid
     :raises IndexError: if the index is out of range
     """
@@ -640,14 +624,13 @@ def get_element_name(sequence_name, element_index):
     return _node_name(seq.nodes.nodes[element_index])
 
 
-def get_element_index(sequence_name, element_name):
+def get_element_index(sequence_name: str, element_name: str) -> int:
     """
     Return index of element with specified name in the original sequence.
 
     :param str sequence_name: sequence name
-    :param str element_name: element index
+    :param str element_name: element name
     :returns: the index of the specified element
-    :rtype: int
     :raises ValueError: if the sequence or element name is invalid
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
@@ -658,14 +641,13 @@ def get_element_index(sequence_name, element_name):
     return index
 
 
-def get_element_index_by_position(sequence_name, position):
+def get_element_index_by_position(sequence_name: str, position: float) -> int:
     """
     Return index of element at specified position in the original sequence.
 
     :param str sequence_name: sequence name
-    :param double position: position (S coordinate)
+    :param float position: position (S coordinate)
     :returns: the index of an element at that position, -1 if not found
-    :rtype: int
     :raises ValueError: if the sequence or element name is invalid
     """
     # This is implemented here just for performance, but still uses a linear
@@ -683,27 +665,25 @@ def get_element_index_by_position(sequence_name, position):
     raise ValueError("No element found at position: {0}".format(position))
 
 
-def get_element_count(sequence_name):
+def get_element_count(sequence_name: str) -> int:
     """
     Return number of elements in the original sequence.
 
     :param str sequence_name: sequence name
     :returns: number of elements in the original sequence
-    :rtype: int
     :raises ValueError: if the sequence is invalid.
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
     return seq.nodes.curr
 
 
-def get_expanded_element(sequence_name, element_index):
+def get_expanded_element(sequence_name: str, element_index: int) -> dict:
     """
     Return requested element in the expanded sequence.
 
     :param str sequence_name: sequence name
     :param int element_index: element index
     :returns: the element with the specified index
-    :rtype: dict
     :raises ValueError: if the sequence is invalid
     :raises IndexError: if the index is out of range
 
@@ -718,13 +698,12 @@ def get_expanded_element(sequence_name, element_index):
     return _get_node(seq.all_nodes[element_index], seq.ref_flag, seq.n_nodes > 0, seq.line)
 
 
-def get_expanded_element_positions(sequence_name):
+def get_expanded_element_positions(sequence_name: str) -> list:
     """
     Get list with positions of all elements of a specific sequence.
 
     :param str sequence_name: sequence name
     :returns: positions of all elements in the sequence
-    :rtype: list
     :raises ValueError: if the sequence is invalid
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
@@ -734,13 +713,12 @@ def get_expanded_element_positions(sequence_name):
             for i in range(seq.n_nodes)]
 
 
-def get_expanded_element_names(sequence_name):
+def get_expanded_element_names(sequence_name: str) -> list:
     """
     Get list with the names of all elements of a specific sequence.
 
     :param str sequence_name: sequence name
     :returns: names of all elements in the sequence
-    :rtype: list
     :raises ValueError: if the sequence is invalid
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
@@ -749,14 +727,13 @@ def get_expanded_element_names(sequence_name):
             for i in range(seq.n_nodes)]
 
 
-def get_expanded_element_name(sequence_name, element_index):
+def get_expanded_element_name(sequence_name: str, element_index: int) -> str:
     """
     Get list with the names of all elements of a specific sequence.
 
     :param str sequence_name: sequence name
     :param int element_index: element index
     :returns: the name of the element with the specified index
-    :rtype: str
     :raises ValueError: if the sequence is invalid
     :raises IndexError: if the index is out of range
     """
@@ -768,7 +745,7 @@ def get_expanded_element_name(sequence_name, element_index):
     return _node_name(seq.all_nodes[element_index])
 
 
-def get_expanded_element_index(sequence_name, element_name):
+def get_expanded_element_index(sequence_name: str, element_name: str) -> int:
     """
     Return index of element with specified name in the expanded sequence.
 
@@ -778,7 +755,6 @@ def get_expanded_element_index(sequence_name, element_name):
     :param str sequence_name: sequence name
     :param str element_name: element index
     :returns: the index of the specified element, -1 if not found
-    :rtype: int
     :raises ValueError: if the sequence is invalid
     """
     # Unfortunately, there is no name_list for the expanded list. Therefore,
@@ -791,14 +767,13 @@ def get_expanded_element_index(sequence_name, element_name):
     raise ValueError("Element name not found: {0!r}".format(element_name))
 
 
-def get_expanded_element_index_by_position(sequence_name, position):
+def get_expanded_element_index_by_position(sequence_name: str, position: float) -> int:
     """
     Return index of element at specified position in the expanded sequence.
 
     :param str sequence_name: sequence name
-    :param double position: position (S coordinate)
+    :param float position: position (S coordinate)
     :returns: the index of an element at that position
-    :rtype: int
     :raises ValueError: if the sequence or element name is invalid
     """
     # This is implemented here just for performance, but still uses a linear
@@ -816,26 +791,24 @@ def get_expanded_element_index_by_position(sequence_name, position):
     raise ValueError("No element found at position: {0}".format(position))
 
 
-def get_expanded_element_count(sequence_name):
+def get_expanded_element_count(sequence_name: str) -> int:
     """
     Return number of elements in the expanded sequence.
 
     :param str sequence_name: sequence name
     :returns: number of elements in the expanded sequence
-    :rtype: int
     :raises ValueError: if the sequence is invalid.
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
     return seq.n_nodes
 
 
-def get_global_element(element_index):
+def get_global_element(element_index: int) -> dict:
     """
     Return requested element in the expanded sequence.
 
     :param int element_index: element index
     :returns: the element with the specified index
-    :rtype: dict
     :raises IndexError: if the index is out of range
     """
     cdef clib.el_list* elems = clib.element_list
@@ -845,13 +818,12 @@ def get_global_element(element_index):
     return _get_element(elems.elem[element_index])
 
 
-def get_global_element_name(element_index):
+def get_global_element_name(element_index: int) -> str:
     """
     Return name of element.
 
     :param int element_index: element index
     :returns: element name
-    :rtype: str
     :raises IndexError: if the index is out of range
     """
     cdef clib.el_list* elems = clib.element_list
@@ -861,33 +833,32 @@ def get_global_element_name(element_index):
     return _str(elems.list.names[element_index])
 
 
-def get_global_element_index(element_name):
+def get_global_element_index(element_name: str) -> int:
     """
     Return index of element with specified name in the global element list.
 
     :param str element_name: element index
     :returns: the index of the specified element, -1 if not found
-    :rtype: int
     """
     cdef bytes _element_name = _cstr(element_name)
     return clib.name_list_pos(_element_name, clib.element_list.list)
 
 
-def get_global_element_count():
+def get_global_element_count() -> int:
     """
     Return number of globally visible elements.
     """
     return clib.element_list.curr
 
 
-def get_base_type_names():
+def get_base_type_names() -> list:
     """
     Return list of element names for base types.
     """
     return _name_list(clib.base_type_list.list)
 
 
-def get_defined_command(command_name):
+def get_defined_command(command_name: str) -> dict:
     """Return MAD-X command as dict of values."""
     cdef bytes _command_name = _cstr(command_name)
     cdef int index = clib.name_list_pos(_command_name, clib.defined_commands.list)
@@ -896,31 +867,29 @@ def get_defined_command(command_name):
     return _parse_command(clib.defined_commands.commands[index])
 
 
-def get_defined_command_names():
+def get_defined_command_names() -> list:
     """Return list of MAD-X command names."""
     return _name_list(clib.defined_commands.list)
 
 
-def is_sequence_expanded(sequence_name):
+def is_sequence_expanded(sequence_name: str) -> bool:
     """
     Check whether a sequence has already been expanded.
 
     :param str sequence_name: sequence name
     :returns: expanded state of the sequence
-    :rtype: bool
     :raises ValueError: if the sequence is invalid
     """
     cdef clib.sequence* seq = _find_sequence(sequence_name)
     return seq.n_nodes > 0
 
 
-def eval(expression):
+def eval(expression: str) -> float:
     """
     Evaluates an expression and returns the result as double.
 
     :param str expression: symbolic expression to evaluate
     :returns: numeric value of the expression
-    :rtype: float
 
     NOTE: This function does not perform rigorous input validation! It uses
     nothing but the MAD-X builtin rather incompetent error checks. This means
@@ -935,13 +904,12 @@ def eval(expression):
     return value
 
 
-def expression_vars(expression):
+def expression_vars(expression: str) -> set:
     """
     Returns all the variables in an expression.
 
     :param str expression: symbolic expression
     :returns: set of variables
-    :rtype: set
 
     NOTE: This function does not perform rigorous input validation! It uses
     nothing but the MAD-X builtin rather incompetent error checks. This means
@@ -967,7 +935,7 @@ def expression_vars(expression):
 # we want to pass parameters or return values with a pure C type.
 
 
-cdef clib.expression* _make_expr(expression):
+cdef clib.expression* _make_expr(str expression):
     # TODO: This function uses global variables as temporaries - which is in
     # general an *extremely* bad design choice. Even though MAD-X uses global
     # variables internally anyway, this is no excuse for cpymad to copy that
@@ -1061,12 +1029,11 @@ cdef _get_param_value(clib.command_parameter* par):
     raise ValueError("Unknown parameter type: {}".format(par.type))
 
 
-cdef _parse_command(clib.command* cmd):
+cdef dict _parse_command(clib.command* cmd):
     """
     Get the values of all parameters of a command.
 
     :returns: the command parameters
-    :rtype: dict
     """
     cdef int i
     return {'name': _str(cmd.name), 'data': {
@@ -1084,7 +1051,7 @@ cdef _parse_command(clib.command* cmd):
 # The 'except NULL' clause is needed to forward exceptions from cdef
 # functions with C return values, see:
 # http://docs.cython.org/src/userguide/language_basics.html#error-return-values
-cdef clib.sequence* _find_sequence(sequence_name) except NULL:
+cdef clib.sequence* _find_sequence(str sequence_name) except NULL:
     """
     Get pointer to the C sequence struct of the specified sequence or NULL.
 
@@ -1099,7 +1066,7 @@ cdef clib.sequence* _find_sequence(sequence_name) except NULL:
     return seqs.sequs[index]
 
 
-cdef clib.table* _find_table(table_name) except NULL:
+cdef clib.table* _find_table(str table_name) except NULL:
     cdef bytes _table_name = _cstr(table_name)
     cdef int index = clib.name_list_pos(_table_name, clib.table_register.names)
     if index == -1:
@@ -1143,11 +1110,11 @@ cdef bytes _cstr(s):
     return <bytes> s.encode('utf-8')
 
 
-cdef _node_name(clib.node* node):
+cdef str _node_name(clib.node* node):
     return name_from_internal(_str(node.name))
 
 
-cdef _get_node(clib.node* node, int ref_flag, int is_expanded, int line):
+cdef dict _get_node(clib.node* node, int ref_flag, int is_expanded, int line):
     """Return dictionary with node + element attributes."""
     if node.p_elem is NULL:
         # Maybe this is a valid case, but better detect it with boom!
@@ -1198,7 +1165,7 @@ cdef double _get_node_entry_pos(clib.node* node, int ref_flag, int is_expanded):
         return position
 
 
-cdef _get_element(clib.element* elem):
+cdef dict _get_element(clib.element* elem):
     """Return dictionary with element attributes."""
     data = _parse_command(elem.def_)
     data['name'] = _str(elem.name)
@@ -1208,7 +1175,7 @@ cdef _get_element(clib.element* elem):
     return data
 
 
-cdef _get_table_row_name(clib.table* table, int index):
+cdef str _get_table_row_name(clib.table* table, int index):
     if index < 0 or index >= table.curr:
         raise ValueError("Invalid row index: {}".format(index))
     return normalize_range_name(name_from_internal(_str(

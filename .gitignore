@@ -2,6 +2,7 @@
 .*~
 .*.swp
 _build
+doc/automod
 
 # Python binaries
 *.py[cod]

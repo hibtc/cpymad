@@ -2,12 +2,14 @@
 
 # -- General configuration ------------------------------------------------
 extensions = [
-    'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
     'sphinx-prompt',
     'sphinx_substitution_extensions',
+    'sphinx_automodapi.automodapi',
+    'sphinx_automodapi.smart_resolver',     # see sphinx-autodoc-typehints#38
+    'sphinx_autodoc_typehints',
 ]
 
 templates_path = ['_templates']
@@ -15,13 +17,25 @@ source_suffix = '.rst'
 master_doc = 'index'
 exclude_patterns = ['_build']
 add_function_parentheses = True
+add_module_names = False
 pygments_style = 'sphinx'
 
+automodapi_toctreedirnm = "automod"
+automodapi_writereprocessed = False
+automodsumm_inherited_members = True
+typehints_fully_qualified = False
+typehints_document_rtype = True
+
+intersphinx_mapping = {
+    'numpy': ('https://docs.scipy.org/doc/numpy/', None),
+    'pandas': ('https://pandas.pydata.org/pandas-docs/stable/', None),
+    'python': ('https://docs.python.org/3', None),
+}
 
 # General information about the project.
 project = 'cpymad'
 copyright = (
-    u'2014-2020, T. Gläßle,'
+    u'2014-2021, T. Gläßle,'
     u'2014-2019, HIT Betriebs GmbH,'
     u'2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN)')
 
@@ -42,4 +56,22 @@ import sphinx_rtd_theme
 html_theme = 'sphinx_rtd_theme'
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 html_static_path = []
+html_context = {
+    'display_github': True,
+    'github_user': 'hibtc',
+    'github_repo': 'cpymad',
+    'github_version': 'master/doc/',
+}
 htmlhelp_basename = 'cpymaddoc'
+
+
+# -- Fix broken links to non-existing source for auto-generated pages -----
+def setup(app):
+    app.connect("html-page-context", html_page_context)
+
+
+def html_page_context(app, pagename, templatename, context, doctree):
+    """Avoid broken source links to auto-generated API-docs."""
+    if pagename.startswith('automod/'):
+        context['meta'] = None
+        context['display_github'] = False

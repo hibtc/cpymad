@@ -1,5 +1,6 @@
 cpymad.util
 -----------
 
-.. automodule:: cpymad.util
-    :members:
+.. automodapi:: cpymad.util
+   :no-heading:
+   :include-all-objects:

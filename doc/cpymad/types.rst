@@ -1,5 +1,6 @@
 cpymad.types
 ------------
 
-.. automodule:: cpymad.types
-    :members:
+.. automodapi:: cpymad.types
+   :no-heading:
+   :include-all-objects:

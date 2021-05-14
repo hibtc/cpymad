@@ -24,11 +24,30 @@ from .stream import AsyncReader
 
 __all__ = [
     'Madx',
-    'Sequence',
-    'BaseElementList',
-    'Table',
+    'ArrayAttribute',
+    'AttrDict',
+    'BaseTypeMap',
+    'Command',
     'CommandLog',
+    'CommandMap',
+    'Element',
+    'ElementList',
+    'ExpandedElementList',
+    'GlobalElementList',
+    'Metadata',
+    'Sequence',
+    'SequenceMap',
+    'Table',
+    'TableMap',
+    'VarList',
+    'VarParamList',
+    'Version',
+
+    # Data
     'metadata',
+
+    # Errors:
+    'TwissFailed',
 ]
 
 
@@ -74,7 +93,7 @@ class CommandLog:
     def __del__(self):
         self.close()
 
-    def __call__(self, command):
+    def __call__(self, command: str):
         """Log a single history line and flush to file immediately."""
         self._file.write(self._prefix + command + self._suffix)
         self._file.flush()
@@ -216,25 +235,24 @@ class Madx:
     # Data descriptors:
 
     @property
-    def version(self):
+    def version(self) -> Version:
         """Get the MAD-X version."""
         return Version(self._libmadx.get_version_number(),
                        self._libmadx.get_version_date())
 
     @property
-    def options(self):
+    def options(self) -> "Command":
         """Values of current options."""
         return Command(self, self._libmadx.get_options())
 
     # Methods:
 
-    def input(self, text):
+    def input(self, text: str) -> bool:
         """
         Run any textual MAD-X input.
 
-        :param str text: command text
+        :param text: command text
         :returns: whether the command has completed without error
-        :rtype: bool
         """
         text = text.rstrip(';') + ';'
         if self._enter_count > 0:
@@ -277,7 +295,7 @@ class Madx:
                 self.input("\n".join(self._batch))
                 self._batch = None
 
-    def expr_vars(self, expr):
+    def expr_vars(self, expr: str) -> list:
         """Find all variable names used in an expression. This does *not*
         include element attribute nor function names."""
         if not isinstance(expr, str):
@@ -287,13 +305,12 @@ class Madx:
                 and v in self.globals
                 and self._libmadx.get_var_type(v) > 0]
 
-    def chdir(self, dir):
+    def chdir(self, dir: str) -> util.ChangeDirectory:
         """
         Change the directory of the MAD-X process (not the current python process).
 
-        :param str path: new path name
+        :param dir: new path name
         :returns: a context manager that can change the directory back
-        :rtype: ChangeDirectory
 
         It can be used as context manager for temporary directory changes::
 
@@ -304,15 +321,15 @@ class Madx:
         return util.ChangeDirectory(dir, self._chdir, self._libmadx.getcwd)
 
     # Turns `dir` into a keyword argument for CHDIR command:
-    def _chdir(self, dir):
+    def _chdir(self, dir: str):
         return self.command.chdir(dir=dir)
 
-    def call(self, file, chdir=False):
+    def call(self, file: str, chdir: bool = False):
         """
         CALL a file in the MAD-X interpreter.
 
-        :param str file: file name with path
-        :param bool chdir: temporarily change directory in MAD-X process
+        :param file: file name with path
+        :param chdir: temporarily change directory in MAD-X process
         """
         if chdir:
             dirname, basename = os.path.split(file)
@@ -350,7 +367,7 @@ class Madx:
             self._libmadx.apply_table_selections(table)
         return self.table[table]
 
-    def use(self, sequence=None, range=None, **kwargs):
+    def use(self, sequence: str = None, range: str = None, **kwargs):
         """
         Run USE to expand a sequence.
 
@@ -394,7 +411,7 @@ class Madx:
               method=('lmdif', {}),
               knobfile=None,
               limits=None,
-              **kwargs):
+              **kwargs) -> dict:
         """
         Perform a simple MATCH operation.
 
@@ -406,7 +423,6 @@ class Madx:
         :param str knobfile: file to write the knob values to
         :param dict kwargs: keyword arguments for the MAD-X command
         :returns: final knob values
-        :rtype: dict
 
         Example:
 
@@ -446,13 +462,12 @@ class Madx:
         """Turn verbose output on/off."""
         self.command.option(echo=switch, warn=switch, info=switch)
 
-    def eval(self, expr):
+    def eval(self, expr) -> float:
         """
         Evaluates an expression and returns the result as double.
 
         :param str expr: expression to evaluate.
         :returns: numeric value of the expression
-        :rtype: float
         """
         if isinstance(expr, (float, int, bool)):
             return expr
@@ -1100,13 +1115,12 @@ class Table(_Mapping):
         """Retrieve one row from the table."""
         return AttrDict(self._libmadx.get_table_row(self._name, index, columns))
 
-    def copy(self, columns=None):
+    def copy(self, columns=None) -> dict:
         """
         Return a frozen table with the desired columns.
 
         :param list columns: column names or ``None`` for all columns.
         :returns: column data
-        :rtype: dict
         :raises ValueError: if the table name is invalid
         """
         if columns is None:
