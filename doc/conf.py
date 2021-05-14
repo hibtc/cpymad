@@ -56,4 +56,22 @@ import sphinx_rtd_theme
 html_theme = 'sphinx_rtd_theme'
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 html_static_path = []
+html_context = {
+    'display_github': True,
+    'github_user': 'hibtc',
+    'github_repo': 'cpymad',
+    'github_version': 'master/doc/',
+}
 htmlhelp_basename = 'cpymaddoc'
+
+
+# -- Fix broken links to non-existing source for auto-generated pages -----
+def setup(app):
+    app.connect("html-page-context", html_page_context)
+
+
+def html_page_context(app, pagename, templatename, context, doctree):
+    """Avoid broken source links to auto-generated API-docs."""
+    if pagename.startswith('automod/'):
+        context['meta'] = None
+        context['display_github'] = False
