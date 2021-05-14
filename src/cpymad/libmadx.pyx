@@ -14,8 +14,7 @@ CAUTION: Do not import this module directly! Use :class:`Madx` instead.
 - this module exposes a very C-ish API that is not convenient to work with.
 """
 
-from os import getcwd
-
+import os
 import ctypes
 import numpy as np      # Import the Python-level symbols of numpy
 
@@ -121,6 +120,11 @@ __all__ = [
     # considered part of the public interface:
     'getcwd',
 ]
+
+
+def getcwd() -> str:
+    """Return the current working directory."""
+    return os.getcwd()
 
 
 def _get_rightmost_word(sentence):
