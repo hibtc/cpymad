@@ -8,6 +8,8 @@ extensions = [
     'sphinx-prompt',
     'sphinx_substitution_extensions',
     'sphinx_automodapi.automodapi',
+    'sphinx_automodapi.smart_resolver',     # see sphinx-autodoc-typehints#38
+    'sphinx_autodoc_typehints',
 ]
 
 templates_path = ['_templates']
@@ -21,6 +23,8 @@ pygments_style = 'sphinx'
 automodapi_toctreedirnm = "automod"
 automodapi_writereprocessed = False
 automodsumm_inherited_members = True
+typehints_fully_qualified = False
+typehints_document_rtype = True
 
 intersphinx_mapping = {
     'numpy': ('https://docs.scipy.org/doc/numpy/', None),
