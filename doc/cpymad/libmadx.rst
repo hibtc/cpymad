@@ -1,5 +1,5 @@
 cpymad.libmadx
 --------------
 
-.. automodule:: cpymad.libmadx
-    :members:
+.. automodapi:: cpymad.libmadx
+   :no-heading:

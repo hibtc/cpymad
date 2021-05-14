@@ -2,12 +2,12 @@
 
 # -- General configuration ------------------------------------------------
 extensions = [
-    'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
     'sphinx-prompt',
     'sphinx_substitution_extensions',
+    'sphinx_automodapi.automodapi',
 ]
 
 templates_path = ['_templates']
@@ -15,7 +15,12 @@ source_suffix = '.rst'
 master_doc = 'index'
 exclude_patterns = ['_build']
 add_function_parentheses = True
+add_module_names = False
 pygments_style = 'sphinx'
+
+automodapi_toctreedirnm = "automod"
+automodapi_writereprocessed = False
+automodsumm_inherited_members = True
 
 intersphinx_mapping = {
     'numpy': ('https://docs.scipy.org/doc/numpy/', None),
@@ -26,7 +31,7 @@ intersphinx_mapping = {
 # General information about the project.
 project = 'cpymad'
 copyright = (
-    u'2014-2020, T. Gläßle,'
+    u'2014-2021, T. Gläßle,'
     u'2014-2019, HIT Betriebs GmbH,'
     u'2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN)')
 
