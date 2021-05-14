@@ -14,21 +14,12 @@ import collections.abc as abc
 import os
 import subprocess
 import sys
-import warnings
 
 import numpy as np
 
 from . import _rpc
 from . import util
 from .stream import AsyncReader
-
-
-if sys.version_info < (3, 6):
-    _unsupported_version = (
-        "Support for python 3.5 and below will be removed in a future release!\n"
-        "If you need continued support for an older version, let us know at:\n"
-        "  https://github.com/hibtc/cpymad/issues")
-    warnings.warn(_unsupported_version, DeprecationWarning)
 
 
 __all__ = [
