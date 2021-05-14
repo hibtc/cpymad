@@ -24,11 +24,30 @@ from .stream import AsyncReader
 
 __all__ = [
     'Madx',
-    'Sequence',
-    'BaseElementList',
-    'Table',
+    'ArrayAttribute',
+    'AttrDict',
+    'BaseTypeMap',
+    'Command',
     'CommandLog',
+    'CommandMap',
+    'Element',
+    'ElementList',
+    'ExpandedElementList',
+    'GlobalElementList',
+    'Metadata',
+    'Sequence',
+    'SequenceMap',
+    'Table',
+    'TableMap',
+    'VarList',
+    'VarParamList',
+    'Version',
+
+    # Data
     'metadata',
+
+    # Errors:
+    'TwissFailed',
 ]
 
 
