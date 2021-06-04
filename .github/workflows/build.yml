@@ -238,6 +238,7 @@ jobs:
           name: dist-linux
           path: dist
 
+      - run: sudo apt-get install -qy graphviz
       - run: pip install cpymad[doc] -f dist
       - run: make -C doc html
 
