@@ -834,6 +834,9 @@ class ArrayAttribute(abc.Sequence):
         self._values[index] = value
         self._element[self._name] = self._values
 
+    def __eq__(self, other):
+        return self._values == other._values
+
     def __iter__(self):
         return iter(self._values)
 
