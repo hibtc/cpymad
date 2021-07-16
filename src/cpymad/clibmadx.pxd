@@ -277,6 +277,9 @@ cdef extern from "madX/mad_table.h" nogil:
     char_p_array* table_get_header(char* table_name)
     int table_exists(char* table_name)
     void out_table(char* tname, table*, char* filename)
+    void check_table(char* string)
+    void check_tabindex(char* string)
+    void check_tabstring(char* string)
 
 cdef extern from "madX/mad_var.h" nogil:
     # NOTE: C API uses "const char* name"

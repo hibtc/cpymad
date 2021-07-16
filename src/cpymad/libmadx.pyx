@@ -973,6 +973,9 @@ cdef clib.expression* _make_expr(str expression):
     # TODO: not sure about the flags (the magic constants 0, 2)
     cdef bytes _expr = _cstr(expression.lower())
     clib.pre_split(_expr, clib.c_dum, 0)
+    clib.check_table(clib.c_dum.c)
+    clib.check_tabindex(clib.c_dum.c)
+    clib.check_tabstring(clib.c_dum.c)
     clib.mysplit(clib.c_dum.c, clib.tmp_p_array)
     # NOTE: `loc_expr` is mostly useless for input validation. It even accepts
     # stuff such as '+' that will lead to program crashes on evaluation. We
