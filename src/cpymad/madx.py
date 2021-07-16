@@ -1096,7 +1096,13 @@ class Table(_Mapping):
         return self._libmadx.get_table_column_names(self._name)
 
     def row_names(self):
-        """Get table row names."""
+        """
+        Get table row names.
+
+        WARNING: using ``row_names`` after calling ``USE`` (before recomputing
+        the table) is unsafe and may lead to segmentation faults or incorrect
+        results.
+        """
         return self._libmadx.get_table_row_names(self._name)
 
     @property
@@ -1127,10 +1133,28 @@ class Table(_Mapping):
             columns = self
         return {column: self[column] for column in columns}
 
-    def dframe(self, columns=None):
-        """Return table as ``pandas.DataFrame``."""
+    def dframe(self, columns=None, index=None):
+        """
+        Return table as ``pandas.DataFrame``.
+
+        :param list columns: column names or ``None`` for all columns.
+        :param str index: column name or sequence to be used as index, or
+                          ``None`` for using the ``row_names``
+        :returns: column data as ``pandas.DataFrame``
+        :raises ValueError: if the table name is invalid
+
+        WARNING: using ``index=None`` is unsafe after calling ``USE``.
+        In this case, please manually specify another column to be used,
+        e.g. ``index="name"``.
+        """
         import pandas as pd
-        return pd.DataFrame(self.copy(columns), index=self.row_names())
+        if index is None:
+            index = self.row_names()
+        elif isinstance(index, str):
+            index = util.remove_count_suffix_from_name(self[index])
+        else:
+            index = index
+        return pd.DataFrame(self.copy(columns), index=index)
 
     def getmat(self, name, idx, *dim):
         s = () if isinstance(idx, int) else (-1,)
