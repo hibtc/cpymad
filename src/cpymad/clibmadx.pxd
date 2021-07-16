@@ -238,6 +238,7 @@ cdef extern from "madX/mad_gvar.h" nogil:
     el_list* base_type_list     # list of base types
     command_list* defined_commands  # with base types, but no user elements
     int start_var               # start of variables after predefined constants
+    int_array* deco             # temporary buffer for polished expressions
 
 
 # Function declarations:
@@ -259,9 +260,12 @@ cdef extern from "madX/mad_str.h" nogil:
     void stolower_nq(char*)
     int mysplit(char*, char_p_array*)
     int supp_lt(char*, int)
+    char* join(char**, int)
 
 cdef extern from "madX/mad_eval.h" nogil:
     void pro_input(char*)
+    int polish_expr(int, char**)
+    double polish_value(int_array*, char*)
 
 cdef extern from "madX/mad_expr.h" nogil:
     expression* make_expression(int, char**)

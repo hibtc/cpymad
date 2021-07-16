@@ -926,12 +926,8 @@ def eval(expression: str) -> float:
     invalid input such as '+' can lead to program crashes! If you're looking
     for more secure validation, see :func:`cpymad.util.check_expression`.
     """
-    cdef clib.expression* expr = _make_expr(expression)
-    if expr == NULL:
-        raise ValueError("Invalid expression: {!r}".format(expression))
-    value = clib.expression_value(expr, 2)
-    clib.delete_expression(expr)
-    return value
+    cdef char* string = _polish_expr(expression)
+    return clib.polish_value(clib.deco, string)
 
 
 def expression_vars(expression: str) -> set:
@@ -946,15 +942,12 @@ def expression_vars(expression: str) -> set:
     invalid input such as '+' can lead to program crashes! If you're looking
     for more secure validation, see :func:`cpymad.util.check_expression`.
     """
-    cdef clib.expression* expr = _make_expr(expression)
-    if expr == NULL:
-        raise ValueError("Invalid expression: {!r}".format(expression))
+    _polish_expr(expression)
     cdef int i
     vars = {_str(clib.expr_chunks.names[k % 100000000])
-            for i in range(expr.polish.curr)
-            for k in [expr.polish.i[i]]
+            for i in range(clib.deco.curr)
+            for k in [clib.deco.i[i]]
             if k // 100000000 == 1}
-    clib.delete_expression(expr)
     return vars
 
 
@@ -965,7 +958,7 @@ def expression_vars(expression: str) -> set:
 # we want to pass parameters or return values with a pure C type.
 
 
-cdef clib.expression* _make_expr(str expression):
+cdef char* _polish_expr(str expression) except NULL:
     # TODO: This function uses global variables as temporaries - which is in
     # general an *extremely* bad design choice. Even though MAD-X uses global
     # variables internally anyway, this is no excuse for cpymad to copy that
@@ -986,8 +979,10 @@ cdef clib.expression* _make_expr(str expression):
                           clib.tmp_p_array.curr,
                           start, &stop)
     if etype == 0 or stop+1 < clib.tmp_p_array.curr:
-        return NULL
-    return clib.make_expression(clib.tmp_p_array.curr, clib.tmp_p_array.p)
+        raise ValueError("Invalid expression: {!r}".format(expression))
+    if clib.polish_expr(stop + 1, clib.tmp_p_array.p) != 0:
+        raise ValueError("Invalid expression: {!r}".format(expression))
+    return clib.join(clib.tmp_p_array.p, stop + 1)
 
 
 _expr_types = [bool, int, float]
