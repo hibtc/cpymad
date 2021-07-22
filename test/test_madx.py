@@ -688,25 +688,25 @@ class TestMadx(unittest.TestCase):
         knl_gt = bar_gt.knl
         knl_lt = bar_lt.knl
 
-        self.assertTrue( knl == knl_eq)
+        self.assertTrue(knl == knl_eq)
         self.assertFalse(knl == knl_gt)
         self.assertFalse(knl == knl_lt)
 
-        self.assertFalse(knl <  knl_eq)
-        self.assertTrue( knl <  knl_gt)
-        self.assertFalse(knl <  knl_lt)
+        self.assertFalse(knl < knl_eq)
+        self.assertTrue(knl < knl_gt)
+        self.assertFalse(knl < knl_lt)
 
-        self.assertTrue( knl <= knl_eq)
-        self.assertTrue( knl <= knl_gt)
+        self.assertTrue(knl <= knl_eq)
+        self.assertTrue(knl <= knl_gt)
         self.assertFalse(knl <= knl_lt)
 
-        self.assertFalse(knl >  knl_eq)
-        self.assertFalse(knl >  knl_gt)
-        self.assertTrue( knl >  knl_lt)
+        self.assertFalse(knl > knl_eq)
+        self.assertFalse(knl > knl_gt)
+        self.assertTrue(knl > knl_lt)
 
-        self.assertTrue( knl >= knl_eq)
+        self.assertTrue(knl >= knl_eq)
         self.assertFalse(knl >= knl_gt)
-        self.assertTrue( knl >= knl_lt)
+        self.assertTrue(knl >= knl_lt)
 
     def test_command_map(self):
         command = self.mad.command
