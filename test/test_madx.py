@@ -675,6 +675,39 @@ class TestMadx(unittest.TestCase):
         self.assertEqual(self.mad.elements.foo.defs.knl[1], '3 * nine')
         self.assertEqual(self.mad.elements.foo.knl[1], 27)
 
+    def test_array_attribute_comparison(self):
+        self.mad.globals.nine = 9
+        foo = self.mad.elements.multipole.clone('foo', knl=[0, 5, 10])
+
+        bar_eq = self.mad.elements.multipole.clone('bar_eq', knl=[0, 5, 10])
+        bar_gt = self.mad.elements.multipole.clone('bar_gt', knl=[0, 6, 10])
+        bar_lt = self.mad.elements.multipole.clone('bar_lt', knl=[0, 5, 'nine'])
+
+        knl = foo.knl
+        knl_eq = bar_eq.knl
+        knl_gt = bar_gt.knl
+        knl_lt = bar_lt.knl
+
+        self.assertTrue( knl == knl_eq)
+        self.assertFalse(knl == knl_gt)
+        self.assertFalse(knl == knl_lt)
+
+        self.assertFalse(knl <  knl_eq)
+        self.assertTrue( knl <  knl_gt)
+        self.assertFalse(knl <  knl_lt)
+
+        self.assertTrue( knl <= knl_eq)
+        self.assertTrue( knl <= knl_gt)
+        self.assertFalse(knl <= knl_lt)
+
+        self.assertFalse(knl >  knl_eq)
+        self.assertFalse(knl >  knl_gt)
+        self.assertTrue( knl >  knl_lt)
+
+        self.assertTrue( knl >= knl_eq)
+        self.assertFalse(knl >= knl_gt)
+        self.assertTrue( knl >= knl_lt)
+
     def test_command_map(self):
         command = self.mad.command
         self.assertIn('match', command)
