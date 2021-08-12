@@ -457,11 +457,16 @@ def get_table_column(table_name: str, column_name: str) -> np.ndarray:
     # double:
     if dtype == b'i' or dtype == b'd':
         # YES, integers are internally stored as doubles in MAD-X:
-        return np.ctypeslib.as_array(<double [:info.length]> info.data)
+        if info.length == 0:
+            return np.empty(0)
+        else:
+            return np.ctypeslib.as_array(<double [:info.length]> info.data)
     # string:
     elif dtype == b'S':
         char_tmp = <char**> info.data
-        return np.array([_str(char_tmp[i]) for i in range(info.length)])
+        return np.array(
+            [_str(char_tmp[i]) for i in range(info.length)],
+            dtype=str)
     # invalid:
     elif dtype == b'V':
         raise ValueError("Column {!r} is not in table {!r}."
