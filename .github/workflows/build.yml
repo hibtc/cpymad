@@ -217,6 +217,7 @@ jobs:
 
       - run: coverage run --source=cpymad -p test/test_util.py -v
       - run: coverage run --source=cpymad -p test/test_madx.py -v
+      - run: coverage run --source=cpymad -p test/test_regression.py -v
 
       - run: coverage combine
       - run: coveralls
