@@ -9,6 +9,8 @@ from contextlib import contextmanager
 from numbers import Number
 import collections.abc as abc
 
+import numpy as np
+
 from .types import (
     Range, Constraint,
     PARAM_TYPE_LOGICAL, PARAM_TYPE_INTEGER,
@@ -492,3 +494,9 @@ class ChangeDirectory:
         """Exit 'with' context and restore old path."""
         if self._restore:
             self._chdir(self._restore)
+
+
+@np.vectorize
+def remove_count_suffix_from_name(name):
+    """Return the :N suffix from an element name."""
+    return name.rsplit(':', 1)[0]

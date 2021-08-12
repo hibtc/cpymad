@@ -219,6 +219,9 @@ jobs:
       - run: coverage run --source=cpymad -p test/test_madx.py -v
       - run: coverage run --source=cpymad -p test/test_regression.py -v
 
+      - run: pip install pandas
+      - run: coverage run --source=cpymad -p test/test_pandas.py -v
+
       - run: coverage combine
       - run: coveralls
         if: env.COVERALLS_REPO_TOKEN != ''

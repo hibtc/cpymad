@@ -11,3 +11,9 @@ Known issues
   handles in the MAD-X process or prevent them from being inherited by
   default.  You have to make sure on your own that you close all file handles
   before creating a new ``cpymad.madx.Madx`` instance!
+
+- the MAD-X ``USE`` command invalidates table row names. Therefore, using
+  ``Table.dframe()`` is unsafe after ``USE`` should be avoided, unless
+  manually specifying an index, e.g. ``Table.dframe(index='name')``, see `#93`_.
+
+.. _#93: https://github.com/hibtc/cpymad/issues/93
