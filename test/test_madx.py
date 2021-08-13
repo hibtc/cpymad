@@ -4,7 +4,6 @@ Tests for the :class:`cpymad.madx.Madx` API.
 
 import os
 import sys
-from textwrap import dedent
 
 import numpy as np
 from numpy.testing import assert_allclose
@@ -138,7 +137,7 @@ def test_command_log():
     history_filename = '_test_madx.madx.tmp'
     try:
         # feed some input lines and compare with history file:
-        lines = dedent("""
+        lines = """
             l = 5;
             f = 200;
 
@@ -149,8 +148,8 @@ def test_command_log():
 
             beam, particle=proton, energy=2;
             use, sequence=fodo;
-        """).splitlines()
-        lines = [line for line in lines if line.strip()]
+        """.splitlines()
+        lines = [line.strip() for line in lines if line.strip()]
         with Madx(command_log=history_filename) as mad:
             for line in lines:
                 mad.input(line)
