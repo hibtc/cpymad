@@ -3,8 +3,9 @@ import unittest
 
 # tested objects
 from cpymad import util
-from cpymad.madx import Madx, AttrDict
+from cpymad.madx import AttrDict
 from cpymad.types import Range, Constraint
+from common import with_madx
 
 
 def is_valid_expression(expr):
@@ -14,21 +15,9 @@ def is_valid_expression(expr):
         return False
 
 
-def _close(m):
-    try:
-        m._service.close()
-    except (RuntimeError, IOError, EOFError, OSError):
-        pass
-    m._process.wait()
-
-
 class TestUtil(unittest.TestCase):
 
     """Tests for the objects in :mod:`cpymad.util`."""
-
-    def tearDown(self):
-        if hasattr(self, 'madx'):
-            _close(self.madx)
 
     def test_mad_quote(self):
         # default to double quotes:
@@ -75,9 +64,8 @@ class TestUtil(unittest.TestCase):
     def _check_command(self, compare, *args, **kwargs):
         self.assertEqual(compare, util.format_command(*args, **kwargs))
 
-    def test_format_command(self):
-        m = self.madx = Madx()
-
+    @with_madx()
+    def test_format_command(self, mad):
         self.assertEqual(
             util.format_command(
                 'twiss', sequence='lhc'
@@ -92,7 +80,7 @@ class TestUtil(unittest.TestCase):
             ), 'constraint, betx<3.13;')
         self.assertEqual(
             util.format_command(
-                m.command.quadrupole, k1='pi/2'
+                mad.command.quadrupole, k1='pi/2'
             ), 'quadrupole, k1:=pi/2;')
         self.assertEqual(
             util.format_command(
@@ -109,16 +97,16 @@ class TestUtil(unittest.TestCase):
 
         self.assertEqual(
             util.format_command(
-                m.elements.quadrupole, k1="hello + world"
+                mad.elements.quadrupole, k1="hello + world"
             ), 'quadrupole, k1:=hello + world;')
         self.assertEqual(
             util.format_command(
                 # match->sequence parameter is list in MAD-X!
-                m.command.match, sequence="foo"
+                mad.command.match, sequence="foo"
             ), "match, sequence=foo;")
         self.assertEqual(
             util.format_command(
-                m.command.select, class_='quadrupole',
+                mad.command.select, class_='quadrupole',
             ), 'select, class=quadrupole;')
 
     def test_format_param(self):
@@ -150,14 +138,14 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(fmt('pi', 3), 'pi=3')
         self.assertEqual(fmt('pi', 3.14), 'pi=3.14')
 
-    def test_format_cmdpar(self):
+    @with_madx()
+    def test_format_cmdpar(self, mad):
         fmt = util.format_cmdpar
 
-        m = self.madx = Madx()
-        mult = m.elements.quadrupole
-        cons = m.command.constraint
-        match = m.command.match
-        twiss = m.command.twiss
+        mult = mad.elements.quadrupole
+        cons = mad.command.constraint
+        match = mad.command.match
+        twiss = mad.command.twiss
 
         self.assertEqual(fmt(mult, 'knl', None), '')
 

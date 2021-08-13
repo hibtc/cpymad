@@ -1,7 +1,6 @@
-import sys
 import unittest
 
-from cpymad.madx import Madx, CommandLog
+from common import with_madx
 
 
 SEQU = """
@@ -23,26 +22,20 @@ twiss, sequence=fodo, x=0.1;
 
 class PandasTests(unittest.TestCase):
 
-    def setUp(self):
-        self.madx = Madx(command_log=CommandLog(sys.stdout, 'X:> '))
-        self.madx.input(SEQU)
-
-    def tearDown(self):
-        self.madx.quit()
-        del self.madx
-
-    def test_dframe_after_use(self):
+    @with_madx()
+    def test_dframe_after_use(self, mad):
+        mad.input(SEQU)
         index = ['#s', 'mqf', 'dff', 'mqd', 'dfd', '#e']
         names = ['fodo$start', 'mqf', 'dff', 'mqd', 'dfd', 'fodo$end']
 
-        twiss = self.madx.table.twiss
+        twiss = mad.table.twiss
         self.assertEqual(index, twiss.row_names())
         self.assertEqual(index, twiss.dframe().index.tolist())
         self.assertEqual(names, twiss.dframe(index='name').index.tolist())
 
-        self.madx.use(sequence='fodo')
+        mad.use(sequence='fodo')
 
-        twiss = self.madx.table.twiss
+        twiss = mad.table.twiss
 
         # Should still work:
         self.assertEqual(names, twiss.dframe(index='name').index.tolist())
@@ -52,7 +45,7 @@ class PandasTests(unittest.TestCase):
         # to crashes or change in the future. In that case, please remove
         # this line. It does not represent desired behaviour!
         self.assertEqual(
-            self.madx.table.twiss.row_names(),
+            mad.table.twiss.row_names(),
             ['#s', '#e', 'dfd', 'mqd', 'dff', 'mqf'])
 
 

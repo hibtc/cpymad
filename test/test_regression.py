@@ -1,26 +1,18 @@
-import sys
 import unittest
 
-from cpymad.madx import Madx, CommandLog
+from common import with_madx
 
 
 class RegressionTests(unittest.TestCase):
 
-    def setUp(self):
-        self.madx = Madx(command_log=CommandLog(sys.stdout, 'X:> '))
-
-    def tearDown(self):
-        self.madx.quit()
-        del self.madx
-
-    def test_error_table_after_clear_issue57(self):
+    @with_madx()
+    def test_error_table_after_clear_issue57(self, mad):
         """
         Test that ``Madx.table.error`` works as expected.
         """
         # See: https://github.com/hibtc/cpymad/issues/57
-        madx = self.madx
-        madx.verbose(False)
-        madx.input("""
+        mad.verbose(False)
+        mad.input("""
         fodo: sequence, l=10, refer=entry;
         endsequence;
         beam;
@@ -30,7 +22,7 @@ class RegressionTests(unittest.TestCase):
         """)
         # The following line would previously cause a:
         #   KeyError: "Unknown table column: 'k0l'"
-        data = madx.table.error.copy()
+        data = mad.table.error.copy()
 
         self.assertEqual(len(data['name']), 0)
         self.assertIn('name', data)
