@@ -1,41 +1,52 @@
-import sys
-import unittest
+"""
+Regression tests.
+"""
 
-from cpymad.madx import Madx, CommandLog
+from cpymad.madx import Madx
+import pytest
 
 
-class RegressionTests(unittest.TestCase):
+@pytest.fixture
+def mad():
+    with Madx(prompt='X:> ') as mad:
+        yield mad
 
-    def setUp(self):
-        self.madx = Madx(command_log=CommandLog(sys.stdout, 'X:> '))
 
-    def tearDown(self):
-        self.madx.quit()
-        del self.madx
-
-    def test_error_table_after_clear_issue57(self):
-        """
-        Test that ``Madx.table.error`` works as expected.
-        """
-        # See: https://github.com/hibtc/cpymad/issues/57
-        madx = self.madx
-        madx.verbose(False)
-        madx.input("""
+def test_error_table_after_clear_issue57(mad):
+    """
+    Test that ``Madx.table.error`` works as expected.
+    """
+    # See: https://github.com/hibtc/cpymad/issues/57
+    mad.verbose(False)
+    mad.input("""
         fodo: sequence, l=10, refer=entry;
         endsequence;
+
         beam;
         use, sequence=fodo;
+
         select, flag=error, clear;
         etable, table=error;
-        """)
-        # The following line would previously cause a:
-        #   KeyError: "Unknown table column: 'k0l'"
-        data = madx.table.error.copy()
+    """)
+    # The following line would previously cause a:
+    #   KeyError: "Unknown table column: 'k0l'"
+    data = mad.table.error.copy()
 
-        self.assertEqual(len(data['name']), 0)
-        self.assertIn('name', data)
-        self.assertIn('k0l', data)
+    assert len(data['name']) == 0
+    assert 'name' in data
+    assert 'k0l' in data
 
 
-if __name__ == '__main__':
-    unittest.main()
+def test_no_segfault_in_makethin_issue67(mad):
+    # See: https://github.com/hibtc/cpymad/issues/67
+    mad.input("""
+        seq: sequence, l=2, refer=center;
+        q1: quadrupole, l=1, at=1;
+        endsequence;
+
+        beam;
+        use, sequence=seq;
+
+        select, flag=MAKETHIN, class=quadrupole;
+        makethin, sequence=seq;
+    """)

@@ -1,9 +1,0 @@
-seq: sequence, l=2, refer=center;
-q1: quadrupole, l=1, at=1;
-endsequence;
-
-beam;
-use, sequence=seq;
-
-select, flag=MAKETHIN, class=quadrupole;
-makethin, sequence=seq;
