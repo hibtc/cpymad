@@ -211,16 +211,16 @@ jobs:
           pip install cpymad -f dist --no-index --no-deps
           pip install cpymad
 
-      - run: pip install flake8 twine coverage coveralls
+      - run: pip install flake8 twine coverage coveralls pytest
       - run: twine check dist/*
       - run: flake8
 
-      - run: coverage run --source=cpymad -p test/test_util.py -v
-      - run: coverage run --source=cpymad -p test/test_madx.py -v
-      - run: coverage run --source=cpymad -p test/test_regression.py -v
+      - run: coverage run --source=cpymad -p -m pytest test/test_util.py -v
+      - run: coverage run --source=cpymad -p -m pytest test/test_madx.py -v
+      - run: coverage run --source=cpymad -p -m pytest test/test_regression.py -v
 
       - run: pip install pandas
-      - run: coverage run --source=cpymad -p test/test_pandas.py -v
+      - run: coverage run --source=cpymad -p -m pytest test/test_pandas.py -v
 
       - run: coverage combine
       - run: coveralls

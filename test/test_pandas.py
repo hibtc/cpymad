@@ -1,6 +1,11 @@
-import unittest
+"""
+Tests that involve pandas data frames.
 
-from common import with_madx
+These tests are not included within the main tests, so that they can be
+executed selectively.
+"""
+
+from cpymad.madx import Madx
 
 
 SEQU = """
@@ -20,34 +25,27 @@ twiss, sequence=fodo, x=0.1;
 """
 
 
-class PandasTests(unittest.TestCase):
-
-    @with_madx()
-    def test_dframe_after_use(self, mad):
+def test_dframe_after_use():
+    with Madx(prompt='X:> ') as mad:
         mad.input(SEQU)
         index = ['#s', 'mqf', 'dff', 'mqd', 'dfd', '#e']
         names = ['fodo$start', 'mqf', 'dff', 'mqd', 'dfd', 'fodo$end']
 
         twiss = mad.table.twiss
-        self.assertEqual(index, twiss.row_names())
-        self.assertEqual(index, twiss.dframe().index.tolist())
-        self.assertEqual(names, twiss.dframe(index='name').index.tolist())
+        assert index == twiss.row_names()
+        assert index == twiss.dframe().index.tolist()
+        assert names == twiss.dframe(index='name').index.tolist()
 
         mad.use(sequence='fodo')
 
         twiss = mad.table.twiss
 
         # Should still work:
-        self.assertEqual(names, twiss.dframe(index='name').index.tolist())
+        assert names == twiss.dframe(index='name').index.tolist()
 
         # The following assert demonstrates the current behaviour and is
         # meant to detect if the MAD-X implementation changes. It may lead
         # to crashes or change in the future. In that case, please remove
         # this line. It does not represent desired behaviour!
-        self.assertEqual(
-            mad.table.twiss.row_names(),
-            ['#s', '#e', 'dfd', 'mqd', 'dff', 'mqf'])
-
-
-if __name__ == '__main__':
-    unittest.main()
+        assert mad.table.twiss.row_names() == \
+            ['#s', '#e', 'dfd', 'mqd', 'dff', 'mqf']
