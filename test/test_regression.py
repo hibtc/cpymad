@@ -28,6 +28,21 @@ class RegressionTests(unittest.TestCase):
         self.assertIn('name', data)
         self.assertIn('k0l', data)
 
+    @with_madx()
+    def test_no_segfault_in_makethin_issue67(self, mad):
+        # See: https://github.com/hibtc/cpymad/issues/67
+        mad.input("""
+            seq: sequence, l=2, refer=center;
+            q1: quadrupole, l=1, at=1;
+            endsequence;
+
+            beam;
+            use, sequence=seq;
+
+            select, flag=MAKETHIN, class=quadrupole;
+            makethin, sequence=seq;
+        """)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -834,21 +834,6 @@ class TestMadx(unittest.TestCase):
         assert_allclose(al.dx, 1e-3)
         assert_allclose(al.dy, -4e-3)
 
-    @with_madx()
-    def test_makethin(self, mad):
-        # regression test for segfault, see #67:
-        mad.input("""
-            seq: sequence, l=2, refer=center;
-            q1: quadrupole, l=1, at=1;
-            endsequence;
-
-            beam;
-            use, sequence=seq;
-
-            select, flag=MAKETHIN, class=quadrupole;
-            makethin, sequence=seq;
-        """)
-
 
 def _test_transfer_map(mad, seq, range_, doc, rtol=1e-7, atol=1e-15):
     mad.input(doc)
