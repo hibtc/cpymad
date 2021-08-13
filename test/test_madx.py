@@ -10,7 +10,7 @@ from numpy.testing import assert_allclose
 from pytest import approx, fixture, mark, raises
 
 import cpymad
-from cpymad.madx import Madx, metadata
+from cpymad.madx import Madx, Sequence, metadata
 
 
 @fixture
@@ -500,12 +500,12 @@ def test_sequence(mad):
 
 def test_sequence_get_elements_s1(mad):
     mad.input(SEQU)
-    s1, idx = _get_elems(mad, 's1')
+    s1 = mad.sequence.s1.elements
     qp1 = s1['qp[1]']
     qp2 = s1['qp[2]']
     sb1 = s1['sb[1]']
-    assert idx['qp'] < idx['qp[2]']
-    assert idx['qp[2]'] < idx['sb']
+    assert s1.index('qp') < s1.index('qp[2]')
+    assert s1.index('qp[2]') < s1.index('sb')
     assert qp1['at'] == approx(1.5)
     assert qp2['at'] == approx(3.5)
     assert sb1['at'] == approx(6)
@@ -523,10 +523,10 @@ def test_sequence_get_elements_s1(mad):
 
 def test_sequence_get_elements_s2(mad):
     mad.input(SEQU)
-    s2, idx = _get_elems(mad, 's2')
+    s2 = mad.sequence.s2.elements
     qp1 = s2['qp1[1]']
     qp2 = s2['qp2[1]']
-    assert idx['qp1'] < idx['qp2']
+    assert s2.index('qp1') < s2.index('qp2')
     assert qp1['at'] == approx(0)
     assert qp2['at'] == approx(1)
     assert qp1['l'] == approx(1)
@@ -849,6 +849,26 @@ def test_errors(mad):
     assert_allclose(al.dy, -4e-3)
 
 
+def test_subsequence(mad):
+    mad.input("""
+    d1: RBEND, l=0.1, angle=0.1;
+
+    seq1: sequence, l=0.1;
+        d1.1: d1, at=0.05;
+    endsequence;
+
+    seq2: sequence, l=0.2;
+        seq1, at=0.05;
+        seq1, at=0.15;
+    endsequence;
+    """)
+    seq2 = mad.sequence.seq2
+    assert isinstance(seq2.elements['seq1'], Sequence)
+    assert seq2.elements['seq1'].name == 'seq1'
+    assert seq2.elements['seq1'].element_names() == \
+        mad.sequence.seq1.element_names()
+
+
 def test_dframe_after_use(mad):
     mad.input("""
         mqf.k1 =  0.3037241107;
@@ -886,9 +906,3 @@ def test_dframe_after_use(mad):
     # this line. It does not represent desired behaviour!
     assert mad.table.twiss.row_names() == \
         ['#s', '#e', 'dfd', 'mqd', 'dff', 'mqf']
-
-
-def _get_elems(mad, seq_name):
-    elems = mad.sequence[seq_name].elements
-    elem_idx = dict((el.node_name, i) for i, el in enumerate(elems))
-    return elems, elem_idx

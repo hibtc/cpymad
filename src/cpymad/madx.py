@@ -906,7 +906,10 @@ class BaseElementList:
             index += _len
         data = self._get_element(index)
         data['index'] = index
-        return Element(self._madx, data)
+        if data['base_type'] == 'sequence':
+            return Sequence(data['name'], self._madx)
+        else:
+            return Element(self._madx, data)
 
     def __len__(self):
         """Get number of elements."""

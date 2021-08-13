@@ -1122,10 +1122,19 @@ cdef str _node_name(clib.node* node):
 
 cdef dict _get_node(clib.node* node, int ref_flag, int is_expanded, int line):
     """Return dictionary with node + element attributes."""
-    if node.p_elem is NULL:
+    if node.p_elem is not NULL:
+        data = _get_element(node.p_elem)
+    elif node.p_sequ is not NULL:
+        data = {
+            'name': _str(node.p_sequ.name),
+            'base_type': 'sequence',
+            'data': {},
+        }
+    else:
         # Maybe this is a valid case, but better detect it with boom!
-        raise RuntimeError("Empty node or subsequence! Please report this incident!")
-    data = _get_element(node.p_elem)
+        raise RuntimeError(
+            "Empty node or subsequence! Please report this incident!")
+
     if not line:
         # Update `at` command parameters in order to avoid surprises when
         # specifying `at` value for elements defined outside the sequence:
