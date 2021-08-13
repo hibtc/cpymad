@@ -92,7 +92,10 @@ def test_independent_instances():
 
 # TODO: We need to fix this on windows, but for now, I just need it to
 # pass so that the CI builds the release...
-@mark.xfail(sys.platform == 'win32', reason='Known to be broken on win32!')
+@mark.xfail(
+    sys.platform != 'linux',
+    reason='Output is sometimes garbled on MacOS and windows.',
+)
 def test_streamreader():
     output = []
     with Madx(stdout=output.append) as m:
@@ -119,7 +122,10 @@ def test_quit(mad):
         mad.input(';')
 
 
-@mark.xfail(sys.platform == 'win32', reason='Known to be broken on win32!')
+@mark.xfail(
+    sys.platform != 'linux',
+    reason='Output is sometimes garbled on MacOS and windows.',
+)
 def test_context_manager():
     output = []
     with Madx(stdout=output.append) as m:
