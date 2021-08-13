@@ -218,6 +218,7 @@ jobs:
       - run: coverage run --source=cpymad -p -m pytest test/test_util.py -v
       - run: coverage run --source=cpymad -p -m pytest test/test_madx.py -v
       - run: coverage run --source=cpymad -p -m pytest test/test_regression.py -v
+      - run: coverage run --source=cpymad -p -m pytest test/test_transfer_map.py -v
 
       - run: pip install pandas
       - run: coverage run --source=cpymad -p -m pytest test/test_pandas.py -v
