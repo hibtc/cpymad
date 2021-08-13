@@ -9,8 +9,8 @@ from numpy.testing import assert_allclose
 
 # tested class
 import cpymad
-from cpymad.madx import metadata
-from common import with_madx, create_madx as Madx
+from cpymad.madx import Madx, metadata
+from common import with_madx
 
 
 SEQU = """
@@ -77,8 +77,8 @@ class TestMadx(unittest.TestCase):
         self.assertEqual(metadata.__version__, version.release)
         self.assertIsInstance(metadata.get_copyright_notice(), type(u""))
 
-    @with_madx()
-    @with_madx()
+    @with_madx(prompt='X1:> ')
+    @with_madx(prompt='X2:> ')
     def test_independent_instances(self, mad1, mad2):
         # Check independence by defining a variable differently in each
         # instance:

@@ -132,13 +132,14 @@ class Madx:
     """
 
     def __init__(self, libmadx=None, command_log=None, stdout=None,
-                 history=None, **Popen_args):
+                 history=None, prompt=None, **Popen_args):
         """
         Initialize instance variables.
 
         :param libmadx: :mod:`libmadx` compatible object
         :param command_log: Log all MAD-X commands issued via cpymad.
         :param stdout: file descriptor, file object or callable
+        :param str prompt: prefix for a new :class:`CommandLog`
         :param Popen_args: Additional parameters to ``subprocess.Popen``
 
         If ``libmadx`` is NOT specified, a new MAD-X interpreter will
@@ -154,9 +155,17 @@ class Madx:
 
             m = Madx(stdout=sys.stdout)
         """
-        # open history file
         if isinstance(command_log, str):
-            command_log = CommandLog.create(command_log)
+            # open new history file:
+            command_log = CommandLog.create(command_log, prompt or '')
+        elif hasattr(command_log, 'write'):
+            # assuming stream already opened:
+            command_log = CommandLog(command_log, prompt or '')
+        elif prompt is not None:
+            assert command_log is None, \
+                "Passing fully constructed `command_log` instances is " \
+                "incompatible with parameter `prompt`."
+            command_log = CommandLog(sys.stdout, prompt)
         self.reader = NullContext()
         # start libmadx subprocess
         if libmadx is None:
