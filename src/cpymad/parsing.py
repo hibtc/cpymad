@@ -168,19 +168,19 @@ class Parser:
         """
         tokens = list(reversed(tokens))
         stack = [self.start]
-        while stack:
-            token = tokens[-1]
-            rules = stack.pop()
-            try:
+        try:
+            while stack:
+                token = tokens[-1]
+                rules = stack.pop()
                 more = rules[token.type]
-            except KeyError:
-                raise ValueError(
-                    f"Unexpected {token.type} in:\n"
-                    f"    {token.expr!r}\n"
-                    f"     "
-                    + ' ' * token.start
-                    + '^' * max(token.length, 1)
-                ) from None
-            if more is not None:
-                stack.extend(more)
-                tokens.pop()
+                if more is not None:
+                    stack.extend(more)
+                    tokens.pop()
+        except KeyError:
+            raise ValueError(
+                f"Unexpected {token.type} in:\n"
+                f"    {token.expr!r}\n"
+                f"     "
+                + ' ' * token.start
+                + '^' * max(token.length, 1)
+            ) from None
