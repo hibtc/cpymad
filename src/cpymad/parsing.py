@@ -159,9 +159,16 @@ class Parser:
     """
 
     def __init__(self, terminals, grammar, start):
-        self.table = create_parse_table(
+        self.table = table = create_parse_table(
             terminals, grammar, start)
-        self.start = start
+        # precompule rules lookup:
+        self.rules = {symbol: {} for symbol in table}
+        for symbol, rules in table.items():
+            self.rules[symbol] |= {
+                t: p and [self.rules[n] for n in p]
+                for t, p in rules.items()
+            }
+        self.start = self.rules[start]
 
     def parse(self, tokens):
         """
@@ -172,16 +179,20 @@ class Parser:
         :raises: ValueError
         """
         tokens = list(reversed(tokens))
-        table = self.table
         stack = [self.start]
         while stack:
-            symbol = stack.pop()
             token = tokens[-1]
+            rules = stack.pop()
             try:
-                more = table[symbol][token.type]
+                more = rules[token.type]
             except KeyError:
                 raise ValueError(
-                    f"Unexpected token {token} for {symbol}!") from None
-            if more:
-                stack.extend(more[:-1])
+                    f"Unexpected {token.type} in:\n"
+                    f"    {token.expr!r}\n"
+                    f"     "
+                    + ' ' * token.start
+                    + '^' * max(token.length, 1)
+                ) from None
+            if more is not None:
+                stack.extend(more)
                 tokens.pop()
