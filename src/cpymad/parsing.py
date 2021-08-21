@@ -50,9 +50,12 @@ def extend_firsts_sets(firsts, *, empty, grammar):
     firsts = deepcopy(firsts)
     for symbol, productions in grammar.items():
         for production in productions:
-            for p in production:
-                firsts[symbol] |= firsts[p]
-                if not empty[p]:
+            for i, n in enumerate(production):
+                extend_parse_table(symbol, firsts[symbol], {
+                    t: production[i + 1:][::-1] + p
+                    for t, p in firsts[n].items()
+                })
+                if not empty[n]:
                     break
     return firsts
 
@@ -75,25 +78,12 @@ def extend_follow_sets(follow, *, firsts, empty, grammar):
         for production in productions:
             for i, p1 in enumerate(production):
                 for p2 in production[i + 1:]:
-                    follow[p1] |= firsts[p2]
+                    follow[p1] |= set(firsts[p2])
                     if not empty[p2]:
                         break
                 else:
                     follow[p1] |= follow[symbol]
     return follow
-
-
-def optimize_table(table: dict) -> dict:
-    """
-    Inline definitions in a LL(1) parsing table.
-    """
-    table = deepcopy(table)
-    for symbol, rules in table.items():
-        for terminal, production in rules.items():
-            if production:
-                if production[-1] != terminal:
-                    production[-1:] = table[production[-1]][terminal]
-    return table
 
 
 def create_parse_table(terminals, grammar, start):
@@ -107,10 +97,10 @@ def create_parse_table(terminals, grammar, start):
     """
     empty = fix_point(extend_empty_sets, {}, grammar=grammar)
     empty |= {t: False for t in terminals}
-    firsts = {t: {t} for t in terminals} | {n: set() for n in grammar}
-    firsts = fix_point(
+    table = {t: {t: []} for t in terminals} | {n: {} for n in grammar}
+    table = fix_point(
         extend_firsts_sets,
-        firsts,
+        table,
         empty=empty,
         grammar=grammar)
     follow = (
@@ -119,33 +109,31 @@ def create_parse_table(terminals, grammar, start):
     )
     follow = fix_point(
         extend_follow_sets, follow,
-        firsts=firsts, empty=empty, grammar=grammar)
+        firsts=table, empty=empty, grammar=grammar)
 
-    table = {n: {} for n in grammar}
+    for symbol, terminals in follow.items():
+        if empty[symbol]:
+            extend_parse_table(symbol, table[symbol], {
+                t: None
+                for t in terminals
+            })
 
-    for symbol, productions in grammar.items():
-        for production in productions:
-            trigger = set()
-            for p in production:
-                trigger |= firsts[p]
-                if not empty[p]:
-                    break
-            else:
-                trigger |= follow[symbol]
+    return table
 
-            for terminal in trigger:
-                if terminal in table[symbol]:
-                    raise ValueError((
-                        "Grammar may be ambiguous. Duplicate entry "
-                        "in parse table: <{}, {}> -> {}"
-                    ).format(symbol, terminal, production))
-                else:
-                    table[symbol][terminal] = production[::-1]
 
-    return fix_point(optimize_table, table) | {
-        terminal: {terminal: [terminal]}
-        for terminal in terminals
-    }
+def extend_parse_table(symbol, old, new):
+    """
+    Merge parse tables ``old`` and ``new`` without silently overriding
+    duplicate entries. Raises a ``ValueError`` if ``new`` contains entries
+    that were defined differently in ``old``.
+    """
+    for key in old.keys() & new.keys():
+        if old[key] != new[key]:
+            raise ValueError((
+                "Grammar is ambiguous. Duplicate entry "
+                "in parse table: <{}, {}> -> {} or {}"
+            ).format(symbol, key, old[key], new[key]))
+    old |= new
 
 
 class Parser:
