@@ -673,21 +673,34 @@ def test_select(mad, lib):
     def check_selection(table, name):
         assert_equal(
             table.column(name, rows='selected'),
-            table.column(name, rows='all')[table.selected_rows()])
+            table[name][table.selected_rows()])
+        assert_equal(
+            table.column(name, rows='selected'),
+            table.select()[name])
 
-    mad.select(flag='twiss', class_='quadrupole')
+    mad.select(flag='twiss', class_='quadrupole', column=['s', 'x', 'y'])
     table = mad.twiss(sequence='s1', betx=1, bety=1)
+    assert set(table) > {'s', 'x', 'y', 'betx', 'bety'}
+    assert set(table.copy()) > {'s', 'x', 'y', 'betx', 'bety'}
     assert table.selected_rows() == [2, 4]
+    assert table.selected_columns() == ['s', 'x', 'y']
+    assert table.select().col_names() == ['s', 'x', 'y']
+    assert table.select().copy().keys() == {'s', 'x', 'y'}
     check_selection(table, 'alfx')
     check_selection(table, 'alfy')
     check_selection(table, 'betx')
     check_selection(table, 'bety')
 
     mad.select(flag='twiss', clear=True)
-    mad.select(flag='twiss', class_='drift')
+    mad.select(flag='twiss', class_='drift', column=['betx', 'bety'])
     lib.apply_table_selections('twiss')
     table = mad.table.twiss
+    assert set(table) > {'s', 'x', 'y', 'betx', 'bety'}
+    assert set(table.copy()) > {'s', 'x', 'y', 'betx', 'bety'}
     assert table.selected_rows() == [1, 3, 5, 7]
+    assert table.selected_columns() == ['betx', 'bety']
+    assert table.select().col_names() == ['betx', 'bety']
+    assert table.select().copy().keys() == {'betx', 'bety'}
     mask = lib.get_table_selected_rows_mask('twiss')
     assert mask.shape == (len(mad.sequence.s1.expanded_elements), )
     assert_equal(mask.nonzero(), (table.selected_rows(), ))

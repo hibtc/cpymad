@@ -1066,13 +1066,34 @@ class Table(_Mapping):
     Loads individual columns from the MAD-X process lazily only on demand.
     """
 
-    def __init__(self, name, libmadx, _check=True):
+    def __init__(self, name, libmadx, *, columns='all', rows='all', _check=True):
         """Just store the table name for now."""
         self._name = name = name.lower()
         self._libmadx = libmadx
+        self._columns = columns
+        self._rows = rows
         self._cache = {}
         if _check and not libmadx.table_exists(name):
             raise ValueError("Invalid table: {!r}".format(name))
+
+    def select(self, columns='selected', rows=None) -> "Table":
+        """
+        Return a Table object that only retrieves the specified rows and
+        columns by default.
+
+        :param columns: list of names or 'all' or 'selected'
+        :param rows: list of indices or 'all' or 'selected'
+
+        If only ``columns`` is given, ``rows`` defaults to 'selected'
+        unless ``columns`` is set to 'all' in which case it also defaults
+        to 'all'.
+        """
+        if rows is None:
+            rows = columns if isinstance(columns, str) else 'selected'
+        return Table(
+            self._name, self._libmadx,
+            columns=columns, rows=rows,
+            _check=False)
 
     def __getitem__(self, column):
         """Get the column data."""
@@ -1083,21 +1104,13 @@ class Table(_Mapping):
         except KeyError:
             return self.reload(column)
 
-    def _query(self, column):
-        """Retrieve the column data."""
-        try:
-            return self._libmadx.get_table_column(self._name, column.lower())
-        except ValueError:
-            raise KeyError(
-                "Unknown table column: {!r}".format(column)) from None
-
     def __iter__(self):
         """Iterate over all column names."""
         return iter(self.col_names())
 
     def __len__(self):
         """Return number of columns."""
-        return self._libmadx.get_table_column_count(self._name)
+        return self._libmadx.get_table_column_count(self._name, self._columns)
 
     def __repr__(self):
         return "<{} {!r}: {{{}}}>".format(
@@ -1118,11 +1131,17 @@ class Table(_Mapping):
         empty)."""
         return self._libmadx.get_table_selected_rows(self._name)
 
-    def col_names(self):
+    def col_names(self, columns=None):
         """Get list of all columns in the table."""
-        return self._libmadx.get_table_column_names(self._name)
+        if columns is None:
+            columns = self._columns
+        if isinstance(columns, str):
+            return self._libmadx.get_table_column_names(
+                self._name, selected=columns == 'selected')
+        else:
+            return columns
 
-    def row_names(self):
+    def row_names(self, rows=None):
         """
         Get table row names.
 
@@ -1130,7 +1149,9 @@ class Table(_Mapping):
         the table) is unsafe and may lead to segmentation faults or incorrect
         results.
         """
-        return self._libmadx.get_table_row_names(self._name)
+        if rows is None:
+            rows = self._rows
+        return self._libmadx.get_table_row_names(self._name, rows)
 
     @property
     def range(self):
@@ -1141,22 +1162,30 @@ class Table(_Mapping):
 
     def reload(self, column):
         """Reload (recache) one column from MAD-X."""
-        self._cache[column.lower()] = data = self._query(column)
+        try:
+            data = self._cache[column.lower()] = self.column(column)
+        except ValueError:
+            raise KeyError(
+                "Unknown table column: {!r}".format(column)) from None
         return data
 
-    def column(self, column: str, rows='all') -> np.ndarray:
+    def column(self, column: str, rows=None) -> np.ndarray:
         """Retrieve all specified rows in the given column of the table.
 
         :param column: column name
         :param rows: a list of row indices or ``'all'`` or ``'selected'``
         """
+        if rows is None:
+            rows = self._rows
         return self._libmadx.get_table_column(self._name, column.lower(), rows)
 
-    def row(self, index, columns='all'):
+    def row(self, index, columns=None):
         """Retrieve one row from the table."""
+        if columns is None:
+            columns = self._columns
         return AttrDict(self._libmadx.get_table_row(self._name, index, columns))
 
-    def copy(self, columns=None) -> dict:
+    def copy(self, columns=None, rows=None) -> dict:
         """
         Return a frozen table with the desired columns.
 
@@ -1164,15 +1193,20 @@ class Table(_Mapping):
         :returns: column data
         :raises ValueError: if the table name is invalid
         """
-        if columns is None:
-            columns = self
-        return {column: self[column] for column in columns}
+        if rows is None:
+            rows = columns if isinstance(columns, str) else self._rows
+        if rows == self._rows:
+            table = self
+        else:
+            table = self.select(rows=rows)
+        return {column: table[column] for column in self.col_names(columns)}
 
-    def dframe(self, columns=None, index=None):
+    def dframe(self, columns=None, rows=None, *, index=None):
         """
         Return table as ``pandas.DataFrame``.
 
-        :param list columns: column names or ``None`` for all columns.
+        :param columns: column names or 'all' or 'selected'
+        :param rows: row indices or 'all' or 'selected'
         :param str index: column name or sequence to be used as index, or
                           ``None`` for using the ``row_names``
         :returns: column data as ``pandas.DataFrame``
@@ -1184,12 +1218,12 @@ class Table(_Mapping):
         """
         import pandas as pd
         if index is None:
-            index = self.row_names()
+            index = self.row_names(rows)
         elif isinstance(index, str):
             index = util.remove_count_suffix_from_name(self[index])
         else:
             index = index
-        return pd.DataFrame(self.copy(columns), index=index)
+        return pd.DataFrame(self.copy(columns, rows), index=index)
 
     def getmat(self, name, idx, *dim):
         s = () if isinstance(idx, int) else (-1,)
