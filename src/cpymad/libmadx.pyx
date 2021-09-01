@@ -85,6 +85,7 @@ __all__ = [
     'get_table_row_names',
 
     'get_table_selected_rows',
+    'get_table_selected_rows_mask',
     'apply_table_selections',
 
     # sequence element list access
@@ -434,7 +435,7 @@ def get_table_column_count(table_name: str, selected: bool = False) -> int:
         return table.columns.curr
 
 
-def get_table_column(table_name: str, column_name: str) -> np.ndarray:
+def get_table_column(table_name: str, column_name: str, rows='all') -> np.ndarray:
     """
     Get data from the specified table.
 
@@ -454,19 +455,28 @@ def get_table_column(table_name: str, column_name: str) -> np.ndarray:
     cdef bytes _col_name = _cstr(column_name)
     cdef clib.column_info info = clib.table_get_column(_tab_name, _col_name)
     dtype = <bytes> info.datatype
+    # row indices:
+    if isinstance(rows, str):
+        if rows == 'all':
+            indices = np.arange(info.length)
+        elif rows == 'selected':
+            indices = get_table_selected_rows(table_name)
+        else:
+            raise ValueError("Invalid value for rows:", rows)
+    else:
+        indices = np.arange(info.length)[rows]
     # double:
     if dtype == b'i' or dtype == b'd':
         # YES, integers are internally stored as doubles in MAD-X:
         if info.length == 0:
             return np.empty(0)
         else:
-            return np.ctypeslib.as_array(<double [:info.length]> info.data)
+            return np.ctypeslib.as_array(
+                <double [:info.length]> info.data)[indices]
     # string:
     elif dtype == b'S':
         char_tmp = <char**> info.data
-        return np.array(
-            [_str(char_tmp[i]) for i in range(info.length)],
-            dtype=str)
+        return np.array([_str(char_tmp[i]) for i in indices], dtype=str)
     # invalid:
     elif dtype == b'V':
         raise ValueError("Column {!r} is not in table {!r}."
@@ -500,12 +510,15 @@ def get_table_row(table_name: str, row_index: int, columns='all') -> dict:
         raise RuntimeError("Unknown datatype {!r} in column {!r}."
                            .format(inform, table.columns.names[col_index]))
 
-    if columns == 'all':
-        indices = range(table.columns.curr)
-    elif columns == 'selected':
-        indices = [table.col_out.i[i] for i in range(table.col_out.curr)]
-        # fallback if selection missing:
-        indices = indices or range(table.columns.curr)
+    if isinstance(columns, str):
+        if columns == 'all':
+            indices = range(table.columns.curr)
+        elif columns == 'selected':
+            indices = [table.col_out.i[i] for i in range(table.col_out.curr)]
+            # fallback if selection missing:
+            indices = indices or range(table.columns.curr)
+        else:
+            raise ValueError("Invalid value for columns:", columns)
     else:
         indices = []
         for col in columns:
@@ -534,15 +547,18 @@ def get_table_row_count(table_name: str) -> int:
     return _find_table(table_name).curr
 
 
-def get_table_row_names(table_name: str, indices=None) -> list:
+def get_table_row_names(table_name: str, indices='all') -> list:
     """
     Return row names for every index (row number) in the list.
     """
     cdef clib.table* table = _find_table(table_name)
-    if indices == 'all' or indices is None:
-        indices = range(table.curr)
-    elif indices == 'selected':
-        indices = [table.row_out.i[i] for i in range(table.curr)]
+    if isinstance(indices, str):
+        if indices == 'all':
+            indices = range(table.curr)
+        elif indices == 'selected':
+            indices = [table.row_out.i[i] for i in range(table.curr)]
+        else:
+            raise ValueError("Invalid value for indices:", indices)
     elif isinstance(indices, int):
         return _get_table_row_name(table, indices)
     return [_get_table_row_name(table, i) for i in indices]
@@ -551,7 +567,15 @@ def get_table_row_names(table_name: str, indices=None) -> list:
 def get_table_selected_rows(table_name: str) -> list:
     """Return list of selected row indices in table (may be empty)."""
     cdef clib.table* table = _find_table(table_name)
-    return [table.row_out.i[i] for i in range(table.curr)]
+    return [i for i in range(table.curr) if table.row_out.i[i]]
+
+
+def get_table_selected_rows_mask(table_name: str) -> np.ndarray:
+    """Return boolean mask of which rows are selected in a table."""
+    cdef clib.table* table = _find_table(table_name)
+    return np.array(
+        [table.row_out.i[i] for i in range(table.curr)],
+        dtype=bool)
 
 
 def apply_table_selections(table_name: str):

@@ -6,7 +6,7 @@ import os
 import sys
 
 import numpy as np
-from numpy.testing import assert_allclose
+from numpy.testing import assert_allclose, assert_equal
 from pytest import approx, fixture, mark, raises
 
 import cpymad
@@ -17,6 +17,11 @@ from cpymad.madx import Madx, Sequence, metadata
 def mad():
     with Madx(prompt='X:> ') as mad:
         yield mad
+
+
+@fixture
+def lib(mad):
+    return mad._libmadx
 
 
 SEQU = """
@@ -658,6 +663,74 @@ def test_table(mad):
     assert_allclose(k[:, 1], sector.k2)
     assert_allclose(k[:, 3], sector.k4)
     assert_allclose(k[:, 4], sector.k5)
+
+
+def test_selected_columns(mad, lib):
+    mad.input(SEQU)
+    mad.command.beam()
+    mad.use('s1')
+
+    mad.select(flag='twiss', column=['s', 'x', 'y'])
+    table = mad.twiss(sequence='s1', betx=1, bety=1)
+    assert set(table) > {'s', 'x', 'y', 'betx', 'bety'}
+    assert set(table.copy()) > {'s', 'x', 'y', 'betx', 'bety'}
+    assert table.selected_columns() == ['s', 'x', 'y']
+    assert table.selection().col_names() == ['s', 'x', 'y']
+    assert table.selection().copy().keys() == {'s', 'x', 'y'}
+
+    mad.select(flag='twiss', clear=True)
+    mad.select(flag='twiss', column=['betx', 'bety'])
+    lib.apply_table_selections('twiss')
+    table = mad.table.twiss
+    assert set(table) > {'s', 'x', 'y', 'betx', 'bety'}
+    assert set(table.copy()) > {'s', 'x', 'y', 'betx', 'bety'}
+    assert table.selected_columns() == ['betx', 'bety']
+    assert table.selection().col_names() == ['betx', 'bety']
+    assert table.selection().copy().keys() == {'betx', 'bety'}
+
+
+def test_table_selected_rows(mad, lib):
+    mad.input(SEQU)
+    mad.command.beam()
+    mad.use('s1')
+
+    def check_selection(table, name):
+        assert_equal(
+            table.column(name, rows='selected'),
+            table[name][table.selected_rows()])
+        assert_equal(
+            table.column(name, rows='selected'),
+            table.selection()[name])
+
+    mad.select(flag='twiss', class_='quadrupole')
+    table = mad.twiss(sequence='s1', betx=1, bety=1)
+    assert table.selected_rows() == [2, 4]
+    check_selection(table, 'alfx')
+    check_selection(table, 'alfy')
+    check_selection(table, 'betx')
+    check_selection(table, 'bety')
+
+    mad.select(flag='twiss', clear=True)
+    mad.select(flag='twiss', class_='drift')
+    lib.apply_table_selections('twiss')
+    table = mad.table.twiss
+    assert table.selected_rows() == [1, 3, 5, 7]
+    check_selection(table, 'alfx')
+    check_selection(table, 'alfy')
+    check_selection(table, 'betx')
+    check_selection(table, 'bety')
+
+
+def test_table_selected_rows_mask(mad, lib):
+    mad.input(SEQU)
+    mad.command.beam()
+    mad.use('s1')
+
+    mad.select(flag='twiss', class_='quadrupole')
+    table = mad.twiss(sequence='s1', betx=1, bety=1)
+    mask = lib.get_table_selected_rows_mask('twiss')
+    assert mask.shape == (len(mad.sequence.s1.expanded_elements), )
+    assert_equal(mask.nonzero(), (table.selected_rows(), ))
 
 
 def test_attr(mad):
