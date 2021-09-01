@@ -482,9 +482,6 @@ class Madx:
             return expr
         if isinstance(expr, (list, ArrayAttribute)):
             return [self.eval(x) for x in expr]
-        # Try to prevent process crashes:
-        # NOTE: this limits to a sane subset of accepted MAD-X expressions.
-        util.check_expression(expr)
         return self._libmadx.eval(expr)
 
 

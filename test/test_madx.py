@@ -370,6 +370,35 @@ def test_eval(mad):
     assert mad.eval("1/QP_K1") == approx(0.5)
 
 
+def test_eval_functions(mad):
+    assert mad.eval("sin(1.0)") == approx(np.sin(1.0))
+    assert mad.eval("cos(1.0)") == approx(np.cos(1.0))
+
+    mad.input("""
+        mqf.k1 =  0.3037241107;
+        mqd.k1 = -0.3037241107;
+
+        fodo: sequence, l=10, refer=entry;
+        mqf: quadrupole, at=0, l=1, k1:=mqf.k1;
+        dff: drift,      at=1, l=4;
+        mqd: quadrupole, at=5, l=1, k1:=mqd.k1;
+        dfd: drift,      at=6, l=4;
+        endsequence;
+
+        beam;
+        use, sequence=fodo;
+        twiss, sequence=fodo, x=0.1;
+    """)
+
+    elems = mad.sequence.fodo.expanded_elements
+    twiss = mad.table.twiss
+
+    mad.input("mqf_x = table(twiss, mqf, x);")
+    assert mad.eval("table(twiss, mqf, x)") \
+        == twiss.row(elems.index('mqf')).x \
+        == mad.globals.mqf_x
+
+
 def test_globals(mad):
     g = mad.globals
     # Membership:
