@@ -660,6 +660,22 @@ def test_table(mad):
     assert_allclose(k[:, 4], sector.k5)
 
 
+def test_select(mad):
+    mad.input(SEQU)
+    mad.command.beam()
+    mad.use('s1')
+
+    mad.select(flag='twiss', class_='quadrupole')
+    table = mad.twiss(sequence='s1', betx=1, bety=1)
+    assert table.selected_rows() == [2, 4]
+
+    mad.select(flag='twiss', clear=True)
+    mad.select(flag='twiss', class_='drift')
+    table = mad.table.twiss
+    mad._libmadx.apply_table_selections('twiss')
+    assert table.selected_rows() == [1, 3, 5, 7]
+
+
 def test_attr(mad):
     assert hasattr(mad, 'constraint')
     assert hasattr(mad, 'constraint_')

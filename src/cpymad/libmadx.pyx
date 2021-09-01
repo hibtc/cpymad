@@ -551,7 +551,7 @@ def get_table_row_names(table_name: str, indices=None) -> list:
 def get_table_selected_rows(table_name: str) -> list:
     """Return list of selected row indices in table (may be empty)."""
     cdef clib.table* table = _find_table(table_name)
-    return [table.row_out.i[i] for i in range(table.curr)]
+    return [i for i in range(table.curr) if table.row_out.i[i]]
 
 
 def apply_table_selections(table_name: str):
