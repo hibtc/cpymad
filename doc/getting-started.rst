@@ -215,6 +215,18 @@ View of MAD-X tables::
     # get all twiss variables for 10th element:
     row = twiss[10]
 
+By default a table provides access to all available rows and columns. In order
+to restrict to the selection from a previous ``SELECT`` command, you can use
+the the ``table.selection()`` method::
+
+    twiss = madx.table.twiss.selection()
+
+    # only selected elements:
+    twiss.betx
+
+    # only selected columns:
+    list(twiss)
+
 
 globals
 -------
