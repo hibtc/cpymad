@@ -1144,6 +1144,14 @@ class Table(_Mapping):
         self._cache[column.lower()] = data = self._query(column)
         return data
 
+    def column(self, column: str, rows='all') -> np.ndarray:
+        """Retrieve all specified rows in the given column of the table.
+
+        :param column: column name
+        :param rows: a list of row indices or ``'all'`` or ``'selected'``
+        """
+        return self._libmadx.get_table_column(self._name, column.lower(), rows)
+
     def row(self, index, columns='all'):
         """Retrieve one row from the table."""
         return AttrDict(self._libmadx.get_table_row(self._name, index, columns))

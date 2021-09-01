@@ -670,9 +670,18 @@ def test_select(mad, lib):
     mad.command.beam()
     mad.use('s1')
 
+    def check_selection(table, name):
+        assert_equal(
+            table.column(name, rows='selected'),
+            table.column(name, rows='all')[table.selected_rows()])
+
     mad.select(flag='twiss', class_='quadrupole')
     table = mad.twiss(sequence='s1', betx=1, bety=1)
     assert table.selected_rows() == [2, 4]
+    check_selection(table, 'alfx')
+    check_selection(table, 'alfy')
+    check_selection(table, 'betx')
+    check_selection(table, 'bety')
 
     mad.select(flag='twiss', clear=True)
     mad.select(flag='twiss', class_='drift')
@@ -682,6 +691,10 @@ def test_select(mad, lib):
     mask = lib.get_table_selected_rows_mask('twiss')
     assert mask.shape == (len(mad.sequence.s1.expanded_elements), )
     assert_equal(mask.nonzero(), (table.selected_rows(), ))
+    check_selection(table, 'alfx')
+    check_selection(table, 'alfy')
+    check_selection(table, 'betx')
+    check_selection(table, 'bety')
 
 
 def test_attr(mad):

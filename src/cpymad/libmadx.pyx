@@ -435,7 +435,7 @@ def get_table_column_count(table_name: str, selected: bool = False) -> int:
         return table.columns.curr
 
 
-def get_table_column(table_name: str, column_name: str) -> np.ndarray:
+def get_table_column(table_name: str, column_name: str, rows='all') -> np.ndarray:
     """
     Get data from the specified table.
 
@@ -455,19 +455,25 @@ def get_table_column(table_name: str, column_name: str) -> np.ndarray:
     cdef bytes _col_name = _cstr(column_name)
     cdef clib.column_info info = clib.table_get_column(_tab_name, _col_name)
     dtype = <bytes> info.datatype
+    # row indices:
+    if rows == 'all':
+        indices = np.arange(info.length)
+    elif rows == 'selected':
+        indices = get_table_selected_rows(table_name)
+    else:
+        indices = np.arange(info.length)[rows]
     # double:
     if dtype == b'i' or dtype == b'd':
         # YES, integers are internally stored as doubles in MAD-X:
         if info.length == 0:
             return np.empty(0)
         else:
-            return np.ctypeslib.as_array(<double [:info.length]> info.data)
+            return np.ctypeslib.as_array(
+                <double [:info.length]> info.data)[indices]
     # string:
     elif dtype == b'S':
         char_tmp = <char**> info.data
-        return np.array(
-            [_str(char_tmp[i]) for i in range(info.length)],
-            dtype=str)
+        return np.array([_str(char_tmp[i]) for i in indices], dtype=str)
     # invalid:
     elif dtype == b'V':
         raise ValueError("Column {!r} is not in table {!r}."
