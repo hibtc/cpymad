@@ -5,13 +5,16 @@ import re
 import os
 import sys
 import tempfile
+from collections import namedtuple
 from contextlib import contextmanager
+from enum import Enum
 from numbers import Number
 import collections.abc as abc
 
 import numpy as np
 
-from .types import (
+from cpymad.parsing import Parser
+from cpymad.types import (
     Range, Constraint,
     PARAM_TYPE_LOGICAL, PARAM_TYPE_INTEGER,
     PARAM_TYPE_DOUBLE, PARAM_TYPE_STRING, PARAM_TYPE_CONSTRAINT,
@@ -335,6 +338,73 @@ def format_command(*args, **kwargs) -> str:
 
 # validation of MAD-X expressions
 
+class T(Enum):
+    """Terminal/token type."""
+    WHITESPACE = 0
+    LPAREN     = 1
+    RPAREN     = 2
+    COMMA      = 3
+    SIGN       = 4
+    OPERATOR   = 5
+    SYMBOL     = 6
+    NUMBER     = 7
+    END        = 8
+
+    __str__ = __repr__ = lambda self: self.name
+
+
+class N(Enum):
+    """Nonterminal symbol."""
+    start            = 0
+    expression       = 1
+    expression_inner = 2
+    expression_tail  = 3
+    symbol_tail      = 4
+    argument_list    = 5
+    argument_tail    = 6
+
+    __str__ = __repr__ = lambda self: self.name
+
+
+grammar = {
+    N.start: [
+        [N.expression, T.END],
+    ],
+    N.expression: [
+        [T.WHITESPACE, N.expression],
+        [N.expression_inner],
+    ],
+    N.expression_inner: [
+        [T.SIGN, N.expression],
+        [T.LPAREN, N.expression, T.RPAREN, N.expression_tail],
+        [T.NUMBER, N.expression_tail],
+        [T.SYMBOL, N.symbol_tail],
+    ],
+    N.expression_tail: [
+        [T.WHITESPACE, N.expression_tail],
+        [T.SIGN, N.expression],
+        [T.OPERATOR, N.expression],
+        [],
+    ],
+    N.symbol_tail: [
+        [T.WHITESPACE, N.symbol_tail],
+        [T.LPAREN, N.argument_list, T.RPAREN, N.expression_tail],
+        [T.SIGN, N.expression],
+        [T.OPERATOR, N.expression],
+        [],
+    ],
+    N.argument_list: [
+        [T.WHITESPACE, N.argument_list],
+        [N.expression_inner, N.argument_tail],
+        [],
+    ],
+    N.argument_tail: [
+        [T.COMMA, N.argument_list],
+        [],
+    ],
+}
+
+
 def _regex(expr: str) -> callable:
     regex = re.compile(expr)
     def match(text, i):
@@ -349,24 +419,38 @@ def _choice(choices: str) -> callable:
     return match
 
 
-_expr_tokens = [
-    ('WHITESPACE',  _choice(' \t')),
-    ('LPAREN',      _choice('(')),
-    ('RPAREN',      _choice(')')),
-    ('OPERATOR',    _choice('+-/*^')),
-    ('SYMBOL',      _regex(r'[a-zA-Z_][a-zA-Z0-9_.]*(->[a-zA-Z_][a-zA-Z0-9_]*)?')),
-    ('NUMBER',      _regex(r'(\d+(\.\d*)?|\.\d+)([eE][+\-]?\d+)?')),
-]
+_expr_tokens = {
+    T.WHITESPACE:   _choice(' \t'),
+    T.LPAREN:       _choice('('),
+    T.RPAREN:       _choice(')'),
+    T.COMMA:        _choice(','),
+    T.SIGN:         _choice('+-'),
+    T.OPERATOR:     _choice('/*^'),
+    T.SYMBOL:       _regex(r'[a-zA-Z_][a-zA-Z0-9_.]*(->[a-zA-Z_][a-zA-Z0-9_]*)?'),
+    T.NUMBER:       _regex(r'(\d+(\.\d*)?|\.\d+)([eE][+\-]?\d+)?'),
+}
+
+_expr_parser = Parser(T, grammar, N.start)
 
 
-def _tokenize(tokens, expr: str):
+class Token(namedtuple('Token', ['type', 'start', 'length', 'expr'])):
+
+    @property
+    def text(self):
+        return self.expr[self.start:self.start + self.length]
+
+    def __repr__(self):
+        return '{}({!r})'.format(self.type, self.text)
+
+
+def tokenize(tokens, expr: str):
     i = 0
     stop = len(expr)
     while i < stop:
-        for tokname, tokmatch in tokens:
+        for toktype, tokmatch in tokens:
             l = tokmatch(expr, i)
             if l > 0:
-                yield tokname, i, l
+                yield Token(toktype, i, l, expr)
                 i += l
                 break
         else:
@@ -375,7 +459,6 @@ def _tokenize(tokens, expr: str):
 
 
 def check_expression(expr: str):
-
     """
     Check if the given expression is a valid MAD-X expression that is safe to
     pass to :meth:`cpymad.madx.Madx.eval`.
@@ -388,60 +471,10 @@ def check_expression(expr: str):
     accepted by MAD-X and rejects valid but strange ones such as a number
     formatting '.' representing zero.
     """
-
-    expr = expr.strip()
-
-    def unexpected(tok, i, l):
-        return "Unexpected {} {!r} after {!r} in expression: {!r}".format(
-            tok, expr[i:i+l], expr[:i], expr)
-
-    _EXPRESSION = 'expression'
-    _OPERATOR = 'operator'
-    _ATOM = 'atom'
-    expect = _EXPRESSION
-    paren_level = 0
-
-    # expr =
-    #       symbol | number
-    #   |   '(' expr ')'
-    #   |   expr op expr
-
-    for tok, i, l in _tokenize(_expr_tokens, expr):
-        # ignore whitespace
-        if tok == 'WHITESPACE':
-            pass
-        # expr = symbol | number
-        elif tok in ('SYMBOL', 'NUMBER'):
-            if expect not in (_EXPRESSION, _ATOM):
-                raise ValueError(unexpected(tok, i, l))
-            expect = _OPERATOR
-        # expr = '(' expr ')'
-        elif tok == 'LPAREN':
-            if expect not in (_EXPRESSION, _ATOM):
-                raise ValueError(unexpected(tok, i, l))
-            paren_level += 1
-            expect = _EXPRESSION
-        elif tok == 'RPAREN':
-            if expect != _OPERATOR:
-                raise ValueError(unexpected(tok, i, l))
-            paren_level -= 1
-            expect = _OPERATOR
-        # expr = expr op expr
-        elif tok == 'OPERATOR':
-            if expect == _OPERATOR:
-                expect = _EXPRESSION
-            elif expect == _EXPRESSION and expr[i] in '+-':
-                expect = _ATOM
-            else:
-                raise ValueError(unexpected(tok, i, l))
-
-    if expect != _OPERATOR:
-        raise ValueError("Unexpected end-of-string in expression: {!r}"
-                         .format(expr))
-    if paren_level != 0:
-        raise ValueError("{} unclosed left-parens in expression: {!r}"
-                         .format(paren_level, expr))
-
+    expr = expr.strip().lower()
+    tokens = list(tokenize(list(_expr_tokens.items()), expr))
+    tokens.append(Token(T.END, len(expr), 0, expr))
+    _expr_parser.parse(tokens)  # raises ValueError
     return True
 
 
