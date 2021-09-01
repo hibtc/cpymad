@@ -96,17 +96,17 @@ def create_parse_table(terminals, grammar, start):
     :returns: parse table nonterminal -> {terminal -> production}
     """
     empty = fix_point(extend_empty_sets, {}, grammar=grammar)
-    empty |= {t: False for t in terminals}
-    table = {t: {t: []} for t in terminals} | {n: {} for n in grammar}
+    empty.update({t: False for t in terminals})
+    table = {**{t: {t: []} for t in terminals}, **{n: {} for n in grammar}}
     table = fix_point(
         extend_firsts_sets,
         table,
         empty=empty,
         grammar=grammar)
-    follow = (
-        {t: set() for t in terminals} |
-        {n: set() for n in grammar}
-    )
+    follow = {
+        **{t: set() for t in terminals},
+        **{n: set() for n in grammar},
+    }
     follow = fix_point(
         extend_follow_sets, follow,
         firsts=table, empty=empty, grammar=grammar)
@@ -133,7 +133,7 @@ def extend_parse_table(symbol, old, new):
                 "Grammar is ambiguous. Duplicate entry "
                 "in parse table: <{}, {}> -> {} or {}"
             ).format(symbol, key, old[key], new[key]))
-    old |= new
+    old.update(new)
 
 
 class Parser:
@@ -152,10 +152,10 @@ class Parser:
         # precompule rules lookup:
         self.rules = {symbol: {} for symbol in table}
         for symbol, rules in table.items():
-            self.rules[symbol] |= {
+            self.rules[symbol].update({
                 t: p and [self.rules[n] for n in p]
                 for t, p in rules.items()
-            }
+            })
         self.start = self.rules[start]
 
     def parse(self, tokens):
@@ -178,9 +178,9 @@ class Parser:
                     tokens.pop()
         except KeyError:
             raise ValueError(
-                f"Unexpected {token.type} in:\n"
-                f"    {token.expr!r}\n"
-                f"     "
+                ("Unexpected {} in:\n"
+                 "    {!r}\n"
+                 "     ").format(token.type, token.expr)
                 + ' ' * token.start
                 + '^' * max(token.length, 1)
             ) from None

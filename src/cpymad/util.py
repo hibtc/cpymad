@@ -7,7 +7,7 @@ import sys
 import tempfile
 from collections import namedtuple
 from contextlib import contextmanager
-from enum import Enum, auto
+from enum import Enum
 from numbers import Number
 import collections.abc as abc
 
@@ -340,28 +340,28 @@ def format_command(*args, **kwargs) -> str:
 
 class T(Enum):
     """Terminal/token type."""
-    WHITESPACE = auto()
-    LPAREN     = auto()
-    RPAREN     = auto()
-    COMMA      = auto()
-    SIGN       = auto()
-    OPERATOR   = auto()
-    SYMBOL     = auto()
-    NUMBER     = auto()
-    END        = auto()
+    WHITESPACE = 0
+    LPAREN     = 1
+    RPAREN     = 2
+    COMMA      = 3
+    SIGN       = 4
+    OPERATOR   = 5
+    SYMBOL     = 6
+    NUMBER     = 7
+    END        = 8
 
     __str__ = __repr__ = lambda self: self.name
 
 
 class N(Enum):
     """Nonterminal symbol."""
-    start            = auto()
-    expression       = auto()
-    expression_inner = auto()
-    expression_tail  = auto()
-    symbol_tail      = auto()
-    argument_list    = auto()
-    argument_tail    = auto()
+    start            = 0
+    expression       = 1
+    expression_inner = 2
+    expression_tail  = 3
+    symbol_tail      = 4
+    argument_list    = 5
+    argument_tail    = 6
 
     __str__ = __repr__ = lambda self: self.name
 
@@ -440,7 +440,7 @@ class Token(namedtuple('Token', ['type', 'start', 'length', 'expr'])):
         return self.expr[self.start:self.start + self.length]
 
     def __repr__(self):
-        return f'{self.type}({self.text!r})'
+        return '{}({!r})'.format(self.type, self.text)
 
 
 def tokenize(tokens, expr: str):
