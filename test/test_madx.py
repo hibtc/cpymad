@@ -6,7 +6,7 @@ import os
 import sys
 
 import numpy as np
-from numpy.testing import assert_allclose
+from numpy.testing import assert_allclose, assert_equal
 from pytest import approx, fixture, mark, raises
 
 import cpymad
@@ -17,6 +17,11 @@ from cpymad.madx import Madx, Sequence, metadata
 def mad():
     with Madx(prompt='X:> ') as mad:
         yield mad
+
+
+@fixture
+def lib(mad):
+    return mad._libmadx
 
 
 SEQU = """
@@ -660,7 +665,7 @@ def test_table(mad):
     assert_allclose(k[:, 4], sector.k5)
 
 
-def test_select(mad):
+def test_select(mad, lib):
     mad.input(SEQU)
     mad.command.beam()
     mad.use('s1')
@@ -671,9 +676,12 @@ def test_select(mad):
 
     mad.select(flag='twiss', clear=True)
     mad.select(flag='twiss', class_='drift')
+    lib.apply_table_selections('twiss')
     table = mad.table.twiss
-    mad._libmadx.apply_table_selections('twiss')
     assert table.selected_rows() == [1, 3, 5, 7]
+    mask = lib.get_table_selected_rows_mask('twiss')
+    assert mask.shape == (len(mad.sequence.s1.expanded_elements), )
+    assert_equal(mask.nonzero(), (table.selected_rows(), ))
 
 
 def test_attr(mad):

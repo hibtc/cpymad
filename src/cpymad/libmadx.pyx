@@ -85,6 +85,7 @@ __all__ = [
     'get_table_row_names',
 
     'get_table_selected_rows',
+    'get_table_selected_rows_mask',
     'apply_table_selections',
 
     # sequence element list access
@@ -552,6 +553,14 @@ def get_table_selected_rows(table_name: str) -> list:
     """Return list of selected row indices in table (may be empty)."""
     cdef clib.table* table = _find_table(table_name)
     return [i for i in range(table.curr) if table.row_out.i[i]]
+
+
+def get_table_selected_rows_mask(table_name: str) -> np.ndarray:
+    """Return boolean mask of which rows are selected in a table."""
+    cdef clib.table* table = _find_table(table_name)
+    return np.array(
+        [table.row_out.i[i] for i in range(table.curr)],
+        dtype=bool)
 
 
 def apply_table_selections(table_name: str):
