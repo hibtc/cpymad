@@ -675,8 +675,8 @@ def test_selected_columns(mad, lib):
     assert set(table) > {'s', 'x', 'y', 'betx', 'bety'}
     assert set(table.copy()) > {'s', 'x', 'y', 'betx', 'bety'}
     assert table.selected_columns() == ['s', 'x', 'y']
-    assert table.select().col_names() == ['s', 'x', 'y']
-    assert table.select().copy().keys() == {'s', 'x', 'y'}
+    assert table.selection().col_names() == ['s', 'x', 'y']
+    assert table.selection().copy().keys() == {'s', 'x', 'y'}
 
     mad.select(flag='twiss', clear=True)
     mad.select(flag='twiss', column=['betx', 'bety'])
@@ -685,8 +685,8 @@ def test_selected_columns(mad, lib):
     assert set(table) > {'s', 'x', 'y', 'betx', 'bety'}
     assert set(table.copy()) > {'s', 'x', 'y', 'betx', 'bety'}
     assert table.selected_columns() == ['betx', 'bety']
-    assert table.select().col_names() == ['betx', 'bety']
-    assert table.select().copy().keys() == {'betx', 'bety'}
+    assert table.selection().col_names() == ['betx', 'bety']
+    assert table.selection().copy().keys() == {'betx', 'bety'}
 
 
 def test_table_selected_rows(mad, lib):
@@ -700,7 +700,7 @@ def test_table_selected_rows(mad, lib):
             table[name][table.selected_rows()])
         assert_equal(
             table.column(name, rows='selected'),
-            table.select()[name])
+            table.selection()[name])
 
     mad.select(flag='twiss', class_='quadrupole')
     table = mad.twiss(sequence='s1', betx=1, bety=1)

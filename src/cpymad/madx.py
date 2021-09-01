@@ -1076,7 +1076,7 @@ class Table(_Mapping):
         if _check and not libmadx.table_exists(name):
             raise ValueError("Invalid table: {!r}".format(name))
 
-    def select(self, columns='selected', rows=None) -> "Table":
+    def selection(self, columns='selected', rows=None) -> "Table":
         """
         Return a Table object that only retrieves the specified rows and
         columns by default.
