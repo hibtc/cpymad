@@ -1,6 +1,74 @@
 Changelog
 ~~~~~~~~~
 
+1.9.0
+=====
+Date: 01.09.2021
+
+
+API changes:
+
+- ``Table.selected_rows()`` now actually returns the *indices* of the selected
+  elements as documented, rather than returning a boolean mask.
+- ``Madx.eval()`` does no automatic syntax checking anymore. This is a minor
+  performance improvement and is more consistent with ``Madx.input()`` which
+  doesn't check the syntax either. Expressions can still be checked manually
+  using ``cpymad.util.check_expression``
+
+
+New features:
+
+- (#90) Add comparison operators for ArrayAttribute (see #89)
+- (#94) Add keyword argument ``Table.dframe(index=..)`` to allow specifying
+  a column or sequence as the DataFrame index rather than using the default
+  (``row_names()``). This is essential when accessing a table after having
+  executed a ``USE`` statement (see #93).
+- (#97) Add basic support for unexpanded nested sequences by returning
+  them as elements of type ``Sequence`` from ``Sequence.elements`` (see #76)
+- Add keyword argument ``Madx(prompt=...)`` as a shortcut for the most common
+  ``CommandLog`` use case
+- (#99) Add method ``Table.column()`` to retrieve specified rows in a specific
+  column.
+- (#99) Add ``rows`` and/or ``columns`` arguments to several ``Table`` methods
+  to allow querying only specific columns or rows from the MAD-X process
+- (#99) Add method ``Table.selection()`` that returns a new ``Table`` object
+  which exposes only those rows/columns marked by a previous ``SELECT`` statement
+  (see #98)
+- Fix ``Madx.eval()`` to handle function calls, e.g.: ``sin(...)`` or ``table(...)``
+
+
+Bug fixes:
+
+- (#95) Fix ``KeyError`` when accessing tables after ``CLEAR`` (see #57)
+- (#99) Fix requesting a subset of table rows using using a *numpy array*
+  of indices
+- Fix expression syntax checker to not reject function calls anymore. Rewrite
+  the checker to use a LL(1) parser generator.
+
+
+Documentation:
+
+- Add links to external documentation using intersphinx
+- Use automodapi to create module and class summary pages
+- Use type hints from function annotations in documentation
+- Mark more objects for inclusion in the documentation
+- Add "Edit on GitHub" link to directly edit documentation
+- Add many function annotations
+- Generate class inheritance diagrams using graphviz
+- Document problem with ``Table.row_names()`` after ``USE`` (#93)
+
+
+Tests/CI:
+
+- Move python 3.5 deprecation warning to package level
+- Create GitHub releases for tags automatically (required for zenodo DOIs)
+- Setup sequence definitions individually and explicitly in each test
+- Add module for regression tests for all future bugfixes
+- Put transfer map tests in their own module
+- Port tests from unittest to pytest for simplicity
+- Mark flaky tests for expected failure on macOS and windows
+
+
 1.8.1
 =====
 Date: 04.05.2021
