@@ -13,7 +13,7 @@ if [[ ! -f CMakeCache.txt ]]; then
     cmake .. \
         -DCMAKE_POLICY_DEFAULT_CMP0077=NEW \
         -DCMAKE_POLICY_DEFAULT_CMP0042=NEW \
-        -DCMAKE_OSX_ARCHITECTURES=x86_64 \
+        -DCMAKE_OSX_ARCHITECTURES=arm64 \
         -DCMAKE_C_COMPILER=gcc-9 \
         -DCMAKE_CXX_COMPILER=g++-9 \
         -DCMAKE_Fortran_COMPILER=gfortran-9 \
