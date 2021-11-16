@@ -39,6 +39,7 @@ except ImportError:
 # Linux:    linux-x86_64/...
 # Mac:      darwin*
 IS_WIN = get_platform().startswith('win')
+IS_ARM = get_platform().startswith('linux-aarch')
 
 
 # We parse command line options using our own mechanim. We could use
@@ -57,15 +58,18 @@ def command_line_options():
     option(parser, 'lapack', 'MAD-X was {NOT}built with LAPACK')
     option(parser, 'blas', 'MAD-X was {NOT}built with BLAS')
     option(parser, 'X11', 'MAD-X was {NOT}built with MADX_X11')
+    option(parser, 'quadmath', 'do {NOT}link against libquadmath')
     return parser
 
 
 def option(parser, name, descr):
     """Add a negatable option to parser."""
+    env_var = os.environ.get(name.upper())
+    default = bool(int(env_var)) if env_var else None
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
         '--' + name, dest=name,
-        default=bool(int(os.environ.get(name.upper()) or 0)),
+        default=default,
         action='store_true', help=descr.format(NOT=''))
     group.add_argument(
         '--no-' + name, dest=name,
@@ -94,8 +98,9 @@ def exec_file(path):
 
 def get_extension_args(madxdir, shared, static, **libs):
     """Get arguments for C-extension (include pathes, libraries, etc)."""
-    if libs.get('X11') is None:
-        libs['X11'] = not IS_WIN
+    # libquadmath isn't available on aarch64, see #101:
+    if libs.get('quadmath') is None:
+        libs['quadmath'] = not IS_ARM
     include_dirs = []
     library_dirs = []
 
@@ -109,7 +114,7 @@ def get_extension_args(madxdir, shared, static, **libs):
     if not shared:
         # NOTE: If MAD-X was built with BLAS/LAPACK, you must manually provide
         # arguments `python setup.py build_ext -lblas -llapack`!
-        libraries += ['DISTlib', 'ptc', 'gc-lib', 'stdc++', 'gfortran', 'quadmath']
+        libraries += ['DISTlib', 'ptc', 'gc-lib', 'stdc++', 'gfortran']
         libraries += [lib for lib, use in libs.items() if use]
 
     link_args = ['--static'] if static and not IS_WIN else []
