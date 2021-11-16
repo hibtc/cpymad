@@ -24,4 +24,4 @@ $PY/cmake .. \
     -DMADX_ONLINE=OFF \
     -DMADX_FORCE_32=OFF \
     -DMADX_X11=OFF
-$PY/cmake --build . --target install
+$PY/cmake --build . --target install -j

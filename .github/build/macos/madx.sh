@@ -25,4 +25,4 @@ cmake .. \
     -DMADX_ONLINE=OFF \
     -DMADX_FORCE_32=OFF \
     -DMADX_X11=OFF
-cmake --build . --target install
+cmake --build . --target install -j
