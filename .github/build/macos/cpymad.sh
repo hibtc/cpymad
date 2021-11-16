@@ -8,9 +8,9 @@ build()
 {
     py_ver=$1
 
-    _ conda create -qyf -n py$py_ver python=$py_ver wheel cython -c anaconda
+    _ conda create -qyf -n py$py_ver python=$py_ver -c anaconda
     _ conda activate py$py_ver
-    pip install -U setuptools
+    pip install -U setuptools wheel cython
     rm -f src/cpymad/libmadx.c
     python setup.py sdist bdist_wheel
     _ conda deactivate
