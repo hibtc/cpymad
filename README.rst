@@ -8,8 +8,12 @@ MAD-X interpreter in python.
 .. _Cython: https://cython.org/
 .. _MAD-X: https://cern.ch/mad
 
+
 **Note:** Support for 32bit builds and python 2.7 has been removed in version
-1.8.0. python 3.5 is deprecated and will be removed in a future release.
+1.8.0.
+
+**Note:** python 3.5 and manylinux1 have reached EOL. Support will be
+removed in a future release.
 
 
 Links
