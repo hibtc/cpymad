@@ -6,7 +6,7 @@ on:
 jobs:
   build_macos:
     name: "Build: MacOS"
-    runs-on: macos-latest
+    runs-on: macos-11
     steps:
       - uses: actions/checkout@v2
       - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
