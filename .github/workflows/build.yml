@@ -36,13 +36,39 @@ jobs:
         with:
           madx_version: ${{ env.MADX_VERSION }}
 
+      - name: Set up Docker buildx
+        uses: docker/setup-buildx-action@v1
+
+      - uses: actions/cache@v1
+        with:
+          path: /tmp/buildx-cache
+          key: "\
+            ${{ runner.os }}-buildx-manylinux1-\
+            ${{ hashFiles('.github/build/manylinux1/Dockerfile') }}\
+          "
+
+      - run: echo "UID=$(id -u)" >> $GITHUB_ENV
+      - run: echo "GID=$(id -g)" >> $GITHUB_ENV
       - name: Prepare docker image
-        run: |
-          docker buildx build .github/build/${{ matrix.manylinux }} \
-            --build-arg UID=`id -u` \
-            --build-arg GID=`id -g` \
-            --build-arg BASE=${{ matrix.manylinux }} \
-            -t cpymad-builder
+        uses: docker/build-push-action@v2
+        with:
+          load: true
+          push: false
+          tags: builder
+          context: .github/build/${{ matrix.manylinux }}
+          cache-from: type=local,src=/tmp/buildx-cache
+          cache-to: type=local,dest=/tmp/buildx-cache
+          build-args: |
+            BASE=${{ matrix.manylinux }}
+            UID=${{ env.UID }}
+            GID=${{ env.GID }}
+
+        # run: |
+        #   docker buildx build .github/build/${{ matrix.manylinux }} \
+        #     --build-arg UID=`id -u` \
+        #     --build-arg GID=`id -g` \
+        #     --build-arg BASE=${{ matrix.manylinux }} \
+        #     -t cpymad-builder
 
       - name: Build MAD-X
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
