@@ -1,10 +1,6 @@
 #! /usr/bin/env bash
 set -ex
 
-if [[ $AUDITWHEEL_PLAT == manylinux2014_* ]]; then
-    yum install -y glibc-static
-fi
-
 # Build MAD-X static library from prepared sources.
 # Must be run from the root the directory of the MAD-X sources.
 # Builds in './build' and installs to './dist'.
@@ -13,7 +9,6 @@ mkdir -p build
 cd build
 
 if [[ ! -f CMakeCache.txt ]]; then
-    $PY/pip install --upgrade cmake
     $PY/cmake .. \
         -DBUILD_SHARED_LIBS=OFF \
         -DMADX_STATIC=ON \
