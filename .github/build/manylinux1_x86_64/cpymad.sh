@@ -22,7 +22,7 @@ tar -c $(cat src/cpymad.egg-info/SOURCES.txt) |
 # source distribution can be used as installation medium. We will later
 # upload this exact source distribution to PyPI:
 pushd build
-$PY/python setup.py sdist
+python setup.py sdist
 
 for PYBIN in /opt/python/cp3*/bin; do
     "${PYBIN}/pip" wheel dist/*.tar.gz --no-deps -w dist/

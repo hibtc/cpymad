@@ -9,7 +9,7 @@ mkdir -p build
 cd build
 
 if [[ ! -f CMakeCache.txt ]]; then
-    $PY/cmake .. \
+    cmake .. \
         -DBUILD_SHARED_LIBS=OFF \
         -DMADX_STATIC=ON \
         -DCMAKE_INSTALL_PREFIX=../dist \
@@ -23,4 +23,4 @@ if [[ ! -f CMakeCache.txt ]]; then
         -DMADX_X11=OFF
 fi
 
-$PY/cmake --build . --target install -j
+cmake --build . --target install -j
