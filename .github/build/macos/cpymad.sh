@@ -28,3 +28,4 @@ build 3.6
 build 3.7
 build 3.8
 build 3.9
+build 3.10
