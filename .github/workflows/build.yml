@@ -4,9 +4,14 @@ on:
   pull_request:
 
 jobs:
-  build_manylinux1:
-    name: "Build: manylinux1"
+  build_linux:
+    name: "Build: Linux"
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        manylinux:
+          - manylinux1_x86_64
+          - manylinux2014_x86_64
     steps:
       - uses: actions/checkout@v2
       - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
@@ -20,9 +25,9 @@ jobs:
           path: ../MAD-X/dist
           key: "\
             madx-${{ env.MADX_VERSION }}-\
-            manylinux1-\
+            ${{ matrix.manylinux }}-\
             patches-${{ hashFiles('.github/patch/*') }}-\
-            scripts-${{ hashFiles('.github/build/manylinux1/madx*') }}\
+            scripts-${{ hashFiles('.github/build/manylinux*/madx*') }}\
           "
 
       - name: Prepare MAD-X source
@@ -37,66 +42,16 @@ jobs:
           docker run --rm --init \
             -w /mnt/MAD-X \
             -v `pwd`/..:/mnt \
-            quay.io/pypa/manylinux1_x86_64 \
-            ../cpymad/.github/build/manylinux1/madx.sh
+            quay.io/pypa/${{ matrix.manylinux }} \
+            ../cpymad/.github/build/${{ matrix.manylinux }}/madx.sh
 
       - name: Build cpymad wheels
         run: |
           docker run --rm --init \
             -w /mnt/cpymad \
             -v `pwd`/..:/mnt \
-            quay.io/pypa/manylinux1_x86_64 \
-            .github/build/manylinux1/cpymad.sh
-
-      - name: Upload cpymad wheels
-        uses: actions/upload-artifact@v2
-        with:
-          name: dist-linux
-          path: dist
-
-  build_manylinux2014:
-    name: "Build: manylinux2014"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
-
-      - name: Download cached MAD-X build
-        id: madx-build-cache
-        # Do NOT use cache@v2, it can't handle relative paths with '..' nor
-        # absolute paths on windows!
-        uses: actions/cache@v1
-        with:
-          path: ../MAD-X/dist
-          key: "\
-            madx-${{ env.MADX_VERSION }}-\
-            manylinux2014-\
-            patches-${{ hashFiles('.github/patch/*') }}-\
-            scripts-${{ hashFiles('.github/build/manylinux2014/madx*') }}\
-          "
-
-      - name: Prepare MAD-X source
-        if: steps.madx-build-cache.outputs.cache-hit != 'true'
-        uses: ./.github/checkout-madx
-        with:
-          madx_version: ${{ env.MADX_VERSION }}
-
-      - name: Build MAD-X
-        if: steps.madx-build-cache.outputs.cache-hit != 'true'
-        run: |
-          docker run --rm --init \
-            -w /mnt/MAD-X \
-            -v `pwd`/..:/mnt \
-            quay.io/pypa/manylinux2014_x86_64 \
-            ../cpymad/.github/build/manylinux2014/madx.sh
-
-      - name: Build cpymad wheels
-        run: |
-          docker run --rm --init \
-            -w /mnt/cpymad \
-            -v `pwd`/..:/mnt \
-            quay.io/pypa/manylinux2014_x86_64 \
-            .github/build/manylinux2014/cpymad.sh
+            quay.io/pypa/${{ matrix.manylinux }} \
+            .github/build/${{ matrix.manylinux }}/cpymad.sh
 
       - name: Upload cpymad wheels
         uses: actions/upload-artifact@v2
@@ -234,7 +189,7 @@ jobs:
   test:
     name: Tests
     runs-on: ${{ matrix.os == 'linux' && 'ubuntu' || matrix.os }}-latest
-    needs: [build_manylinux1, build_manylinux2014, build_windows, build_macos]
+    needs: [build_linux, build_windows, build_macos]
     strategy:
       matrix:
         # 32bit python is currently only available on windows in
@@ -281,7 +236,7 @@ jobs:
 
   documentation:
     name: Update documentation
-    needs: build_manylinux2014
+    needs: build_linux
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
