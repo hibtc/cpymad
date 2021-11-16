@@ -38,7 +38,7 @@ jobs:
 
       - name: Prepare docker image
         run: |
-          docker build .github/build/${{ matrix.manylinux }} \
+          docker buildx build .github/build/${{ matrix.manylinux }} \
             --build-arg UID=`id -u` \
             --build-arg GID=`id -g` \
             --build-arg BASE=${{ matrix.manylinux }} \
