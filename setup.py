@@ -62,10 +62,12 @@ def command_line_options():
 
 def option(parser, name, descr):
     """Add a negatable option to parser."""
+    env_var = os.environ.get(name.upper())
+    default = bool(int(env_var)) if env_var else None
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
         '--' + name, dest=name,
-        default=bool(int(os.environ.get(name.upper()) or 0)),
+        default=default,
         action='store_true', help=descr.format(NOT=''))
     group.add_argument(
         '--no-' + name, dest=name,
@@ -94,8 +96,6 @@ def exec_file(path):
 
 def get_extension_args(madxdir, shared, static, **libs):
     """Get arguments for C-extension (include pathes, libraries, etc)."""
-    if libs.get('X11') is None:
-        libs['X11'] = not IS_WIN
     include_dirs = []
     library_dirs = []
 
