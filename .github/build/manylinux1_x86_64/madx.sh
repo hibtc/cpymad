@@ -12,8 +12,6 @@ fi
 mkdir -p build
 cd build
 
-: ${PY:=/opt/python/cp36-cp36m/bin}
-
 if [[ ! -f CMakeCache.txt ]]; then
     $PY/pip install --upgrade cmake
     $PY/cmake .. \

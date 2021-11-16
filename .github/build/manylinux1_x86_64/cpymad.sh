@@ -5,8 +5,6 @@ set -ex
 # Expects a built madx distribution in '../MAD-X/dist'.
 # Builds in './build' and places wheels in './dist'.
 
-: ${PY:=/opt/python/cp36-cp36m/bin}
-
 # Build variables:
 export MADXDIR=$(readlink -nf ../MAD-X/dist)
 export X11=0 BLAS=0 LAPACK=0
