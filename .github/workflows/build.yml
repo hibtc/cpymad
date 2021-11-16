@@ -167,6 +167,10 @@ jobs:
         with: {python-version: "3.9"}
       - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.9
 
+      - uses: actions/setup-python@v2
+        with: {python-version: "3.10"}
+      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.10
+
       - name: Upload cpymad wheels
         uses: actions/upload-artifact@v2
         with:
@@ -236,7 +240,7 @@ jobs:
         # 32bit python is currently only available on windows in
         # actions/setup-python:
         os: [linux, windows, macos]
-        python: ['3.5', '3.6', '3.7', '3.8', '3.9']
+        python: ['3.5', '3.6', '3.7', '3.8', '3.9', '3.10']
 
     defaults:
       run:
