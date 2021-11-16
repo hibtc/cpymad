@@ -24,6 +24,7 @@ jobs:
         with:
           path: ../MAD-X/dist
           key: "\
+            ${{ github.ref }}-\
             madx-${{ env.MADX_VERSION }}-\
             ${{ matrix.manylinux }}-\
             patches-${{ hashFiles('.github/patch/*') }}-\
@@ -94,6 +95,7 @@ jobs:
         with:
           path: ../MAD-X/dist
           key: "\
+            ${{ github.ref }}-\
             madx-${{ env.MADX_VERSION }}-\
             windows-\
             patches-${{ hashFiles('.github/patch/*') }}-\
@@ -155,6 +157,7 @@ jobs:
         with:
           path: ../MAD-X/dist
           key: "\
+            ${{ github.ref }}-\
             madx-${{ env.MADX_VERSION }}-\
             macos-\
             patches-${{ hashFiles('.github/patch/*') }}-\
