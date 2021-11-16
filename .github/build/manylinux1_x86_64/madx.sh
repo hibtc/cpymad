@@ -1,10 +1,6 @@
 #! /usr/bin/env bash
 set -ex
 
-if [[ $AUDITWHEEL_PLAT == manylinux2014_* ]]; then
-    yum install -y glibc-static
-fi
-
 # Build MAD-X static library from prepared sources.
 # Must be run from the root the directory of the MAD-X sources.
 # Builds in './build' and installs to './dist'.
@@ -12,11 +8,8 @@ fi
 mkdir -p build
 cd build
 
-: ${PY:=/opt/python/cp36-cp36m/bin}
-
 if [[ ! -f CMakeCache.txt ]]; then
-    $PY/pip install --upgrade cmake
-    $PY/cmake .. \
+    cmake .. \
         -DBUILD_SHARED_LIBS=OFF \
         -DMADX_STATIC=ON \
         -DCMAKE_INSTALL_PREFIX=../dist \
@@ -30,4 +23,4 @@ if [[ ! -f CMakeCache.txt ]]; then
         -DMADX_X11=OFF
 fi
 
-$PY/cmake --build . --target install -j
+cmake --build . --target install -j

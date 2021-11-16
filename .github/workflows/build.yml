@@ -36,13 +36,21 @@ jobs:
         with:
           madx_version: ${{ env.MADX_VERSION }}
 
+      - name: Prepare docker image
+        run: |
+          docker buildx build .github/build/${{ matrix.manylinux }} \
+            --build-arg UID=`id -u` \
+            --build-arg GID=`id -g` \
+            --build-arg BASE=${{ matrix.manylinux }} \
+            -t cpymad-builder
+
       - name: Build MAD-X
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
         run: |
           docker run --rm --init \
             -w /mnt/MAD-X \
             -v `pwd`/..:/mnt \
-            quay.io/pypa/${{ matrix.manylinux }} \
+            cpymad-builder \
             ../cpymad/.github/build/${{ matrix.manylinux }}/madx.sh
 
       - name: Build cpymad wheels
@@ -50,7 +58,7 @@ jobs:
           docker run --rm --init \
             -w /mnt/cpymad \
             -v `pwd`/..:/mnt \
-            quay.io/pypa/${{ matrix.manylinux }} \
+            cpymad-builder \
             .github/build/${{ matrix.manylinux }}/cpymad.sh
 
       - name: Upload cpymad wheels
