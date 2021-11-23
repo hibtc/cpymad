@@ -12,6 +12,7 @@ jobs:
         manylinux:
           - manylinux1_x86_64
           - manylinux2014_x86_64
+          - manylinux2014_aarch64
     steps:
       - uses: actions/checkout@v2
       - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
@@ -35,6 +36,10 @@ jobs:
         uses: ./.github/checkout-madx
         with:
           madx_version: ${{ env.MADX_VERSION }}
+
+      - name: Set up QEMU for running arm64 containers
+        if: endsWith(matrix.manylinux, '_aarch64')
+        uses: docker/setup-qemu-action@v1
 
       - name: Prepare docker image
         run: |
