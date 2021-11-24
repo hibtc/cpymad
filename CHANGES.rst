@@ -1,6 +1,21 @@
 Changelog
 ~~~~~~~~~
 
+1.9.1
+=====
+Date: 24.11.2021
+
+Build updates:
+
+- add wheels for python 3.10 (EXPERIMENTAL)
+- add wheels for arm64 (EXPERIMENTAL, UNTESTED)
+- add manylinux2014 wheels
+- deprecate the manylinux1 wheels
+- refactor build scripts to make it easier to build wheels for arm64
+- refactor build scripts to make it easier to run the manylinux build locally
+  (for debugging)
+
+
 1.9.0
 =====
 Date: 01.09.2021
