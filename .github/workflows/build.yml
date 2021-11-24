@@ -27,6 +27,14 @@ jobs:
         with:
           manylinux: manylinux2014_aarch64
 
+      - name: Short tests
+        run: |
+          docker run --rm --init \
+            -w /mnt/cpymad \
+            -v `pwd`/..:/mnt \
+            cpymad-builder \
+            .github/build/manylinux2014_aarch64/test.sh
+
   build_windows:
     name: "Build: Windows"
     runs-on: windows-latest
