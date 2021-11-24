@@ -5,72 +5,27 @@ on:
 
 jobs:
   build_linux:
-    name: "Build: Linux"
+    name: "Build: Linux (x64)"
     runs-on: ubuntu-latest
     strategy:
       matrix:
         manylinux:
           - manylinux1_x86_64
           - manylinux2014_x86_64
-          - manylinux2014_aarch64
     steps:
       - uses: actions/checkout@v2
-      - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
-
-      - name: Download cached MAD-X build
-        id: madx-build-cache
-        # Do NOT use cache@v2, it can't handle relative paths with '..' nor
-        # absolute paths on windows!
-        uses: actions/cache@v1
+      - uses: ./.github/build/manylinux1_x86_64
         with:
-          path: ../MAD-X/dist
-          key: "\
-            madx-${{ env.MADX_VERSION }}-\
-            ${{ matrix.manylinux }}-\
-            patches-${{ hashFiles('.github/patch/*') }}-\
-            scripts-${{ hashFiles('.github/build/manylinux*/madx*') }}\
-          "
+          manylinux: ${{ matrix.manylinux }}
 
-      - name: Prepare MAD-X source
-        if: steps.madx-build-cache.outputs.cache-hit != 'true'
-        uses: ./.github/checkout-madx
+  build_linux_arm:
+    name: "Build: Linux (ARM)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/build/manylinux2014_aarch64
         with:
-          madx_version: ${{ env.MADX_VERSION }}
-
-      - name: Set up QEMU for running arm64 containers
-        if: endsWith(matrix.manylinux, '_aarch64')
-        uses: docker/setup-qemu-action@v1
-
-      - name: Prepare docker image
-        run: |
-          docker buildx build .github/build/${{ matrix.manylinux }} \
-            --build-arg UID=`id -u` \
-            --build-arg GID=`id -g` \
-            --build-arg BASE=${{ matrix.manylinux }} \
-            -t cpymad-builder
-
-      - name: Build MAD-X
-        if: steps.madx-build-cache.outputs.cache-hit != 'true'
-        run: |
-          docker run --rm --init \
-            -w /mnt/MAD-X \
-            -v `pwd`/..:/mnt \
-            cpymad-builder \
-            ../cpymad/.github/build/${{ matrix.manylinux }}/madx.sh
-
-      - name: Build cpymad wheels
-        run: |
-          docker run --rm --init \
-            -w /mnt/cpymad \
-            -v `pwd`/..:/mnt \
-            cpymad-builder \
-            .github/build/${{ matrix.manylinux }}/cpymad.sh
-
-      - name: Upload cpymad wheels
-        uses: actions/upload-artifact@v2
-        with:
-          name: dist-linux
-          path: dist
+          manylinux: manylinux2014_aarch64
 
   build_windows:
     name: "Build: Windows"
