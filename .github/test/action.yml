@@ -1,0 +1,54 @@
+name: Download and prepare MAD-X sources
+inputs:
+  os:
+    description: OS name
+    required: true
+  python:
+    description: python version
+    required: true
+  COVERALLS_REPO_TOKEN:
+    description: python version
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v2
+      with:
+        python-version: ${{ inputs.python }}
+
+    - name: Download cpymad wheels
+      uses: actions/download-artifact@v2
+      with:
+        name: dist-${{ inputs.os }}
+        path: dist
+
+    - name: Install cpymad from wheel
+      run: |
+        set -ex
+        python -m pip install -U pip || sudo python -m pip install -U pip
+        pip install cpymad -f dist --no-index --no-deps
+        pip install cpymad
+      shell: bash
+
+    - run: pip install flake8 twine coverage coveralls pytest
+      shell: bash
+    - run: twine check dist/*
+      shell: bash
+    - run: flake8
+      shell: bash
+
+    - run: coverage run --source=cpymad -p -m pytest -v -k "not dframe"
+      shell: bash
+    - run: pip install pandas
+      shell: bash
+    - run: coverage run --source=cpymad -p -m pytest -v -k "dframe"
+      shell: bash
+
+    - run: coverage combine
+      shell: bash
+    - run: coveralls
+      if: inputs.COVERALLS_REPO_TOKEN != ''
+      env:
+        COVERALLS_REPO_TOKEN: ${{ inputs.COVERALLS_REPO_TOKEN }}
+      shell: bash
