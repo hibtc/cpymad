@@ -1,0 +1,36 @@
+name: Download and prepare MAD-X sources
+inputs:
+  manylinux:
+    description: 'manylinux image name'
+    required: true
+  python:
+    description: 'python versions'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Prepare docker image
+      run: |
+        docker buildx build .github/build/${{ inputs.manylinux }}/cpymad \
+          --build-arg UID=`id -u` \
+          --build-arg GID=`id -g` \
+          --build-arg BASE=${{ inputs.manylinux }} \
+          --build-arg PYTHON="${{ inputs.python }}" \
+          -t cpymad-builder
+      shell: bash
+
+    - name: Build cpymad wheels
+      run: |
+        docker run --rm --init \
+          -w /mnt/cpymad \
+          -v `pwd`/..:/mnt \
+          cpymad-builder \
+          .github/build/${{ inputs.manylinux }}/cpymad/build.sh ${{ inputs.python }}
+      shell: bash
+
+    - name: Upload cpymad wheels
+      uses: actions/upload-artifact@v2
+      with:
+        name: dist-linux
+        path: dist

@@ -10,10 +10,7 @@ RUN groupadd -o -g $GID runner && \
     if [[ $AUDITWHEEL_PLAT == manylinux2014_* ]]; then \
         yum install -y glibc-static; \
     fi && \
-    pip install --upgrade cmake cython && \
-    for PYBIN in /opt/python/cp3*/bin; do \
-        "${PYBIN}/pip" install -U setuptools; \
-    done
+    pip install --upgrade cmake
 
 VOLUME /mnt
 WORKDIR /mnt

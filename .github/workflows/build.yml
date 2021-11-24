@@ -14,18 +14,57 @@ jobs:
           - manylinux2014_x86_64
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/build/manylinux1_x86_64
+      - uses: ./.github/build/manylinux1_x86_64/madx
         with:
           manylinux: ${{ matrix.manylinux }}
+      - uses: ./.github/build/manylinux1_x86_64/cpymad
+        with:
+          manylinux: ${{ matrix.manylinux }}
+          python: cp3*
 
-  build_linux_arm:
+  build_linux_arm_madx:
     name: "Build: Linux (ARM)"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/build/manylinux2014_aarch64
+      - uses: docker/setup-qemu-action@v1
+      - uses: ./.github/build/manylinux2014_aarch64/madx
         with:
           manylinux: manylinux2014_aarch64
+      - run: mv ../MAD-X/dist .
+      - name: Upload madx wheels
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist-madx-manylinux2014_aarch64
+          path: dist
+
+  build_linux_arm_cpymad:
+    name: "Build: Linux (ARM)"
+    needs: build_linux_arm_madx
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python:
+          - cp35*
+          - cp36*
+          - cp37*
+          - cp38*
+          - cp39*
+          - cp310*
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: dist-madx-manylinux2014_aarch64
+          path: dist
+      - run: mkdir -p ../MAD-X
+      - run: mv ../MAD-X/dist .
+
+      - uses: docker/setup-qemu-action@v1
+      - uses: ./.github/build/manylinux2014_aarch64/cpymad
+        with:
+          manylinux: manylinux2014_aarch64
+          python: ${{ matrix.python }}
 
       - name: Short tests
         run: |
@@ -33,7 +72,7 @@ jobs:
             -w /mnt/cpymad \
             -v `pwd`/..:/mnt \
             cpymad-builder \
-            .github/build/manylinux2014_aarch64/test.sh
+            .github/build/manylinux2014_aarch64/test.sh ${{ matrix.python }}
 
   build_windows:
     name: "Build: Windows"
@@ -240,7 +279,7 @@ jobs:
 
   upload_release:
     name: Upload release
-    needs: [build_linux_arm, test_linux, test_windows, test_macos]
+    needs: [build_linux_arm_cpymad, test_linux, test_windows, test_macos]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
 

@@ -16,8 +16,8 @@ export LDFLAGS="-fno-lto"
 # upload this exact source distribution to PyPI:
 python setup.py sdist
 
-for PYBIN in /opt/python/cp3*/bin; do
-    "${PYBIN}/pip" wheel dist/*.tar.gz --no-deps -w rawdist/
+for PY in $(cd /opt/python; eval "ls $@"); do
+    "/opt/python/$PY/bin/pip" wheel dist/*.tar.gz --no-deps -w rawdist/
 done
 
 # Bundle external shared libraries into the wheels
