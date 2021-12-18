@@ -1346,7 +1346,10 @@ class Metadata:
     )
 
     def get_copyright_notice(self):
-        from importlib_resources import read_text
+        try:
+            from importlib.resources import read_text
+        except ImportError:  # < python 3.7
+            from importlib_resources import read_text
         return read_text('cpymad.COPYING', 'madx.rst', encoding='utf-8')
 
     _libmadx = None

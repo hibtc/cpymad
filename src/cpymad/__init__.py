@@ -30,5 +30,8 @@ if sys.version_info < (3, 6):
 
 
 def get_copyright_notice() -> str:
-    from importlib_resources import read_text
+    try:
+        from importlib.resources import read_text
+    except ImportError:  # < python 3.7
+        from importlib_resources import read_text
     return read_text('cpymad.COPYING', 'cpymad.rst', encoding='utf-8')
