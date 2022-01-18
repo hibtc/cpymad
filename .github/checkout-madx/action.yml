@@ -10,7 +10,3 @@ runs:
     - run: git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
         ../MAD-X -b "${{ inputs.madx_version }}" --depth 1
       shell: bash
-    # Remove this on next release, already fixed in MAD-X#1019:
-    - name: "Fix compiler error on msys2: Index variable 'i' redefined"
-      run: patch -d ../MAD-X -p1 < .github/patch/fix-index-variable-i-redefined.patch
-      shell: bash
