@@ -5,7 +5,6 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
-    'sphinx-prompt',
     'sphinx_substitution_extensions',
     'sphinx_automodapi.automodapi',
     'sphinx_automodapi.smart_resolver',     # see sphinx-autodoc-typehints#38
