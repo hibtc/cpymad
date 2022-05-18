@@ -61,8 +61,6 @@ cdef extern from "madX/mad_table.h" nogil:
         char*** s_cols
         double** d_cols
         name_list* columns
-        double chkick
-        double cvkick
 
     struct table_list:
         int curr
