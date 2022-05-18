@@ -23,7 +23,6 @@ _() {
     { set -x; return $exitcode; } 2>/dev/null
 }
 
-build 3.5
 build 3.6
 build 3.7
 build 3.8
