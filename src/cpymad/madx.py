@@ -19,7 +19,7 @@ import numpy as np
 
 from . import _rpc
 from . import util
-from .stream import AsyncReader
+from .stream import AsyncReader, TextCallback
 
 
 __all__ = [
@@ -172,10 +172,32 @@ class Madx:
             if stdout is None:
                 stdout = sys.stdout
             if hasattr(stdout, 'write'):
-                try:
-                    stdout = stdout.fileno()
-                except (AttributeError, OSError, IOError):
+                # Detect if stdout is attached to a jupyter notebook:
+                cls = getattr(stdout, '__class__', type(None))
+                qualname = cls.__module__ + '.' + cls.__name__
+                if qualname == 'ipykernel.iostream.OutStream':
+                    # In that case we want to behave the same way as `print`
+                    # (i.e. log to the notebook not to the terminal). On
+                    # linux, python>=3.7 within notebooks 6.4 `sys.stdout` has
+                    # a valid sys.stdout.fileno(), but writing to it outputs
+                    # to the terminal, so we have to use `sys.stdout.write()`:
                     stdout = stdout.write
+                else:
+                    # Otherwise, let the OS handle MAD-X output, by passing
+                    # the file descriptor if available. This is preferred
+                    # because it is faster, and also because it means that the
+                    # MAD-X output is directly connected to the output as
+                    # binary stream, without potential recoding errors.
+                    try:
+                        stdout = stdout.fileno()
+                    except (AttributeError, OSError, IOError):
+                        stdout = stdout.write
+                # Check for text stream to prevent TypeError (see #110).
+                if callable(stdout):
+                    try:
+                        stdout(b'')
+                    except TypeError:
+                        stdout = TextCallback(stdout)
             Popen_args['stdout'] = \
                 subprocess.PIPE if callable(stdout) else stdout
             # stdin=None leads to an error on windows when STDIN is broken.

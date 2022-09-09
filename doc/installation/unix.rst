@@ -59,7 +59,8 @@ install location if you prefer (e.g. ``~/.local`` or ``/opt/madx``), but keep
 in mind that there is no ``uninstall`` command other than removing the files
 manually.
 
-The cmake command has many more options, the most important ones being:
+The cmake command has many more options, the most important ones being
+(only use if you now what you're doing!):
 
 - ``-DMADX_STATIC=ON``: Pass this flag to link statically against the
   dependencies of MAD-X (libc, libgfortran, libstdc++, blas, lapack, etc).
@@ -87,7 +88,7 @@ MAD-X headers and library, for example::
     export MADXDIR="$(pwd)"/../dist
 
 Also, set the following variables according to the flags passed to the cmake
-command above::
+command above (ONLY PASS IF NEEDED!)::
 
     set STATIC=1    # if -DMADX_STATIC=ON
     set SHARED=1    # if -DBUILD_SHARED_LIBS=ON
@@ -102,12 +103,14 @@ Install setup requirements::
 
 Enter the cpymad folder, and build as follows::
 
-    python setup.py build_ext
+    python setup.py build_ext -lm
+
+The ``-lm`` might not be necessary on all systems.
 
 If you have installed blas/lapack and MAD-X found it during the cmake step,
 you have to pass them as additional link libraries::
 
-    python setup.py build_ext -lblas -llapack
+    python setup.py build_ext -lm -lblas -llapack
 
 You can now create and install a wheel as follows (however, note that this
 wheel probably won't be fit to be distributed to other systems)::
