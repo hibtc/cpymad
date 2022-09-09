@@ -73,3 +73,17 @@ class AsyncReader:
             if not line:
                 return lines
             lines.append(line)
+
+
+class TextCallback:
+
+    """Decode bytes and pass to callback."""
+
+    def __init__(self, callback, encoding='utf-8', errors='replace'):
+        self.callback = callback
+        self.encoding = encoding
+        self.errors = errors
+
+    def __call__(self, data):
+        text = data.decode(self.encoding, errors=self.errors)
+        return self.callback(text)
