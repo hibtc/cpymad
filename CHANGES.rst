@@ -1,6 +1,16 @@
 Changelog
 ~~~~~~~~~
 
+1.10.0
+======
+Date: 09.09.2022
+
+- remove support for python 3.5
+- fix TypeError in jupyter on windows 10 (#110)
+- fix output to go to jupyter notebook instead of terminal on linux in recent
+  versions of python and jupyter
+
+
 1.9.3
 =====
 Date: 28.02.2022
