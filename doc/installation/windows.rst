@@ -97,7 +97,7 @@ In the build environment, type::
         -DMADX_STATIC=ON ^
         -DCMAKE_INSTALL_PREFIX="../dist"
 
-    cmake --build . --target install:
+    cmake --build . --target install
 
 .. note::
 
