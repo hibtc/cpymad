@@ -149,8 +149,10 @@ First set a few environment variables corresponding to the target platform
 and python version::
 
     set py_ver=37
-    set dir_tag=win-amd64-3.7
     set file_tag=cp37-win_amd64
+    set dir_tag=win-amd64-cpython-37
+
+On python 3.6 or earlier use the form ``set dir_tag=win-amd64-3.6`` instead.
 
 With these values set, you should be able to copy-paste the following
 commands::
@@ -171,19 +173,11 @@ commands::
     call %gcc% -shared -s ^
         %tempdir%\libmadx.obj ^
         -L %MADXDIR%\lib ^
-        -lmadx -lptc -lgc-lib -lstdc++ -lgfortran ^
+        -lmadx -lDISTlib -lptc -lgc-lib -lstdc++ -lgfortran ^
         -lquadmath %pythondir%\python%py_ver%.dll -lmsvcr100 ^
         -o %libdir%\libmadx.%file_tag%.pyd
 
-Newer versions of MAD-X also require that you pass ``-lDISTlib`` in the second
-call to gcc, i.e.::
-
-    call %gcc% -shared -s ^
-        %tempdir%\libmadx.obj ^
-        -L %MADXDIR%\lib ^
-        -lmadx -lptc -lDISTlib -lgc-lib -lstdc++ -lgfortran ^
-        -lquadmath %pythondir%\python%py_ver%.dll -lmsvcr100 ^
-        -o %libdir%\libmadx.%file_tag%.pyd
+For old versions of MAD-X, leave out ``-lDISTlib`` from the second gcc call.
 
 If this succeeds, you have most of the work behind you.
 
@@ -196,22 +190,6 @@ all the files ready for installation, as well as some metadata such as version
 numbers etc. The wheel can be built as follows::
 
     python setup.py bdist_wheel
-
-If you get an error like this::
-
-    "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.33.31629\bin\HostX86\x64\cl.exe" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -IC:\Users\admin\Anaconda3\envs\buildenv\MAD-X\dist\include -IC:\Users\admin\Anaconda3\envs\buildenv\include -IC:\Users\admin\Anaconda3\envs\buildenv\Include "-IC:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.33.31629\include" "-IC:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\VS\include" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.19041.0\\um" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.19041.0\\shared" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.19041.0\\winrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.19041.0\\cppwinrt" /Tcsrc/cpymad/libmadx.c /Fobuild\temp.win-amd64-cpython-39\Release\src/cpymad/libmadx.obj -std=gnu99
-    cl: command line warning D9002: ignoring unknown option "-std=gnu99"
-    libmadx.c
-    warning: I don't know what to do with 'runtime_library_dirs': ['C:\\Users\\admin\\Anaconda3\\envs\\buildenv\\MAD-X\\dist\\lib', 'C:\\Users\\admin\\Anaconda3\\envs\\buildenv\\MAD-X\\dist\\lib64']
-    error: don't know how to set runtime library search path for MSVC
-
-It could mean that your setuptools version assumes a different directory
-layout than the one assumed above. Search for the path of the object path in
-the command above (in this case
-``/Fobuild\temp.win-amd64-cpython-39\Release\src/cpymad/libmadx.obj``), and
-adapt the ``set dir_tag`` instruction above accordingly (in this case
-``set dir_tag=win-amd64-cpython-3.9``), and execute everything from that point
-on again.
 
 The ``.whl`` file is named after the package and its target platform. This
 file can now be used for installation on this or any other machine running the
