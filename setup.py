@@ -35,11 +35,13 @@ except ImportError:
     def cythonize(extensions):
         return extensions
 
-# Windows:  win32/win-amd64
-# Linux:    linux-x86_64/...
-# Mac:      darwin*
-IS_WIN = get_platform().startswith('win')
-IS_ARM = get_platform().startswith('linux-aarch') or get_platform().endswith('arm64')
+# Windows:              win32/win-amd64
+# Linux:                linux-x86_64/...
+# Mac Intel:            darwin*
+# Mac Apple Silicon:    *-arm64
+platform = get_platform()
+IS_WIN = platform.startswith('win')
+IS_ARM = platform.startswith('linux-aarch') or platform.endswith('arm64')
 
 
 # We parse command line options using our own mechanim. We could use
