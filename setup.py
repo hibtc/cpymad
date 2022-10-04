@@ -39,7 +39,7 @@ except ImportError:
 # Linux:    linux-x86_64/...
 # Mac:      darwin*
 IS_WIN = get_platform().startswith('win')
-IS_ARM = get_platform().startswith('linux-aarch')
+IS_ARM = get_platform().startswith('linux-aarch') or get_platform().endswith('arm64')
 
 
 # We parse command line options using our own mechanim. We could use
