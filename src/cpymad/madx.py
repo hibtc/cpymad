@@ -14,6 +14,9 @@ import collections.abc as abc
 import os
 import subprocess
 import sys
+import re
+import pathlib
+from collections import ChainMap
 
 import numpy as np
 
@@ -1244,6 +1247,112 @@ class Table(_Mapping):
     def sigmat(self, idx, dim=6):
         """Beam matrix."""
         return self.getmat('sig', idx, dim, dim)
+
+    def pattern(self, regexp):
+        """Return a mask for row names matching the given regular expression."""
+        regexp = re.compile(regexp)
+        idx = np.array([regexp.match(nn) for nn in self.name],dtype=bool)
+        return idx
+
+    def crange(self,a,b,column='name'):
+        """Return a mask for rows with column between a and b."""
+        if column == 'name':
+            idx = np.zeros(len(self.name),dtype=bool)
+            ia = np.where(np.name==a)[0][0]
+            ib = np.where(np.name==b)[0][0]
+            idx[ia:ib+1] = True
+        else:
+            idx = np.array([a <= nn <= b for nn in self.eval(column)],dtype=bool)
+        return idx
+
+    def show(self, rows=None, cols=None, maxrows=30, maxwidth=80, digits=6, output=None):
+        """Pretty print a twiss table
+
+           rows:  `None` all columns,
+                  a regexp to matching t["name"] 
+                  a boolean index
+           cols:  a list of spaced columns names or expressions
+           digits: the number of significant digit to show
+           maxrows: maximum number of rows show, None for all
+           maxwidth: maximum number row length
+           output: None-> stdout, str -> a string, "filename" a file, fh an open file
+        """
+        if rows is None:
+            idx = slice(None)
+        elif isinstance(rows, str):
+            if 'name' in self:
+                regex = re.compile(rows)
+                idx = np.where([regex.match(nn) for nn in self.name])[0]
+            else:
+                raise(f"Table does not have 'name' column to search")
+        else:
+            rows = np.array(rows)
+            if rows.dtype.kind == 'b':
+                idx = np.where(rows)[0]
+            else:
+                idx = rows
+        cut = -1
+        if rows is None and len(self) > maxrows:
+            cut = maxrows//2
+            idx = np.r_[np.arange(cut), np.arange(len(self)-cut, len(self))]
+        elif len(idx) > maxrows:
+            cut = maxrows//2
+            idx = np.r_[idx[:cut], idx[-cut:]]
+
+        if cols is None:
+            cols = self.col_names()
+        elif hasattr(cols, 'split'):
+            cols = cols.split()
+
+        if 'name' not in cols and 'name' in self.col_names():
+            cols.insert(0, 'name')
+
+        if maxwidth is None:
+            maxwidth = 1e30
+
+        data = []
+        width = 0
+        fmt = []
+        header = ""
+        for cc in cols:
+            coldata = self.eval(cc)[idx]
+            coltype = coldata.dtype.kind
+            col = util._to_str(coldata, digits)
+            colwidth = int(col.dtype.str[2:])
+            if len(cc) > colwidth:
+                colwidth = len(cc)
+            colwidth += 1
+            width += colwidth+1
+            if width < maxwidth:
+                if coltype in 'SU':
+                    fmt.append("%%-%ds" % colwidth)
+                else:
+                    fmt.append("%%%ds" % colwidth)
+                header += fmt[-1] % cc
+                data.append(col)
+
+        result = [header]
+        for ii in range(len(col)):
+            row = "".join([ff % col[ii] for ff, col in zip(fmt, data)])
+            result.append(row)
+            if ii == cut:
+                result.append("...")
+        result = "\n".join(result)
+        if output is None:
+            print(result)
+        elif output is str:
+            return result
+        elif hasattr(output, "write"):
+            output.write(result)
+        else:
+            output = pathlib.Path(output)
+            with open(output, "w") as fh:
+                fh.write(output)
+
+
+    def eval(self, expr):
+        lcl = ChainMap(self, np.__dict__)
+        return eval(expr, {}, lcl)
 
 
 class VarList(_MutableMapping):

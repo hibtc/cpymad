@@ -533,3 +533,12 @@ class ChangeDirectory:
 def remove_count_suffix_from_name(name):
     """Return the :N suffix from an element name."""
     return name.rsplit(':', 1)[0]
+
+
+def _to_str(arr, digits):
+    """covert array to string repr"""
+    if arr.dtype.kind in 'SU':
+        return arr
+    else:
+        fmt = '%%.%dg' % digits
+        return np.array([fmt % nn for nn in arr])
