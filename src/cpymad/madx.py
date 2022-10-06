@@ -1248,18 +1248,20 @@ class Table(_Mapping):
         """Beam matrix."""
         return self.getmat('sig', idx, dim, dim)
 
-    def pattern(self, regexp):
+    def pattern(self, regexp, column='name'):
         """Return a mask for row names matching the given regular expression."""
         regexp = re.compile(regexp)
-        idx = np.array([regexp.match(nn) for nn in self.name],dtype=bool)
+        idx = np.array([regexp.match(nn) for nn in self[column]],dtype=bool)
         return idx
 
     def crange(self,a,b,column='name'):
         """Return a mask for rows with column between a and b."""
         if column == 'name':
+            r1=re.compile(a)
+            r2=re.compile(b)
             idx = np.zeros(len(self.name),dtype=bool)
-            ia = np.where(np.name==a)[0][0]
-            ib = np.where(np.name==b)[0][0]
+            ia = np.where([r1.match(nn) for nn in self.name])[0][0]
+            ib = np.where([r2.match(nn) for nn in self.name])[0][0]
             idx[ia:ib+1] = True
         else:
             idx = np.array([a <= nn <= b for nn in self.eval(column)],dtype=bool)
@@ -1285,6 +1287,8 @@ class Table(_Mapping):
                 idx = np.where([regex.match(nn) for nn in self.name])[0]
             else:
                 raise(f"Table does not have 'name' column to search")
+        elif isinstance(rows, tuple):
+            idx=np.where(self.crange(rows[0],rows[1]))[0]
         else:
             rows = np.array(rows)
             if rows.dtype.kind == 'b':
@@ -1347,7 +1351,7 @@ class Table(_Mapping):
         else:
             output = pathlib.Path(output)
             with open(output, "w") as fh:
-                fh.write(output)
+                fh.write(result)
 
 
     def eval(self, expr):
