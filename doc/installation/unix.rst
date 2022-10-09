@@ -10,6 +10,14 @@ following subsections:
 
 .. contents:: :local:
 
+If you're planning to build cpymad inside a conda environment, we recommend
+to build MAD-X within that same environment to avoid linker errors. You will
+have to install gcc, g++, and gfortran inside conda before continuing, e.g.::
+
+    conda create -n cpymad python=3.10
+    conda activate cpymad
+    conda install {gcc,gxx,gfortran}_linux-64
+
 
 Build MAD-X
 ~~~~~~~~~~~
