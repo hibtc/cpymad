@@ -5,6 +5,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
+    'sphinxext.rediraffe',
     'sphinx_substitution_extensions',
     'sphinx_automodapi.automodapi',
     'sphinx_automodapi.smart_resolver',     # see sphinx-autodoc-typehints#38
@@ -29,6 +30,11 @@ intersphinx_mapping = {
     'numpy': ('https://docs.scipy.org/doc/numpy/', None),
     'pandas': ('https://pandas.pydata.org/pandas-docs/stable/', None),
     'python': ('https://docs.python.org/3', None),
+}
+
+# Redirect:
+rediraffe_redirects = {
+    "installation/unix.rst": "installation/linux.rst",
 }
 
 # General information about the project.
