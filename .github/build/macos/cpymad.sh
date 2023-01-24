@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 set -ex
-export CC=gcc-9
+source "$(dirname -- "${BASH_SOURCE[0]}")"/setup_compiler.sh
 export MADXDIR=../MAD-X/dist
 export BLAS=1 LAPACK=1
 

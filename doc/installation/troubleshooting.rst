@@ -44,6 +44,28 @@ If that is the case, either build MAD-X with ``-DBUILD_SHARED_LIBS=OFF``, or
 change *hidden* to *protected*, or leave out the visibility option entirely.
 
 
+Fatal Error: Cannot open module file ‘gxx11_common.mod’
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+With some compiler toolchains (manylinux2014) the following error has been
+observed, followed by some additional outputs and warnings::
+
+    /mnt/MAD-X/src/gxx11ps.f90:2:7:
+
+        2 |   use gxx11_common
+          |       1
+    Fatal Error: Cannot open module file ‘gxx11_common.mod’ for reading at (1): No such file or directory
+    compilation terminated.
+    make[2]: *** [src/CMakeFiles/madx.dir/build.make:101: src/CMakeFiles/madx.dir/gxx11ps.f90.o] Error 1
+    make[2]: *** Waiting for unfinished jobs....
+    [...]
+    make[1]: *** [CMakeFiles/Makefile2:1356: src/CMakeFiles/madx.dir/all] Error 2
+    make: *** [Makefile:166: all] Error 2
+
+This is likely related to using parallel make jobs, i.e. ``make -j``. If
+that's the case for you, try without ``-j``.
+
+
 Setup or compile time errors
 ============================
 
