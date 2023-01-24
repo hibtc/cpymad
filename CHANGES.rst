@@ -1,6 +1,15 @@
 Changelog
 ~~~~~~~~~
 
+1.11.0
+======
+Date: 09.09.2022
+
+- add wheels for python 3.11
+- fix platform identification to work with Apple Silicon architecture
+  (no upstream M1 wheels yet)
+
+
 1.10.0
 ======
 Date: 09.09.2022
