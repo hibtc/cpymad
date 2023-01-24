@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 set -ex
-export CC=gcc-9
+export CC=gcc-12
 export MADXDIR=../MAD-X/dist
 export BLAS=1 LAPACK=1
 

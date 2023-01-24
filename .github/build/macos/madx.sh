@@ -14,9 +14,9 @@ if [[ ! -f CMakeCache.txt ]]; then
         -DCMAKE_POLICY_DEFAULT_CMP0077=NEW \
         -DCMAKE_POLICY_DEFAULT_CMP0042=NEW \
         -DCMAKE_OSX_ARCHITECTURES=x86_64 \
-        -DCMAKE_C_COMPILER=gcc-9 \
-        -DCMAKE_CXX_COMPILER=g++-9 \
-        -DCMAKE_Fortran_COMPILER=gfortran-9 \
+        -DCMAKE_C_COMPILER=gcc-12 \
+        -DCMAKE_CXX_COMPILER=g++-12 \
+        -DCMAKE_Fortran_COMPILER=gfortran-12 \
         -DBUILD_SHARED_LIBS=OFF \
         -DMADX_STATIC=OFF \
         -DCMAKE_INSTALL_PREFIX=../dist \
