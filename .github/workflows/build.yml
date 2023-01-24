@@ -158,7 +158,11 @@ jobs:
     needs: build_linux
     strategy:
       matrix:
-        python: ['3.6', '3.7', '3.8', '3.9', '3.10']
+        python:
+          - '3.7'
+          - '3.8'
+          - '3.9'
+          - '3.10'
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/test
@@ -173,7 +177,11 @@ jobs:
     needs: build_windows
     strategy:
       matrix:
-        python: ['3.6', '3.7', '3.8', '3.9', '3.10']
+        python:
+          - '3.7'
+          - '3.8'
+          - '3.9'
+          - '3.10'
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/test
@@ -188,7 +196,11 @@ jobs:
     needs: build_macos
     strategy:
       matrix:
-        python: ['3.6', '3.7', '3.8', '3.9', '3.10']
+        python:
+          - '3.7'
+          - '3.8'
+          - '3.9'
+          - '3.10'
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/test
