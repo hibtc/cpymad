@@ -7,11 +7,6 @@ Known issues
   environment. On windows, this can be tried as well, but is not reliable to
   our knowledge.
 
-- **windows + python 3.3:** there is currently no satisfying way to close file
-  handles in the MAD-X process or prevent them from being inherited by
-  default.  You have to make sure on your own that you close all file handles
-  before creating a new ``cpymad.madx.Madx`` instance!
-
 - the MAD-X ``USE`` command invalidates table row names. Therefore, using
   ``Table.dframe()`` is unsafe after ``USE`` should be avoided, unless
   manually specifying an index, e.g. ``Table.dframe(index='name')``, see `#93`_.
