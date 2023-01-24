@@ -14,7 +14,7 @@ if available (see :ref:`installation`).
 .. toctree::
    :maxdepth: 1
 
-   installation/unix
+   installation/linux
    installation/windows
    installation/macos
    installation/troubleshooting

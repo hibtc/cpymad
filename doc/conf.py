@@ -67,6 +67,7 @@ htmlhelp_basename = 'cpymaddoc'
 # -- Fix broken links to non-existing source for auto-generated pages -----
 def setup(app):
     app.connect("html-page-context", html_page_context)
+    app.connect("build-finished", build_redirects)
 
 
 def html_page_context(app, pagename, templatename, context, doctree):
@@ -74,3 +75,34 @@ def html_page_context(app, pagename, templatename, context, doctree):
     if pagename.startswith('automod/'):
         context['meta'] = None
         context['display_github'] = False
+
+# Redirects
+
+def build_redirects(app, exception):
+    redirect(app, 'installation/unix.html', 'installation/linux.html')
+
+
+def redirect(app, src, dst):
+    # Lightweight alternative to 'sphinxext-rediraffe'
+    import os
+    dst = os.path.relpath(dst, os.path.dirname(src))
+    src = os.path.join(app.outdir, src)
+    os.makedirs(os.path.dirname(src), exist_ok=True)
+    with open(src, 'wt') as f:
+        f.write(f"""
+<html>
+    <head>
+        <noscript>
+            <meta http-equiv="refresh" content="0; url={dst}"/>
+        </noscript>
+    </head>
+    <body>
+        <script>
+            window.location.href = '{dst}' + (window.location.search || '') + (window.location.hash || '');
+        </script>
+        <p>This page has moved.</p>
+        <p>If you are not getting redirected please
+        <a href="{dst}">click here to continue.</a></p>
+    </body>
+</html>
+""")
