@@ -1,7 +1,7 @@
 name: Download and prepare MAD-X sources
 inputs:
-  manylinux:
-    description: 'manylinux image name'
+  base:
+    description: 'manylinux base image'
     required: true
 
 runs:
@@ -19,9 +19,9 @@ runs:
         path: ../MAD-X/dist
         key: "\
           madx-${{ env.MADX_VERSION }}-\
-          ${{ inputs.manylinux }}-\
+          ${{ inputs.base }}-\
           patches-${{ hashFiles('.github/patch/*') }}-\
-          scripts-${{ hashFiles('.github/build/manylinux*/madx*') }}\
+          scripts-${{ hashFiles('.github/build/linux/madx*') }}\
         "
 
     - name: Prepare MAD-X source
@@ -31,15 +31,15 @@ runs:
         madx_version: ${{ env.MADX_VERSION }}
 
     - name: Set up QEMU for running arm64 containers
-      if: endsWith(inputs.manylinux, '_aarch64')
+      if: endsWith(inputs.base, '_aarch64')
       uses: docker/setup-qemu-action@v1
 
     - name: Prepare docker image
       run: |
-        docker buildx build .github/build/${{ inputs.manylinux }} \
+        docker buildx build .github/build/linux \
           --build-arg UID=`id -u` \
           --build-arg GID=`id -g` \
-          --build-arg BASE=${{ inputs.manylinux }} \
+          --build-arg BASE=${{ inputs.base }} \
           -t cpymad-builder
       shell: bash
 
@@ -50,7 +50,7 @@ runs:
           -w /mnt/MAD-X \
           -v `pwd`/..:/mnt \
           cpymad-builder \
-          ../cpymad/.github/build/${{ inputs.manylinux }}/madx.sh
+          ../cpymad/.github/build/linux/madx.sh
       shell: bash
 
     - name: Build cpymad wheels
@@ -59,7 +59,7 @@ runs:
           -w /mnt/cpymad \
           -v `pwd`/..:/mnt \
           cpymad-builder \
-          .github/build/${{ inputs.manylinux }}/cpymad.sh
+          .github/build/linux/cpymad.sh
       shell: bash
 
     - name: Upload cpymad wheels

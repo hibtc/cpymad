@@ -11,23 +11,23 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        manylinux:
+        base:
           - manylinux1_x86_64
           - manylinux2014_x86_64
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/build/manylinux1_x86_64
+      - uses: ./.github/build/linux
         with:
-          manylinux: ${{ matrix.manylinux }}
+          base: ${{ matrix.base }}
 
   build_linux_arm:
     name: "Build: Linux (ARM)"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/build/manylinux2014_aarch64
+      - uses: ./.github/build/linux
         with:
-          manylinux: manylinux2014_aarch64
+          base: manylinux2014_aarch64
 
   build_windows:
     name: "Build: Windows"
@@ -59,7 +59,7 @@ jobs:
             madx-${{ env.MADX_VERSION }}-\
             windows-\
             patches-${{ hashFiles('.github/patch/*') }}-\
-            scripts-${{ hashFiles('.github/build/msys2/madx*') }}\
+            scripts-${{ hashFiles('.github/build/windows/madx*') }}\
           "
 
       - name: Prepare MAD-X source
@@ -70,31 +70,31 @@ jobs:
 
       - name: Build MAD-X
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
-        run: cd ../MAD-X && ../cpymad/.github/build/msys2/madx.sh
+        run: cd ../MAD-X && ../cpymad/.github/build/windows/madx.sh
 
       - uses: actions/setup-python@v2
         with: {python-version: "3.6"}
-      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.6
+      - run: .github/build/windows/cpymad.sh ../MAD-X/dist 3.6
 
       - uses: actions/setup-python@v2
         with: {python-version: "3.7"}
-      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.7
+      - run: .github/build/windows/cpymad.sh ../MAD-X/dist 3.7
 
       - uses: actions/setup-python@v2
         with: {python-version: "3.8"}
-      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.8
+      - run: .github/build/windows/cpymad.sh ../MAD-X/dist 3.8
 
       - uses: actions/setup-python@v2
         with: {python-version: "3.9"}
-      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.9
+      - run: .github/build/windows/cpymad.sh ../MAD-X/dist 3.9
 
       - uses: actions/setup-python@v2
         with: {python-version: "3.10"}
-      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.10
+      - run: .github/build/windows/cpymad.sh ../MAD-X/dist 3.10
 
       - uses: actions/setup-python@v2
         with: {python-version: "3.11"}
-      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.11
+      - run: .github/build/windows/cpymad.sh ../MAD-X/dist 3.11
 
       - name: Upload cpymad wheels
         uses: actions/upload-artifact@v2
