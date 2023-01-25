@@ -145,7 +145,7 @@ if __name__ == '__main__':
                       sources=["src/cpymad/libmadx.pyx"],
                       **get_extension_args(**options.__dict__)),
         ]),
-        packages=find_packages('src'),
+        packages=find_packages('src', include='cpymad*'),
         package_dir={'': 'src'},
         zip_safe=False,             # zip is bad for redistributing shared libs
         include_package_data=True,  # include files matched by MANIFEST.in
