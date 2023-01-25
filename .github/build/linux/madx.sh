@@ -15,6 +15,31 @@ cd "$1"
 mkdir -p build
 cd build
 
+# Install glibc-static where needed and possible:
+case $AUDITWHEEL_PLAT in
+    manylinux1_*)
+        # static package preinstalled, but under different name (?)
+        ;;
+    manylinux2010_*)
+        yum install -y glibc-static
+        ;;
+    manylinux2014_*)
+        yum install -y glibc-static
+        ;;
+    manylinux_2_24*)
+        # uses apt-get, but lib seems to be unavailable here
+        ;;
+    manylinux_2_28*)
+        yum install -y glibc-static
+        ;;
+    musllinux_1_1*)
+        # designed for static linkage from the ground up
+        ;;
+esac
+
+PATH="/opt/python/cp39-cp39/bin:$PATH"
+pip install cmake --only-binary cmake
+
 if [[ ! -f CMakeCache.txt ]]; then
     cmake .. \
         -DBUILD_SHARED_LIBS=OFF \

@@ -23,67 +23,35 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        base:
-          - manylinux1_x86_64
-          - manylinux2014_x86_64
-          - manylinux2014_aarch64
+        include:
+        # - {base: manylinux1,     python: "cp{36,37,38,39}",         arch: x86_64}
+        # - {base: manylinux2010,  python: "cp{36,37,38,39,310}",     arch: x86_64}
+          - {base: manylinux2014,  python: "cp{36,37,38,39,310,311}", arch: x86_64}
+        # - {base: manylinux_2_28, python: "cp{36,37,38,39,310,311}", arch: x86_64}
+          - {base: musllinux_1_1,  python: "cp{36,37,38,39,310,311}", arch: x86_64}
     steps:
       - uses: actions/checkout@v3
-      - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
-
-      - name: Download cached MAD-X build
-        id: madx-build-cache
-        uses: actions/cache@v3
-        with:
-          path: src/MAD-X/dist
-          key: "\
-            madx-${{ env.MADX_VERSION }}-\
-            ${{ matrix.base }}-\
-            patches-${{ hashFiles('.github/patch/*') }}-\
-            scripts-${{ hashFiles('.github/build/linux/madx*') }}\
-          "
 
       - run: git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
-          src/MAD-X -b $MADX_VERSION --depth 1
-        if: steps.madx-build-cache.outputs.cache-hit != 'true'
+          src/MAD-X -b "$(cat MADX_VERSION)" --depth 1
 
-      - name: Set up QEMU for running arm64 containers
-        if: endsWith(matrix.base, '_aarch64')
-        uses: docker/setup-qemu-action@v2
+      - uses: pypa/cibuildwheel@v2.12.0
+        env:
+          CIBW_ARCHS: x86_64
+          CIBW_BUILD: ${{ matrix.python }}*-manylinux_x86_64
+          CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.base }}
+          CIBW_BEFORE_ALL: ".github/build/linux/madx.sh src/MAD-X"
+          CIBW_BEFORE_BUILD: "pip install cython"
+          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.6"
+          CIBW_ENVIRONMENT: MADXDIR=src/MAD-X/dist
+          CIBW_TEST_REQUIRES: flake8 pytest pandas
+          CIBW_TEST_COMMAND: |
+            flake8 "{project}"
+            pytest "{project}/test" -v
 
-      - name: Prepare docker image
-        run: |
-          docker buildx build .github/build/linux \
-            --build-arg UID=`id -u` \
-            --build-arg GID=`id -g` \
-            --build-arg BASE=${{ matrix.base }} \
-            -t builder
-        shell: bash
-
-      - name: Build MAD-X
-        if: steps.madx-build-cache.outputs.cache-hit != 'true'
-        run: |
-          docker run --rm --init \
-            -w /mnt \
-            -v `pwd`:/mnt \
-            builder \
-            .github/build/linux/madx.sh src/MAD-X
-        shell: bash
-
-      - name: Build cpymad wheels
-        run: |
-          docker run --rm --init \
-            -w /mnt \
-            -v `pwd`:/mnt \
-            builder \
-            .github/build/linux/cpymad.sh src/MAD-X/dist
-        shell: bash
-
-      - name: Upload cpymad wheels
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist-linux
-          path: dist
+# build_linux_arm64:
+#         - {base: manylinux2014,  python: "cp{36,37,38,39,310,311}", arch: aarch64}
+#         - {base: musllinux_1_1,  python: "cp{36,37,38,39,310,311}", arch: aarch64}
 
   build_windows:
     name: "Build: Windows"
@@ -91,8 +59,12 @@ jobs:
     defaults:
       run:
         shell: msys2 {0}
+
     steps:
       - uses: actions/checkout@v3
+      - run: git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
+          src/MAD-X -b "$(cat MADX_VERSION)" --depth 1
+
       - uses: msys2/setup-msys2@v2
         with:
           update: true
@@ -102,57 +74,14 @@ jobs:
                    mingw-w64-ucrt-x86_64-cmake
 
       - run: echo "MSYSTEM=UCRT64" >> $GITHUB_ENV
-      - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
+      - run: echo -e "[build]\ncompiler=mingw32" > ~/pydistutils.cfg
 
-      - name: Download cached MAD-X build
-        id: madx-build-cache
-        uses: actions/cache@v3
-        with:
-          path: src/MAD-X/dist
-          key: "\
-            madx-${{ env.MADX_VERSION }}-\
-            windows-\
-            patches-${{ hashFiles('.github/patch/*') }}-\
-            scripts-${{ hashFiles('.github/build/windows/madx*') }}\
-          "
-
-      - run: git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
-          src/MAD-X -b $MADX_VERSION --depth 1
-        if: steps.madx-build-cache.outputs.cache-hit != 'true'
-
-      - name: Build MAD-X
-        if: steps.madx-build-cache.outputs.cache-hit != 'true'
-        run: .github/build/windows/madx.sh src/MAD-X
-
-      - uses: actions/setup-python@v4
-        with: {python-version: "3.6"}
-      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.6
-
-      - uses: actions/setup-python@v4
-        with: {python-version: "3.7"}
-      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.7
-
-      - uses: actions/setup-python@v4
-        with: {python-version: "3.8"}
-      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.8
-
-      - uses: actions/setup-python@v4
-        with: {python-version: "3.9"}
-      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.9
-
-      - uses: actions/setup-python@v4
-        with: {python-version: "3.10"}
-      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.10
-
-      - uses: actions/setup-python@v4
-        with: {python-version: "3.11"}
-      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.11
-
-      - name: Upload cpymad wheels
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist-windows
-          path: dist
+      - uses: pypa/cibuildwheel@v2.12.0
+        env:
+          CIBW_BEFORE_ALL: ".github/build/windows/madx.sh src/MAD-X"
+          CIBW_BEFORE_BUILD: "pip install cython"
+          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.6"
+          CIBW_ENVIRONMENT: MADXDIR=src/MAD-X/dist
 
   build_macos:
     name: "Build: MacOS"
@@ -162,219 +91,68 @@ jobs:
         arch:
           - x86_64
           - arm64
+        python:
+          - cp36-* cp37-* cp38-* cp39-* cp310-*
+
     steps:
       - uses: actions/checkout@v3
-      - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
-
-      - name: Download cached MAD-X build
-        id: madx-build-cache
-        uses: actions/cache@v3
-        with:
-          path: src/MAD-X/dist
-          key: "\
-            madx-${{ env.MADX_VERSION }}-\
-            macos-${{ matrix.arch }}-\
-            patches-${{ hashFiles('.github/patch/*') }}-\
-            scripts-${{ hashFiles('.github/build/macos/madx*') }}\
-          "
 
       - run: git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
-          src/MAD-X -b $MADX_VERSION --depth 1
-        if: steps.madx-build-cache.outputs.cache-hit != 'true'
+          src/MAD-X -b "$(cat MADX_VERSION)" --depth 1
 
-      # Select matching Xcode and SDK, see: https://xcodereleases.com/
-      - run: |
-          sudo xcode-select -switch /Applications/Xcode_12.5.1.app
-          echo "SDKROOT=$(xcrun --show-sdk-path)" >> $GITHUB_ENV
+      # Select matching Xcode, SDK, Deployment Target, see:
+      # https://xcodereleases.com/
+      # 11.3 was the oldest one I got to work so far:
+      - run: sudo xcode-select -switch /Applications/Xcode_12.5.1.app
+      - run: echo "MACOSX_DEPLOYMENT_TARGET=11.3" >> $GITHUB_ENV
+      - run: echo "SDKROOT=$(xcrun --show-sdk-path)" >> $GITHUB_ENV
 
-      - name: Setup gfortran
+      - name: Setup gfortran (x86_64)
+        if: matrix.arch == 'x86_64'
         run: |
-          set -xeo pipefail
+          echo "CC=gcc-11" >> $GITHUB_ENV
+          echo "CPP=cpp-11" >> $GITHUB_ENV
+          echo "CXX=g++-11" >> $GITHUB_ENV
+          echo "FC=gfortran-11" >> $GITHUB_ENV
+          echo "LD=gcc-11" >> $GITHUB_ENV
 
-          if [[ ${{ matrix.arch }} == "x86_64" ]]; then
-            FC=gfortran-11
-            LIBDIR=$(dirname $(find /usr/local/Cellar/gcc@11 -name libgfortran.dylib))
-            echo "MACOSX_DEPLOYMENT_TARGET=10.14" >> $GITHUB_ENV
+      # Taken and simplified from:
+      # https://github.com/MacPython/gfortran-install/blob/master/gfortran_utils.sh
+      - name: Setup gfortran (arm64)
+        if: matrix.arch == 'arm64'
+        run: |
+          name=gfortran-darwin-arm64-cross
+          curl -L -O https://github.com/isuruf/gcc/releases/download/gcc-11.3.0-2/${name}.tar.gz
+          sudo tar -f ${name}.tar.gz -C /opt -xzv
+          rm ${name}.tar.gz
 
-          elif [[ ${{ matrix.arch }} == "arm64" ]]; then
-            # See: https://github.com/MacPython/gfortran-install
-            name=gfortran-darwin-arm64-cross
-            curl -L -O https://github.com/isuruf/gcc/releases/download/gcc-11.3.0-2/${name}.tar.gz
-            sudo tar -f ${name}.tar.gz -C /opt -xzv
-            rm ${name}.tar.gz
-
-            FC=$(find /opt/${name}/bin -name "*-gfortran")
-            LIBDIR=$(dirname $(find /opt/${name}/lib -name libgfortran.dylib))
-
-            # See: https://github.com/pypa/cibuildwheel/discussions/997
-            echo "ARCHFLAGS=-arch arm64" >> $GITHUB_ENV
-            echo "_PYTHON_HOST_PLATFORM=macosx-11.0-arm64" >> $GITHUB_ENV
-            echo "MACOSX_DEPLOYMENT_TARGET=11.0" >> $GITHUB_ENV
-          fi
-
+          FC=$(find /opt/${name}/bin -name "*-gfortran")
+          LIBDIR=$(dirname $(find /opt/${name}/lib -name libgfortran.dylib))
           LDFLAGS="-L$LIBDIR -Wl,-rpath,$LIBDIR"
 
-          echo "FC=$FC"           >> $GITHUB_ENV  # for cmake
-          echo "LDFLAGS=$LDFLAGS" >> $GITHUB_ENV  # for setuptools
-          echo "LIBDIR=$LIBDIR"   >> $GITHUB_ENV  # for delocate step
+          # needed for cmake:
+          echo "FC=$FC" >> $GITHUB_ENV
+          # needed for setuptools:
+          echo "LDFLAGS=$LDFLAGS" >> $GITHUB_ENV
+          # needed for delocate:
+          echo "LIBDIR=$LIBDIR" >> $GITHUB_ENV
 
-      - name: Build MAD-X
-        if: steps.madx-build-cache.outputs.cache-hit != 'true'
-        run: .github/build/macos/madx.sh src/MAD-X ${{ matrix.arch }}
-
-      - uses: actions/setup-python@v4
-        with: { python-version: "3.6" }
-      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
-
-      - uses: actions/setup-python@v4
-        with: { python-version: "3.7" }
-      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
-
-      - uses: actions/setup-python@v4
-        with: { python-version: "3.8" }
-      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
-
-      - uses: actions/setup-python@v4
-        with: { python-version: "3.9" }
-      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
-
-      - uses: actions/setup-python@v4
-        with: { python-version: "3.10" }
-      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
-
-      - uses: actions/setup-python@v4
-        with: { python-version: "3.11" }
-      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
-
-      - name: Fixup wheel dependencies
-        run: |
-          pip3 install delocate
-          DYLD_LIBRARY_PATH=$LIBDIR delocate-wheel dist/*.whl
-          DYLD_LIBRARY_PATH=$LIBDIR delocate-listdeps --all dist/*.whl
-
-      - name: Upload cpymad wheels
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist-macos
-          path: dist
-
-  test:
-    name: Tests
-    runs-on: ${{ matrix.os == 'linux' && 'ubuntu' || matrix.os }}-latest
-    needs: [build_linux, build_windows, build_macos]
-    strategy:
-      matrix:
-        os:
-          - linux
-          - windows
-          - macos
-        python:
-          - '3.7'
-          - '3.8'
-          - '3.9'
-          - '3.10'
-          - '3.11'
-
-    defaults:
-      run:
-        shell: bash
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python }}
-
-      - name: Download cpymad wheels
-        uses: actions/download-artifact@v3
-        with:
-          name: dist-${{ matrix.os }}
-          path: dist
-
-      - name: Install cpymad from wheel
-        run: |
-          set -ex
-          python -m pip install -U pip || sudo python -m pip install -U pip
-          pip install cpymad -f dist --no-index --no-deps
-          pip install cpymad
-
-      - run: pip install flake8 twine coverage coveralls pytest
-      - run: twine check dist/*
-      - run: flake8
-
-      - run: coverage run --source=cpymad -p -m pytest -v -k "not dframe"
-      - run: pip install pandas
-      - run: coverage run --source=cpymad -p -m pytest -v -k "dframe"
-
-      - run: coverage combine
-      - run: coveralls
-        if: inputs.COVERALLS_REPO_TOKEN != ''
+      # ARCHFLAGS="-arch arm64"
+      # _PYTHON_HOST_PLATFORM=macosx-11.0-arm64
+      - uses: pypa/cibuildwheel@v2.12.0
         env:
-          COVERALLS_REPO_TOKEN: ${{ inputs.COVERALLS_REPO_TOKEN }}
+          CIBW_ARCHS: ${{ matrix.arch }}
+          CIBW_BUILD: ${{ matrix.python }}
+          CIBW_BEFORE_ALL: ".github/build/macos/madx.sh src/MAD-X ${{ matrix.arch }}"
+          CIBW_BEFORE_BUILD: "pip install cython"
+          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.6"
+          CIBW_ENVIRONMENT: >
+            MADXDIR=src/MAD-X/dist
+            BLAS=1
+            LAPACK=1
 
-  documentation:
-    name: Update documentation
-    needs: build_linux
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-      - uses: actions/download-artifact@v3
-        with:
-          name: dist-linux
-          path: dist
-
-      - run: sudo apt-get install -qy graphviz
-      - run: pip install -U pip
-      - run: pip install cpymad[doc] -f dist
-      - run: make -C doc html
-
-      - name: Deploy to GitHub Pages
-        if: success() && (
-            startsWith(github.ref, 'refs/tags/v') ||
-            github.ref == 'refs/heads/master')
-        uses: crazy-max/ghaction-github-pages@v2
-        with:
-          build_dir: doc/_build/html
-          commit_message: Build documentation from ${{ github.ref }}@${{ github.sha }}
-          jekyll: false
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-  upload_release:
-    name: Upload release
-    needs: test
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
-
-    steps:
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-
-      - name: Fetch built distributions
-        uses: actions/download-artifact@v3
-        with:
-          path: dist
-
-      - name: Merge artifacts to single folder
-        run: |
-          mv dist/dist-*/*.whl dist/
-          mv dist/dist-linux/*.tar.gz dist/
-
-      - name: Install twine
-        run: pip install twine
-
-      - name: Publish PyPI package
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-        run: twine upload dist/*.whl dist/*.tar.gz
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/v')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Needed to point delocate to libgfortran.so, see:
+          # https://github.com/pypa/cibuildwheel/issues/816
+          CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
+            DYLD_LIBRARY_PATH=$LIBDIR delocate-listdeps {wheel} &&
+            DYLD_LIBRARY_PATH=$LIBDIR delocate-wheel --require-archs {delocate_archs} -w {dest_dir} {wheel}
