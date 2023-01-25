@@ -15,7 +15,7 @@ jobs:
           - manylinux1_x86_64
           - manylinux2014_x86_64
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/build/linux
         with:
           base: ${{ matrix.base }}
@@ -24,7 +24,7 @@ jobs:
     name: "Build: Linux (ARM)"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/build/linux
         with:
           base: manylinux2014_aarch64
@@ -36,7 +36,7 @@ jobs:
       run:
         shell: msys2 {0}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: msys2/setup-msys2@v2
         with:
           update: true
@@ -106,7 +106,7 @@ jobs:
     name: "Build: MacOS"
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
 
       - name: Download cached MAD-X build
@@ -169,7 +169,7 @@ jobs:
           - '3.10'
           - '3.11'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/test
         with:
           os: linux
@@ -189,7 +189,7 @@ jobs:
           - '3.10'
           - '3.11'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/test
         with:
           os: windows
@@ -209,7 +209,7 @@ jobs:
           - '3.10'
           - '3.11'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/test
         with:
           os: macos
@@ -221,7 +221,7 @@ jobs:
     needs: build_linux
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v2
         with:
           python-version: '3.9'
