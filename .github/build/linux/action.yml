@@ -32,7 +32,7 @@ runs:
 
     - name: Set up QEMU for running arm64 containers
       if: endsWith(inputs.base, '_aarch64')
-      uses: docker/setup-qemu-action@v1
+      uses: docker/setup-qemu-action@v2
 
     - name: Prepare docker image
       run: |
@@ -63,7 +63,7 @@ runs:
       shell: bash
 
     - name: Upload cpymad wheels
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: dist-linux
         path: dist

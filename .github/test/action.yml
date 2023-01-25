@@ -13,12 +13,12 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/setup-python@v2
+    - uses: actions/setup-python@v4
       with:
         python-version: ${{ inputs.python }}
 
     - name: Download cpymad wheels
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: dist-${{ inputs.os }}
         path: dist
