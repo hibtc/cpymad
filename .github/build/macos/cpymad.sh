@@ -1,41 +1,24 @@
 #! /usr/bin/env bash
 # Build cpymad from checked out sources.
 #
-# Usage: cpymad.sh <MADXDIR>
+# Usage: cpymad.sh <MADXDIR> <PYVER>
 #
 # Arguments:
 #   <MADXDIR>: MAD-X installation directory
+#   <PYVER>:   python version (e.g. "3.9")
 #
 # Outputs:
 #   ./build: builds here
 #   ./dist:  places wheels here
-set -ex
+set -e
 source "$(dirname -- "${BASH_SOURCE[0]}")"/setup_compiler.sh
 export MADXDIR=$1
+export PYVER=$2
 export BLAS=1 LAPACK=1
 
-build()
-{
-    py_ver=$1
-
-    _ conda create -qyf -n py$py_ver python=$py_ver -c anaconda
-    _ conda activate py$py_ver
-    pip install -U setuptools wheel cython
-    rm -f src/cpymad/libmadx.c
-    python setup.py sdist bdist_wheel
-    _ conda deactivate
-}
-
-_() {
-    # run command with disabled trace to decrease noise
-    { set +x; } 2>/dev/null
-    "$@"; exitcode=$?
-    { set -x; return $exitcode; } 2>/dev/null
-}
-
-build 3.6
-build 3.7
-build 3.8
-build 3.9
-build 3.10
-build 3.11
+conda create -qyf -n py$PYVER python=$PYVER -c anaconda
+conda activate py$PYVER
+pip install -U setuptools wheel cython
+rm -f src/cpymad/libmadx.c
+python setup.py sdist bdist_wheel
+conda deactivate

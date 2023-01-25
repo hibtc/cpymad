@@ -134,9 +134,13 @@ jobs:
         with:
           python-version: '3.8'
 
-      - name: Build cpymad wheels
-        # We need 'bash -l' to make conda available within the script:
-        run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist
+      # We need 'bash -l' to make conda available within the script:
+      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.6
+      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.7
+      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.8
+      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.9
+      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.10
+      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.11
 
       - name: Fixup wheel dependencies
         run: |
