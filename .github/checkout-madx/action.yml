@@ -8,5 +8,5 @@ runs:
   using: composite
   steps:
     - run: git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
-        ../MAD-X -b "${{ inputs.madx_version }}" --depth 1
+        src/MAD-X -b "${{ inputs.madx_version }}" --depth 1
       shell: bash

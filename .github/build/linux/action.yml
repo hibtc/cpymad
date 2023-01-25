@@ -1,7 +1,7 @@
 name: Download and prepare MAD-X sources
 inputs:
-  manylinux:
-    description: 'manylinux image name'
+  base:
+    description: 'manylinux base image'
     required: true
 
 runs:
@@ -12,16 +12,14 @@ runs:
 
     - name: Download cached MAD-X build
       id: madx-build-cache
-      # Do NOT use cache@v2, it can't handle relative paths with '..' nor
-      # absolute paths on windows!
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
-        path: ../MAD-X/dist
+        path: src/MAD-X/dist
         key: "\
           madx-${{ env.MADX_VERSION }}-\
-          ${{ inputs.manylinux }}-\
+          ${{ inputs.base }}-\
           patches-${{ hashFiles('.github/patch/*') }}-\
-          scripts-${{ hashFiles('.github/build/manylinux*/madx*') }}\
+          scripts-${{ hashFiles('.github/build/linux/madx*') }}\
         "
 
     - name: Prepare MAD-X source
@@ -31,39 +29,39 @@ runs:
         madx_version: ${{ env.MADX_VERSION }}
 
     - name: Set up QEMU for running arm64 containers
-      if: endsWith(inputs.manylinux, '_aarch64')
-      uses: docker/setup-qemu-action@v1
+      if: endsWith(inputs.base, '_aarch64')
+      uses: docker/setup-qemu-action@v2
 
     - name: Prepare docker image
       run: |
-        docker buildx build .github/build/${{ inputs.manylinux }} \
+        docker buildx build .github/build/linux \
           --build-arg UID=`id -u` \
           --build-arg GID=`id -g` \
-          --build-arg BASE=${{ inputs.manylinux }} \
-          -t cpymad-builder
+          --build-arg BASE=${{ inputs.base }} \
+          -t builder
       shell: bash
 
     - name: Build MAD-X
       if: steps.madx-build-cache.outputs.cache-hit != 'true'
       run: |
         docker run --rm --init \
-          -w /mnt/MAD-X \
-          -v `pwd`/..:/mnt \
-          cpymad-builder \
-          ../cpymad/.github/build/${{ inputs.manylinux }}/madx.sh
+          -w /mnt \
+          -v `pwd`:/mnt \
+          builder \
+          .github/build/linux/madx.sh src/MAD-X
       shell: bash
 
     - name: Build cpymad wheels
       run: |
         docker run --rm --init \
-          -w /mnt/cpymad \
-          -v `pwd`/..:/mnt \
-          cpymad-builder \
-          .github/build/${{ inputs.manylinux }}/cpymad.sh
+          -w /mnt \
+          -v `pwd`:/mnt \
+          builder \
+          .github/build/linux/cpymad.sh src/MAD-X/dist
       shell: bash
 
     - name: Upload cpymad wheels
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: dist-linux
         path: dist

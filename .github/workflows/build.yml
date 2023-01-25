@@ -11,23 +11,23 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        manylinux:
+        base:
           - manylinux1_x86_64
           - manylinux2014_x86_64
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/build/manylinux1_x86_64
+      - uses: actions/checkout@v3
+      - uses: ./.github/build/linux
         with:
-          manylinux: ${{ matrix.manylinux }}
+          base: ${{ matrix.base }}
 
   build_linux_arm:
     name: "Build: Linux (ARM)"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/build/manylinux2014_aarch64
+      - uses: actions/checkout@v3
+      - uses: ./.github/build/linux
         with:
-          manylinux: manylinux2014_aarch64
+          base: manylinux2014_aarch64
 
   build_windows:
     name: "Build: Windows"
@@ -36,7 +36,7 @@ jobs:
       run:
         shell: msys2 {0}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: msys2/setup-msys2@v2
         with:
           update: true
@@ -50,16 +50,14 @@ jobs:
 
       - name: Download cached MAD-X build
         id: madx-build-cache
-        # Do NOT use cache@v2, it can't handle relative paths with '..' nor
-        # absolute paths on windows!
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
-          path: ../MAD-X/dist
+          path: src/MAD-X/dist
           key: "\
             madx-${{ env.MADX_VERSION }}-\
             windows-\
             patches-${{ hashFiles('.github/patch/*') }}-\
-            scripts-${{ hashFiles('.github/build/msys2/madx*') }}\
+            scripts-${{ hashFiles('.github/build/windows/madx*') }}\
           "
 
       - name: Prepare MAD-X source
@@ -70,34 +68,34 @@ jobs:
 
       - name: Build MAD-X
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
-        run: cd ../MAD-X && ../cpymad/.github/build/msys2/madx.sh
+        run: .github/build/windows/madx.sh src/MAD-X
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with: {python-version: "3.6"}
-      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.6
+      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.6
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with: {python-version: "3.7"}
-      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.7
+      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.7
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with: {python-version: "3.8"}
-      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.8
+      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.8
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with: {python-version: "3.9"}
-      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.9
+      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.9
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with: {python-version: "3.10"}
-      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.10
+      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.10
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with: {python-version: "3.11"}
-      - run: .github/build/msys2/cpymad.sh ../MAD-X/dist 3.11
+      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.11
 
       - name: Upload cpymad wheels
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: dist-windows
           path: dist
@@ -106,16 +104,14 @@ jobs:
     name: "Build: MacOS"
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
 
       - name: Download cached MAD-X build
         id: madx-build-cache
-        # Do NOT use cache@v2, it can't handle relative paths with '..' nor
-        # absolute paths on windows!
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
-          path: ../MAD-X/dist
+          path: src/MAD-X/dist
           key: "\
             madx-${{ env.MADX_VERSION }}-\
             macos-\
@@ -131,18 +127,20 @@ jobs:
 
       - name: Build MAD-X
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
-        run: |
-          cd ../MAD-X
-          ../cpymad/.github/build/macos/madx.sh
+        run: .github/build/macos/madx.sh src/MAD-X
 
       - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@v2
         with:
           python-version: '3.8'
 
-      - name: Build cpymad wheels
-        # We need 'bash -l' to make conda available within the script:
-        run: bash -l .github/build/macos/cpymad.sh ../MAD-X/dist
+      # We need 'bash -l' to make conda available within the script:
+      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.6
+      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.7
+      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.8
+      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.9
+      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.10
+      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.11
 
       - name: Fixup wheel dependencies
         run: |
@@ -151,7 +149,7 @@ jobs:
           delocate-listdeps --all dist/*.whl
 
       - name: Upload cpymad wheels
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: dist-macos
           path: dist
@@ -169,7 +167,7 @@ jobs:
           - '3.10'
           - '3.11'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/test
         with:
           os: linux
@@ -189,7 +187,7 @@ jobs:
           - '3.10'
           - '3.11'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/test
         with:
           os: windows
@@ -209,7 +207,7 @@ jobs:
           - '3.10'
           - '3.11'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/test
         with:
           os: macos
@@ -221,11 +219,11 @@ jobs:
     needs: build_linux
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: dist-linux
           path: dist
@@ -254,12 +252,12 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
 
     steps:
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
       - name: Fetch built distributions
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           path: dist
 

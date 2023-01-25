@@ -1,11 +1,18 @@
 #! /usr/bin/env bash
+# Build MAD-X static library from prepared sources.
+#
+# Usage: madx.sh <SRCDIR>
+#
+# Arguments:
+#   <SRCDIR>: root directory of MAD-X sources
+#
+# Outputs:
+#   <SRCDIR>/build: cmake build directory
+#   <SRCDIR>/dist:  MAD-X installation directory (binary distribution)
 set -ex
 source "$(dirname -- "${BASH_SOURCE[0]}")"/setup_compiler.sh
 
-# Build MAD-X static library from prepared sources.
-# Must be run from the root the directory of the MAD-X sources.
-# Builds in './build' and installs to './dist'.
-
+cd "$1"
 mkdir build
 cd build
 
