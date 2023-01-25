@@ -1,7 +1,2 @@
 recursive-include src/cpymad *.pxd *.pyx *.c
 recursive-include test *.py *.madx
-include src/cpymad/COPYING/*
-include LICENSE/*
-include README.rst CHANGES.rst COPYING.rst
-include setup.py
-include utils/*.py
