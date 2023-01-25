@@ -12,11 +12,9 @@ runs:
 
     - name: Download cached MAD-X build
       id: madx-build-cache
-      # Do NOT use cache@v2, it can't handle relative paths with '..' nor
-      # absolute paths on windows!
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
-        path: ../MAD-X/dist
+        path: src/MAD-X/dist
         key: "\
           madx-${{ env.MADX_VERSION }}-\
           ${{ inputs.base }}-\
@@ -40,26 +38,26 @@ runs:
           --build-arg UID=`id -u` \
           --build-arg GID=`id -g` \
           --build-arg BASE=${{ inputs.base }} \
-          -t cpymad-builder
+          -t builder
       shell: bash
 
     - name: Build MAD-X
       if: steps.madx-build-cache.outputs.cache-hit != 'true'
       run: |
         docker run --rm --init \
-          -w /mnt/MAD-X \
-          -v `pwd`/..:/mnt \
-          cpymad-builder \
-          ../cpymad/.github/build/linux/madx.sh
+          -w /mnt \
+          -v `pwd`:/mnt \
+          builder \
+          .github/build/linux/madx.sh src/MAD-X
       shell: bash
 
     - name: Build cpymad wheels
       run: |
         docker run --rm --init \
-          -w /mnt/cpymad \
-          -v `pwd`/..:/mnt \
-          cpymad-builder \
-          .github/build/linux/cpymad.sh
+          -w /mnt \
+          -v `pwd`:/mnt \
+          builder \
+          .github/build/linux/cpymad.sh src/MAD-X/dist
       shell: bash
 
     - name: Upload cpymad wheels

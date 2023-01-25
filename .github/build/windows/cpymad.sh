@@ -1,11 +1,16 @@
 #! /usr/bin/env bash
+# Build cpymad from checked out sources.
+#
+# Usage: cpymad.sh <MADXDIR> <PYVER>
+#
+# Arguments:
+#   <MADXDIR>: MAD-X installation directory
+#   <PYVER>:   python version
+#
+# Outputs:
+#   ./build: builds here
+#   ./dist:  places wheels here
 set -ex
-
-# Usage:
-# ./cpymad.sh <MADXDIR> <python-version>
-
-# Expects a built madx distribution in <MADXDIR>.
-# Builds in './build' and places wheels in './dist'.
 
 # We manually build the C extension using our msys gcc because setuptools is
 # not smart enough to figure out how to build it. The downside is that

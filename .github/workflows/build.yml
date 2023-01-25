@@ -50,11 +50,9 @@ jobs:
 
       - name: Download cached MAD-X build
         id: madx-build-cache
-        # Do NOT use cache@v2, it can't handle relative paths with '..' nor
-        # absolute paths on windows!
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
-          path: ../MAD-X/dist
+          path: src/MAD-X/dist
           key: "\
             madx-${{ env.MADX_VERSION }}-\
             windows-\
@@ -70,31 +68,31 @@ jobs:
 
       - name: Build MAD-X
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
-        run: cd ../MAD-X && ../cpymad/.github/build/windows/madx.sh
+        run: .github/build/windows/madx.sh src/MAD-X
 
       - uses: actions/setup-python@v4
         with: {python-version: "3.6"}
-      - run: .github/build/windows/cpymad.sh ../MAD-X/dist 3.6
+      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.6
 
       - uses: actions/setup-python@v4
         with: {python-version: "3.7"}
-      - run: .github/build/windows/cpymad.sh ../MAD-X/dist 3.7
+      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.7
 
       - uses: actions/setup-python@v4
         with: {python-version: "3.8"}
-      - run: .github/build/windows/cpymad.sh ../MAD-X/dist 3.8
+      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.8
 
       - uses: actions/setup-python@v4
         with: {python-version: "3.9"}
-      - run: .github/build/windows/cpymad.sh ../MAD-X/dist 3.9
+      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.9
 
       - uses: actions/setup-python@v4
         with: {python-version: "3.10"}
-      - run: .github/build/windows/cpymad.sh ../MAD-X/dist 3.10
+      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.10
 
       - uses: actions/setup-python@v4
         with: {python-version: "3.11"}
-      - run: .github/build/windows/cpymad.sh ../MAD-X/dist 3.11
+      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.11
 
       - name: Upload cpymad wheels
         uses: actions/upload-artifact@v3
@@ -111,11 +109,9 @@ jobs:
 
       - name: Download cached MAD-X build
         id: madx-build-cache
-        # Do NOT use cache@v2, it can't handle relative paths with '..' nor
-        # absolute paths on windows!
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
-          path: ../MAD-X/dist
+          path: src/MAD-X/dist
           key: "\
             madx-${{ env.MADX_VERSION }}-\
             macos-\
@@ -131,9 +127,7 @@ jobs:
 
       - name: Build MAD-X
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
-        run: |
-          cd ../MAD-X
-          ../cpymad/.github/build/macos/madx.sh
+        run: .github/build/macos/madx.sh src/MAD-X
 
       - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@v2
@@ -142,7 +136,7 @@ jobs:
 
       - name: Build cpymad wheels
         # We need 'bash -l' to make conda available within the script:
-        run: bash -l .github/build/macos/cpymad.sh ../MAD-X/dist
+        run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist
 
       - name: Fixup wheel dependencies
         run: |

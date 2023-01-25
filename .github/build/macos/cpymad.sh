@@ -1,7 +1,17 @@
 #! /usr/bin/env bash
+# Build cpymad from checked out sources.
+#
+# Usage: cpymad.sh <MADXDIR>
+#
+# Arguments:
+#   <MADXDIR>: MAD-X installation directory
+#
+# Outputs:
+#   ./build: builds here
+#   ./dist:  places wheels here
 set -ex
 source "$(dirname -- "${BASH_SOURCE[0]}")"/setup_compiler.sh
-export MADXDIR=../MAD-X/dist
+export MADXDIR=$1
 export BLAS=1 LAPACK=1
 
 build()

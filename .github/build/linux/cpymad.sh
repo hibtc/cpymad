@@ -1,12 +1,18 @@
 #! /usr/bin/env bash
+# Build cpymad from checked out sources.
+#
+# Usage: cpymad.sh <MADXDIR>
+#
+# Arguments:
+#   <MADXDIR>: MAD-X installation directory
+#
+# Outputs:
+#   ./build: builds here
+#   ./dist:  places wheels here
 set -ex
 
-# Build cpymad from checked out sources.
-# Expects a built madx distribution in '../MAD-X/dist'.
-# Builds in './build' and places wheels in './dist'.
-
 # Build variables:
-export MADXDIR=$(readlink -nf ../MAD-X/dist)
+export MADXDIR=$(readlink -nf "$1")
 export X11=0 BLAS=0 LAPACK=0
 export CFLAGS="-fno-lto"
 export LDFLAGS="-fno-lto"
