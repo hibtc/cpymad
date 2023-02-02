@@ -1,18 +1,21 @@
 #! /usr/bin/env bash
 # Build MAD-X static library from prepared sources.
 #
-# Usage: madx.sh <SRCDIR>
+# Usage: madx.sh <SRCDIR> <ARCH>
 #
 # Arguments:
 #   <SRCDIR>: root directory of MAD-X sources
+#   <ARCH>:   target architecture (x86_64/arm64)
 #
 # Outputs:
 #   <SRCDIR>/build: cmake build directory
 #   <SRCDIR>/dist:  MAD-X installation directory (binary distribution)
 set -ex
-source "$(dirname -- "${BASH_SOURCE[0]}")"/setup_compiler.sh
 
-cd "$1"
+srcdir=$1
+arch=$2
+
+cd "$srcdir"
 mkdir build
 cd build
 
@@ -21,7 +24,7 @@ if [[ ! -f CMakeCache.txt ]]; then
     cmake .. \
         -DCMAKE_POLICY_DEFAULT_CMP0077=NEW \
         -DCMAKE_POLICY_DEFAULT_CMP0042=NEW \
-        -DCMAKE_OSX_ARCHITECTURES=x86_64 \
+        -DCMAKE_OSX_ARCHITECTURES=$arch \
         -DBUILD_SHARED_LIBS=OFF \
         -DMADX_STATIC=OFF \
         -DCMAKE_INSTALL_PREFIX=../dist \
@@ -32,4 +35,4 @@ if [[ ! -f CMakeCache.txt ]]; then
         -DMADX_X11=OFF
 fi
 
-cmake --build . --target install -j
+cmake --build . --target install
