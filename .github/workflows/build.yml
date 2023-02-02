@@ -43,11 +43,9 @@ jobs:
             scripts-${{ hashFiles('.github/build/linux/madx*') }}\
           "
 
-      - name: Prepare MAD-X source
+      - run: git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
+          src/MAD-X -b $MADX_VERSION --depth 1
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
-        uses: ./.github/checkout-madx
-        with:
-          madx_version: ${{ env.MADX_VERSION }}
 
       - name: Set up QEMU for running arm64 containers
         if: endsWith(matrix.base, '_aarch64')
@@ -118,11 +116,9 @@ jobs:
             scripts-${{ hashFiles('.github/build/windows/madx*') }}\
           "
 
-      - name: Prepare MAD-X source
+      - run: git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
+          src/MAD-X -b $MADX_VERSION --depth 1
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
-        uses: ./.github/checkout-madx
-        with:
-          madx_version: ${{ env.MADX_VERSION }}
 
       - name: Build MAD-X
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
@@ -182,11 +178,9 @@ jobs:
             scripts-${{ hashFiles('.github/build/macos/madx*') }}\
           "
 
-      - name: Prepare MAD-X source
+      - run: git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
+          src/MAD-X -b $MADX_VERSION --depth 1
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
-        uses: ./.github/checkout-madx
-        with:
-          madx_version: ${{ env.MADX_VERSION }}
 
       # Select matching Xcode and SDK, see: https://xcodereleases.com/
       - run: |
