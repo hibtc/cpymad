@@ -1,9 +1,17 @@
 Changelog
 ~~~~~~~~~
 
+1.12.0
+======
+Date: 02.02.2023
+
+- add experimental wheels for MacOS M1.
+  Beware: Due to lack of hosted runners, these are completely untested!
+
+
 1.11.0
 ======
-Date: 09.09.2022
+Date: 24.01.2023
 
 - add wheels for python 3.11
 - fix platform identification to work with Apple Silicon architecture
