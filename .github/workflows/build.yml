@@ -26,20 +26,66 @@ jobs:
         base:
           - manylinux1_x86_64
           - manylinux2014_x86_64
+          - manylinux2014_aarch64
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/build/linux
-        with:
-          base: ${{ matrix.base }}
+      - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
 
-  build_linux_arm:
-    name: "Build: Linux (ARM)"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/build/linux
+      - name: Download cached MAD-X build
+        id: madx-build-cache
+        uses: actions/cache@v3
         with:
-          base: manylinux2014_aarch64
+          path: src/MAD-X/dist
+          key: "\
+            madx-${{ env.MADX_VERSION }}-\
+            ${{ matrix.base }}-\
+            patches-${{ hashFiles('.github/patch/*') }}-\
+            scripts-${{ hashFiles('.github/build/linux/madx*') }}\
+          "
+
+      - name: Prepare MAD-X source
+        if: steps.madx-build-cache.outputs.cache-hit != 'true'
+        uses: ./.github/checkout-madx
+        with:
+          madx_version: ${{ env.MADX_VERSION }}
+
+      - name: Set up QEMU for running arm64 containers
+        if: endsWith(matrix.base, '_aarch64')
+        uses: docker/setup-qemu-action@v2
+
+      - name: Prepare docker image
+        run: |
+          docker buildx build .github/build/linux \
+            --build-arg UID=`id -u` \
+            --build-arg GID=`id -g` \
+            --build-arg BASE=${{ matrix.base }} \
+            -t builder
+        shell: bash
+
+      - name: Build MAD-X
+        if: steps.madx-build-cache.outputs.cache-hit != 'true'
+        run: |
+          docker run --rm --init \
+            -w /mnt \
+            -v `pwd`:/mnt \
+            builder \
+            .github/build/linux/madx.sh src/MAD-X
+        shell: bash
+
+      - name: Build cpymad wheels
+        run: |
+          docker run --rm --init \
+            -w /mnt \
+            -v `pwd`:/mnt \
+            builder \
+            .github/build/linux/cpymad.sh src/MAD-X/dist
+        shell: bash
+
+      - name: Upload cpymad wheels
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-linux
+          path: dist
 
   build_windows:
     name: "Build: Windows"
@@ -305,7 +351,7 @@ jobs:
 
   upload_release:
     name: Upload release
-    needs: [build_linux_arm, test]
+    needs: test
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
 
