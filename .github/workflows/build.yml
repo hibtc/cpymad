@@ -170,17 +170,29 @@ jobs:
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
         run: .github/build/macos/madx.sh src/MAD-X ${{ matrix.arch }}
 
-      - name: Setup Miniconda
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          python-version: '3.8'
+      - uses: actions/setup-python@v4
+        with: { python-version: "3.6" }
+      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
 
-      # We need 'bash -l' to make conda available within the script:
-      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.7
-      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.8
-      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.9
-      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.10
-      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.11
+      - uses: actions/setup-python@v4
+        with: { python-version: "3.7" }
+      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
+
+      - uses: actions/setup-python@v4
+        with: { python-version: "3.8" }
+      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
+
+      - uses: actions/setup-python@v4
+        with: { python-version: "3.9" }
+      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
+
+      - uses: actions/setup-python@v4
+        with: { python-version: "3.10" }
+      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
+
+      - uses: actions/setup-python@v4
+        with: { python-version: "3.11" }
+      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
 
       - name: Fixup wheel dependencies
         run: |
