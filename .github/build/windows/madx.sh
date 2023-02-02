@@ -30,4 +30,4 @@ if [[ ! -f CMakeCache.txt ]]; then
         -DMADX_X11=OFF
 fi
 
-cmake --build . --target install -j
+cmake --build . --target install
