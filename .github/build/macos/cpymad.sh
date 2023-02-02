@@ -11,7 +11,6 @@
 #   ./build: builds here
 #   ./dist:  places wheels here
 set -e
-source "$(dirname -- "${BASH_SOURCE[0]}")"/setup_compiler.sh
 export MADXDIR=$1
 export PYVER=$2
 export BLAS=1 LAPACK=1

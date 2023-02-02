@@ -102,7 +102,12 @@ jobs:
 
   build_macos:
     name: "Build: MacOS"
-    runs-on: macos-latest
+    runs-on: macos-11
+    strategy:
+      matrix:
+        arch:
+          - x86_64
+          - arm64
     steps:
       - uses: actions/checkout@v3
       - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
@@ -114,7 +119,7 @@ jobs:
           path: src/MAD-X/dist
           key: "\
             madx-${{ env.MADX_VERSION }}-\
-            macos-\
+            macos-${{ matrix.arch }}-\
             patches-${{ hashFiles('.github/patch/*') }}-\
             scripts-${{ hashFiles('.github/build/macos/madx*') }}\
           "
@@ -125,9 +130,45 @@ jobs:
         with:
           madx_version: ${{ env.MADX_VERSION }}
 
+      # Select matching Xcode and SDK, see: https://xcodereleases.com/
+      - run: |
+          sudo xcode-select -switch /Applications/Xcode_12.5.1.app
+          echo "SDKROOT=$(xcrun --show-sdk-path)" >> $GITHUB_ENV
+
+      - name: Setup gfortran
+        run: |
+          set -xeo pipefail
+
+          if [[ ${{ matrix.arch }} == "x86_64" ]]; then
+            FC=gfortran-11
+            LIBDIR=$(dirname $(find /usr/local/Cellar/gcc@11 -name libgfortran.dylib))
+            echo "MACOSX_DEPLOYMENT_TARGET=10.14" >> $GITHUB_ENV
+
+          elif [[ ${{ matrix.arch }} == "arm64" ]]; then
+            # See: https://github.com/MacPython/gfortran-install
+            name=gfortran-darwin-arm64-cross
+            curl -L -O https://github.com/isuruf/gcc/releases/download/gcc-11.3.0-2/${name}.tar.gz
+            sudo tar -f ${name}.tar.gz -C /opt -xzv
+            rm ${name}.tar.gz
+
+            FC=$(find /opt/${name}/bin -name "*-gfortran")
+            LIBDIR=$(dirname $(find /opt/${name}/lib -name libgfortran.dylib))
+
+            # See: https://github.com/pypa/cibuildwheel/discussions/997
+            echo "ARCHFLAGS=-arch arm64" >> $GITHUB_ENV
+            echo "_PYTHON_HOST_PLATFORM=macosx-11.0-arm64" >> $GITHUB_ENV
+            echo "MACOSX_DEPLOYMENT_TARGET=11.0" >> $GITHUB_ENV
+          fi
+
+          LDFLAGS="-L$LIBDIR -Wl,-rpath,$LIBDIR"
+
+          echo "FC=$FC"           >> $GITHUB_ENV  # for cmake
+          echo "LDFLAGS=$LDFLAGS" >> $GITHUB_ENV  # for setuptools
+          echo "LIBDIR=$LIBDIR"   >> $GITHUB_ENV  # for delocate step
+
       - name: Build MAD-X
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
-        run: .github/build/macos/madx.sh src/MAD-X
+        run: .github/build/macos/madx.sh src/MAD-X ${{ matrix.arch }}
 
       - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@v2
@@ -135,7 +176,6 @@ jobs:
           python-version: '3.8'
 
       # We need 'bash -l' to make conda available within the script:
-      - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.6
       - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.7
       - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.8
       - run: bash -l .github/build/macos/cpymad.sh src/MAD-X/dist 3.9
@@ -145,8 +185,8 @@ jobs:
       - name: Fixup wheel dependencies
         run: |
           pip3 install delocate
-          delocate-wheel dist/*.whl
-          delocate-listdeps --all dist/*.whl
+          DYLD_LIBRARY_PATH=$LIBDIR delocate-wheel dist/*.whl
+          DYLD_LIBRARY_PATH=$LIBDIR delocate-listdeps --all dist/*.whl
 
       - name: Upload cpymad wheels
         uses: actions/upload-artifact@v3
