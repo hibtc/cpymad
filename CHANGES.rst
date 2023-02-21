@@ -1,6 +1,13 @@
 Changelog
 ~~~~~~~~~
 
+1.12.1
+======
+Date: 21.02.2023
+
+- ignore comment markers within string literals (#121)
+
+
 1.12.0
 ======
 Date: 02.02.2023
