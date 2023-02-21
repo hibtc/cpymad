@@ -1229,24 +1229,31 @@ cdef clib.variable* _get_var(name) except NULL:
 
 
 cdef void _strip_comments(char* text) nogil:
+    cdef int in_quotes = 0
     cdef char* dest = text
     cdef char c, d
     while True:
         c = text[0]
         if c == 0:
             break
-        d = text[1]
-        if c == b'!' or (c == b'/' and d == b'/'):
-            text = strchr(text+1, b'\n')
-            if text == NULL:
-                break
-            continue
-        if c == b'/' and d == b'*':
-            text = strstr(text+2, b"*/")
-            if text == NULL:
-                break
-            text += 2
-            continue
+        if in_quotes:
+            in_quotes = c != d
+        elif c == b'\'' or c == b'"':
+            in_quotes = 1
+            d = c
+        else:
+            d = text[1]
+            if c == b'!' or (c == b'/' and d == b'/'):
+                text = strchr(text+1, b'\n')
+                if text == NULL:
+                    break
+                continue
+            if c == b'/' and d == b'*':
+                text = strstr(text+2, b"*/")
+                if text == NULL:
+                    break
+                text += 2
+                continue
         dest[0] = text[0]
         text += 1
         dest += 1

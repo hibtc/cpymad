@@ -902,6 +902,19 @@ def test_comments(mad):
     assert var.x == 6
 
 
+def test_quoted_comment_markers(mad):
+    """Comment markers within quotes should be ignored."""
+    var = mad.globals
+    mad("print, text='//'; x = 7;")
+    assert var.x == 7
+    mad('print, text="//"; x = 8;')
+    assert var.x == 8
+    mad('print, text="!"; x = 9;')
+    assert var.x == 9
+    mad('print, text="/*"; x = 10; print, text="*/";')
+    assert var.x == 10
+
+
 def test_multiline_input(mad):
     var = mad.globals
     mad('''
