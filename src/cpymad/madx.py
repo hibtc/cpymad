@@ -276,6 +276,11 @@ class Madx:
         """Values of current options."""
         return Command(self, self._libmadx.get_options())
 
+    @property
+    def beam(self):
+        """Get the current default beam."""
+        return Command(self._madx, self._libmadx.get_current_beam())
+
     # Methods:
 
     def input(self, text: str) -> bool:

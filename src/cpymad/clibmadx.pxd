@@ -226,6 +226,7 @@ cdef enum:
 # Global variables:
 cdef extern from "madX/mad_gvar.h" nogil:
     command* options            # current options
+    command* current_beam       # default beam
     sequence* current_sequ      # active sequence
     table_list* table_register  # list of all tables
     char_p_array* tmp_p_array   # temporary buffer for splits

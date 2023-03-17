@@ -341,6 +341,17 @@ def test_verbose(mad):
     assert mad.options.info is True
 
 
+def test_current_beam(mad):
+    mad.beam(particle='electron', ex=1, ey=2)
+    assert mad.beam.particle == 'electron'
+    assert mad.beam.ex == 1
+    assert mad.beam.ey == 2
+    mad.beam(particle='positron', ex=2, ey=1)
+    assert mad.beam.particle == 'positron'
+    assert mad.beam.ex == 2
+    assert mad.beam.ey == 1
+
+
 def test_active_sequence(mad):
     mad.input(SEQU)
     mad.command.beam('ex=1, ey=2, particle=electron, sequence=s1;')
