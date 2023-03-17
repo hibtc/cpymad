@@ -1023,7 +1023,7 @@ def test_dframe_after_use(mad):
         ['#s', '#e', 'dfd', 'mqd', 'dff', 'mqf']
 
 
-def test_beam_list(mad,lib):
+def test_beam_list(mad, lib):
     mad.beam(pc=100)
-    assert lib.get_defined_beam('default_beam')['data']['pc'].value ==100
-    assert lib.get_defined_beam_names()==['default_beam']
+    assert lib.get_defined_beam('default_beam')['data']['pc'].value == 100
+    assert lib.get_defined_beam_names() == ['default_beam']
