@@ -119,6 +119,10 @@ __all__ = [
     'get_defined_command',
     'get_defined_command_names',
 
+    # defined commands
+    'get_defined_beam',
+    'get_defined_beam_names',
+
     # imported from 'os' for convenience in madx.Madx and should not be
     # considered part of the public interface:
     'getcwd',
