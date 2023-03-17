@@ -221,6 +221,7 @@ class Madx:
         self.elements = GlobalElementList(self)
         self.base_types = BaseTypeMap(self)
         self.sequence = SequenceMap(self)
+        self.beams = BeamMap(self)
         self.table = TableMap(self._libmadx)
         self._enter_count = 0
         self._batch = None
@@ -600,6 +601,27 @@ class SequenceMap(_Mapping):
         except RuntimeError:
             return None
 
+class BeamMap(_Mapping):
+    """Mapping of all sequences (:class:`Sequence`) in memory."""
+
+    def __init__(self, madx):
+        self._madx = madx
+        self._libmadx = madx._libmadx
+
+    def __iter__(self):
+        return iter(self._libmadx.get_beam_names())
+
+    def __getitem__(self, name):
+        try:
+            return Command(self._madx,self._libmadx.get_beam(name))
+        except ValueError:
+            raise KeyError("Unknown beam: {!r}".format(name)) from None
+
+    def __contains__(self, name):
+        return name in self._libmadx.get_beam_names()
+
+    def __len__(self):
+        return len(self._libmadx.get_beam_names())
 
 class TableMap(_Mapping):
 
