@@ -601,8 +601,9 @@ class SequenceMap(_Mapping):
         except RuntimeError:
             return None
 
+
 class BeamMap(_Mapping):
-    """Mapping of all sequences (:class:`Sequence`) in memory."""
+    """Mapping of all beams (:class:`Beam`) in memory."""
 
     def __init__(self, madx):
         self._madx = madx
@@ -613,7 +614,7 @@ class BeamMap(_Mapping):
 
     def __getitem__(self, name):
         try:
-            return Command(self._madx,self._libmadx.get_beam(name))
+            return Command(self._madx, self._libmadx.get_beam(name))
         except ValueError:
             raise KeyError("Unknown beam: {!r}".format(name)) from None
 
@@ -622,6 +623,7 @@ class BeamMap(_Mapping):
 
     def __len__(self):
         return len(self._libmadx.get_beam_names())
+
 
 class TableMap(_Mapping):
 
