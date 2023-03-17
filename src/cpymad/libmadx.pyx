@@ -907,7 +907,7 @@ def get_defined_beam(beam_name: str) -> dict:
     cdef int index = clib.name_list_pos(_beam_name, clib.beam_list.list)
     if index == -1:
         raise ValueError("Invalid beam: {!r}".format(beam_name))
-    return _parse_beam(clib.beam_list.beams[index])
+    return _parse_command(clib.beam_list.commands[index])
 
 def get_defined_beam_names() -> list:
     """Return list of MAD-X beam names."""
