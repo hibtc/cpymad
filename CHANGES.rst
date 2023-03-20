@@ -1,6 +1,17 @@
 Changelog
 ~~~~~~~~~
 
+1.13.0
+======
+Date: 20.03.2023
+
+- change ``Madx.beam`` to provide access to the current default beam instead
+  of simply deferring to the ``BEAM`` base command. You can still use it as
+  command though.
+- add mapping ``Madx.beams`` to provide access to all defined beams by name,
+  similar to how ``Madx.table`` and ``Madx.sequence`` currently work.
+
+
 1.12.1
 ======
 Date: 21.02.2023
