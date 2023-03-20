@@ -59,6 +59,9 @@ __all__ = [
 
     'get_options',
 
+    # beam
+    'get_current_beam',
+
     # iterate sequences
     'sequence_exists',
     'get_sequence_names',
@@ -252,6 +255,13 @@ def get_globals() -> list:
     Get a list of names of all global variables.
     """
     return _name_list(clib.variable_list.list)
+
+
+def get_current_beam() -> dict:
+    """
+    Get properties of current default beam.
+    """
+    return _parse_command(clib.current_beam)
 
 
 def sequence_exists(sequence_name: str) -> bool:
