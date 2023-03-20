@@ -122,6 +122,10 @@ __all__ = [
     'get_defined_command',
     'get_defined_command_names',
 
+    # defined commands
+    'get_beam',
+    'get_beam_names',
+
     # imported from 'os' for convenience in madx.Madx and should not be
     # considered part of the public interface:
     'getcwd',
@@ -911,6 +915,17 @@ def get_defined_command_names() -> list:
     """Return list of MAD-X command names."""
     return _name_list(clib.defined_commands.list)
 
+def get_beam(beam_name: str) -> dict:
+    """Return MAD-X beam as dict of values."""
+    cdef bytes _beam_name = _cstr(beam_name)
+    cdef int index = clib.name_list_pos(_beam_name, clib.beam_list.list)
+    if index == -1:
+        raise ValueError("Invalid beam: {!r}".format(beam_name))
+    return _parse_command(clib.beam_list.commands[index])
+
+def get_beam_names() -> list:
+    """Return list of MAD-X beam names."""
+    return _name_list(clib.beam_list.list)
 
 def is_sequence_expanded(sequence_name: str) -> bool:
     """

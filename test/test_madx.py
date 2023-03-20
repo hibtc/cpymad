@@ -1032,3 +1032,9 @@ def test_dframe_after_use(mad):
     # this line. It does not represent desired behaviour!
     assert mad.table.twiss.row_names() == \
         ['#s', '#e', 'dfd', 'mqd', 'dff', 'mqf']
+
+
+def test_beam_list(mad, lib):
+    mad.beam(pc=100)
+    assert lib.get_beam('default_beam')['data']['pc'].value == 100
+    assert lib.get_beam_names() == ['default_beam']

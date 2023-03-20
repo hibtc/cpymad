@@ -238,6 +238,7 @@ cdef extern from "madX/mad_gvar.h" nogil:
     command_list* defined_commands  # with base types, but no user elements
     int start_var               # start of variables after predefined constants
     int_array* deco             # temporary buffer for polished expressions
+    command_list* beam_list     # beam list
 
 
 # Function declarations:
