@@ -342,10 +342,12 @@ def test_verbose(mad):
 
 
 def test_current_beam(mad):
-    mad.beam(particle='electron', ex=1, ey=2)
+    # Check that .beam provides access to the default BEAM:
+    mad.input("beam, particle='electron', ex=1, ey=2;")
     assert mad.beam.particle == 'electron'
     assert mad.beam.ex == 1
     assert mad.beam.ey == 2
+    # Check that .beam can be used as command:
     mad.beam(particle='positron', ex=2, ey=1)
     assert mad.beam.particle == 'positron'
     assert mad.beam.ex == 2
@@ -1034,7 +1036,7 @@ def test_dframe_after_use(mad):
         ['#s', '#e', 'dfd', 'mqd', 'dff', 'mqf']
 
 
-def test_beam_list(mad, lib):
-    mad.beam(pc=100)
-    assert lib.get_beam('default_beam')['data']['pc'].value == 100
-    assert lib.get_beam_names() == ['default_beam']
+def test_beams(mad):
+    mad.input("beam, pc=100;")
+    assert mad.beams.default_beam.pc == 100
+    assert list(mad.beams) == ['default_beam']
