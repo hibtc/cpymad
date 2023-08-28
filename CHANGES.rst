@@ -1,6 +1,14 @@
 Changelog
 ~~~~~~~~~
 
+1.14.1
+======
+Date: 28.08.2023
+
+- fix ``ValueError`` on CERN SWAN jupyter instances due to treating stdout
+  as binary stream (#125)
+
+
 1.14.0
 ======
 Date: 07.05.2023
