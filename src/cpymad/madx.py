@@ -196,7 +196,7 @@ class Madx:
                 if callable(stdout):
                     try:
                         stdout(b'')
-                    except TypeError:
+                    except (TypeError, ValueError):
                         stdout = TextCallback(stdout)
             Popen_args['stdout'] = \
                 subprocess.PIPE if callable(stdout) else stdout
