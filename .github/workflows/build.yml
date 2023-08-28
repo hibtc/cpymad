@@ -2,8 +2,6 @@ name: build
 on:
   push:
   pull_request:
-  schedule:
-    - cron: '45 14  *  *  1'
 
 jobs:
   # Quickly check with flake8 without having to go through the whole build:
