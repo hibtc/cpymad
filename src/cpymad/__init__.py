@@ -29,6 +29,14 @@ if sys.version_info < (3, 7):
     warnings.warn(_unsupported_version, DeprecationWarning)
 
 
+def _read_text(package, resource, **kwargs):
+    try:
+        from importlib.resources import files
+        return files(package).joinpath(resource).read_text(**kwargs)
+    except ImportError:
+        from importlib.resources import read_text
+        return read_text(package, resource, **kwargs)
+
+
 def get_copyright_notice() -> str:
-    from importlib_resources import read_text
-    return read_text('cpymad.COPYING', 'cpymad.rst', encoding='utf-8')
+    return _read_text('cpymad.COPYING', 'cpymad.rst', encoding='utf-8')

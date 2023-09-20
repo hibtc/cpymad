@@ -150,7 +150,6 @@ if __name__ == '__main__':
         zip_safe=False,             # zip is bad for redistributing shared libs
         include_package_data=True,  # include files matched by MANIFEST.in
         install_requires=[
-            'importlib_resources',
             'numpy',
             'minrpc>=0.0.8',
         ],
