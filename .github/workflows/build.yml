@@ -47,7 +47,7 @@ jobs:
 
       - name: Set up QEMU for running arm64 containers
         if: endsWith(matrix.base, '_aarch64')
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
 
       - name: Prepare docker image
         run: |
