@@ -9,7 +9,7 @@ jobs:
     name: "Fast flake8"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       # Check on lowest supported python version to catch syntax errors:
       - uses: actions/setup-python@v4
         with: { python-version: "3.7" }
@@ -26,7 +26,7 @@ jobs:
           - manylinux2014_x86_64
           - manylinux2014_aarch64
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
 
       - name: Download cached MAD-X build
@@ -90,7 +90,7 @@ jobs:
       run:
         shell: msys2 {0}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: msys2/setup-msys2@v2
         with:
           update: true
@@ -161,7 +161,7 @@ jobs:
           - x86_64
           - arm64
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
 
       - name: Download cached MAD-X build
@@ -278,7 +278,7 @@ jobs:
         shell: bash
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python }}
@@ -315,7 +315,7 @@ jobs:
     needs: build_linux
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
