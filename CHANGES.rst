@@ -1,6 +1,15 @@
 Changelog
 ~~~~~~~~~
 
+1.14.2
+======
+Date: 20.09.2023
+
+- fix error in ``get_copyright_notice`` due to backward incompatible API
+  changes of ``importlib_resources``. This function now requires py>=3.7,
+  as supporting it for lower python versions would be unwarranted effort.
+
+
 1.14.1
 ======
 Date: 28.08.2023
