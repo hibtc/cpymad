@@ -1,6 +1,14 @@
 Changelog
 ~~~~~~~~~
 
+1.15.0
+======
+Date: 05.12.2023
+
+- update to MAD-X 5.09.01
+- add wheels for python 3.12
+
+
 1.14.2
 ======
 Date: 20.09.2023
