@@ -1,0 +1,6 @@
+get_sequence_beam
+=================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_sequence_beam

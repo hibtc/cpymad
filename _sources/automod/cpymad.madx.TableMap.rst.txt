@@ -1,0 +1,23 @@
+TableMap
+========
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: TableMap
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~TableMap.get
+      ~TableMap.items
+      ~TableMap.keys
+      ~TableMap.values
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: get
+   .. automethod:: items
+   .. automethod:: keys
+   .. automethod:: values

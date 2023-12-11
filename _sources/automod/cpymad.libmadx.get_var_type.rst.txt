@@ -1,0 +1,6 @@
+get_var_type
+============
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_var_type

@@ -1,0 +1,6 @@
+temp_filename
+=============
+
+.. currentmodule:: cpymad.util
+
+.. autofunction:: temp_filename

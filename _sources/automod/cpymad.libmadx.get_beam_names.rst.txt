@@ -1,0 +1,6 @@
+get_beam_names
+==============
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_beam_names

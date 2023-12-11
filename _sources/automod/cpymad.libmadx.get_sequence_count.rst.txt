@@ -1,0 +1,6 @@
+get_sequence_count
+==================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_sequence_count

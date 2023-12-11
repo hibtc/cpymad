@@ -1,0 +1,49 @@
+Command
+=======
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: Command
+   :show-inheritance:
+
+   .. rubric:: Attributes Summary
+
+   .. autosummary::
+
+      ~Command.cmdpar
+      ~Command.defs
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~Command.__call__
+      ~Command.clear
+      ~Command.clone
+      ~Command.get
+      ~Command.items
+      ~Command.keys
+      ~Command.pop
+      ~Command.popitem
+      ~Command.setdefault
+      ~Command.update
+      ~Command.values
+
+   .. rubric:: Attributes Documentation
+
+   .. autoattribute:: cmdpar
+   .. autoattribute:: defs
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: __call__
+   .. automethod:: clear
+   .. automethod:: clone
+   .. automethod:: get
+   .. automethod:: items
+   .. automethod:: keys
+   .. automethod:: pop
+   .. automethod:: popitem
+   .. automethod:: setdefault
+   .. automethod:: update
+   .. automethod:: values

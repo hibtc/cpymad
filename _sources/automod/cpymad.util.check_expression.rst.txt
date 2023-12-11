@@ -1,0 +1,6 @@
+check_expression
+================
+
+.. currentmodule:: cpymad.util
+
+.. autofunction:: check_expression

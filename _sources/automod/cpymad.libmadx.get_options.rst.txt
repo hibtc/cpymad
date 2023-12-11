@@ -1,0 +1,6 @@
+get_options
+===========
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_options

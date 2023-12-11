@@ -1,0 +1,6 @@
+is_sequence_expanded
+====================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: is_sequence_expanded

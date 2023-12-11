@@ -1,0 +1,6 @@
+metadata
+========
+
+.. currentmodule:: cpymad.madx
+
+.. autodata:: metadata

@@ -1,0 +1,23 @@
+CommandMap
+==========
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: CommandMap
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~CommandMap.get
+      ~CommandMap.items
+      ~CommandMap.keys
+      ~CommandMap.values
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: get
+   .. automethod:: items
+   .. automethod:: keys
+   .. automethod:: values

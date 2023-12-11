@@ -1,0 +1,31 @@
+PhaseError
+==========
+
+.. currentmodule:: cpymad.types
+
+.. autoclass:: PhaseError
+   :show-inheritance:
+
+   .. rubric:: Attributes Summary
+
+   .. autosummary::
+
+      ~PhaseError.dpn
+      ~PhaseError.dps
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~PhaseError.count
+      ~PhaseError.index
+
+   .. rubric:: Attributes Documentation
+
+   .. autoattribute:: dpn
+   .. autoattribute:: dps
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: count
+   .. automethod:: index

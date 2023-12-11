@@ -1,0 +1,21 @@
+ExpandedElementList
+===================
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: ExpandedElementList
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~ExpandedElementList.at
+      ~ExpandedElementList.count
+      ~ExpandedElementList.index
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: at
+   .. automethod:: count
+   .. automethod:: index

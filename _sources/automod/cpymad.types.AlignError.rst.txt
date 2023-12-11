@@ -1,0 +1,55 @@
+AlignError
+==========
+
+.. currentmodule:: cpymad.types
+
+.. autoclass:: AlignError
+   :show-inheritance:
+
+   .. rubric:: Attributes Summary
+
+   .. autosummary::
+
+      ~AlignError.arex
+      ~AlignError.arey
+      ~AlignError.dphi
+      ~AlignError.dpsi
+      ~AlignError.ds
+      ~AlignError.dtheta
+      ~AlignError.dx
+      ~AlignError.dy
+      ~AlignError.mredx
+      ~AlignError.mredy
+      ~AlignError.mrex
+      ~AlignError.mrey
+      ~AlignError.mscalx
+      ~AlignError.mscaly
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~AlignError.count
+      ~AlignError.index
+
+   .. rubric:: Attributes Documentation
+
+   .. autoattribute:: arex
+   .. autoattribute:: arey
+   .. autoattribute:: dphi
+   .. autoattribute:: dpsi
+   .. autoattribute:: ds
+   .. autoattribute:: dtheta
+   .. autoattribute:: dx
+   .. autoattribute:: dy
+   .. autoattribute:: mredx
+   .. autoattribute:: mredy
+   .. autoattribute:: mrex
+   .. autoattribute:: mrey
+   .. autoattribute:: mscalx
+   .. autoattribute:: mscaly
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: count
+   .. automethod:: index
