@@ -31,7 +31,7 @@ jobs:
 
       - name: Download cached MAD-X build
         id: madx-build-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: src/MAD-X/dist
           key: "\
@@ -104,7 +104,7 @@ jobs:
 
       - name: Download cached MAD-X build
         id: madx-build-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: src/MAD-X/dist
           key: "\
@@ -170,7 +170,7 @@ jobs:
 
       - name: Download cached MAD-X build
         id: madx-build-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: src/MAD-X/dist
           key: "\
