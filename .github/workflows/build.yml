@@ -196,7 +196,7 @@ jobs:
           if [[ ${{ matrix.arch }} == "x86_64" ]]; then
             FC=gfortran-11
             LIBDIR=$(dirname $(find /usr/local/Cellar/gcc@11 -name libgfortran.dylib))
-            echo "MACOSX_DEPLOYMENT_TARGET=10.14" >> $GITHUB_ENV
+            echo "MACOSX_DEPLOYMENT_TARGET=11.0" >> $GITHUB_ENV
 
           elif [[ ${{ matrix.arch }} == "arm64" ]]; then
             # See: https://github.com/MacPython/gfortran-install
