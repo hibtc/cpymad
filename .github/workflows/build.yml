@@ -80,7 +80,7 @@ jobs:
       - name: Upload cpymad wheels
         uses: actions/upload-artifact@v4
         with:
-          name: dist-linux
+          name: dist-linux-${{ matrix.base }}
           path: dist
 
   build_windows:
@@ -261,19 +261,19 @@ jobs:
       - name: Upload cpymad wheels
         uses: actions/upload-artifact@v4
         with:
-          name: dist-macos
+          name: dist-macos-${{ matrix.arch }}
           path: dist
 
   test:
     name: Tests
-    runs-on: ${{ matrix.os == 'linux' && 'ubuntu' || matrix.os }}-latest
+    runs-on: ${{ matrix.os.run }}
     needs: [build_linux, build_windows, build_macos]
     strategy:
       matrix:
         os:
-          - linux
-          - windows
-          - macos
+          - {run: ubuntu-latest, dist: dist-linux-manylinux2014_x86_64}
+          - {run: windows-latest, dist: dist-windows}
+          - {run: macos-latest, dist: dist-macos-x86_64}
         python:
           - '3.7'
           - '3.8'
@@ -295,7 +295,7 @@ jobs:
       - name: Download cpymad wheels
         uses: actions/download-artifact@v4
         with:
-          name: dist-${{ matrix.os }}
+          name: ${{ matrix.os.dist }}
           path: dist
 
       - name: Install cpymad from wheel
@@ -330,7 +330,7 @@ jobs:
           python-version: '3.9'
       - uses: actions/download-artifact@v4
         with:
-          name: dist-linux
+          name: dist-linux-manylinux2014_x86_64
           path: dist
 
       - run: sudo apt-get install -qy graphviz
