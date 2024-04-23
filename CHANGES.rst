@@ -1,11 +1,19 @@
 Changelog
 ~~~~~~~~~
 
+1.16.1
+======
+Date: 23.04.2024
+
+- maintenance release to trigger new build after fix in build pipeline
+
+
 1.16.0
 ======
-Date: 19.04.2024
+Date: 23.04.2024
 
 - update to MAD-X 5.09.02
+
 
 1.15.0
 ======
