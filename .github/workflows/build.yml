@@ -369,7 +369,7 @@ jobs:
       - name: Merge artifacts to single folder
         run: |
           mv dist/dist-*/*.whl dist/
-          mv dist/dist-linux/*.tar.gz dist/
+          mv dist/dist-linux-manylinux2014_x86_64/*.tar.gz dist/
 
       - name: Install twine
         run: pip install twine
