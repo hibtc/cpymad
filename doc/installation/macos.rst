@@ -1,7 +1,7 @@
 .. highlight:: bash
 
-MacOS (experimental)
---------------------
+MacOS
+-----
 
 cpymad is linked against a library version of MAD-X, which means that in order
 to build cpymad you first have to compile MAD-X from source. The official

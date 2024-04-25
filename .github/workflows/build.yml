@@ -273,7 +273,8 @@ jobs:
         os:
           - {run: ubuntu-latest, dist: dist-linux-manylinux2014_x86_64}
           - {run: windows-latest, dist: dist-windows}
-          - {run: macos-latest, dist: dist-macos-x86_64}
+          - {run: macos-latest, dist: dist-macos-arm64}
+          - {run: macos-13, dist: dist-macos-x86_64}
         python:
           - '3.7'
           - '3.8'
@@ -281,6 +282,9 @@ jobs:
           - '3.10'
           - '3.11'
           - '3.12'
+        exclude:
+          - os: {run: macos-latest}
+            python: '3.7'
 
     defaults:
       run:
