@@ -1,6 +1,17 @@
 Changelog
 ~~~~~~~~~
 
+1.16.3
+======
+Date: 25.04.2024
+
+- fix error in build pipeline due to github just having changed the
+  ``macos-latest`` runner from x86_64 to arm64. Another tag needed to trigger
+  another release
+- show deprecation warning for py3.7 downoards
+- macos arm64 wheels are now tested in CI
+
+
 1.16.2
 ======
 Date: 25.04.2024
