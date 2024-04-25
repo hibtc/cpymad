@@ -21,9 +21,9 @@ Initial pymad creators:
 """
 
 
-if sys.version_info < (3, 7):
+if sys.version_info < (3, 8):
     _unsupported_version = (
-        "Support for python 3.6 and below will be removed in a future release!\n"
+        "Support for python 3.7 and below will be removed in a future release!\n"
         "If you need continued support for an older version, let us know at:\n"
         "  https://github.com/hibtc/cpymad/issues")
     warnings.warn(_unsupported_version, DeprecationWarning)
