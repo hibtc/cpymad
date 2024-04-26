@@ -1,0 +1,6 @@
+get_active_sequence_name
+========================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_active_sequence_name

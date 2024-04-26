@@ -1,0 +1,25 @@
+AttrDict
+========
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: AttrDict
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~AttrDict.get
+      ~AttrDict.items
+      ~AttrDict.keys
+      ~AttrDict.update
+      ~AttrDict.values
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: get
+   .. automethod:: items
+   .. automethod:: keys
+   .. automethod:: update
+   .. automethod:: values

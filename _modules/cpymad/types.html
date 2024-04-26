@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cpymad.types &mdash; cpymad 1.16.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/documentation_options.js?v=d5528024"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            cpymad
+          </a>
+              <div class="version">
+                1.16
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../building.html">Building from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cpymad/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../known-issues.html">Known issues</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">cpymad</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cpymad.types</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cpymad.types</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Python type analogues for MAD-X data structures.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;Constraint&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Parameter&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Range&#39;</span><span class="p">,</span>
+
+    <span class="s1">&#39;AlignError&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;FieldError&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;PhaseError&#39;</span><span class="p">,</span>
+
+    <span class="c1"># constants:</span>
+    <span class="s1">&#39;PARAM_TYPE_LOGICAL&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;PARAM_TYPE_INTEGER&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;PARAM_TYPE_DOUBLE&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;PARAM_TYPE_STRING&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;PARAM_TYPE_CONSTRAINT&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;PARAM_TYPE_LOGICAL_ARRAY&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;PARAM_TYPE_INTEGER_ARRAY&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;PARAM_TYPE_DOUBLE_ARRAY&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;PARAM_TYPE_STRING_ARRAY&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;VAR_TYPE_CONST&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;VAR_TYPE_DIRECT&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;VAR_TYPE_DEFERRED&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;VAR_TYPE_STRING&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="n">PARAM_TYPE_LOGICAL</span>       <span class="o">=</span> <span class="mi">0</span>
+<span class="n">PARAM_TYPE_INTEGER</span>       <span class="o">=</span> <span class="mi">1</span>
+<span class="n">PARAM_TYPE_DOUBLE</span>        <span class="o">=</span> <span class="mi">2</span>
+<span class="n">PARAM_TYPE_STRING</span>        <span class="o">=</span> <span class="mi">3</span>
+<span class="n">PARAM_TYPE_CONSTRAINT</span>    <span class="o">=</span> <span class="mi">4</span>
+<span class="n">PARAM_TYPE_LOGICAL_ARRAY</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">PARAM_TYPE_INTEGER_ARRAY</span> <span class="o">=</span> <span class="mi">11</span>
+<span class="n">PARAM_TYPE_DOUBLE_ARRAY</span>  <span class="o">=</span> <span class="mi">12</span>
+<span class="n">PARAM_TYPE_STRING_ARRAY</span>  <span class="o">=</span> <span class="mi">13</span>
+
+<span class="n">VAR_TYPE_CONST</span>    <span class="o">=</span> <span class="mi">0</span>
+<span class="n">VAR_TYPE_DIRECT</span>   <span class="o">=</span> <span class="mi">1</span>
+<span class="n">VAR_TYPE_DEFERRED</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">VAR_TYPE_STRING</span>   <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">dtype_to_native</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">PARAM_TYPE_LOGICAL</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">PARAM_TYPE_INTEGER</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">PARAM_TYPE_DOUBLE</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">PARAM_TYPE_STRING</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">PARAM_TYPE_LOGICAL_ARRAY</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+    <span class="n">PARAM_TYPE_INTEGER_ARRAY</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+    <span class="n">PARAM_TYPE_DOUBLE_ARRAY</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+    <span class="n">PARAM_TYPE_STRING_ARRAY</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="n">Range</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Range&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;first&#39;</span><span class="p">,</span> <span class="s1">&#39;last&#39;</span><span class="p">])</span>
+
+<span class="n">AlignError</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;AlignError&#39;</span><span class="p">,</span> <span class="p">[</span>
+    <span class="s1">&#39;dx&#39;</span><span class="p">,</span> <span class="s1">&#39;dy&#39;</span><span class="p">,</span> <span class="s1">&#39;ds&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;dphi&#39;</span><span class="p">,</span> <span class="s1">&#39;dtheta&#39;</span><span class="p">,</span> <span class="s1">&#39;dpsi&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;mrex&#39;</span><span class="p">,</span> <span class="s1">&#39;mrey&#39;</span><span class="p">,</span> <span class="s1">&#39;mredx&#39;</span><span class="p">,</span> <span class="s1">&#39;mredy&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;arex&#39;</span><span class="p">,</span> <span class="s1">&#39;arey&#39;</span><span class="p">,</span> <span class="s1">&#39;mscalx&#39;</span><span class="p">,</span> <span class="s1">&#39;mscaly&#39;</span><span class="p">,</span>
+<span class="p">])</span>
+<span class="n">FieldError</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;FieldError&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;dkn&#39;</span><span class="p">,</span> <span class="s1">&#39;dks&#39;</span><span class="p">])</span>
+<span class="n">PhaseError</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;PhaseError&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;dpn&#39;</span><span class="p">,</span> <span class="s1">&#39;dps&#39;</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="Parameter">
+<a class="viewcode-back" href="../../automod/cpymad.types.Parameter.html#cpymad.types.Parameter">[docs]</a>
+<span class="k">class</span> <span class="nc">Parameter</span><span class="p">:</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;expr&#39;</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">,</span> <span class="s1">&#39;inform&#39;</span><span class="p">,</span> <span class="s1">&#39;var_type&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">expr</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">inform</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expr</span> <span class="o">=</span> <span class="n">expr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inform</span> <span class="o">=</span> <span class="n">inform</span>
+        <span class="k">if</span> <span class="n">var_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">var_type</span> <span class="o">=</span> <span class="n">VAR_TYPE_STRING</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">has_expr</span> <span class="o">=</span> <span class="n">expr</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="n">expr</span><span class="p">))</span>
+                <span class="n">var_type</span> <span class="o">=</span> <span class="n">VAR_TYPE_DEFERRED</span> <span class="k">if</span> <span class="n">has_expr</span> <span class="k">else</span> <span class="n">VAR_TYPE_DIRECT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">var_type</span>
+
+<div class="viewcode-block" id="Parameter.__call__">
+<a class="viewcode-back" href="../../automod/cpymad.types.Parameter.html#cpymad.types.Parameter.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return command argument as should be used for MAD-X input to</span>
+<span class="sd">        create an identical element.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">e</span> <span class="ow">or</span> <span class="n">v</span> <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">expr</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expr</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Constraint">
+<a class="viewcode-back" href="../../automod/cpymad.types.Constraint.html#cpymad.types.Constraint">[docs]</a>
+<span class="k">class</span> <span class="nc">Constraint</span><span class="p">:</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents a MAD-X constraint, which has either min/max/both/value.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Just store the values&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min</span> <span class="o">=</span> <span class="nb">min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max</span> <span class="o">=</span> <span class="nb">max</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2014-2021, T. Gläßle,2014-2019, HIT Betriebs GmbH,2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

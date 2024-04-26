@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Element &mdash; cpymad 1.16.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/documentation_options.js?v=d5528024"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ElementList" href="cpymad.madx.ElementList.html" />
+    <link rel="prev" title="CommandMap" href="cpymad.madx.CommandMap.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cpymad
+          </a>
+              <div class="version">
+                1.16
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building.html">Building from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../cpymad/index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../cpymad/madx.html">cpymad.madx</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../cpymad/madx.html#classes">Classes</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Madx.html">Madx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.ArrayAttribute.html">ArrayAttribute</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.AttrDict.html">AttrDict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.BaseTypeMap.html">BaseTypeMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Command.html">Command</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.CommandLog.html">CommandLog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.CommandMap.html">CommandMap</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Element</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.ElementList.html">ElementList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.ExpandedElementList.html">ExpandedElementList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.GlobalElementList.html">GlobalElementList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Metadata.html">Metadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Sequence.html">Sequence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.SequenceMap.html">SequenceMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Table.html">Table</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.TableMap.html">TableMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.VarList.html">VarList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.VarParamList.html">VarParamList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Version.html">Version</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.TwissFailed.html">TwissFailed</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../cpymad/madx.html#variables">Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cpymad/madx.html#class-inheritance-diagram">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/libmadx.html">cpymad.libmadx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/util.html">cpymad.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/types.html">cpymad.types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../known-issues.html">Known issues</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cpymad</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../cpymad/index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../cpymad/madx.html">cpymad.madx</a></li>
+      <li class="breadcrumb-item active">Element</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/automod/cpymad.madx.Element.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="element">
+<h1>Element<a class="headerlink" href="#element" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="cpymad.madx.Element">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">madx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Element" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="cpymad.madx.Command.html#cpymad.madx.Command" title="cpymad.madx.Command"><code class="xref py py-class docutils literal notranslate"><span class="pre">Command</span></code></a></p>
+<p class="rubric">Attributes Summary</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Element.base_type" title="cpymad.madx.Element.base_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">base_type</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Element.cmdpar" title="cpymad.madx.Element.cmdpar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cmdpar</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Element.defs" title="cpymad.madx.Element.defs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">defs</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Element.parent" title="cpymad.madx.Element.parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parent</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Element.__call__" title="cpymad.madx.Element.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code></a>(**kwargs)</p></td>
+<td><p>Perform a single MAD-X command.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Element.clear" title="cpymad.madx.Element.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Element.clone" title="cpymad.madx.Element.clone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clone</span></code></a>(**kwargs)</p></td>
+<td><p>Clone this command, assign the given name. This corresponds to the colon syntax in MAD-X, e.g.::.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Element.get" title="cpymad.madx.Element.get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code></a>(k[,d])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Element.items" title="cpymad.madx.Element.items"><code class="xref py py-obj docutils literal notranslate"><span class="pre">items</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Element.keys" title="cpymad.madx.Element.keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">keys</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Element.pop" title="cpymad.madx.Element.pop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pop</span></code></a>(k[,d])</p></td>
+<td><p>If key is not found, d is returned if given, otherwise KeyError is raised.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Element.popitem" title="cpymad.madx.Element.popitem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">popitem</span></code></a>()</p></td>
+<td><p>as a 2-tuple; but raise KeyError if D is empty.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Element.setdefault" title="cpymad.madx.Element.setdefault"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setdefault</span></code></a>(k[,d])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Element.update" title="cpymad.madx.Element.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>([E, ]**F)</p></td>
+<td><p>If E present and has a .keys() method, does:     for k in E: D[k] = E[k] If E present and lacks .keys() method, does:     for (k, v) in E: D[k] = v In either case, this is followed by: for k, v in F.items(): D[k] = v</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Element.values" title="cpymad.madx.Element.values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">values</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes Documentation</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.madx.Element.base_type">
+<span class="sig-name descname"><span class="pre">base_type</span></span><a class="headerlink" href="#cpymad.madx.Element.base_type" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.madx.Element.cmdpar">
+<span class="sig-name descname"><span class="pre">cmdpar</span></span><a class="headerlink" href="#cpymad.madx.Element.cmdpar" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.madx.Element.defs">
+<span class="sig-name descname"><span class="pre">defs</span></span><a class="headerlink" href="#cpymad.madx.Element.defs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.madx.Element.parent">
+<span class="sig-name descname"><span class="pre">parent</span></span><a class="headerlink" href="#cpymad.madx.Element.parent" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods Documentation</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Element.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.madx.Element.__call__" title="Link to this definition">¶</a></dt>
+<dd><p>Perform a single MAD-X command.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Element.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None.</span>&#160; <span class="pre">Remove</span> <span class="pre">all</span> <span class="pre">items</span> <span class="pre">from</span> <span class="pre">D.</span></span></span><a class="headerlink" href="#cpymad.madx.Element.clear" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Element.clone">
+<span class="sig-name descname"><span class="pre">clone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.madx.Element.clone" title="Link to this definition">¶</a></dt>
+<dd><p>Clone this command, assign the given name. This corresponds to the
+colon syntax in MAD-X, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">madx</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">quadrupole</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="s1">&#39;qp&#39;</span><span class="p">,</span> <span class="n">at</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>translates to the MAD-X command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">qp</span><span class="p">:</span> <span class="n">quadrupole</span><span class="p">,</span> <span class="n">at</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Element.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="optional">]</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">D[k]</span> <span class="pre">if</span> <span class="pre">k</span> <span class="pre">in</span> <span class="pre">D,</span> <span class="pre">else</span> <span class="pre">d.</span>&#160; <span class="pre">d</span> <span class="pre">defaults</span> <span class="pre">to</span> <span class="pre">None.</span></span></span><a class="headerlink" href="#cpymad.madx.Element.get" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Element.items">
+<span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">a</span> <span class="pre">set-like</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">items</span></span></span><a class="headerlink" href="#cpymad.madx.Element.items" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Element.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">a</span> <span class="pre">set-like</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">keys</span></span></span><a class="headerlink" href="#cpymad.madx.Element.keys" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Element.pop">
+<span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="optional">]</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">v,</span> <span class="pre">remove</span> <span class="pre">specified</span> <span class="pre">key</span> <span class="pre">and</span> <span class="pre">return</span> <span class="pre">the</span> <span class="pre">corresponding</span> <span class="pre">value.</span></span></span><a class="headerlink" href="#cpymad.madx.Element.pop" title="Link to this definition">¶</a></dt>
+<dd><p>If key is not found, d is returned if given, otherwise KeyError is raised.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Element.popitem">
+<span class="sig-name descname"><span class="pre">popitem</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">(k,</span> <span class="pre">v),</span> <span class="pre">remove</span> <span class="pre">and</span> <span class="pre">return</span> <span class="pre">some</span> <span class="pre">(key,</span> <span class="pre">value)</span> <span class="pre">pair</span></span></span><a class="headerlink" href="#cpymad.madx.Element.popitem" title="Link to this definition">¶</a></dt>
+<dd><p>as a 2-tuple; but raise KeyError if D is empty.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Element.setdefault">
+<span class="sig-name descname"><span class="pre">setdefault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="optional">]</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">D.get(k,d),</span> <span class="pre">also</span> <span class="pre">set</span> <span class="pre">D[k]=d</span> <span class="pre">if</span> <span class="pre">k</span> <span class="pre">not</span> <span class="pre">in</span> <span class="pre">D</span></span></span><a class="headerlink" href="#cpymad.madx.Element.setdefault" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Element.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <span class="optional">]</span><em class="sig-param"><span class="n"><span class="pre">**F</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None.</span>&#160; <span class="pre">Update</span> <span class="pre">D</span> <span class="pre">from</span> <span class="pre">mapping/iterable</span> <span class="pre">E</span> <span class="pre">and</span> <span class="pre">F.</span></span></span><a class="headerlink" href="#cpymad.madx.Element.update" title="Link to this definition">¶</a></dt>
+<dd><p>If E present and has a .keys() method, does:     for k in E: D[k] = E[k]
+If E present and lacks .keys() method, does:     for (k, v) in E: D[k] = v
+In either case, this is followed by: for k, v in F.items(): D[k] = v</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Element.values">
+<span class="sig-name descname"><span class="pre">values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">an</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">values</span></span></span><a class="headerlink" href="#cpymad.madx.Element.values" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cpymad.madx.CommandMap.html" class="btn btn-neutral float-left" title="CommandMap" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cpymad.madx.ElementList.html" class="btn btn-neutral float-right" title="ElementList" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2014-2021, T. Gläßle,2014-2019, HIT Betriebs GmbH,2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

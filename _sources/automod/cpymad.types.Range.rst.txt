@@ -1,0 +1,31 @@
+Range
+=====
+
+.. currentmodule:: cpymad.types
+
+.. autoclass:: Range
+   :show-inheritance:
+
+   .. rubric:: Attributes Summary
+
+   .. autosummary::
+
+      ~Range.first
+      ~Range.last
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~Range.count
+      ~Range.index
+
+   .. rubric:: Attributes Documentation
+
+   .. autoattribute:: first
+   .. autoattribute:: last
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: count
+   .. automethod:: index

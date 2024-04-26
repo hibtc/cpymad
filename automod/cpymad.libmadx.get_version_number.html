@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>get_version_number &mdash; cpymad 1.16.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/documentation_options.js?v=d5528024"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="get_version_date" href="cpymad.libmadx.get_version_date.html" />
+    <link rel="prev" title="cpymad.libmadx" href="../cpymad/libmadx.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cpymad
+          </a>
+              <div class="version">
+                1.16
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building.html">Building from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../cpymad/index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/madx.html">cpymad.madx</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpymad/libmadx.html">cpymad.libmadx</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../cpymad/libmadx.html#functions">Functions</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">get_version_number</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_version_date.html">get_version_date</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.is_started.html">is_started</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.start.html">start</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.finish.html">finish</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.input.html">input</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.eval.html">eval</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_var.html">get_var</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.num_globals.html">num_globals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_globals.html">get_globals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_var_type.html">get_var_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_options.html">get_options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_current_beam.html">get_current_beam</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.sequence_exists.html">sequence_exists</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_sequence_names.html">get_sequence_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_sequence_count.html">get_sequence_count</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_active_sequence_name.html">get_active_sequence_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_sequence_twiss_table_name.html">get_sequence_twiss_table_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_sequence_beam.html">get_sequence_beam</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.is_sequence_expanded.html">is_sequence_expanded</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.table_exists.html">table_exists</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_table_names.html">get_table_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_table_count.html">get_table_count</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_table_summary.html">get_table_summary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_table_column_names.html">get_table_column_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_table_column_count.html">get_table_column_count</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_table_column.html">get_table_column</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_table_row.html">get_table_row</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_table_row_count.html">get_table_row_count</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_table_row_names.html">get_table_row_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_table_selected_rows.html">get_table_selected_rows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_table_selected_rows_mask.html">get_table_selected_rows_mask</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.apply_table_selections.html">apply_table_selections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_element.html">get_element</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_element_name.html">get_element_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_element_positions.html">get_element_positions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_element_names.html">get_element_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_element_index.html">get_element_index</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_element_index_by_position.html">get_element_index_by_position</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_element_count.html">get_element_count</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_expanded_element.html">get_expanded_element</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_expanded_element_name.html">get_expanded_element_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_expanded_element_positions.html">get_expanded_element_positions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_expanded_element_names.html">get_expanded_element_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_expanded_element_index.html">get_expanded_element_index</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_expanded_element_index_by_position.html">get_expanded_element_index_by_position</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_expanded_element_count.html">get_expanded_element_count</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_global_element.html">get_global_element</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_global_element_name.html">get_global_element_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_global_element_index.html">get_global_element_index</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_global_element_count.html">get_global_element_count</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_base_type_names.html">get_base_type_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_defined_command.html">get_defined_command</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_defined_command_names.html">get_defined_command_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_beam.html">get_beam</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.get_beam_names.html">get_beam_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.libmadx.getcwd.html">getcwd</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/util.html">cpymad.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/types.html">cpymad.types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../known-issues.html">Known issues</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cpymad</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../cpymad/index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../cpymad/libmadx.html">cpymad.libmadx</a></li>
+      <li class="breadcrumb-item active">get_version_number</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/automod/cpymad.libmadx.get_version_number.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="get-version-number">
+<h1>get_version_number<a class="headerlink" href="#get-version-number" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="cpymad.libmadx.get_version_number">
+<span class="sig-name descname"><span class="pre">get_version_number</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.libmadx.get_version_number" title="Link to this definition">¶</a></dt>
+<dd><p>Get the version number of loaded MAD-X interpreter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>full version number</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../cpymad/libmadx.html" class="btn btn-neutral float-left" title="cpymad.libmadx" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cpymad.libmadx.get_version_date.html" class="btn btn-neutral float-right" title="get_version_date" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2014-2021, T. Gläßle,2014-2019, HIT Betriebs GmbH,2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

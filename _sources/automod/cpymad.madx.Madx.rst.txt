@@ -1,0 +1,63 @@
+Madx
+====
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: Madx
+   :show-inheritance:
+
+   .. rubric:: Attributes Summary
+
+   .. autosummary::
+
+      ~Madx.beam
+      ~Madx.options
+      ~Madx.version
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~Madx.__call__
+      ~Madx.batch
+      ~Madx.call
+      ~Madx.chdir
+      ~Madx.eval
+      ~Madx.exit
+      ~Madx.expr_vars
+      ~Madx.input
+      ~Madx.match
+      ~Madx.quit
+      ~Madx.sectormap
+      ~Madx.sectortable
+      ~Madx.sectortable2
+      ~Madx.survey
+      ~Madx.twiss
+      ~Madx.use
+      ~Madx.verbose
+
+   .. rubric:: Attributes Documentation
+
+   .. autoattribute:: beam
+   .. autoattribute:: options
+   .. autoattribute:: version
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: __call__
+   .. automethod:: batch
+   .. automethod:: call
+   .. automethod:: chdir
+   .. automethod:: eval
+   .. automethod:: exit
+   .. automethod:: expr_vars
+   .. automethod:: input
+   .. automethod:: match
+   .. automethod:: quit
+   .. automethod:: sectormap
+   .. automethod:: sectortable
+   .. automethod:: sectortable2
+   .. automethod:: survey
+   .. automethod:: twiss
+   .. automethod:: use
+   .. automethod:: verbose

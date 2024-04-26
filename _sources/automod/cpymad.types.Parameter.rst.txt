@@ -1,0 +1,39 @@
+Parameter
+=========
+
+.. currentmodule:: cpymad.types
+
+.. autoclass:: Parameter
+   :show-inheritance:
+
+   .. rubric:: Attributes Summary
+
+   .. autosummary::
+
+      ~Parameter.definition
+      ~Parameter.dtype
+      ~Parameter.expr
+      ~Parameter.inform
+      ~Parameter.name
+      ~Parameter.value
+      ~Parameter.var_type
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~Parameter.__call__
+
+   .. rubric:: Attributes Documentation
+
+   .. autoattribute:: definition
+   .. autoattribute:: dtype
+   .. autoattribute:: expr
+   .. autoattribute:: inform
+   .. autoattribute:: name
+   .. autoattribute:: value
+   .. autoattribute:: var_type
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: __call__

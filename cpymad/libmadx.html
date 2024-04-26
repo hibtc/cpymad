@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cpymad.libmadx &mdash; cpymad 1.16.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/documentation_options.js?v=d5528024"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="get_version_number" href="../automod/cpymad.libmadx.get_version_number.html" />
+    <link rel="prev" title="metadata" href="../automod/cpymad.madx.metadata.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cpymad
+          </a>
+              <div class="version">
+                1.16
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building.html">Building from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="madx.html">cpymad.madx</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">cpymad.libmadx</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_version_number.html">get_version_number</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_version_date.html">get_version_date</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.is_started.html">is_started</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.start.html">start</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.finish.html">finish</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.input.html">input</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.eval.html">eval</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_var.html">get_var</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.num_globals.html">num_globals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_globals.html">get_globals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_var_type.html">get_var_type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_options.html">get_options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_current_beam.html">get_current_beam</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.sequence_exists.html">sequence_exists</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_sequence_names.html">get_sequence_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_sequence_count.html">get_sequence_count</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_active_sequence_name.html">get_active_sequence_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_sequence_twiss_table_name.html">get_sequence_twiss_table_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_sequence_beam.html">get_sequence_beam</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.is_sequence_expanded.html">is_sequence_expanded</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.table_exists.html">table_exists</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_table_names.html">get_table_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_table_count.html">get_table_count</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_table_summary.html">get_table_summary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_table_column_names.html">get_table_column_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_table_column_count.html">get_table_column_count</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_table_column.html">get_table_column</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_table_row.html">get_table_row</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_table_row_count.html">get_table_row_count</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_table_row_names.html">get_table_row_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_table_selected_rows.html">get_table_selected_rows</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_table_selected_rows_mask.html">get_table_selected_rows_mask</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.apply_table_selections.html">apply_table_selections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_element.html">get_element</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_element_name.html">get_element_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_element_positions.html">get_element_positions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_element_names.html">get_element_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_element_index.html">get_element_index</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_element_index_by_position.html">get_element_index_by_position</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_element_count.html">get_element_count</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_expanded_element.html">get_expanded_element</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_expanded_element_name.html">get_expanded_element_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_expanded_element_positions.html">get_expanded_element_positions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_expanded_element_names.html">get_expanded_element_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_expanded_element_index.html">get_expanded_element_index</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_expanded_element_index_by_position.html">get_expanded_element_index_by_position</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_expanded_element_count.html">get_expanded_element_count</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_global_element.html">get_global_element</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_global_element_name.html">get_global_element_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_global_element_index.html">get_global_element_index</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_global_element_count.html">get_global_element_count</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_base_type_names.html">get_base_type_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_defined_command.html">get_defined_command</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_defined_command_names.html">get_defined_command_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_beam.html">get_beam</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.get_beam_names.html">get_beam_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.libmadx.getcwd.html">getcwd</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="util.html">cpymad.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">cpymad.types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../known-issues.html">Known issues</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cpymad</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">API Reference</a></li>
+      <li class="breadcrumb-item active">cpymad.libmadx</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/hibtc/cpymad/blob/master/doc/cpymad/libmadx.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-cpymad.libmadx">
+<span id="cpymad-libmadx"></span><h1>cpymad.libmadx<a class="headerlink" href="#module-cpymad.libmadx" title="Link to this heading">¶</a></h1>
+<p>Low level cython binding to MAD-X.</p>
+<p>CAUTION: End users should usually not import this module directly! Use
+<a class="reference internal" href="../automod/cpymad.madx.Madx.html#cpymad.madx.Madx" title="cpymad.madx.Madx"><code class="xref py py-class docutils literal notranslate"><span class="pre">cpymad.madx.Madx</span></code></a> instead.</p>
+<ul class="simple">
+<li><p>The API of this module is considered private, i.e. it may change between
+versions without further notice.</p></li>
+<li><p>Importing this module means loading MAD-X directly into the process space.
+This means that any crash in the (sometimes fragile) MAD-X interpreter will
+crash the importing process with it.</p></li>
+<li><p>All functions in this module operate on a shared global state.</p></li>
+<li><p>this module exposes a very C-ish API that is not convenient to work with.</p></li>
+</ul>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_version_number.html#cpymad.libmadx.get_version_number" title="cpymad.libmadx.get_version_number"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_version_number</span></code></a>()</p></td>
+<td><p>Get the version number of loaded MAD-X interpreter.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_version_date.html#cpymad.libmadx.get_version_date" title="cpymad.libmadx.get_version_date"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_version_date</span></code></a>()</p></td>
+<td><p>Get the release date of loaded MAD-X interpreter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.is_started.html#cpymad.libmadx.is_started" title="cpymad.libmadx.is_started"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_started</span></code></a>()</p></td>
+<td><p>Check whether MAD-X has been initialized.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.start.html#cpymad.libmadx.start" title="cpymad.libmadx.start"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start</span></code></a>()</p></td>
+<td><p>Initialize MAD-X.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.finish.html#cpymad.libmadx.finish" title="cpymad.libmadx.finish"><code class="xref py py-obj docutils literal notranslate"><span class="pre">finish</span></code></a>()</p></td>
+<td><p>Cleanup MAD-X.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.input.html#cpymad.libmadx.input" title="cpymad.libmadx.input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">input</span></code></a>(cmd)</p></td>
+<td><p>Pass one input command to MAD-X.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.eval.html#cpymad.libmadx.eval" title="cpymad.libmadx.eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval</span></code></a>(expression)</p></td>
+<td><p>Evaluates an expression and returns the result as double.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_var.html#cpymad.libmadx.get_var" title="cpymad.libmadx.get_var"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_var</span></code></a>(name)</p></td>
+<td><p>Get the value of a global variable.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.num_globals.html#cpymad.libmadx.num_globals" title="cpymad.libmadx.num_globals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_globals</span></code></a>()</p></td>
+<td><p>Return the number of global variables.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_globals.html#cpymad.libmadx.get_globals" title="cpymad.libmadx.get_globals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_globals</span></code></a>()</p></td>
+<td><p>Get a list of names of all global variables.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_var_type.html#cpymad.libmadx.get_var_type" title="cpymad.libmadx.get_var_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_var_type</span></code></a>(name)</p></td>
+<td><p>Get the type of the variable: :rtype: <span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_options.html#cpymad.libmadx.get_options" title="cpymad.libmadx.get_options"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_options</span></code></a>()</p></td>
+<td><p>Get the current option values.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_current_beam.html#cpymad.libmadx.get_current_beam" title="cpymad.libmadx.get_current_beam"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_current_beam</span></code></a>()</p></td>
+<td><p>Get properties of current default beam.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.sequence_exists.html#cpymad.libmadx.sequence_exists" title="cpymad.libmadx.sequence_exists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sequence_exists</span></code></a>(sequence_name)</p></td>
+<td><p>Check if the sequence exists.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_sequence_names.html#cpymad.libmadx.get_sequence_names" title="cpymad.libmadx.get_sequence_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sequence_names</span></code></a>()</p></td>
+<td><p>Get a list of all sequences currently in memory.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_sequence_count.html#cpymad.libmadx.get_sequence_count" title="cpymad.libmadx.get_sequence_count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sequence_count</span></code></a>()</p></td>
+<td><p>Get the number of all sequences currently in memory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_active_sequence_name.html#cpymad.libmadx.get_active_sequence_name" title="cpymad.libmadx.get_active_sequence_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_active_sequence_name</span></code></a>()</p></td>
+<td><p>Get the name of the active sequence.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_sequence_twiss_table_name.html#cpymad.libmadx.get_sequence_twiss_table_name" title="cpymad.libmadx.get_sequence_twiss_table_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sequence_twiss_table_name</span></code></a>(sequence_name)</p></td>
+<td><p>Get the last calculated twiss table for the given sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_sequence_beam.html#cpymad.libmadx.get_sequence_beam" title="cpymad.libmadx.get_sequence_beam"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sequence_beam</span></code></a>(sequence_name)</p></td>
+<td><p>Get the beam associated to the sequence.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.is_sequence_expanded.html#cpymad.libmadx.is_sequence_expanded" title="cpymad.libmadx.is_sequence_expanded"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_sequence_expanded</span></code></a>(sequence_name)</p></td>
+<td><p>Check whether a sequence has already been expanded.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.table_exists.html#cpymad.libmadx.table_exists" title="cpymad.libmadx.table_exists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">table_exists</span></code></a>(table_name)</p></td>
+<td><p>Check if the table exists.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_table_names.html#cpymad.libmadx.get_table_names" title="cpymad.libmadx.get_table_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_table_names</span></code></a>()</p></td>
+<td><p>Return list of all table names.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_table_count.html#cpymad.libmadx.get_table_count" title="cpymad.libmadx.get_table_count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_table_count</span></code></a>()</p></td>
+<td><p>Return number of existing tables.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_table_summary.html#cpymad.libmadx.get_table_summary" title="cpymad.libmadx.get_table_summary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_table_summary</span></code></a>(table_name)</p></td>
+<td><p>Get table summary.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_table_column_names.html#cpymad.libmadx.get_table_column_names" title="cpymad.libmadx.get_table_column_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_table_column_names</span></code></a>(table_name[, selected])</p></td>
+<td><p>Get a list of all column names in the table.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_table_column_count.html#cpymad.libmadx.get_table_column_count" title="cpymad.libmadx.get_table_column_count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_table_column_count</span></code></a>(table_name[, selected])</p></td>
+<td><p>Get a number of columns in the table.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_table_column.html#cpymad.libmadx.get_table_column" title="cpymad.libmadx.get_table_column"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_table_column</span></code></a>(table_name, column_name[, rows])</p></td>
+<td><p>Get data from the specified table.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_table_row.html#cpymad.libmadx.get_table_row" title="cpymad.libmadx.get_table_row"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_table_row</span></code></a>(table_name, row_index[, columns])</p></td>
+<td><p>Return row as tuple of values.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_table_row_count.html#cpymad.libmadx.get_table_row_count" title="cpymad.libmadx.get_table_row_count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_table_row_count</span></code></a>(table_name)</p></td>
+<td><p>Return total number of rows in the table.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_table_row_names.html#cpymad.libmadx.get_table_row_names" title="cpymad.libmadx.get_table_row_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_table_row_names</span></code></a>(table_name[, indices])</p></td>
+<td><p>Return row names for every index (row number) in the list.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_table_selected_rows.html#cpymad.libmadx.get_table_selected_rows" title="cpymad.libmadx.get_table_selected_rows"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_table_selected_rows</span></code></a>(table_name)</p></td>
+<td><p>Return list of selected row indices in table (may be empty).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_table_selected_rows_mask.html#cpymad.libmadx.get_table_selected_rows_mask" title="cpymad.libmadx.get_table_selected_rows_mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_table_selected_rows_mask</span></code></a>(table_name)</p></td>
+<td><p>Return boolean mask of which rows are selected in a table.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.apply_table_selections.html#cpymad.libmadx.apply_table_selections" title="cpymad.libmadx.apply_table_selections"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_table_selections</span></code></a>(table_name)</p></td>
+<td><p>Apply the SELECT/DESELECT commands for table columns/rows.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_element.html#cpymad.libmadx.get_element" title="cpymad.libmadx.get_element"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_element</span></code></a>(sequence_name, element_index)</p></td>
+<td><p>Return requested element in the original sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_element_name.html#cpymad.libmadx.get_element_name" title="cpymad.libmadx.get_element_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_element_name</span></code></a>(sequence_name, element_index)</p></td>
+<td><p>Get list with the names of all elements of a specific sequence.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_element_positions.html#cpymad.libmadx.get_element_positions" title="cpymad.libmadx.get_element_positions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_element_positions</span></code></a>(sequence_name)</p></td>
+<td><p>Get list with positions of all elements of a specific sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_element_names.html#cpymad.libmadx.get_element_names" title="cpymad.libmadx.get_element_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_element_names</span></code></a>(sequence_name)</p></td>
+<td><p>Get list with the names of all elements of a specific sequence.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_element_index.html#cpymad.libmadx.get_element_index" title="cpymad.libmadx.get_element_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_element_index</span></code></a>(sequence_name, element_name)</p></td>
+<td><p>Return index of element with specified name in the original sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_element_index_by_position.html#cpymad.libmadx.get_element_index_by_position" title="cpymad.libmadx.get_element_index_by_position"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_element_index_by_position</span></code></a>(sequence_name, ...)</p></td>
+<td><p>Return index of element at specified position in the original sequence.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_element_count.html#cpymad.libmadx.get_element_count" title="cpymad.libmadx.get_element_count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_element_count</span></code></a>(sequence_name)</p></td>
+<td><p>Return number of elements in the original sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_expanded_element.html#cpymad.libmadx.get_expanded_element" title="cpymad.libmadx.get_expanded_element"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_expanded_element</span></code></a>(sequence_name, ...)</p></td>
+<td><p>Return requested element in the expanded sequence.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_expanded_element_name.html#cpymad.libmadx.get_expanded_element_name" title="cpymad.libmadx.get_expanded_element_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_expanded_element_name</span></code></a>(sequence_name, ...)</p></td>
+<td><p>Get list with the names of all elements of a specific sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_expanded_element_positions.html#cpymad.libmadx.get_expanded_element_positions" title="cpymad.libmadx.get_expanded_element_positions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_expanded_element_positions</span></code></a>(sequence_name)</p></td>
+<td><p>Get list with positions of all elements of a specific sequence.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_expanded_element_names.html#cpymad.libmadx.get_expanded_element_names" title="cpymad.libmadx.get_expanded_element_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_expanded_element_names</span></code></a>(sequence_name)</p></td>
+<td><p>Get list with the names of all elements of a specific sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_expanded_element_index.html#cpymad.libmadx.get_expanded_element_index" title="cpymad.libmadx.get_expanded_element_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_expanded_element_index</span></code></a>(sequence_name, ...)</p></td>
+<td><p>Return index of element with specified name in the expanded sequence.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_expanded_element_index_by_position.html#cpymad.libmadx.get_expanded_element_index_by_position" title="cpymad.libmadx.get_expanded_element_index_by_position"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_expanded_element_index_by_position</span></code></a>(...)</p></td>
+<td><p>Return index of element at specified position in the expanded sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_expanded_element_count.html#cpymad.libmadx.get_expanded_element_count" title="cpymad.libmadx.get_expanded_element_count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_expanded_element_count</span></code></a>(sequence_name)</p></td>
+<td><p>Return number of elements in the expanded sequence.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_global_element.html#cpymad.libmadx.get_global_element" title="cpymad.libmadx.get_global_element"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_global_element</span></code></a>(element_index)</p></td>
+<td><p>Return requested element in the expanded sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_global_element_name.html#cpymad.libmadx.get_global_element_name" title="cpymad.libmadx.get_global_element_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_global_element_name</span></code></a>(element_index)</p></td>
+<td><p>Return name of element.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_global_element_index.html#cpymad.libmadx.get_global_element_index" title="cpymad.libmadx.get_global_element_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_global_element_index</span></code></a>(element_name)</p></td>
+<td><p>Return index of element with specified name in the global element list.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_global_element_count.html#cpymad.libmadx.get_global_element_count" title="cpymad.libmadx.get_global_element_count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_global_element_count</span></code></a>()</p></td>
+<td><p>Return number of globally visible elements.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_base_type_names.html#cpymad.libmadx.get_base_type_names" title="cpymad.libmadx.get_base_type_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_base_type_names</span></code></a>()</p></td>
+<td><p>Return list of element names for base types.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_defined_command.html#cpymad.libmadx.get_defined_command" title="cpymad.libmadx.get_defined_command"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_defined_command</span></code></a>(command_name)</p></td>
+<td><p>Return MAD-X command as dict of values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_defined_command_names.html#cpymad.libmadx.get_defined_command_names" title="cpymad.libmadx.get_defined_command_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_defined_command_names</span></code></a>()</p></td>
+<td><p>Return list of MAD-X command names.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_beam.html#cpymad.libmadx.get_beam" title="cpymad.libmadx.get_beam"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_beam</span></code></a>(beam_name)</p></td>
+<td><p>Return MAD-X beam as dict of values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.get_beam_names.html#cpymad.libmadx.get_beam_names" title="cpymad.libmadx.get_beam_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_beam_names</span></code></a>()</p></td>
+<td><p>Return list of MAD-X beam names.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.libmadx.getcwd.html#cpymad.libmadx.getcwd" title="cpymad.libmadx.getcwd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getcwd</span></code></a>()</p></td>
+<td><p>Return the current working directory.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../automod/cpymad.madx.metadata.html" class="btn btn-neutral float-left" title="metadata" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../automod/cpymad.libmadx.get_version_number.html" class="btn btn-neutral float-right" title="get_version_number" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2014-2021, T. Gläßle,2014-2019, HIT Betriebs GmbH,2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

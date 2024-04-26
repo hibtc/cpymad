@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Madx &mdash; cpymad 1.16.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/documentation_options.js?v=d5528024"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ArrayAttribute" href="cpymad.madx.ArrayAttribute.html" />
+    <link rel="prev" title="cpymad.madx" href="../cpymad/madx.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cpymad
+          </a>
+              <div class="version">
+                1.16
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building.html">Building from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../cpymad/index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../cpymad/madx.html">cpymad.madx</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../cpymad/madx.html#classes">Classes</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Madx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.ArrayAttribute.html">ArrayAttribute</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.AttrDict.html">AttrDict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.BaseTypeMap.html">BaseTypeMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Command.html">Command</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.CommandLog.html">CommandLog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.CommandMap.html">CommandMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Element.html">Element</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.ElementList.html">ElementList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.ExpandedElementList.html">ExpandedElementList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.GlobalElementList.html">GlobalElementList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Metadata.html">Metadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Sequence.html">Sequence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.SequenceMap.html">SequenceMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Table.html">Table</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.TableMap.html">TableMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.VarList.html">VarList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.VarParamList.html">VarParamList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Version.html">Version</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.TwissFailed.html">TwissFailed</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../cpymad/madx.html#variables">Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cpymad/madx.html#class-inheritance-diagram">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/libmadx.html">cpymad.libmadx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/util.html">cpymad.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/types.html">cpymad.types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../known-issues.html">Known issues</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cpymad</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../cpymad/index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../cpymad/madx.html">cpymad.madx</a></li>
+      <li class="breadcrumb-item active">Madx</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/automod/cpymad.madx.Madx.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="madx">
+<h1>Madx<a class="headerlink" href="#madx" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="cpymad.madx.Madx">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Madx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">libmadx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stdout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">history</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">Popen_args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Madx" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Python interface for a MAD-X process.</p>
+<p>For usage instructions, please refer to:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://hibtc.github.io/cpymad/getting-started">https://hibtc.github.io/cpymad/getting-started</a></p>
+</div></blockquote>
+<p>Communicates with a MAD-X interpreter in a background process.</p>
+<p>The state of the MAD-X interpreter is controlled by feeding textual MAD-X
+commands to the interpreter.</p>
+<p>The state of the MAD-X interpreter is accessed by directly reading the
+values from the C variables in-memory and sending the results pickled back
+over the pipe.</p>
+<p>Data attributes:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>command</strong> – Mapping of all MAD-X commands.</p></li>
+<li><p><strong>globals</strong> – Mapping of global MAD-X variables.</p></li>
+<li><p><strong>elements</strong> – Mapping of globally visible elements.</p></li>
+<li><p><strong>base_types</strong> – Mapping of MAD-X base elements.</p></li>
+<li><p><strong>sequence</strong> – Mapping of all sequences in memory.</p></li>
+<li><p><strong>table</strong> – Mapping of all tables in memory.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Attributes Summary</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Madx.beam" title="cpymad.madx.Madx.beam"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beam</span></code></a></p></td>
+<td><p>Get the current default beam.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Madx.options" title="cpymad.madx.Madx.options"><code class="xref py py-obj docutils literal notranslate"><span class="pre">options</span></code></a></p></td>
+<td><p>Values of current options.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Madx.version" title="cpymad.madx.Madx.version"><code class="xref py py-obj docutils literal notranslate"><span class="pre">version</span></code></a></p></td>
+<td><p>Get the MAD-X version.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Madx.__call__" title="cpymad.madx.Madx.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code></a>(text)</p></td>
+<td><p>Run any textual MAD-X input.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Madx.batch" title="cpymad.madx.Madx.batch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">batch</span></code></a>()</p></td>
+<td><p>Collect input and send in a single batch when leaving context.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Madx.call" title="cpymad.madx.Madx.call"><code class="xref py py-obj docutils literal notranslate"><span class="pre">call</span></code></a>(file[, chdir])</p></td>
+<td><p>CALL a file in the MAD-X interpreter.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Madx.chdir" title="cpymad.madx.Madx.chdir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">chdir</span></code></a>(dir)</p></td>
+<td><p>Change the directory of the MAD-X process (not the current python process).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Madx.eval" title="cpymad.madx.Madx.eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval</span></code></a>(expr)</p></td>
+<td><p>Evaluates an expression and returns the result as double.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Madx.exit" title="cpymad.madx.Madx.exit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exit</span></code></a>()</p></td>
+<td><p>Shutdown MAD-X interpreter and stop process.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Madx.expr_vars" title="cpymad.madx.Madx.expr_vars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">expr_vars</span></code></a>(expr)</p></td>
+<td><p>Find all variable names used in an expression.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Madx.input" title="cpymad.madx.Madx.input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">input</span></code></a>(text)</p></td>
+<td><p>Run any textual MAD-X input.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Madx.match" title="cpymad.madx.Madx.match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">match</span></code></a>([constraints, vary, weight, method, ...])</p></td>
+<td><p>Perform a simple MATCH operation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Madx.quit" title="cpymad.madx.Madx.quit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quit</span></code></a>()</p></td>
+<td><p>Shutdown MAD-X interpreter and stop process.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Madx.sectormap" title="cpymad.madx.Madx.sectormap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sectormap</span></code></a>(elems, **kwargs)</p></td>
+<td><p>Compute the 7D transfer maps (the 7'th column accounting for KICKs) for the given elements and return as Nx7x7 array.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Madx.sectortable" title="cpymad.madx.Madx.sectortable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sectortable</span></code></a>([name])</p></td>
+<td><p>Read sectormap + kicks from memory and return as Nx7x7 array.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Madx.sectortable2" title="cpymad.madx.Madx.sectortable2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sectortable2</span></code></a>([name])</p></td>
+<td><p>Read 2nd order sectormap T_ijk, return as Nx6x6x6 array.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Madx.survey" title="cpymad.madx.Madx.survey"><code class="xref py py-obj docutils literal notranslate"><span class="pre">survey</span></code></a>(**kwargs)</p></td>
+<td><p>Run SURVEY.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Madx.twiss" title="cpymad.madx.Madx.twiss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">twiss</span></code></a>(**kwargs)</p></td>
+<td><p>Run TWISS.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Madx.use" title="cpymad.madx.Madx.use"><code class="xref py py-obj docutils literal notranslate"><span class="pre">use</span></code></a>([sequence, range])</p></td>
+<td><p>Run USE to expand a sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Madx.verbose" title="cpymad.madx.Madx.verbose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verbose</span></code></a>([switch])</p></td>
+<td><p>Turn verbose output on/off.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes Documentation</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.beam">
+<span class="sig-name descname"><span class="pre">beam</span></span><a class="headerlink" href="#cpymad.madx.Madx.beam" title="Link to this definition">¶</a></dt>
+<dd><p>Get the current default beam.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.options">
+<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#cpymad.madx.Madx.options" title="Link to this definition">¶</a></dt>
+<dd><p>Values of current options.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.version">
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#cpymad.madx.Madx.version" title="Link to this definition">¶</a></dt>
+<dd><p>Get the MAD-X version.</p>
+</dd></dl>
+
+<p class="rubric">Methods Documentation</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.madx.Madx.__call__" title="Link to this definition">¶</a></dt>
+<dd><p>Run any textual MAD-X input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – command text</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>whether the command has completed without error</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.batch">
+<span class="sig-name descname"><span class="pre">batch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Madx.batch" title="Link to this definition">¶</a></dt>
+<dd><p>Collect input and send in a single batch when leaving context. This is
+useful to improve performance when issueing many related commands in
+quick succession.</p>
+<p>Example:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">madx</span><span class="o">.</span><span class="n">batch</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="n">madx</span><span class="o">.</span><span class="n">globals</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">optic</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.call">
+<span class="sig-name descname"><span class="pre">call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Madx.call" title="Link to this definition">¶</a></dt>
+<dd><p>CALL a file in the MAD-X interpreter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – file name with path</p></li>
+<li><p><strong>chdir</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – temporarily change directory in MAD-X process</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.chdir">
+<span class="sig-name descname"><span class="pre">chdir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.chdir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Madx.chdir" title="Link to this definition">¶</a></dt>
+<dd><p>Change the directory of the MAD-X process (not the current python process).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dir</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – new path name</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="cpymad.util.ChangeDirectory.html#cpymad.util.ChangeDirectory" title="cpymad.util.ChangeDirectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChangeDirectory</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a context manager that can change the directory back</p>
+</dd>
+</dl>
+<p>It can be used as context manager for temporary directory changes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">madx</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s1">&#39;/x/y/z&#39;</span><span class="p">):</span>
+    <span class="n">madx</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;file.x&#39;</span><span class="p">)</span>
+    <span class="n">madx</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;file.y&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Madx.eval" title="Link to this definition">¶</a></dt>
+<dd><p>Evaluates an expression and returns the result as double.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>expr</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – expression to evaluate.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numeric value of the expression</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.exit">
+<span class="sig-name descname"><span class="pre">exit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.madx.Madx.exit" title="Link to this definition">¶</a></dt>
+<dd><p>Shutdown MAD-X interpreter and stop process.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.expr_vars">
+<span class="sig-name descname"><span class="pre">expr_vars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.expr_vars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Madx.expr_vars" title="Link to this definition">¶</a></dt>
+<dd><p>Find all variable names used in an expression. This does <em>not</em>
+include element attribute nor function names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.input">
+<span class="sig-name descname"><span class="pre">input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Madx.input" title="Link to this definition">¶</a></dt>
+<dd><p>Run any textual MAD-X input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – command text</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>whether the command has completed without error</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.match">
+<span class="sig-name descname"><span class="pre">match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">constraints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('lmdif',</span> <span class="pre">{})</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knobfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Madx.match" title="Link to this definition">¶</a></dt>
+<dd><p>Perform a simple MATCH operation.</p>
+<p>For more advanced cases, you should issue the commands manually.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>constraints</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – constraints to pose during matching</p></li>
+<li><p><strong>vary</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – knob names to be varied</p></li>
+<li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – weights for matching parameters</p></li>
+<li><p><strong>knobfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – file to write the knob values to</p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – keyword arguments for the MAD-X command</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>final knob values</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cpymad.madx</span> <span class="kn">import</span> <span class="n">Madx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cpymad.types</span> <span class="kn">import</span> <span class="n">Constraint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">Madx</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;sequence.madx&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">twiss_init</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;betx&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;bety&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;alfx&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;alfy&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">match</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">sequence</span><span class="o">=</span><span class="s1">&#39;mysequence&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">constraints</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">... </span>        <span class="nb">dict</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="s1">&#39;marker1&#39;</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">betx</span><span class="o">=</span><span class="n">Constraint</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+<span class="gp">... </span>             <span class="n">bety</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="p">],</span>
+<span class="gp">... </span>    <span class="n">vary</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;qp1-&gt;k1&#39;</span><span class="p">,</span>
+<span class="gp">... </span>          <span class="s1">&#39;qp2-&gt;k1&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="o">**</span><span class="n">twiss_init</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tw</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">twiss</span><span class="p">(</span><span class="s1">&#39;mysequence&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">twiss_init</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.quit">
+<span class="sig-name descname"><span class="pre">quit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.quit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Madx.quit" title="Link to this definition">¶</a></dt>
+<dd><p>Shutdown MAD-X interpreter and stop process.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.sectormap">
+<span class="sig-name descname"><span class="pre">sectormap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elems</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.sectormap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Madx.sectormap" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the 7D transfer maps (the 7’th column accounting for KICKs)
+for the given elements and return as Nx7x7 array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.sectortable">
+<span class="sig-name descname"><span class="pre">sectortable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sectortable'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.sectortable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Madx.sectortable" title="Link to this definition">¶</a></dt>
+<dd><p>Read sectormap + kicks from memory and return as Nx7x7 array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.sectortable2">
+<span class="sig-name descname"><span class="pre">sectortable2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sectortable'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.sectortable2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Madx.sectortable2" title="Link to this definition">¶</a></dt>
+<dd><p>Read 2nd order sectormap T_ijk, return as Nx6x6x6 array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.survey">
+<span class="sig-name descname"><span class="pre">survey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.survey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Madx.survey" title="Link to this definition">¶</a></dt>
+<dd><p>Run SURVEY.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sequence</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of sequence</p></li>
+<li><p><strong>kwargs</strong> – keyword arguments for the MAD-X command</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.twiss">
+<span class="sig-name descname"><span class="pre">twiss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.twiss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Madx.twiss" title="Link to this definition">¶</a></dt>
+<dd><p>Run TWISS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sequence</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of sequence</p></li>
+<li><p><strong>kwargs</strong> – keyword arguments for the MAD-X command</p></li>
+</ul>
+</dd>
+</dl>
+<p>Note that the kwargs overwrite any arguments in twiss_init.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.use">
+<span class="sig-name descname"><span class="pre">use</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.use"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Madx.use" title="Link to this definition">¶</a></dt>
+<dd><p>Run USE to expand a sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sequence</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – sequence name</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>name of active sequence</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Madx.verbose">
+<span class="sig-name descname"><span class="pre">verbose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">switch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Madx.verbose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Madx.verbose" title="Link to this definition">¶</a></dt>
+<dd><p>Turn verbose output on/off.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../cpymad/madx.html" class="btn btn-neutral float-left" title="cpymad.madx" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cpymad.madx.ArrayAttribute.html" class="btn btn-neutral float-right" title="ArrayAttribute" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2014-2021, T. Gläßle,2014-2019, HIT Betriebs GmbH,2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

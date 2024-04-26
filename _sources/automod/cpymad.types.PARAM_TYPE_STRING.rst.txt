@@ -1,0 +1,6 @@
+PARAM_TYPE_STRING
+=================
+
+.. currentmodule:: cpymad.types
+
+.. autodata:: PARAM_TYPE_STRING

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cpymad.madx &mdash; cpymad 1.16.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/documentation_options.js?v=d5528024"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Madx" href="../automod/cpymad.madx.Madx.html" />
+    <link rel="prev" title="API Reference" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cpymad
+          </a>
+              <div class="version">
+                1.16
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building.html">Building from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">cpymad.madx</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.Madx.html">Madx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.ArrayAttribute.html">ArrayAttribute</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.AttrDict.html">AttrDict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.BaseTypeMap.html">BaseTypeMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.Command.html">Command</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.CommandLog.html">CommandLog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.CommandMap.html">CommandMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.Element.html">Element</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.ElementList.html">ElementList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.ExpandedElementList.html">ExpandedElementList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.GlobalElementList.html">GlobalElementList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.Metadata.html">Metadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.Sequence.html">Sequence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.SequenceMap.html">SequenceMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.Table.html">Table</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.TableMap.html">TableMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.VarList.html">VarList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.VarParamList.html">VarParamList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.Version.html">Version</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.TwissFailed.html">TwissFailed</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#variables">Variables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.madx.metadata.html">metadata</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#class-inheritance-diagram">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="libmadx.html">cpymad.libmadx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html">cpymad.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">cpymad.types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../known-issues.html">Known issues</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cpymad</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">API Reference</a></li>
+      <li class="breadcrumb-item active">cpymad.madx</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/hibtc/cpymad/blob/master/doc/cpymad/madx.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-cpymad.madx">
+<span id="cpymad-madx"></span><h1>cpymad.madx<a class="headerlink" href="#module-cpymad.madx" title="Link to this heading">¶</a></h1>
+<p>This module defines a convenience layer to access the MAD-X interpreter.</p>
+<p>The most interesting class for users is <a class="reference internal" href="../automod/cpymad.madx.Madx.html#cpymad.madx.Madx" title="cpymad.madx.Madx"><code class="xref py py-class docutils literal notranslate"><span class="pre">Madx</span></code></a>.</p>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.madx.Madx.html#cpymad.madx.Madx" title="cpymad.madx.Madx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Madx</span></code></a>([libmadx, command_log, stdout, ...])</p></td>
+<td><p>Python interface for a MAD-X process.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.madx.ArrayAttribute.html#cpymad.madx.ArrayAttribute" title="cpymad.madx.ArrayAttribute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArrayAttribute</span></code></a>(element, values, name)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.madx.AttrDict.html#cpymad.madx.AttrDict" title="cpymad.madx.AttrDict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AttrDict</span></code></a>(data)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.madx.BaseTypeMap.html#cpymad.madx.BaseTypeMap" title="cpymad.madx.BaseTypeMap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTypeMap</span></code></a>(madx)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.madx.Command.html#cpymad.madx.Command" title="cpymad.madx.Command"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Command</span></code></a>(madx, data)</p></td>
+<td><p>Raw python interface to issue and view MAD-X commands.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.madx.CommandLog.html#cpymad.madx.CommandLog" title="cpymad.madx.CommandLog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CommandLog</span></code></a>(file[, prefix, suffix, own])</p></td>
+<td><p>Log MAD-X command history to a text file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.madx.CommandMap.html#cpymad.madx.CommandMap" title="cpymad.madx.CommandMap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CommandMap</span></code></a>(madx)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.madx.Element.html#cpymad.madx.Element" title="cpymad.madx.Element"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Element</span></code></a>(madx, data)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.madx.ElementList.html#cpymad.madx.ElementList" title="cpymad.madx.ElementList"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ElementList</span></code></a>(madx, sequence_name)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.madx.ExpandedElementList.html#cpymad.madx.ExpandedElementList" title="cpymad.madx.ExpandedElementList"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExpandedElementList</span></code></a>(madx, sequence_name)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.madx.GlobalElementList.html#cpymad.madx.GlobalElementList" title="cpymad.madx.GlobalElementList"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GlobalElementList</span></code></a>(madx)</p></td>
+<td><p>Mapping of the global elements in MAD-X.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.madx.Metadata.html#cpymad.madx.Metadata" title="cpymad.madx.Metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Metadata</span></code></a>()</p></td>
+<td><p>MAD-X metadata (license info, etc).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.madx.Sequence.html#cpymad.madx.Sequence" title="cpymad.madx.Sequence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sequence</span></code></a>(name, madx[, _check])</p></td>
+<td><p>MAD-X sequence representation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.madx.SequenceMap.html#cpymad.madx.SequenceMap" title="cpymad.madx.SequenceMap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SequenceMap</span></code></a>(madx)</p></td>
+<td><p>Mapping of all sequences (<a class="reference internal" href="../automod/cpymad.madx.Sequence.html#cpymad.madx.Sequence" title="cpymad.madx.Sequence"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>) in memory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.madx.Table.html#cpymad.madx.Table" title="cpymad.madx.Table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Table</span></code></a>(name, libmadx, *[, columns, rows, _check])</p></td>
+<td><p>MAD-X twiss table.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.madx.TableMap.html#cpymad.madx.TableMap" title="cpymad.madx.TableMap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TableMap</span></code></a>(libmadx)</p></td>
+<td><p>Mapping of all tables (<a class="reference internal" href="../automod/cpymad.madx.Table.html#cpymad.madx.Table" title="cpymad.madx.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a>) in memory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.madx.VarList.html#cpymad.madx.VarList" title="cpymad.madx.VarList"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VarList</span></code></a>(madx)</p></td>
+<td><p>Mapping of global MAD-X variables.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.madx.VarParamList.html#cpymad.madx.VarParamList" title="cpymad.madx.VarParamList"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VarParamList</span></code></a>(madx)</p></td>
+<td><p>Mapping of global MAD-X variables.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.madx.Version.html#cpymad.madx.Version" title="cpymad.madx.Version"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Version</span></code></a>(release, date)</p></td>
+<td><p>Version information struct.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.madx.TwissFailed.html#cpymad.madx.TwissFailed" title="cpymad.madx.TwissFailed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwissFailed</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.madx.metadata.html#cpymad.madx.metadata" title="cpymad.madx.metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">metadata</span></code></a></p></td>
+<td><p>MAD-X metadata (license info, etc).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="class-inheritance-diagram">
+<h2>Class Inheritance Diagram<a class="headerlink" href="#class-inheritance-diagram" title="Link to this heading">¶</a></h2>
+<div class="graphviz"><img src="../_images/inheritance-54099195b75b3cfc4cafee25a1733c27754e2e98.png" alt="Inheritance diagram of cpymad.madx.Madx, cpymad.madx.ArrayAttribute, cpymad.madx.AttrDict, cpymad.madx.BaseTypeMap, cpymad.madx.Command, cpymad.madx.CommandLog, cpymad.madx.CommandMap, cpymad.madx.Element, cpymad.madx.ElementList, cpymad.madx.ExpandedElementList, cpymad.madx.GlobalElementList, cpymad.madx.Metadata, cpymad.madx.Sequence, cpymad.madx.SequenceMap, cpymad.madx.Table, cpymad.madx.TableMap, cpymad.madx.VarList, cpymad.madx.VarParamList, cpymad.madx.Version, cpymad.madx.TwissFailed" usemap="#inheritanceff938bc3e5" class="inheritance graphviz" /></div>
+<map id="inheritanceff938bc3e5" name="inheritanceff938bc3e5">
+<area shape="rect" id="node1" href="../automod/cpymad.madx.ArrayAttribute.html#cpymad.madx.ArrayAttribute" target="_top" title="ArrayAttribute" alt="" coords="338,327,418,344"/>
+<area shape="rect" id="node2" href="../automod/cpymad.madx.Sequence.html#cpymad.madx.Sequence" target="_top" title="MAD&#45;X sequence representation." alt="" coords="225,292,284,310"/>
+<area shape="rect" id="node16" href="../automod/cpymad.madx.ElementList.html#cpymad.madx.ElementList" target="_top" title="ElementList" alt="" coords="344,292,412,310"/>
+<area shape="rect" id="node3" href="../automod/cpymad.madx.AttrDict.html#cpymad.madx.AttrDict" target="_top" title="AttrDict" alt="" coords="487,122,537,140"/>
+<area shape="rect" id="node7" href="../automod/cpymad.madx.CommandMap.html#cpymad.madx.CommandMap" target="_top" title="CommandMap" alt="" coords="472,156,553,174"/>
+<area shape="rect" id="node18" href="../automod/cpymad.madx.GlobalElementList.html#cpymad.madx.GlobalElementList" target="_top" title="Mapping of the global elements in MAD&#45;X." alt="" coords="464,258,561,276"/>
+<area shape="rect" id="node24" href="../automod/cpymad.madx.SequenceMap.html#cpymad.madx.SequenceMap" target="_top" title="Mapping of all sequences (:class:`Sequence`) in memory." alt="" coords="473,190,551,208"/>
+<area shape="rect" id="node25" href="../automod/cpymad.madx.Table.html#cpymad.madx.Table" target="_top" title="MAD&#45;X twiss table." alt="" coords="487,224,537,242"/>
+<area shape="rect" id="node26" href="../automod/cpymad.madx.TableMap.html#cpymad.madx.TableMap" target="_top" title="Mapping of all tables (:class:`Table`) in memory." alt="" coords="483,54,541,72"/>
+<area shape="rect" id="node29" href="../automod/cpymad.madx.VarParamList.html#cpymad.madx.VarParamList" target="_top" title="Mapping of global MAD&#45;X variables." alt="" coords="476,88,549,106"/>
+<area shape="rect" id="node6" href="../automod/cpymad.madx.BaseTypeMap.html#cpymad.madx.BaseTypeMap" target="_top" title="BaseTypeMap" alt="" coords="602,156,679,174"/>
+<area shape="rect" id="node8" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Collection" target="_top" title="Collection" alt="" coords="115,258,175,276"/>
+<area shape="rect" id="node20" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" target="_top" title="Mapping" alt="" coords="228,140,282,157"/>
+<area shape="rect" id="node9" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sized" target="_top" title="Sized" alt="" coords="17,224,67,242"/>
+<area shape="rect" id="node10" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" target="_top" title="Iterable" alt="" coords="17,292,67,310"/>
+<area shape="rect" id="node23" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Reversible" target="_top" title="Reversible" alt="" coords="114,292,177,310"/>
+<area shape="rect" id="node11" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Container" target="_top" title="Container" alt="" coords="13,258,72,276"/>
+<area shape="rect" id="node12" href="../automod/cpymad.madx.Command.html#cpymad.madx.Command" target="_top" title="Raw python interface to issue and view MAD&#45;X commands. Usage example:" alt="" coords="609,38,671,55"/>
+<area shape="rect" id="node15" href="../automod/cpymad.madx.Element.html#cpymad.madx.Element" target="_top" title="Element" alt="" coords="712,38,764,55"/>
+<area shape="rect" id="node28" href="../automod/cpymad.madx.VarList.html#cpymad.madx.VarList" target="_top" title="Mapping of global MAD&#45;X variables." alt="" coords="615,4,665,21"/>
+<area shape="rect" id="node14" href="../automod/cpymad.madx.CommandLog.html#cpymad.madx.CommandLog" target="_top" title="Log MAD&#45;X command history to a text file." alt="" coords="4,190,81,208"/>
+<area shape="rect" id="node17" href="../automod/cpymad.madx.ExpandedElementList.html#cpymad.madx.ExpandedElementList" target="_top" title="ExpandedElementList" alt="" coords="456,292,568,310"/>
+<area shape="rect" id="node19" href="../automod/cpymad.madx.Madx.html#cpymad.madx.Madx" target="_top" title="Python interface for a MAD&#45;X process." alt="" coords="17,156,67,174"/>
+<area shape="rect" id="node22" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping" target="_top" title="MutableMapping" alt="" coords="333,55,423,73"/>
+<area shape="rect" id="node21" href="../automod/cpymad.madx.Metadata.html#cpymad.madx.Metadata" target="_top" title="MAD&#45;X metadata (license info, etc)." alt="" coords="13,122,71,140"/>
+<area shape="rect" id="node27" href="../automod/cpymad.madx.TwissFailed.html#cpymad.madx.TwissFailed" target="_top" title="TwissFailed" alt="" coords="10,88,75,106"/>
+<area shape="rect" id="node30" href="../automod/cpymad.madx.Version.html#cpymad.madx.Version" target="_top" title="Version information struct." alt="" coords="17,54,67,72"/>
+</map></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../automod/cpymad.madx.Madx.html" class="btn btn-neutral float-right" title="Madx" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2014-2021, T. Gläßle,2014-2019, HIT Betriebs GmbH,2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

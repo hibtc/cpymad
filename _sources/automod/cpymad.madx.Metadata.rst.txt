@@ -1,0 +1,17 @@
+Metadata
+========
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: Metadata
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~Metadata.get_copyright_notice
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: get_copyright_notice

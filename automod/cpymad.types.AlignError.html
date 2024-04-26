@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AlignError &mdash; cpymad 1.16.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/documentation_options.js?v=d5528024"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FieldError" href="cpymad.types.FieldError.html" />
+    <link rel="prev" title="Range" href="cpymad.types.Range.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cpymad
+          </a>
+              <div class="version">
+                1.16
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building.html">Building from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../cpymad/index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/madx.html">cpymad.madx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/libmadx.html">cpymad.libmadx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/util.html">cpymad.util</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpymad/types.html">cpymad.types</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../cpymad/types.html#classes">Classes</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cpymad.types.Constraint.html">Constraint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.types.Parameter.html">Parameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.types.Range.html">Range</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">AlignError</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.types.FieldError.html">FieldError</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.types.PhaseError.html">PhaseError</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../cpymad/types.html#variables">Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cpymad/types.html#class-inheritance-diagram">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../known-issues.html">Known issues</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cpymad</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../cpymad/index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../cpymad/types.html">cpymad.types</a></li>
+      <li class="breadcrumb-item active">AlignError</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/automod/cpymad.types.AlignError.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="alignerror">
+<h1>AlignError<a class="headerlink" href="#alignerror" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="cpymad.types.AlignError">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AlignError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dphi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpsi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mrex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mrey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mredx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mredy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mscalx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mscaly</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.types.AlignError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+<p class="rubric">Attributes Summary</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.types.AlignError.arex" title="cpymad.types.AlignError.arex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">arex</span></code></a></p></td>
+<td><p>Alias for field number 10</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.types.AlignError.arey" title="cpymad.types.AlignError.arey"><code class="xref py py-obj docutils literal notranslate"><span class="pre">arey</span></code></a></p></td>
+<td><p>Alias for field number 11</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.types.AlignError.dphi" title="cpymad.types.AlignError.dphi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dphi</span></code></a></p></td>
+<td><p>Alias for field number 3</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.types.AlignError.dpsi" title="cpymad.types.AlignError.dpsi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dpsi</span></code></a></p></td>
+<td><p>Alias for field number 5</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.types.AlignError.ds" title="cpymad.types.AlignError.ds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ds</span></code></a></p></td>
+<td><p>Alias for field number 2</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.types.AlignError.dtheta" title="cpymad.types.AlignError.dtheta"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtheta</span></code></a></p></td>
+<td><p>Alias for field number 4</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.types.AlignError.dx" title="cpymad.types.AlignError.dx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dx</span></code></a></p></td>
+<td><p>Alias for field number 0</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.types.AlignError.dy" title="cpymad.types.AlignError.dy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dy</span></code></a></p></td>
+<td><p>Alias for field number 1</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.types.AlignError.mredx" title="cpymad.types.AlignError.mredx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mredx</span></code></a></p></td>
+<td><p>Alias for field number 8</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.types.AlignError.mredy" title="cpymad.types.AlignError.mredy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mredy</span></code></a></p></td>
+<td><p>Alias for field number 9</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.types.AlignError.mrex" title="cpymad.types.AlignError.mrex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mrex</span></code></a></p></td>
+<td><p>Alias for field number 6</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.types.AlignError.mrey" title="cpymad.types.AlignError.mrey"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mrey</span></code></a></p></td>
+<td><p>Alias for field number 7</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.types.AlignError.mscalx" title="cpymad.types.AlignError.mscalx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mscalx</span></code></a></p></td>
+<td><p>Alias for field number 12</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.types.AlignError.mscaly" title="cpymad.types.AlignError.mscaly"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mscaly</span></code></a></p></td>
+<td><p>Alias for field number 13</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.types.AlignError.count" title="cpymad.types.AlignError.count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">count</span></code></a>(value, /)</p></td>
+<td><p>Return number of occurrences of value.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.types.AlignError.index" title="cpymad.types.AlignError.index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">index</span></code></a>(value[, start, stop])</p></td>
+<td><p>Return first index of value.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes Documentation</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.types.AlignError.arex">
+<span class="sig-name descname"><span class="pre">arex</span></span><a class="headerlink" href="#cpymad.types.AlignError.arex" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 10</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.types.AlignError.arey">
+<span class="sig-name descname"><span class="pre">arey</span></span><a class="headerlink" href="#cpymad.types.AlignError.arey" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 11</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.types.AlignError.dphi">
+<span class="sig-name descname"><span class="pre">dphi</span></span><a class="headerlink" href="#cpymad.types.AlignError.dphi" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.types.AlignError.dpsi">
+<span class="sig-name descname"><span class="pre">dpsi</span></span><a class="headerlink" href="#cpymad.types.AlignError.dpsi" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 5</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.types.AlignError.ds">
+<span class="sig-name descname"><span class="pre">ds</span></span><a class="headerlink" href="#cpymad.types.AlignError.ds" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.types.AlignError.dtheta">
+<span class="sig-name descname"><span class="pre">dtheta</span></span><a class="headerlink" href="#cpymad.types.AlignError.dtheta" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 4</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.types.AlignError.dx">
+<span class="sig-name descname"><span class="pre">dx</span></span><a class="headerlink" href="#cpymad.types.AlignError.dx" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.types.AlignError.dy">
+<span class="sig-name descname"><span class="pre">dy</span></span><a class="headerlink" href="#cpymad.types.AlignError.dy" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.types.AlignError.mredx">
+<span class="sig-name descname"><span class="pre">mredx</span></span><a class="headerlink" href="#cpymad.types.AlignError.mredx" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 8</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.types.AlignError.mredy">
+<span class="sig-name descname"><span class="pre">mredy</span></span><a class="headerlink" href="#cpymad.types.AlignError.mredy" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 9</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.types.AlignError.mrex">
+<span class="sig-name descname"><span class="pre">mrex</span></span><a class="headerlink" href="#cpymad.types.AlignError.mrex" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 6</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.types.AlignError.mrey">
+<span class="sig-name descname"><span class="pre">mrey</span></span><a class="headerlink" href="#cpymad.types.AlignError.mrey" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 7</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.types.AlignError.mscalx">
+<span class="sig-name descname"><span class="pre">mscalx</span></span><a class="headerlink" href="#cpymad.types.AlignError.mscalx" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 12</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.types.AlignError.mscaly">
+<span class="sig-name descname"><span class="pre">mscaly</span></span><a class="headerlink" href="#cpymad.types.AlignError.mscaly" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 13</p>
+</dd></dl>
+
+<p class="rubric">Methods Documentation</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.types.AlignError.count">
+<span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.types.AlignError.count" title="Link to this definition">¶</a></dt>
+<dd><p>Return number of occurrences of value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.types.AlignError.index">
+<span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9223372036854775807</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cpymad.types.AlignError.index" title="Link to this definition">¶</a></dt>
+<dd><p>Return first index of value.</p>
+<p>Raises ValueError if the value is not present.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cpymad.types.Range.html" class="btn btn-neutral float-left" title="Range" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cpymad.types.FieldError.html" class="btn btn-neutral float-right" title="FieldError" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2014-2021, T. Gläßle,2014-2019, HIT Betriebs GmbH,2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

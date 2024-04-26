@@ -1,0 +1,6 @@
+get_element_name
+================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_element_name

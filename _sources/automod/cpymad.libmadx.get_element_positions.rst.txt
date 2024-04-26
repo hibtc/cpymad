@@ -1,0 +1,6 @@
+get_element_positions
+=====================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_element_positions

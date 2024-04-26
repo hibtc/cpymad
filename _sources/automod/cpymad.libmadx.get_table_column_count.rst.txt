@@ -1,0 +1,6 @@
+get_table_column_count
+======================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_table_column_count

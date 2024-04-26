@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ArrayAttribute &mdash; cpymad 1.16.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/documentation_options.js?v=d5528024"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="AttrDict" href="cpymad.madx.AttrDict.html" />
+    <link rel="prev" title="Madx" href="cpymad.madx.Madx.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cpymad
+          </a>
+              <div class="version">
+                1.16
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building.html">Building from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../cpymad/index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../cpymad/madx.html">cpymad.madx</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../cpymad/madx.html#classes">Classes</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Madx.html">Madx</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">ArrayAttribute</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.AttrDict.html">AttrDict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.BaseTypeMap.html">BaseTypeMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Command.html">Command</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.CommandLog.html">CommandLog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.CommandMap.html">CommandMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Element.html">Element</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.ElementList.html">ElementList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.ExpandedElementList.html">ExpandedElementList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.GlobalElementList.html">GlobalElementList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Metadata.html">Metadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Sequence.html">Sequence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.SequenceMap.html">SequenceMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Table.html">Table</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.TableMap.html">TableMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.VarList.html">VarList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.VarParamList.html">VarParamList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Version.html">Version</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.TwissFailed.html">TwissFailed</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../cpymad/madx.html#variables">Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cpymad/madx.html#class-inheritance-diagram">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/libmadx.html">cpymad.libmadx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/util.html">cpymad.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/types.html">cpymad.types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../known-issues.html">Known issues</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cpymad</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../cpymad/index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../cpymad/madx.html">cpymad.madx</a></li>
+      <li class="breadcrumb-item active">ArrayAttribute</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/automod/cpymad.madx.ArrayAttribute.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="arrayattribute">
+<h1>ArrayAttribute<a class="headerlink" href="#arrayattribute" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="cpymad.madx.ArrayAttribute">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ArrayAttribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#ArrayAttribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.ArrayAttribute" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a></p>
+<p class="rubric">Methods Summary</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.ArrayAttribute.count" title="cpymad.madx.ArrayAttribute.count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">count</span></code></a>(value)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.ArrayAttribute.index" title="cpymad.madx.ArrayAttribute.index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">index</span></code></a>(value, [start, [stop]])</p></td>
+<td><p>Raises ValueError if the value is not present.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.ArrayAttribute.count">
+<span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">integer</span> <span class="pre">--</span> <span class="pre">return</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">occurrences</span> <span class="pre">of</span> <span class="pre">value</span></span></span><a class="headerlink" href="#cpymad.madx.ArrayAttribute.count" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.ArrayAttribute.index">
+<span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">integer</span> <span class="pre">--</span> <span class="pre">return</span> <span class="pre">first</span> <span class="pre">index</span> <span class="pre">of</span> <span class="pre">value.</span></span></span><a class="headerlink" href="#cpymad.madx.ArrayAttribute.index" title="Link to this definition">¶</a></dt>
+<dd><p>Raises ValueError if the value is not present.</p>
+<p>Supporting start and stop arguments is optional, but
+recommended.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cpymad.madx.Madx.html" class="btn btn-neutral float-left" title="Madx" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cpymad.madx.AttrDict.html" class="btn btn-neutral float-right" title="AttrDict" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2014-2021, T. Gläßle,2014-2019, HIT Betriebs GmbH,2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

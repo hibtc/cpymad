@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Table &mdash; cpymad 1.16.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/documentation_options.js?v=d5528024"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="TableMap" href="cpymad.madx.TableMap.html" />
+    <link rel="prev" title="SequenceMap" href="cpymad.madx.SequenceMap.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cpymad
+          </a>
+              <div class="version">
+                1.16
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building.html">Building from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../cpymad/index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../cpymad/madx.html">cpymad.madx</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../cpymad/madx.html#classes">Classes</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Madx.html">Madx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.ArrayAttribute.html">ArrayAttribute</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.AttrDict.html">AttrDict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.BaseTypeMap.html">BaseTypeMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Command.html">Command</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.CommandLog.html">CommandLog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.CommandMap.html">CommandMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Element.html">Element</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.ElementList.html">ElementList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.ExpandedElementList.html">ExpandedElementList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.GlobalElementList.html">GlobalElementList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Metadata.html">Metadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Sequence.html">Sequence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.SequenceMap.html">SequenceMap</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Table</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.TableMap.html">TableMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.VarList.html">VarList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.VarParamList.html">VarParamList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.Version.html">Version</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpymad.madx.TwissFailed.html">TwissFailed</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../cpymad/madx.html#variables">Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cpymad/madx.html#class-inheritance-diagram">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/libmadx.html">cpymad.libmadx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/util.html">cpymad.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpymad/types.html">cpymad.types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../known-issues.html">Known issues</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cpymad</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../cpymad/index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../cpymad/madx.html">cpymad.madx</a></li>
+      <li class="breadcrumb-item active">Table</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/automod/cpymad.madx.Table.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="table">
+<h1>Table<a class="headerlink" href="#table" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="cpymad.madx.Table">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">libmadx</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Table" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_Mapping</span></code></p>
+<p>MAD-X twiss table.</p>
+<p>Loads individual columns from the MAD-X process lazily only on demand.</p>
+<p class="rubric">Attributes Summary</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Table.range" title="cpymad.madx.Table.range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">range</span></code></a></p></td>
+<td><p>Get the element names (first, last) of the valid range.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Table.summary" title="cpymad.madx.Table.summary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">summary</span></code></a></p></td>
+<td><p>Get the table summary.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Table.col_names" title="cpymad.madx.Table.col_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">col_names</span></code></a>([columns])</p></td>
+<td><p>Get list of all columns in the table.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Table.column" title="cpymad.madx.Table.column"><code class="xref py py-obj docutils literal notranslate"><span class="pre">column</span></code></a>(column[, rows])</p></td>
+<td><p>Retrieve all specified rows in the given column of the table.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Table.copy" title="cpymad.madx.Table.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a>([columns, rows])</p></td>
+<td><p>Return a frozen table with the desired columns.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Table.dframe" title="cpymad.madx.Table.dframe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dframe</span></code></a>([columns, rows, index])</p></td>
+<td><p>Return table as <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Table.get" title="cpymad.madx.Table.get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code></a>(k[,d])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Table.getmat" title="cpymad.madx.Table.getmat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getmat</span></code></a>(name, idx, *dim)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Table.items" title="cpymad.madx.Table.items"><code class="xref py py-obj docutils literal notranslate"><span class="pre">items</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Table.keys" title="cpymad.madx.Table.keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">keys</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Table.kvec" title="cpymad.madx.Table.kvec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kvec</span></code></a>(idx[, dim])</p></td>
+<td><p>Kicks.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Table.reload" title="cpymad.madx.Table.reload"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reload</span></code></a>(column)</p></td>
+<td><p>Reload (recache) one column from MAD-X.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Table.rmat" title="cpymad.madx.Table.rmat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rmat</span></code></a>(idx[, dim])</p></td>
+<td><p>Sectormap.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Table.row" title="cpymad.madx.Table.row"><code class="xref py py-obj docutils literal notranslate"><span class="pre">row</span></code></a>(index[, columns])</p></td>
+<td><p>Retrieve one row from the table.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Table.row_names" title="cpymad.madx.Table.row_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">row_names</span></code></a>([rows])</p></td>
+<td><p>Get table row names.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Table.selected_columns" title="cpymad.madx.Table.selected_columns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">selected_columns</span></code></a>()</p></td>
+<td><p>Get list of column names that were selected by the user (can be empty).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Table.selected_rows" title="cpymad.madx.Table.selected_rows"><code class="xref py py-obj docutils literal notranslate"><span class="pre">selected_rows</span></code></a>()</p></td>
+<td><p>Get list of row indices that were selected by the user (can be empty).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Table.selection" title="cpymad.madx.Table.selection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">selection</span></code></a>([columns, rows])</p></td>
+<td><p>Return a Table object that only retrieves the specified rows and columns by default.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Table.sigmat" title="cpymad.madx.Table.sigmat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sigmat</span></code></a>(idx[, dim])</p></td>
+<td><p>Beam matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpymad.madx.Table.tmat" title="cpymad.madx.Table.tmat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmat</span></code></a>(idx[, dim])</p></td>
+<td><p>2nd order sectormap.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cpymad.madx.Table.values" title="cpymad.madx.Table.values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">values</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes Documentation</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.madx.Table.range">
+<span class="sig-name descname"><span class="pre">range</span></span><a class="headerlink" href="#cpymad.madx.Table.range" title="Link to this definition">¶</a></dt>
+<dd><p>Get the element names (first, last) of the valid range.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cpymad.madx.Table.summary">
+<span class="sig-name descname"><span class="pre">summary</span></span><a class="headerlink" href="#cpymad.madx.Table.summary" title="Link to this definition">¶</a></dt>
+<dd><p>Get the table summary.</p>
+</dd></dl>
+
+<p class="rubric">Methods Documentation</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.col_names">
+<span class="sig-name descname"><span class="pre">col_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Table.col_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Table.col_names" title="Link to this definition">¶</a></dt>
+<dd><p>Get list of all columns in the table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.column">
+<span class="sig-name descname"><span class="pre">column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Table.column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Table.column" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve all specified rows in the given column of the table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>column</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – column name</p></li>
+<li><p><strong>rows</strong> – a list of row indices or <code class="docutils literal notranslate"><span class="pre">'all'</span></code> or <code class="docutils literal notranslate"><span class="pre">'selected'</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Table.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Table.copy" title="Link to this definition">¶</a></dt>
+<dd><p>Return a frozen table with the desired columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – column names or <code class="docutils literal notranslate"><span class="pre">None</span></code> for all columns.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>column data</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – if the table name is invalid</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.dframe">
+<span class="sig-name descname"><span class="pre">dframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Table.dframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Table.dframe" title="Link to this definition">¶</a></dt>
+<dd><p>Return table as <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>columns</strong> – column names or ‘all’ or ‘selected’</p></li>
+<li><p><strong>rows</strong> – row indices or ‘all’ or ‘selected’</p></li>
+<li><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – column name or sequence to be used as index, or
+<code class="docutils literal notranslate"><span class="pre">None</span></code> for using the <code class="docutils literal notranslate"><span class="pre">row_names</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>column data as <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – if the table name is invalid</p>
+</dd>
+</dl>
+<p>WARNING: using <code class="docutils literal notranslate"><span class="pre">index=None</span></code> is unsafe after calling <code class="docutils literal notranslate"><span class="pre">USE</span></code>.
+In this case, please manually specify another column to be used,
+e.g. <code class="docutils literal notranslate"><span class="pre">index=&quot;name&quot;</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="optional">]</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">D[k]</span> <span class="pre">if</span> <span class="pre">k</span> <span class="pre">in</span> <span class="pre">D,</span> <span class="pre">else</span> <span class="pre">d.</span>&#160; <span class="pre">d</span> <span class="pre">defaults</span> <span class="pre">to</span> <span class="pre">None.</span></span></span><a class="headerlink" href="#cpymad.madx.Table.get" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.getmat">
+<span class="sig-name descname"><span class="pre">getmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Table.getmat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Table.getmat" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.items">
+<span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">a</span> <span class="pre">set-like</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">items</span></span></span><a class="headerlink" href="#cpymad.madx.Table.items" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">a</span> <span class="pre">set-like</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">keys</span></span></span><a class="headerlink" href="#cpymad.madx.Table.keys" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.kvec">
+<span class="sig-name descname"><span class="pre">kvec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Table.kvec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Table.kvec" title="Link to this definition">¶</a></dt>
+<dd><p>Kicks.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.reload">
+<span class="sig-name descname"><span class="pre">reload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Table.reload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Table.reload" title="Link to this definition">¶</a></dt>
+<dd><p>Reload (recache) one column from MAD-X.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.rmat">
+<span class="sig-name descname"><span class="pre">rmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Table.rmat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Table.rmat" title="Link to this definition">¶</a></dt>
+<dd><p>Sectormap.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.row">
+<span class="sig-name descname"><span class="pre">row</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Table.row"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Table.row" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve one row from the table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.row_names">
+<span class="sig-name descname"><span class="pre">row_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Table.row_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Table.row_names" title="Link to this definition">¶</a></dt>
+<dd><p>Get table row names.</p>
+<p>WARNING: using <code class="docutils literal notranslate"><span class="pre">row_names</span></code> after calling <code class="docutils literal notranslate"><span class="pre">USE</span></code> (before recomputing
+the table) is unsafe and may lead to segmentation faults or incorrect
+results.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.selected_columns">
+<span class="sig-name descname"><span class="pre">selected_columns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Table.selected_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Table.selected_columns" title="Link to this definition">¶</a></dt>
+<dd><p>Get list of column names that were selected by the user (can be
+empty).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.selected_rows">
+<span class="sig-name descname"><span class="pre">selected_rows</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Table.selected_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Table.selected_rows" title="Link to this definition">¶</a></dt>
+<dd><p>Get list of row indices that were selected by the user (can be
+empty).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.selection">
+<span class="sig-name descname"><span class="pre">selection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'selected'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Table.selection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Table.selection" title="Link to this definition">¶</a></dt>
+<dd><p>Return a Table object that only retrieves the specified rows and
+columns by default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>columns</strong> – list of names or ‘all’ or ‘selected’</p></li>
+<li><p><strong>rows</strong> – list of indices or ‘all’ or ‘selected’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#cpymad.madx.Table" title="cpymad.madx.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a></span></p>
+</dd>
+</dl>
+<p>If only <code class="docutils literal notranslate"><span class="pre">columns</span></code> is given, <code class="docutils literal notranslate"><span class="pre">rows</span></code> defaults to ‘selected’
+unless <code class="docutils literal notranslate"><span class="pre">columns</span></code> is set to ‘all’ in which case it also defaults
+to ‘all’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.sigmat">
+<span class="sig-name descname"><span class="pre">sigmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Table.sigmat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Table.sigmat" title="Link to this definition">¶</a></dt>
+<dd><p>Beam matrix.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.tmat">
+<span class="sig-name descname"><span class="pre">tmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cpymad/madx.html#Table.tmat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cpymad.madx.Table.tmat" title="Link to this definition">¶</a></dt>
+<dd><p>2nd order sectormap.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cpymad.madx.Table.values">
+<span class="sig-name descname"><span class="pre">values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">an</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">values</span></span></span><a class="headerlink" href="#cpymad.madx.Table.values" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cpymad.madx.SequenceMap.html" class="btn btn-neutral float-left" title="SequenceMap" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cpymad.madx.TableMap.html" class="btn btn-neutral float-right" title="TableMap" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2014-2021, T. Gläßle,2014-2019, HIT Betriebs GmbH,2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

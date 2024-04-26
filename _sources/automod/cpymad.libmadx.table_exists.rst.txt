@@ -1,0 +1,6 @@
+table_exists
+============
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: table_exists

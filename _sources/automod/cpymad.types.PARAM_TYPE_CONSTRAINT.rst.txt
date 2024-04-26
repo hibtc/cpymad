@@ -1,0 +1,6 @@
+PARAM_TYPE_CONSTRAINT
+=====================
+
+.. currentmodule:: cpymad.types
+
+.. autodata:: PARAM_TYPE_CONSTRAINT

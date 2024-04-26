@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cpymad.util &mdash; cpymad 1.16.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/documentation_options.js?v=d5528024"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="mad_quote" href="../automod/cpymad.util.mad_quote.html" />
+    <link rel="prev" title="getcwd" href="../automod/cpymad.libmadx.getcwd.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cpymad
+          </a>
+              <div class="version">
+                1.16
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building.html">Building from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="madx.html">cpymad.madx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="libmadx.html">cpymad.libmadx</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">cpymad.util</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.util.mad_quote.html">mad_quote</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.util.is_identifier.html">is_identifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.util.name_from_internal.html">name_from_internal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.util.name_to_internal.html">name_to_internal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.util.format_param.html">format_param</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.util.format_cmdpar.html">format_cmdpar</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.util.format_command.html">format_command</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.util.check_expression.html">check_expression</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.util.temp_filename.html">temp_filename</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../automod/cpymad.util.ChangeDirectory.html">ChangeDirectory</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#class-inheritance-diagram">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">cpymad.types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../known-issues.html">Known issues</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cpymad</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">API Reference</a></li>
+      <li class="breadcrumb-item active">cpymad.util</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/hibtc/cpymad/blob/master/doc/cpymad/util.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-cpymad.util">
+<span id="cpymad-util"></span><h1>cpymad.util<a class="headerlink" href="#module-cpymad.util" title="Link to this heading">¶</a></h1>
+<p>Utility functions used in other parts of the pymad package.</p>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.util.mad_quote.html#cpymad.util.mad_quote" title="cpymad.util.mad_quote"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mad_quote</span></code></a>(value)</p></td>
+<td><p>Add quotes to a string value.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.util.is_identifier.html#cpymad.util.is_identifier" title="cpymad.util.is_identifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_identifier</span></code></a>(name)</p></td>
+<td><p>Check if <code class="docutils literal notranslate"><span class="pre">name</span></code> is a valid identifier in MAD-X.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.util.name_from_internal.html#cpymad.util.name_from_internal" title="cpymad.util.name_from_internal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name_from_internal</span></code></a>(element_name)</p></td>
+<td><p>Convert element name from internal representation to user API.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.util.name_to_internal.html#cpymad.util.name_to_internal" title="cpymad.util.name_to_internal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name_to_internal</span></code></a>(element_name)</p></td>
+<td><p>Convert element name from user API to internal representation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.util.format_param.html#cpymad.util.format_param" title="cpymad.util.format_param"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_param</span></code></a>(key, value)</p></td>
+<td><p>Format a single MAD-X command parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.util.format_cmdpar.html#cpymad.util.format_cmdpar" title="cpymad.util.format_cmdpar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_cmdpar</span></code></a>(cmd, key, value)</p></td>
+<td><p>Format a single MAD-X command parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.util.format_command.html#cpymad.util.format_command" title="cpymad.util.format_command"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_command</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Create a MAD-X command from its name and parameter list.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../automod/cpymad.util.check_expression.html#cpymad.util.check_expression" title="cpymad.util.check_expression"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_expression</span></code></a>(expr)</p></td>
+<td><p>Check if the given expression is a valid MAD-X expression that is safe to pass to <a class="reference internal" href="../automod/cpymad.madx.Madx.html#cpymad.madx.Madx.eval" title="cpymad.madx.Madx.eval"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cpymad.madx.Madx.eval()</span></code></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.util.temp_filename.html#cpymad.util.temp_filename" title="cpymad.util.temp_filename"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temp_filename</span></code></a>()</p></td>
+<td><p>Get filename for use within 'with' block and delete file afterwards.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../automod/cpymad.util.ChangeDirectory.html#cpymad.util.ChangeDirectory" title="cpymad.util.ChangeDirectory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ChangeDirectory</span></code></a>(path, chdir, getcwd)</p></td>
+<td><p>Context manager for temporarily changing current working directory.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="class-inheritance-diagram">
+<h2>Class Inheritance Diagram<a class="headerlink" href="#class-inheritance-diagram" title="Link to this heading">¶</a></h2>
+<div class="graphviz"><img src="../_images/inheritance-988e0c2687d9210fd7992077b33f04587ef16bf4.png" alt="Inheritance diagram of cpymad.util.ChangeDirectory" usemap="#inheritanced4051fc03a" class="inheritance graphviz" /></div>
+<map id="inheritanced4051fc03a" name="inheritanced4051fc03a">
+<area shape="rect" id="node1" href="../automod/cpymad.util.ChangeDirectory.html#cpymad.util.ChangeDirectory" target="_top" title="Context manager for temporarily changing current working directory." alt="" coords="5,5,136,31"/>
+</map></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../automod/cpymad.libmadx.getcwd.html" class="btn btn-neutral float-left" title="getcwd" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../automod/cpymad.util.mad_quote.html" class="btn btn-neutral float-right" title="mad_quote" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2014-2021, T. Gläßle,2014-2019, HIT Betriebs GmbH,2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

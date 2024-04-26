@@ -1,0 +1,6 @@
+TwissFailed
+===========
+
+.. currentmodule:: cpymad.madx
+
+.. autoexception:: TwissFailed

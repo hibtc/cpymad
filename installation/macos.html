@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MacOS &mdash; cpymad 1.16.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/documentation_options.js?v=d5528024"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Troubleshooting" href="troubleshooting.html" />
+    <link rel="prev" title="Windows" href="windows.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cpymad
+          </a>
+              <div class="version">
+                1.16
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../building.html">Building from source</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="linux.html">Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="windows.html">Windows</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">MacOS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#build-mad-x">Build MAD-X</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building-cpymad">Building cpymad</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cpymad/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../known-issues.html">Known issues</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cpymad</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../building.html">Building from source</a></li>
+      <li class="breadcrumb-item active">MacOS</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/hibtc/cpymad/blob/master/doc/installation/macos.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="macos">
+<h1>MacOS<a class="headerlink" href="#macos" title="Link to this heading">¶</a></h1>
+<p>cpymad is linked against a library version of MAD-X, which means that in order
+to build cpymad you first have to compile MAD-X from source. The official
+<code class="docutils literal notranslate"><span class="pre">madx</span></code> executable is not sufficient. These steps are described in the
+following subsections:</p>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#build-mad-x" id="id1">Build MAD-X</a></p></li>
+<li><p><a class="reference internal" href="#building-cpymad" id="id2">Building cpymad</a></p></li>
+</ul>
+</nav>
+<section id="build-mad-x">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Build MAD-X</a><a class="headerlink" href="#build-mad-x" title="Link to this heading">¶</a></h2>
+<p>In order to build MAD-X from source, please install the following build tools:</p>
+<ul class="simple">
+<li><p>gcc &gt;= 4.8</p></li>
+<li><p>gfortran</p></li>
+<li><p><a class="reference external" href="http://www.cmake.org/">CMake</a> &gt;= 3.0 (e.g. using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">cmake</span></code>)</p></li>
+</ul>
+<p>Other C/C++/fortran compiler suites may work too but are untested as of now.</p>
+<p>Download and extract the latest <a class="reference external" href="https://github.com/MethodicalAcceleratorDesign/MAD-X/releases">MAD-X release</a> from github, e.g.:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-L<span class="w"> </span>-O<span class="w"> </span>https://github.com/MethodicalAcceleratorDesign/MAD-X/archive/5.09.03.tar.gz
+tar<span class="w"> </span>-xzf<span class="w"> </span><span class="m">5</span>.09.03.tar.gz
+</pre></div>
+</div>
+<p>or directly checkout the source code using git (unstable):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/MethodicalAcceleratorDesign/MAD-X
+</pre></div>
+</div>
+<p>On Mac, you currently also have to apply the following <a class="reference external" href="https://raw.githubusercontent.com/hibtc/cpymad/master/.github/patch/fix-macos-symbol-not-found-mad_argc.patch">patch</a> to the MAD-X
+source, to make the build work:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-L<span class="w"> </span>-O<span class="w"> </span>https://raw.githubusercontent.com/hibtc/cpymad/master/.github/patch/fix-macos-symbol-not-found-mad_argc.patch
+patch<span class="w"> </span>-d<span class="w"> </span>./MAD-X<span class="w"> </span>-p1<span class="w"> </span>&lt;fix-macos-symbol-not-found-mad_argc.patch
+</pre></div>
+</div>
+<p>We will do an out-of-source build in a <code class="docutils literal notranslate"><span class="pre">build/</span></code> subdirectory. This way, you
+can easily delete the <code class="docutils literal notranslate"><span class="pre">build</span></code> directory and restart if anything goes wrong.
+The basic process looks as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>cmake
+
+mkdir<span class="w"> </span>MAD-X/build
+<span class="nb">cd</span><span class="w"> </span>MAD-X/build
+
+cmake<span class="w"> </span>..<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DCMAKE_POLICY_DEFAULT_CMP0077<span class="o">=</span>NEW<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DCMAKE_POLICY_DEFAULT_CMP0042<span class="o">=</span>NEW<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DCMAKE_OSX_ARCHITECTURES<span class="o">=</span>x86_64<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DCMAKE_C_COMPILER<span class="o">=</span>gcc<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DCMAKE_CXX_COMPILER<span class="o">=</span>g++<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DCMAKE_Fortran_COMPILER<span class="o">=</span>gfortran<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DBUILD_SHARED_LIBS<span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DMADX_STATIC<span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span>../dist<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DMADX_INSTALL_DOC<span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DMADX_ONLINE<span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DMADX_FORCE_32<span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DMADX_X11<span class="o">=</span>OFF
+cmake<span class="w"> </span>--build<span class="w"> </span>.<span class="w"> </span>--target<span class="w"> </span>install
+</pre></div>
+</div>
+<p>Here we have specified a custom installation prefix to prevent cmake from
+installing MAD-X to a system directory (which would require root privileges,
+and may be harder to remove completely). You can also set a more permanent
+install location if you prefer, but keep in mind that there is no
+<code class="docutils literal notranslate"><span class="pre">uninstall</span></code> command other than removing the files manually.</p>
+<p>The cmake command has many more options, but these are untested on Mac so far.</p>
+<p>Save the path to the install directory in the <code class="docutils literal notranslate"><span class="pre">MADXDIR</span></code> environment variable.
+This variable will be used later by the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> script to locate the
+MAD-X headers and library, for example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">MADXDIR</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">&quot;</span>/../dist
+</pre></div>
+</div>
+</section>
+<section id="building-cpymad">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Building cpymad</a><a class="headerlink" href="#building-cpymad" title="Link to this heading">¶</a></h2>
+<p>Install setup requirements:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>cython<span class="w"> </span>wheel<span class="w"> </span>setuptools<span class="w"> </span>delocate
+</pre></div>
+</div>
+<p>Enter the cpymad folder, and build as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">CC</span><span class="o">=</span>gcc
+
+python<span class="w"> </span>setup.py<span class="w"> </span>build_ext
+</pre></div>
+</div>
+<p>If you have installed blas/lapack and MAD-X found it during the cmake step,
+you have to pass them as additional link libraries:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>setup.py<span class="w"> </span>build_ext<span class="w"> </span>-lblas<span class="w"> </span>-llapack
+</pre></div>
+</div>
+<p>You can now create and install a wheel as follows (however, note that this
+wheel probably won’t be fit to be distributed to other systems):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>setup.py<span class="w"> </span>bdist_wheel
+delocate-wheel<span class="w"> </span>dist/*.whl
+pip<span class="w"> </span>install<span class="w"> </span>dist/cpymad-*.whl
+</pre></div>
+</div>
+<p>If you plan on changing cpymad code, do the following instead:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="windows.html" class="btn btn-neutral float-left" title="Windows" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="troubleshooting.html" class="btn btn-neutral float-right" title="Troubleshooting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2014-2021, T. Gläßle,2014-2019, HIT Betriebs GmbH,2011-2013 Y.I. Levinsen, K. Fuchsberger (CERN).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
