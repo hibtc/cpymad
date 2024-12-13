@@ -1253,7 +1253,7 @@ cdef clib.variable* _get_var(name) except NULL:
     return var
 
 
-cdef void _strip_comments(char* text) nogil:
+cdef void _strip_comments(char* text) noexcept nogil:
     cdef int in_quotes = 0
     cdef char* dest = text
     cdef char c, d
