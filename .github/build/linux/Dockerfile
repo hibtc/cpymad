@@ -3,7 +3,8 @@ FROM quay.io/pypa/$BASE
 
 ARG UID=1000
 ARG GID=$UID
-ENV PATH="/opt/python/cp36-cp36m/bin:${PATH}"
+# Highest version supported by manylinux1:
+ENV PATH="/opt/python/cp39-cp39/bin:${PATH}"
 
 RUN groupadd -o -g $GID runner && \
     useradd -o -u $UID -g $GID runner && \
