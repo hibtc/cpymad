@@ -57,7 +57,7 @@ The basic process looks as follows::
     cmake .. \
         -DCMAKE_POLICY_DEFAULT_CMP0077=NEW \
         -DCMAKE_POLICY_DEFAULT_CMP0042=NEW \
-        -DCMAKE_OSX_ARCHITECTURES=x86_64 \
+        -DCMAKE_OSX_ARCHITECTURES=$(uname -m) \
         -DCMAKE_C_COMPILER=gcc \
         -DCMAKE_CXX_COMPILER=g++ \
         -DCMAKE_Fortran_COMPILER=gfortran \
