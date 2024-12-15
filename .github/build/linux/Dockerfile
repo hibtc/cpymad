@@ -1,4 +1,4 @@
-ARG BASE=manylinux1_x86_64
+ARG BASE=manylinux2014_x86_64
 FROM quay.io/pypa/$BASE
 
 ARG UID=1000
