@@ -23,7 +23,9 @@ export LDFLAGS="-fno-lto"
 python setup.py sdist
 
 for PYBIN in /opt/python/cp3*/bin; do
-    "${PYBIN}/pip" wheel dist/*.tar.gz --no-deps -w rawdist/
+    if "${PYBIN}/python" -c "import sys;exit(sys.version_info<(3,8))"; then
+        "${PYBIN}/pip" wheel dist/*.tar.gz --no-deps -w rawdist/
+    fi
 done
 
 # Bundle external shared libraries into the wheels
