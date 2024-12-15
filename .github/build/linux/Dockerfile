@@ -13,7 +13,7 @@ RUN groupadd -o -g $GID runner && \
     fi && \
     pip install --upgrade cmake 'cython>=3.1.0a1' --only-binary=cmake && \
     for PYBIN in /opt/python/cp3*/bin; do \
-        "${PYBIN}/pip" install -U setuptools; \
+        "${PYBIN}/pip" install -U "setuptools[core]"; \
     done
 
 VOLUME /mnt
