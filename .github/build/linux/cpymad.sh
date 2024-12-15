@@ -12,7 +12,7 @@
 set -ex
 
 # Build variables:
-export MADXDIR=$(readlink -nf "$1")
+export MADXDIR="$(readlink -nf "${1:-/mnt/dist/MAD-X}")"
 export X11=0 BLAS=0 LAPACK=0
 export CFLAGS="-fno-lto"
 export LDFLAGS="-fno-lto"

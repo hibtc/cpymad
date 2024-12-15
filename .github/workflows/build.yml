@@ -64,7 +64,7 @@ jobs:
             -w /mnt \
             -v `pwd`:/mnt \
             builder \
-            .github/build/linux/madx.sh src/MAD-X
+            .github/build/linux/madx.sh src/MAD-X build/MAD-X dist/MAD-X
         shell: bash
 
       - name: Build cpymad wheels
@@ -73,14 +73,16 @@ jobs:
             -w /mnt \
             -v `pwd`:/mnt \
             builder \
-            .github/build/linux/cpymad.sh src/MAD-X/dist
+            .github/build/linux/cpymad.sh dist/MAD-X
         shell: bash
 
       - name: Upload cpymad wheels
         uses: actions/upload-artifact@v4
         with:
           name: dist-linux-${{ matrix.base }}
-          path: dist
+          path: |
+            dist/
+            !dist/MAD-X
 
   build_windows:
     name: "Build: Windows"
