@@ -150,6 +150,10 @@ jobs:
         with: {python-version: "3.12"}
       - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.12
 
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.13"}
+      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.13
+
       - name: Upload cpymad wheels
         uses: actions/upload-artifact@v4
         with:
