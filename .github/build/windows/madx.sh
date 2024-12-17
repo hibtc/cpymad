@@ -24,6 +24,7 @@ if [[ ! -f CMakeCache.txt ]]; then
         -DMADX_STATIC=ON \
         -DCMAKE_INSTALL_PREFIX=../dist \
         -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_CXX_STANDARD=11 \
         -DMADX_INSTALL_DOC=OFF \
         -DMADX_ONLINE=OFF \
         -DMADX_FORCE_32=OFF \

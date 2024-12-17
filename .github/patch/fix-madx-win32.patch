@@ -1,0 +1,23 @@
+diff --git a/libs/ptc/src/tpsa.h b/libs/ptc/src/tpsa.h
+index 4a2f15bc..b0b3174c 100644
+--- a/libs/ptc/src/tpsa.h
++++ b/libs/ptc/src/tpsa.h
+@@ -11,7 +11,7 @@
+ //! \version $Id: tpsa.h,v 1.4 2009-04-17 17:32:23 frs Exp $
+ //! \author Lingyun Yang, http://www.lingyunyang.com/
+ 
+-#ifndef WIN32
++#if !defined(WIN32) || defined(__GNUC__)
+ 
+ /* should work unchanged on _win32 using Lahey */
+ #define ad_print      ad_print_
+diff --git a/src/mad_sstate.c b/src/mad_sstate.c
+index fe909635..044ed409 100644
+--- a/src/mad_sstate.c
++++ b/src/mad_sstate.c
+@@ -1,4 +1,5 @@
+ #include "madx.h"
++#include <direct.h>     // _mkdir()
+ 
+ static void
+ move_files(const char* orig_name,const  char* append,const  char* dirname){
