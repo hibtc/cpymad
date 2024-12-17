@@ -165,7 +165,7 @@ jobs:
 
   build_macos:
     name: "Build: MacOS"
-    runs-on: macos-11
+    runs-on: macos-13
     strategy:
       matrix:
         arch:
@@ -193,7 +193,7 @@ jobs:
 
       # Select matching Xcode and SDK, see: https://xcodereleases.com/
       - run: |
-          sudo xcode-select -switch /Applications/Xcode_12.5.1.app
+          sudo xcode-select -switch /Applications/Xcode_15.2.app
           echo "SDKROOT=$(xcrun --show-sdk-path)" >> $GITHUB_ENV
 
       - name: Setup gfortran
@@ -201,9 +201,9 @@ jobs:
           set -xeo pipefail
 
           if [[ ${{ matrix.arch }} == "x86_64" ]]; then
-            FC=gfortran-11
-            LIBDIR=$(dirname $(find /usr/local/Cellar/gcc@11 -name libgfortran.dylib))
-            echo "MACOSX_DEPLOYMENT_TARGET=11.0" >> $GITHUB_ENV
+            FC=gfortran-12
+            LIBDIR=$(dirname $(find /usr/local/Cellar/gcc@12 -name libgfortran.dylib))
+            echo "MACOSX_DEPLOYMENT_TARGET=13.0" >> $GITHUB_ENV
 
           elif [[ ${{ matrix.arch }} == "arm64" ]]; then
             # See: https://github.com/MacPython/gfortran-install
@@ -217,8 +217,8 @@ jobs:
 
             # See: https://github.com/pypa/cibuildwheel/discussions/997
             echo "ARCHFLAGS=-arch arm64" >> $GITHUB_ENV
-            echo "_PYTHON_HOST_PLATFORM=macosx-11.0-arm64" >> $GITHUB_ENV
-            echo "MACOSX_DEPLOYMENT_TARGET=11.0" >> $GITHUB_ENV
+            echo "_PYTHON_HOST_PLATFORM=macosx-13.0-arm64" >> $GITHUB_ENV
+            echo "MACOSX_DEPLOYMENT_TARGET=13.0" >> $GITHUB_ENV
           fi
 
           LDFLAGS="-L$LIBDIR -Wl,-rpath,$LIBDIR"
@@ -257,6 +257,10 @@ jobs:
 
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
+      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
+
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.13" }
       - run: .github/build/macos/cpymad.sh src/MAD-X/dist
 
       - name: Fixup wheel dependencies
