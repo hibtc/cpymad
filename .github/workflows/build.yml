@@ -118,6 +118,9 @@ jobs:
           src/MAD-X -b $MADX_VERSION --depth 1
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
 
+      - name: Apply patches
+        if: steps.madx-build-cache.outputs.cache-hit != 'true'
+        run: git -C src/MAD-X apply - <.github/patch/fix-madx-win32.patch
       - name: Build MAD-X
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
         run: .github/build/windows/madx.sh src/MAD-X
@@ -149,6 +152,10 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.12
+
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.13"}
+      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.13
 
       - name: Upload cpymad wheels
         uses: actions/upload-artifact@v4
