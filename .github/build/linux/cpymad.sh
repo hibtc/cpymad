@@ -12,7 +12,7 @@
 set -ex
 
 # Build variables:
-export MADXDIR=$(readlink -nf "$1")
+export MADXDIR="$(readlink -nf "${1:-/mnt/dist/MAD-X}")"
 export X11=0 BLAS=0 LAPACK=0
 export CFLAGS="-fno-lto"
 export LDFLAGS="-fno-lto"
@@ -23,7 +23,9 @@ export LDFLAGS="-fno-lto"
 python setup.py sdist
 
 for PYBIN in /opt/python/cp3*/bin; do
-    "${PYBIN}/pip" wheel dist/*.tar.gz --no-deps -w rawdist/
+    if "${PYBIN}/python" -c "import sys;exit(sys.version_info<(3,8))"; then
+        "${PYBIN}/pip" wheel dist/*.tar.gz --no-deps -w rawdist/
+    fi
 done
 
 # Bundle external shared libraries into the wheels
