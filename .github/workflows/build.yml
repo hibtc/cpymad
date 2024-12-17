@@ -120,7 +120,7 @@ jobs:
 
       - name: Apply patches
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
-        run: patch -d src/MAD-X -p1 <.github/patch/fix-madx-win32.patch
+        run: git -C src/MAD-X apply - <.github/patch/fix-madx-win32.patch
       - name: Build MAD-X
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
         run: .github/build/windows/madx.sh src/MAD-X
