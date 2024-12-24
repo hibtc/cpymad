@@ -1,0 +1,4 @@
+pyproject.toml: cython
+cpymad.selfcheck
+
+musllinux...

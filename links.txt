@@ -1,0 +1,32 @@
+https://setuptools.pypa.io/en/latest/userguide/miscellaneous.html#using-manifest-in
+https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+https://packaging.python.org/en/latest/guides/writing-pyproject-toml/
+https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml/
+
+
+
+https://docs.astral.sh/ruff/configuration/
+
+
+
+https://github.com/actions/runner-images#available-images
+https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md#available-versions-of-python-pypy-and-graalpy
+https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners#standard-github-hosted-runners-for-public-repositories
+https://xcodereleases.com/
+
+https://devguide.python.org/versions/
+
+
+https://py-free-threading.github.io/ci/
+
+
+
+
+https://www.vim.org/scripts/script.php?script_id=2830
+
+
+#ifdef __GNUC__
+#ifdef __MINGW32__
+
+
