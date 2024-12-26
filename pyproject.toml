@@ -58,6 +58,9 @@ optional-dependencies.dev = [
 build-backend = "setuptools.build_meta"
 requires = [
     "setuptools",
+    "cython>=3.1.0a1 ; python_version >= '3.13'",   # Cython3.1 needed for free-threaded python
+    "cython<3        ; python_version  < '3.8'",    # Cython3.1 dropped support for python<3.8
+    "cython          ; python_version >= '3.8' and python_version < '3.13'", # no particular requirements
 ]
 
 [tool.setuptools]

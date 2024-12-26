@@ -23,6 +23,7 @@ export LDFLAGS="-fno-lto"
 python setup.py sdist
 
 for PYBIN in /opt/python/cp3*/bin; do
+    rm -f src/cpymad/libmadx.c
     "${PYBIN}/pip" wheel dist/*.tar.gz --no-deps -w rawdist/
 done
 
