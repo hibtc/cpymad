@@ -19,7 +19,7 @@ For more information, see
 # at the commit that first added this paragraph (can be identified using `git
 # blame`) and the simplifications that were possible in the following commits.
 
-from setuptools import setup, find_packages, Extension
+from setuptools import setup, Extension
 from distutils.util import get_platform
 from distutils import sysconfig
 from argparse import ArgumentParser
@@ -145,7 +145,7 @@ if __name__ == '__main__':
                       sources=["src/cpymad/libmadx.pyx"],
                       **get_extension_args(**options.__dict__)),
         ]),
-        packages=find_packages('src', include='cpymad*'),
+        packages=['cpymad', 'cpymad.COPYING'],
         package_dir={'': 'src'},
         zip_safe=False,             # zip is bad for redistributing shared libs
         include_package_data=True,  # include files matched by MANIFEST.in

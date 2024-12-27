@@ -65,6 +65,7 @@ requires = [
 
 [tool.setuptools]
 dynamic.version.attr = "cpymad.__version__"
-packages.find = {where = ["src"], include = ["cpymad*"]}
+packages = ["cpymad", "cpymad.COPYING"]
+package-dir = {"" = "src"}
 package-data = {"cpymad.COPYING" = ["*.rst"]}
 include-package-data = false
