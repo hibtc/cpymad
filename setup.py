@@ -135,6 +135,10 @@ if __name__ == '__main__':
     sys.path.append(os.path.dirname(__file__))
     fix_distutils_sysconfig_mingw()
     options, sys.argv[1:] = command_line_options().parse_known_args()
+    # NOTE: The "metadata" parameters for setup() may appear to be redundant
+    # but are curently required on setuptools<61.0 and hence for python3.6
+    # for which setuptools>=60 is not available. See branch `drop-py36` for
+    # removal.
     metadata = exec_file('src/cpymad/__init__.py')
     setup(
         name='cpymad',
