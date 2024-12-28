@@ -5,21 +5,22 @@
 #
 # Arguments:
 #   <SRCDIR>: root directory of MAD-X sources
-#
-# Outputs:
-#   <SRCDIR>/build: cmake build directory
-#   <SRCDIR>/dist:  MAD-X installation directory (binary distribution)
+#   <BUILDDIR>: cmake build directory
+#   <INSTALLDIR>: MAD-X installation directory (binary distribution)
 set -ex
 
-cd "$1"
-mkdir -p build
-cd build
+SRCDIR="$(readlink -nm "${1:-/mnt/src/MAD-X}")"
+BUILDDIR="$(readlink -nm "${2:-/mnt/build/MAD-X}")"
+INSTALLDIR="$(readlink -nm "${3:-/mnt/dist/MAD-X}")"
+
+mkdir -p "$BUILDDIR"
+cd "$BUILDDIR"
 
 if [[ ! -f CMakeCache.txt ]]; then
-    cmake .. \
+    cmake "$SRCDIR" \
         -DBUILD_SHARED_LIBS=OFF \
         -DMADX_STATIC=ON \
-        -DCMAKE_INSTALL_PREFIX=../dist \
+        -DCMAKE_INSTALL_PREFIX="$INSTALLDIR" \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_C_FLAGS="-fvisibility=hidden" \
         -DCMAKE_CXX_FLAGS="-fvisibility=hidden" \

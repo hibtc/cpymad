@@ -33,7 +33,7 @@ jobs:
         id: madx-build-cache
         uses: actions/cache@v4
         with:
-          path: src/MAD-X/dist
+          path: dist/MAD-X
           key: "\
             madx-${{ env.MADX_VERSION }}-\
             ${{ matrix.base }}-\
@@ -65,7 +65,7 @@ jobs:
             -w /mnt \
             -v `pwd`:/mnt \
             builder \
-            .github/build/linux/madx.sh src/MAD-X
+            .github/build/linux/madx.sh src/MAD-X build/MAD-X dist/MAD-X
         shell: bash
 
       - name: Build cpymad wheels
@@ -74,14 +74,16 @@ jobs:
             -w /mnt \
             -v `pwd`:/mnt \
             builder \
-            .github/build/linux/cpymad.sh src/MAD-X/dist
+            .github/build/linux/cpymad.sh dist/MAD-X
         shell: bash
 
       - name: Upload cpymad wheels
         uses: actions/upload-artifact@v4
         with:
           name: dist-linux-${{ matrix.base }}
-          path: dist
+          path: |
+            dist/
+            !dist/MAD-X
 
   build_windows:
     name: "Build: Windows"
@@ -118,6 +120,9 @@ jobs:
           src/MAD-X -b $MADX_VERSION --depth 1
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
 
+      - name: Apply patches
+        if: steps.madx-build-cache.outputs.cache-hit != 'true'
+        run: git -C src/MAD-X apply - <.github/patch/fix-madx-win32.patch
       - name: Build MAD-X
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
         run: .github/build/windows/madx.sh src/MAD-X
@@ -150,6 +155,10 @@ jobs:
         with: {python-version: "3.12"}
       - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.12
 
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.13"}
+      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.13
+
       - name: Upload cpymad wheels
         uses: actions/upload-artifact@v4
         with:
@@ -158,7 +167,7 @@ jobs:
 
   build_macos:
     name: "Build: MacOS"
-    runs-on: macos-11
+    runs-on: macos-13
     strategy:
       matrix:
         arch:
@@ -186,7 +195,7 @@ jobs:
 
       # Select matching Xcode and SDK, see: https://xcodereleases.com/
       - run: |
-          sudo xcode-select -switch /Applications/Xcode_12.5.1.app
+          sudo xcode-select -switch /Applications/Xcode_15.2.app
           echo "SDKROOT=$(xcrun --show-sdk-path)" >> $GITHUB_ENV
 
       - name: Setup gfortran
@@ -194,9 +203,9 @@ jobs:
           set -xeo pipefail
 
           if [[ ${{ matrix.arch }} == "x86_64" ]]; then
-            FC=gfortran-11
-            LIBDIR=$(dirname $(find /usr/local/Cellar/gcc@11 -name libgfortran.dylib))
-            echo "MACOSX_DEPLOYMENT_TARGET=11.0" >> $GITHUB_ENV
+            FC=gfortran-12
+            LIBDIR=$(dirname $(find /usr/local/Cellar/gcc@12 -name libgfortran.dylib))
+            echo "MACOSX_DEPLOYMENT_TARGET=13.0" >> $GITHUB_ENV
 
           elif [[ ${{ matrix.arch }} == "arm64" ]]; then
             # See: https://github.com/MacPython/gfortran-install
@@ -210,8 +219,8 @@ jobs:
 
             # See: https://github.com/pypa/cibuildwheel/discussions/997
             echo "ARCHFLAGS=-arch arm64" >> $GITHUB_ENV
-            echo "_PYTHON_HOST_PLATFORM=macosx-11.0-arm64" >> $GITHUB_ENV
-            echo "MACOSX_DEPLOYMENT_TARGET=11.0" >> $GITHUB_ENV
+            echo "_PYTHON_HOST_PLATFORM=macosx-13.0-arm64" >> $GITHUB_ENV
+            echo "MACOSX_DEPLOYMENT_TARGET=13.0" >> $GITHUB_ENV
           fi
 
           LDFLAGS="-L$LIBDIR -Wl,-rpath,$LIBDIR"
@@ -252,6 +261,10 @@ jobs:
         with: { python-version: "3.12" }
       - run: .github/build/macos/cpymad.sh src/MAD-X/dist
 
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.13" }
+      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
+
       - name: Fixup wheel dependencies
         run: |
           pip3 install delocate
@@ -282,6 +295,7 @@ jobs:
           - '3.10'
           - '3.11'
           - '3.12'
+          - '3.13'
         exclude:
           - os: {run: macos-latest}
             python: '3.7'
