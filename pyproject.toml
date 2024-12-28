@@ -50,7 +50,7 @@ optional-dependencies.doc = [
 ]
 optional-dependencies.dev = [
     "cython",
-    "flake8",
+    "ruff",
     "pytest",
 ]
 
@@ -77,4 +77,21 @@ paths.source = [
     "src/cpymad/",
     "*/site-packages/cpymad-*.egg/cpymad",
     "*/site-packages/cpymad/",
+]
+
+[tool.ruff]
+line-length = 84
+lint.ignore = [
+    "E701",
+    "E731",
+    "E741",
+]
+exclude = [
+    ".git",
+    "__pycache__",
+    "doc/conf.py",
+    "build",
+    "dist",
+    ".eggs",
+    "src/MAD-X",
 ]
