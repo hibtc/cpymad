@@ -1,6 +1,18 @@
 Changelog
 ~~~~~~~~~
 
+1.17.0
+======
+Date: 28.12.2024
+
+- add builds for python 3.13
+- add builds for free-threaded python 3.13 (linux only)
+- migrate to pyproject.toml based packaging
+- no longer include .c in source distribution, require cython for building
+- no longer include .c, .pyx, .pxd in binary distributions
+- show deprecation warning for py3.8 and below
+
+
 1.16.3
 ======
 Date: 25.04.2024
@@ -8,7 +20,7 @@ Date: 25.04.2024
 - fix error in build pipeline due to github just having changed the
   ``macos-latest`` runner from x86_64 to arm64. Another tag needed to trigger
   another release
-- show deprecation warning for py3.7 downoards
+- show deprecation warning for py3.7 and below
 - macos arm64 wheels are now tested in CI
 
 
