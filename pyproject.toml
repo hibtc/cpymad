@@ -69,3 +69,12 @@ packages = ["cpymad", "cpymad.COPYING"]
 package-dir = {"" = "src"}
 package-data = {"cpymad.COPYING" = ["*.rst"]}
 include-package-data = false
+
+[tool.coverage]
+# when running `coverage combine`, replace these paths by `src/cpymad`, see:
+# https://coverage.readthedocs.io/en/latest/config.html#paths
+paths.source = [
+    "src/cpymad/",
+    "*/site-packages/cpymad-*.egg/cpymad",
+    "*/site-packages/cpymad/",
+]
