@@ -4,17 +4,15 @@ on:
   pull_request:
 
 jobs:
-  # Quickly check with flake8 without having to go through the whole build:
-  flake8:
-    name: "Fast flake8"
+  # Quickly check with ruff without having to go through the whole build:
+  ruff:
+    name: "Fast lint"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # Check on lowest supported python version to catch syntax errors:
       - uses: actions/setup-python@v5
-        with: { python-version: "3.7" }
-      - run: pip install flake8
-      - run: flake8
+      - run: pip install ruff
+      - run: ruff check src
 
   build_linux:
     name: "Build: Linux (x64)"
@@ -323,9 +321,9 @@ jobs:
           pip install cpymad -f dist --no-index --no-deps
           pip install cpymad
 
-      - run: pip install flake8 twine coverage coveralls pytest
+      - run: pip install ruff twine coverage coveralls pytest
       - run: twine check dist/*
-      - run: flake8
+      - run: ruff check src
 
       - run: coverage run --source=cpymad -p -m pytest -v -k "not dframe"
       - run: pip install pandas

@@ -63,7 +63,10 @@ def _fix_name(name: str) -> str:
 
 
 # precompile regexes for performance:
-re_compile = lambda s: re.compile(s, re.IGNORECASE)
+def re_compile(s):
+    return re.compile(s, re.IGNORECASE)
+
+
 _re_is_identifier = re_compile(r'^[a-z_][a-z0-9_]*$')
 _re_symbol = re_compile(r'([a-z_][a-z0-9._]*(->[a-z_][a-z0-9._]*(\[[0-9]+\])?)?)')
 _re_element_internal = re_compile(r'^([a-z_][a-z0-9_.$]*)(:\d+)?$')
@@ -448,10 +451,10 @@ def tokenize(tokens, expr: str):
     stop = len(expr)
     while i < stop:
         for toktype, tokmatch in tokens:
-            l = tokmatch(expr, i)
-            if l > 0:
-                yield Token(toktype, i, l, expr)
-                i += l
+            length = tokmatch(expr, i)
+            if length > 0:
+                yield Token(toktype, i, length, expr)
+                i += length
                 break
         else:
             raise ValueError("Unknown token {!r} at {!r}"
