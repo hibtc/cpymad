@@ -1,0 +1,6 @@
+get_defined_command
+===================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_defined_command

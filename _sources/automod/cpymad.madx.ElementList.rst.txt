@@ -1,0 +1,21 @@
+ElementList
+===========
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: ElementList
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~ElementList.at
+      ~ElementList.count
+      ~ElementList.index
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: at
+   .. automethod:: count
+   .. automethod:: index

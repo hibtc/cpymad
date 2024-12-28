@@ -1,0 +1,6 @@
+is_started
+==========
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: is_started

@@ -1,0 +1,6 @@
+get_element_index
+=================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_element_index

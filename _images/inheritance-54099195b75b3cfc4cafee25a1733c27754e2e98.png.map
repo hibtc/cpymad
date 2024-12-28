@@ -1,0 +1,30 @@
+<map id="inheritanceff938bc3e5" name="inheritanceff938bc3e5">
+<area shape="rect" id="node1" href="../automod/cpymad.madx.ArrayAttribute.html#cpymad.madx.ArrayAttribute" target="_top" title="ArrayAttribute" alt="" coords="338,327,418,344"/>
+<area shape="rect" id="node2" href="../automod/cpymad.madx.Sequence.html#cpymad.madx.Sequence" target="_top" title="MAD&#45;X sequence representation." alt="" coords="225,292,284,310"/>
+<area shape="rect" id="node16" href="../automod/cpymad.madx.ElementList.html#cpymad.madx.ElementList" target="_top" title="ElementList" alt="" coords="344,292,412,310"/>
+<area shape="rect" id="node3" href="../automod/cpymad.madx.AttrDict.html#cpymad.madx.AttrDict" target="_top" title="AttrDict" alt="" coords="487,122,537,140"/>
+<area shape="rect" id="node7" href="../automod/cpymad.madx.CommandMap.html#cpymad.madx.CommandMap" target="_top" title="CommandMap" alt="" coords="472,156,553,174"/>
+<area shape="rect" id="node18" href="../automod/cpymad.madx.GlobalElementList.html#cpymad.madx.GlobalElementList" target="_top" title="Mapping of the global elements in MAD&#45;X." alt="" coords="464,258,561,276"/>
+<area shape="rect" id="node24" href="../automod/cpymad.madx.SequenceMap.html#cpymad.madx.SequenceMap" target="_top" title="Mapping of all sequences (:class:`Sequence`) in memory." alt="" coords="473,190,551,208"/>
+<area shape="rect" id="node25" href="../automod/cpymad.madx.Table.html#cpymad.madx.Table" target="_top" title="MAD&#45;X twiss table." alt="" coords="487,224,537,242"/>
+<area shape="rect" id="node26" href="../automod/cpymad.madx.TableMap.html#cpymad.madx.TableMap" target="_top" title="Mapping of all tables (:class:`Table`) in memory." alt="" coords="483,54,541,72"/>
+<area shape="rect" id="node29" href="../automod/cpymad.madx.VarParamList.html#cpymad.madx.VarParamList" target="_top" title="Mapping of global MAD&#45;X variables." alt="" coords="476,88,549,106"/>
+<area shape="rect" id="node5" title="Immutable list of beam line elements." alt="" coords="210,258,300,275"/>
+<area shape="rect" id="node6" href="../automod/cpymad.madx.BaseTypeMap.html#cpymad.madx.BaseTypeMap" target="_top" title="BaseTypeMap" alt="" coords="602,156,679,174"/>
+<area shape="rect" id="node8" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Collection" target="_top" title="Collection" alt="" coords="115,258,175,276"/>
+<area shape="rect" id="node20" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" target="_top" title="Mapping" alt="" coords="228,140,282,157"/>
+<area shape="rect" id="node9" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sized" target="_top" title="Sized" alt="" coords="17,224,67,242"/>
+<area shape="rect" id="node10" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" target="_top" title="Iterable" alt="" coords="17,292,67,310"/>
+<area shape="rect" id="node23" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Reversible" target="_top" title="Reversible" alt="" coords="114,292,177,310"/>
+<area shape="rect" id="node11" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Container" target="_top" title="Container" alt="" coords="13,258,72,276"/>
+<area shape="rect" id="node12" href="../automod/cpymad.madx.Command.html#cpymad.madx.Command" target="_top" title="Raw python interface to issue and view MAD&#45;X commands. Usage example:" alt="" coords="609,38,671,55"/>
+<area shape="rect" id="node15" href="../automod/cpymad.madx.Element.html#cpymad.madx.Element" target="_top" title="Element" alt="" coords="712,38,764,55"/>
+<area shape="rect" id="node28" href="../automod/cpymad.madx.VarList.html#cpymad.madx.VarList" target="_top" title="Mapping of global MAD&#45;X variables." alt="" coords="615,4,665,21"/>
+<area shape="rect" id="node14" href="../automod/cpymad.madx.CommandLog.html#cpymad.madx.CommandLog" target="_top" title="Log MAD&#45;X command history to a text file." alt="" coords="4,190,81,208"/>
+<area shape="rect" id="node17" href="../automod/cpymad.madx.ExpandedElementList.html#cpymad.madx.ExpandedElementList" target="_top" title="ExpandedElementList" alt="" coords="456,292,568,310"/>
+<area shape="rect" id="node19" href="../automod/cpymad.madx.Madx.html#cpymad.madx.Madx" target="_top" title="Python interface for a MAD&#45;X process." alt="" coords="17,156,67,174"/>
+<area shape="rect" id="node22" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping" target="_top" title="MutableMapping" alt="" coords="333,55,423,73"/>
+<area shape="rect" id="node21" href="../automod/cpymad.madx.Metadata.html#cpymad.madx.Metadata" target="_top" title="MAD&#45;X metadata (license info, etc)." alt="" coords="13,122,71,140"/>
+<area shape="rect" id="node27" href="../automod/cpymad.madx.TwissFailed.html#cpymad.madx.TwissFailed" target="_top" title="TwissFailed" alt="" coords="10,88,75,106"/>
+<area shape="rect" id="node30" href="../automod/cpymad.madx.Version.html#cpymad.madx.Version" target="_top" title="Version information struct." alt="" coords="17,54,67,72"/>
+</map>

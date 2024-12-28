@@ -1,0 +1,6 @@
+start
+=====
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: start

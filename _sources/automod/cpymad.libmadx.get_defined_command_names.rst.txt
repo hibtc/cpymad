@@ -1,0 +1,6 @@
+get_defined_command_names
+=========================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_defined_command_names

@@ -1,0 +1,23 @@
+BaseTypeMap
+===========
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: BaseTypeMap
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~BaseTypeMap.get
+      ~BaseTypeMap.items
+      ~BaseTypeMap.keys
+      ~BaseTypeMap.values
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: get
+   .. automethod:: items
+   .. automethod:: keys
+   .. automethod:: values

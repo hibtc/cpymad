@@ -1,0 +1,6 @@
+PARAM_TYPE_INTEGER_ARRAY
+========================
+
+.. currentmodule:: cpymad.types
+
+.. autodata:: PARAM_TYPE_INTEGER_ARRAY

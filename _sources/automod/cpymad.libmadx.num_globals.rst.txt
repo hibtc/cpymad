@@ -1,0 +1,6 @@
+num_globals
+===========
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: num_globals

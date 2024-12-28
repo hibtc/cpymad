@@ -1,0 +1,6 @@
+get_table_row_count
+===================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_table_row_count
