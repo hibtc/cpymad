@@ -1,0 +1,58 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index fb666391..19cb9344 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,18 +1,9 @@
+-cmake_minimum_required(VERSION 2.8)
+-
+-set(CMAKE_LEGACY_CYGWIN_WIN32 0) # Remove when CMake >= 2.8.4 is required
++cmake_minimum_required(VERSION 3.5)
++cmake_policy(VERSION 3.5...4.1.1)
+ 
+ PROJECT(madX C CXX Fortran)
+ 
+-cmake_policy(VERSION 2.8...3.18)
+-if (NOT ${CMAKE_VERSION} VERSION_LESS 3.0)
+-    cmake_policy(SET CMP0042 NEW)
+-endif()
+-
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+-if(CMAKE_VERSION VERSION_LESS "2.8.3")
+-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/compilers")
+-endif()
+ 
+ include(madxInit)
+ include(setupOptions)
+diff --git a/libs/gc/gc-8.0.2/CMakeLists.txt b/libs/gc/gc-8.0.2/CMakeLists.txt
+index f588fc16..f1ecccec 100644
+--- a/libs/gc/gc-8.0.2/CMakeLists.txt
++++ b/libs/gc/gc-8.0.2/CMakeLists.txt
+@@ -27,7 +27,7 @@ PROJECT(gc)
+ 
+ INCLUDE(CTest)
+ 
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
+ 
+ ADD_DEFINITIONS("-D_CRT_SECURE_NO_DEPRECATE
+                  -DALL_INTERIOR_POINTERS -DNO_EXECUTE_PERMISSION")
+diff --git a/libs/ptc/CMakeLists.txt b/libs/ptc/CMakeLists.txt
+index 0c576c92..da21a0e2 100644
+--- a/libs/ptc/CMakeLists.txt
++++ b/libs/ptc/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.5)
+ 
+ # Some policies regarding configure
+ # warnings we do not want..
+diff --git a/tools/numdiff/CMakeLists.txt b/tools/numdiff/CMakeLists.txt
+index 0c622de1..f6681ef1 100644
+--- a/tools/numdiff/CMakeLists.txt
++++ b/tools/numdiff/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.4)
++cmake_minimum_required(VERSION 3.5)
+ 
+ project(ndiff C)
+ 

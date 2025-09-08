@@ -43,6 +43,10 @@ jobs:
           src/MAD-X -b $MADX_VERSION --depth 1
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
 
+      - name: "Apply patch: cmake_minimum_version.patch"
+        if: steps.madx-build-cache.outputs.cache-hit != 'true'
+        run: git -C src/MAD-X apply - <.github/patch/cmake_minimum_version.patch
+
       - name: Set up QEMU for running arm64 containers
         if: endsWith(matrix.base, '_aarch64')
         uses: docker/setup-qemu-action@v3
@@ -118,9 +122,12 @@ jobs:
           src/MAD-X -b $MADX_VERSION --depth 1
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
 
-      - name: Apply patches
+      - name: "Apply patch: fix-madx-win32.patch"
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
         run: git -C src/MAD-X apply - <.github/patch/fix-madx-win32.patch
+      - name: "Apply patch: cmake_minimum_version.patch"
+        if: steps.madx-build-cache.outputs.cache-hit != 'true'
+        run: git -C src/MAD-X apply - <.github/patch/cmake_minimum_version.patch
       - name: Build MAD-X
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
         run: .github/build/windows/madx.sh src/MAD-X
@@ -190,6 +197,10 @@ jobs:
       - run: git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
           src/MAD-X -b $MADX_VERSION --depth 1
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
+
+      - name: "Apply patch: cmake_minimum_version.patch"
+        if: steps.madx-build-cache.outputs.cache-hit != 'true'
+        run: git -C src/MAD-X apply - <.github/patch/cmake_minimum_version.patch
 
       # Select matching Xcode and SDK, see: https://xcodereleases.com/
       - run: |
