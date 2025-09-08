@@ -11,7 +11,8 @@ RUN groupadd -o -g $GID runner && \
     if [[ $AUDITWHEEL_PLAT == manylinux2014_* ]]; then \
         yum install -y glibc-static; \
     fi && \
-    pip install --upgrade cmake --only-binary=cmake
+    pip install --upgrade cmake --only-binary=cmake && \
+    pip install setuptools
 
 VOLUME /mnt
 WORKDIR /mnt
