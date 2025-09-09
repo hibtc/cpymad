@@ -298,8 +298,6 @@ jobs:
           - {run: macos-latest, dist: dist-macos-arm64}
           - {run: macos-13, dist: dist-macos-x86_64}
         python:
-          - '3.7'
-          - '3.8'
           - '3.9'
           - '3.10'
           - '3.11'
