@@ -80,7 +80,7 @@ jobs:
         shell: bash
 
       - name: Upload cpymad wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: dist-linux-${{ matrix.base }}
           path: |
@@ -165,7 +165,7 @@ jobs:
       - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.13
 
       - name: Upload cpymad wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: dist-windows
           path: dist
@@ -281,7 +281,7 @@ jobs:
           DYLD_LIBRARY_PATH=$LIBDIR delocate-listdeps --all dist/*.whl
 
       - name: Upload cpymad wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: dist-macos-${{ matrix.arch }}
           path: dist
