@@ -1,6 +1,14 @@
 Changelog
 ~~~~~~~~~
 
+1.18.0
+======
+Date: 31.10.2025
+
+- add builds for python 3.14
+- drop support for python 3.7, 3.8, 3.9
+
+
 1.17.0
 ======
 Date: 28.12.2024
