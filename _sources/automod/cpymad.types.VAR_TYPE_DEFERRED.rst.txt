@@ -1,0 +1,6 @@
+VAR_TYPE_DEFERRED
+=================
+
+.. currentmodule:: cpymad.types
+
+.. autodata:: VAR_TYPE_DEFERRED

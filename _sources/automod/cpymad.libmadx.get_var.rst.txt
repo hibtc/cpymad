@@ -1,0 +1,6 @@
+get_var
+=======
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_var

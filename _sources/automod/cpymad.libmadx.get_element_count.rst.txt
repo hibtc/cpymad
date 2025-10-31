@@ -1,0 +1,6 @@
+get_element_count
+=================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_element_count

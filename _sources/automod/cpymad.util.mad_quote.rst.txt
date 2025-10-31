@@ -1,0 +1,6 @@
+mad_quote
+=========
+
+.. currentmodule:: cpymad.util
+
+.. autofunction:: mad_quote

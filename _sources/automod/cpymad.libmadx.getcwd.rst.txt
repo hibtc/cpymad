@@ -1,0 +1,6 @@
+getcwd
+======
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: getcwd

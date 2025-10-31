@@ -1,0 +1,53 @@
+Element
+=======
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: Element
+   :show-inheritance:
+
+   .. rubric:: Attributes Summary
+
+   .. autosummary::
+
+      ~Element.base_type
+      ~Element.cmdpar
+      ~Element.defs
+      ~Element.parent
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~Element.__call__
+      ~Element.clear
+      ~Element.clone
+      ~Element.get
+      ~Element.items
+      ~Element.keys
+      ~Element.pop
+      ~Element.popitem
+      ~Element.setdefault
+      ~Element.update
+      ~Element.values
+
+   .. rubric:: Attributes Documentation
+
+   .. autoattribute:: base_type
+   .. autoattribute:: cmdpar
+   .. autoattribute:: defs
+   .. autoattribute:: parent
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: __call__
+   .. automethod:: clear
+   .. automethod:: clone
+   .. automethod:: get
+   .. automethod:: items
+   .. automethod:: keys
+   .. automethod:: pop
+   .. automethod:: popitem
+   .. automethod:: setdefault
+   .. automethod:: update
+   .. automethod:: values

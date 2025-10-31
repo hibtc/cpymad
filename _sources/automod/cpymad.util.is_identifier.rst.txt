@@ -1,0 +1,6 @@
+is_identifier
+=============
+
+.. currentmodule:: cpymad.util
+
+.. autofunction:: is_identifier

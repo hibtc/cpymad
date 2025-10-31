@@ -1,0 +1,6 @@
+get_expanded_element_index_by_position
+======================================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_expanded_element_index_by_position

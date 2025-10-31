@@ -1,0 +1,7 @@
+ChangeDirectory
+===============
+
+.. currentmodule:: cpymad.util
+
+.. autoclass:: ChangeDirectory
+   :show-inheritance:

@@ -1,0 +1,6 @@
+get_sequence_twiss_table_name
+=============================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_sequence_twiss_table_name

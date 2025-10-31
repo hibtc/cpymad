@@ -1,0 +1,53 @@
+Sequence
+========
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: Sequence
+   :show-inheritance:
+
+   .. rubric:: Attributes Summary
+
+   .. autosummary::
+
+      ~Sequence.beam
+      ~Sequence.elements
+      ~Sequence.expanded_elements
+      ~Sequence.has_beam
+      ~Sequence.is_expanded
+      ~Sequence.length
+      ~Sequence.name
+      ~Sequence.twiss_table
+      ~Sequence.twiss_table_name
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~Sequence.element_names
+      ~Sequence.element_positions
+      ~Sequence.expand
+      ~Sequence.expanded_element_names
+      ~Sequence.expanded_element_positions
+      ~Sequence.use
+
+   .. rubric:: Attributes Documentation
+
+   .. autoattribute:: beam
+   .. autoattribute:: elements
+   .. autoattribute:: expanded_elements
+   .. autoattribute:: has_beam
+   .. autoattribute:: is_expanded
+   .. autoattribute:: length
+   .. autoattribute:: name
+   .. autoattribute:: twiss_table
+   .. autoattribute:: twiss_table_name
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: element_names
+   .. automethod:: element_positions
+   .. automethod:: expand
+   .. automethod:: expanded_element_names
+   .. automethod:: expanded_element_positions
+   .. automethod:: use

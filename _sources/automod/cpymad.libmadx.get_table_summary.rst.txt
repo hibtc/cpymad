@@ -1,0 +1,6 @@
+get_table_summary
+=================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_table_summary

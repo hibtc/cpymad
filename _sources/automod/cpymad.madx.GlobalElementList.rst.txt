@@ -1,0 +1,25 @@
+GlobalElementList
+=================
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: GlobalElementList
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~GlobalElementList.get
+      ~GlobalElementList.index
+      ~GlobalElementList.items
+      ~GlobalElementList.keys
+      ~GlobalElementList.values
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: get
+   .. automethod:: index
+   .. automethod:: items
+   .. automethod:: keys
+   .. automethod:: values

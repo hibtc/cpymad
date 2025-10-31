@@ -1,0 +1,65 @@
+Table
+=====
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: Table
+   :show-inheritance:
+
+   .. rubric:: Attributes Summary
+
+   .. autosummary::
+
+      ~Table.range
+      ~Table.summary
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~Table.col_names
+      ~Table.column
+      ~Table.copy
+      ~Table.dframe
+      ~Table.get
+      ~Table.getmat
+      ~Table.items
+      ~Table.keys
+      ~Table.kvec
+      ~Table.reload
+      ~Table.rmat
+      ~Table.row
+      ~Table.row_names
+      ~Table.selected_columns
+      ~Table.selected_rows
+      ~Table.selection
+      ~Table.sigmat
+      ~Table.tmat
+      ~Table.values
+
+   .. rubric:: Attributes Documentation
+
+   .. autoattribute:: range
+   .. autoattribute:: summary
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: col_names
+   .. automethod:: column
+   .. automethod:: copy
+   .. automethod:: dframe
+   .. automethod:: get
+   .. automethod:: getmat
+   .. automethod:: items
+   .. automethod:: keys
+   .. automethod:: kvec
+   .. automethod:: reload
+   .. automethod:: rmat
+   .. automethod:: row
+   .. automethod:: row_names
+   .. automethod:: selected_columns
+   .. automethod:: selected_rows
+   .. automethod:: selection
+   .. automethod:: sigmat
+   .. automethod:: tmat
+   .. automethod:: values

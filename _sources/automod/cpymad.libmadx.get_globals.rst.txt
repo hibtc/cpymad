@@ -1,0 +1,6 @@
+get_globals
+===========
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_globals

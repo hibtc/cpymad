@@ -1,0 +1,6 @@
+get_table_names
+===============
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_table_names

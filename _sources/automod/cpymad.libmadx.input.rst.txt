@@ -1,0 +1,6 @@
+input
+=====
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: input
