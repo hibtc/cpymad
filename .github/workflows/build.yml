@@ -164,6 +164,10 @@ jobs:
         with: {python-version: "3.13"}
       - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.13
 
+      - uses: actions/setup-python@v6
+        with: {python-version: "3.14"}
+      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.14
+
       - name: Upload cpymad wheels
         uses: actions/upload-artifact@v5
         with:
@@ -274,6 +278,10 @@ jobs:
         with: { python-version: "3.13" }
       - run: .github/build/macos/cpymad.sh src/MAD-X/dist
 
+      - uses: actions/setup-python@v6
+        with: { python-version: "3.14" }
+      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
+
       - name: Fixup wheel dependencies
         run: |
           pip3 install delocate
@@ -298,14 +306,11 @@ jobs:
           - {run: macos-latest, dist: dist-macos-arm64}
           - {run: macos-13, dist: dist-macos-x86_64}
         python:
-          - '3.9'
           - '3.10'
           - '3.11'
           - '3.12'
           - '3.13'
-        exclude:
-          - os: {run: macos-latest}
-            python: '3.7'
+          - '3.14'
 
     defaults:
       run:
