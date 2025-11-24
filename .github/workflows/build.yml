@@ -9,7 +9,7 @@ jobs:
     name: "Fast lint"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
       - run: pip install ruff
       - run: ruff check src
@@ -24,7 +24,7 @@ jobs:
           - manylinux2014_x86_64
           - manylinux2014_aarch64
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
 
       - name: Download cached MAD-X build
@@ -94,7 +94,7 @@ jobs:
       run:
         shell: msys2 {0}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: msys2/setup-msys2@v2
         with:
           update: true
@@ -183,7 +183,7 @@ jobs:
           - x86_64
           - arm64
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
 
       - name: Download cached MAD-X build
@@ -317,7 +317,7 @@ jobs:
         shell: bash
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python }}
@@ -354,7 +354,7 @@ jobs:
     needs: build_linux
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
           python-version: '3.9'
