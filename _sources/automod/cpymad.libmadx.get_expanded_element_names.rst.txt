@@ -1,0 +1,6 @@
+get_expanded_element_names
+==========================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_expanded_element_names

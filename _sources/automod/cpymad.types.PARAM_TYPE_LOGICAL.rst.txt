@@ -1,0 +1,6 @@
+PARAM_TYPE_LOGICAL
+==================
+
+.. currentmodule:: cpymad.types
+
+.. autodata:: PARAM_TYPE_LOGICAL

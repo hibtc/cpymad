@@ -1,0 +1,45 @@
+VarList
+=======
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: VarList
+   :show-inheritance:
+
+   .. rubric:: Attributes Summary
+
+   .. autosummary::
+
+      ~VarList.cmdpar
+      ~VarList.defs
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~VarList.clear
+      ~VarList.get
+      ~VarList.items
+      ~VarList.keys
+      ~VarList.pop
+      ~VarList.popitem
+      ~VarList.setdefault
+      ~VarList.update
+      ~VarList.values
+
+   .. rubric:: Attributes Documentation
+
+   .. autoattribute:: cmdpar
+   .. autoattribute:: defs
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: clear
+   .. automethod:: get
+   .. automethod:: items
+   .. automethod:: keys
+   .. automethod:: pop
+   .. automethod:: popitem
+   .. automethod:: setdefault
+   .. automethod:: update
+   .. automethod:: values

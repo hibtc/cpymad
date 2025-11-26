@@ -1,0 +1,23 @@
+VarParamList
+============
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: VarParamList
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~VarParamList.get
+      ~VarParamList.items
+      ~VarParamList.keys
+      ~VarParamList.values
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: get
+   .. automethod:: items
+   .. automethod:: keys
+   .. automethod:: values

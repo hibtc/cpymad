@@ -1,0 +1,6 @@
+sequence_exists
+===============
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: sequence_exists

@@ -1,0 +1,6 @@
+apply_table_selections
+======================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: apply_table_selections

@@ -1,0 +1,6 @@
+format_param
+============
+
+.. currentmodule:: cpymad.util
+
+.. autofunction:: format_param

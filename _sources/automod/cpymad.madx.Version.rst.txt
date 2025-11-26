@@ -1,0 +1,7 @@
+Version
+=======
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: Version
+   :show-inheritance:

@@ -1,0 +1,21 @@
+CommandLog
+==========
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: CommandLog
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~CommandLog.__call__
+      ~CommandLog.close
+      ~CommandLog.create
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: __call__
+   .. automethod:: close
+   .. automethod:: create

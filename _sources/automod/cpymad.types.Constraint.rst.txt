@@ -1,0 +1,7 @@
+Constraint
+==========
+
+.. currentmodule:: cpymad.types
+
+.. autoclass:: Constraint
+   :show-inheritance:

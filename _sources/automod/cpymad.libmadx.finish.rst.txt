@@ -1,0 +1,6 @@
+finish
+======
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: finish

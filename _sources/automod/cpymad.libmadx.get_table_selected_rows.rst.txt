@@ -1,0 +1,6 @@
+get_table_selected_rows
+=======================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_table_selected_rows

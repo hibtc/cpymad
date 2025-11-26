@@ -1,0 +1,6 @@
+get_version_number
+==================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_version_number

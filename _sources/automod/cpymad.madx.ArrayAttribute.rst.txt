@@ -1,0 +1,19 @@
+ArrayAttribute
+==============
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: ArrayAttribute
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~ArrayAttribute.count
+      ~ArrayAttribute.index
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: count
+   .. automethod:: index

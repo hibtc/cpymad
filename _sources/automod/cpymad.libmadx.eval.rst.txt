@@ -1,0 +1,6 @@
+eval
+====
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: eval

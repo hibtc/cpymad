@@ -1,0 +1,6 @@
+get_base_type_names
+===================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_base_type_names

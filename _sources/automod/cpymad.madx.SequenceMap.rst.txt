@@ -1,0 +1,25 @@
+SequenceMap
+===========
+
+.. currentmodule:: cpymad.madx
+
+.. autoclass:: SequenceMap
+   :show-inheritance:
+
+   .. rubric:: Methods Summary
+
+   .. autosummary::
+
+      ~SequenceMap.__call__
+      ~SequenceMap.get
+      ~SequenceMap.items
+      ~SequenceMap.keys
+      ~SequenceMap.values
+
+   .. rubric:: Methods Documentation
+
+   .. automethod:: __call__
+   .. automethod:: get
+   .. automethod:: items
+   .. automethod:: keys
+   .. automethod:: values

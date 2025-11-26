@@ -1,0 +1,6 @@
+get_sequence_names
+==================
+
+.. currentmodule:: cpymad.libmadx
+
+.. autofunction:: get_sequence_names

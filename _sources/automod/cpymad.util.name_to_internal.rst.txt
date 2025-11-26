@@ -1,0 +1,6 @@
+name_to_internal
+================
+
+.. currentmodule:: cpymad.util
+
+.. autofunction:: name_to_internal
