@@ -1,6 +1,15 @@
 Changelog
 ~~~~~~~~~
 
+1.18.1
+======
+Date: 26.11.2025
+
+- no longer replace SEQ$start/SEQ$end markers when formatting ``TWISS, RANGE=``
+  parameter, as it seems to be handled by the MADX command, and our
+  replacement can incorrectly override subsequences, see #142
+
+
 1.18.0
 ======
 Date: 31.10.2025
