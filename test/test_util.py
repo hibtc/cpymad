@@ -143,7 +143,7 @@ def test_format_cmdpar(mad):
 
     assert fmt(mult, 'knl', None) == ''
 
-    assert fmt(twiss, 'range', 'h$start/h$end') == 'range=#s/#e'
+    assert fmt(twiss, 'range', 'h$start/h$end') == 'range=h$start/h$end'
     assert fmt(twiss, 'range', ('a', 'b')) == 'range=a/b'
     assert fmt(match, 'range', '#s/#e') == 'range=#s/#e'
     assert fmt(match, 'range', ['#s/#e', 's/e']) == 'range={#s/#e,s/e}'

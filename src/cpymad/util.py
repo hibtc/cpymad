@@ -165,7 +165,7 @@ QUOTED_PARAMS = {'file', 'halofile', 'sectorfile', 'trueprofile'
                  'echo', 'title', 'text', 'format', 'dir'}
 
 
-def format_param(key: str, value) -> str:
+def format_param(key: str, value, cmd: str = None) -> str:
     """
     Format a single MAD-X command parameter.
 
@@ -189,7 +189,7 @@ def format_param(key: str, value) -> str:
     elif isinstance(value, bool):
         return key + '=' + str(value).lower()
     elif key == 'range' or isinstance(value, Range):
-        return key + '=' + _format_range(value)
+        return key + '=' + _format_range(value, cmd)
     # check for basestrings before abc.Sequence, because every
     # string is also a Sequence:
     elif isinstance(value, str):
@@ -210,14 +210,32 @@ def format_param(key: str, value) -> str:
         return key + '=' + str(value)
 
 
-def _format_range(value) -> str:
+def _format_range(value, cmd: str = None) -> str:
+    # NOTE: To avoid falsely overriding user input, it is preferred to not
+    # replace X$start/X$end markers by #s/#e if the corresponding command
+    # can handle the markers. See #142.
+    # - TWISS: Seems to handle $start/$end markers appropriately.
+    # - CONSTRAINT: Seems to not handle these markers
+    # - others: TBD
+    # For now, replace it for all commands except twiss.. This may change in
+    # the future.
+    start_end_markers_are_supported = (
+        cmd is not None and
+        cmd.lower() == 'twiss')
     if isinstance(value, str):
-        return normalize_range_name(value)
+        if start_end_markers_are_supported:
+            return value.lower()
+        else:
+            return normalize_range_name(value)
     elif isinstance(value, Range):
         begin, end = value.first, value.last
     else:
         begin, end = value
-    begin, end = normalize_range_name((str(begin), str(end)))
+    if start_end_markers_are_supported:
+        begin = str(begin).lower()
+        end = str(end).lower()
+    else:
+        begin, end = normalize_range_name((str(begin), str(end)))
     return begin + '/' + end
 
 
@@ -285,7 +303,7 @@ def format_cmdpar(cmd, key: str, value) -> str:
             return mad_quote(value.lower())
     if dtype == PARAM_TYPE_STRING:
         if key == 'range' or isinstance(value, Range):
-            return key + '=' + _format_range(value)
+            return key + '=' + _format_range(value, cmd.name)
         if isinstance(value, str):
             return key + '=' + format_str(value)
     if dtype == PARAM_TYPE_STRING_ARRAY:
@@ -293,8 +311,11 @@ def format_cmdpar(cmd, key: str, value) -> str:
         # for `match`, see above.
         if key == 'range' or isinstance(value, Range):
             if isinstance(value, list):
-                return key + '={' + ','.join(map(_format_range, value)) + '}'
-            return key + '=' + _format_range(value)
+                return key + '={' + ','.join([
+                    _format_range(v, cmd.name)
+                    for v in value
+                ]) + '}'
+            return key + '=' + _format_range(value, cmd.name)
         if isinstance(value, str):
             return key + '=' + format_str(value)
         if isinstance(value, abc.Sequence):
@@ -328,7 +349,7 @@ def format_command(*args, **kwargs) -> str:
     if isinstance(cmd, str):
         _args = [cmd] + list(args)
         _keys = ordered_keys(kwargs)
-        _args += [format_param(k, kwargs[k]) for k in _keys]
+        _args += [format_param(k, kwargs[k], cmd) for k in _keys]
     else:
         _args = [cmd.name] + list(args)
         _keys = ordered_keys(kwargs)
