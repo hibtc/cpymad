@@ -353,6 +353,12 @@ jobs:
     name: Update documentation
     needs: build_linux
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
@@ -368,17 +374,19 @@ jobs:
       - run: pip install cpymad[doc] -f dist
       - run: make -C doc html
 
+      - uses: actions/configure-pages@v5
       - name: Deploy to GitHub Pages
         if: success() && (
             startsWith(github.ref, 'refs/tags/v') ||
             github.ref == 'refs/heads/master')
-        uses: crazy-max/ghaction-github-pages@v4
+        uses: actions/upload-pages-artifact@v3
         with:
-          build_dir: doc/_build/html
-          commit_message: Build documentation from ${{ github.ref }}@${{ github.sha }}
-          jekyll: false
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+          path: doc/_build/html
+      - uses: actions/deploy-pages@v4
+        if: success() && (
+            startsWith(github.ref, 'refs/tags/v') ||
+            github.ref == 'refs/heads/master')
+        id: deployment
 
   upload_release:
     name: Upload release
