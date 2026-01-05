@@ -1,3 +1,6 @@
+# For debugging add a step like this in the corresponding job:
+# - uses: mxschmitt/action-tmate@v3
+
 name: build
 on:
   push:
