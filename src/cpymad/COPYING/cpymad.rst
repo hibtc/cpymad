@@ -1,6 +1,6 @@
 applies to the python source of the cpymad package::
 
-    Copyright 2013-2020 Thomas Gläßle
+    Copyright 2013-2026 Thomas Gläßle
               2013-2019 HIT Betriebs GmbH
 
     This program is free software: you can redistribute it and/or modify

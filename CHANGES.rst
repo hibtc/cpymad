@@ -1,6 +1,19 @@
 Changelog
 ~~~~~~~~~
 
+1.19.0
+======
+Date: 06.01.2026
+
+- drop support for manylinux1 wheels
+- drop support for python 3.6, 3.7, 3.8, 3.9
+- fix segfault when using numpy>=2.4, see #155
+- updated macos deployment target to macos 15.0
+- build and test macos + linux arm binaries using native runners
+  (instead of cross-compiling)
+- require setuptools v77.0 for building
+
+
 1.18.1
 ======
 Date: 26.11.2025

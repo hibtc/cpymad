@@ -4,7 +4,7 @@ import warnings
 
 
 __title__ = 'cpymad'
-__version__ = '1.18.1'
+__version__ = '1.19.0'
 
 __summary__ = 'Cython binding to MAD-X'
 __uri__ = 'https://github.com/hibtc/cpymad'
