@@ -41,8 +41,8 @@ dependencies = [
     "minrpc>=0.1.0",
 ]
 optional-dependencies.doc = [
-    "sphinx",
-    "sphinx_rtd_theme",
+    "sphinx<9",                         # until compatibility with sphinx_rtd_theme is worked out
+    "sphinx_rtd_theme>=3",
     "sphinx_substitution_extensions",
     "sphinx_automodapi",
     "sphinx_autodoc_typehints",
