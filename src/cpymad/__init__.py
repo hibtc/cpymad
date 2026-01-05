@@ -21,6 +21,15 @@ Initial pymad creators:
 """
 
 
+try:
+    # For some unknown reason, in recent versions of numpy on linux, numpy
+    # must be pre-imported before importing cpymad.libmadx to avoid segfault.
+    # See https://github.com/hibtc/cpymad/issues/155.
+    __import__("numpy", None, None, "*")
+except ImportError:
+    pass
+
+
 if sys.version_info < (3, 9):
     _unsupported_version = (
         "Support for python 3.8 and below will be removed in a future release!\n"
