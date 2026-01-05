@@ -18,7 +18,7 @@ jobs:
       - run: ruff check src
 
   build_linux:
-    name: "Build: Linux (x64)"
+    name: "Build: Linux"
     runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
