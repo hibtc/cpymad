@@ -69,7 +69,7 @@ dynamic.version.attr = "cpymad.__version__"
 packages = ["cpymad", "cpymad.COPYING"]
 package-dir = {"" = "src"}
 package-data = {"cpymad.COPYING" = ["*.rst"]}
-include-package-data = false
+include-package-data = true
 
 [tool.coverage]
 # when running `coverage combine`, replace these paths by `src/cpymad`, see:
