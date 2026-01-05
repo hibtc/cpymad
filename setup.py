@@ -90,14 +90,6 @@ def fix_distutils_sysconfig_mingw():
         sysconfig._config_vars['CC'] = 'gcc'
 
 
-def exec_file(path):
-    """Execute a python file and return the `globals` dictionary."""
-    namespace = {}
-    with open(path, 'rb') as f:
-        exec(f.read(), namespace, namespace)
-    return namespace
-
-
 def get_extension_args(madxdir, shared, static, **libs):
     """Get arguments for C-extension (include pathes, libraries, etc)."""
     # libquadmath isn't available on aarch64, see #101:
@@ -135,26 +127,10 @@ if __name__ == '__main__':
     sys.path.append(os.path.dirname(__file__))
     fix_distutils_sysconfig_mingw()
     options, sys.argv[1:] = command_line_options().parse_known_args()
-    # NOTE: The "metadata" parameters for setup() may appear to be redundant
-    # but are curently required on setuptools<61.0 and hence for python3.6
-    # for which setuptools>=60 is not available. See branch `drop-py36` for
-    # removal.
-    metadata = exec_file('src/cpymad/__init__.py')
     setup(
-        name='cpymad',
-        version=metadata['__version__'],
-        description=metadata['__summary__'],
         ext_modules=cythonize([
             Extension('cpymad.libmadx',
                       sources=["src/cpymad/libmadx.pyx"],
                       **get_extension_args(**options.__dict__)),
         ]),
-        packages=['cpymad', 'cpymad.COPYING'],
-        package_dir={'': 'src'},
-        zip_safe=False,             # zip is bad for redistributing shared libs
-        include_package_data=True,  # include files matched by MANIFEST.in
-        install_requires=[
-            'numpy',
-            'minrpc>=0.0.8',
-        ],
     )

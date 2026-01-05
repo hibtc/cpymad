@@ -25,13 +25,8 @@ py_dot=$2
 py_ver=${py_dot/./}
 py_env=py${py_ver}
 
-if [[ $py_ver -ge 37 ]]; then
-    dir_tag=${PLATFORM}-cpython-${py_ver}
-    file_tag=.cp${py_ver}-${PLATFORM/-/_}
-else
-    dir_tag=${PLATFORM}-${py_dot}
-    file_tag=.cp${py_ver}-${PLATFORM/-/_}
-fi
+dir_tag=${PLATFORM}-cpython-${py_ver}
+file_tag=.cp${py_ver}-${PLATFORM/-/_}
 
 pip install cython wheel
 

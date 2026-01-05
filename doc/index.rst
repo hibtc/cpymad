@@ -11,9 +11,7 @@ MAD-X interpreter in python.
 **Note:** Support for 32bit builds and python 2.7 has been removed in version
 1.8.0.
 
-**Note:** python 3.5 and manylinux1 have reached EOL. Support will be
-removed in a future release.
-
+**Note:** Support for python<3.10 and manylinux1 have been removed in 1.19.0.
 
 
 Contents

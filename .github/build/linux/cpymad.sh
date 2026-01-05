@@ -22,10 +22,18 @@ export LDFLAGS="-fno-lto"
 # upload this exact source distribution to PyPI:
 python setup.py sdist
 
-for PYBIN in /opt/python/cp3*/bin; do
+build() {
     rm -f src/cpymad/libmadx.c
-    "${PYBIN}/pip" wheel dist/*.tar.gz --no-deps -w rawdist/
-done
+    "$1/bin/pip" wheel dist/*.tar.gz --no-deps -w rawdist/
+}
+
+build /opt/python/cp310-cp310
+build /opt/python/cp311-cp311
+build /opt/python/cp312-cp312
+build /opt/python/cp313-cp313
+build /opt/python/cp313-cp313t
+build /opt/python/cp314-cp314
+build /opt/python/cp314-cp314t
 
 # Bundle external shared libraries into the wheels
 mkdir -p dist
