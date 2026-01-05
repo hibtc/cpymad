@@ -352,16 +352,10 @@ jobs:
         env:
           COVERALLS_REPO_TOKEN: ${{ inputs.COVERALLS_REPO_TOKEN }}
 
-  documentation:
+  documentation-build:
     name: Update documentation
     needs: build_linux
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    permissions:
-      pages: write
-      id-token: write
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
@@ -374,21 +368,41 @@ jobs:
 
       - run: sudo apt-get install -qy graphviz
       - run: pip install -U pip
-      - run: pip install cpymad[doc] -f dist
+      # Get cpymad alone first to make sure it's retrieved from ./dist
+      - run: pip install cpymad -f dist --no-index --no-deps
+      # Now install dependencies
+      - run: pip install cpymad[doc]
       - run: make -C doc html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          name: docs
+          path: doc/_build/html
 
+  # Deployment must be in a separate job because it requires permissions that
+  # are only available on master.
+  documentation-deploy:
+    name: Deploy documentation
+    needs: documentation-build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v') ||
+        github.ref == 'refs/heads/master'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          name: docs
+          path: doc/_build/html
       - uses: actions/configure-pages@v5
       - name: Deploy to GitHub Pages
-        if: success() && (
-            startsWith(github.ref, 'refs/tags/v') ||
-            github.ref == 'refs/heads/master')
         uses: actions/upload-pages-artifact@v4
         with:
           path: doc/_build/html
       - uses: actions/deploy-pages@v4
-        if: success() && (
-            startsWith(github.ref, 'refs/tags/v') ||
-            github.ref == 'refs/heads/master')
         id: deployment
 
   upload_release:
