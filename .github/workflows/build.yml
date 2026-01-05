@@ -38,6 +38,7 @@ jobs:
           key: "\
             madx-${{ env.MADX_VERSION }}-\
             ${{ matrix.base }}-\
+            workflow-${{ hashFiles('.github/workflows/build.yml') }}-\
             patches-${{ hashFiles('.github/patch/*') }}-\
             scripts-${{ hashFiles('.github/build/linux/madx*') }}\
           "
@@ -117,6 +118,7 @@ jobs:
           key: "\
             madx-${{ env.MADX_VERSION }}-\
             windows-\
+            workflow-${{ hashFiles('.github/workflows/build.yml') }}-\
             patches-${{ hashFiles('.github/patch/*') }}-\
             scripts-${{ hashFiles('.github/build/windows/madx*') }}\
           "
@@ -197,6 +199,7 @@ jobs:
           key: "\
             madx-${{ env.MADX_VERSION }}-\
             macos-${{ matrix.arch }}-\
+            workflow-${{ hashFiles('.github/workflows/build.yml') }}-\
             patches-${{ hashFiles('.github/patch/*') }}-\
             scripts-${{ hashFiles('.github/build/macos/madx*') }}\
           "
