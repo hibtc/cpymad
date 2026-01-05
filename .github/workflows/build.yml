@@ -19,13 +19,13 @@ jobs:
 
   build_linux:
     name: "Build: Linux (x64)"
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
-        base:
-          - manylinux1_x86_64
-          - manylinux2014_x86_64
-          - manylinux2014_aarch64
+        include:
+          - {base: manylinux1_x86_64, runner: ubuntu-latest}
+          - {base: manylinux2014_x86_64, runner: ubuntu-latest}
+          - {base: manylinux2014_aarch64, runner: ubuntu-24.04-arm}
     steps:
       - uses: actions/checkout@v6
       - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
@@ -49,10 +49,6 @@ jobs:
       - name: "Apply patch: cmake_minimum_version.patch"
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
         run: git -C src/MAD-X apply - <.github/patch/cmake_minimum_version.patch
-
-      - name: Set up QEMU for running arm64 containers
-        if: endsWith(matrix.base, '_aarch64')
-        uses: docker/setup-qemu-action@v3
 
       - name: Prepare docker image
         run: |
@@ -294,6 +290,7 @@ jobs:
       matrix:
         os:
           - {run: ubuntu-latest, dist: dist-linux-manylinux2014_x86_64}
+          - {run: ubuntu-24.04-arm, dist: dist-linux-manylinux2014_aarch64}
           - {run: windows-latest, dist: dist-windows}
           - {run: macos-latest, dist: dist-macos-arm64}
           - {run: macos-15-intel, dist: dist-macos-x86_64}
