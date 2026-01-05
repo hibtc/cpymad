@@ -14,14 +14,12 @@ maintainers = [
 ]
 
 readme = {file = "README.rst", content-type = "text/x-rst"}
-license = {file = "COPYING.rst"}
+license = "GPL-3.0-or-later AND Apache-2.0 AND LicenseRef-CERN-MADX-Proprietary"
+license-files = ["COPYING.rst", "LICENSE/*"]
 
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
-    "License :: OSI Approved :: Apache Software License",
-    "License :: Other/Proprietary License",
     "Operating System :: MacOS :: MacOS X",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX :: Linux",
