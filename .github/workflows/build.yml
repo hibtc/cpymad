@@ -365,7 +365,10 @@ jobs:
 
       - run: sudo apt-get install -qy graphviz
       - run: pip install -U pip
-      - run: pip install cpymad[doc] -f dist
+      # Get cpymad alone first to make sure it's retrieved from ./dist
+      - run: pip install cpymad -f dist --no-index --no-deps
+      # Now install dependencies
+      - run: pip install cpymad[doc]
       - run: make -C doc html
       - uses: actions/upload-pages-artifact@v3
         with:
