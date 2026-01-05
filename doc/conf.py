@@ -9,6 +9,7 @@ extensions = [
     'sphinx_automodapi.automodapi',
     'sphinx_automodapi.smart_resolver',     # see sphinx-autodoc-typehints#38
     'sphinx_autodoc_typehints',
+    'sphinx_rtd_theme',
 ]
 
 templates_path = ['_templates']
@@ -51,9 +52,7 @@ rst_prolog = """
 
 
 # -- Options for HTML output ----------------------------------------------
-import sphinx_rtd_theme
 html_theme = 'sphinx_rtd_theme'
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 html_static_path = []
 html_context = {
     'display_github': True,

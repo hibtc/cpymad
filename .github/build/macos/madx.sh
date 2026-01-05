@@ -20,7 +20,6 @@ mkdir build
 cd build
 
 if [[ ! -f CMakeCache.txt ]]; then
-    pip3 install --upgrade cmake
     cmake .. \
         -DCMAKE_POLICY_DEFAULT_CMP0077=NEW \
         -DCMAKE_POLICY_DEFAULT_CMP0042=NEW \

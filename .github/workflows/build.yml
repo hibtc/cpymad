@@ -1,3 +1,6 @@
+# For debugging add a step like this in the corresponding job:
+# - uses: mxschmitt/action-tmate@v3
+
 name: build
 on:
   push:
@@ -16,13 +19,12 @@ jobs:
 
   build_linux:
     name: "Build: Linux (x64)"
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
-        base:
-          - manylinux1_x86_64
-          - manylinux2014_x86_64
-          - manylinux2014_aarch64
+        include:
+          - {base: manylinux2014_x86_64, runner: ubuntu-latest}
+          - {base: manylinux2014_aarch64, runner: ubuntu-24.04-arm}
     steps:
       - uses: actions/checkout@v6
       - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
@@ -46,10 +48,6 @@ jobs:
       - name: "Apply patch: cmake_minimum_version.patch"
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
         run: git -C src/MAD-X apply - <.github/patch/cmake_minimum_version.patch
-
-      - name: Set up QEMU for running arm64 containers
-        if: endsWith(matrix.base, '_aarch64')
-        uses: docker/setup-qemu-action@v3
 
       - name: Prepare docker image
         run: |
@@ -133,22 +131,6 @@ jobs:
         run: .github/build/windows/madx.sh src/MAD-X
 
       - uses: actions/setup-python@v6
-        with: {python-version: "3.6"}
-      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.6
-
-      - uses: actions/setup-python@v6
-        with: {python-version: "3.7"}
-      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.7
-
-      - uses: actions/setup-python@v6
-        with: {python-version: "3.8"}
-      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.8
-
-      - uses: actions/setup-python@v6
-        with: {python-version: "3.9"}
-      - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.9
-
-      - uses: actions/setup-python@v6
         with: {python-version: "3.10"}
       - run: .github/build/windows/cpymad.sh src/MAD-X/dist 3.10
 
@@ -176,12 +158,14 @@ jobs:
 
   build_macos:
     name: "Build: MacOS"
-    runs-on: macos-13
+    runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
-        arch:
-          - x86_64
-          - arm64
+        include:
+          - arch: x86_64
+            runner: macos-15-intel
+          - arch: arm64
+            runner: macos-15
     steps:
       - uses: actions/checkout@v6
       - run: echo "MADX_VERSION=$(cat MADX_VERSION)" >> $GITHUB_ENV
@@ -208,7 +192,7 @@ jobs:
 
       # Select matching Xcode and SDK, see: https://xcodereleases.com/
       - run: |
-          sudo xcode-select -switch /Applications/Xcode_15.2.app
+          sudo xcode-select -switch /Applications/Xcode_16.0.app
           echo "SDKROOT=$(xcrun --show-sdk-path)" >> $GITHUB_ENV
 
       - name: Setup gfortran
@@ -216,51 +200,30 @@ jobs:
           set -xeo pipefail
 
           if [[ ${{ matrix.arch }} == "x86_64" ]]; then
-            FC=gfortran-12
-            LIBDIR=$(dirname $(find /usr/local/Cellar/gcc@12 -name libgfortran.dylib))
-            echo "MACOSX_DEPLOYMENT_TARGET=13.0" >> $GITHUB_ENV
+            LIBDIR=$(dirname $(find /usr/local/Cellar/gcc@14 -name libgfortran.dylib))
 
           elif [[ ${{ matrix.arch }} == "arm64" ]]; then
-            # See: https://github.com/MacPython/gfortran-install
-            name=gfortran-darwin-arm64-cross
-            curl -L -O https://github.com/isuruf/gcc/releases/download/gcc-11.3.0-2/${name}.tar.gz
-            sudo tar -f ${name}.tar.gz -C /opt -xzv
-            rm ${name}.tar.gz
-
-            FC=$(find /opt/${name}/bin -name "*-gfortran")
-            LIBDIR=$(dirname $(find /opt/${name}/lib -name libgfortran.dylib))
-
-            # See: https://github.com/pypa/cibuildwheel/discussions/997
-            echo "ARCHFLAGS=-arch arm64" >> $GITHUB_ENV
-            echo "_PYTHON_HOST_PLATFORM=macosx-13.0-arm64" >> $GITHUB_ENV
-            echo "MACOSX_DEPLOYMENT_TARGET=13.0" >> $GITHUB_ENV
+            LIBDIR=$(dirname $(find /opt/homebrew/Cellar/gcc@14 -name libgfortran.dylib))
           fi
 
           LDFLAGS="-L$LIBDIR -Wl,-rpath,$LIBDIR"
 
-          echo "FC=$FC"           >> $GITHUB_ENV  # for cmake
           echo "LDFLAGS=$LDFLAGS" >> $GITHUB_ENV  # for setuptools
           echo "LIBDIR=$LIBDIR"   >> $GITHUB_ENV  # for delocate step
+
+          # Seems to be needed to make platform-specific (not "universal") wheels:
+          ARCHFLAGS="-arch ${{ matrix.arch }}"
+          HOST_PLATFORM=macosx-15.0-${{ matrix.arch }}
+
+          echo "ARCHFLAGS=$ARCHFLAGS"                   >> $GITHUB_ENV
+          echo "_PYTHON_HOST_PLATFORM=$HOST_PLATFORM"   >> $GITHUB_ENV
+          echo "MACOSX_DEPLOYMENT_TARGET=15.0"          >> $GITHUB_ENV
 
       - name: Build MAD-X
         if: steps.madx-build-cache.outputs.cache-hit != 'true'
         run: .github/build/macos/madx.sh src/MAD-X ${{ matrix.arch }}
-
-      - uses: actions/setup-python@v6
-        with: { python-version: "3.6" }
-      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
-
-      - uses: actions/setup-python@v6
-        with: { python-version: "3.7" }
-      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
-
-      - uses: actions/setup-python@v6
-        with: { python-version: "3.8" }
-      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
-
-      - uses: actions/setup-python@v6
-        with: { python-version: "3.9" }
-      - run: .github/build/macos/cpymad.sh src/MAD-X/dist
+        env:
+          FC: gfortran-14
 
       - uses: actions/setup-python@v6
         with: { python-version: "3.10" }
@@ -302,9 +265,10 @@ jobs:
       matrix:
         os:
           - {run: ubuntu-latest, dist: dist-linux-manylinux2014_x86_64}
+          - {run: ubuntu-24.04-arm, dist: dist-linux-manylinux2014_aarch64}
           - {run: windows-latest, dist: dist-windows}
           - {run: macos-latest, dist: dist-macos-arm64}
-          - {run: macos-13, dist: dist-macos-x86_64}
+          - {run: macos-15-intel, dist: dist-macos-x86_64}
         python:
           - '3.10'
           - '3.11'
@@ -349,21 +313,15 @@ jobs:
         env:
           COVERALLS_REPO_TOKEN: ${{ inputs.COVERALLS_REPO_TOKEN }}
 
-  documentation:
+  documentation-build:
     name: Update documentation
     needs: build_linux
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    permissions:
-      pages: write
-      id-token: write
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
-          python-version: '3.9'
+          python-version: '3.14'
       - uses: actions/download-artifact@v7
         with:
           name: dist-linux-manylinux2014_x86_64
@@ -371,21 +329,41 @@ jobs:
 
       - run: sudo apt-get install -qy graphviz
       - run: pip install -U pip
-      - run: pip install cpymad[doc] -f dist
+      # Get cpymad alone first to make sure it's retrieved from ./dist
+      - run: pip install cpymad -f dist --no-index --no-deps
+      # Now install dependencies
+      - run: pip install cpymad[doc]
       - run: make -C doc html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          name: docs
+          path: doc/_build/html
 
+  # Deployment must be in a separate job because it requires permissions that
+  # are only available on master.
+  documentation-deploy:
+    name: Deploy documentation
+    needs: documentation-build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v') ||
+        github.ref == 'refs/heads/master'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          name: docs
+          path: doc/_build/html
       - uses: actions/configure-pages@v5
       - name: Deploy to GitHub Pages
-        if: success() && (
-            startsWith(github.ref, 'refs/tags/v') ||
-            github.ref == 'refs/heads/master')
         uses: actions/upload-pages-artifact@v4
         with:
           path: doc/_build/html
       - uses: actions/deploy-pages@v4
-        if: success() && (
-            startsWith(github.ref, 'refs/tags/v') ||
-            github.ref == 'refs/heads/master')
         id: deployment
 
   upload_release:
