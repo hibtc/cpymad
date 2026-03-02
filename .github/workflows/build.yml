@@ -287,7 +287,7 @@ jobs:
           python-version: ${{ matrix.python }}
 
       - name: Download cpymad wheels
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: ${{ matrix.os.dist }}
           path: dist
@@ -322,7 +322,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.14'
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           name: dist-linux-manylinux2014_x86_64
           path: dist
@@ -369,7 +369,7 @@ jobs:
 
     steps:
       - name: Fetch built distributions
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           path: download
 
