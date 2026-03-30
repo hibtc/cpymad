@@ -334,7 +334,7 @@ jobs:
       # Now install dependencies
       - run: pip install cpymad[doc]
       - run: make -C doc html
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v4
         with:
           path: doc/_build/html
