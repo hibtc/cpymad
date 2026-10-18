@@ -442,8 +442,8 @@ class Madx:
         return tab.tmat(slice(None)).transpose((3, 0, 1, 2))
 
     def match(self,
-              constraints=[],
-              vary=[],
+              constraints=None,
+              vary=None,
               weight=None,
               method=('lmdif', {}),
               knobfile=None,
@@ -481,6 +481,10 @@ class Madx:
         ... )
         >>> tw = m.twiss('mysequence', **twiss_init)
         """
+        if vary is None:
+            vary = []
+        if constraints is None:
+            constraints = []
         command = self.command
         # MATCH (=start)
         command.match(**kwargs)
