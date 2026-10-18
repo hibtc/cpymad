@@ -934,8 +934,8 @@ def test_multiline_input(mad):
         x = 1;
         y = 2;
     ''')
-    assert var.x, 1
-    assert var.y, 2
+    assert var.x == 1
+    assert var.y == 2
     mad('''
         x = /* 3;
         y =*/ 4;
