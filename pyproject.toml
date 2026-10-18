@@ -83,10 +83,27 @@ paths.source = [
 [tool.ruff]
 line-length = 84
 lint.per-file-ignores = {"src/cpymad/util.py" = ["E701"]}
-lint.select = [
-    "E",
-    "W",
+lint.ignore = [
+    # Affects tests:
+    "B018",     # Found useless expression. Either assign it to a variable or remove it.
+    "SIM201",   # Use `knl != knl_lt` instead of `not knl == knl_lt`
+
+    # Cosmetic changes that affects a lot of code:
+    "UP032",    # Use f-string instead of `format` call
+    "C408",     # Unnecessary `dict()` call (rewrite as a literal)
+    "SIM102",   # Use a single `if` statement instead of nested `if` statements
+
+    # Held back because of incompatibility with python 3.9:
+    "RUF013",   # PEP 484 prohibits implicit `Optional`
+
+    # I'm using "import X.Y as Y" to make explicit that X is a submodule:
+    "PLR0402",  # [*] Use `from collections import abc` in lieu of alias
+
+    # Not sure if fixing this would influence any user-visible behaviour
+    # (e.g. sorting fields in help):
+    "RUF023",   # [*] `Parameter.__slots__` is not sorted
 ]
+
 exclude = [
     ".git",
     "__pycache__",
