@@ -61,7 +61,7 @@ class AsyncReader:
         while True:
             try:
                 line = self.stream.readline()
-            except IOError:
+            except OSError:
                 if stop:
                     return lines
                 # do one more iteration, this prevents missing output due to

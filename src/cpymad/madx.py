@@ -185,7 +185,7 @@ class Madx:
                     # binary stream, without potential recoding errors.
                     try:
                         stdout = stdout.fileno()
-                    except (AttributeError, OSError, IOError):
+                    except (AttributeError, OSError):
                         stdout = stdout.write
                 # Check for text stream to prevent TypeError (see #110).
                 if callable(stdout):
