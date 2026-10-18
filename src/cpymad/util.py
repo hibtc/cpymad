@@ -166,7 +166,7 @@ def normalize_range_name(name: str) -> str:
     return name
 
 
-QUOTED_PARAMS = {'file', 'halofile', 'sectorfile', 'trueprofile'
+QUOTED_PARAMS = {'file', 'halofile', 'sectorfile', 'trueprofile',
                  'pipefile', 'trackfile', 'summary_file', 'filename',
                  'echo', 'title', 'text', 'format', 'dir'}
 
