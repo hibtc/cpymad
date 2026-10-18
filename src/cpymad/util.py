@@ -63,8 +63,7 @@ def _fix_name(name: str) -> str:
     if name.startswith('_'):
         raise AttributeError("Unknown item: {!r}! Did you mean {!r}?"
                              .format(name, name.strip('_') + '_'))
-    if name.endswith('_'):
-        name = name[:-1]
+    name = name.removesuffix('_')
     return name
 
 
