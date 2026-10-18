@@ -19,8 +19,8 @@ from minrpc.client import Client, RemoteProcessClosed, RemoteProcessCrashed
 
 __all__ = [
     'LibMadxClient',
-    'RemoteProcessCrashed',
     'RemoteProcessClosed',
+    'RemoteProcessCrashed',
 ]
 
 

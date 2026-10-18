@@ -29,16 +29,16 @@ from cpymad.types import (
 )
 
 __all__ = [
-    'mad_quote',
-    'is_identifier',
-    'name_from_internal',
-    'name_to_internal',
-    'format_param',
+    'ChangeDirectory',
+    'check_expression',
     'format_cmdpar',
     'format_command',
-    'check_expression',
+    'format_param',
+    'is_identifier',
+    'mad_quote',
+    'name_from_internal',
+    'name_to_internal',
     'temp_filename',
-    'ChangeDirectory',
 ]
 
 

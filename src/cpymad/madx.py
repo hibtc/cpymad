@@ -21,7 +21,6 @@ from . import _rpc, util
 from .stream import AsyncReader, TextCallback
 
 __all__ = [
-    'Madx',
     'ArrayAttribute',
     'AttrDict',
     'BaseTypeMap',
@@ -32,20 +31,19 @@ __all__ = [
     'ElementList',
     'ExpandedElementList',
     'GlobalElementList',
+    'Madx',
     'Metadata',
     'Sequence',
     'SequenceMap',
     'Table',
     'TableMap',
+    # Errors:
+    'TwissFailed',
     'VarList',
     'VarParamList',
     'Version',
-
     # Data
     'metadata',
-
-    # Errors:
-    'TwissFailed',
 ]
 
 
