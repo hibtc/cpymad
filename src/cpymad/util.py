@@ -160,7 +160,7 @@ def normalize_range_name(name: str) -> str:
     if '/' in name:
         return '/'.join(map(normalize_range_name, name.split('/')))
     name = name.lower()
-    if name.endswith('$end') or name.endswith('$start'):
+    if name.endswith(('$end', '$start')):
         return '#s' if name.endswith('$start') else '#e'
     return name
 
