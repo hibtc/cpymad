@@ -161,7 +161,7 @@ def normalize_range_name(name: str) -> str:
         return '/'.join(map(normalize_range_name, name.split('/')))
     name = name.lower()
     if name.endswith('$end') or name.endswith('$start'):
-        return u'#s' if name.endswith('$start') else u'#e'
+        return '#s' if name.endswith('$start') else '#e'
     return name
 
 
@@ -188,7 +188,7 @@ def format_param(key: str, value, cmd: str = None) -> str:
         if value.max is not None:
             constr.append(key + '<' + str(value.max))
         if constr:
-            return u', '.join(constr)
+            return ', '.join(constr)
         else:
             return key + '=' + str(value.val)
     elif isinstance(value, bool):
@@ -257,7 +257,7 @@ def format_cmdpar(cmd, key: str, value) -> str:
     dtype = cmdpar.dtype
     # the empty string was used in earlier versions in place of None:
     if value is None or value == '':
-        return u''
+        return ''
 
     # NUMERIC
     if dtype == PARAM_TYPE_LOGICAL:
@@ -284,7 +284,7 @@ def format_cmdpar(cmd, key: str, value) -> str:
             if value.max is not None:
                 constr.append(key + '<' + str(value.max))
             if constr:
-                return u', '.join(constr)
+                return ', '.join(constr)
             else:
                 return key + '=' + str(value.val)
     if dtype in (PARAM_TYPE_LOGICAL_ARRAY,
@@ -359,7 +359,7 @@ def format_command(*args, **kwargs) -> str:
         _args = [cmd.name] + list(args)
         _keys = ordered_keys(kwargs)
         _args += [format_cmdpar(cmd, k, kwargs[k]) for k in _keys]
-    return u', '.join(filter(None, _args)) + ';'
+    return ', '.join(filter(None, _args)) + ';'
 
 
 # validation of MAD-X expressions
