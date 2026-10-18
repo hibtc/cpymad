@@ -497,7 +497,7 @@ class Madx:
             command.vary(name=v, **limits.get(v, {}))
         command[method[0]](**method[1])
         command.endmatch(knobfile=knobfile)
-        return dict((knob, self.eval(knob)) for knob in vary)
+        return {knob: self.eval(knob) for knob in vary}
 
     def verbose(self, switch=True):
         """Turn verbose output on/off."""
