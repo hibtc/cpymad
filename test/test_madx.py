@@ -211,7 +211,7 @@ def test_call_and_chdir(mad):
 
 
 def _check_twiss(mad, seq_name):
-    beam = 'ex=1, ey=2, particle=electron, sequence={0};'.format(seq_name)
+    beam = 'ex=1, ey=2, particle=electron, sequence={};'.format(seq_name)
     mad.command.beam(beam)
     mad.use(seq_name)
     initial = dict(alfx=0.5, alfy=1.5,
