@@ -31,7 +31,6 @@ build /opt/python/cp310-cp310
 build /opt/python/cp311-cp311
 build /opt/python/cp312-cp312
 build /opt/python/cp313-cp313
-build /opt/python/cp313-cp313t
 build /opt/python/cp314-cp314
 build /opt/python/cp314-cp314t
 
