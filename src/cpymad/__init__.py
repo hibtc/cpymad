@@ -29,9 +29,9 @@ except ImportError:
     pass
 
 
-if sys.version_info < (3, 9):
+if sys.version_info < (3, 11):
     _unsupported_version = (
-        "Support for python 3.8 and below will be removed in a future release!\n"
+        "Support for python 3.10 and below will be removed in a future release!\n"
         "If you need continued support for an older version, let us know at:\n"
         "  https://github.com/hibtc/cpymad/issues")
     warnings.warn(_unsupported_version, DeprecationWarning)
