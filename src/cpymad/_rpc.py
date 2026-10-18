@@ -37,7 +37,7 @@ class LibMadxClient(Client):
                 self.libmadx.finish()
         except (RemoteProcessClosed, RemoteProcessCrashed):
             pass
-        super(LibMadxClient, self).close()
+        super().close()
 
     @property
     def libmadx(self):
