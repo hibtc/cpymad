@@ -83,6 +83,10 @@ paths.source = [
 [tool.ruff]
 line-length = 84
 lint.per-file-ignores = {"src/cpymad/util.py" = ["E701"]}
+lint.select = [
+    "E",
+    "W",
+]
 exclude = [
     ".git",
     "__pycache__",
