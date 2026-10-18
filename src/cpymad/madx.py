@@ -1406,7 +1406,7 @@ class Metadata:
         if not self._libmadx:
             # Need to disable stdin to avoid deadlock that occurs if starting
             # with closed or invalid stdin:
-            svc, proc = _rpc.LibMadxClient.spawn_subprocess(stdin=False)
+            svc, _proc = _rpc.LibMadxClient.spawn_subprocess(stdin=False)
             self._libmadx = svc.libmadx
         return self._libmadx
 
