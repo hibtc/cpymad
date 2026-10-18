@@ -15,8 +15,7 @@ python process from crashes due to incorrect use of MAD-X.
 
 from __future__ import absolute_import
 
-from minrpc.client import Client, RemoteProcessCrashed, RemoteProcessClosed
-
+from minrpc.client import Client, RemoteProcessClosed, RemoteProcessCrashed
 
 __all__ = [
     'LibMadxClient',

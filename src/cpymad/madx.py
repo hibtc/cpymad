@@ -6,21 +6,19 @@ The most interesting class for users is :class:`Madx`.
 
 from __future__ import absolute_import
 
-from contextlib import contextmanager, suppress
-from functools import wraps
-from itertools import product
-from numbers import Number
 import collections.abc as abc
 import os
 import subprocess
 import sys
+from contextlib import contextmanager, suppress
+from functools import wraps
+from itertools import product
+from numbers import Number
 
 import numpy as np
 
-from . import _rpc
-from . import util
+from . import _rpc, util
 from .stream import AsyncReader, TextCallback
-
 
 __all__ = [
     'Madx',

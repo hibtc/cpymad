@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
+
 import sys
 import warnings
-
 
 __title__ = 'cpymad'
 __version__ = '1.19.0'

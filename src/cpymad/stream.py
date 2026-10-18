@@ -1,6 +1,5 @@
 from multiprocessing.dummy import Pool as ThreadPool
 
-
 # The following code makes sure to read all available stdout lines before
 # sending more input to MAD-X (ensure the real chronological order!), see:
 #       linux:   https://stackoverflow.com/q/375427/650222
@@ -18,8 +17,8 @@ try:                        # Linux
 
 except ImportError:         # Windows
     import msvcrt
-    from ctypes import windll, byref, WinError
-    from ctypes.wintypes import HANDLE, DWORD, LPDWORD, BOOL
+    from ctypes import WinError, byref, windll
+    from ctypes.wintypes import BOOL, DWORD, HANDLE, LPDWORD
 
     PIPE_NOWAIT = DWORD(0x00000001)
 

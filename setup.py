@@ -19,13 +19,13 @@ For more information, see
 # at the commit that first added this paragraph (can be identified using `git
 # blame`) and the simplifications that were possible in the following commits.
 
-from setuptools import setup, Extension
-from distutils.util import get_platform
-from distutils import sysconfig
-from argparse import ArgumentParser
-
-import sys
 import os
+import sys
+from argparse import ArgumentParser
+from distutils import sysconfig
+from distutils.util import get_platform
+
+from setuptools import Extension, setup
 
 try:
     # Use Cython if available:

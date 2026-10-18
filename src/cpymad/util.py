@@ -1,26 +1,32 @@
 """
 Utility functions used in other parts of the pymad package.
 """
-import re
+import collections.abc as abc
 import os
+import re
 import sys
 import tempfile
 from collections import namedtuple
 from contextlib import contextmanager
 from enum import Enum
 from numbers import Number
-import collections.abc as abc
 
 import numpy as np
 
 from cpymad.parsing import Parser
 from cpymad.types import (
-    Range, Constraint,
-    PARAM_TYPE_LOGICAL, PARAM_TYPE_INTEGER,
-    PARAM_TYPE_DOUBLE, PARAM_TYPE_STRING, PARAM_TYPE_CONSTRAINT,
-    PARAM_TYPE_LOGICAL_ARRAY, PARAM_TYPE_INTEGER_ARRAY,
-    PARAM_TYPE_DOUBLE_ARRAY, PARAM_TYPE_STRING_ARRAY)
-
+    PARAM_TYPE_CONSTRAINT,
+    PARAM_TYPE_DOUBLE,
+    PARAM_TYPE_DOUBLE_ARRAY,
+    PARAM_TYPE_INTEGER,
+    PARAM_TYPE_INTEGER_ARRAY,
+    PARAM_TYPE_LOGICAL,
+    PARAM_TYPE_LOGICAL_ARRAY,
+    PARAM_TYPE_STRING,
+    PARAM_TYPE_STRING_ARRAY,
+    Constraint,
+    Range,
+)
 
 __all__ = [
     'mad_quote',

@@ -2,10 +2,11 @@
 Tests for the functionality in :mod:`cpymad.util`.
 """
 
-from cpymad import util
-from cpymad.madx import Madx, AttrDict
-from cpymad.types import Range, Constraint
 import pytest
+
+from cpymad import util
+from cpymad.madx import AttrDict, Madx
+from cpymad.types import Constraint, Range
 
 
 @pytest.fixture
