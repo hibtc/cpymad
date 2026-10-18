@@ -33,6 +33,8 @@ build /opt/python/cp312-cp312
 build /opt/python/cp313-cp313
 build /opt/python/cp314-cp314
 build /opt/python/cp314-cp314t
+build /opt/python/cp315-cp315
+build /opt/python/cp315-cp315t
 
 # Bundle external shared libraries into the wheels
 mkdir -p dist
