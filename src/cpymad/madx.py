@@ -1268,8 +1268,6 @@ class Table(_Mapping):
             index = self.row_names(rows)
         elif isinstance(index, str):
             index = util.remove_count_suffix_from_name(self[index])
-        else:
-            index = index
         return pd.DataFrame(self.copy(columns, rows), index=index)
 
     def getmat(self, name, idx, *dim):
