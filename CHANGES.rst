@@ -1,6 +1,16 @@
 Changelog
 ~~~~~~~~~
 
+1.20.0
+======
+Date: 18.10.2026
+
+- add wheel for python 3.15
+- deprecate python 3.10
+- remove some py2 compatibility code
+- bugfix: trueprofile and pipefile parameters will now be quoted
+
+
 1.19.0
 ======
 Date: 06.01.2026
