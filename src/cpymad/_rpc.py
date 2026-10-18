@@ -13,7 +13,6 @@ parallel. Furthermore, running MAD-X in a separate process shields the main
 python process from crashes due to incorrect use of MAD-X.
 """
 
-from __future__ import absolute_import
 
 from minrpc.client import Client, RemoteProcessClosed, RemoteProcessCrashed
 

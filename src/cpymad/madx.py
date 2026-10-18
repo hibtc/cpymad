@@ -4,7 +4,6 @@ This module defines a convenience layer to access the MAD-X interpreter.
 The most interesting class for users is :class:`Madx`.
 """
 
-from __future__ import absolute_import
 
 import collections.abc as abc
 import os
