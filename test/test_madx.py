@@ -60,7 +60,7 @@ def normalize(path):
 
 def test_copyright():
     notice = cpymad.get_copyright_notice()
-    assert isinstance(notice, type(u""))
+    assert isinstance(notice, str)
 
 
 def test_version(mad):
@@ -82,7 +82,7 @@ def test_version(mad):
 def test_metadata(mad):
     version = mad.version
     assert metadata.__version__ == version.release
-    assert isinstance(metadata.get_copyright_notice(), type(u""))
+    assert isinstance(metadata.get_copyright_notice(), str)
 
 
 def test_independent_instances():
