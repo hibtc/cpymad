@@ -13,15 +13,13 @@ parallel. Furthermore, running MAD-X in a separate process shields the main
 python process from crashes due to incorrect use of MAD-X.
 """
 
-from __future__ import absolute_import
 
-from minrpc.client import Client, RemoteProcessCrashed, RemoteProcessClosed
-
+from minrpc.client import Client, RemoteProcessClosed, RemoteProcessCrashed
 
 __all__ = [
     'LibMadxClient',
-    'RemoteProcessCrashed',
     'RemoteProcessClosed',
+    'RemoteProcessCrashed',
 ]
 
 
@@ -38,7 +36,7 @@ class LibMadxClient(Client):
                 self.libmadx.finish()
         except (RemoteProcessClosed, RemoteProcessCrashed):
             pass
-        super(LibMadxClient, self).close()
+        super().close()
 
     @property
     def libmadx(self):

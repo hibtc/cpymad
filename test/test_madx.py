@@ -60,7 +60,7 @@ def normalize(path):
 
 def test_copyright():
     notice = cpymad.get_copyright_notice()
-    assert isinstance(notice, type(u""))
+    assert isinstance(notice, str)
 
 
 def test_version(mad):
@@ -82,7 +82,7 @@ def test_version(mad):
 def test_metadata(mad):
     version = mad.version
     assert metadata.__version__ == version.release
-    assert isinstance(metadata.get_copyright_notice(), type(u""))
+    assert isinstance(metadata.get_copyright_notice(), str)
 
 
 def test_independent_instances():
@@ -211,7 +211,7 @@ def test_call_and_chdir(mad):
 
 
 def _check_twiss(mad, seq_name):
-    beam = 'ex=1, ey=2, particle=electron, sequence={0};'.format(seq_name)
+    beam = 'ex=1, ey=2, particle=electron, sequence={};'.format(seq_name)
     mad.command.beam(beam)
     mad.use(seq_name)
     initial = dict(alfx=0.5, alfy=1.5,
@@ -934,8 +934,8 @@ def test_multiline_input(mad):
         x = 1;
         y = 2;
     ''')
-    assert var.x, 1
-    assert var.y, 2
+    assert var.x == 1
+    assert var.y == 2
     mad('''
         x = /* 3;
         y =*/ 4;

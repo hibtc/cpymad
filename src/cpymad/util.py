@@ -1,38 +1,44 @@
 """
 Utility functions used in other parts of the pymad package.
 """
-import re
+import collections.abc as abc
 import os
+import re
 import sys
 import tempfile
 from collections import namedtuple
 from contextlib import contextmanager
 from enum import Enum
 from numbers import Number
-import collections.abc as abc
 
 import numpy as np
 
 from cpymad.parsing import Parser
 from cpymad.types import (
-    Range, Constraint,
-    PARAM_TYPE_LOGICAL, PARAM_TYPE_INTEGER,
-    PARAM_TYPE_DOUBLE, PARAM_TYPE_STRING, PARAM_TYPE_CONSTRAINT,
-    PARAM_TYPE_LOGICAL_ARRAY, PARAM_TYPE_INTEGER_ARRAY,
-    PARAM_TYPE_DOUBLE_ARRAY, PARAM_TYPE_STRING_ARRAY)
-
+    PARAM_TYPE_CONSTRAINT,
+    PARAM_TYPE_DOUBLE,
+    PARAM_TYPE_DOUBLE_ARRAY,
+    PARAM_TYPE_INTEGER,
+    PARAM_TYPE_INTEGER_ARRAY,
+    PARAM_TYPE_LOGICAL,
+    PARAM_TYPE_LOGICAL_ARRAY,
+    PARAM_TYPE_STRING,
+    PARAM_TYPE_STRING_ARRAY,
+    Constraint,
+    Range,
+)
 
 __all__ = [
-    'mad_quote',
-    'is_identifier',
-    'name_from_internal',
-    'name_to_internal',
-    'format_param',
+    'ChangeDirectory',
+    'check_expression',
     'format_cmdpar',
     'format_command',
-    'check_expression',
+    'format_param',
+    'is_identifier',
+    'mad_quote',
+    'name_from_internal',
+    'name_to_internal',
     'temp_filename',
-    'ChangeDirectory',
 ]
 
 
@@ -57,8 +63,7 @@ def _fix_name(name: str) -> str:
     if name.startswith('_'):
         raise AttributeError("Unknown item: {!r}! Did you mean {!r}?"
                              .format(name, name.strip('_') + '_'))
-    if name.endswith('_'):
-        name = name[:-1]
+    name = name.removesuffix('_')
     return name
 
 
@@ -155,12 +160,12 @@ def normalize_range_name(name: str) -> str:
     if '/' in name:
         return '/'.join(map(normalize_range_name, name.split('/')))
     name = name.lower()
-    if name.endswith('$end') or name.endswith('$start'):
-        return u'#s' if name.endswith('$start') else u'#e'
+    if name.endswith(('$end', '$start')):
+        return '#s' if name.endswith('$start') else '#e'
     return name
 
 
-QUOTED_PARAMS = {'file', 'halofile', 'sectorfile', 'trueprofile'
+QUOTED_PARAMS = {'file', 'halofile', 'sectorfile', 'trueprofile',
                  'pipefile', 'trackfile', 'summary_file', 'filename',
                  'echo', 'title', 'text', 'format', 'dir'}
 
@@ -183,7 +188,7 @@ def format_param(key: str, value, cmd: str = None) -> str:
         if value.max is not None:
             constr.append(key + '<' + str(value.max))
         if constr:
-            return u', '.join(constr)
+            return ', '.join(constr)
         else:
             return key + '=' + str(value.val)
     elif isinstance(value, bool):
@@ -252,7 +257,7 @@ def format_cmdpar(cmd, key: str, value) -> str:
     dtype = cmdpar.dtype
     # the empty string was used in earlier versions in place of None:
     if value is None or value == '':
-        return u''
+        return ''
 
     # NUMERIC
     if dtype == PARAM_TYPE_LOGICAL:
@@ -279,7 +284,7 @@ def format_cmdpar(cmd, key: str, value) -> str:
             if value.max is not None:
                 constr.append(key + '<' + str(value.max))
             if constr:
-                return u', '.join(constr)
+                return ', '.join(constr)
             else:
                 return key + '=' + str(value.val)
     if dtype in (PARAM_TYPE_LOGICAL_ARRAY,
@@ -354,7 +359,7 @@ def format_command(*args, **kwargs) -> str:
         _args = [cmd.name] + list(args)
         _keys = ordered_keys(kwargs)
         _args += [format_cmdpar(cmd, k, kwargs[k]) for k in _keys]
-    return u', '.join(filter(None, _args)) + ';'
+    return ', '.join(filter(None, _args)) + ';'
 
 
 # validation of MAD-X expressions

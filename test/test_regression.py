@@ -2,8 +2,9 @@
 Regression tests.
 """
 
-from cpymad.madx import Madx
 import pytest
+
+from cpymad.madx import Madx
 
 
 @pytest.fixture

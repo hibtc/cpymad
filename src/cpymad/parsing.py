@@ -111,11 +111,11 @@ def create_parse_table(terminals, grammar, start):
         extend_follow_sets, follow,
         firsts=table, empty=empty, grammar=grammar)
 
-    for symbol, terminals in follow.items():
+    for symbol, terms in follow.items():
         if empty[symbol]:
             extend_parse_table(symbol, table[symbol], {
                 t: None
-                for t in terminals
+                for t in terms
             })
 
     return table

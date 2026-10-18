@@ -4,26 +4,22 @@ This module defines a convenience layer to access the MAD-X interpreter.
 The most interesting class for users is :class:`Madx`.
 """
 
-from __future__ import absolute_import
 
-from contextlib import contextmanager, suppress
-from functools import wraps
-from itertools import product
-from numbers import Number
 import collections.abc as abc
 import os
 import subprocess
 import sys
+from contextlib import contextmanager, suppress
+from functools import wraps
+from itertools import product
+from numbers import Number
 
 import numpy as np
 
-from . import _rpc
-from . import util
+from . import _rpc, util
 from .stream import AsyncReader, TextCallback
 
-
 __all__ = [
-    'Madx',
     'ArrayAttribute',
     'AttrDict',
     'BaseTypeMap',
@@ -34,20 +30,19 @@ __all__ = [
     'ElementList',
     'ExpandedElementList',
     'GlobalElementList',
+    'Madx',
     'Metadata',
     'Sequence',
     'SequenceMap',
     'Table',
     'TableMap',
+    # Errors:
+    'TwissFailed',
     'VarList',
     'VarParamList',
     'Version',
-
     # Data
     'metadata',
-
-    # Errors:
-    'TwissFailed',
 ]
 
 
@@ -190,7 +185,7 @@ class Madx:
                     # binary stream, without potential recoding errors.
                     try:
                         stdout = stdout.fileno()
-                    except (AttributeError, OSError, IOError):
+                    except (AttributeError, OSError):
                         stdout = stdout.write
                 # Check for text stream to prevent TypeError (see #110).
                 if callable(stdout):
@@ -442,8 +437,8 @@ class Madx:
         return tab.tmat(slice(None)).transpose((3, 0, 1, 2))
 
     def match(self,
-              constraints=[],
-              vary=[],
+              constraints=None,
+              vary=None,
               weight=None,
               method=('lmdif', {}),
               knobfile=None,
@@ -481,6 +476,10 @@ class Madx:
         ... )
         >>> tw = m.twiss('mysequence', **twiss_init)
         """
+        if vary is None:
+            vary = []
+        if constraints is None:
+            constraints = []
         command = self.command
         # MATCH (=start)
         command.match(**kwargs)
@@ -493,7 +492,7 @@ class Madx:
             command.vary(name=v, **limits.get(v, {}))
         command[method[0]](**method[1])
         command.endmatch(knobfile=knobfile)
-        return dict((knob, self.eval(knob)) for knob in vary)
+        return {knob: self.eval(knob) for knob in vary}
 
     def verbose(self, switch=True):
         """Turn verbose output on/off."""
@@ -1269,8 +1268,6 @@ class Table(_Mapping):
             index = self.row_names(rows)
         elif isinstance(index, str):
             index = util.remove_count_suffix_from_name(self[index])
-        else:
-            index = index
         return pd.DataFrame(self.copy(columns, rows), index=index)
 
     def getmat(self, name, idx, *dim):
@@ -1373,27 +1370,27 @@ class Metadata:
 
     """MAD-X metadata (license info, etc)."""
 
-    __title__ = u'MAD-X'
+    __title__ = 'MAD-X'
 
     @property
     def __version__(self):
         return self._get_libmadx().get_version_number()
 
     __summary__ = (
-        u'MAD is a project with a long history, aiming to be at the '
-        u'forefront of computational physics in the field of particle '
-        u'accelerator design and simulation. The MAD scripting language '
-        u'is de facto the standard to describe particle accelerators, '
-        u'simulate beam dynamics and optimize beam optics.'
+        'MAD is a project with a long history, aiming to be at the '
+        'forefront of computational physics in the field of particle '
+        'accelerator design and simulation. The MAD scripting language '
+        'is de facto the standard to describe particle accelerators, '
+        'simulate beam dynamics and optimize beam optics.'
     )
 
-    __uri__ = u'http://madx.web.cern.ch/madx/'
+    __uri__ = 'http://madx.web.cern.ch/madx/'
 
     __credits__ = (
-        u'MAD-X is developed at CERN and has many contributors. '
-        u'For more information see:\n'
-        u'\n'
-        u'http://madx.web.cern.ch/madx/www/contributors.html'
+        'MAD-X is developed at CERN and has many contributors. '
+        'For more information see:\n'
+        '\n'
+        'http://madx.web.cern.ch/madx/www/contributors.html'
     )
 
     def get_copyright_notice(self):
@@ -1406,7 +1403,7 @@ class Metadata:
         if not self._libmadx:
             # Need to disable stdin to avoid deadlock that occurs if starting
             # with closed or invalid stdin:
-            svc, proc = _rpc.LibMadxClient.spawn_subprocess(stdin=False)
+            svc, _proc = _rpc.LibMadxClient.spawn_subprocess(stdin=False)
             self._libmadx = svc.libmadx
         return self._libmadx
 
